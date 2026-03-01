@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bsharp/app/child_mode_provider.dart';
+import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/child_mode/widgets/pin_pad.dart';
+
+class PinSetupScreen extends ConsumerStatefulWidget {
+  const PinSetupScreen({super.key});
+
+  @override
+  ConsumerState<PinSetupScreen> createState() => _PinSetupScreenState();
+}
+
+class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
+  String? _firstPin;
+  String? _error;
+  final _padKey = GlobalKey<PinPadState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(t.childMode.setupPinTitle)),
+      body: Center(
+        child: PinPad(
+          key: _padKey,
+          title: _firstPin == null
+              ? t.childMode.createPin
+              : t.childMode.confirmPin,
+          errorMessage: _error,
+          onComplete: _onPinEntered,
+        ),
+      ),
+    );
+  }
+
+  void _onPinEntered(String pin) {
+    if (_firstPin == null) {
+      setState(() {
+        _firstPin = pin;
+        _error = null;
+      });
+      _padKey.currentState?.clear();
+      return;
+    }
+
+    if (pin != _firstPin) {
+      setState(() => _error = t.childMode.pinMismatch);
+      _padKey.currentState?.shake();
+      setState(() => _firstPin = null);
+      return;
+    }
+
+    ref.read(childModeProvider.notifier).setupPin(pin).then((success) {
+      if (success && mounted) {
+        Navigator.of(context).pop(true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(t.childMode.pinSetSuccess)),
+        );
+      }
+    });
+  }
+}
