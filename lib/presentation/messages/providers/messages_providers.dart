@@ -1,0 +1,38 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
+import 'package:bsharp/domain/entities/poczta.dart';
+
+final inboxProvider = StateProvider<List<PocztaMessage>>((ref) => []);
+
+final sentProvider = StateProvider<List<PocztaMessage>>((ref) => []);
+
+final trashProvider = StateProvider<List<PocztaMessage>>((ref) => []);
+
+final receiversProvider = StateProvider<List<PocztaReceiver>>((ref) => []);
+
+final pocztaDataSourceProvider =
+    StateProvider<PocztaDataSource?>((ref) => null);
+
+final unreadCountProvider = Provider<int>((ref) {
+  final inbox = ref.watch(inboxProvider);
+  return inbox.where((m) => !m.isRead).length;
+});
+
+final starredMessagesProvider = Provider<List<PocztaMessage>>((ref) {
+  final inbox = ref.watch(inboxProvider);
+  return inbox.where((m) => m.isStarred).toList();
+});
+
+enum MessageFolder { inbox, sent, trash }
+
+final selectedFolderProvider =
+    StateProvider<MessageFolder>((ref) => MessageFolder.inbox);
+
+final currentFolderMessagesProvider = Provider<List<PocztaMessage>>((ref) {
+  final folder = ref.watch(selectedFolderProvider);
+  return switch (folder) {
+    MessageFolder.inbox => ref.watch(inboxProvider),
+    MessageFolder.sent => ref.watch(sentProvider),
+    MessageFolder.trash => ref.watch(trashProvider),
+  };
+});
