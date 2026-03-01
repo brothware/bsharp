@@ -23,6 +23,16 @@ jobs:
 
       - run: flutter pub get
       - run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Archive generated files
+        run: find lib -name '*.g.dart' -o -name '*.freezed.dart' | tar -czf generated-sources.tar.gz -T -
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: generated-sources
+          path: generated-sources.tar.gz
+          retention-days: 1
+
       - run: dart format --set-exit-if-changed .
       - run: flutter analyze --fatal-warnings
 
@@ -61,7 +71,13 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+
+      - run: tar -xzf generated-sources.tar.gz
+
       - run: flutter build web --base-href /bsharp/
 
       - uses: actions/upload-artifact@v4
@@ -79,6 +95,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: 'gradle'
 
       - uses: subosito/flutter-action@v2
         with:
@@ -86,7 +103,12 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+
+      - run: tar -xzf generated-sources.tar.gz
 
       - name: Configure signing
         if: env.KEYSTORE_BASE64 != ''
@@ -128,8 +150,19 @@ jobs:
           flutter-version: '3.38.5'
           cache: true
 
+      - uses: actions/cache@v4
+        with:
+          path: ios/Pods
+          key: pods-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+
+      - run: tar -xzf generated-sources.tar.gz
+
       - run: flutter build ios --release --no-codesign
 
       - uses: actions/upload-artifact@v4
@@ -147,6 +180,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: 'gradle'
 
       - uses: subosito/flutter-action@v2
         with:
@@ -154,7 +188,12 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+
+      - run: tar -xzf generated-sources.tar.gz
 
       - name: Configure signing
         env:

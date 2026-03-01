@@ -26,9 +26,8 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
 
-  build-web:
+  codegen:
     runs-on: ubuntu-latest
-    needs: version
     steps:
       - uses: actions/checkout@v4
 
@@ -39,6 +38,35 @@ jobs:
 
       - run: flutter pub get
       - run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Archive generated files
+        run: find lib -name '*.g.dart' -o -name '*.freezed.dart' | tar -czf generated-sources.tar.gz -T -
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: generated-sources
+          path: generated-sources.tar.gz
+          retention-days: 1
+
+  build-web:
+    runs-on: ubuntu-latest
+    needs: [version, codegen]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.5'
+          cache: true
+
+      - run: flutter pub get
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+
+      - run: tar -xzf generated-sources.tar.gz
+
       - run: flutter build web --base-href /bsharp/ --build-name=${{ needs.version.outputs.version }}
 
       - uses: actions/upload-artifact@v4
@@ -48,7 +76,7 @@ jobs:
 
   build-android:
     runs-on: ubuntu-latest
-    needs: version
+    needs: [version, codegen]
     steps:
       - uses: actions/checkout@v4
 
@@ -56,6 +84,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: 'gradle'
 
       - uses: subosito/flutter-action@v2
         with:
@@ -63,7 +92,12 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+
+      - run: tar -xzf generated-sources.tar.gz
 
       - name: Configure signing
         if: env.KEYSTORE_BASE64 != ''
@@ -99,7 +133,7 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
-    needs: version
+    needs: [version, codegen]
     steps:
       - uses: actions/checkout@v4
 
@@ -108,8 +142,19 @@ jobs:
           flutter-version: '3.38.5'
           cache: true
 
+      - uses: actions/cache@v4
+        with:
+          path: ios/Pods
+          key: pods-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+
+      - run: tar -xzf generated-sources.tar.gz
+
       - run: flutter build ios --release --no-codesign --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
       - uses: actions/upload-artifact@v4
@@ -119,7 +164,7 @@ jobs:
 
   build-wearos:
     runs-on: ubuntu-latest
-    needs: version
+    needs: [version, codegen]
     steps:
       - uses: actions/checkout@v4
 
@@ -127,6 +172,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: 'gradle'
 
       - uses: subosito/flutter-action@v2
         with:
@@ -134,7 +180,12 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-sources
+
+      - run: tar -xzf generated-sources.tar.gz
 
       - name: Configure signing
         env:
