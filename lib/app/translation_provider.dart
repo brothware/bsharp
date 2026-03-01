@@ -1,20 +1,19 @@
-import 'dart:io';
-
-import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/locale_provider.dart';
+import 'package:bsharp/data/data_sources/local/connection/connection.dart';
 import 'package:bsharp/data/data_sources/local/database.dart';
 import 'package:bsharp/data/data_sources/local/mlkit_translation_source.dart';
 import 'package:bsharp/data/data_sources/remote/deepl_data_source.dart';
 import 'package:bsharp/data/services/translation_service.dart';
 
 final _isMobileProvider = Provider<bool>((ref) {
-  return Platform.isAndroid || Platform.isIOS;
+  return !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
 });
 
 final translationDatabaseProvider = Provider<AppDatabase>((ref) {
-  final db = AppDatabase(NativeDatabase.memory());
+  final db = AppDatabase(createInMemoryExecutor());
   ref.onDispose(db.close);
   return db;
 });
