@@ -1,3 +1,7 @@
+[< Back to main README](../README.md)
+
+> **Disclaimer**: This documentation describes a reverse-engineered, undocumented API. It is not affiliated with or endorsed by Mobireg. The API may change without notice. This information is provided for educational and interoperability purposes only.
+
 # Mobireg e-Grade Book API
 
 Reverse-engineered API documentation for the Mobireg e-Dziennik (electronic grade book) system,
