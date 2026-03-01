@@ -1,0 +1,1316 @@
+openapi: 3.0.3
+info:
+  title: Mobireg e-Grade Book API
+  description: |
+    Reverse-engineered API for the Mobireg electronic grade book system.
+
+    Four independent APIs:
+    1. **Mobile Sync API** (`njson.php`) - bulk data sync for the mobile app
+    2. **Parent Portal API** (`api.php`) - JSON queries for the parent web portal
+    3. **Poczta (Mail) API** (`poczta.mobireg.pl`) - messaging system (separate Laravel app)
+    4. **Schedules API** (`schedules.php`) - subject schedule database (SQLite download)
+
+    Additionally, the homework module lives on a separate subdomain (`zadania.mobireg.pl`).
+
+    Authentication notes:
+    - Mobile Sync API: fixed credentials `login=eparent&pass=eparent` plus user's
+      `parent_login` and MD5-hashed `parent_pass`. Requires `User-Agent: Andreg 12345`.
+    - Parent Portal API: session token from web login (expires in ~30 seconds).
+    - Poczta/Zadania APIs: SSO via `messagesToken` from the users response, sets
+      Laravel session cookies.
+  version: 1.7.0
+
+servers:
+  - url: https://mobireg.pl/{school}
+    description: School e-Dziennik server (Mobile Sync API)
+    variables:
+      school:
+        default: osm-wroclaw
+        description: School slug from the Mobireg URL
+  - url: https://rodzic.mobireg.pl
+    description: Parent Portal API
+  - url: https://poczta.mobireg.pl
+    description: Mail (Poczta) API - messaging system
+  - url: https://zadania.mobireg.pl
+    description: Homework (Zadania) module
+
+tags:
+  - name: auth
+    description: Authentication
+  - name: portal
+    description: Parent Portal API (rodzic.mobireg.pl/api.php)
+  - name: portal-mutations
+    description: Parent Portal data mutations (api.php with data parameter)
+  - name: mobile-sync
+    description: Mobile Sync API (njson.php)
+  - name: mobile-messages
+    description: Mobile Messages API (messages.php)
+  - name: schedules
+    description: Subject schedules (schedules.php)
+  - name: poczta
+    description: Mail API (poczta.mobireg.pl)
+  - name: zadania
+    description: Homework module (zadania.mobireg.pl)
+
+paths:
+  /index.php:
+    post:
+      tags: [auth]
+      summary: Web login
+      description: |
+        Authenticates via the web form. Returns a 302 redirect to
+        `https://rodzic.mobireg.pl/{school}/{token}` where `{token}` is
+        a 32-character hex session hash for the Parent Portal API.
+
+        The token expires in approximately 30 seconds. Get a fresh token
+        before each batch of API requests.
+      operationId: webLogin
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [login]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [edlogin, edpass]
+              properties:
+                queryString:
+                  type: string
+                  default: ""
+                edlogin:
+                  type: string
+                  description: Username
+                edpass:
+                  type: string
+                  description: MD5 hash of password (lowercase hex, no salt)
+                resolutions:
+                  type: string
+                  description: Screen width in pixels
+                  default: "1920"
+      responses:
+        "302":
+          description: Successful login, redirects to parent portal with session token
+          headers:
+            Location:
+              schema:
+                type: string
+                example: https://rodzic.mobireg.pl/osm-wroclaw/abc123def456...
+        "200":
+          description: Login failed (returns login page HTML)
+
+  /modules/api/njson.php:
+    post:
+      tags: [mobile-sync]
+      summary: Mobile Sync API
+      description: |
+        The main mobile sync endpoint. Supports multiple operations via different
+        parameter combinations. All requests require the fixed API credentials
+        (`login=eparent&pass=eparent`) plus the user's actual credentials
+        (`parent_login`, `parent_pass`).
+
+        **Important**: Requires `User-Agent: Andreg 12345` header.
+
+        Operations:
+        - **Settings**: `view=Settings` - get server settings and protocol version
+        - **ParentStudents**: `view=ParentStudents` - get student list
+        - **Full sync**: `start_date` + `end_date` + `student_id` - get all data for date range
+        - **Diff sync**: full sync params + `lmt` + `last_end_date` - get changes since last sync
+
+        The `view` parameter is ignored when `start_date`/`end_date` are provided;
+        the full sync always returns all 36 tables regardless of the view value.
+
+        Full sync returns these tables:
+        Settings, Teachers, Students, Rooms, Terms, Subjects, Groups, GroupTerms,
+        GroupEducators, MarkScaleGroups, MarkScales, MarkDivisionGroups, MarkKinds,
+        MarkGroupGroups, MarkGroups, EventTypes, EventTypeTeachers, EventTypeTerms,
+        EventTypeGroups, Events, EventSubjects, EventIssues, EventEvents,
+        AttendanceTypes, Attendances, Marks, MarkGroupIssues, UserReprimands,
+        StudentGroups, EventTypeSchedules, LessonGroups, Lessons, Messages,
+        PermissionGroups, Permissions, Averages
+      operationId: mobileSync
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [login, pass, device_id, app_version]
+              properties:
+                login:
+                  type: string
+                  description: Fixed API credential
+                  enum: [eparent]
+                pass:
+                  type: string
+                  description: Fixed API credential
+                  enum: [eparent]
+                device_id:
+                  type: string
+                  description: Device registration ID (any non-empty string works)
+                  example: "12345"
+                app_version:
+                  type: integer
+                  description: App version code
+                  example: 42
+                parent_login:
+                  type: string
+                  description: User's actual login username
+                parent_pass:
+                  type: string
+                  description: User's MD5-hashed password
+                view:
+                  type: string
+                  description: Operation type (only for settings/student queries)
+                  enum: [Settings, ParentStudents]
+                start_date:
+                  type: string
+                  format: date
+                  description: Sync window start (YYYY-MM-DD)
+                  example: "2025-11-20"
+                end_date:
+                  type: string
+                  format: date
+                  description: Sync window end (YYYY-MM-DD)
+                  example: "2026-06-07"
+                lmt:
+                  type: string
+                  description: Last modification time for diff sync (YYYY-MM-DD HH:MM:SS)
+                  example: "2026-02-20 10:30:00"
+                last_end_date:
+                  type: string
+                  format: date
+                  description: Previous sync's end date for diff sync
+                get_all_mark_groups:
+                  type: string
+                  description: Include all mark groups (set to "1" to enable)
+                  enum: ["1"]
+                student_id:
+                  type: integer
+                  description: Filter to specific student ID
+      responses:
+        "200":
+          description: Successful response (gzip-compressed if Accept-Encoding sent)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/SettingsResponse"
+                  - $ref: "#/components/schemas/ParentStudentsResponse"
+                  - $ref: "#/components/schemas/FullSyncResponse"
+                  - $ref: "#/components/schemas/ErrorResponse"
+
+  /modules/api/messages.php:
+    post:
+      tags: [mobile-messages]
+      summary: Mobile Messages API
+      description: |
+        Separate endpoint for message operations from the mobile app.
+        Uses the same authentication as njson.php.
+
+        Actions:
+        - `action=inbox` - list inbox messages
+        - `action=sent` - list sent messages
+        - `action=trash` - list trashed messages
+        - `action=read` + `message_id` - mark message as read
+        - `action=send` - send a message
+        - `action=receivers` - list available receivers
+      operationId: mobileMessages
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [login, pass, device_id, app_version, action]
+              properties:
+                login:
+                  type: string
+                  enum: [eparent]
+                pass:
+                  type: string
+                  enum: [eparent]
+                device_id:
+                  type: string
+                parent_login:
+                  type: string
+                parent_pass:
+                  type: string
+                app_version:
+                  type: integer
+                action:
+                  type: string
+                  enum: [inbox, sent, trash, read, send, receivers]
+                message_id:
+                  type: integer
+                  description: Message ID (required for action=read)
+                student_id:
+                  type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Message"
+                  - $ref: "#/components/schemas/ErrorResponse"
+
+  /modules/api/schedules.php:
+    post:
+      tags: [schedules]
+      summary: Subject schedule database
+      description: |
+        Manages the subject schedule database. Supports two operations:
+        - `get_version=` - returns version info as JSON
+        - `download=` - returns the full SQLite database file (~774KB)
+
+        The SQLite database contains two tables:
+        - `Version(Version INTEGER, LastModificationTime DATETIME)`
+        - `Subject(Id, ParentId, ScheduleId, OrderNumber, Number, Name, Description, Hours, TermNumber, Type)`
+      operationId: schedules
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [login, pass, device_id, app_version]
+              properties:
+                login:
+                  type: string
+                  enum: [eparent]
+                pass:
+                  type: string
+                  enum: [eparent]
+                device_id:
+                  type: string
+                parent_login:
+                  type: string
+                parent_pass:
+                  type: string
+                app_version:
+                  type: integer
+                get_version:
+                  type: string
+                  description: Empty string to request version info JSON
+                  enum: [""]
+                download:
+                  type: string
+                  description: Empty string to download the SQLite database file
+                  enum: [""]
+      responses:
+        "200":
+          description: JSON version info or SQLite database binary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubjectDbVersionResponse"
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+                description: SQLite database file
+
+  /api.php:
+    post:
+      tags: [portal]
+      summary: Parent Portal API
+      description: |
+        The parent portal's JSON API. Requires `school` slug and `token`
+        (session hash from web login). Supports multiple views for reading
+        data and a `data` parameter for mutations.
+
+        Read views:
+        - `users` - user profile, pupils, messagesToken
+        - `timetable-events` - lesson schedule (requires pupilId, dateFrom, dateTo)
+        - `attendances` - attendance stats (requires pupilId, dateFrom, dateTo)
+        - `marks` - grades (requires pupilId, termId)
+        - `subjects` - subject list (requires pupilId)
+        - `terms` - term/semester list (requires pupilId)
+        - `homeworks` - homework list (requires pupilId, dateFrom, dateTo)
+        - `tests` - test/exam list (requires pupilId, dateFrom, dateTo)
+        - `reprimands` - notes and praises (requires pupilId, dateFrom, dateTo; optional type=0|1)
+        - `bulletins` - bulletin board (requires pupilId, dateFrom, dateTo)
+        - `bulletin` - single bulletin detail (requires pupilId, bulletinId)
+        - `changelog` - change log (requires pupilId, optional dateFrom, dateTo)
+
+        Mutations (no view parameter, use `data` instead):
+        - Mark bulletin as read: `data={"bulletin":[bulletinId]}`
+        - Accept RODO/GDPR: `data={"acceptRodo":[{"acceptRodo":true}]}`
+        - Update email: `data={"email":[{"email":"new@example.com"}]}`
+        - Change password: `data={"password":[{"oldPassword":"old_md5","newPassword":"new_md5"}]}`
+        - Toggle contact consent: `data={"allowContact":[value]}`
+      operationId: parentPortal
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [school, token]
+              properties:
+                school:
+                  type: string
+                  description: School slug
+                  example: osm-wroclaw
+                token:
+                  type: string
+                  description: 32-char hex session token from web login
+                view:
+                  type: string
+                  description: Data view to fetch
+                  enum:
+                    - users
+                    - timetable-events
+                    - attendances
+                    - marks
+                    - subjects
+                    - terms
+                    - homeworks
+                    - tests
+                    - reprimands
+                    - bulletins
+                    - bulletin
+                    - changelog
+                pupilId:
+                  type: integer
+                  description: Student ID (required for all views except users)
+                termId:
+                  type: integer
+                  description: Term ID (required for marks view)
+                dateFrom:
+                  type: string
+                  format: date
+                  description: Start date filter (YYYY-MM-DD)
+                dateTo:
+                  type: string
+                  format: date
+                  description: End date filter (YYYY-MM-DD)
+                bulletinId:
+                  type: integer
+                  description: Bulletin ID (required for bulletin view)
+                type:
+                  type: integer
+                  description: Filter type (for reprimands 0=note, 1=praise)
+                data:
+                  type: string
+                  description: |
+                    JSON-encoded mutation payload. When present, no view parameter
+                    is needed. See description for supported mutation formats.
+      responses:
+        "200":
+          description: View-dependent JSON response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/PortalUsersResponse"
+                  - $ref: "#/components/schemas/PortalTimetableResponse"
+                  - $ref: "#/components/schemas/PortalMarksResponse"
+                  - $ref: "#/components/schemas/PortalAttendanceResponse"
+                  - $ref: "#/components/schemas/PortalSubjectsResponse"
+                  - $ref: "#/components/schemas/PortalTermsResponse"
+                  - $ref: "#/components/schemas/PortalBulletinsResponse"
+                  - $ref: "#/components/schemas/PortalBulletinDetailResponse"
+                  - $ref: "#/components/schemas/PortalTestsResponse"
+                  - $ref: "#/components/schemas/PortalReprimandsResponse"
+                  - $ref: "#/components/schemas/PortalHomeworksResponse"
+                  - $ref: "#/components/schemas/PortalChangelogResponse"
+                  - $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [errno, message]
+      properties:
+        errno:
+          type: integer
+          description: |
+            Error codes:
+            - 101: Login FAILED, give inputs
+            - 102: Login FAILED, incorrect device inputs / incorrect session id
+            - 103: No view exist
+            - 106: Incorrect user inputs
+            - 108: Incorrect action parameter
+            - 110: No data send
+            - 111: Update data failed
+            - 199: Informational (e.g. message already read)
+        message:
+          type: string
+          description: Error message
+
+    SettingsResponse:
+      type: object
+      properties:
+        Settings:
+          type: array
+          items:
+            type: object
+            properties:
+              version:
+                type: string
+                example: "1.6.0"
+              protocol:
+                type: string
+                example: "1.6.0"
+              id:
+                type: string
+                description: Database snapshot MD5 hash
+              time:
+                type: string
+                format: date-time
+                description: Server timestamp (ISO 8601)
+              permissions:
+                type: integer
+
+    ParentStudentsResponse:
+      type: object
+      properties:
+        ParentStudents:
+          type: array
+          items:
+            $ref: "#/components/schemas/Student"
+
+    Student:
+      type: object
+      properties:
+        id: { type: integer }
+        users_edu_id: { type: integer }
+        name: { type: string }
+        surname: { type: string }
+        phone: { type: string, nullable: true }
+        sex: { type: string, enum: [K, M] }
+        pin: { type: string, nullable: true }
+        action: { type: string, enum: [I, U, D] }
+
+    FullSyncResponse:
+      type: object
+      description: |
+        Contains all 36 synced tables as top-level keys with arrays of records.
+        Each record has an `action` field: I=insert, U=update, D=delete.
+      properties:
+        Settings:
+          type: array
+          items: { type: object }
+        Teachers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Teacher"
+        Students:
+          type: array
+          items:
+            $ref: "#/components/schemas/Student"
+        Rooms:
+          type: array
+          items:
+            $ref: "#/components/schemas/Room"
+        Terms:
+          type: array
+          items:
+            $ref: "#/components/schemas/Term"
+        Subjects:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subject"
+        Groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/Group"
+        GroupTerms:
+          type: array
+          items:
+            $ref: "#/components/schemas/GroupTerm"
+        GroupEducators:
+          type: array
+          items:
+            $ref: "#/components/schemas/GroupEducator"
+        Events:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+        EventSubjects:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventSubject"
+        EventTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventType"
+        EventTypeTeachers:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventTypeTeacher"
+        EventTypeTerms:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventTypeTerm"
+        EventTypeGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventTypeGroup"
+        EventTypeSchedules:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventTypeSchedule"
+        EventEvents:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventEvent"
+        EventIssues:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventIssue"
+        Marks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Mark"
+        MarkGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/MarkGroup"
+        MarkGroupGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/MarkGroupGroup"
+        MarkGroupIssues:
+          type: array
+          items: { type: object }
+        MarkKinds:
+          type: array
+          items:
+            $ref: "#/components/schemas/MarkKind"
+        MarkScales:
+          type: array
+          items:
+            $ref: "#/components/schemas/MarkScale"
+        MarkScaleGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/MarkScaleGroup"
+        MarkDivisionGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/MarkDivisionGroup"
+        Attendances:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attendance"
+        AttendanceTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttendanceType"
+        Messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
+        Lessons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lesson"
+        LessonGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/LessonGroup"
+        StudentGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/StudentGroup"
+        UserReprimands:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserReprimand"
+        Permissions:
+          type: array
+          items: { type: object }
+        PermissionGroups:
+          type: array
+          items: { type: object }
+        Averages:
+          type: array
+          items: { type: object }
+
+    Teacher:
+      type: object
+      properties:
+        id: { type: integer }
+        login: { type: string }
+        users_edu_id: { type: integer, nullable: true }
+        name: { type: string }
+        surname: { type: string }
+        phone: { type: string, nullable: true }
+        sex: { type: string, nullable: true, enum: [K, M] }
+        pin: { type: string, nullable: true }
+        user_type: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    Room:
+      type: object
+      properties:
+        id: { type: integer }
+        patrons_id: { type: integer, nullable: true }
+        name: { type: string }
+        description: { type: string }
+        action: { type: string, enum: [I, U, D] }
+
+    Term:
+      type: object
+      properties:
+        id: { type: integer }
+        parent_id: { type: integer, nullable: true }
+        name: { type: string }
+        type: { type: string, description: "Y=year, S=semester" }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        action: { type: string, enum: [I, U, D] }
+
+    Subject:
+      type: object
+      properties:
+        id: { type: integer }
+        subjects_edu_id: { type: integer, nullable: true }
+        name: { type: string }
+        abbr: { type: string }
+        action: { type: string, enum: [I, U, D] }
+
+    Group:
+      type: object
+      properties:
+        id: { type: integer }
+        parent_id: { type: integer, nullable: true }
+        groups_edu_id: { type: integer, nullable: true }
+        name: { type: string }
+        type: { type: string, description: "C=class" }
+        attr: { type: string }
+        action: { type: string, enum: [I, U, D] }
+
+    GroupTerm:
+      type: object
+      properties:
+        id: { type: integer }
+        groups_id: { type: integer }
+        terms_id: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    GroupEducator:
+      type: object
+      properties:
+        id: { type: integer }
+        groups_id: { type: integer }
+        teachers_educator_id: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    Event:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        date: { type: string, format: date }
+        number: { type: integer }
+        start_time: { type: string, example: "08:00:00" }
+        end_time: { type: string, example: "08:45:00" }
+        rooms_id: { type: integer }
+        event_types_id: { type: integer }
+        status: { type: integer }
+        substitution: { type: integer }
+        type: { type: integer }
+        attr: { type: integer }
+        terms_id: { type: integer }
+        lesson_groups_id: { type: integer }
+        locked: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    EventSubject:
+      type: object
+      properties:
+        id: { type: integer }
+        events_id: { type: integer }
+        content: { type: string, description: Lesson topic/content }
+        add_time: { type: string, format: date-time }
+        action: { type: string, enum: [I, U, D] }
+
+    EventType:
+      type: object
+      properties:
+        id: { type: integer }
+        subjects_id: { type: integer }
+        teaching_level: { type: integer }
+        substitution: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    EventTypeTeacher:
+      type: object
+      properties:
+        id: { type: integer }
+        teachers_id: { type: integer }
+        event_types_id: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    EventTypeTerm:
+      type: object
+      properties:
+        id: { type: integer }
+        terms_id: { type: integer }
+        event_types_id: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    EventTypeGroup:
+      type: object
+      properties:
+        id: { type: integer }
+        groups_id: { type: integer }
+        event_types_id: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    EventTypeSchedule:
+      type: object
+      properties:
+        id: { type: integer }
+        event_types_id: { type: integer }
+        schedules_id: { type: integer }
+        comments: { type: string }
+        name: { type: string, description: Schedule/curriculum name }
+        number: { type: string, description: Schedule reference number }
+        action: { type: string, enum: [I, U, D] }
+
+    EventEvent:
+      type: object
+      description: Links related events (e.g. substitution pairs)
+      properties:
+        id: { type: integer }
+        events1_id: { type: integer }
+        events2_id: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    EventIssue:
+      type: object
+      properties:
+        id: { type: integer }
+        events_id: { type: integer }
+        issues_id: { type: integer }
+        event_types_id: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    Mark:
+      type: object
+      properties:
+        id: { type: integer }
+        mark_groups_id: { type: integer }
+        mark_scales_id: { type: integer, nullable: true }
+        pupil_users_id: { type: integer }
+        teacher_users_id: { type: integer }
+        mark_value: { type: number, nullable: true }
+        comments: { type: string }
+        weight: { type: integer, nullable: true }
+        get_date: { type: string, format: date }
+        add_time: { type: string, format: date-time }
+        modified: { type: integer }
+        events_id: { type: integer, nullable: true }
+        action: { type: string, enum: [I, U, D] }
+
+    MarkGroup:
+      type: object
+      description: Defines a grade category (e.g. "dictation", "test")
+      properties:
+        id: { type: integer }
+        parent_id: { type: integer, nullable: true }
+        mark_group_groups_id: { type: integer, nullable: true }
+        mark_kinds_id: { type: integer }
+        mark_division_groups_id: { type: integer, nullable: true }
+        mark_scale_groups_id: { type: integer }
+        event_type_terms_id: { type: integer }
+        abbreviation: { type: string }
+        description: { type: string }
+        mark_format: { type: string, example: "%f" }
+        visibility: { type: integer }
+        css_style: { type: string }
+        weight: { type: integer, nullable: true }
+        mark_type: { type: integer }
+        mark_value_range_min: { type: number, nullable: true }
+        mark_value_range_max: { type: number, nullable: true }
+        precision: { type: number }
+        parent_type: { type: string, nullable: true }
+        is_pattern: { type: integer }
+        position: { type: integer }
+        add_by_users_id: { type: integer }
+        extended_range: { type: integer }
+        count_points_without_base: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    MarkGroupGroup:
+      type: object
+      description: Parent categories for mark groups (e.g. "Tests", "Activity")
+      properties:
+        id: { type: integer }
+        parent_id: { type: integer, nullable: true }
+        name: { type: string }
+        is_pattern: { type: integer }
+        position: { type: integer }
+        weight: { type: integer }
+        mark_division_groups_id: { type: integer, nullable: true }
+        action: { type: string, enum: [I, U, D] }
+
+    MarkKind:
+      type: object
+      description: Grade kind definitions (e.g. "Activity", "Test", "Homework")
+      properties:
+        id: { type: integer }
+        parent_id: { type: integer, nullable: true }
+        name: { type: string }
+        abbreviation: { type: string }
+        subjects_id: { type: integer, nullable: true }
+        public: { type: integer }
+        add_by_users_id: { type: integer }
+        default_mark_type: { type: integer }
+        default_mark_scale_groups_id: { type: integer }
+        default_mark_division_groups_id: { type: integer, nullable: true }
+        default_weigth: { type: integer }
+        position: { type: integer }
+        css_style: { type: string }
+        action: { type: string, enum: [I, U, D] }
+
+    MarkScale:
+      type: object
+      description: Individual grade values within a scale (e.g. "6" = "Excellent")
+      properties:
+        id: { type: integer }
+        mark_scale_groups_id: { type: integer }
+        abbreviation: { type: string }
+        name: { type: string }
+        mark_value: { type: number }
+        image: { type: string, nullable: true }
+        classified: { type: integer }
+        no_count_to_average: { type: integer }
+        css_style: { type: string, nullable: true }
+        mark_scale_edu_id: { type: integer, nullable: true }
+        action: { type: string, enum: [I, U, D] }
+
+    MarkScaleGroup:
+      type: object
+      description: Grading scales (e.g. "1-6 scale", "descriptive scale")
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        public: { type: integer }
+        add_by_users_id: { type: integer }
+        mark_types: { type: string }
+        mark_scale_group_edu_id: { type: integer }
+        is_system: { type: integer }
+        is_default: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    MarkDivisionGroup:
+      type: object
+      description: Grade thresholds/divisions (percentage ranges for each grade)
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        type: { type: integer }
+        public: { type: integer }
+        add_by_users_id: { type: integer }
+        range_min: { type: number }
+        range_max: { type: number }
+        range_max_to_display: { type: number, nullable: true }
+        precision: { type: number }
+        mark_scale_groups_id: { type: integer }
+        mark_division_group_edu_id: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    Attendance:
+      type: object
+      properties:
+        id: { type: integer }
+        events_id: { type: integer }
+        students_id: { type: integer }
+        types_id: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    AttendanceType:
+      type: object
+      description: Attendance status types (present, absent, late, excused, etc.)
+      properties:
+        id: { type: integer }
+        name: { type: string, description: "e.g. Obecność, Nieobecność, Spóźnienie" }
+        abbr: { type: string, description: "e.g. O, NB, SP" }
+        style: { type: string, description: "CSS style string" }
+        count_as: { type: string, description: "P=present, A=absent" }
+        type: { type: string }
+        action: { type: string, enum: [I, U, D] }
+
+    Message:
+      type: object
+      properties:
+        id: { type: integer }
+        send_time: { type: string, format: date-time }
+        sender_users_id: { type: integer }
+        recipient_users_id: { type: integer }
+        title: { type: string }
+        content: { type: string }
+        read_time: { type: string, format: date-time, nullable: true }
+        hide: { type: integer, nullable: true }
+        files:
+          oneOf:
+            - type: array
+              items: { type: object }
+            - type: string
+              nullable: true
+
+    Lesson:
+      type: object
+      properties:
+        id: { type: integer }
+        lesson_groups_id: { type: integer }
+        lesson_number: { type: integer }
+        start_time: { type: string, example: "08:00:00" }
+        end_time: { type: string, example: "08:45:00" }
+        action: { type: string, enum: [I, U, D] }
+
+    LessonGroup:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string, example: "Lekcje normalne" }
+        selected: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    StudentGroup:
+      type: object
+      description: Maps students to class groups with roster numbers
+      properties:
+        id: { type: integer }
+        students_id: { type: integer }
+        groups_id: { type: integer }
+        number: { type: integer, description: Student number in class roster }
+        strike_off_time: { type: string, nullable: true }
+        strike_off_reason: { type: string, nullable: true }
+        action: { type: string, enum: [I, U, D] }
+
+    UserReprimand:
+      type: object
+      description: Notes (warnings) and praises for students
+      properties:
+        id: { type: integer }
+        students_id: { type: integer }
+        teachers_id: { type: integer }
+        kinds_id: { type: integer, description: "0=note/warning, 1=praise" }
+        getdate: { type: string, format: date }
+        content: { type: string }
+        addtime: { type: string, format: date-time }
+        status: { type: integer }
+        action: { type: string, enum: [I, U, D] }
+
+    SubjectDbVersionResponse:
+      type: object
+      properties:
+        protocol_version:
+          type: string
+          example: "1.0"
+        size:
+          type: integer
+          description: Database file size in bytes
+        cached:
+          type: boolean
+        version:
+          type: string
+        last_modification_time:
+          type: string
+          format: date-time
+
+    PortalUsersResponse:
+      type: object
+      properties:
+        id: { type: integer }
+        eduId: { type: integer }
+        firstname: { type: string }
+        lastname: { type: string }
+        role: { type: integer, description: "1=pupil, 2=parent" }
+        email: { type: string }
+        zgodaNaKontaktInnychRodzicow: { type: integer }
+        oldHomeworkModule: { type: integer, description: "0=new zadania.mobireg.pl, 1=old built-in" }
+        showMarkAverage: { type: integer }
+        acceptRodo: { type: integer }
+        lastChangePass: { type: string }
+        schoolName:
+          type: array
+          items: { type: string }
+        pupils:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              firstname: { type: string }
+              lastname: { type: string }
+        messagesToken:
+          type: string
+          description: |
+            SSO token for poczta.mobireg.pl and zadania.mobireg.pl.
+            Use as: https://poczta.mobireg.pl/sso/{school}/{messagesToken}
+            Or: https://zadania.mobireg.pl/{school}/account/ssov2/{messagesToken}
+        unreadMessages: { type: integer }
+
+    PortalTimetableEvent:
+      type: object
+      properties:
+        id: { type: integer }
+        dateTimeFrom: { type: string, example: "2026-02-24 08:00:00" }
+        dateTimeTo: { type: string, example: "2026-02-24 08:45:00" }
+        subjectName: { type: string }
+        bgColor: { type: string, description: CSS style string }
+        attendanceLabel: { type: string }
+        isLocked: { type: integer }
+        isCyclic: { type: integer }
+        isCanceled: { type: integer }
+        substitution: { type: integer }
+        room: { type: string }
+        title: { type: string, description: Lesson topic }
+        teachers:
+          type: array
+          items: { type: string }
+        hasTest: { type: integer }
+        tests:
+          type: array
+          items: { type: object }
+        relatedEventId: { type: integer, nullable: true }
+        relatedEventsId:
+          type: array
+          items: { type: integer }
+
+    PortalTimetableResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/PortalTimetableEvent"
+
+    PortalMarksResponse:
+      type: object
+      properties:
+        markDescriptives:
+          type: object
+          description: Descriptive marks (behavior, mandatory, recommendations)
+          properties:
+            zachowanie: { type: string }
+            obowiazkowe: { type: string }
+            zalecenia: { type: string }
+        subjects:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              label: { type: string }
+              avg1: { type: number }
+              avg2: { type: number }
+              value: { type: string }
+              isFinal: { type: integer }
+        markGroups:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              subjectId: { type: integer }
+              kindLabel: { type: string }
+              markGroupId: { type: integer }
+              parentMarkGroupId: { type: integer }
+              bgColor: { type: string }
+              description: { type: string }
+        grades:
+          type: array
+          items:
+            $ref: "#/components/schemas/PortalGrade"
+
+    PortalGrade:
+      type: object
+      properties:
+        id: { type: integer }
+        subjectId: { type: integer }
+        kindLabel: { type: string }
+        value: { type: string }
+        markGroupId: { type: integer }
+        parentMarkGroupId: { type: integer }
+        date: { type: string, format: date }
+        bgColor: { type: string }
+        weight: { type: integer }
+        description: { type: string }
+        comments: { type: string }
+
+    PortalAttendanceResponse:
+      type: object
+      properties:
+        percent:
+          type: number
+          description: Overall attendance percentage
+        types:
+          type: array
+          items:
+            type: object
+            properties:
+              label: { type: string }
+              count: { type: integer }
+
+    PortalSubjectsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id: { type: integer }
+          label: { type: string }
+
+    PortalTermsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id: { type: integer }
+          isYear: { type: integer }
+          label: { type: string }
+          parentId: { type: integer }
+          dateFrom: { type: string, format: date }
+          dateTo: { type: string, format: date }
+
+    PortalBulletinsResponse:
+      type: object
+      properties:
+        count:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              title: { type: string }
+              dateTime: { type: string }
+              read: { type: string, nullable: true }
+              author: { type: string }
+              login: { type: string }
+
+    PortalBulletinDetailResponse:
+      type: array
+      description: Response from view=bulletin with bulletinId
+      items:
+        type: object
+        properties:
+          id: { type: integer }
+          title: { type: string }
+          content: { type: string, description: HTML content }
+          dateTime: { type: string }
+          read: { type: string, nullable: true }
+          userAnswer: { type: string }
+          author: { type: string }
+          login: { type: string }
+          answers: { type: array, items: { type: object } }
+
+    PortalTestsResponse:
+      type: object
+      properties:
+        count:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              subjectName: { type: string }
+              dateTime: { type: string }
+              addedTime: { type: string }
+              title: { type: string }
+              description: { type: string }
+
+    PortalReprimandsResponse:
+      type: object
+      properties:
+        count:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              type: { type: integer, description: "0=note/warning, 1=praise" }
+              teacherName: { type: string }
+              teacherLogin: { type: string }
+              date: { type: string, format: date }
+              content: { type: string }
+
+    PortalHomeworksResponse:
+      type: object
+      properties:
+        count:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+
+    PortalChangelogResponse:
+      type: object
+      properties:
+        count:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            type: object
+
+    PocztaMessage:
+      type: object
+      description: Message from the poczta.mobireg.pl API
+      properties:
+        id: { type: integer }
+        subject: { type: string }
+        content: { type: string, description: HTML content }
+        date: { type: string, format: date-time }
+        read_at: { type: string, format: date-time, nullable: true }
+        stared: { type: boolean }
+        trashed: { type: boolean }
+        files: { type: array, items: { type: object } }
+        author:
+          type: object
+          properties:
+            id: { type: integer }
+            name: { type: string }
+            role: { type: string }
+        recipients:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              roleName: { type: string }
+              read_at: { type: string, nullable: true }
+        previous:
+          type: array
+          description: Previous messages in thread
+          items: { type: object }
+
+    PocztaInboxResponse:
+      type: object
+      properties:
+        trash: { type: array, items: { type: integer } }
+        stares: { type: array, items: { type: integer } }
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PocztaMessage"
+        total: { type: integer }
+
+    PocztaReceiver:
+      type: object
+      properties:
+        id: { type: string, description: "Format: user_{userId} or group_{groupId}" }
+        name: { type: string }
+        role: { type: string }
+        children: { type: array, items: { type: object } }
+        parents: { type: array, items: { type: object } }
+        _type: { type: string }
