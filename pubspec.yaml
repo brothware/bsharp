@@ -1,0 +1,57 @@
+name: bsharp
+description: BSharp - Polish e-Grade register client
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.10.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+  go_router: ^14.8.1
+  dio: ^5.7.0
+  drift: ^2.23.1
+  sqlite3_flutter_libs: ^0.5.28
+  flutter_secure_storage: ^9.2.4
+  shared_preferences: ^2.5.3
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+  crypto: ^3.0.6
+  connectivity_plus: ^6.1.4
+  path_provider: ^2.1.5
+  collection: ^1.19.1
+  intl: ^0.20.2
+  slang_flutter: ^3.32.0
+  flutter_local_notifications: ^19.0.0
+  path: ^1.9.1
+  cookie_jar: ^4.0.8
+  dio_cookie_manager: ^3.1.4
+  url_launcher: ^6.3.1
+  google_mlkit_translation: ^0.13.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  very_good_analysis: ^7.0.0
+  build_runner: ^2.4.14
+  freezed: ^3.0.0
+  json_serializable: ^6.9.4
+  riverpod_generator: ^2.6.3
+  drift_dev: ^2.23.1
+  slang_build_runner: ^3.32.0
+  mocktail: ^1.0.4
+  custom_lint: ^0.7.5
+  riverpod_lint: ^2.6.3
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
