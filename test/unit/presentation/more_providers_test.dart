@@ -1,0 +1,291 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/presentation/more/providers/more_providers.dart';
+
+void main() {
+  group('filteredHomeworksProvider', () {
+    test('filters upcoming homeworks', () {
+      final future = DateTime.now().add(const Duration(days: 5));
+      final past = DateTime.now().subtract(const Duration(days: 5));
+      final container = ProviderContainer(
+        overrides: [
+          homeworksProvider.overrideWith(
+            (ref) => [
+              PortalHomework(
+                id: 1,
+                subjectName: 'Mat',
+                date: '2026-01-01',
+                dueDate: future.toIso8601String().substring(0, 10),
+                content: 'Future',
+              ),
+              PortalHomework(
+                id: 2,
+                subjectName: 'Pol',
+                date: '2026-01-01',
+                dueDate: past.toIso8601String().substring(0, 10),
+                content: 'Past',
+              ),
+            ],
+          ),
+          homeworkFilterProvider.overrideWith(
+            (ref) => HomeworkFilter.upcoming,
+          ),
+        ],
+      );
+
+      final result = container.read(filteredHomeworksProvider);
+      expect(result.length, 1);
+      expect(result.first.content, 'Future');
+    });
+
+    test('filters past homeworks', () {
+      final past = DateTime.now().subtract(const Duration(days: 5));
+      final container = ProviderContainer(
+        overrides: [
+          homeworksProvider.overrideWith(
+            (ref) => [
+              PortalHomework(
+                id: 1,
+                subjectName: 'Mat',
+                date: '2026-01-01',
+                dueDate: past.toIso8601String().substring(0, 10),
+                content: 'Past',
+              ),
+            ],
+          ),
+          homeworkFilterProvider.overrideWith(
+            (ref) => HomeworkFilter.past,
+          ),
+        ],
+      );
+
+      final result = container.read(filteredHomeworksProvider);
+      expect(result.length, 1);
+    });
+
+    test('returns all homeworks', () {
+      final container = ProviderContainer(
+        overrides: [
+          homeworksProvider.overrideWith(
+            (ref) => [
+              const PortalHomework(
+                id: 1,
+                subjectName: 'A',
+                date: '2026-01-01',
+                dueDate: '2026-06-01',
+                content: 'x',
+              ),
+              const PortalHomework(
+                id: 2,
+                subjectName: 'B',
+                date: '2026-01-01',
+                dueDate: '2025-01-01',
+                content: 'y',
+              ),
+            ],
+          ),
+          homeworkFilterProvider.overrideWith(
+            (ref) => HomeworkFilter.all,
+          ),
+        ],
+      );
+
+      final result = container.read(filteredHomeworksProvider);
+      expect(result.length, 2);
+    });
+  });
+
+  group('groupedHomeworksProvider', () {
+    test('groups by due date', () {
+      final container = ProviderContainer(
+        overrides: [
+          homeworksProvider.overrideWith(
+            (ref) => [
+              const PortalHomework(
+                id: 1,
+                subjectName: 'A',
+                date: '2026-01-01',
+                dueDate: '2026-03-01',
+                content: 'x',
+              ),
+              const PortalHomework(
+                id: 2,
+                subjectName: 'B',
+                date: '2026-01-01',
+                dueDate: '2026-03-01',
+                content: 'y',
+              ),
+              const PortalHomework(
+                id: 3,
+                subjectName: 'C',
+                date: '2026-01-01',
+                dueDate: '2026-03-02',
+                content: 'z',
+              ),
+            ],
+          ),
+          homeworkFilterProvider.overrideWith(
+            (ref) => HomeworkFilter.all,
+          ),
+        ],
+      );
+
+      final grouped = container.read(groupedHomeworksProvider);
+      expect(grouped.length, 2);
+      expect(grouped['2026-03-01']!.length, 2);
+      expect(grouped['2026-03-02']!.length, 1);
+    });
+  });
+
+  group('notesProvider and praisesProvider', () {
+    test('separates notes (type 0) and praises (type 1)', () {
+      final container = ProviderContainer(
+        overrides: [
+          reprimandsProvider.overrideWith(
+            (ref) => [
+              const PortalReprimand(
+                id: 1,
+                date: '2026-02-27',
+                teacherName: 'Jan',
+                content: 'Note',
+                type: 0,
+              ),
+              const PortalReprimand(
+                id: 2,
+                date: '2026-02-28',
+                teacherName: 'Anna',
+                content: 'Praise',
+                type: 1,
+              ),
+              const PortalReprimand(
+                id: 3,
+                date: '2026-02-26',
+                teacherName: 'Piotr',
+                content: 'Note2',
+                type: 0,
+              ),
+            ],
+          ),
+        ],
+      );
+
+      final notes = container.read(notesProvider);
+      expect(notes.length, 2);
+      expect(notes.every((r) => r.type == 0), isTrue);
+      expect(notes.first.date, '2026-02-27');
+
+      final praises = container.read(praisesProvider);
+      expect(praises.length, 1);
+      expect(praises.first.type, 1);
+    });
+  });
+
+  group('unreadBulletinsCountProvider', () {
+    test('counts unread bulletins', () {
+      final container = ProviderContainer(
+        overrides: [
+          bulletinsProvider.overrideWith(
+            (ref) => [
+              const PortalBulletin(
+                id: 1,
+                title: 'A',
+                content: '',
+                date: '2026-02-27',
+                author: 'Admin',
+                isRead: false,
+              ),
+              const PortalBulletin(
+                id: 2,
+                title: 'B',
+                content: '',
+                date: '2026-02-27',
+                author: 'Admin',
+                isRead: true,
+              ),
+              const PortalBulletin(
+                id: 3,
+                title: 'C',
+                content: '',
+                date: '2026-02-27',
+                author: 'Admin',
+                isRead: false,
+              ),
+            ],
+          ),
+        ],
+      );
+
+      expect(container.read(unreadBulletinsCountProvider), 2);
+    });
+  });
+
+  group('groupedChangelogProvider', () {
+    test('groups by date descending', () {
+      final container = ProviderContainer(
+        overrides: [
+          changelogProvider.overrideWith(
+            (ref) => [
+              const PortalChangelog(
+                date: '2026-02-27',
+                description: 'New grade',
+                type: 'grade',
+              ),
+              const PortalChangelog(
+                date: '2026-02-26',
+                description: 'Attendance',
+                type: 'attendance',
+              ),
+              const PortalChangelog(
+                date: '2026-02-27',
+                description: 'Message',
+                type: 'message',
+              ),
+            ],
+          ),
+        ],
+      );
+
+      final grouped = container.read(groupedChangelogProvider);
+      expect(grouped.length, 2);
+      expect(grouped.keys.first, '2026-02-27');
+      expect(grouped['2026-02-27']!.length, 2);
+    });
+  });
+
+  group('upcomingTestsProvider', () {
+    test('filters future tests and sorts by date', () {
+      final future1 = DateTime.now().add(const Duration(days: 10));
+      final future2 = DateTime.now().add(const Duration(days: 3));
+      final past = DateTime.now().subtract(const Duration(days: 5));
+
+      final container = ProviderContainer(
+        overrides: [
+          testsProvider.overrideWith(
+            (ref) => [
+              PortalTest(
+                id: 1,
+                subjectName: 'Mat',
+                date: future1.toIso8601String().substring(0, 10),
+              ),
+              PortalTest(
+                id: 2,
+                subjectName: 'Pol',
+                date: past.toIso8601String().substring(0, 10),
+              ),
+              PortalTest(
+                id: 3,
+                subjectName: 'Ang',
+                date: future2.toIso8601String().substring(0, 10),
+              ),
+            ],
+          ),
+        ],
+      );
+
+      final upcoming = container.read(upcomingTestsProvider);
+      expect(upcoming.length, 2);
+      expect(upcoming.first.subjectName, 'Ang');
+    });
+  });
+}
