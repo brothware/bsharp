@@ -1,4 +1,4 @@
 import 'package:drift/native.dart';
-import 'package:drift/drift.dart';
+import 'package:bsharp/data/data_sources/local/database.dart';
 
-QueryExecutor createInMemoryExecutor() => NativeDatabase.memory();
+AppDatabase? createTranslationDatabase() => AppDatabase(NativeDatabase.memory());

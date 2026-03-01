@@ -11,14 +11,14 @@ enum TranslationEngine { mlKit, deepL }
 
 class TranslationService {
   TranslationService({
-    required AppDatabase database,
+    AppDatabase? database,
     MlKitTranslationSource? mlKit,
     DeepLDataSource? deepL,
   })  : _database = database,
         _mlKit = mlKit,
         _deepL = deepL;
 
-  final AppDatabase _database;
+  final AppDatabase? _database;
   final MlKitTranslationSource? _mlKit;
   final DeepLDataSource? _deepL;
 
@@ -34,14 +34,17 @@ class TranslationService {
     bool isHtml = false,
   }) async {
     final hash = _sourceHash(text, targetLang);
+    final db = _database;
 
-    final cached = await (_database.select(_database.translationCacheEntries)
-          ..where((t) =>
-              t.sourceHash.equals(hash) & t.targetLang.equals(targetLang)))
-        .getSingleOrNull();
+    if (db != null) {
+      final cached = await (db.select(db.translationCacheEntries)
+            ..where((t) =>
+                t.sourceHash.equals(hash) & t.targetLang.equals(targetLang)))
+          .getSingleOrNull();
 
-    if (cached != null) {
-      return Result.success(cached.translatedText);
+      if (cached != null) {
+        return Result.success(cached.translatedText);
+      }
     }
 
     final result = _deepL != null
@@ -50,7 +53,7 @@ class TranslationService {
 
     return result.when(
       success: (translated) async {
-        await _database.into(_database.translationCacheEntries).insert(
+        await db?.into(db.translationCacheEntries).insert(
               TranslationCacheEntriesCompanion.insert(
                 sourceHash: hash,
                 targetLang: targetLang,
@@ -85,7 +88,10 @@ class TranslationService {
   }
 
   Future<void> clearCache() async {
-    await _database.delete(_database.translationCacheEntries).go();
+    final db = _database;
+    if (db != null) {
+      await db.delete(db.translationCacheEntries).go();
+    }
   }
 
   Future<void> dispose() async {

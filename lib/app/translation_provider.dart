@@ -12,9 +12,9 @@ final _isMobileProvider = Provider<bool>((ref) {
   return !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
 });
 
-final translationDatabaseProvider = Provider<AppDatabase>((ref) {
-  final db = AppDatabase(createInMemoryExecutor());
-  ref.onDispose(db.close);
+final translationDatabaseProvider = Provider<AppDatabase?>((ref) {
+  final db = createTranslationDatabase();
+  if (db != null) ref.onDispose(db.close);
   return db;
 });
 
