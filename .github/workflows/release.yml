@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   version:
@@ -129,7 +131,39 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: flutter build apk --release --target=lib/main_wear.dart --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
+
+      - name: Configure signing
+        env:
+          WEAR_KEYSTORE_BASE64: ${{ secrets.WEAR_KEYSTORE_BASE64 }}
+          WEAR_KEY_ALIAS: ${{ secrets.WEAR_KEY_ALIAS }}
+          WEAR_KEY_PASSWORD: ${{ secrets.WEAR_KEY_PASSWORD }}
+          WEAR_STORE_PASSWORD: ${{ secrets.WEAR_STORE_PASSWORD }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+        if: env.WEAR_KEYSTORE_BASE64 != '' || env.KEYSTORE_BASE64 != ''
+        run: |
+          if [ -n "$WEAR_KEYSTORE_BASE64" ]; then
+            echo "$WEAR_KEYSTORE_BASE64" | base64 -d > android/app/release.jks
+            cat > android/key.properties <<EOF
+          storePassword=$WEAR_STORE_PASSWORD
+          keyPassword=$WEAR_KEY_PASSWORD
+          keyAlias=$WEAR_KEY_ALIAS
+          storeFile=app/release.jks
+          EOF
+          else
+            echo "$KEYSTORE_BASE64" | base64 -d > android/app/release.jks
+            cat > android/key.properties <<EOF
+          storePassword=$STORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=app/release.jks
+          EOF
+          fi
+
+      - name: Build WearOS APK
+        run: flutter build apk --release --target=lib/main_wear.dart --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -196,3 +230,24 @@ jobs:
             artifacts/bsharp-ios-${{ needs.version.outputs.version }}.tar.gz
           generate_release_notes: true
 
+  deploy-pages:
+    needs: build-web
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-web
+          path: web-build
+
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web-build
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
