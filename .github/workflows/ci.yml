@@ -22,6 +22,7 @@ jobs:
           cache: true
 
       - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
       - run: dart format --set-exit-if-changed .
       - run: flutter analyze --fatal-warnings
 
@@ -60,6 +61,7 @@ jobs:
           cache: true
 
       - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build web --base-href /bsharp/
 
       - uses: actions/upload-artifact@v4
@@ -84,6 +86,7 @@ jobs:
           cache: true
 
       - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Configure signing
         if: env.KEYSTORE_BASE64 != ''
@@ -126,6 +129,7 @@ jobs:
           cache: true
 
       - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build ios --release --no-codesign
 
       - uses: actions/upload-artifact@v4
@@ -150,6 +154,7 @@ jobs:
           cache: true
 
       - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Configure signing
         env:

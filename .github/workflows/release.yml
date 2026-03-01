@@ -38,6 +38,7 @@ jobs:
           cache: true
 
       - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build web --base-href /bsharp/ --build-name=${{ needs.version.outputs.version }}
 
       - uses: actions/upload-artifact@v4
@@ -62,6 +63,7 @@ jobs:
           cache: true
 
       - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Configure signing
         if: env.KEYSTORE_BASE64 != ''
@@ -107,6 +109,7 @@ jobs:
           cache: true
 
       - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build ios --release --no-codesign --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
       - uses: actions/upload-artifact@v4
@@ -131,6 +134,7 @@ jobs:
           cache: true
 
       - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Configure signing
         env:
