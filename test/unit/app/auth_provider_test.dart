@@ -32,7 +32,7 @@ void main() {
       expect(state, AuthState.unauthenticated);
     });
 
-    test('returns needsSetup when credentials but no student', () async {
+    test('returns unauthenticated when credentials but no student', () async {
       await credentialStorage.saveCredentials(
         school: 'sp1',
         login: 'user1',
@@ -42,7 +42,7 @@ void main() {
       container = createContainer();
 
       final state = await container.read(authStateProvider.future);
-      expect(state, AuthState.needsSetup);
+      expect(state, AuthState.unauthenticated);
     });
 
     test('returns authenticated when credentials and student exist',
@@ -67,15 +67,6 @@ void main() {
       await container.read(authStateProvider.notifier).completeSetup();
       final state = await container.read(authStateProvider.future);
       expect(state, AuthState.authenticated);
-    });
-
-    test('credentialsSaved sets state to needsSetup', () async {
-      container = createContainer();
-      await container.read(authStateProvider.future);
-
-      await container.read(authStateProvider.notifier).credentialsSaved();
-      final state = await container.read(authStateProvider.future);
-      expect(state, AuthState.needsSetup);
     });
 
     test('logout clears storage and sets unauthenticated', () async {

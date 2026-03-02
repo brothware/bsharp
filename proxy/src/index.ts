@@ -1,12 +1,28 @@
-const ALLOWED_ORIGIN = 'https://brothware.github.io';
+const ALLOWED_ORIGINS = [
+  'https://brothware.github.io',
+];
+
 const USER_AGENT = 'Andreg 12345';
 
-const CORS_HEADERS: Record<string, string> = {
-  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With, X-CSRF-TOKEN',
-  'Access-Control-Allow-Credentials': 'true',
-};
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  try {
+    const url = new URL(origin);
+    return url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+  } catch {
+    return false;
+  }
+}
+
+function corsHeaders(origin: string): Record<string, string> {
+  return {
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With, X-CSRF-TOKEN',
+    'Access-Control-Allow-Credentials': 'true',
+  };
+}
 
 interface Route {
   pattern: RegExp;
@@ -37,9 +53,9 @@ const routes: Route[] = [
   },
 ];
 
-function addCorsHeaders(response: Response): Response {
+function addCorsHeaders(response: Response, origin: string): Response {
   const headers = new Headers(response.headers);
-  for (const [key, value] of Object.entries(CORS_HEADERS)) {
+  for (const [key, value] of Object.entries(corsHeaders(origin))) {
     headers.set(key, value);
   }
   return new Response(response.body, {
@@ -51,12 +67,18 @@ function addCorsHeaders(response: Response): Response {
 
 export default {
   async fetch(request: Request): Promise<Response> {
+    const origin = request.headers.get('Origin') ?? ALLOWED_ORIGINS[0];
+
+    if (!isAllowedOrigin(origin)) {
+      return new Response('Forbidden', { status: 403 });
+    }
+
     if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: CORS_HEADERS });
+      return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
 
     if (request.method !== 'POST') {
-      return addCorsHeaders(new Response('Method not allowed', { status: 405 }));
+      return addCorsHeaders(new Response('Method not allowed', { status: 405 }), origin);
     }
 
     const url = new URL(request.url);
@@ -80,9 +102,9 @@ export default {
         redirect: 'manual',
       });
 
-      return addCorsHeaders(upstream);
+      return addCorsHeaders(upstream, origin);
     }
 
-    return addCorsHeaders(new Response('Not found', { status: 404 }));
+    return addCorsHeaders(new Response('Not found', { status: 404 }), origin);
   },
 };

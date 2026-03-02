@@ -54,27 +54,6 @@ void main() {
     expect(find.text('Dashboard'), findsWidgets);
   });
 
-  testWidgets('BSharpApp shows Setup when needsSetup', (tester) async {
-    SharedPreferences.setMockInitialValues({});
-    final prefs = await SharedPreferences.getInstance();
-
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-          authStateProvider.overrideWith(
-            () => _FakeAuthNotifier(AuthState.needsSetup),
-          ),
-          credentialStorageProvider.overrideWithValue(_fakeStorage()),
-        ],
-        child: TranslationProvider(child: const BSharpApp()),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.text('Setup'), findsOneWidget);
-  });
-
   testWidgets('BSharpApp shows Login when unauthenticated', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
@@ -109,11 +88,6 @@ class _FakeAuthNotifier extends AsyncNotifier<AuthState>
   @override
   Future<void> completeSetup() async {
     state = const AsyncData(AuthState.authenticated);
-  }
-
-  @override
-  Future<void> credentialsSaved() async {
-    state = const AsyncData(AuthState.needsSetup);
   }
 
   @override

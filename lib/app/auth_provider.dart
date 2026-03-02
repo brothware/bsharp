@@ -23,22 +23,15 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   Future<AuthState> build() async {
     final storage = ref.read(credentialStorageProvider);
     final hasCredentials = await storage.hasCredentials();
-    if (!hasCredentials) {
-      return AuthState.unauthenticated;
-    }
     final hasStudent = await storage.hasSelectedStudent();
-    if (!hasStudent) {
-      return AuthState.needsSetup;
+    if (hasCredentials && hasStudent) {
+      return AuthState.authenticated;
     }
-    return AuthState.authenticated;
+    return AuthState.unauthenticated;
   }
 
   Future<void> completeSetup() async {
     state = const AsyncData(AuthState.authenticated);
-  }
-
-  Future<void> credentialsSaved() async {
-    state = const AsyncData(AuthState.needsSetup);
   }
 
   Future<void> logout() async {

@@ -66,7 +66,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
         }
         return switch (authState) {
           AuthState.authenticated => const WearHome(),
-          AuthState.unauthenticated || AuthState.needsSetup => const WearSetupScreen(),
+          AuthState.unauthenticated => const WearSetupScreen(),
         };
       },
       loading: () => const Scaffold(

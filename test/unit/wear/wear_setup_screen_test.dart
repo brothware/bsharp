@@ -55,7 +55,7 @@ void main() {
       expect(find.text('Fill in all fields'), findsOneWidget);
     });
 
-    testWidgets('needsSetup state pre-fills credentials from storage',
+    testWidgets('unauthenticated state shows credential fields',
         (tester) async {
       final fakeSecure = FakeFlutterSecureStorage();
       final storage = CredentialStorage(storage: fakeSecure);
@@ -67,7 +67,7 @@ void main() {
             wearScreenShapeProvider
                 .overrideWith((_) => WearScreenShape.rectangular),
             authStateProvider.overrideWith(
-              () => _FakeAuthNotifier(AuthState.needsSetup),
+              () => _FakeAuthNotifier(AuthState.unauthenticated),
             ),
           ],
           child: const MaterialApp(home: WearSetupScreen()),

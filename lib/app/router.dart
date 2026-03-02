@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:bsharp/presentation/attendance/screens/attendance_screen.dart';
 import 'package:bsharp/presentation/auth/screens/login_screen.dart';
-import 'package:bsharp/presentation/auth/screens/setup_wizard_screen.dart';
 import 'package:bsharp/presentation/bulletins/screens/bulletins_screen.dart';
 import 'package:bsharp/presentation/changelog/screens/changelog_screen.dart';
 import 'package:bsharp/presentation/common/widgets/main_shell.dart';
@@ -16,7 +15,6 @@ import 'package:bsharp/presentation/tests/screens/tests_screen.dart';
 
 abstract final class AppRoutes {
   static const login = '/login';
-  static const setup = '/setup';
   static const dashboard = '/dashboard';
   static const schedule = '/schedule';
   static const grades = '/grades';
@@ -30,21 +28,17 @@ abstract final class AppRoutes {
   static const changelog = '/changelog';
 }
 
-enum AuthState { unauthenticated, needsSetup, authenticated }
+enum AuthState { unauthenticated, authenticated }
 
 GoRouter createRouter({required AuthState authState}) {
   return GoRouter(
     initialLocation: AppRoutes.dashboard,
     redirect: (context, state) {
-      final location = state.uri.path;
-      final isOnLogin = location == AppRoutes.login;
-      final isOnSetup = location.startsWith(AppRoutes.setup);
+      final isOnLogin = state.uri.path == AppRoutes.login;
 
       return switch (authState) {
         AuthState.unauthenticated when !isOnLogin => AppRoutes.login,
-        AuthState.needsSetup when !isOnSetup => AppRoutes.setup,
-        AuthState.authenticated when isOnLogin || isOnSetup =>
-          AppRoutes.dashboard,
+        AuthState.authenticated when isOnLogin => AppRoutes.dashboard,
         _ => null,
       };
     },
@@ -52,10 +46,6 @@ GoRouter createRouter({required AuthState authState}) {
       GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.setup,
-        builder: (context, state) => const SetupWizardScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

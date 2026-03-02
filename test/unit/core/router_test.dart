@@ -15,7 +15,6 @@ void main() {
 
     test('AppRoutes constants are correct', () {
       expect(AppRoutes.login, '/login');
-      expect(AppRoutes.setup, '/setup');
       expect(AppRoutes.dashboard, '/dashboard');
       expect(AppRoutes.schedule, '/schedule');
       expect(AppRoutes.grades, '/grades');

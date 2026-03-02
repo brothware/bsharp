@@ -4,6 +4,8 @@ import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/core/constants/app_colors.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/remote/auth_service.dart';
+import 'package:bsharp/domain/entities/student.dart';
+import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/auth/providers/setup_providers.dart';
 
@@ -21,6 +23,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _isLoading = false;
   String? _errorMessage;
   bool _hasStoredCredentials = false;
+
+  List<Student>? _students;
+  int? _selectedStudentId;
+  String _passwordHash = '';
 
   @override
   void initState() {
@@ -76,30 +82,60 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _errorMessage = null;
     });
 
-    final passwordHash = AuthService.hashPassword(password);
+    _passwordHash = AuthService.hashPassword(password);
 
     final api = ref.read(
       setupApiProvider((
         school: school,
         parentLogin: login,
-        parentPassHash: passwordHash,
+        parentPassHash: _passwordHash,
       )),
     );
     final result = await api.syncDataSource.getSettings();
 
     if (!mounted) return;
 
-    result.when(
-      success: (_) async {
-        final storage = ref.read(credentialStorageProvider);
-        await storage.saveCredentials(
-          school: school,
-          login: login,
-          passwordHash: passwordHash,
-        );
+    await result.when(
+      success: (_) => _loadStudents(api),
+      failure: (failure) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = _mapFailureMessage(failure);
+        });
+      },
+    );
+  }
 
-        if (!mounted) return;
-        await ref.read(authStateProvider.notifier).credentialsSaved();
+  Future<void> _loadStudents(SetupApiState api) async {
+    final result = await api.syncDataSource.getStudents();
+
+    if (!mounted) return;
+
+    result.when(
+      success: (data) {
+        final studentsJson = data['ParentStudents'] as List<dynamic>? ?? [];
+        final students = studentsJson
+            .whereType<Map<String, dynamic>>()
+            .map(
+              (json) => Student(
+                id: json['id'] as int,
+                usersEduId: json['users_edu_id'] as int,
+                name: json['name'] as String,
+                surname: json['surname'] as String,
+                sex: Sex.fromString(json['sex'] as String),
+              ),
+            )
+            .toList();
+
+        if (students.length == 1) {
+          _finishLogin(students.first.id);
+          return;
+        }
+
+        setState(() {
+          _isLoading = false;
+          _students = students;
+        });
       },
       failure: (failure) {
         setState(() {
@@ -108,6 +144,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         });
       },
     );
+  }
+
+  Future<void> _finishLogin(int studentId) async {
+    final storage = ref.read(credentialStorageProvider);
+    await storage.saveCredentials(
+      school: _schoolController.text.trim(),
+      login: _loginController.text.trim(),
+      passwordHash: _passwordHash,
+    );
+    await storage.saveSelectedStudentId(studentId);
+
+    if (!mounted) return;
+    await ref.read(authStateProvider.notifier).completeSetup();
   }
 
   String _mapFailureMessage(AppFailure failure) {
@@ -120,8 +169,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     };
   }
 
+  void _switchAccount() {
+    final storage = ref.read(credentialStorageProvider);
+    storage.clearAll().then((_) {
+      if (mounted) {
+        setState(() {
+          _hasStoredCredentials = false;
+          _schoolController.clear();
+          _loginController.clear();
+          _passwordController.clear();
+          _errorMessage = null;
+          _students = null;
+          _selectedStudentId = null;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_students != null) {
+      return _buildStudentPicker(context);
+    }
+    return _buildLoginForm(context);
+  }
+
+  Widget _buildLoginForm(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -135,7 +208,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.school,
                     size: 64,
                     color: AppColors.seaGreen,
@@ -235,18 +308,83 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  void _switchAccount() {
-    final storage = ref.read(credentialStorageProvider);
-    storage.clearAll().then((_) {
-      if (mounted) {
-        setState(() {
-          _hasStoredCredentials = false;
-          _schoolController.clear();
-          _loginController.clear();
-          _passwordController.clear();
-          _errorMessage = null;
-        });
-      }
-    });
+  Widget _buildStudentPicker(BuildContext context) {
+    final theme = Theme.of(context);
+    final students = _students!;
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: _isLoading
+              ? null
+              : () => setState(() {
+                    _students = null;
+                    _selectedStudentId = null;
+                  }),
+        ),
+        title: Text(t.setup.selectStudent),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: students.length,
+                      itemBuilder: (context, index) {
+                        final student = students[index];
+                        final isSelected = student.id == _selectedStudentId;
+                        return Card(
+                          color: isSelected
+                              ? theme.colorScheme.primaryContainer
+                              : null,
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              child: Text(
+                                student.name.isNotEmpty
+                                    ? student.name[0]
+                                    : '?',
+                              ),
+                            ),
+                            title:
+                                Text('${student.name} ${student.surname}'),
+                            trailing: isSelected
+                                ? const Icon(Icons.check_circle)
+                                : null,
+                            onTap: () => setState(
+                              () => _selectedStudentId = student.id,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  FilledButton(
+                    onPressed:
+                        _selectedStudentId != null && !_isLoading
+                            ? () => _finishLogin(_selectedStudentId!)
+                            : null,
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Text(t.setup.finish),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
