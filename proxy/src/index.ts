@@ -3,6 +3,12 @@ const ALLOWED_ORIGINS = [
 ];
 
 const USER_AGENT = 'Andreg 12345';
+const ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
+
+const UPSTREAM_REWRITES: [RegExp, string][] = [
+  [/^https?:\/\/poczta\.mobireg\.pl(\/.*)?$/, '/poczta$1'],
+  [/^https?:\/\/rodzic\.mobireg\.pl(\/.*)?$/, '/portal$1'],
+];
 
 function isAllowedOrigin(origin: string | null): boolean {
   if (!origin) return false;
@@ -18,7 +24,7 @@ function isAllowedOrigin(origin: string | null): boolean {
 function corsHeaders(origin: string): Record<string, string> {
   return {
     'Access-Control-Allow-Origin': origin,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': ALLOWED_METHODS.join(', '),
     'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With, X-CSRF-TOKEN',
     'Access-Control-Allow-Credentials': 'true',
   };
@@ -47,20 +53,49 @@ const routes: Route[] = [
     addUserAgent: false,
   },
   {
+    pattern: /^\/poczta\/?$/,
+    buildUrl: () => `https://poczta.mobireg.pl/`,
+    addUserAgent: false,
+  },
+  {
     pattern: /^\/login\/([^/]+)\/(.+)$/,
     buildUrl: (m) => `https://mobireg.pl/${m[1]}/${m[2]}`,
     addUserAgent: false,
   },
 ];
 
-function addCorsHeaders(response: Response, origin: string): Response {
-  const headers = new Headers(response.headers);
+function rewriteLocationHeader(
+  headers: Headers,
+  proxyOrigin: string,
+): void {
+  const location = headers.get('location');
+  if (!location) return;
+
+  for (const [pattern, replacement] of UPSTREAM_REWRITES) {
+    const rewritten = location.replace(pattern, `${proxyOrigin}${replacement}`);
+    if (rewritten !== location) {
+      headers.set('location', rewritten);
+      return;
+    }
+  }
+}
+
+function buildResponse(
+  upstream: Response,
+  origin: string,
+  proxyOrigin: string,
+): Response {
+  const headers = new Headers(upstream.headers);
+
   for (const [key, value] of Object.entries(corsHeaders(origin))) {
     headers.set(key, value);
   }
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
+
+  rewriteLocationHeader(headers, proxyOrigin);
+
+  return new Response(upstream.body, {
+    status: upstream.status,
+    statusText: upstream.statusText,
     headers,
   });
 }
@@ -77,34 +112,45 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
 
-    if (request.method !== 'POST') {
-      return addCorsHeaders(new Response('Method not allowed', { status: 405 }), origin);
+    if (!ALLOWED_METHODS.includes(request.method)) {
+      return new Response('Method not allowed', { status: 405 });
     }
 
     const url = new URL(request.url);
+    const proxyOrigin = url.origin;
     const path = url.pathname;
 
     for (const route of routes) {
       const match = path.match(route.pattern);
       if (!match) continue;
 
-      const targetUrl = route.buildUrl(match);
+      let targetUrl = route.buildUrl(match);
+      if (url.search) {
+        targetUrl += url.search;
+      }
+
       const headers = new Headers(request.headers);
       headers.delete('host');
       if (route.addUserAgent) {
         headers.set('User-Agent', USER_AGENT);
       }
 
+      const hasBody = request.method !== 'GET' && request.method !== 'DELETE';
+
       const upstream = await fetch(targetUrl, {
-        method: 'POST',
+        method: request.method,
         headers,
-        body: request.body,
+        body: hasBody ? request.body : null,
         redirect: 'manual',
       });
 
-      return addCorsHeaders(upstream, origin);
+      return buildResponse(upstream, origin, proxyOrigin);
     }
 
-    return addCorsHeaders(new Response('Not found', { status: 404 }), origin);
+    return buildResponse(
+      new Response('Not found', { status: 404 }),
+      origin,
+      proxyOrigin,
+    );
   },
 };
