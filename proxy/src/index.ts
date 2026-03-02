@@ -80,6 +80,24 @@ function rewriteLocationHeader(
   }
 }
 
+function rewriteSetCookieHeaders(
+  original: Headers,
+  target: Headers,
+): void {
+  const cookies = original.getAll('set-cookie');
+  if (cookies.length === 0) return;
+
+  target.delete('set-cookie');
+  for (const cookie of cookies) {
+    let rewritten = cookie
+      .replace(/;\s*domain=[^;]*/gi, '')
+      .replace(/;\s*secure/gi, '')
+      .replace(/;\s*samesite=[^;]*/gi, '');
+    rewritten += '; SameSite=None; Secure';
+    target.append('set-cookie', rewritten);
+  }
+}
+
 function buildResponse(
   upstream: Response,
   origin: string,
@@ -92,6 +110,7 @@ function buildResponse(
   }
 
   rewriteLocationHeader(headers, proxyOrigin);
+  rewriteSetCookieHeaders(upstream.headers, headers);
 
   return new Response(upstream.body, {
     status: upstream.status,
