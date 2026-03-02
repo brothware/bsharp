@@ -111,8 +111,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (!mounted) return;
 
-    result.when(
-      success: (data) {
+    await result.when(
+      success: (data) async {
         final studentsJson = data['ParentStudents'] as List<dynamic>? ?? [];
         final students = studentsJson
             .whereType<Map<String, dynamic>>()
@@ -128,7 +128,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             .toList();
 
         if (students.length == 1) {
-          _finishLogin(students.first.id);
+          await _finishLogin(students.first.id);
           return;
         }
 

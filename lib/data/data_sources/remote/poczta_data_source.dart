@@ -23,11 +23,10 @@ class PocztaDataSource {
       );
 
       if (kIsWeb) {
-        final location =
-            ssoResponse.headers['x-redirect-location']?.first;
-        if (location != null) {
-          final relative = Uri.parse(location).path;
-          await _client.get<String>(relative);
+        final hasRedirect =
+            ssoResponse.headers['x-redirect-location']?.first != null;
+        if (hasRedirect) {
+          await _client.get<String>('/');
         }
       } else if (ssoResponse.statusCode == 302) {
         final location = ssoResponse.headers['location']?.first;
