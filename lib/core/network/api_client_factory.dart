@@ -1,9 +1,10 @@
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/core/network/interceptors/error_mapping_interceptor.dart';
 import 'package:bsharp/core/network/interceptors/mobile_auth_interceptor.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:flutter/foundation.dart';
 
 class ApiClientFactory {
   ApiClientFactory({
@@ -18,15 +19,21 @@ class ApiClientFactory {
   final String _parentLogin;
   final String _parentPassHash;
 
+  static const _proxy = AppConstants.proxyBaseUrl;
+
   Dio createMobileSyncClient() {
+    final baseUrl = kIsWeb
+        ? '$_proxy/sync/$_school'
+        : 'https://mobireg.pl/$_school/modules/api';
+
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'https://mobireg.pl/$_school/modules/api',
+        baseUrl: baseUrl,
         connectTimeout:
             const Duration(milliseconds: AppConstants.connectTimeoutMs),
         receiveTimeout:
             const Duration(milliseconds: AppConstants.receiveTimeoutMs),
-        headers: {'User-Agent': AppConstants.userAgent},
+        headers: kIsWeb ? null : {'User-Agent': AppConstants.userAgent},
       ),
     );
 
@@ -42,9 +49,12 @@ class ApiClientFactory {
   }
 
   Dio createPortalClient() {
+    const baseUrl =
+        kIsWeb ? '$_proxy/portal' : 'https://rodzic.mobireg.pl';
+
     return Dio(
       BaseOptions(
-        baseUrl: 'https://rodzic.mobireg.pl',
+        baseUrl: baseUrl,
         connectTimeout:
             const Duration(milliseconds: AppConstants.connectTimeoutMs),
         receiveTimeout:
@@ -54,9 +64,12 @@ class ApiClientFactory {
   }
 
   Dio createPocztaClient() {
+    const baseUrl =
+        kIsWeb ? '$_proxy/poczta' : 'https://poczta.mobireg.pl';
+
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'https://poczta.mobireg.pl',
+        baseUrl: baseUrl,
         connectTimeout:
             const Duration(milliseconds: AppConstants.connectTimeoutMs),
         receiveTimeout:
@@ -66,14 +79,19 @@ class ApiClientFactory {
         },
       ),
     );
-    dio.interceptors.add(CookieManager(CookieJar()));
+    if (!kIsWeb) {
+      dio.interceptors.add(CookieManager(CookieJar()));
+    }
     return dio;
   }
 
   Dio createWebLoginClient() {
+    final baseUrl =
+        kIsWeb ? '$_proxy/login/$_school' : 'https://mobireg.pl/$_school';
+
     return Dio(
       BaseOptions(
-        baseUrl: 'https://mobireg.pl/$_school',
+        baseUrl: baseUrl,
         connectTimeout:
             const Duration(milliseconds: AppConstants.connectTimeoutMs),
         receiveTimeout:
