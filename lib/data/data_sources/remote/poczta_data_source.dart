@@ -1,5 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:bsharp/core/error/result.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class PocztaDataSource {
   PocztaDataSource({required Dio client}) : _client = client;
@@ -21,11 +22,15 @@ class PocztaDataSource {
         ),
       );
 
-      if (ssoResponse.statusCode == 302) {
-        final location = ssoResponse.headers['location']?.first;
-        if (location != null) {
-          await _client.get<String>(location);
-        }
+      final isRedirect = ssoResponse.statusCode == 302 ||
+          (kIsWeb &&
+              ssoResponse.headers['x-original-status']?.first == '302');
+      final location = kIsWeb
+          ? ssoResponse.headers['x-redirect-location']?.first
+          : ssoResponse.headers['location']?.first;
+
+      if (isRedirect && location != null) {
+        await _client.get<String>(location);
       }
 
       final pageResponse = await _client.get<String>(

@@ -26,6 +26,7 @@ function corsHeaders(origin: string): Record<string, string> {
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': ALLOWED_METHODS.join(', '),
     'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With, X-CSRF-TOKEN',
+    'Access-Control-Expose-Headers': 'X-Redirect-Location, X-Original-Status',
     'Access-Control-Allow-Credentials': 'true',
   };
 }
@@ -111,6 +112,19 @@ function buildResponse(
 
   rewriteLocationHeader(headers, proxyOrigin);
   rewriteSetCookieHeaders(upstream.headers, headers);
+
+  const isRedirect =
+    upstream.status >= 300 && upstream.status < 400;
+
+  if (isRedirect) {
+    const location = headers.get('location');
+    if (location) {
+      headers.set('X-Redirect-Location', location);
+      headers.delete('location');
+    }
+    headers.set('X-Original-Status', String(upstream.status));
+    return new Response(upstream.body, { status: 200, headers });
+  }
 
   return new Response(upstream.body, {
     status: upstream.status,

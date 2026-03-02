@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:bsharp/core/error/result.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:bsharp/core/error/result.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   AuthService({required Dio webLoginClient}) : _client = webLoginClient;
@@ -41,8 +42,13 @@ class AuthService {
         ),
       );
 
-      if (response.statusCode == 302) {
-        final location = response.headers['location']?.first ?? '';
+      final isRedirect = response.statusCode == 302 ||
+          (kIsWeb && response.headers['x-original-status']?.first == '302');
+      final location = kIsWeb
+          ? response.headers['x-redirect-location']?.first
+          : response.headers['location']?.first;
+
+      if (isRedirect && location != null) {
         final token = _extractToken(location);
         if (token != null) {
           _portalToken = token;
