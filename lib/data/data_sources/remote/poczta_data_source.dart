@@ -23,9 +23,7 @@ class PocztaDataSource {
       );
 
       if (kIsWeb) {
-        final hasRedirect =
-            ssoResponse.headers['x-redirect-location']?.first != null;
-        if (hasRedirect) {
+        if (ssoResponse.headers['x-redirect-location']?.first != null) {
           await _client.get<String>('/');
         }
       } else if (ssoResponse.statusCode == 302) {

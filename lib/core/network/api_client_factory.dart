@@ -1,6 +1,7 @@
 import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/core/network/interceptors/error_mapping_interceptor.dart';
 import 'package:bsharp/core/network/interceptors/mobile_auth_interceptor.dart';
+import 'package:bsharp/core/network/interceptors/web_cookie_interceptor.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -83,9 +84,9 @@ class ApiClientFactory {
         extra: _webExtra,
       ),
     );
-    if (!kIsWeb) {
-      dio.interceptors.add(CookieManager(CookieJar()));
-    }
+    dio.interceptors.add(
+      kIsWeb ? WebCookieInterceptor() : CookieManager(CookieJar()),
+    );
     return dio;
   }
 

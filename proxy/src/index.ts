@@ -25,8 +25,10 @@ function corsHeaders(origin: string): Record<string, string> {
   return {
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': ALLOWED_METHODS.join(', '),
-    'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With, X-CSRF-TOKEN',
-    'Access-Control-Expose-Headers': 'X-Redirect-Location, X-Original-Status',
+    'Access-Control-Allow-Headers':
+      'Content-Type, X-Requested-With, X-CSRF-TOKEN, X-Cookie-Jar',
+    'Access-Control-Expose-Headers':
+      'X-Redirect-Location, X-Original-Status, X-Cookie-Jar',
     'Access-Control-Allow-Credentials': 'true',
   };
 }
@@ -81,22 +83,13 @@ function rewriteLocationHeader(
   }
 }
 
-function rewriteSetCookieHeaders(
-  original: Headers,
-  target: Headers,
-): void {
-  const cookies = original.getAll('set-cookie');
-  if (cookies.length === 0) return;
-
-  target.delete('set-cookie');
-  for (const cookie of cookies) {
-    let rewritten = cookie
-      .replace(/;\s*domain=[^;]*/gi, '')
-      .replace(/;\s*secure/gi, '')
-      .replace(/;\s*samesite=[^;]*/gi, '');
-    rewritten += '; SameSite=None; Secure';
-    target.append('set-cookie', rewritten);
+function extractCookieJar(upstream: Response): string {
+  const pairs: string[] = [];
+  for (const raw of upstream.headers.getAll('set-cookie')) {
+    const nameValue = raw.split(';')[0].trim();
+    if (nameValue) pairs.push(nameValue);
   }
+  return pairs.join('; ');
 }
 
 function buildResponse(
@@ -111,7 +104,13 @@ function buildResponse(
   }
 
   rewriteLocationHeader(headers, proxyOrigin);
-  rewriteSetCookieHeaders(upstream.headers, headers);
+
+  headers.delete('set-cookie');
+
+  const cookieJar = extractCookieJar(upstream);
+  if (cookieJar) {
+    headers.set('X-Cookie-Jar', cookieJar);
+  }
 
   const isRedirect =
     upstream.status >= 300 && upstream.status < 400;
@@ -166,6 +165,16 @@ export default {
       headers.delete('host');
       if (route.addUserAgent) {
         headers.set('User-Agent', USER_AGENT);
+      }
+
+      const clientCookies = headers.get('X-Cookie-Jar');
+      if (clientCookies) {
+        const existing = headers.get('cookie') ?? '';
+        headers.set(
+          'cookie',
+          existing ? `${existing}; ${clientCookies}` : clientCookies,
+        );
+        headers.delete('X-Cookie-Jar');
       }
 
       const hasBody = request.method !== 'GET' && request.method !== 'DELETE';
