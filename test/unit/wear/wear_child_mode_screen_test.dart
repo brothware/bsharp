@@ -10,7 +10,7 @@ import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import '../data/credential_storage_test.dart';
 
 Widget _buildApp({List<Override> overrides = const []}) {
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
@@ -22,9 +22,9 @@ Widget _buildApp({List<Override> overrides = const []}) {
 }
 
 Future<Widget> _buildAppWithPin() async {
-  final fakeSecure = FakeFlutterSecureStorage();
+  final fakeSecure = FakeKeyValueStore();
   await fakeSecure.write(key: 'child_mode_pin', value: '1234');
-  final storage = CredentialStorage(storage: fakeSecure);
+  final storage = CredentialStorage(store: fakeSecure);
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),

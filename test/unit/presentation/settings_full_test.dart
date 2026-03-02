@@ -13,7 +13,7 @@ Future<Widget> _buildSettings({String? locale}) async {
   final initial = locale != null ? {'locale': locale} : <String, Object>{};
   SharedPreferences.setMockInitialValues(initial);
   final prefs = await SharedPreferences.getInstance();
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
 
   return ProviderScope(
     overrides: [

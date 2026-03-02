@@ -14,7 +14,7 @@ import '../data/credential_storage_test.dart';
 Future<Widget> _buildApp({List<Override> overrides = const []}) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
@@ -76,10 +76,10 @@ void main() {
 
     testWidgets('in child mode only shows active item, hides sync/about/logout',
         (tester) async {
-      final fakeSecure = FakeFlutterSecureStorage();
+      final fakeSecure = FakeKeyValueStore();
       await fakeSecure.write(key: 'child_mode_pin', value: '1234');
       await fakeSecure.write(key: 'child_mode_active', value: 'true');
-      final storage = CredentialStorage(storage: fakeSecure);
+      final storage = CredentialStorage(store: fakeSecure);
 
       await tester.pumpWidget(
         ProviderScope(

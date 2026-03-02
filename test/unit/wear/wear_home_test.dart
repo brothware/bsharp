@@ -12,7 +12,7 @@ import 'package:bsharp/wear/widgets/wear_page_indicator.dart';
 import '../data/credential_storage_test.dart';
 
 Widget _buildApp({List<Override> overrides = const []}) {
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
@@ -114,7 +114,7 @@ void main() {
     });
 
     testWidgets('child mode hides filtered tiles', (tester) async {
-      final fakeSecure = FakeFlutterSecureStorage();
+      final fakeSecure = FakeKeyValueStore();
       await fakeSecure.write(key: 'child_mode_pin', value: '1234');
       await fakeSecure.write(key: 'child_mode_active', value: 'true');
       await fakeSecure.write(
@@ -128,7 +128,7 @@ void main() {
           'notesVisible': true,
         }),
       );
-      final storage = CredentialStorage(storage: fakeSecure);
+      final storage = CredentialStorage(store: fakeSecure);
 
       await tester.pumpWidget(
         ProviderScope(
@@ -153,7 +153,7 @@ void main() {
 
     testWidgets('child mode with all features hidden shows new tiles + settings',
         (tester) async {
-      final fakeSecure = FakeFlutterSecureStorage();
+      final fakeSecure = FakeKeyValueStore();
       await fakeSecure.write(key: 'child_mode_pin', value: '1234');
       await fakeSecure.write(key: 'child_mode_active', value: 'true');
       await fakeSecure.write(
@@ -167,7 +167,7 @@ void main() {
           'notesVisible': false,
         }),
       );
-      final storage = CredentialStorage(storage: fakeSecure);
+      final storage = CredentialStorage(store: fakeSecure);
 
       await tester.pumpWidget(
         ProviderScope(

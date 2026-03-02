@@ -54,7 +54,7 @@ Widget _buildTile({
   List<SubjectGrades> subjectGrades = const [],
   Set<int> newIds = const {},
 }) {
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),

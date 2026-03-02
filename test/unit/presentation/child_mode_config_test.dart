@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/child_mode_provider.dart';
@@ -14,7 +13,7 @@ Widget _buildApp({
   CredentialStorage? storage,
 }) {
   final store =
-      storage ?? CredentialStorage(storage: FakeFlutterSecureStorage());
+      storage ?? CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(store),

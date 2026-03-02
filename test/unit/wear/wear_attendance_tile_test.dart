@@ -16,7 +16,7 @@ Widget _buildTile({
   List<Attendance> attendances = const [],
   List<AttendanceType> types = const [],
 }) {
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),

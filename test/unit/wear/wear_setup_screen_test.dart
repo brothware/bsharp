@@ -10,7 +10,7 @@ import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import '../data/credential_storage_test.dart';
 
 Widget _buildApp({List<Override> overrides = const []}) {
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
@@ -57,8 +57,8 @@ void main() {
 
     testWidgets('unauthenticated state shows credential fields',
         (tester) async {
-      final fakeSecure = FakeFlutterSecureStorage();
-      final storage = CredentialStorage(storage: fakeSecure);
+      final fakeSecure = FakeKeyValueStore();
+      final storage = CredentialStorage(store: fakeSecure);
 
       await tester.pumpWidget(
         ProviderScope(

@@ -10,7 +10,7 @@ import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import '../data/credential_storage_test.dart';
 
 Widget _buildScreen({required PortalBulletin bulletin}) {
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),

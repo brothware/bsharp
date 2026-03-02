@@ -9,12 +9,12 @@ import '../data/credential_storage_test.dart';
 void main() {
   group('AuthNotifier', () {
     late ProviderContainer container;
-    late FakeFlutterSecureStorage fakeSecureStorage;
+    late FakeKeyValueStore fakeSecureStorage;
     late CredentialStorage credentialStorage;
 
     setUp(() {
-      fakeSecureStorage = FakeFlutterSecureStorage();
-      credentialStorage = CredentialStorage(storage: fakeSecureStorage);
+      fakeSecureStorage = FakeKeyValueStore();
+      credentialStorage = CredentialStorage(store: fakeSecureStorage);
     });
 
     ProviderContainer createContainer() {
@@ -92,9 +92,9 @@ void main() {
 
   group('selectedStudentIdProvider', () {
     test('returns null when no student selected', () async {
-      final fakeSecureStorage = FakeFlutterSecureStorage();
+      final fakeSecureStorage = FakeKeyValueStore();
       final credentialStorage =
-          CredentialStorage(storage: fakeSecureStorage);
+          CredentialStorage(store: fakeSecureStorage);
 
       final container = ProviderContainer(
         overrides: [
@@ -107,9 +107,9 @@ void main() {
     });
 
     test('returns student id when set', () async {
-      final fakeSecureStorage = FakeFlutterSecureStorage();
+      final fakeSecureStorage = FakeKeyValueStore();
       final credentialStorage =
-          CredentialStorage(storage: fakeSecureStorage);
+          CredentialStorage(store: fakeSecureStorage);
       await credentialStorage.saveSelectedStudentId(42);
 
       final container = ProviderContainer(

@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'unit/data/credential_storage_test.dart';
 
 CredentialStorage _fakeStorage() =>
-    CredentialStorage(storage: FakeFlutterSecureStorage());
+    CredentialStorage(store: FakeKeyValueStore());
 
 void main() {
   testWidgets('BSharpApp renders MaterialApp', (tester) async {

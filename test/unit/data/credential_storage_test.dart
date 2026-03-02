@@ -1,15 +1,14 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/data/data_sources/local/key_value_store.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  late FakeFlutterSecureStorage fakeStorage;
+  late FakeKeyValueStore fakeStorage;
   late CredentialStorage credentialStorage;
 
   setUp(() {
-    fakeStorage = FakeFlutterSecureStorage();
-    credentialStorage = CredentialStorage(storage: fakeStorage);
+    fakeStorage = FakeKeyValueStore();
+    credentialStorage = CredentialStorage(store: fakeStorage);
   });
 
   group('CredentialStorage', () {
@@ -71,136 +70,30 @@ void main() {
     });
 
     test('getSelectedStudentId returns null for invalid value', () async {
-      fakeStorage._data['selected_student_id'] = 'notanumber';
+      fakeStorage.data['selected_student_id'] = 'notanumber';
       expect(await credentialStorage.getSelectedStudentId(), isNull);
     });
   });
 }
 
-class FakeFlutterSecureStorage implements FlutterSecureStorage {
-  final Map<String, String> _data = {};
+class FakeKeyValueStore implements KeyValueStore {
+  final Map<String, String> data = {};
 
   @override
-  Future<String?> read({
-    required String key,
-    IOSOptions? iOptions,
-    AndroidOptions? aOptions,
-    LinuxOptions? lOptions,
-    WebOptions? webOptions,
-    MacOsOptions? mOptions,
-    WindowsOptions? wOptions,
-  }) async {
-    return _data[key];
+  Future<String?> read({required String key}) async => data[key];
+
+  @override
+  Future<void> write({required String key, required String value}) async {
+    data[key] = value;
   }
 
   @override
-  Future<void> write({
-    required String key,
-    required String? value,
-    IOSOptions? iOptions,
-    AndroidOptions? aOptions,
-    LinuxOptions? lOptions,
-    WebOptions? webOptions,
-    MacOsOptions? mOptions,
-    WindowsOptions? wOptions,
-  }) async {
-    if (value != null) {
-      _data[key] = value;
-    } else {
-      _data.remove(key);
-    }
+  Future<void> delete({required String key}) async {
+    data.remove(key);
   }
 
   @override
-  Future<void> delete({
-    required String key,
-    IOSOptions? iOptions,
-    AndroidOptions? aOptions,
-    LinuxOptions? lOptions,
-    WebOptions? webOptions,
-    MacOsOptions? mOptions,
-    WindowsOptions? wOptions,
-  }) async {
-    _data.remove(key);
+  Future<void> deleteAll() async {
+    data.clear();
   }
-
-  @override
-  Future<void> deleteAll({
-    IOSOptions? iOptions,
-    AndroidOptions? aOptions,
-    LinuxOptions? lOptions,
-    WebOptions? webOptions,
-    MacOsOptions? mOptions,
-    WindowsOptions? wOptions,
-  }) async {
-    _data.clear();
-  }
-
-  @override
-  Future<bool> containsKey({
-    required String key,
-    IOSOptions? iOptions,
-    AndroidOptions? aOptions,
-    LinuxOptions? lOptions,
-    WebOptions? webOptions,
-    MacOsOptions? mOptions,
-    WindowsOptions? wOptions,
-  }) async {
-    return _data.containsKey(key);
-  }
-
-  @override
-  Future<Map<String, String>> readAll({
-    IOSOptions? iOptions,
-    AndroidOptions? aOptions,
-    LinuxOptions? lOptions,
-    WebOptions? webOptions,
-    MacOsOptions? mOptions,
-    WindowsOptions? wOptions,
-  }) async {
-    return Map.from(_data);
-  }
-
-  @override
-  AndroidOptions get aOptions => AndroidOptions.defaultOptions;
-
-  @override
-  IOSOptions get iOptions => IOSOptions.defaultOptions;
-
-  @override
-  LinuxOptions get lOptions => LinuxOptions.defaultOptions;
-
-  @override
-  MacOsOptions get mOptions => MacOsOptions.defaultOptions;
-
-  @override
-  WebOptions get webOptions => WebOptions.defaultOptions;
-
-  @override
-  WindowsOptions get wOptions => WindowsOptions.defaultOptions;
-
-  @override
-  Future<bool> isCupertinoProtectedDataAvailable() async => true;
-
-  @override
-  Stream<bool> get onCupertinoProtectedDataAvailabilityChanged =>
-      const Stream.empty();
-
-  @override
-  void registerListener({
-    required String key,
-    required ValueChanged<String?> listener,
-  }) {}
-
-  @override
-  void unregisterListener({
-    required String key,
-    required ValueChanged<String?> listener,
-  }) {}
-
-  @override
-  void unregisterAllListeners() {}
-
-  @override
-  void unregisterAllListenersForKey({required String key}) {}
 }

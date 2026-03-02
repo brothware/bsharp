@@ -9,7 +9,7 @@ import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import '../data/credential_storage_test.dart';
 
 ProviderContainer _createContainer({CredentialStorage? storage}) {
-  final store = storage ?? CredentialStorage(storage: FakeFlutterSecureStorage());
+  final store = storage ?? CredentialStorage(store: FakeKeyValueStore());
   return ProviderContainer(
     overrides: [
       credentialStorageProvider.overrideWithValue(store),
@@ -257,9 +257,9 @@ void main() {
     });
 
     test('loadPin restores isPinSet from storage', () async {
-      final fakeStorage = FakeFlutterSecureStorage();
+      final fakeStorage = FakeKeyValueStore();
       await fakeStorage.write(key: 'child_mode_pin', value: '9999');
-      final storage = CredentialStorage(storage: fakeStorage);
+      final storage = CredentialStorage(store: fakeStorage);
       final container = _createContainer(storage: storage);
 
       container.read(childModeProvider);
@@ -269,8 +269,8 @@ void main() {
     });
 
     test('enterChildMode persists active state', () async {
-      final fakeStorage = FakeFlutterSecureStorage();
-      final storage = CredentialStorage(storage: fakeStorage);
+      final fakeStorage = FakeKeyValueStore();
+      final storage = CredentialStorage(store: fakeStorage);
       final container = _createContainer(storage: storage);
       final notifier = container.read(childModeProvider.notifier);
 
@@ -281,8 +281,8 @@ void main() {
     });
 
     test('exitChildMode persists inactive state', () async {
-      final fakeStorage = FakeFlutterSecureStorage();
-      final storage = CredentialStorage(storage: fakeStorage);
+      final fakeStorage = FakeKeyValueStore();
+      final storage = CredentialStorage(store: fakeStorage);
       final container = _createContainer(storage: storage);
       final notifier = container.read(childModeProvider.notifier);
 
@@ -294,8 +294,8 @@ void main() {
     });
 
     test('updateConfig persists config to storage', () async {
-      final fakeStorage = FakeFlutterSecureStorage();
-      final storage = CredentialStorage(storage: fakeStorage);
+      final fakeStorage = FakeKeyValueStore();
+      final storage = CredentialStorage(store: fakeStorage);
       final container = _createContainer(storage: storage);
       final notifier = container.read(childModeProvider.notifier);
 
@@ -311,7 +311,7 @@ void main() {
     });
 
     test('restores child mode and config from storage', () async {
-      final fakeStorage = FakeFlutterSecureStorage();
+      final fakeStorage = FakeKeyValueStore();
       await fakeStorage.write(key: 'child_mode_pin', value: '1234');
       await fakeStorage.write(key: 'child_mode_active', value: 'true');
       await fakeStorage.write(
@@ -325,7 +325,7 @@ void main() {
           'notesVisible': true,
         }),
       );
-      final storage = CredentialStorage(storage: fakeStorage);
+      final storage = CredentialStorage(store: fakeStorage);
       final container = _createContainer(storage: storage);
 
       container.read(childModeProvider);
@@ -339,7 +339,7 @@ void main() {
 
     test('restores failed attempts and lockout from storage', () async {
       final lockedUntil = DateTime.now().add(const Duration(minutes: 3));
-      final fakeStorage = FakeFlutterSecureStorage();
+      final fakeStorage = FakeKeyValueStore();
       await fakeStorage.write(key: 'child_mode_pin', value: '1234');
       await fakeStorage.write(
         key: 'child_mode_failed_attempts',
@@ -349,7 +349,7 @@ void main() {
         key: 'child_mode_locked_until',
         value: lockedUntil.toIso8601String(),
       );
-      final storage = CredentialStorage(storage: fakeStorage);
+      final storage = CredentialStorage(store: fakeStorage);
       final container = _createContainer(storage: storage);
 
       container.read(childModeProvider);
@@ -361,8 +361,8 @@ void main() {
     });
 
     test('verifyPin persists lock state', () async {
-      final fakeStorage = FakeFlutterSecureStorage();
-      final storage = CredentialStorage(storage: fakeStorage);
+      final fakeStorage = FakeKeyValueStore();
+      final storage = CredentialStorage(store: fakeStorage);
       final container = _createContainer(storage: storage);
       final notifier = container.read(childModeProvider.notifier);
 
@@ -373,8 +373,8 @@ void main() {
     });
 
     test('removePin clears all persisted state', () async {
-      final fakeStorage = FakeFlutterSecureStorage();
-      final storage = CredentialStorage(storage: fakeStorage);
+      final fakeStorage = FakeKeyValueStore();
+      final storage = CredentialStorage(store: fakeStorage);
       final container = _createContainer(storage: storage);
       final notifier = container.read(childModeProvider.notifier);
 

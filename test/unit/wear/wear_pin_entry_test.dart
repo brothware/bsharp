@@ -13,7 +13,7 @@ void main() {
   group('WearPinEntry', () {
     testWidgets('renders title and keypad', (tester) async {
       final storage =
-          CredentialStorage(storage: FakeFlutterSecureStorage());
+          CredentialStorage(store: FakeKeyValueStore());
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -36,7 +36,7 @@ void main() {
 
     testWidgets('shows pin dots', (tester) async {
       final storage =
-          CredentialStorage(storage: FakeFlutterSecureStorage());
+          CredentialStorage(store: FakeKeyValueStore());
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -63,10 +63,10 @@ void main() {
     });
 
     testWidgets('shows error on wrong PIN', (tester) async {
-      final fakeSecure = FakeFlutterSecureStorage();
+      final fakeSecure = FakeKeyValueStore();
       await fakeSecure.write(key: 'child_mode_pin', value: '1234');
       await fakeSecure.write(key: 'child_mode_active', value: 'true');
-      final storage = CredentialStorage(storage: fakeSecure);
+      final storage = CredentialStorage(store: fakeSecure);
 
       await tester.pumpWidget(
         ProviderScope(
@@ -92,10 +92,10 @@ void main() {
 
     testWidgets('shows decreasing attempts on repeated wrong PINs',
         (tester) async {
-      final fakeSecure = FakeFlutterSecureStorage();
+      final fakeSecure = FakeKeyValueStore();
       await fakeSecure.write(key: 'child_mode_pin', value: '1234');
       await fakeSecure.write(key: 'child_mode_active', value: 'true');
-      final storage = CredentialStorage(storage: fakeSecure);
+      final storage = CredentialStorage(store: fakeSecure);
 
       await tester.pumpWidget(
         ProviderScope(
@@ -125,7 +125,7 @@ void main() {
 
     testWidgets('shows locked state after max attempts', (tester) async {
       final lockedUntil = DateTime.now().add(const Duration(minutes: 5));
-      final fakeSecure = FakeFlutterSecureStorage();
+      final fakeSecure = FakeKeyValueStore();
       await fakeSecure.write(key: 'child_mode_pin', value: '1234');
       await fakeSecure.write(key: 'child_mode_active', value: 'true');
       await fakeSecure.write(
@@ -136,7 +136,7 @@ void main() {
         key: 'child_mode_locked_until',
         value: lockedUntil.toIso8601String(),
       );
-      final storage = CredentialStorage(storage: fakeSecure);
+      final storage = CredentialStorage(store: fakeSecure);
 
       await tester.pumpWidget(
         ProviderScope(
@@ -158,7 +158,7 @@ void main() {
 
     testWidgets('delete button removes last entered digit', (tester) async {
       final storage =
-          CredentialStorage(storage: FakeFlutterSecureStorage());
+          CredentialStorage(store: FakeKeyValueStore());
       await tester.pumpWidget(
         ProviderScope(
           overrides: [

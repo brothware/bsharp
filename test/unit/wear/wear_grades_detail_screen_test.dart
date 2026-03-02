@@ -41,7 +41,7 @@ Widget _buildScreen({
   List<SubjectGrades> subjectGrades = const [],
   List<Term> terms = const [],
 }) {
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),

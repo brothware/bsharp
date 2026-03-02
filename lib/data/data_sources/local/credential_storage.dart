@@ -1,10 +1,13 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:bsharp/data/data_sources/local/key_value_store.dart';
+import 'package:bsharp/data/data_sources/local/key_value_store_native.dart'
+    if (dart.library.js_interop) 'package:bsharp/data/data_sources/local/key_value_store_web.dart'
+    as platform;
 
 class CredentialStorage {
-  CredentialStorage({FlutterSecureStorage? storage})
-      : _storage = storage ?? const FlutterSecureStorage();
+  CredentialStorage({KeyValueStore? store})
+      : _store = store ?? platform.createDefaultStore();
 
-  final FlutterSecureStorage _storage;
+  final KeyValueStore _store;
 
   static const _schoolKey = 'school';
   static const _loginKey = 'login';
@@ -18,19 +21,19 @@ class CredentialStorage {
   static const _childModeLockedUntilKey = 'child_mode_locked_until';
   static const _deeplApiKeyKey = 'deepl_api_key';
 
-  Future<String?> getSchool() => _storage.read(key: _schoolKey);
+  Future<String?> getSchool() => _store.read(key: _schoolKey);
 
-  Future<String?> getLogin() => _storage.read(key: _loginKey);
+  Future<String?> getLogin() => _store.read(key: _loginKey);
 
-  Future<String?> getPasswordHash() => _storage.read(key: _passwordHashKey);
+  Future<String?> getPasswordHash() => _store.read(key: _passwordHashKey);
 
   Future<int?> getSelectedStudentId() async {
-    final value = await _storage.read(key: _selectedStudentIdKey);
+    final value = await _store.read(key: _selectedStudentIdKey);
     return value != null ? int.tryParse(value) : null;
   }
 
   Future<String?> getMessagesToken() =>
-      _storage.read(key: _messagesTokenKey);
+      _store.read(key: _messagesTokenKey);
 
   Future<void> saveCredentials({
     required String school,
@@ -38,66 +41,66 @@ class CredentialStorage {
     required String passwordHash,
   }) async {
     await Future.wait([
-      _storage.write(key: _schoolKey, value: school),
-      _storage.write(key: _loginKey, value: login),
-      _storage.write(key: _passwordHashKey, value: passwordHash),
+      _store.write(key: _schoolKey, value: school),
+      _store.write(key: _loginKey, value: login),
+      _store.write(key: _passwordHashKey, value: passwordHash),
     ]);
   }
 
   Future<void> saveSelectedStudentId(int studentId) =>
-      _storage.write(
+      _store.write(
         key: _selectedStudentIdKey,
         value: studentId.toString(),
       );
 
   Future<void> saveMessagesToken(String token) =>
-      _storage.write(key: _messagesTokenKey, value: token);
+      _store.write(key: _messagesTokenKey, value: token);
 
   Future<String?> getChildModePin() =>
-      _storage.read(key: _childModePinKey);
+      _store.read(key: _childModePinKey);
 
   Future<void> saveChildModePin(String pin) =>
-      _storage.write(key: _childModePinKey, value: pin);
+      _store.write(key: _childModePinKey, value: pin);
 
   Future<void> clearChildModePin() =>
-      _storage.delete(key: _childModePinKey);
+      _store.delete(key: _childModePinKey);
 
   Future<bool> isChildModeActive() async {
-    final value = await _storage.read(key: _childModeActiveKey);
+    final value = await _store.read(key: _childModeActiveKey);
     return value == 'true';
   }
 
   Future<void> saveChildModeActive({required bool active}) =>
-      _storage.write(key: _childModeActiveKey, value: active.toString());
+      _store.write(key: _childModeActiveKey, value: active.toString());
 
   Future<String?> getChildModeConfig() =>
-      _storage.read(key: _childModeConfigKey);
+      _store.read(key: _childModeConfigKey);
 
   Future<void> saveChildModeConfig(String configJson) =>
-      _storage.write(key: _childModeConfigKey, value: configJson);
+      _store.write(key: _childModeConfigKey, value: configJson);
 
   Future<int> getChildModeFailedAttempts() async {
-    final value = await _storage.read(key: _childModeFailedAttemptsKey);
+    final value = await _store.read(key: _childModeFailedAttemptsKey);
     return value != null ? (int.tryParse(value) ?? 0) : 0;
   }
 
   Future<void> saveChildModeFailedAttempts(int attempts) =>
-      _storage.write(
+      _store.write(
         key: _childModeFailedAttemptsKey,
         value: attempts.toString(),
       );
 
   Future<DateTime?> getChildModeLockedUntil() async {
-    final value = await _storage.read(key: _childModeLockedUntilKey);
+    final value = await _store.read(key: _childModeLockedUntilKey);
     if (value == null) return null;
     return DateTime.tryParse(value);
   }
 
   Future<void> saveChildModeLockedUntil(DateTime? lockedUntil) async {
     if (lockedUntil == null) {
-      await _storage.delete(key: _childModeLockedUntilKey);
+      await _store.delete(key: _childModeLockedUntilKey);
     } else {
-      await _storage.write(
+      await _store.write(
         key: _childModeLockedUntilKey,
         value: lockedUntil.toIso8601String(),
       );
@@ -105,20 +108,20 @@ class CredentialStorage {
   }
 
   Future<void> clearChildModeState() => Future.wait([
-        _storage.delete(key: _childModeActiveKey),
-        _storage.delete(key: _childModeConfigKey),
-        _storage.delete(key: _childModeFailedAttemptsKey),
-        _storage.delete(key: _childModeLockedUntilKey),
+        _store.delete(key: _childModeActiveKey),
+        _store.delete(key: _childModeConfigKey),
+        _store.delete(key: _childModeFailedAttemptsKey),
+        _store.delete(key: _childModeLockedUntilKey),
       ]);
 
   Future<String?> getDeeplApiKey() =>
-      _storage.read(key: _deeplApiKeyKey);
+      _store.read(key: _deeplApiKeyKey);
 
   Future<void> saveDeeplApiKey(String key) =>
-      _storage.write(key: _deeplApiKeyKey, value: key);
+      _store.write(key: _deeplApiKeyKey, value: key);
 
   Future<void> clearDeeplApiKey() =>
-      _storage.delete(key: _deeplApiKeyKey);
+      _store.delete(key: _deeplApiKeyKey);
 
   Future<bool> hasCredentials() async {
     final results = await Future.wait([
@@ -134,5 +137,5 @@ class CredentialStorage {
     return id != null;
   }
 
-  Future<void> clearAll() => _storage.deleteAll();
+  Future<void> clearAll() => _store.deleteAll();
 }

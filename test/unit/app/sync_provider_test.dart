@@ -7,7 +7,7 @@ import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import '../../unit/data/credential_storage_test.dart';
 
 CredentialStorage _emptyStorage() =>
-    CredentialStorage(storage: FakeFlutterSecureStorage());
+    CredentialStorage(store: FakeKeyValueStore());
 
 void main() {
   group('SyncStatusNotifier', () {

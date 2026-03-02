@@ -33,8 +33,8 @@ void main() {
     });
 
     test('returns first student when no selection saved', () {
-      final fakeStorage = FakeFlutterSecureStorage();
-      final storage = CredentialStorage(storage: fakeStorage);
+      final fakeStorage = FakeKeyValueStore();
+      final storage = CredentialStorage(store: fakeStorage);
 
       final container = ProviderContainer(
         overrides: [
@@ -46,8 +46,8 @@ void main() {
     });
 
     test('returns selected student when id matches', () async {
-      final fakeStorage = FakeFlutterSecureStorage();
-      final storage = CredentialStorage(storage: fakeStorage);
+      final fakeStorage = FakeKeyValueStore();
+      final storage = CredentialStorage(store: fakeStorage);
       await storage.saveSelectedStudentId(2);
 
       final container = ProviderContainer(
@@ -62,8 +62,8 @@ void main() {
     });
 
     test('switchTo persists and changes student', () async {
-      final fakeStorage = FakeFlutterSecureStorage();
-      final storage = CredentialStorage(storage: fakeStorage);
+      final fakeStorage = FakeKeyValueStore();
+      final storage = CredentialStorage(store: fakeStorage);
 
       final container = ProviderContainer(
         overrides: [

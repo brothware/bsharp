@@ -28,7 +28,7 @@ PocztaMessage _msg({
 }
 
 Widget _buildTile({List<PocztaMessage> inbox = const []}) {
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),

@@ -31,7 +31,7 @@ PocztaMessage _msg({
 }
 
 Widget _buildScreen({required PocztaMessage message}) {
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),

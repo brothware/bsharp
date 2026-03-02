@@ -12,7 +12,7 @@ import '../data/credential_storage_test.dart';
 Future<Widget> _buildSettings() async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
-  final storage = CredentialStorage(storage: FakeFlutterSecureStorage());
+  final storage = CredentialStorage(store: FakeKeyValueStore());
 
   return ProviderScope(
     overrides: [
