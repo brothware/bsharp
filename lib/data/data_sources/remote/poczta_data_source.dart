@@ -22,12 +22,17 @@ class PocztaDataSource {
         ),
       );
 
-      if (!kIsWeb) {
-        if (ssoResponse.statusCode == 302) {
-          final location = ssoResponse.headers['location']?.first;
-          if (location != null) {
-            await _client.get<String>(location);
-          }
+      if (kIsWeb) {
+        final location =
+            ssoResponse.headers['x-redirect-location']?.first;
+        if (location != null) {
+          final relative = Uri.parse(location).path;
+          await _client.get<String>(relative);
+        }
+      } else if (ssoResponse.statusCode == 302) {
+        final location = ssoResponse.headers['location']?.first;
+        if (location != null) {
+          await _client.get<String>(location);
         }
       }
 
