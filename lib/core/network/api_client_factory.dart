@@ -20,6 +20,7 @@ class ApiClientFactory {
   final String _parentPassHash;
 
   static const _proxy = AppConstants.proxyBaseUrl;
+  static const _webExtra = kIsWeb ? {'withCredentials': true} : <String, dynamic>{};
 
   Dio createMobileSyncClient() {
     final baseUrl = kIsWeb
@@ -34,6 +35,7 @@ class ApiClientFactory {
         receiveTimeout:
             const Duration(milliseconds: AppConstants.receiveTimeoutMs),
         headers: kIsWeb ? null : {'User-Agent': AppConstants.userAgent},
+        extra: _webExtra,
       ),
     );
 
@@ -59,6 +61,7 @@ class ApiClientFactory {
             const Duration(milliseconds: AppConstants.connectTimeoutMs),
         receiveTimeout:
             const Duration(milliseconds: AppConstants.receiveTimeoutMs),
+        extra: _webExtra,
       ),
     );
   }
@@ -77,6 +80,7 @@ class ApiClientFactory {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
         },
+        extra: _webExtra,
       ),
     );
     if (!kIsWeb) {
@@ -99,6 +103,7 @@ class ApiClientFactory {
         followRedirects: false,
         validateStatus: (status) =>
             status != null && (status < 400 || status == 302),
+        extra: _webExtra,
       ),
     );
   }
