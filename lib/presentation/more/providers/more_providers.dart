@@ -12,7 +12,11 @@ final reprimandsProvider = StateProvider<List<PortalReprimand>>((ref) => []);
 
 final bulletinsProvider = StateProvider<List<PortalBulletin>>((ref) => []);
 
-final changelogProvider = StateProvider<List<PortalChangelog>>((ref) => []);
+final gradeChangelogProvider =
+    StateProvider<List<PortalChangelog>>((ref) => []);
+
+final attendanceChangelogProvider =
+    StateProvider<List<PortalChangelog>>((ref) => []);
 
 enum HomeworkFilter { upcoming, past, all }
 
@@ -94,17 +98,30 @@ final unreadBulletinsCountProvider = Provider<int>((ref) {
   return bulletins.where((b) => !b.isRead).length;
 });
 
-final groupedChangelogProvider =
+final groupedGradeChangelogProvider =
     Provider<Map<String, List<PortalChangelog>>>((ref) {
-  final entries = ref.watch(changelogProvider);
+  return _groupChangelogByDate(ref.watch(gradeChangelogProvider));
+});
+
+final groupedAttendanceChangelogProvider =
+    Provider<Map<String, List<PortalChangelog>>>((ref) {
+  return _groupChangelogByDate(ref.watch(attendanceChangelogProvider));
+});
+
+Map<String, List<PortalChangelog>> _groupChangelogByDate(
+  List<PortalChangelog> entries,
+) {
   final sorted = List<PortalChangelog>.from(entries)
-    ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
+    ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
   final grouped = <String, List<PortalChangelog>>{};
   for (final entry in sorted) {
-    grouped.putIfAbsent(entry.date, () => []).add(entry);
+    final date = entry.dateTime.length >= 10
+        ? entry.dateTime.substring(0, 10)
+        : entry.dateTime;
+    grouped.putIfAbsent(date, () => []).add(entry);
   }
   return grouped;
-});
+}
 
 DateTime _parseDate(String date) {
   try {
