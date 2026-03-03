@@ -117,20 +117,20 @@ jobs:
           EOF
 
       - name: Build APK
-        run: flutter build apk --release --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
+        run: flutter build apk --flavor phone --release --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
       - name: Build AAB
-        run: flutter build appbundle --release --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
+        run: flutter build appbundle --flavor phone --release --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: release-android-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-phone-release.apk
 
       - uses: actions/upload-artifact@v4
         with:
           name: release-android-aab
-          path: build/app/outputs/bundle/release/app-release.aab
+          path: build/app/outputs/bundle/phoneRelease/app-phone-release.aab
 
   build-ios:
     runs-on: macos-latest
@@ -219,12 +219,12 @@ jobs:
           fi
 
       - name: Build WearOS APK
-        run: flutter build apk --release --target=lib/main_wear.dart --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
+        run: flutter build apk --flavor wear --release --target=lib/main_wear.dart --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: release-wearos-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-wear-release.apk
 
   create-release:
     runs-on: ubuntu-latest
@@ -241,9 +241,9 @@ jobs:
       - name: Package artifacts
         run: |
           cd artifacts
-          mv release-android-apk/app-release.apk bsharp-${{ needs.version.outputs.version }}.apk
-          mv release-android-aab/app-release.aab bsharp-${{ needs.version.outputs.version }}.aab
-          mv release-wearos-apk/app-release.apk bsharp-wear-${{ needs.version.outputs.version }}.apk
+          mv release-android-apk/app-phone-release.apk bsharp-${{ needs.version.outputs.version }}.apk
+          mv release-android-aab/app-phone-release.aab bsharp-${{ needs.version.outputs.version }}.aab
+          mv release-wearos-apk/app-wear-release.apk bsharp-wear-${{ needs.version.outputs.version }}.apk
           tar -czf bsharp-web-${{ needs.version.outputs.version }}.tar.gz -C release-web .
           tar -czf bsharp-ios-${{ needs.version.outputs.version }}.tar.gz -C release-ios .
 
@@ -299,7 +299,25 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: pl.brothware.bsharp
-          releaseFiles: app-release.aab
+          releaseFiles: app-phone-release.aab
+          track: internal
+          releaseName: v${{ needs.version.outputs.version }}
+          status: completed
+
+  deploy-play-wear:
+    runs-on: ubuntu-latest
+    needs: [version, build-wearos]
+    if: vars.GOOGLE_PLAY_WEAR_ENABLED == 'true'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-wearos-apk
+
+      - uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: pl.brothware.bsharp.wear
+          releaseFiles: app-wear-release.apk
           track: internal
           releaseName: v${{ needs.version.outputs.version }}
           status: completed
