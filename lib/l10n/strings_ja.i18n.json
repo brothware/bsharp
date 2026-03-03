@@ -130,6 +130,15 @@
       "fri": "金曜日",
       "sat": "土曜日",
       "sun": "日曜日"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "点数",
     "grade(context=one)": "件の成績",
     "grade(context=other)": "件の成績",
-    "other": "その他"
+    "other": "その他",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "出欠",
@@ -199,7 +210,9 @@
       "oct": "10月",
       "nov": "11月",
       "dec": "12月"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "メッセージ",
@@ -228,7 +241,8 @@
     "underline": "下線",
     "deleted": "削除済み: ${title}",
     "message(context=one)": "件のメッセージ",
-    "message(context=other)": "件のメッセージ"
+    "message(context=other)": "件のメッセージ",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "設定",
@@ -672,5 +686,16 @@
     "notesCount": "所見${count}件",
     "noChanges": "変更なし",
     "newChanges": "新規: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

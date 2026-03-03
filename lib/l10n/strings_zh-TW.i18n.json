@@ -130,6 +130,15 @@
       "fri": "星期五",
       "sat": "星期六",
       "sun": "星期日"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "分數",
     "grade(context=one)": "筆成績",
     "grade(context=other)": "筆成績",
-    "other": "其他"
+    "other": "其他",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "出勤",
@@ -199,7 +210,9 @@
       "oct": "十月",
       "nov": "十一月",
       "dec": "十二月"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "訊息",
@@ -228,7 +241,8 @@
     "underline": "底線",
     "deleted": "已刪除：${title}",
     "message(context=one)": "則訊息",
-    "message(context=other)": "則訊息"
+    "message(context=other)": "則訊息",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "設定",
@@ -672,5 +686,16 @@
     "notesCount": "${count}則評語",
     "noChanges": "沒有變更",
     "newChanges": "新增：${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

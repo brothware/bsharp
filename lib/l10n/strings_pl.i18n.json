@@ -114,6 +114,15 @@
     "lesson(context=one)": "lekcja",
     "lesson(context=few)": "lekcje",
     "lesson(context=many)": "lekcji",
+    "dayLetter": {
+      "mon": "Pn",
+      "tue": "Wt",
+      "wed": "Śr",
+      "thu": "Cz",
+      "fri": "Pt",
+      "sat": "So",
+      "sun": "Nd"
+    },
     "dayShort": {
       "mon": "Pon",
       "tue": "Wt",
@@ -142,6 +151,8 @@
     "weight": "Waga",
     "noGrades": "Brak ocen",
     "noGradesSubtitle": "Oceny pojawią się po synchronizacji",
+    "newBadge": "NOWA",
+    "weightPrefix": "w${weight}",
     "newGrade": "Nowa ocena",
     "date": "Data",
     "category": "Kategoria",
@@ -161,6 +172,8 @@
     "absent": "Nieobecność",
     "late": "Spóźnienie",
     "excused": "Usprawiedliwione",
+    "presentAbbr": "Ob.",
+    "absentAbbr": "Nb.",
     "percentage": "Procent frekwencji",
     "calendar": "Kalendarz",
     "statistics": "Statystyki",
@@ -210,6 +223,7 @@
     "trash": "Kosz",
     "compose": "Napisz",
     "reply": "Odpowiedz",
+    "replyPrefix": "Odp: ${title}",
     "noMessages": "Brak wiadomości",
     "noSent": "Brak wysłanych wiadomości",
     "trashEmpty": "Kosz jest pusty",
@@ -321,13 +335,16 @@
     "noHomework": "Brak zadań domowych"
   },
   "notes": {
-    "title": "Uwagi i pochwały",
-    "notesTab": "Uwagi",
+    "title": "Uwagi",
+    "remarksTab": "Uwagi",
     "praisesTab": "Pochwały",
-    "noNotes": "Brak uwag",
+    "infoTab": "Informacje",
+    "noRemarks": "Brak uwag",
     "noPraises": "Brak pochwał",
-    "note": "Uwaga",
+    "noInfo": "Brak informacji",
+    "remark": "Uwaga",
     "praise": "Pochwała",
+    "info": "Informacja",
     "teacherLabel": "Nauczyciel: ${name}",
     "dateLabel": "Data: ${date}"
   },
@@ -660,6 +677,17 @@
     "psycholog": "Psycholog",
     "logopeda": "Logopeda",
     "rodzic": "Rodzic"
+  },
+  "support": {
+    "title": "Wesprzyj twórcę",
+    "subtitle": "Pomóż utrzymać BSharp darmowym",
+    "badge": "Stworzone z pasją",
+    "tipJar": "Słoik na napiwki",
+    "tipCoffee": "Kawa",
+    "tipMeal": "Posiłek",
+    "purchaseSuccess": "Dziękuję za wsparcie!",
+    "purchaseFailed": "Zakup nie powiódł się, spróbuj ponownie",
+    "productsUnavailable": "Napiwki są obecnie niedostępne"
   },
   "sync": {
     "syncing": "Synchronizacja...",

@@ -132,6 +132,15 @@
       "fri": "Penktadienis",
       "sat": "Šeštadienis",
       "sun": "Sekmadienis"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -155,7 +164,9 @@
     "grade(context=few)": "pažymiai",
     "grade(context=many)": "pažymių",
     "grade(context=other)": "pažymiai",
-    "other": "Kita"
+    "other": "Kita",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Lankomumas",
@@ -203,7 +214,9 @@
       "oct": "Spalis",
       "nov": "Lapkritis",
       "dec": "Gruodis"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Žinutės",
@@ -234,7 +247,8 @@
     "message(context=one)": "žinutė",
     "message(context=few)": "žinutės",
     "message(context=many)": "žinučių",
-    "message(context=other)": "žinutės"
+    "message(context=other)": "žinutės",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Nustatymai",
@@ -678,5 +692,16 @@
     "notesCount": "${count} pastabų",
     "noChanges": "Nėra pakeitimų",
     "newChanges": "Nauja: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

@@ -132,6 +132,15 @@
       "fri": "Il-Ġimgħa",
       "sat": "Is-Sibt",
       "sun": "Il-Ħadd"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -155,7 +164,9 @@
     "grade(context=few)": "marki",
     "grade(context=many)": "marka",
     "grade(context=other)": "marki",
-    "other": "Oħrajn"
+    "other": "Oħrajn",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Attendenza",
@@ -203,7 +214,9 @@
       "oct": "Ottubru",
       "nov": "Novembru",
       "dec": "Diċembru"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Messaġġi",
@@ -234,7 +247,8 @@
     "message(context=one)": "messaġġ",
     "message(context=few)": "messaġġi",
     "message(context=many)": "messaġġ",
-    "message(context=other)": "messaġġi"
+    "message(context=other)": "messaġġi",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Settings",
@@ -678,5 +692,16 @@
     "notesCount": "${count} noti",
     "noChanges": "M'hemmx bidliet",
     "newChanges": "Ġodda: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

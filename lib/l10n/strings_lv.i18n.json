@@ -130,6 +130,15 @@
       "fri": "Piektdiena",
       "sat": "Sestdiena",
       "sun": "Svētdiena"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "Punkti",
     "grade(context=one)": "atzīme",
     "grade(context=other)": "atzīmes",
-    "other": "Cits"
+    "other": "Cits",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Apmeklējums",
@@ -199,7 +210,9 @@
       "oct": "Oktobris",
       "nov": "Novembris",
       "dec": "Decembris"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Ziņojumi",
@@ -228,7 +241,8 @@
     "underline": "Pasvītrojums",
     "deleted": "Dzēsts: ${title}",
     "message(context=one)": "ziņojums",
-    "message(context=other)": "ziņojumi"
+    "message(context=other)": "ziņojumi",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Iestatījumi",
@@ -672,5 +686,16 @@
     "notesCount": "${count} piezīmes",
     "noChanges": "Nav izmaiņu",
     "newChanges": "Jauns: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

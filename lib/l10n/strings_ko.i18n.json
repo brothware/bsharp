@@ -130,6 +130,15 @@
       "fri": "금요일",
       "sat": "토요일",
       "sun": "일요일"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "점수",
     "grade(context=one)": "성적",
     "grade(context=other)": "성적",
-    "other": "기타"
+    "other": "기타",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "출결",
@@ -199,7 +210,9 @@
       "oct": "10월",
       "nov": "11월",
       "dec": "12월"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "메시지",
@@ -228,7 +241,8 @@
     "underline": "밑줄",
     "deleted": "삭제됨: ${title}",
     "message(context=one)": "메시지",
-    "message(context=other)": "메시지"
+    "message(context=other)": "메시지",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "설정",
@@ -672,5 +686,16 @@
     "notesCount": "평가 ${count}건",
     "noChanges": "변경사항 없음",
     "newChanges": "새 항목: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

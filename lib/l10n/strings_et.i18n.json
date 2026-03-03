@@ -130,6 +130,15 @@
       "fri": "Reede",
       "sat": "Laupäev",
       "sun": "Pühapäev"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "Punktid",
     "grade(context=one)": "hinne",
     "grade(context=other)": "hinnet",
-    "other": "Muu"
+    "other": "Muu",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Kohalviibimine",
@@ -199,7 +210,9 @@
       "oct": "Oktoober",
       "nov": "November",
       "dec": "Detsember"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Sõnumid",
@@ -228,7 +241,8 @@
     "underline": "Allajoonitud",
     "deleted": "Kustutatud: ${title}",
     "message(context=one)": "sõnum",
-    "message(context=other)": "sõnumit"
+    "message(context=other)": "sõnumit",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Seaded",
@@ -672,5 +686,16 @@
     "notesCount": "${count} märkust",
     "noChanges": "Muudatusi pole",
     "newChanges": "Uus: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

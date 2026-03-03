@@ -130,6 +130,15 @@
       "fri": "E premte",
       "sat": "E shtunë",
       "sun": "E diel"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "Pikët",
     "grade(context=one)": "notë",
     "grade(context=other)": "nota",
-    "other": "Tjetër"
+    "other": "Tjetër",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Frekuentimi",
@@ -199,7 +210,9 @@
       "oct": "Tetor",
       "nov": "Nëntor",
       "dec": "Dhjetor"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Mesazhet",
@@ -228,7 +241,8 @@
     "underline": "I nënvizuar",
     "deleted": "Fshirë: ${title}",
     "message(context=one)": "mesazh",
-    "message(context=other)": "mesazhe"
+    "message(context=other)": "mesazhe",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Cilësimet",
@@ -672,5 +686,16 @@
     "notesCount": "${count} shënime",
     "noChanges": "Nuk ka ndryshime",
     "newChanges": "Të reja: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

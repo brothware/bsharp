@@ -133,6 +133,15 @@
       "fri": "De hAoine",
       "sat": "De Sathairn",
       "sun": "De Domhnaigh"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -157,7 +166,9 @@
     "grade(context=few)": "ghradam",
     "grade(context=many)": "ngradam",
     "grade(context=other)": "gradam",
-    "other": "Eile"
+    "other": "Eile",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Tinreamh",
@@ -205,7 +216,9 @@
       "oct": "Deireadh Fomhair",
       "nov": "Samhain",
       "dec": "Nollaig"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Teachtaireachtai",
@@ -237,7 +250,8 @@
     "message(context=two)": "theachtaireacht",
     "message(context=few)": "theachtaireacht",
     "message(context=many)": "dteachtaireacht",
-    "message(context=other)": "teachtaireacht"
+    "message(context=other)": "teachtaireacht",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Socruithe",
@@ -681,5 +695,16 @@
     "notesCount": "${count} nota",
     "noChanges": "Gan athruithne",
     "newChanges": "Nua: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

@@ -130,6 +130,15 @@
       "fri": "शुक्रवार",
       "sat": "शनिवार",
       "sun": "रविवार"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "अंक",
     "grade(context=one)": "अंक",
     "grade(context=other)": "अंक",
-    "other": "अन्य"
+    "other": "अन्य",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "उपस्थिति",
@@ -199,7 +210,9 @@
       "oct": "अक्तूबर",
       "nov": "नवंबर",
       "dec": "दिसंबर"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "संदेश",
@@ -228,7 +241,8 @@
     "underline": "अंडरलाइन",
     "deleted": "हटाया गया: ${title}",
     "message(context=one)": "संदेश",
-    "message(context=other)": "संदेश"
+    "message(context=other)": "संदेश",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "सेटिंग्स",
@@ -672,5 +686,16 @@
     "notesCount": "${count} टिप्पणियाँ",
     "noChanges": "कोई बदलाव नहीं",
     "newChanges": "नया: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

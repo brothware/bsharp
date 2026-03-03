@@ -113,6 +113,15 @@
     "nextWeek": "Next week",
     "lesson(context=one)": "lesson",
     "lesson(context=other)": "lessons",
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
+    },
     "dayShort": {
       "mon": "Mon",
       "tue": "Tue",
@@ -141,6 +150,8 @@
     "weight": "Weight",
     "noGrades": "No grades",
     "noGradesSubtitle": "Grades will appear after synchronisation",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}",
     "newGrade": "New grade",
     "date": "Date",
     "category": "Category",
@@ -159,6 +170,8 @@
     "absent": "Absent",
     "late": "Late",
     "excused": "Excused",
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab.",
     "percentage": "Attendance percentage",
     "calendar": "Calendar",
     "statistics": "Statistics",
@@ -208,6 +221,7 @@
     "trash": "Trash",
     "compose": "Compose",
     "reply": "Reply",
+    "replyPrefix": "Re: ${title}",
     "noMessages": "No messages",
     "noSent": "No sent messages",
     "trashEmpty": "Trash is empty",
@@ -318,13 +332,16 @@
     "noHomework": "No homework"
   },
   "notes": {
-    "title": "Notes and praise",
-    "notesTab": "Notes",
+    "title": "Remarks",
+    "remarksTab": "Remarks",
     "praisesTab": "Praise",
-    "noNotes": "No notes",
+    "infoTab": "Information",
+    "noRemarks": "No remarks",
     "noPraises": "No praise",
-    "note": "Note",
+    "noInfo": "No information",
+    "remark": "Remark",
     "praise": "Praise",
+    "info": "Information",
     "teacherLabel": "Teacher: ${name}",
     "dateLabel": "Date: ${date}"
   },
@@ -657,6 +674,17 @@
     "psycholog": "Psychologist",
     "logopeda": "Speech therapist",
     "rodzic": "Parent"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   },
   "sync": {
     "syncing": "Syncing...",

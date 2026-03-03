@@ -130,6 +130,15 @@
       "fri": "Петък",
       "sat": "Събота",
       "sun": "Неделя"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "Точки",
     "grade(context=one)": "оценка",
     "grade(context=other)": "оценки",
-    "other": "Други"
+    "other": "Други",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Присъствия",
@@ -199,7 +210,9 @@
       "oct": "Октомври",
       "nov": "Ноември",
       "dec": "Декември"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Съобщения",
@@ -228,7 +241,8 @@
     "underline": "Подчертан",
     "deleted": "Изтрито: ${title}",
     "message(context=one)": "съобщение",
-    "message(context=other)": "съобщения"
+    "message(context=other)": "съобщения",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Настройки",
@@ -672,5 +686,16 @@
     "notesCount": "${count} бележки",
     "noChanges": "Няма промени",
     "newChanges": "Нови: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

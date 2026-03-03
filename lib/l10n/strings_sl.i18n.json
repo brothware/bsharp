@@ -132,6 +132,15 @@
       "fri": "Petek",
       "sat": "Sobota",
       "sun": "Nedelja"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -155,7 +164,9 @@
     "grade(context=two)": "oceni",
     "grade(context=few)": "ocene",
     "grade(context=other)": "ocen",
-    "other": "Drugo"
+    "other": "Drugo",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Prisotnost",
@@ -203,7 +214,9 @@
       "oct": "Oktober",
       "nov": "November",
       "dec": "December"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Sporočila",
@@ -234,7 +247,8 @@
     "message(context=one)": "sporočilo",
     "message(context=two)": "sporočili",
     "message(context=few)": "sporočila",
-    "message(context=other)": "sporočil"
+    "message(context=other)": "sporočil",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Nastavitve",
@@ -678,5 +692,16 @@
     "notesCount": "${count} opomb",
     "noChanges": "Ni sprememb",
     "newChanges": "Novo: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

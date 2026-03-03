@@ -130,6 +130,15 @@
       "fri": "Παρασκευή",
       "sat": "Σάββατο",
       "sun": "Κυριακή"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "Πόντοι",
     "grade(context=one)": "βαθμός",
     "grade(context=other)": "βαθμοί",
-    "other": "Άλλο"
+    "other": "Άλλο",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Παρουσίες",
@@ -199,7 +210,9 @@
       "oct": "Οκτώβριος",
       "nov": "Νοέμβριος",
       "dec": "Δεκέμβριος"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Μηνύματα",
@@ -228,7 +241,8 @@
     "underline": "Υπογράμμιση",
     "deleted": "Διαγράφηκε: ${title}",
     "message(context=one)": "μήνυμα",
-    "message(context=other)": "μηνύματα"
+    "message(context=other)": "μηνύματα",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Ρυθμίσεις",
@@ -672,5 +686,16 @@
     "notesCount": "${count} σημειώσεις",
     "noChanges": "Δεν υπάρχουν αλλαγές",
     "newChanges": "Νέο: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

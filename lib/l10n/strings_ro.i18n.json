@@ -131,6 +131,15 @@
       "fri": "Vineri",
       "sat": "Sâmbătă",
       "sun": "Duminică"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -153,7 +162,9 @@
     "grade(context=one)": "notă",
     "grade(context=few)": "note",
     "grade(context=other)": "de note",
-    "other": "Altele"
+    "other": "Altele",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Prezență",
@@ -201,7 +212,9 @@
       "oct": "Octombrie",
       "nov": "Noiembrie",
       "dec": "Decembrie"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Mesaje",
@@ -231,7 +244,8 @@
     "deleted": "Șters: ${title}",
     "message(context=one)": "mesaj",
     "message(context=few)": "mesaje",
-    "message(context=other)": "de mesaje"
+    "message(context=other)": "de mesaje",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Setări",
@@ -675,5 +689,16 @@
     "notesCount": "${count} observații",
     "noChanges": "Fără modificări",
     "newChanges": "Noi: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

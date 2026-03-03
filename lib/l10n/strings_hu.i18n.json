@@ -130,6 +130,15 @@
       "fri": "Péntek",
       "sat": "Szombat",
       "sun": "Vasárnap"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "Pontok",
     "grade(context=one)": "jegy",
     "grade(context=other)": "jegy",
-    "other": "Egyéb"
+    "other": "Egyéb",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Hiányzás",
@@ -199,7 +210,9 @@
       "oct": "Október",
       "nov": "November",
       "dec": "December"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Üzenetek",
@@ -228,7 +241,8 @@
     "underline": "Aláhúzott",
     "deleted": "Törölve: ${title}",
     "message(context=one)": "üzenet",
-    "message(context=other)": "üzenet"
+    "message(context=other)": "üzenet",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Beállítások",
@@ -672,5 +686,16 @@
     "notesCount": "${count} megjegyzés",
     "noChanges": "Nincsenek változások",
     "newChanges": "Új: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

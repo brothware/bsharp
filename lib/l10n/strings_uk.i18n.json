@@ -16,7 +16,7 @@
     "undo": "Скасувати",
     "change": "Змінити",
     "clear": "Очистити",
-    "dataAfterSync": "Дані з\u2019являться після синхронізації",
+    "dataAfterSync": "Дані з’являться після синхронізації",
     "agoJustNow": "щойно",
     "agoMinutes": "${n} хв тому",
     "agoHours": "${n} год тому"
@@ -58,7 +58,7 @@
     "studentStep": "Учень",
     "enterSchoolUrl": "Введіть адресу школи",
     "enterSchoolUrlSubtitle": "Введіть ідентифікатор школи з mobireg.pl",
-    "testConnection": "Перевірити з\u2019єднання",
+    "testConnection": "Перевірити з’єднання",
     "selectStudent": "Обрати учня",
     "next": "Далі",
     "back": "Назад",
@@ -128,9 +128,18 @@
       "tue": "Вівторок",
       "wed": "Середа",
       "thu": "Четвер",
-      "fri": "П\u2019ятниця",
+      "fri": "П’ятниця",
       "sat": "Субота",
       "sun": "Неділя"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -141,7 +150,7 @@
     "simpleAverageLabel": "Проста: ",
     "weight": "Вага",
     "noGrades": "Немає оцінок",
-    "noGradesSubtitle": "Оцінки з\u2019являться після синхронізації",
+    "noGradesSubtitle": "Оцінки з’являться після синхронізації",
     "newGrade": "Нова оцінка",
     "date": "Дата",
     "category": "Категорія",
@@ -153,7 +162,9 @@
     "grade(context=one)": "оцінка",
     "grade(context=few)": "оцінки",
     "grade(context=many)": "оцінок",
-    "other": "Інше"
+    "other": "Інше",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Відвідуваність",
@@ -165,9 +176,9 @@
     "calendar": "Календар",
     "statistics": "Статистика",
     "noData": "Немає даних відвідуваності",
-    "noDataSubtitle": "Дані з\u2019являться після синхронізації",
+    "noDataSubtitle": "Дані з’являться після синхронізації",
     "fullYear": "Весь рік",
-    "statsAfterSync": "Статистика з\u2019явиться після синхронізації",
+    "statsAfterSync": "Статистика з’явиться після синхронізації",
     "overall": "Загальна відвідуваність",
     "total": "Разом",
     "presentCount": "Присутність",
@@ -201,7 +212,9 @@
       "oct": "Жовтень",
       "nov": "Листопад",
       "dec": "Грудень"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Повідомлення",
@@ -231,7 +244,8 @@
     "deleted": "Видалено: ${title}",
     "message(context=one)": "повідомлення",
     "message(context=few)": "повідомлення",
-    "message(context=many)": "повідомлень"
+    "message(context=many)": "повідомлень",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Налаштування",
@@ -367,7 +381,7 @@
     "deeplUsage": "Використано: ${used}/${limit} символів"
   },
   "errors": {
-    "noConnection": "Немає з\u2019єднання з інтернетом",
+    "noConnection": "Немає з’єднання з інтернетом",
     "timeout": "Час очікування вичерпано",
     "serverError": "Помилка сервера",
     "licenseExpired": "Ліцензія школи закінчилася",
@@ -428,9 +442,9 @@
     "nieklasyfikowany": "Некласифікований",
     "zwolniony": "Звільнений",
     "szostka": "Шістка",
-    "piatkaPlus": "П\u2019ятірка з плюсом",
-    "piatka": "П\u2019ятірка",
-    "piatkaMinus": "П\u2019ятірка з мінусом",
+    "piatkaPlus": "П’ятірка з плюсом",
+    "piatka": "П’ятірка",
+    "piatkaMinus": "П’ятірка з мінусом",
     "czworkaPlus": "Четвірка з плюсом",
     "czworka": "Четвірка",
     "czworkaMinus": "Четвірка з мінусом",
@@ -506,7 +520,7 @@
     "edb": "Безпека життєдіяльності",
     "religia": "Релігія",
     "etyka": "Етика",
-    "wdz": "Виховання для життя в сім\u2019ї",
+    "wdz": "Виховання для життя в сім’ї",
     "godzinaWychowawcza": "Виховна година",
     "przyroda": "Природознавство",
     "filozofia": "Філософія",
@@ -518,7 +532,7 @@
     "zajeciaZWychowawca": "Заняття з класним керівником",
     "zajeciaArtystyczne": "Мистецькі заняття",
     "zajeciaTechniczne": "Технічні заняття",
-    "zajeciaKomputerowe": "Комп\u2019ютерні заняття",
+    "zajeciaKomputerowe": "Комп’ютерні заняття",
     "wychowanieDoZycia": "Підготовка до життя",
     "jezyk": "Мова",
     "fortepian": "Фортепіано",
@@ -569,7 +583,7 @@
     "edukacjaPolonistyczna": "Навчання польської мови",
     "edukacjaRuchowa": "Рухова освіта",
     "edukacjaSpolPrzyr": "Суспільно-природнича освіта",
-    "edukacjaZdrowotna": "Здоров\u2019язбережна освіта",
+    "edukacjaZdrowotna": "Здоров’язбережна освіта",
     "edukacjaMedialna": "Медіаосвіта",
     "emisjaGlosu": "Постановка голосу",
     "historiaITerazniejszosc": "Історія і сучасність",
@@ -581,7 +595,7 @@
     "rewalidacjaIndywidualna": "Індивідуальна реабілітація",
     "rezerwacjaSali": "Бронювання кабінету",
     "wiedzaOMuzyce": "Музичні знання",
-    "zajKorKomp": "Корекційні заняття — комп\u2019ютер",
+    "zajKorKomp": "Корекційні заняття — комп’ютер",
     "zajRozKomEmocISpo": "Емоційні та соціальні навички",
     "zajeciaLogopedyczne": "Логопедичні заняття",
     "zajeciaOpWych": "Виховні заняття",
@@ -595,7 +609,7 @@
     "cwiczeniaZKompozycji": "Вправи з композиції",
     "swietlica": "Група подовженого дня",
     "fortepianDodatkowy": "Додаткове фортепіано",
-    "fortepianObowiazkowy": "Обов\u2019язкове фортепіано",
+    "fortepianObowiazkowy": "Обов’язкове фортепіано",
     "jezykChinski": "Китайська мова",
     "jezykPortugalski": "Португальська мова",
     "jezykUkrainski": "Українська мова",
@@ -675,5 +689,16 @@
     "notesCount": "${count} зауважень",
     "noChanges": "Немає змін",
     "newChanges": "Нове: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

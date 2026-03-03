@@ -131,6 +131,15 @@
       "fri": "Pátek",
       "sat": "Sobota",
       "sun": "Neděle"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -153,7 +162,9 @@
     "grade(context=one)": "známka",
     "grade(context=few)": "známky",
     "grade(context=other)": "známek",
-    "other": "Ostatní"
+    "other": "Ostatní",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Docházka",
@@ -201,7 +212,9 @@
       "oct": "Říjen",
       "nov": "Listopad",
       "dec": "Prosinec"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Zprávy",
@@ -231,7 +244,8 @@
     "deleted": "Smazáno: ${title}",
     "message(context=one)": "zpráva",
     "message(context=few)": "zprávy",
-    "message(context=other)": "zpráv"
+    "message(context=other)": "zpráv",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Nastavení",
@@ -675,5 +689,16 @@
     "notesCount": "${count} poznámek",
     "noChanges": "Žádné změny",
     "newChanges": "Nové: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

@@ -130,6 +130,15 @@
       "fri": "Freitag",
       "sat": "Samstag",
       "sun": "Sonntag"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -151,7 +160,9 @@
     "points": "Punkte",
     "grade(context=one)": "Note",
     "grade(context=other)": "Noten",
-    "other": "Sonstige"
+    "other": "Sonstige",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Anwesenheit",
@@ -199,7 +210,9 @@
       "oct": "Oktober",
       "nov": "November",
       "dec": "Dezember"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Nachrichten",
@@ -228,7 +241,8 @@
     "underline": "Unterstrichen",
     "deleted": "Gelöscht: ${title}",
     "message(context=one)": "Nachricht",
-    "message(context=other)": "Nachrichten"
+    "message(context=other)": "Nachrichten",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Einstellungen",
@@ -672,5 +686,16 @@
     "notesCount": "${count} Vermerke",
     "noChanges": "Keine Änderungen",
     "newChanges": "Neu: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }

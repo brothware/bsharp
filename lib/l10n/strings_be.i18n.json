@@ -16,7 +16,7 @@
     "undo": "Адмяніць",
     "change": "Змяніць",
     "clear": "Ачысціць",
-    "dataAfterSync": "Даныя з\u2019явяцца пасля сінхранізацыі",
+    "dataAfterSync": "Даныя з’явяцца пасля сінхранізацыі",
     "agoJustNow": "толькі што",
     "agoMinutes": "${n} хв таму",
     "agoHours": "${n} гадз таму"
@@ -131,6 +131,15 @@
       "fri": "Пятніца",
       "sat": "Субота",
       "sun": "Нядзеля"
+    },
+    "dayLetter": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
     }
   },
   "grades": {
@@ -141,7 +150,7 @@
     "simpleAverageLabel": "Простая: ",
     "weight": "Вага",
     "noGrades": "Няма адзнак",
-    "noGradesSubtitle": "Адзнакі з\u2019явяцца пасля сінхранізацыі",
+    "noGradesSubtitle": "Адзнакі з’явяцца пасля сінхранізацыі",
     "newGrade": "Новая адзнака",
     "date": "Дата",
     "category": "Катэгорыя",
@@ -153,7 +162,9 @@
     "grade(context=one)": "адзнака",
     "grade(context=few)": "адзнакі",
     "grade(context=many)": "адзнак",
-    "other": "Іншае"
+    "other": "Іншае",
+    "newBadge": "NEW",
+    "weightPrefix": "w${weight}"
   },
   "attendance": {
     "title": "Наведвальнасць",
@@ -165,9 +176,9 @@
     "calendar": "Каляндар",
     "statistics": "Статыстыка",
     "noData": "Няма даных наведвальнасці",
-    "noDataSubtitle": "Даныя з\u2019явяцца пасля сінхранізацыі",
+    "noDataSubtitle": "Даныя з’явяцца пасля сінхранізацыі",
     "fullYear": "Увесь год",
-    "statsAfterSync": "Статыстыка з\u2019явіцца пасля сінхранізацыі",
+    "statsAfterSync": "Статыстыка з’явіцца пасля сінхранізацыі",
     "overall": "Агульная наведвальнасць",
     "total": "Разам",
     "presentCount": "Прысутнасць",
@@ -201,7 +212,9 @@
       "oct": "Кастрычнік",
       "nov": "Лістапад",
       "dec": "Снежань"
-    }
+    },
+    "presentAbbr": "Pr.",
+    "absentAbbr": "Ab."
   },
   "messages": {
     "title": "Паведамленні",
@@ -231,7 +244,8 @@
     "deleted": "Выдалена: ${title}",
     "message(context=one)": "паведамленне",
     "message(context=few)": "паведамленні",
-    "message(context=many)": "паведамленняў"
+    "message(context=many)": "паведамленняў",
+    "replyPrefix": "Re: ${title}"
   },
   "settings": {
     "title": "Наладкі",
@@ -506,7 +520,7 @@
     "edb": "Бяспека жыццядзейнасці",
     "religia": "Рэлігія",
     "etyka": "Этыка",
-    "wdz": "Выхаванне для жыцця ў сям\u2019і",
+    "wdz": "Выхаванне для жыцця ў сям’і",
     "godzinaWychowawcza": "Выхаваўчая гадзіна",
     "przyroda": "Прыродазнаўства",
     "filozofia": "Філасофія",
@@ -518,7 +532,7 @@
     "zajeciaZWychowawca": "Заняткі з класным кіраўніком",
     "zajeciaArtystyczne": "Мастацкія заняткі",
     "zajeciaTechniczne": "Тэхнічныя заняткі",
-    "zajeciaKomputerowe": "Камп\u2019ютарныя заняткі",
+    "zajeciaKomputerowe": "Камп’ютарныя заняткі",
     "wychowanieDoZycia": "Падрыхтоўка да жыцця",
     "jezyk": "Мова",
     "fortepian": "Фартэпіяна",
@@ -581,7 +595,7 @@
     "rewalidacjaIndywidualna": "Індывідуальная рэабілітацыя",
     "rezerwacjaSali": "Браніраванне кабінета",
     "wiedzaOMuzyce": "Музычныя веды",
-    "zajKorKomp": "Карэкцыйныя заняткі — камп\u2019ютар",
+    "zajKorKomp": "Карэкцыйныя заняткі — камп’ютар",
     "zajRozKomEmocISpo": "Эмацыйныя і сацыяльныя навыкі",
     "zajeciaLogopedyczne": "Лагапедычныя заняткі",
     "zajeciaOpWych": "Выхаваўчыя заняткі",
@@ -675,5 +689,16 @@
     "notesCount": "${count} заўваг",
     "noChanges": "Няма змен",
     "newChanges": "Новае: ${summary}"
+  },
+  "support": {
+    "title": "Support the developer",
+    "subtitle": "Help keep BSharp free and maintained",
+    "badge": "Made with love",
+    "tipJar": "Tip jar",
+    "tipCoffee": "Coffee",
+    "tipMeal": "Meal",
+    "purchaseSuccess": "Thank you for your support!",
+    "purchaseFailed": "Purchase failed, please try again",
+    "productsUnavailable": "Tips are currently unavailable"
   }
 }
