@@ -472,6 +472,27 @@ class TranslationCacheEntries extends Table {
       dateTime().withDefault(currentDateAndTime)();
 }
 
+class CustomEvents extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get accountId => integer().references(Accounts, #id)();
+  TextColumn get title => text()();
+  TextColumn get place => text().nullable()();
+  TextColumn get description => text().nullable()();
+  TextColumn get startTime => text()();
+  TextColumn get endTime => text()();
+  IntColumn get colorIndex => integer().withDefault(const Constant(0))();
+  IntColumn get recurrenceType => integer().withDefault(const Constant(0))();
+  DateTimeColumn get recurrenceStartDate => dateTime().nullable()();
+  DateTimeColumn get recurrenceEndDate => dateTime().nullable()();
+  IntColumn get recurrenceWeekdays => integer().nullable()();
+}
+
+class CustomEventOccurrences extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get customEventId => integer().references(CustomEvents, #id)();
+  DateTimeColumn get date => dateTime()();
+}
+
 @DriftDatabase(
   tables: [
     Accounts,
@@ -511,13 +532,15 @@ class TranslationCacheEntries extends Table {
     PermissionGroupsTable,
     Permissions,
     TranslationCacheEntries,
+    CustomEvents,
+    CustomEventOccurrences,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -525,6 +548,10 @@ class AppDatabase extends _$AppDatabase {
         onUpgrade: (m, from, to) async {
           if (from < 2) {
             await m.createTable(translationCacheEntries);
+          }
+          if (from < 3) {
+            await m.createTable(customEvents);
+            await m.createTable(customEventOccurrences);
           }
         },
       );
