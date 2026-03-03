@@ -37,8 +37,8 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: dart run slang
       - run: dart run build_runner build --delete-conflicting-outputs
+      - run: dart run slang
 
       - name: Archive generated files
         run: find lib -name '*.g.dart' -o -name '*.freezed.dart' | tar -czf generated-sources.tar.gz -T -
