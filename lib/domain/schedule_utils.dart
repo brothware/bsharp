@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bsharp/domain/entities/event.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 
 class ScheduleEntry {
   ScheduleEntry({
@@ -61,34 +62,28 @@ String formatDateFull(DateTime dt) {
       '${dt.year}';
 }
 
-String dayLabel(int weekday, {List<String>? labels}) {
-  if (labels != null && weekday >= 1 && weekday <= labels.length) {
-    return labels[weekday - 1];
-  }
+String dayLabel(int weekday) {
   return switch (weekday) {
-    1 => 'Mon',
-    2 => 'Tue',
-    3 => 'Wed',
-    4 => 'Thu',
-    5 => 'Fri',
-    6 => 'Sat',
-    7 => 'Sun',
+    1 => t.schedule.dayShort.mon,
+    2 => t.schedule.dayShort.tue,
+    3 => t.schedule.dayShort.wed,
+    4 => t.schedule.dayShort.thu,
+    5 => t.schedule.dayShort.fri,
+    6 => t.schedule.dayShort.sat,
+    7 => t.schedule.dayShort.sun,
     _ => '',
   };
 }
 
-String dayLabelFull(int weekday, {List<String>? labels}) {
-  if (labels != null && weekday >= 1 && weekday <= labels.length) {
-    return labels[weekday - 1];
-  }
+String dayLabelFull(int weekday) {
   return switch (weekday) {
-    1 => 'Monday',
-    2 => 'Tuesday',
-    3 => 'Wednesday',
-    4 => 'Thursday',
-    5 => 'Friday',
-    6 => 'Saturday',
-    7 => 'Sunday',
+    1 => t.schedule.dayFull.mon,
+    2 => t.schedule.dayFull.tue,
+    3 => t.schedule.dayFull.wed,
+    4 => t.schedule.dayFull.thu,
+    5 => t.schedule.dayFull.fri,
+    6 => t.schedule.dayFull.sat,
+    7 => t.schedule.dayFull.sun,
     _ => '',
   };
 }

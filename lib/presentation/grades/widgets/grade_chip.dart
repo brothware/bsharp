@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 
 class GradeChip extends StatelessWidget {
   const GradeChip({
@@ -44,7 +45,7 @@ class GradeChip extends StatelessWidget {
                     ),
                     if (resolvedMark.mark.weight > 1)
                       Text(
-                        'w${resolvedMark.mark.weight}',
+                        t.grades.weightPrefix(weight: resolvedMark.mark.weight),
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                           fontSize: 9,
@@ -67,7 +68,7 @@ class GradeChip extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
-                'NEW',
+                t.grades.newBadge,
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: theme.colorScheme.onPrimary,
                   fontSize: 8,

@@ -6,6 +6,7 @@ void main() {
   Widget buildPinPad({
     void Function(String)? onComplete,
     int pinLength = 4,
+    String title = 'Enter PIN',
     String? errorMessage,
   }) {
     return MaterialApp(
@@ -13,6 +14,7 @@ void main() {
         body: PinPad(
           onComplete: onComplete ?? (_) {},
           pinLength: pinLength,
+          title: title,
           errorMessage: errorMessage,
         ),
       ),
@@ -115,6 +117,7 @@ void main() {
           home: Scaffold(
             body: PinPad(
               key: key,
+              title: 'Enter PIN',
               onComplete: (_) {},
             ),
           ),
@@ -137,6 +140,7 @@ void main() {
           home: Scaffold(
             body: PinPad(
               key: key,
+              title: 'Enter PIN',
               onComplete: (pin) => enteredPin = pin,
             ),
           ),

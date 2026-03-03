@@ -163,7 +163,7 @@ class WearGradesTile extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
-                              'NEW',
+                              t.grades.newBadge,
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: theme.colorScheme.onTertiary,
                                 fontSize: 8, // Intentionally small badge

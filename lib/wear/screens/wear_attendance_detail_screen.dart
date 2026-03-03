@@ -109,7 +109,15 @@ class _WearWeekdayHeaders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    final labels = [
+      t.schedule.dayLetter.mon,
+      t.schedule.dayLetter.tue,
+      t.schedule.dayLetter.wed,
+      t.schedule.dayLetter.thu,
+      t.schedule.dayLetter.fri,
+      t.schedule.dayLetter.sat,
+      t.schedule.dayLetter.sun,
+    ];
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: labels

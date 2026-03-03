@@ -6,7 +6,7 @@ class PinPad extends StatefulWidget {
     super.key,
     required this.onComplete,
     this.pinLength = 4,
-    this.title = 'Enter PIN',
+    required this.title,
     this.errorMessage,
   });
 

@@ -74,14 +74,14 @@ class WearAttendanceTile extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           _StatChip(
-                            label: 'Ob.',
+                            label: t.attendance.presentAbbr,
                             value: '${stats.presentCount}',
                             color: theme.colorScheme.primary,
                             theme: theme,
                           ),
                           const SizedBox(width: 8),
                           _StatChip(
-                            label: 'Nb.',
+                            label: t.attendance.absentAbbr,
                             value: '${stats.absentCount}',
                             color: theme.colorScheme.error,
                             theme: theme,

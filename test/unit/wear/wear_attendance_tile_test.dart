@@ -92,8 +92,8 @@ void main() {
       );
       await tester.pump();
 
-      expect(find.textContaining('Ob.'), findsOneWidget);
-      expect(find.textContaining('Nb.'), findsOneWidget);
+      expect(find.textContaining('Pr.'), findsOneWidget);
+      expect(find.textContaining('Ab.'), findsOneWidget);
     });
 
     testWidgets('header shows Attendance title', (tester) async {
