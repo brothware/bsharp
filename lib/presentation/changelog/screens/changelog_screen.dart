@@ -10,7 +10,48 @@ class ChangelogScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final grouped = ref.watch(groupedChangelogProvider);
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          TabBar(
+            tabs: [
+              Tab(text: t.changelog.gradesTab),
+              Tab(text: t.changelog.attendanceTab),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _ChangelogTab(
+                  groupedProvider: groupedGradeChangelogProvider,
+                  isGrade: true,
+                ),
+                _ChangelogTab(
+                  groupedProvider: groupedAttendanceChangelogProvider,
+                  isGrade: false,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ChangelogTab extends ConsumerWidget {
+  const _ChangelogTab({
+    required this.groupedProvider,
+    required this.isGrade,
+  });
+
+  final Provider<Map<String, List<PortalChangelog>>> groupedProvider;
+  final bool isGrade;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final grouped = ref.watch(groupedProvider);
 
     return RefreshIndicator(
       onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
@@ -22,7 +63,11 @@ class ChangelogScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final date = grouped.keys.elementAt(index);
                 final entries = grouped[date]!;
-                return _DateGroup(date: date, entries: entries);
+                return _DateGroup(
+                  date: date,
+                  entries: entries,
+                  isGrade: isGrade,
+                );
               },
             ),
     );
@@ -30,10 +75,15 @@ class ChangelogScreen extends ConsumerWidget {
 }
 
 class _DateGroup extends StatelessWidget {
-  const _DateGroup({required this.date, required this.entries});
+  const _DateGroup({
+    required this.date,
+    required this.entries,
+    required this.isGrade,
+  });
 
   final String date;
   final List<PortalChangelog> entries;
+  final bool isGrade;
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +104,30 @@ class _DateGroup extends StatelessWidget {
           Card(
             child: ListTile(
               leading: Icon(
-                _changeIcon(entry.type),
-                color: _changeColor(entry.type),
+                _actionIcon(entry.action),
+                color: _actionColor(entry.action),
               ),
               title: Text(
-                entry.description,
+                '${entry.newName} — ${entry.subjectName}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              subtitle: Text(
-                _changeLabel(entry.type),
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: _changeColor(entry.type),
-                ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (entry.newAdditionalInfo.isNotEmpty)
+                    Text(
+                      entry.newAdditionalInfo,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  Text(
+                    '${_actionLabel(entry.action, isGrade)} · ${entry.user}',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: _actionColor(entry.action),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -74,39 +135,38 @@ class _DateGroup extends StatelessWidget {
     );
   }
 
-  static IconData _changeIcon(String type) {
-    return switch (type.toLowerCase()) {
-      'grade' || 'mark' || 'ocena' => Icons.grade_outlined,
-      'attendance' || 'frekwencja' => Icons.event_available_outlined,
-      'message' || 'wiadomość' => Icons.mail_outline,
-      'schedule' || 'plan' => Icons.calendar_today_outlined,
-      'homework' || 'zadanie' => Icons.assignment_outlined,
-      'test' || 'sprawdzian' => Icons.quiz_outlined,
+  static IconData _actionIcon(String action) {
+    return switch (action) {
+      'I' => Icons.add_circle_outline,
+      'U' => Icons.edit_outlined,
+      'D' => Icons.remove_circle_outline,
       _ => Icons.info_outline,
     };
   }
 
-  static Color _changeColor(String type) {
-    return switch (type.toLowerCase()) {
-      'grade' || 'mark' || 'ocena' => const Color(0xFF2196F3),
-      'attendance' || 'frekwencja' => const Color(0xFF4CAF50),
-      'message' || 'wiadomość' => const Color(0xFF9C27B0),
-      'schedule' || 'plan' => const Color(0xFFFFA726),
-      'homework' || 'zadanie' => const Color(0xFFE91E63),
-      'test' || 'sprawdzian' => const Color(0xFFFF5722),
+  static Color _actionColor(String action) {
+    return switch (action) {
+      'I' => const Color(0xFF4CAF50),
+      'U' => const Color(0xFF2196F3),
+      'D' => const Color(0xFFF44336),
       _ => const Color(0xFF607D8B),
     };
   }
 
-  static String _changeLabel(String type) {
-    return switch (type.toLowerCase()) {
-      'grade' || 'mark' || 'ocena' => t.changelog.grade,
-      'attendance' || 'frekwencja' => t.changelog.attendanceLabel,
-      'message' || 'wiadomość' => t.changelog.messageLabel,
-      'schedule' || 'plan' => t.changelog.scheduleLabel,
-      'homework' || 'zadanie' => t.changelog.homeworkLabel,
-      'test' || 'sprawdzian' => t.changelog.testLabel,
-      _ => type,
+  static String _actionLabel(String action, bool isGrade) {
+    if (isGrade) {
+      return switch (action) {
+        'I' => t.changelog.gradeAdded,
+        'U' => t.changelog.gradeUpdated,
+        'D' => t.changelog.gradeDeleted,
+        _ => action,
+      };
+    }
+    return switch (action) {
+      'I' => t.changelog.attendanceAdded,
+      'U' => t.changelog.attendanceUpdated,
+      'D' => t.changelog.attendanceDeleted,
+      _ => action,
     };
   }
 }
