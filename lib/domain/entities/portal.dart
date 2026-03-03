@@ -147,8 +147,12 @@ abstract class PortalHomework with _$PortalHomework {
 @freezed
 abstract class PortalChangelog with _$PortalChangelog {
   const factory PortalChangelog({
-    required String date,
-    required String description,
     required String type,
+    required String dateTime,
+    required String subjectName,
+    required String user,
+    required String newName,
+    @Default('') String newAdditionalInfo,
+    @Default('') String action,
   }) = _PortalChangelog;
 }
