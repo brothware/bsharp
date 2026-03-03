@@ -241,9 +241,22 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
           _parseBulletins(items),
     );
 
+    final changelogParams = {
+      ...params,
+      'limit': '100',
+      'offset': '0',
+    };
     await _fetchPortalView(
-      portalDs, creds, null, 'changelog', params,
-      (items) => ref.read(changelogProvider.notifier).state =
+      portalDs, creds, null, 'changelog',
+      {...changelogParams, 'type': 'mark'},
+      (items) => ref.read(gradeChangelogProvider.notifier).state =
+          _parseChangelog(items),
+    );
+
+    await _fetchPortalView(
+      portalDs, creds, null, 'changelog',
+      {...changelogParams, 'type': 'attendance'},
+      (items) => ref.read(attendanceChangelogProvider.notifier).state =
           _parseChangelog(items),
     );
 
@@ -359,9 +372,14 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       if (item is! Map<String, dynamic>) continue;
       try {
         result.add(PortalChangelog(
-          date: (item['date'] ?? '') as String,
-          description: (item['description'] ?? '') as String,
           type: (item['type'] ?? '') as String,
+          dateTime: (item['dateTime'] ?? '') as String,
+          subjectName: (item['subjectName'] ?? '') as String,
+          user: (item['user'] ?? '') as String,
+          newName: (item['newName'] ?? '') as String,
+          newAdditionalInfo:
+              (item['newAdditionalInfo'] ?? '') as String,
+          action: (item['action'] ?? '') as String,
         ));
       } on Object {
         continue;
