@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bgBase" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0%" stop-color="#66BB6A"/>
+      <stop offset="55%" stop-color="#42A5F5"/>
+      <stop offset="100%" stop-color="#1E88E5"/>
+    </linearGradient>
+    <radialGradient id="orangeGlow" cx="0.82" cy="0.38" r="0.55">
+      <stop offset="0%" stop-color="#FFB74D"/>
+      <stop offset="45%" stop-color="#FFA726" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#FFA726" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="greenHighlight" cx="0.12" cy="0.1" r="0.45">
+      <stop offset="0%" stop-color="#81C784" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#81C784" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="iconClip">
+      <rect x="12" y="12" width="232" height="232" rx="48"/>
+    </clipPath>
+    <filter id="glow" x="-5%" y="-5%" width="115%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset in="blur" dx="0" dy="2" result="shadow"/>
+      <feFlood flood-color="#000" flood-opacity="0.12" result="color"/>
+      <feComposite in="color" in2="shadow" operator="in" result="colorShadow"/>
+      <feMerge>
+        <feMergeNode in="colorShadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="12" y="12" width="232" height="232" rx="48" fill="url(#bgBase)"/>
+  <rect x="12" y="12" width="232" height="232" rx="48" fill="url(#orangeGlow)"/>
+  <rect x="12" y="12" width="232" height="232" rx="48" fill="url(#greenHighlight)"/>
+
+  <g clip-path="url(#iconClip)">
+    <!-- Staff lines (tilted + wavy) -->
+    <g transform="rotate(-8, 128, 130)" stroke="white" stroke-width="3.5" opacity="0.35" fill="none">
+      <path d="M-20 82 Q60 78, 130 83 Q200 88, 280 82"/>
+      <path d="M-20 103 Q60 99, 130 104 Q200 109, 280 103"/>
+      <path d="M-20 124 Q60 120, 130 125 Q200 130, 280 124"/>
+      <path d="M-20 145 Q60 141, 130 146 Q200 151, 280 145"/>
+      <path d="M-20 166 Q60 162, 130 167 Q200 172, 280 166"/>
+    </g>
+
+    <!-- B# (upright) -->
+    <g filter="url(#glow)">
+      <g transform="translate(31.4, 176) scale(0.145, -0.145)" fill="white">
+        <path d="M388 700Q484 700 531 655Q578 610 578 522Q578 475 555 439.5Q532 404 487 384.5Q442 365 376 365L380 410Q411 410 451 401.5Q491 393 528.5 371.5Q566 350 590.5 311.5Q615 273 615 213Q615 147 593.5 105Q572 63 537 40Q502 17 462 8.5Q422 0 385 0H136Q110 0 92.5 17.5Q75 35 75 61V639Q75 665 92.5 682.5Q110 700 136 700ZM370 582H192L205 598V417L193 426H373Q402 426 425 445Q448 464 448 500Q448 543 426.5 562.5Q405 582 370 582ZM378 308H196L205 316V105L195 115H385Q431 115 458 139.5Q485 164 485 213Q485 258 467 278Q449 298 424 303Q399 308 378 308Z"/>
+      </g>
+      <g transform="translate(118.4, 176) scale(0.145, -0.145)" fill="white">
+        <path d="M161 0Q135 0 120.5 19.5Q106 39 110 67L211 657Q214 677 228 688.5Q242 700 261 700Q288 700 303 680.5Q318 661 313 633L212 43Q209 24 195 12Q181 0 161 0ZM127 439Q104 439 88.5 454.5Q73 470 73 493Q73 515 88.5 529Q104 543 127 543H603Q626 543 641.5 527.5Q657 512 657 489Q657 467 641.5 453Q626 439 603 439ZM432 0Q405 0 390 19.5Q375 39 380 67L481 657Q484 677 498 688.5Q512 700 532 700Q558 700 573 680.5Q588 661 583 633L482 43Q479 24 465.5 12Q452 0 432 0ZM90 161Q67 161 51.5 176.5Q36 192 36 215Q36 237 51.5 251Q67 265 90 265H567Q590 265 605.5 249.5Q621 234 621 211Q621 189 605.5 175Q590 161 567 161Z"/>
+      </g>
+    </g>
+
+    <!-- Sparkle -->
+    <path d="M200 40 L203 28 L206 40 L218 43 L206 46 L203 58 L200 46 L188 43 Z" fill="white" opacity="0.9"/>
+
+    <!-- Dots -->
+    <circle cx="62" cy="48" r="5" fill="#FFA726" opacity="0.85"/>
+    <circle cx="47" cy="67" r="3" fill="white" opacity="0.5"/>
+    <circle cx="200" cy="200" r="5" fill="#80DEEA" opacity="0.8"/>
+  </g>
+</svg>
