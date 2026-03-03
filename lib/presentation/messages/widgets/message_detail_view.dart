@@ -56,11 +56,13 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
         final filesRaw = data['files'] as List<dynamic>?;
         final files = filesRaw
             ?.whereType<Map<String, dynamic>>()
-            .map((f) => PocztaAttachment(
-                  name: (f['name'] ?? '') as String,
-                  url: (f['url'] ?? '') as String,
-                  size: int.tryParse('${f['size'] ?? ''}'),
-                ))
+            .map(
+              (f) => PocztaAttachment(
+                name: (f['name'] ?? '') as String,
+                url: (f['url'] ?? '') as String,
+                size: int.tryParse('${f['size'] ?? ''}'),
+              ),
+            )
             .toList();
         if (files != null && files.isNotEmpty) {
           widget.onFilesLoaded?.call(files);
@@ -81,7 +83,8 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
     final message = widget.message;
     final rawContent = _fullContent ?? message.content;
     final displayTitle = _translatedTitle ?? message.title;
-    final displayContent = _translatedContent ??
+    final displayContent =
+        _translatedContent ??
         (rawContent != null ? stripHtml(rawContent) : null);
 
     return Scaffold(
@@ -95,9 +98,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
                 color: message.isStarred ? Colors.orange : null,
               ),
               onPressed: widget.onToggleStar,
-              tooltip: message.isStarred
-                  ? t.messages.unstar
-                  : t.messages.star,
+              tooltip: message.isStarred ? t.messages.unstar : t.messages.star,
             ),
           if (widget.onDelete != null)
             IconButton(
@@ -112,10 +113,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              displayTitle,
-              style: theme.textTheme.titleLarge,
-            ),
+            Text(displayTitle, style: theme.textTheme.titleLarge),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -160,8 +158,9 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
                     if (translated != null) {
                       final parts = translated.split('\n---\n');
                       _translatedTitle = parts.first;
-                      _translatedContent =
-                          parts.length > 1 ? stripHtml(parts.sublist(1).join('\n---\n')) : null;
+                      _translatedContent = parts.length > 1
+                          ? stripHtml(parts.sublist(1).join('\n---\n'))
+                          : null;
                     } else {
                       _translatedTitle = null;
                       _translatedContent = null;
@@ -176,17 +175,11 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
                 child: Center(child: CircularProgressIndicator()),
               )
             else if (displayContent != null)
-              SelectableText(
-                displayContent,
-                style: theme.textTheme.bodyMedium,
-              ),
+              SelectableText(displayContent, style: theme.textTheme.bodyMedium),
             if ((_detailFiles ?? message.files) case final files?
                 when files.isNotEmpty) ...[
               const SizedBox(height: 16),
-              Text(
-                t.messages.attachments,
-                style: theme.textTheme.titleSmall,
-              ),
+              Text(t.messages.attachments, style: theme.textTheme.titleSmall),
               const SizedBox(height: 8),
               for (final file in files) _AttachmentTile(attachment: file),
             ],
@@ -202,7 +195,6 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
           : null,
     );
   }
-
 }
 
 class _AttachmentTile extends StatelessWidget {

@@ -5,7 +5,6 @@ import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 void main() {
   group('NotificationPreferences', () {
     test('defaults are correct', () {
@@ -54,9 +53,7 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
       container = ProviderContainer(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-        ],
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
       );
     });
 
@@ -67,8 +64,7 @@ void main() {
     });
 
     test('toggleCategory flips the value', () async {
-      final notifier =
-          container.read(notificationPreferencesProvider.notifier);
+      final notifier = container.read(notificationPreferencesProvider.notifier);
       await notifier.toggleCategory(ChangeCategory.grades);
 
       final prefs = container.read(notificationPreferencesProvider);
@@ -76,8 +72,7 @@ void main() {
     });
 
     test('toggleCategory twice restores original value', () async {
-      final notifier =
-          container.read(notificationPreferencesProvider.notifier);
+      final notifier = container.read(notificationPreferencesProvider.notifier);
       await notifier.toggleCategory(ChangeCategory.grades);
       await notifier.toggleCategory(ChangeCategory.grades);
 
@@ -86,8 +81,7 @@ void main() {
     });
 
     test('setSyncInterval updates interval', () async {
-      final notifier =
-          container.read(notificationPreferencesProvider.notifier);
+      final notifier = container.read(notificationPreferencesProvider.notifier);
       await notifier.setSyncInterval(60);
 
       final prefs = container.read(notificationPreferencesProvider);
@@ -95,8 +89,7 @@ void main() {
     });
 
     test('setSyncInterval rejects invalid value', () async {
-      final notifier =
-          container.read(notificationPreferencesProvider.notifier);
+      final notifier = container.read(notificationPreferencesProvider.notifier);
       await notifier.setSyncInterval(20);
 
       final prefs = container.read(notificationPreferencesProvider);
@@ -104,8 +97,7 @@ void main() {
     });
 
     test('persists preferences to SharedPreferences', () async {
-      final notifier =
-          container.read(notificationPreferencesProvider.notifier);
+      final notifier = container.read(notificationPreferencesProvider.notifier);
       await notifier.toggleCategory(ChangeCategory.messages);
 
       final sp = container.read(sharedPreferencesProvider);

@@ -5,7 +5,7 @@ import 'package:bsharp/l10n/strings.g.dart';
 
 class NotificationService {
   NotificationService({FlutterLocalNotificationsPlugin? plugin})
-      : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+    : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   final FlutterLocalNotificationsPlugin _plugin;
   bool _initialized = false;
@@ -22,15 +22,17 @@ class NotificationService {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    const androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
     );
-    const linuxSettings =
-        LinuxInitializationSettings(defaultActionName: 'Open');
+    const linuxSettings = LinuxInitializationSettings(
+      defaultActionName: 'Open',
+    );
 
     const settings = InitializationSettings(
       android: androidSettings,
@@ -87,46 +89,41 @@ class NotificationService {
         ? items.first.subtitle ?? ''
         : items.take(3).map((i) => i.title).join(', ');
 
-    await _plugin.show(
-      category.index,
-      title,
-      body,
-      details,
-    );
+    await _plugin.show(category.index, title, body, details);
   }
 
   _ChannelConfig _channelConfig(ChangeCategory category) {
     return switch (category) {
       ChangeCategory.grades => _ChannelConfig(
-          channelId: _gradesChannelId,
-          channelName: t.notification.gradesName,
-          channelDescription: t.notification.gradesDescription,
-        ),
+        channelId: _gradesChannelId,
+        channelName: t.notification.gradesName,
+        channelDescription: t.notification.gradesDescription,
+      ),
       ChangeCategory.messages => _ChannelConfig(
-          channelId: _messagesChannelId,
-          channelName: t.notification.messagesName,
-          channelDescription: t.notification.messagesDescription,
-        ),
+        channelId: _messagesChannelId,
+        channelName: t.notification.messagesName,
+        channelDescription: t.notification.messagesDescription,
+      ),
       ChangeCategory.schedule => _ChannelConfig(
-          channelId: _scheduleChannelId,
-          channelName: t.notification.scheduleName,
-          channelDescription: t.notification.scheduleDescription,
-        ),
+        channelId: _scheduleChannelId,
+        channelName: t.notification.scheduleName,
+        channelDescription: t.notification.scheduleDescription,
+      ),
       ChangeCategory.attendance => _ChannelConfig(
-          channelId: _attendanceChannelId,
-          channelName: t.notification.attendanceName,
-          channelDescription: t.notification.attendanceDescription,
-        ),
+        channelId: _attendanceChannelId,
+        channelName: t.notification.attendanceName,
+        channelDescription: t.notification.attendanceDescription,
+      ),
       ChangeCategory.homework => _ChannelConfig(
-          channelId: _homeworkChannelId,
-          channelName: t.notification.homeworkName,
-          channelDescription: t.notification.homeworkDescription,
-        ),
+        channelId: _homeworkChannelId,
+        channelName: t.notification.homeworkName,
+        channelDescription: t.notification.homeworkDescription,
+      ),
       ChangeCategory.notes => _ChannelConfig(
-          channelId: _notesChannelId,
-          channelName: t.notification.notesName,
-          channelDescription: t.notification.notesDescription,
-        ),
+        channelId: _notesChannelId,
+        channelName: t.notification.notesName,
+        channelDescription: t.notification.notesDescription,
+      ),
     };
   }
 

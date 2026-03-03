@@ -74,9 +74,7 @@ void main() {
 
       expect(container.read(activeStudentProvider), jan);
 
-      await container
-          .read(activeStudentProvider.notifier)
-          .switchTo(anna);
+      await container.read(activeStudentProvider.notifier).switchTo(anna);
 
       final savedId = await storage.getSelectedStudentId();
       expect(savedId, 2);

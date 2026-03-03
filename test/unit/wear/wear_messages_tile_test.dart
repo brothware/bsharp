@@ -32,13 +32,10 @@ Widget _buildTile({List<PocztaMessage> inbox = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       inboxProvider.overrideWith((ref) => inbox),
     ],
-    child: const MaterialApp(
-      home: Scaffold(body: WearMessagesTile()),
-    ),
+    child: const MaterialApp(home: Scaffold(body: WearMessagesTile())),
   );
 }
 
@@ -53,10 +50,19 @@ void main() {
     });
 
     testWidgets('shows recent messages', (tester) async {
-      await tester.pumpWidget(_buildTile(inbox: [
-        _msg(id: 1, title: 'Zebranie', sender: 'Anna Nowak'),
-        _msg(id: 2, title: 'Wycieczka', sender: 'Jan Kowalski', isRead: true),
-      ]));
+      await tester.pumpWidget(
+        _buildTile(
+          inbox: [
+            _msg(id: 1, title: 'Zebranie', sender: 'Anna Nowak'),
+            _msg(
+              id: 2,
+              title: 'Wycieczka',
+              sender: 'Jan Kowalski',
+              isRead: true,
+            ),
+          ],
+        ),
+      );
       await tester.pump();
 
       expect(find.text('Anna Nowak'), findsOneWidget);
@@ -80,20 +86,24 @@ void main() {
     });
 
     testWidgets('shows unread count badge', (tester) async {
-      await tester.pumpWidget(_buildTile(inbox: [
-        _msg(id: 1, isRead: false),
-        _msg(id: 2, isRead: false),
-        _msg(id: 3, isRead: true),
-      ]));
+      await tester.pumpWidget(
+        _buildTile(
+          inbox: [
+            _msg(id: 1, isRead: false),
+            _msg(id: 2, isRead: false),
+            _msg(id: 3, isRead: true),
+          ],
+        ),
+      );
       await tester.pump();
 
       expect(find.text('2'), findsOneWidget);
     });
 
     testWidgets('unread messages have bold sender name', (tester) async {
-      await tester.pumpWidget(_buildTile(inbox: [
-        _msg(id: 1, sender: 'Unread', isRead: false),
-      ]));
+      await tester.pumpWidget(
+        _buildTile(inbox: [_msg(id: 1, sender: 'Unread', isRead: false)]),
+      );
       await tester.pump();
 
       final textWidget = tester.widget<Text>(find.text('Unread'));

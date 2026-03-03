@@ -35,7 +35,10 @@ class _WearSwipeDismissState extends State<WearSwipeDismiss>
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
     if (details.primaryDelta == null) return;
     setState(() {
-      _dragOffset = (_dragOffset + details.primaryDelta!).clamp(0.0, double.infinity);
+      _dragOffset = (_dragOffset + details.primaryDelta!).clamp(
+        0.0,
+        double.infinity,
+      );
     });
   }
 

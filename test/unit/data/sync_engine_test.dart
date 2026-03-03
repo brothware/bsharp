@@ -24,13 +24,15 @@ class _FakeSyncRepository implements SyncRepository {
 
   @override
   Future<Result<ServerSettings>> getSettings() async {
-    return Result.success(ServerSettings(
-      version: '1.0',
-      protocol: '1.6.0',
-      id: 'test',
-      time: DateTime(2025, 1, 1),
-      permissions: 0,
-    ));
+    return Result.success(
+      ServerSettings(
+        version: '1.0',
+        protocol: '1.6.0',
+        id: 'test',
+        time: DateTime(2025, 1, 1),
+        permissions: 0,
+      ),
+    );
   }
 
   @override

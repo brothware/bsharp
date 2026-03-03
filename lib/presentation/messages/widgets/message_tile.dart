@@ -16,8 +16,7 @@ class AnimatedMessageRemoval extends StatefulWidget {
   final Widget child;
 
   @override
-  State<AnimatedMessageRemoval> createState() =>
-      _AnimatedMessageRemovalState();
+  State<AnimatedMessageRemoval> createState() => _AnimatedMessageRemovalState();
 }
 
 class _AnimatedMessageRemovalState extends State<AnimatedMessageRemoval>
@@ -33,12 +32,14 @@ class _AnimatedMessageRemovalState extends State<AnimatedMessageRemoval>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _sizeFactor = Tween<double>(begin: 1, end: 0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-    _opacity = Tween<double>(begin: 1, end: 0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _sizeFactor = Tween<double>(
+      begin: 1,
+      end: 0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _opacity = Tween<double>(
+      begin: 1,
+      end: 0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         widget.onRemoved();
@@ -65,10 +66,7 @@ class _AnimatedMessageRemovalState extends State<AnimatedMessageRemoval>
     return SizeTransition(
       sizeFactor: _sizeFactor,
       axisAlignment: -1,
-      child: FadeTransition(
-        opacity: _opacity,
-        child: widget.child,
-      ),
+      child: FadeTransition(opacity: _opacity, child: widget.child),
     );
   }
 }
@@ -191,11 +189,7 @@ class MessageTile extends StatelessWidget {
                     color: theme.colorScheme.error,
                   ),
               ] else if (message.isStarred)
-                const Icon(
-                  Icons.star,
-                  size: 16,
-                  color: Colors.orange,
-                ),
+                const Icon(Icons.star, size: 16, color: Colors.orange),
             ],
           ),
         ],
@@ -235,11 +229,7 @@ class MessageTile extends StatelessWidget {
 }
 
 class _ActionIcon extends StatelessWidget {
-  const _ActionIcon({
-    required this.icon,
-    required this.color,
-    this.onPressed,
-  });
+  const _ActionIcon({required this.icon, required this.color, this.onPressed});
 
   final IconData icon;
   final Color color;

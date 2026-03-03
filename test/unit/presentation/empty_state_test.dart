@@ -8,10 +8,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyState(
-              icon: Icons.inbox,
-              title: 'No messages',
-            ),
+            body: EmptyState(icon: Icons.inbox, title: 'No messages'),
           ),
         ),
       );
@@ -23,10 +20,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyState(
-              icon: Icons.inbox,
-              title: 'No messages',
-            ),
+            body: EmptyState(icon: Icons.inbox, title: 'No messages'),
           ),
         ),
       );
@@ -54,10 +48,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyState(
-              icon: Icons.inbox,
-              title: 'No messages',
-            ),
+            body: EmptyState(icon: Icons.inbox, title: 'No messages'),
           ),
         ),
       );
@@ -73,10 +64,7 @@ void main() {
             body: EmptyState(
               icon: Icons.inbox,
               title: 'No data',
-              action: FilledButton(
-                onPressed: () {},
-                child: const Text('Sync'),
-              ),
+              action: FilledButton(onPressed: () {}, child: const Text('Sync')),
             ),
           ),
         ),
@@ -90,10 +78,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: EmptyState(
-              icon: Icons.inbox,
-              title: 'No data',
-            ),
+            body: EmptyState(icon: Icons.inbox, title: 'No data'),
           ),
         ),
       );

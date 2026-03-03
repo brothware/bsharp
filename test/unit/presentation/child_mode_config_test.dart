@@ -8,19 +8,11 @@ import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.
 
 import '../data/credential_storage_test.dart';
 
-Widget _buildApp({
-  ChildModeState? initialState,
-  CredentialStorage? storage,
-}) {
-  final store =
-      storage ?? CredentialStorage(store: FakeKeyValueStore());
+Widget _buildApp({ChildModeState? initialState, CredentialStorage? storage}) {
+  final store = storage ?? CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
-    overrides: [
-      credentialStorageProvider.overrideWithValue(store),
-    ],
-    child: const MaterialApp(
-      home: ChildModeConfigScreen(),
-    ),
+    overrides: [credentialStorageProvider.overrideWithValue(store)],
+    child: const MaterialApp(home: ChildModeConfigScreen()),
   );
 }
 
@@ -31,10 +23,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('Set PIN'), findsOneWidget);
-      expect(
-        find.text('Required to enable child mode'),
-        findsOneWidget,
-      );
+      expect(find.text('Required to enable child mode'), findsOneWidget);
     });
 
     testWidgets('shows feature toggles section', (tester) async {

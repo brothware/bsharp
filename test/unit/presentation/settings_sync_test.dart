@@ -46,7 +46,6 @@ void main() {
       expect(find.text('Sync interval'), findsOneWidget);
       expect(find.text('Every 30 minutes'), findsOneWidget);
     });
-
   });
 
   group('Settings - Notification Section', () {

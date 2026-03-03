@@ -12,61 +12,68 @@ final todayLessonsProvider = Provider<List<ScheduleEntry>>((ref) {
   return ref.watch(scheduleEntriesForDateProvider(today));
 });
 
-final currentLessonProvider = Provider<({ScheduleEntry? current, ScheduleEntry? next, bool allEnded})>((ref) {
-  final lessons = ref.watch(todayLessonsProvider);
-  if (lessons.isEmpty) {
-    return (current: null, next: null, allEnded: false);
-  }
+final currentLessonProvider =
+    Provider<({ScheduleEntry? current, ScheduleEntry? next, bool allEnded})>((
+      ref,
+    ) {
+      final lessons = ref.watch(todayLessonsProvider);
+      if (lessons.isEmpty) {
+        return (current: null, next: null, allEnded: false);
+      }
 
-  final now = DateTime.now();
-  final nowMinutes = now.hour * 60 + now.minute;
+      final now = DateTime.now();
+      final nowMinutes = now.hour * 60 + now.minute;
 
-  ScheduleEntry? current;
-  ScheduleEntry? next;
+      ScheduleEntry? current;
+      ScheduleEntry? next;
 
-  for (final entry in lessons) {
-    final start = _parseTimeMinutes(entry.event.startTime);
-    final end = _parseTimeMinutes(entry.event.endTime);
-    if (start == null || end == null) continue;
-    if (entry.isCancelled) continue;
+      for (final entry in lessons) {
+        final start = _parseTimeMinutes(entry.event.startTime);
+        final end = _parseTimeMinutes(entry.event.endTime);
+        if (start == null || end == null) continue;
+        if (entry.isCancelled) continue;
 
-    if (nowMinutes >= start && nowMinutes < end) {
-      current = entry;
-    } else if (nowMinutes < start && next == null) {
-      next = entry;
-    }
-  }
+        if (nowMinutes >= start && nowMinutes < end) {
+          current = entry;
+        } else if (nowMinutes < start && next == null) {
+          next = entry;
+        }
+      }
 
-  final lastEnd = lessons
-      .where((e) => !e.isCancelled)
-      .map((e) => _parseTimeMinutes(e.event.endTime))
-      .whereType<int>()
-      .fold<int>(0, (a, b) => a > b ? a : b);
+      final lastEnd = lessons
+          .where((e) => !e.isCancelled)
+          .map((e) => _parseTimeMinutes(e.event.endTime))
+          .whereType<int>()
+          .fold<int>(0, (a, b) => a > b ? a : b);
 
-  final allEnded = current == null && next == null && lastEnd > 0 && nowMinutes >= lastEnd;
+      final allEnded =
+          current == null &&
+          next == null &&
+          lastEnd > 0 &&
+          nowMinutes >= lastEnd;
 
-  return (current: current, next: next, allEnded: allEnded);
-});
+      return (current: current, next: next, allEnded: allEnded);
+    });
 
 final recentMarksProvider =
     Provider<List<({ResolvedMark mark, String subjectName})>>((ref) {
-  final subjectGrades = ref.watch(subjectGradesProvider);
-  final all = <({ResolvedMark mark, String subjectName})>[];
+      final subjectGrades = ref.watch(subjectGradesProvider);
+      final all = <({ResolvedMark mark, String subjectName})>[];
 
-  for (final sg in subjectGrades) {
-    for (final rm in sg.resolvedMarks) {
-      all.add((mark: rm, subjectName: sg.subjectName));
-    }
-  }
+      for (final sg in subjectGrades) {
+        for (final rm in sg.resolvedMarks) {
+          all.add((mark: rm, subjectName: sg.subjectName));
+        }
+      }
 
-  all.sort((a, b) {
-    final aTime = a.mark.mark.addTime ?? a.mark.mark.getDate;
-    final bTime = b.mark.mark.addTime ?? b.mark.mark.getDate;
-    return bTime.compareTo(aTime);
-  });
+      all.sort((a, b) {
+        final aTime = a.mark.mark.addTime ?? a.mark.mark.getDate;
+        final bTime = b.mark.mark.addTime ?? b.mark.mark.getDate;
+        return bTime.compareTo(aTime);
+      });
 
-  return all.take(5).toList();
-});
+      return all.take(5).toList();
+    });
 
 final latestUnreadMessagesProvider = Provider<List<PocztaMessage>>((ref) {
   final inbox = ref.watch(inboxProvider);

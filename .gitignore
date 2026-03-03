@@ -38,6 +38,7 @@ app.*.map.json
 *.freezed.dart
 
 *.apk
+*.jks
 /decompiled/
 /jadx/
 /examples/

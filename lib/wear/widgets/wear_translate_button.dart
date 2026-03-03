@@ -33,77 +33,77 @@ class _WearTranslateButtonState extends ConsumerState<WearTranslateButton> {
 
     return switch (_state) {
       _TranslationState.idle => GestureDetector(
-          onTap: _translate,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.translate, size: 14, color: theme.colorScheme.primary),
-              const SizedBox(width: 4),
-              Text(
-                t.translation.translate,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  fontSize: 9,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ],
-          ),
-        ),
-      _TranslationState.loading => Row(
+        onTap: _translate,
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              width: 12,
-              height: 12,
-              child: CircularProgressIndicator(
-                strokeWidth: 1.5,
-                color: theme.colorScheme.primary,
-              ),
-            ),
+            Icon(Icons.translate, size: 14, color: theme.colorScheme.primary),
             const SizedBox(width: 4),
             Text(
-              t.translation.translating,
+              t.translation.translate,
               style: theme.textTheme.labelSmall?.copyWith(
                 fontSize: 9,
-                color: theme.colorScheme.onSurfaceVariant,
+                color: theme.colorScheme.primary,
               ),
             ),
           ],
         ),
+      ),
+      _TranslationState.loading => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 12,
+            height: 12,
+            child: CircularProgressIndicator(
+              strokeWidth: 1.5,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            t.translation.translating,
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontSize: 9,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
       _TranslationState.translated => GestureDetector(
-          onTap: _showOriginal,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.translate, size: 14, color: theme.colorScheme.primary),
-              const SizedBox(width: 4),
-              Text(
-                t.translation.showOriginal,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  fontSize: 9,
-                  color: theme.colorScheme.primary,
-                ),
+        onTap: _showOriginal,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.translate, size: 14, color: theme.colorScheme.primary),
+            const SizedBox(width: 4),
+            Text(
+              t.translation.showOriginal,
+              style: theme.textTheme.labelSmall?.copyWith(
+                fontSize: 9,
+                color: theme.colorScheme.primary,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
       _TranslationState.error => GestureDetector(
-          onTap: _translate,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.error_outline, size: 14, color: theme.colorScheme.error),
-              const SizedBox(width: 4),
-              Text(
-                t.translation.translationFailed,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  fontSize: 9,
-                  color: theme.colorScheme.error,
-                ),
+        onTap: _translate,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.error_outline, size: 14, color: theme.colorScheme.error),
+            const SizedBox(width: 4),
+            Text(
+              t.translation.translationFailed,
+              style: theme.textTheme.labelSmall?.copyWith(
+                fontSize: 9,
+                color: theme.colorScheme.error,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
     };
   }
 

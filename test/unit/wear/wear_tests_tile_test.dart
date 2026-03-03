@@ -15,13 +15,10 @@ Widget _buildTile({List<PortalTest> tests = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       testsProvider.overrideWith((ref) => tests),
     ],
-    child: const MaterialApp(
-      home: Scaffold(body: WearTestsTile()),
-    ),
+    child: const MaterialApp(home: Scaffold(body: WearTestsTile())),
   );
 }
 
@@ -46,14 +43,18 @@ void main() {
       final tomorrow = DateTime.now().add(const Duration(days: 1));
       final dateStr =
           '${tomorrow.year}-${tomorrow.month.toString().padLeft(2, '0')}-${tomorrow.day.toString().padLeft(2, '0')}';
-      await tester.pumpWidget(_buildTile(tests: [
-        PortalTest(
-          id: 1,
-          subjectName: 'Physics',
-          date: dateStr,
-          title: 'Chapter 5 test',
+      await tester.pumpWidget(
+        _buildTile(
+          tests: [
+            PortalTest(
+              id: 1,
+              subjectName: 'Physics',
+              date: dateStr,
+              title: 'Chapter 5 test',
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('Physics'), findsOneWidget);
@@ -64,9 +65,11 @@ void main() {
       final tomorrow = DateTime.now().add(const Duration(days: 1));
       final dateStr =
           '${tomorrow.year}-${tomorrow.month.toString().padLeft(2, '0')}-${tomorrow.day.toString().padLeft(2, '0')}';
-      await tester.pumpWidget(_buildTile(tests: [
-        PortalTest(id: 1, subjectName: 'Math', date: dateStr),
-      ]));
+      await tester.pumpWidget(
+        _buildTile(
+          tests: [PortalTest(id: 1, subjectName: 'Math', date: dateStr)],
+        ),
+      );
       await tester.pump();
 
       final listView = tester.widget<ListView>(find.byType(ListView));

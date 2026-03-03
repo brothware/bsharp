@@ -45,16 +45,13 @@ class GradesScreen extends ConsumerWidget {
                   ),
                 ),
                 SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final sg = subjectGrades[index];
-                      return _SubjectSection(
-                        subjectGrades: sg,
-                        newGradeIds: newIds,
-                      );
-                    },
-                    childCount: subjectGrades.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final sg = subjectGrades[index];
+                    return _SubjectSection(
+                      subjectGrades: sg,
+                      newGradeIds: newIds,
+                    );
+                  }, childCount: subjectGrades.length),
                 ),
                 const SliverToBoxAdapter(child: SizedBox(height: 16)),
               ],
@@ -86,8 +83,8 @@ class _EmptyState extends StatelessWidget {
           t.grades.noGradesSubtitle,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
       ],
     );
@@ -113,16 +110,13 @@ class _AverageChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
+          Text(label, style: Theme.of(context).textTheme.labelSmall),
           Text(
             formatAverage(average),
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: average != null ? gradeColor(average) : null,
-                ),
+              fontWeight: FontWeight.bold,
+              color: average != null ? gradeColor(average) : null,
+            ),
           ),
         ],
       ),
@@ -147,10 +141,7 @@ class _SubjectSection extends StatelessWidget {
 
     return ExpansionTile(
       initiallyExpanded: true,
-      title: Text(
-        subjectGrades.subjectName,
-        style: theme.textTheme.titleSmall,
-      ),
+      title: Text(subjectGrades.subjectName, style: theme.textTheme.titleSmall),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

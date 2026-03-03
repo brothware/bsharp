@@ -30,7 +30,8 @@ ResolvedMark _resolved({
   );
   return ResolvedMark(
     mark: mark,
-    displayValue: displayValue ??
+    displayValue:
+        displayValue ??
         (markValue != null ? markValue.toInt().toString() : '?'),
     effectiveValue: markValue,
     countsToAverage: markValue != null,
@@ -45,8 +46,7 @@ Widget _buildScreen({
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       subjectGradesProvider.overrideWith((ref) => subjectGrades),
       termsProvider.overrideWith((ref) => terms),
     ],
@@ -64,18 +64,22 @@ void main() {
     });
 
     testWidgets('shows subject sections with grades', (tester) async {
-      await tester.pumpWidget(_buildScreen(subjectGrades: [
-        SubjectGrades(
-          subjectName: 'Mathematics',
-          subjectId: 1,
-          resolvedMarks: [_resolved(id: 1, markValue: 5.0)],
+      await tester.pumpWidget(
+        _buildScreen(
+          subjectGrades: [
+            SubjectGrades(
+              subjectName: 'Mathematics',
+              subjectId: 1,
+              resolvedMarks: [_resolved(id: 1, markValue: 5.0)],
+            ),
+            SubjectGrades(
+              subjectName: 'English',
+              subjectId: 2,
+              resolvedMarks: [_resolved(id: 2, markValue: 4.0)],
+            ),
+          ],
         ),
-        SubjectGrades(
-          subjectName: 'English',
-          subjectId: 2,
-          resolvedMarks: [_resolved(id: 2, markValue: 4.0)],
-        ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('English'), findsOneWidget);
@@ -86,24 +90,26 @@ void main() {
 
     testWidgets('shows term selector when multiple terms', (tester) async {
       final now = DateTime.now();
-      await tester.pumpWidget(_buildScreen(
-        terms: [
-          Term(
-            id: 1,
-            name: 'Semester 1',
-            type: TermType.semester,
-            startDate: now.subtract(const Duration(days: 90)),
-            endDate: now.add(const Duration(days: 90)),
-          ),
-          Term(
-            id: 2,
-            name: 'Semester 2',
-            type: TermType.semester,
-            startDate: now.add(const Duration(days: 91)),
-            endDate: now.add(const Duration(days: 270)),
-          ),
-        ],
-      ));
+      await tester.pumpWidget(
+        _buildScreen(
+          terms: [
+            Term(
+              id: 1,
+              name: 'Semester 1',
+              type: TermType.semester,
+              startDate: now.subtract(const Duration(days: 90)),
+              endDate: now.add(const Duration(days: 90)),
+            ),
+            Term(
+              id: 2,
+              name: 'Semester 2',
+              type: TermType.semester,
+              startDate: now.add(const Duration(days: 91)),
+              endDate: now.add(const Duration(days: 270)),
+            ),
+          ],
+        ),
+      );
       await tester.pump();
 
       expect(find.byIcon(Icons.chevron_left), findsOneWidget);
@@ -111,16 +117,20 @@ void main() {
     });
 
     testWidgets('shows average for subject', (tester) async {
-      await tester.pumpWidget(_buildScreen(subjectGrades: [
-        SubjectGrades(
-          subjectName: 'Mathematics',
-          subjectId: 1,
-          resolvedMarks: [
-            _resolved(id: 1, markValue: 5.0),
-            _resolved(id: 2, markValue: 4.0),
+      await tester.pumpWidget(
+        _buildScreen(
+          subjectGrades: [
+            SubjectGrades(
+              subjectName: 'Mathematics',
+              subjectId: 1,
+              resolvedMarks: [
+                _resolved(id: 1, markValue: 5.0),
+                _resolved(id: 2, markValue: 4.0),
+              ],
+            ),
           ],
         ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('4.50'), findsOneWidget);

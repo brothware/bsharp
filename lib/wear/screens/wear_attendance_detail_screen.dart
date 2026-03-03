@@ -44,24 +44,32 @@ class WearAttendanceDetailScreen extends ConsumerWidget {
               Expanded(
                 child: WearVerticalOverscrollPager(
                   onPrevious: () {
-                    ref.read(selectedMonthProvider.notifier).state =
-                        DateTime(month.year, month.month - 1);
+                    ref.read(selectedMonthProvider.notifier).state = DateTime(
+                      month.year,
+                      month.month - 1,
+                    );
                   },
                   onNext: () {
-                    ref.read(selectedMonthProvider.notifier).state =
-                        DateTime(month.year, month.month + 1);
+                    ref.read(selectedMonthProvider.notifier).state = DateTime(
+                      month.year,
+                      month.month + 1,
+                    );
                   },
                   child: GridView.builder(
-                    padding: EdgeInsets.only(bottom: wearListBottomInset(shape)),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 7,
+                    padding: EdgeInsets.only(
+                      bottom: wearListBottomInset(shape),
                     ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 7,
+                        ),
                     itemCount: calDays.length,
                     itemBuilder: (context, index) {
                       final day = calDays[index];
                       final isCurrentMonth = day.month == month.month;
                       final isToday = day == today;
-                      final attDay = attDays[DateTime(day.year, day.month, day.day)];
+                      final attDay =
+                          attDays[DateTime(day.year, day.month, day.day)];
                       final status =
                           attDay?.status ?? AttendanceDayStatus.noData;
 

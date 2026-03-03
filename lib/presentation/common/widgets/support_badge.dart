@@ -15,9 +15,8 @@ class SupportBadge extends ConsumerWidget {
     final isIos = ref.watch(isIosProvider);
 
     return GestureDetector(
-      onTap: () => isIos
-          ? showTipJarSheet(context)
-          : launchUrl(Uri.parse(supportUrl)),
+      onTap: () =>
+          isIos ? showTipJarSheet(context) : launchUrl(Uri.parse(supportUrl)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Opacity(

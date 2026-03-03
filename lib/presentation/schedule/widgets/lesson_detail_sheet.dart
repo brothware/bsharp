@@ -136,10 +136,7 @@ class LessonDetailSheet extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    entry.topic!,
-                    style: theme.textTheme.bodyMedium,
-                  ),
+                  Text(entry.topic!, style: theme.textTheme.bodyMedium),
                 ],
                 if (entry.isLocked) ...[
                   const SizedBox(height: 16),
@@ -216,25 +213,25 @@ class _StatusBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final (icon, color, label) = switch (changeType) {
       ScheduleChangeType.cancelled => (
-          Icons.cancel_outlined,
-          Theme.of(context).colorScheme.error,
-          t.schedule.lessonCancelled,
-        ),
+        Icons.cancel_outlined,
+        Theme.of(context).colorScheme.error,
+        t.schedule.lessonCancelled,
+      ),
       ScheduleChangeType.substitution => (
-          Icons.swap_horiz,
-          Colors.orange,
-          t.schedule.substitution,
-        ),
+        Icons.swap_horiz,
+        Colors.orange,
+        t.schedule.substitution,
+      ),
       ScheduleChangeType.roomChanged => (
-          Icons.room_outlined,
-          Colors.blue,
-          t.schedule.roomChanged,
-        ),
+        Icons.room_outlined,
+        Colors.blue,
+        t.schedule.roomChanged,
+      ),
       ScheduleChangeType.added => (
-          Icons.add_circle_outline,
-          Colors.green,
-          t.schedule.lessonAdded,
-        ),
+        Icons.add_circle_outline,
+        Colors.green,
+        t.schedule.lessonAdded,
+      ),
     };
 
     return Container(
@@ -251,10 +248,9 @@ class _StatusBanner extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             label,
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.copyWith(color: color),
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(color: color),
           ),
         ],
       ),

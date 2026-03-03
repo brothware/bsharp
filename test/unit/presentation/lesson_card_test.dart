@@ -97,10 +97,7 @@ void main() {
 
   testWidgets('triggers onTap callback', (tester) async {
     var tapped = false;
-    final entry = ScheduleEntry(
-      event: _event(),
-      subjectName: 'Chemistry',
-    );
+    final entry = ScheduleEntry(event: _event(), subjectName: 'Chemistry');
 
     await tester.pumpWidget(
       wrap(LessonCard(entry: entry, onTap: () => tapped = true)),

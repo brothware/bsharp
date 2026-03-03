@@ -40,8 +40,7 @@ class _TermFilterChips extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final terms = ref.watch(termsProvider);
     final currentTerm = ref.watch(currentStatsTermProvider);
-    final semesters =
-        terms.where((t) => t.type == TermType.semester).toList();
+    final semesters = terms.where((t) => t.type == TermType.semester).toList();
 
     if (semesters.isEmpty) return const SizedBox.shrink();
 
@@ -85,10 +84,7 @@ class _EmptyStats extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
           const SizedBox(height: 12),
-          Text(
-            t.common.noData,
-            style: theme.textTheme.titleMedium,
-          ),
+          Text(t.common.noData, style: theme.textTheme.titleMedium),
           const SizedBox(height: 4),
           Text(
             t.attendance.statsAfterSync,
@@ -113,18 +109,15 @@ class _OverallCard extends StatelessWidget {
     final percentColor = stats.presentPercent >= 90
         ? const Color(0xFF4CAF50)
         : stats.presentPercent >= 75
-            ? const Color(0xFFFFA726)
-            : const Color(0xFFF44336);
+        ? const Color(0xFFFFA726)
+        : const Color(0xFFF44336);
 
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Text(
-              t.attendance.overall,
-              style: theme.textTheme.titleSmall,
-            ),
+            Text(t.attendance.overall, style: theme.textTheme.titleSmall),
             const SizedBox(height: 16),
             SizedBox(
               width: 120,
@@ -133,8 +126,7 @@ class _OverallCard extends StatelessWidget {
                 painter: _RingPainter(
                   percent: stats.presentPercent / 100,
                   color: percentColor,
-                  backgroundColor:
-                      theme.colorScheme.surfaceContainerHighest,
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
                 ),
                 child: Center(
                   child: Text(
@@ -175,11 +167,7 @@ class _OverallCard extends StatelessWidget {
 }
 
 class _StatItem extends StatelessWidget {
-  const _StatItem({
-    required this.label,
-    required this.value,
-    this.color,
-  });
+  const _StatItem({required this.label, required this.value, this.color});
 
   final String label;
   final String value;
@@ -216,8 +204,9 @@ class _DistributionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final presentFraction =
-        stats.totalLessons > 0 ? stats.presentCount / stats.totalLessons : 0.0;
+    final presentFraction = stats.totalLessons > 0
+        ? stats.presentCount / stats.totalLessons
+        : 0.0;
 
     return Card(
       child: Padding(
@@ -242,8 +231,9 @@ class _DistributionCard extends StatelessWidget {
                           child: stats.presentCount > 0
                               ? Text(
                                   '${stats.presentCount}',
-                                  style: theme.textTheme.labelSmall
-                                      ?.copyWith(color: Colors.white),
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: Colors.white,
+                                  ),
                                 )
                               : null,
                         ),
@@ -256,8 +246,9 @@ class _DistributionCard extends StatelessWidget {
                           alignment: Alignment.center,
                           child: Text(
                             '${stats.absentCount}',
-                            style: theme.textTheme.labelSmall
-                                ?.copyWith(color: Colors.white),
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),

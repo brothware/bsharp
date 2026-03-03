@@ -5,24 +5,25 @@ import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 
 class AttendanceDay {
-  AttendanceDay({
-    required this.date,
-    required this.entries,
-  });
+  AttendanceDay({required this.date, required this.entries});
 
   final DateTime date;
   final List<AttendanceEntry> entries;
 
   int get presentCount => entries
-      .where((e) =>
-          e.type.countAs == AttendanceCountAs.present ||
-          e.type.countAs == AttendanceCountAs.other)
+      .where(
+        (e) =>
+            e.type.countAs == AttendanceCountAs.present ||
+            e.type.countAs == AttendanceCountAs.other,
+      )
       .length;
 
   int get absentCount => entries
-      .where((e) =>
-          e.type.countAs == AttendanceCountAs.absent ||
-          e.type.countAs == AttendanceCountAs.late)
+      .where(
+        (e) =>
+            e.type.countAs == AttendanceCountAs.absent ||
+            e.type.countAs == AttendanceCountAs.late,
+      )
       .length;
 
   bool get hasAbsences => absentCount > 0;
@@ -35,11 +36,11 @@ class AttendanceDay {
       entries.any((e) => e.type.countAs == AttendanceCountAs.late);
 
   bool get _hasUnexcused => entries.any(
-        (e) =>
-            (e.type.countAs == AttendanceCountAs.absent ||
-                e.type.countAs == AttendanceCountAs.late) &&
-            e.type.excuseStatus == AttendanceExcuseStatus.unexcused,
-      );
+    (e) =>
+        (e.type.countAs == AttendanceCountAs.absent ||
+            e.type.countAs == AttendanceCountAs.late) &&
+        e.type.excuseStatus == AttendanceExcuseStatus.unexcused,
+  );
 
   AttendanceDayStatus get status {
     if (entries.isEmpty) return AttendanceDayStatus.noData;
@@ -69,14 +70,7 @@ class AttendanceEntry {
   final String? subjectName;
 }
 
-enum AttendanceDayStatus {
-  present,
-  excused,
-  unexcused,
-  late,
-  mixed,
-  noData,
-}
+enum AttendanceDayStatus { present, excused, unexcused, late, mixed, noData }
 
 class AttendanceStats {
   AttendanceStats({
@@ -173,13 +167,9 @@ Map<DateTime, AttendanceDay> groupByDay(
     final date = event?.date ?? DateTime(2000);
     final dayKey = DateTime(date.year, date.month, date.day);
 
-    days.putIfAbsent(dayKey, () => []).add(
-          AttendanceEntry(
-            attendance: a,
-            type: type,
-            event: event,
-          ),
-        );
+    days
+        .putIfAbsent(dayKey, () => [])
+        .add(AttendanceEntry(attendance: a, type: type, event: event));
   }
 
   return {

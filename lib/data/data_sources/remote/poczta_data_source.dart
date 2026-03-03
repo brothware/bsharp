@@ -38,8 +38,7 @@ class PocztaDataSource {
         options: Options(headers: {'Accept': 'text/html'}),
       );
       final pageHtml = pageResponse.data ?? '';
-      final csrfMatch =
-          RegExp(r'"csrfToken":"([^"]+)"').firstMatch(pageHtml);
+      final csrfMatch = RegExp(r'"csrfToken":"([^"]+)"').firstMatch(pageHtml);
       if (csrfMatch != null) {
         _csrfToken = csrfMatch.group(1)!;
         return const Result.success(null);
@@ -58,24 +57,12 @@ class PocztaDataSource {
 
   bool get hasSession => _csrfToken.isNotEmpty;
 
-  Future<Result<List<dynamic>>> getInbox({
-    int limit = 25,
-    int skip = 0,
-  }) async {
-    return _postMessages(
-      '/api/messages/inbox',
-      {'limit': limit, 'skip': skip},
-    );
+  Future<Result<List<dynamic>>> getInbox({int limit = 25, int skip = 0}) async {
+    return _postMessages('/api/messages/inbox', {'limit': limit, 'skip': skip});
   }
 
-  Future<Result<List<dynamic>>> getSent({
-    int limit = 25,
-    int skip = 0,
-  }) async {
-    return _postMessages(
-      '/api/messages/sent',
-      {'limit': limit, 'skip': skip},
-    );
+  Future<Result<List<dynamic>>> getSent({int limit = 25, int skip = 0}) async {
+    return _postMessages('/api/messages/sent', {'limit': limit, 'skip': skip});
   }
 
   Future<Result<List<dynamic>>> getImportant() async {
@@ -121,8 +108,7 @@ class PocztaDataSource {
           'content': content,
           'odbiorcy': recipients,
           'kopiaDo': copyTo ?? [],
-          if (previousMessageId != null)
-            'previousMessageId': previousMessageId,
+          if (previousMessageId != null) 'previousMessageId': previousMessageId,
         },
         options: _authOptions(),
       );
@@ -203,10 +189,7 @@ class PocztaDataSource {
   }
 
   Future<Result<List<dynamic>>> searchReceivers(String query) async {
-    return _postMessages(
-      '/api/messages/receivers/search',
-      {'query': query},
-    );
+    return _postMessages('/api/messages/receivers/search', {'query': query});
   }
 
   Future<Result<List<dynamic>>> _postMessages(

@@ -14,9 +14,7 @@ void main() {
     testWidgets('shows empty state', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            homeworksProvider.overrideWith((ref) => []),
-          ],
+          overrides: [homeworksProvider.overrideWith((ref) => [])],
           child: const MaterialApp(home: Scaffold(body: HomeworkScreen())),
         ),
       );
@@ -27,9 +25,7 @@ void main() {
     testWidgets('shows filter segments', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            homeworksProvider.overrideWith((ref) => []),
-          ],
+          overrides: [homeworksProvider.overrideWith((ref) => [])],
           child: const MaterialApp(home: Scaffold(body: HomeworkScreen())),
         ),
       );
@@ -54,9 +50,7 @@ void main() {
                 ),
               ],
             ),
-            homeworkFilterProvider.overrideWith(
-              (ref) => HomeworkFilter.all,
-            ),
+            homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.all),
           ],
           child: const MaterialApp(home: Scaffold(body: HomeworkScreen())),
         ),
@@ -71,9 +65,7 @@ void main() {
     testWidgets('shows empty state', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            testsProvider.overrideWith((ref) => []),
-          ],
+          overrides: [testsProvider.overrideWith((ref) => [])],
           child: const MaterialApp(home: Scaffold(body: TestsScreen())),
         ),
       );
@@ -109,9 +101,7 @@ void main() {
     testWidgets('shows tabs for remarks, praises, and info', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            reprimandsProvider.overrideWith((ref) => []),
-          ],
+          overrides: [reprimandsProvider.overrideWith((ref) => [])],
           child: const MaterialApp(home: Scaffold(body: NotesScreen())),
         ),
       );
@@ -179,9 +169,7 @@ void main() {
     testWidgets('shows empty state', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            bulletinsProvider.overrideWith((ref) => []),
-          ],
+          overrides: [bulletinsProvider.overrideWith((ref) => [])],
           child: const MaterialApp(home: Scaffold(body: BulletinsScreen())),
         ),
       );

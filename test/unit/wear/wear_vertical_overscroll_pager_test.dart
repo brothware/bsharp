@@ -15,9 +15,7 @@ void main() {
               onPrevious: () {},
               onNext: () => nextCalled = true,
               child: ListView(
-                children: const [
-                  SizedBox(height: 100, child: Text('Item')),
-                ],
+                children: const [SizedBox(height: 100, child: Text('Item'))],
               ),
             ),
           ),
@@ -42,9 +40,7 @@ void main() {
               onPrevious: () => previousCalled = true,
               onNext: () {},
               child: ListView(
-                children: const [
-                  SizedBox(height: 100, child: Text('Item')),
-                ],
+                children: const [SizedBox(height: 100, child: Text('Item'))],
               ),
             ),
           ),
@@ -58,8 +54,9 @@ void main() {
       expect(previousCalled, isTrue);
     });
 
-    testWidgets('does not fire when overscroll is below threshold',
-        (tester) async {
+    testWidgets('does not fire when overscroll is below threshold', (
+      tester,
+    ) async {
       var previousCalled = false;
       var nextCalled = false;
 
@@ -71,9 +68,7 @@ void main() {
               onPrevious: () => previousCalled = true,
               onNext: () => nextCalled = true,
               child: ListView(
-                children: const [
-                  SizedBox(height: 100, child: Text('Item')),
-                ],
+                children: const [SizedBox(height: 100, child: Text('Item'))],
               ),
             ),
           ),

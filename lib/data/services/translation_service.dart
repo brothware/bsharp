@@ -14,9 +14,9 @@ class TranslationService {
     AppDatabase? database,
     MlKitTranslationSource? mlKit,
     DeepLDataSource? deepL,
-  })  : _database = database,
-        _mlKit = mlKit,
-        _deepL = deepL;
+  }) : _database = database,
+       _mlKit = mlKit,
+       _deepL = deepL;
 
   final AppDatabase? _database;
   final MlKitTranslationSource? _mlKit;
@@ -37,10 +37,12 @@ class TranslationService {
     final db = _database;
 
     if (db != null) {
-      final cached = await (db.select(db.translationCacheEntries)
-            ..where((t) =>
-                t.sourceHash.equals(hash) & t.targetLang.equals(targetLang)))
-          .getSingleOrNull();
+      final cached =
+          await (db.select(db.translationCacheEntries)..where(
+                (t) =>
+                    t.sourceHash.equals(hash) & t.targetLang.equals(targetLang),
+              ))
+              .getSingleOrNull();
 
       if (cached != null) {
         return Result.success(cached.translatedText);
@@ -53,7 +55,9 @@ class TranslationService {
 
     return result.when(
       success: (translated) async {
-        await db?.into(db.translationCacheEntries).insert(
+        await db
+            ?.into(db.translationCacheEntries)
+            .insert(
               TranslationCacheEntriesCompanion.insert(
                 sourceHash: hash,
                 targetLang: targetLang,

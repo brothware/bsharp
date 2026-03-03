@@ -34,8 +34,9 @@ void main() {
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 
-  testWidgets('BSharpApp shows Dashboard tab when authenticated',
-      (tester) async {
+  testWidgets('BSharpApp shows Dashboard tab when authenticated', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
 

@@ -45,8 +45,7 @@ void main() {
       expect(state, AuthState.unauthenticated);
     });
 
-    test('returns authenticated when credentials and student exist',
-        () async {
+    test('returns authenticated when credentials and student exist', () async {
       await credentialStorage.saveCredentials(
         school: 'sp1',
         login: 'user1',
@@ -93,8 +92,7 @@ void main() {
   group('selectedStudentIdProvider', () {
     test('returns null when no student selected', () async {
       final fakeSecureStorage = FakeKeyValueStore();
-      final credentialStorage =
-          CredentialStorage(store: fakeSecureStorage);
+      final credentialStorage = CredentialStorage(store: fakeSecureStorage);
 
       final container = ProviderContainer(
         overrides: [
@@ -108,8 +106,7 @@ void main() {
 
     test('returns student id when set', () async {
       final fakeSecureStorage = FakeKeyValueStore();
-      final credentialStorage =
-          CredentialStorage(store: fakeSecureStorage);
+      final credentialStorage = CredentialStorage(store: fakeSecureStorage);
       await credentialStorage.saveSelectedStudentId(42);
 
       final container = ProviderContainer(

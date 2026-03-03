@@ -12,16 +12,19 @@ final reprimandsProvider = StateProvider<List<PortalReprimand>>((ref) => []);
 
 final bulletinsProvider = StateProvider<List<PortalBulletin>>((ref) => []);
 
-final gradeChangelogProvider =
-    StateProvider<List<PortalChangelog>>((ref) => []);
+final gradeChangelogProvider = StateProvider<List<PortalChangelog>>(
+  (ref) => [],
+);
 
-final attendanceChangelogProvider =
-    StateProvider<List<PortalChangelog>>((ref) => []);
+final attendanceChangelogProvider = StateProvider<List<PortalChangelog>>(
+  (ref) => [],
+);
 
 enum HomeworkFilter { upcoming, past, all }
 
-final homeworkFilterProvider =
-    StateProvider<HomeworkFilter>((ref) => HomeworkFilter.upcoming);
+final homeworkFilterProvider = StateProvider<HomeworkFilter>(
+  (ref) => HomeworkFilter.upcoming,
+);
 
 final filteredHomeworksProvider = Provider<List<PortalHomework>>((ref) {
   final all = ref.watch(homeworksProvider);
@@ -31,8 +34,13 @@ final filteredHomeworksProvider = Provider<List<PortalHomework>>((ref) {
 
   final filtered = switch (filter) {
     HomeworkFilter.upcoming =>
-      all.where((h) => _parseDate(h.dueDate).isAfter(today) ||
-          _parseDate(h.dueDate).isAtSameMomentAs(today)).toList(),
+      all
+          .where(
+            (h) =>
+                _parseDate(h.dueDate).isAfter(today) ||
+                _parseDate(h.dueDate).isAtSameMomentAs(today),
+          )
+          .toList(),
     HomeworkFilter.past =>
       all.where((h) => _parseDate(h.dueDate).isBefore(today)).toList(),
     HomeworkFilter.all => all,
@@ -42,8 +50,9 @@ final filteredHomeworksProvider = Provider<List<PortalHomework>>((ref) {
     ..sort((a, b) => _parseDate(a.dueDate).compareTo(_parseDate(b.dueDate)));
 });
 
-final groupedHomeworksProvider =
-    Provider<Map<String, List<PortalHomework>>>((ref) {
+final groupedHomeworksProvider = Provider<Map<String, List<PortalHomework>>>((
+  ref,
+) {
   final homeworks = ref.watch(filteredHomeworksProvider);
   final grouped = <String, List<PortalHomework>>{};
   for (final hw in homeworks) {
@@ -57,9 +66,11 @@ final upcomingHomeworkProvider = Provider<List<PortalHomework>>((ref) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   return all
-      .where((h) =>
-          _parseDate(h.dueDate).isAfter(today) ||
-          _parseDate(h.dueDate).isAtSameMomentAs(today))
+      .where(
+        (h) =>
+            _parseDate(h.dueDate).isAfter(today) ||
+            _parseDate(h.dueDate).isAtSameMomentAs(today),
+      )
       .toList()
     ..sort((a, b) => _parseDate(a.dueDate).compareTo(_parseDate(b.dueDate)));
 });
@@ -69,8 +80,11 @@ final upcomingTestsProvider = Provider<List<PortalTest>>((ref) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   return all
-      .where((t) => _parseDate(t.date).isAfter(today) ||
-          _parseDate(t.date).isAtSameMomentAs(today))
+      .where(
+        (t) =>
+            _parseDate(t.date).isAfter(today) ||
+            _parseDate(t.date).isAtSameMomentAs(today),
+      )
       .toList()
     ..sort((a, b) => _parseDate(a.date).compareTo(_parseDate(b.date)));
 });
@@ -100,13 +114,13 @@ final unreadBulletinsCountProvider = Provider<int>((ref) {
 
 final groupedGradeChangelogProvider =
     Provider<Map<String, List<PortalChangelog>>>((ref) {
-  return _groupChangelogByDate(ref.watch(gradeChangelogProvider));
-});
+      return _groupChangelogByDate(ref.watch(gradeChangelogProvider));
+    });
 
 final groupedAttendanceChangelogProvider =
     Provider<Map<String, List<PortalChangelog>>>((ref) {
-  return _groupChangelogByDate(ref.watch(attendanceChangelogProvider));
-});
+      return _groupChangelogByDate(ref.watch(attendanceChangelogProvider));
+    });
 
 Map<String, List<PortalChangelog>> _groupChangelogByDate(
   List<PortalChangelog> entries,

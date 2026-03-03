@@ -85,7 +85,9 @@ class UpcomingTestsCard extends ConsumerWidget {
                           width: 3,
                           height: 24,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFF5722).withValues(alpha: 0.4),
+                            color: const Color(
+                              0xFFFF5722,
+                            ).withValues(alpha: 0.4),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),

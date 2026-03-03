@@ -15,8 +15,7 @@ Widget _buildScreen({List<PortalHomework> homework = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       homeworksProvider.overrideWith((ref) => homework),
     ],
     child: const MaterialApp(home: WearHomeworkDetailScreen()),
@@ -57,15 +56,19 @@ void main() {
       final tomorrow = DateTime.now().add(const Duration(days: 1));
       final dateStr =
           '${tomorrow.year}-${tomorrow.month.toString().padLeft(2, '0')}-${tomorrow.day.toString().padLeft(2, '0')}';
-      await tester.pumpWidget(_buildScreen(homework: [
-        PortalHomework(
-          id: 1,
-          subjectName: 'English',
-          date: '2025-01-10',
-          dueDate: dateStr,
-          content: 'Write an essay about nature',
+      await tester.pumpWidget(
+        _buildScreen(
+          homework: [
+            PortalHomework(
+              id: 1,
+              subjectName: 'English',
+              date: '2025-01-10',
+              dueDate: dateStr,
+              content: 'Write an essay about nature',
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('English'), findsOneWidget);

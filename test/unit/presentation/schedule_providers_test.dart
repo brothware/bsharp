@@ -50,8 +50,9 @@ void main() {
         ],
       );
 
-      final result =
-          container.read(eventsForDateProvider(DateTime(2026, 2, 27)));
+      final result = container.read(
+        eventsForDateProvider(DateTime(2026, 2, 27)),
+      );
       expect(result.length, 2);
       expect(result[0].number, 1);
       expect(result[1].number, 3);
@@ -66,8 +67,9 @@ void main() {
         ],
       );
 
-      final result =
-          container.read(eventsForDateProvider(DateTime(2026, 3, 1)));
+      final result = container.read(
+        eventsForDateProvider(DateTime(2026, 3, 1)),
+      );
       expect(result, isEmpty);
     });
   });
@@ -98,11 +100,7 @@ void main() {
           ),
           eventTypeTeachersProvider.overrideWith(
             (ref) => [
-              const EventTypeTeacher(
-                id: 1,
-                teachersId: 300,
-                eventTypesId: 10,
-              ),
+              const EventTypeTeacher(id: 1, teachersId: 300, eventTypesId: 10),
             ],
           ),
           subjectsProvider.overrideWith(
@@ -128,9 +126,7 @@ void main() {
             ],
           ),
           roomsProvider.overrideWith(
-            (ref) => [
-              const Room(id: 100, name: '201'),
-            ],
+            (ref) => [const Room(id: 100, name: '201')],
           ),
           eventSubjectsProvider.overrideWith((ref) => []),
         ],
@@ -170,9 +166,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           eventsProvider.overrideWith(
-            (ref) => [
-              _event(substitution: 1, date: DateTime(2026, 2, 27)),
-            ],
+            (ref) => [_event(substitution: 1, date: DateTime(2026, 2, 27))],
           ),
           eventTypesProvider.overrideWith((ref) => []),
           eventTypeTeachersProvider.overrideWith((ref) => []),
@@ -239,9 +233,7 @@ void main() {
     test('derives Monday from selected date', () {
       final container = ProviderContainer(
         overrides: [
-          selectedDateProvider.overrideWith(
-            (ref) => DateTime(2026, 2, 27),
-          ),
+          selectedDateProvider.overrideWith((ref) => DateTime(2026, 2, 27)),
         ],
       );
 

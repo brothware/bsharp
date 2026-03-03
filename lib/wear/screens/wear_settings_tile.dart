@@ -21,10 +21,7 @@ class WearSettingsTile extends ConsumerWidget {
 
     return Column(
       children: [
-        WearTileHeader(
-          icon: Icons.settings,
-          title: t.settings.title,
-        ),
+        WearTileHeader(icon: Icons.settings, title: t.settings.title),
         Expanded(
           child: ListView(
             physics: const ClampingScrollPhysics(),
@@ -218,14 +215,13 @@ class _WearSettingsItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         child: Row(
           children: [
-            Icon(icon, size: 18, color: iconColor ?? theme.colorScheme.onSurface),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                label,
-                style: theme.textTheme.bodySmall,
-              ),
+            Icon(
+              icon,
+              size: 18,
+              color: iconColor ?? theme.colorScheme.onSurface,
             ),
+            const SizedBox(width: 8),
+            Expanded(child: Text(label, style: theme.textTheme.bodySmall)),
           ],
         ),
       ),

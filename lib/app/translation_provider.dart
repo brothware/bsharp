@@ -9,7 +9,9 @@ import 'package:bsharp/data/data_sources/remote/deepl_data_source.dart';
 import 'package:bsharp/data/services/translation_service.dart';
 
 final _isMobileProvider = Provider<bool>((ref) {
-  return !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
+  return !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
 });
 
 final translationDatabaseProvider = Provider<AppDatabase?>((ref) {
@@ -26,11 +28,7 @@ final translationServiceProvider = Provider<TranslationService>((ref) {
 
   final deepL = deeplKey != null ? DeepLDataSource(apiKey: deeplKey) : null;
 
-  final service = TranslationService(
-    database: db,
-    mlKit: mlKit,
-    deepL: deepL,
-  );
+  final service = TranslationService(database: db, mlKit: mlKit, deepL: deepL);
   ref.onDispose(() => service.dispose());
   return service;
 });

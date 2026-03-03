@@ -13,7 +13,9 @@ class MobileAuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (options.data is Map<String, dynamic>) {
-      final data = Map<String, dynamic>.of(options.data as Map<String, dynamic>);
+      final data = Map<String, dynamic>.of(
+        options.data as Map<String, dynamic>,
+      );
       data['login'] = AppConstants.fixedLogin;
       data['pass'] = AppConstants.fixedPassword;
       data['device_id'] = '12345';

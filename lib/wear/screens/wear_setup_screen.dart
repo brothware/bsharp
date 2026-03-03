@@ -260,7 +260,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       children: [
         Text(
           t.setup.selectStudent,
-          style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+          style: theme.textTheme.bodySmall?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 4),
         Expanded(
@@ -273,11 +275,18 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                 onTap: () => setState(() => _selectedStudentId = student.id),
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 6,
+                  ),
                   child: Row(
                     children: [
                       if (isSelected)
-                        Icon(Icons.check, size: 16, color: theme.colorScheme.primary)
+                        Icon(
+                          Icons.check,
+                          size: 16,
+                          color: theme.colorScheme.primary,
+                        )
                       else
                         const SizedBox(width: 16),
                       const SizedBox(width: 4),
@@ -295,7 +304,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           ),
         ),
         FilledButton(
-          onPressed: _selectedStudentId != null && !_isLoading ? _finishSetup : null,
+          onPressed: _selectedStudentId != null && !_isLoading
+              ? _finishSetup
+              : null,
           child: _isLoading
               ? const SizedBox(
                   width: 16,

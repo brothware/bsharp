@@ -22,11 +22,7 @@ class WearLanguageScreen extends ConsumerWidget {
         body: WearScreenLayout(
           child: Column(
             children: [
-              Icon(
-                Icons.language,
-                size: 20,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(Icons.language, size: 20, color: theme.colorScheme.primary),
               const SizedBox(height: 2),
               Text(
                 t.settings.language,
@@ -37,9 +33,7 @@ class WearLanguageScreen extends ConsumerWidget {
               const SizedBox(height: 4),
               Expanded(
                 child: ListView.builder(
-                  padding: EdgeInsets.only(
-                    bottom: wearListBottomInset(shape),
-                  ),
+                  padding: EdgeInsets.only(bottom: wearListBottomInset(shape)),
                   itemCount: AppLocale.values.length + 1,
                   itemBuilder: (context, index) {
                     if (index == 0) {
@@ -54,7 +48,8 @@ class WearLanguageScreen extends ConsumerWidget {
                     }
                     final locale = AppLocale.values[index - 1];
                     final flutterLocale = locale.flutterLocale;
-                    final isSelected = !isSystem &&
+                    final isSelected =
+                        !isSystem &&
                         currentLocale.languageCode ==
                             flutterLocale.languageCode;
 
@@ -110,11 +105,7 @@ class _LanguageItem extends StatelessWidget {
               ),
             ),
             if (isSelected)
-              Icon(
-                Icons.check,
-                size: 16,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(Icons.check, size: 16, color: theme.colorScheme.primary),
           ],
         ),
       ),

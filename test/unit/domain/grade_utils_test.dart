@@ -63,7 +63,11 @@ void main() {
         ),
       };
       final mark = _mark(markScalesId: 118);
-      final rm = resolveMark(mark: mark, scaleById: scaleById, groupById: groupById);
+      final rm = resolveMark(
+        mark: mark,
+        scaleById: scaleById,
+        groupById: groupById,
+      );
 
       expect(rm.displayValue, '4+');
       expect(rm.effectiveValue, 4.5);
@@ -92,7 +96,11 @@ void main() {
         ),
       };
       final mark = _mark(markScalesId: 43);
-      final rm = resolveMark(mark: mark, scaleById: scaleById, groupById: groupById);
+      final rm = resolveMark(
+        mark: mark,
+        scaleById: scaleById,
+        groupById: groupById,
+      );
 
       expect(rm.displayValue, 'np');
       expect(rm.countsToAverage, false);
@@ -111,11 +119,7 @@ void main() {
         ),
       };
       final mark = _mark(markGroupsId: 10, markValue: 8);
-      final rm = resolveMark(
-        mark: mark,
-        scaleById: {},
-        groupById: groupById,
-      );
+      final rm = resolveMark(mark: mark, scaleById: {}, groupById: groupById);
 
       expect(rm.displayValue, '8/10');
       expect(rm.effectiveValue, 5.0);
@@ -123,47 +127,50 @@ void main() {
       expect(rm.markMax, 10);
     });
 
-    test('normalizes point-based effectiveValue to 1-6 scale rounded to 0.5', () {
-      final groupById = {
-        10: const MarkGroup(
-          id: 10,
-          isPattern: 0,
-          markType: 2,
-          visibility: 1,
-          position: 0,
-          markValueRangeMin: 0,
-          markValueRangeMax: 21,
-        ),
-      };
+    test(
+      'normalizes point-based effectiveValue to 1-6 scale rounded to 0.5',
+      () {
+        final groupById = {
+          10: const MarkGroup(
+            id: 10,
+            isPattern: 0,
+            markType: 2,
+            visibility: 1,
+            position: 0,
+            markValueRangeMin: 0,
+            markValueRangeMax: 21,
+          ),
+        };
 
-      final min = resolveMark(
-        mark: _mark(markGroupsId: 10, markValue: 0),
-        scaleById: {},
-        groupById: groupById,
-      );
-      expect(min.effectiveValue, 1.0);
+        final min = resolveMark(
+          mark: _mark(markGroupsId: 10, markValue: 0),
+          scaleById: {},
+          groupById: groupById,
+        );
+        expect(min.effectiveValue, 1.0);
 
-      final max = resolveMark(
-        mark: _mark(markGroupsId: 10, markValue: 21),
-        scaleById: {},
-        groupById: groupById,
-      );
-      expect(max.effectiveValue, 6.0);
+        final max = resolveMark(
+          mark: _mark(markGroupsId: 10, markValue: 21),
+          scaleById: {},
+          groupById: groupById,
+        );
+        expect(max.effectiveValue, 6.0);
 
-      final mid = resolveMark(
-        mark: _mark(markGroupsId: 10, markValue: 16),
-        scaleById: {},
-        groupById: groupById,
-      );
-      expect(mid.effectiveValue, 5.0);
+        final mid = resolveMark(
+          mark: _mark(markGroupsId: 10, markValue: 16),
+          scaleById: {},
+          groupById: groupById,
+        );
+        expect(mid.effectiveValue, 5.0);
 
-      final half = resolveMark(
-        mark: _mark(markGroupsId: 10, markValue: 10),
-        scaleById: {},
-        groupById: groupById,
-      );
-      expect(half.effectiveValue, 3.5);
-    });
+        final half = resolveMark(
+          mark: _mark(markGroupsId: 10, markValue: 10),
+          scaleById: {},
+          groupById: groupById,
+        );
+        expect(half.effectiveValue, 3.5);
+      },
+    );
 
     test('normalizes with non-zero range min', () {
       final groupById = {
@@ -255,9 +262,7 @@ void main() {
       final sg = SubjectGrades(
         subjectName: 'Math',
         subjectId: 1,
-        resolvedMarks: [
-          _resolved(effectiveValue: 5, weight: 0),
-        ],
+        resolvedMarks: [_resolved(effectiveValue: 5, weight: 0)],
       );
       expect(sg.weightedAverage, isNull);
     });

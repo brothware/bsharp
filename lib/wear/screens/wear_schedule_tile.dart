@@ -63,15 +63,17 @@ class WearScheduleTile extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.fromLTRB(8, 0, 8, wearListBottomInset(shape)),
+                padding: EdgeInsets.fromLTRB(
+                  8,
+                  0,
+                  8,
+                  wearListBottomInset(shape),
+                ),
                 itemCount: entries.take(3).length,
                 itemBuilder: (context, index) {
                   final entry = entries[index];
                   final isCurrent = _isCurrentLesson(entry, now);
-                  return _WearLessonItem(
-                    entry: entry,
-                    isCurrent: isCurrent,
-                  );
+                  return _WearLessonItem(entry: entry, isCurrent: isCurrent);
                 },
               ),
             ),
@@ -82,9 +84,7 @@ class WearScheduleTile extends ConsumerWidget {
 
   void _openDetail(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const WearScheduleDetailScreen(),
-      ),
+      MaterialPageRoute<void>(builder: (_) => const WearScheduleDetailScreen()),
     );
   }
 
@@ -113,10 +113,7 @@ class WearScheduleTile extends ConsumerWidget {
 }
 
 class _WearLessonItem extends StatelessWidget {
-  const _WearLessonItem({
-    required this.entry,
-    required this.isCurrent,
-  });
+  const _WearLessonItem({required this.entry, required this.isCurrent});
 
   final ScheduleEntry entry;
   final bool isCurrent;
@@ -146,9 +143,7 @@ class _WearLessonItem extends StatelessWidget {
             width: 3,
             height: 28,
             decoration: BoxDecoration(
-              color: entry.isCancelled
-                  ? theme.colorScheme.error
-                  : sColor,
+              color: entry.isCancelled ? theme.colorScheme.error : sColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -165,11 +160,13 @@ class _WearLessonItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  entry.subjectName ?? '${t.schedule.lessonFallback} ${entry.event.number}',
+                  entry.subjectName ??
+                      '${t.schedule.lessonFallback} ${entry.event.number}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
-                    decoration:
-                        entry.isCancelled ? TextDecoration.lineThrough : null,
+                    decoration: entry.isCancelled
+                        ? TextDecoration.lineThrough
+                        : null,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -23,8 +23,9 @@ Widget _buildApp({List<Override> overrides = const []}) {
 
 void main() {
   group('WearSetupScreen', () {
-    testWidgets('renders credential fields when unauthenticated',
-        (tester) async {
+    testWidgets('renders credential fields when unauthenticated', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildApp());
       await tester.pump();
 
@@ -33,8 +34,9 @@ void main() {
       expect(find.byType(FilledButton), findsOneWidget);
     });
 
-    testWidgets('shows error when fields are empty and login tapped',
-        (tester) async {
+    testWidgets('shows error when fields are empty and login tapped', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildApp());
       await tester.pump();
 
@@ -55,8 +57,9 @@ void main() {
       expect(find.text('Fill in all fields'), findsOneWidget);
     });
 
-    testWidgets('unauthenticated state shows credential fields',
-        (tester) async {
+    testWidgets('unauthenticated state shows credential fields', (
+      tester,
+    ) async {
       final fakeSecure = FakeKeyValueStore();
       final storage = CredentialStorage(store: fakeSecure);
 
@@ -64,8 +67,9 @@ void main() {
         ProviderScope(
           overrides: [
             credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
             authStateProvider.overrideWith(
               () => _FakeAuthNotifier(AuthState.unauthenticated),
             ),

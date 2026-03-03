@@ -40,10 +40,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           inboxProvider.overrideWith(
-            (ref) => [
-              _msg(id: 1, isRead: true),
-              _msg(id: 2, isRead: true),
-            ],
+            (ref) => [_msg(id: 1, isRead: true), _msg(id: 2, isRead: true)],
           ),
         ],
       );
@@ -81,12 +78,8 @@ void main() {
     test('returns inbox when inbox selected', () {
       final container = ProviderContainer(
         overrides: [
-          inboxProvider.overrideWith(
-            (ref) => [_msg(id: 1), _msg(id: 2)],
-          ),
-          sentProvider.overrideWith(
-            (ref) => [_msg(id: 3)],
-          ),
+          inboxProvider.overrideWith((ref) => [_msg(id: 1), _msg(id: 2)]),
+          sentProvider.overrideWith((ref) => [_msg(id: 3)]),
         ],
       );
 
@@ -97,15 +90,9 @@ void main() {
     test('returns sent when sent selected', () {
       final container = ProviderContainer(
         overrides: [
-          selectedFolderProvider.overrideWith(
-            (ref) => MessageFolder.sent,
-          ),
-          inboxProvider.overrideWith(
-            (ref) => [_msg(id: 1)],
-          ),
-          sentProvider.overrideWith(
-            (ref) => [_msg(id: 2), _msg(id: 3)],
-          ),
+          selectedFolderProvider.overrideWith((ref) => MessageFolder.sent),
+          inboxProvider.overrideWith((ref) => [_msg(id: 1)]),
+          sentProvider.overrideWith((ref) => [_msg(id: 2), _msg(id: 3)]),
         ],
       );
 
@@ -116,12 +103,8 @@ void main() {
     test('returns trash when trash selected', () {
       final container = ProviderContainer(
         overrides: [
-          selectedFolderProvider.overrideWith(
-            (ref) => MessageFolder.trash,
-          ),
-          trashProvider.overrideWith(
-            (ref) => [_msg(id: 4)],
-          ),
+          selectedFolderProvider.overrideWith((ref) => MessageFolder.trash),
+          trashProvider.overrideWith((ref) => [_msg(id: 4)]),
         ],
       );
 

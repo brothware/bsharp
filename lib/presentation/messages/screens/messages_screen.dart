@@ -35,8 +35,7 @@ class MessagesScreen extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.sync),
               tooltip: t.settings.sync,
-              onPressed: () =>
-                  ref.read(syncStatusProvider.notifier).sync(),
+              onPressed: () => ref.read(syncStatusProvider.notifier).sync(),
             ),
         ],
       ),
@@ -51,8 +50,9 @@ class MessagesScreen extends ConsumerWidget {
                 Tab(text: t.messages.trash),
               ],
               labelColor: Theme.of(context).colorScheme.primary,
-              unselectedLabelColor:
-                  Theme.of(context).colorScheme.onSurfaceVariant,
+              unselectedLabelColor: Theme.of(
+                context,
+              ).colorScheme.onSurfaceVariant,
               indicatorSize: TabBarIndicatorSize.label,
               onTap: (index) {
                 final folder = MessageFolder.values[index];
@@ -140,24 +140,24 @@ class _MessageListState extends ConsumerState<_MessageList> {
     final messenger = ScaffoldMessenger.of(context);
     messenger.clearSnackBars();
     messenger.showSnackBar(
-        SnackBar(
-          content: Text(t.messages.deleted(title: message.title)),
-          persist: false,
-          action: SnackBarAction(
-            label: t.common.undo,
-            onPressed: () {
-              final current = notifier.state;
-              final restored = List<PocztaMessage>.of(current);
-              restored.insert(index.clamp(0, restored.length), message);
-              notifier.state = restored;
+      SnackBar(
+        content: Text(t.messages.deleted(title: message.title)),
+        persist: false,
+        action: SnackBarAction(
+          label: t.common.undo,
+          onPressed: () {
+            final current = notifier.state;
+            final restored = List<PocztaMessage>.of(current);
+            restored.insert(index.clamp(0, restored.length), message);
+            notifier.state = restored;
 
-              pocztaDs?.restoreMessage(message.id).then((_) {
-                syncNotifier.syncMessages();
-              });
-            },
-          ),
+            pocztaDs?.restoreMessage(message.id).then((_) {
+              syncNotifier.syncMessages();
+            });
+          },
         ),
-      );
+      ),
+    );
   }
 
   Future<void> _loadMoreInbox() async {
@@ -334,29 +334,16 @@ class _EmptyMessages extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final (icon, text) = switch (folder) {
-      MessageFolder.inbox => (
-          Icons.inbox_outlined,
-          t.messages.noMessages,
-        ),
-      MessageFolder.sent => (
-          Icons.send_outlined,
-          t.messages.noSent,
-        ),
-      MessageFolder.trash => (
-          Icons.delete_outline,
-          t.messages.trashEmpty,
-        ),
+      MessageFolder.inbox => (Icons.inbox_outlined, t.messages.noMessages),
+      MessageFolder.sent => (Icons.send_outlined, t.messages.noSent),
+      MessageFolder.trash => (Icons.delete_outline, t.messages.trashEmpty),
     };
 
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
         const SizedBox(height: 80),
-        Icon(
-          icon,
-          size: 64,
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
+        Icon(icon, size: 64, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(height: 16),
         Text(
           text,

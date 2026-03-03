@@ -37,12 +37,11 @@ class AuthService {
           'edpass': passwordHash,
           'resolutions': '1920',
         },
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ),
+        options: Options(contentType: Headers.formUrlEncodedContentType),
       );
 
-      final isRedirect = response.statusCode == 302 ||
+      final isRedirect =
+          response.statusCode == 302 ||
           (kIsWeb && response.headers['x-original-status']?.first == '302');
       final location = kIsWeb
           ? response.headers['x-redirect-location']?.first
@@ -64,9 +63,7 @@ class AuthService {
       if (e.error is AppFailure) {
         return Result.failure(e.error! as AppFailure);
       }
-      return Result.failure(
-        UnknownFailure(message: e.message),
-      );
+      return Result.failure(UnknownFailure(message: e.message));
     }
   }
 

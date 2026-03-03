@@ -182,10 +182,7 @@ void main() {
     });
 
     test('returns false for different dates', () {
-      expect(
-        isSameDay(DateTime(2026, 2, 27), DateTime(2026, 2, 28)),
-        isFalse,
-      );
+      expect(isSameDay(DateTime(2026, 2, 27), DateTime(2026, 2, 28)), isFalse);
     });
   });
 }

@@ -4,11 +4,7 @@ import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 
 class ErrorCard extends StatelessWidget {
-  const ErrorCard({
-    required this.failure,
-    this.onRetry,
-    super.key,
-  });
+  const ErrorCard({required this.failure, this.onRetry, super.key});
 
   final AppFailure failure;
   final VoidCallback? onRetry;
@@ -82,10 +78,7 @@ class ErrorSnackbar {
       SnackBar(
         content: Text(message),
         action: canRetry
-            ? SnackBarAction(
-                label: t.common.retry,
-                onPressed: retry,
-              )
+            ? SnackBarAction(label: t.common.retry, onPressed: retry)
             : null,
         behavior: SnackBarBehavior.floating,
       ),

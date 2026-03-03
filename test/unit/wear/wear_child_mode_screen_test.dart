@@ -77,8 +77,9 @@ void main() {
       expect(find.byType(Switch), findsNothing);
     });
 
-    testWidgets('shows enable child mode button when in parent mode',
-        (tester) async {
+    testWidgets('shows enable child mode button when in parent mode', (
+      tester,
+    ) async {
       await tester.pumpWidget(await _buildAppWithPin());
       await tester.pump();
       await tester.pump();
@@ -131,10 +132,7 @@ void main() {
 
       final element = tester.element(find.byType(WearChildModeScreen));
       final container = ProviderScope.containerOf(element);
-      expect(
-        container.read(childModeProvider).config.scheduleVisible,
-        isFalse,
-      );
+      expect(container.read(childModeProvider).config.scheduleVisible, isFalse);
     });
   });
 }

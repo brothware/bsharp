@@ -57,9 +57,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
       data: (authState) {
         if (authState == AuthState.authenticated && !_initialSyncTriggered) {
           _initialSyncTriggered = true;
-          Future.microtask(
-            () => ref.read(syncStatusProvider.notifier).sync(),
-          );
+          Future.microtask(() => ref.read(syncStatusProvider.notifier).sync());
         }
         if (authState != AuthState.authenticated) {
           _initialSyncTriggered = false;
@@ -69,16 +67,15 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
           AuthState.unauthenticated => const WearSetupScreen(),
         };
       },
-      loading: () => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
-      error: (_, __) => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (_, __) =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
 
-    final effectiveThemeMode =
-        themeMode == ThemeMode.system ? ThemeMode.dark : themeMode;
+    final effectiveThemeMode = themeMode == ThemeMode.system
+        ? ThemeMode.dark
+        : themeMode;
 
     return MaterialApp(
       title: 'BSharp',

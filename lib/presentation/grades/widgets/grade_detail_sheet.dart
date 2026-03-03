@@ -47,8 +47,9 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
         ? kinds.where((k) => k.id == group!.markKindsId).firstOrNull
         : null;
 
-    final teacher =
-        teachers.where((t) => t.id == mark.teacherUsersId).firstOrNull;
+    final teacher = teachers
+        .where((t) => t.id == mark.teacherUsersId)
+        .firstOrNull;
 
     final displayValue = widget.resolvedMark.displayValue;
 
@@ -87,10 +88,14 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
                 const SizedBox(height: 8),
                 Center(
                   child: Container(
-                    constraints:
-                        const BoxConstraints(minWidth: 72, minHeight: 72),
+                    constraints: const BoxConstraints(
+                      minWidth: 72,
+                      minHeight: 72,
+                    ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: color.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(16),
@@ -139,7 +144,9 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
                   _DetailRow(
                     icon: Icons.category,
                     label: t.grades.category,
-                    value: _translatedCategory ?? translateGradeCategory(kind.name),
+                    value:
+                        _translatedCategory ??
+                        translateGradeCategory(kind.name),
                   ),
                 if (group?.description != null &&
                     group!.description!.isNotEmpty)
@@ -161,13 +168,18 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
                     value: _translatedComment ?? mark.comments!,
                   ),
                 if (translationAvailable)
-                  _buildTranslateButton(kind?.name, group?.description, mark.comments),
+                  _buildTranslateButton(
+                    kind?.name,
+                    group?.description,
+                    mark.comments,
+                  ),
                 if (widget.resolvedMark.effectiveValue != null)
                   _DetailRow(
                     icon: Icons.tag,
                     label: t.grades.numericValue,
-                    value:
-                        widget.resolvedMark.effectiveValue!.toStringAsFixed(2),
+                    value: widget.resolvedMark.effectiveValue!.toStringAsFixed(
+                      2,
+                    ),
                   ),
                 if (widget.resolvedMark.isPointBased)
                   _DetailRow(
@@ -210,10 +222,14 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
               if (category != null && i < segments.length) {
                 _translatedCategory = segments[i++];
               }
-              if (description != null && description.isNotEmpty && i < segments.length) {
+              if (description != null &&
+                  description.isNotEmpty &&
+                  i < segments.length) {
                 _translatedDescription = segments[i++];
               }
-              if (comment != null && comment.isNotEmpty && i < segments.length) {
+              if (comment != null &&
+                  comment.isNotEmpty &&
+                  i < segments.length) {
                 _translatedComment = segments[i];
               }
             } else {
@@ -253,11 +269,7 @@ class _DetailRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            size: 20,
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
+          Icon(icon, size: 20, color: theme.colorScheme.onSurfaceVariant),
           const SizedBox(width: 12),
           SizedBox(
             width: 100,

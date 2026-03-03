@@ -51,17 +51,13 @@ void main() {
   });
 
   testWidgets('shows star icon when starred', (tester) async {
-    await tester.pumpWidget(
-      wrap(MessageTile(message: _msg(isStarred: true))),
-    );
+    await tester.pumpWidget(wrap(MessageTile(message: _msg(isStarred: true))));
 
     expect(find.byIcon(Icons.star), findsOneWidget);
   });
 
   testWidgets('does not show star when not starred', (tester) async {
-    await tester.pumpWidget(
-      wrap(MessageTile(message: _msg(isStarred: false))),
-    );
+    await tester.pumpWidget(wrap(MessageTile(message: _msg(isStarred: false))));
 
     expect(find.byIcon(Icons.star), findsNothing);
   });
@@ -71,9 +67,7 @@ void main() {
       wrap(
         MessageTile(
           message: _msg(
-            files: [
-              const PocztaAttachment(name: 'doc.pdf', url: 'http://x'),
-            ],
+            files: [const PocztaAttachment(name: 'doc.pdf', url: 'http://x')],
           ),
         ),
       ),

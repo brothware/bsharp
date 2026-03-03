@@ -36,8 +36,9 @@ ResolvedMark resolveMark({
 
   if (scale != null) {
     final countsToAverage = scale.noCountToAverage == 0;
-    final effectiveValue =
-        scale.markValue != null && scale.markValue != 0 ? scale.markValue : null;
+    final effectiveValue = scale.markValue != null && scale.markValue != 0
+        ? scale.markValue
+        : null;
 
     return ResolvedMark(
       mark: mark,
@@ -53,7 +54,9 @@ ResolvedMark resolveMark({
     double? effectiveValue;
     if (isPointBased && markMax != null) {
       final v = mark.markValue!;
-      final vStr = v == v.roundToDouble() ? v.toInt().toString() : v.toStringAsFixed(1);
+      final vStr = v == v.roundToDouble()
+          ? v.toInt().toString()
+          : v.toStringAsFixed(1);
       final mStr = markMax == markMax.roundToDouble()
           ? markMax.toInt().toString()
           : markMax.toStringAsFixed(1);
@@ -66,7 +69,9 @@ ResolvedMark resolveMark({
       }
     } else {
       final v = mark.markValue!;
-      display = v == v.roundToDouble() ? v.toInt().toString() : v.toStringAsFixed(1);
+      display = v == v.roundToDouble()
+          ? v.toInt().toString()
+          : v.toStringAsFixed(1);
       effectiveValue = mark.markValue;
     }
 
@@ -78,11 +83,7 @@ ResolvedMark resolveMark({
     );
   }
 
-  return ResolvedMark(
-    mark: mark,
-    displayValue: '?',
-    countsToAverage: false,
-  );
+  return ResolvedMark(mark: mark, displayValue: '?', countsToAverage: false);
 }
 
 class SubjectGrades {
@@ -97,8 +98,9 @@ class SubjectGrades {
   final List<ResolvedMark> resolvedMarks;
 
   Iterable<ResolvedMark> get _gradeable => resolvedMarks.where(
-        (rm) => rm.countsToAverage && rm.effectiveValue != null && rm.mark.weight > 0,
-      );
+    (rm) =>
+        rm.countsToAverage && rm.effectiveValue != null && rm.mark.weight > 0,
+  );
 
   double? get weightedAverage {
     final marks = _gradeable.toList();

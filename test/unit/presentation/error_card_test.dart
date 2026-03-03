@@ -8,9 +8,7 @@ void main() {
     testWidgets('shows error message', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: ErrorCard(failure: NoConnection()),
-          ),
+          home: Scaffold(body: ErrorCard(failure: NoConnection())),
         ),
       );
 
@@ -20,9 +18,7 @@ void main() {
     testWidgets('shows icon', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: ErrorCard(failure: NoConnection()),
-          ),
+          home: Scaffold(body: ErrorCard(failure: NoConnection())),
         ),
       );
 
@@ -33,10 +29,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ErrorCard(
-              failure: const NoConnection(),
-              onRetry: () {},
-            ),
+            body: ErrorCard(failure: const NoConnection(), onRetry: () {}),
           ),
         ),
       );
@@ -80,9 +73,7 @@ void main() {
     testWidgets('shows lock icon for auth failures', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: ErrorCard(failure: InvalidCredentials()),
-          ),
+          home: Scaffold(body: ErrorCard(failure: InvalidCredentials())),
         ),
       );
 
@@ -92,9 +83,7 @@ void main() {
     testWidgets('shows generic icon for unknown failure', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: ErrorCard(failure: UnknownFailure()),
-          ),
+          home: Scaffold(body: ErrorCard(failure: UnknownFailure())),
         ),
       );
 

@@ -5,11 +5,7 @@ import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 
 class AttendanceDayDetail extends StatelessWidget {
-  const AttendanceDayDetail({
-    super.key,
-    required this.date,
-    required this.day,
-  });
+  const AttendanceDayDetail({super.key, required this.date, required this.day});
 
   final DateTime date;
   final AttendanceDay day;
@@ -77,7 +73,10 @@ class AttendanceDayDetail extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  t.attendance.presenceCount(present: day.presentCount, total: day.entries.length),
+                  t.attendance.presenceCount(
+                    present: day.presentCount,
+                    total: day.entries.length,
+                  ),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -90,8 +89,7 @@ class AttendanceDayDetail extends StatelessWidget {
             child: ListView.builder(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
               itemCount: sorted.length,
-              itemBuilder: (context, index) =>
-                  _EntryTile(entry: sorted[index]),
+              itemBuilder: (context, index) => _EntryTile(entry: sorted[index]),
             ),
           ),
         ],
@@ -149,14 +147,13 @@ class _EntryTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  entry.subjectName ?? '${t.schedule.lessonFallback} ${entry.event?.number ?? ""}',
+                  entry.subjectName ??
+                      '${t.schedule.lessonFallback} ${entry.event?.number ?? ""}',
                   style: theme.textTheme.bodyMedium,
                 ),
                 Text(
                   translateAttendanceName(entry.type.name),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: color,
-                  ),
+                  style: theme.textTheme.bodySmall?.copyWith(color: color),
                 ),
               ],
             ),

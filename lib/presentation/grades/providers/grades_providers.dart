@@ -17,8 +17,9 @@ final markScalesProvider = StateProvider<List<MarkScale>>((ref) => []);
 
 final markKindsProvider = StateProvider<List<MarkKind>>((ref) => []);
 
-final markGroupGroupsProvider =
-    StateProvider<List<MarkGroupGroup>>((ref) => []);
+final markGroupGroupsProvider = StateProvider<List<MarkGroupGroup>>(
+  (ref) => [],
+);
 
 final subjectsProvider = StateProvider<List<Subject>>((ref) => []);
 

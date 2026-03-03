@@ -28,10 +28,7 @@ class _ShimmerBoxState extends State<ShimmerBox>
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat();
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
   }
 
   @override
@@ -81,10 +78,7 @@ class SkeletonListTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ShimmerBox(
-                  width: 160 + (hasLeading ? 0 : 40),
-                  height: 14,
-                ),
+                ShimmerBox(width: 160 + (hasLeading ? 0 : 40), height: 14),
                 const SizedBox(height: 8),
                 const ShimmerBox(width: 100, height: 12),
               ],
@@ -105,20 +99,13 @@ class SkeletonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: ShimmerBox(
-        height: height,
-        borderRadius: 12,
-      ),
+      child: ShimmerBox(height: height, borderRadius: 12),
     );
   }
 }
 
 class SkeletonList extends StatelessWidget {
-  const SkeletonList({
-    this.itemCount = 6,
-    this.hasLeading = true,
-    super.key,
-  });
+  const SkeletonList({this.itemCount = 6, this.hasLeading = true, super.key});
 
   final int itemCount;
   final bool hasLeading;
@@ -128,9 +115,7 @@ class SkeletonList extends StatelessWidget {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       itemCount: itemCount,
-      itemBuilder: (context, index) => SkeletonListTile(
-        hasLeading: hasLeading,
-      ),
+      itemBuilder: (context, index) => SkeletonListTile(hasLeading: hasLeading),
     );
   }
 }

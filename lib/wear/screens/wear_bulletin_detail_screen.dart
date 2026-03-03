@@ -66,10 +66,7 @@ class _WearBulletinDetailScreenState
                   ),
                 ],
               ),
-              Divider(
-                height: 8,
-                color: theme.colorScheme.outlineVariant,
-              ),
+              Divider(height: 8, color: theme.colorScheme.outlineVariant),
               Expanded(
                 child: WearCrownScroll(
                   controller: _scrollController,
@@ -77,7 +74,9 @@ class _WearBulletinDetailScreenState
                     controller: _scrollController,
                     child: ListView(
                       controller: _scrollController,
-                      padding: EdgeInsets.only(bottom: wearListBottomInset(shape)),
+                      padding: EdgeInsets.only(
+                        bottom: wearListBottomInset(shape),
+                      ),
                       children: [
                         SelectableText(
                           widget.bulletin.content,

@@ -7,8 +7,7 @@ const _channel = MethodChannel('pl.brothware.bsharp/wear');
 
 final wearScreenShapeProvider = FutureProvider<WearScreenShape>((ref) async {
   try {
-    final isRound =
-        await _channel.invokeMethod<bool>('isScreenRound') ?? false;
+    final isRound = await _channel.invokeMethod<bool>('isScreenRound') ?? false;
     return isRound ? WearScreenShape.round : WearScreenShape.rectangular;
   } on MissingPluginException {
     return WearScreenShape.rectangular;

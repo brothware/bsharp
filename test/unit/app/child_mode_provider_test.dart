@@ -11,9 +11,7 @@ import '../data/credential_storage_test.dart';
 ProviderContainer _createContainer({CredentialStorage? storage}) {
   final store = storage ?? CredentialStorage(store: FakeKeyValueStore());
   return ProviderContainer(
-    overrides: [
-      credentialStorageProvider.overrideWithValue(store),
-    ],
+    overrides: [credentialStorageProvider.overrideWithValue(store)],
   );
 }
 
@@ -230,17 +228,17 @@ void main() {
       expect(config.gradesVisible, isFalse);
     });
 
-    test('isFeatureVisible returns true in parent mode regardless of config',
-        () async {
-      final container = _createContainer();
-      final notifier = container.read(childModeProvider.notifier);
+    test(
+      'isFeatureVisible returns true in parent mode regardless of config',
+      () async {
+        final container = _createContainer();
+        final notifier = container.read(childModeProvider.notifier);
 
-      notifier.updateConfig(
-        const ChildModeConfig(messagesVisible: false),
-      );
+        notifier.updateConfig(const ChildModeConfig(messagesVisible: false));
 
-      expect(notifier.isFeatureVisible(ChildModeFeature.messages), isTrue);
-    });
+        expect(notifier.isFeatureVisible(ChildModeFeature.messages), isTrue);
+      },
+    );
 
     test('isFeatureVisible respects config in child mode', () async {
       final container = _createContainer();
@@ -341,10 +339,7 @@ void main() {
       final lockedUntil = DateTime.now().add(const Duration(minutes: 3));
       final fakeStorage = FakeKeyValueStore();
       await fakeStorage.write(key: 'child_mode_pin', value: '1234');
-      await fakeStorage.write(
-        key: 'child_mode_failed_attempts',
-        value: '4',
-      );
+      await fakeStorage.write(key: 'child_mode_failed_attempts', value: '4');
       await fakeStorage.write(
         key: 'child_mode_locked_until',
         value: lockedUntil.toIso8601String(),
@@ -379,9 +374,7 @@ void main() {
       final notifier = container.read(childModeProvider.notifier);
 
       await notifier.setupPin('1234');
-      notifier.updateConfig(
-        const ChildModeConfig(messagesVisible: true),
-      );
+      notifier.updateConfig(const ChildModeConfig(messagesVisible: true));
       notifier.enterChildMode();
       await notifier.removePin();
 

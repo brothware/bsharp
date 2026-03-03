@@ -14,12 +14,9 @@ Widget _buildScreen({required PortalBulletin bulletin}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
     ],
-    child: MaterialApp(
-      home: WearBulletinDetailScreen(bulletin: bulletin),
-    ),
+    child: MaterialApp(home: WearBulletinDetailScreen(bulletin: bulletin)),
   );
 }
 

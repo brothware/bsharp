@@ -73,8 +73,10 @@ class AttendanceCalendar extends ConsumerWidget {
 
   void _goToToday(WidgetRef ref) {
     final now = DateTime.now();
-    ref.read(selectedMonthProvider.notifier).state =
-        DateTime(now.year, now.month);
+    ref.read(selectedMonthProvider.notifier).state = DateTime(
+      now.year,
+      now.month,
+    );
   }
 }
 
@@ -92,26 +94,25 @@ class _MonthNavigator extends StatelessWidget {
   final VoidCallback onToday;
 
   static List<String> get _monthNames => [
-        t.attendance.month.jan,
-        t.attendance.month.feb,
-        t.attendance.month.mar,
-        t.attendance.month.apr,
-        t.attendance.month.may,
-        t.attendance.month.jun,
-        t.attendance.month.jul,
-        t.attendance.month.aug,
-        t.attendance.month.sep,
-        t.attendance.month.oct,
-        t.attendance.month.nov,
-        t.attendance.month.dec,
-      ];
+    t.attendance.month.jan,
+    t.attendance.month.feb,
+    t.attendance.month.mar,
+    t.attendance.month.apr,
+    t.attendance.month.may,
+    t.attendance.month.jun,
+    t.attendance.month.jul,
+    t.attendance.month.aug,
+    t.attendance.month.sep,
+    t.attendance.month.oct,
+    t.attendance.month.nov,
+    t.attendance.month.dec,
+  ];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final now = DateTime.now();
-    final isCurrentMonth =
-        month.year == now.year && month.month == now.month;
+    final isCurrentMonth = month.year == now.year && month.month == now.month;
 
     return Row(
       children: [
@@ -128,10 +129,7 @@ class _MonthNavigator extends StatelessWidget {
           ),
         ),
         if (!isCurrentMonth)
-          TextButton(
-            onPressed: onToday,
-            child: Text(t.schedule.today),
-          ),
+          TextButton(onPressed: onToday, child: Text(t.schedule.today)),
         IconButton(
           icon: const Icon(Icons.chevron_right),
           onPressed: onNext,
@@ -206,10 +204,7 @@ class _CalendarDay extends StatelessWidget {
               : null,
           borderRadius: BorderRadius.circular(8),
           border: isToday
-              ? Border.all(
-                  color: theme.colorScheme.primary,
-                  width: 2,
-                )
+              ? Border.all(color: theme.colorScheme.primary, width: 2)
               : null,
         ),
         child: Center(
@@ -288,16 +283,10 @@ class _LegendItem extends StatelessWidget {
         Container(
           width: 10,
           height: 10,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 4),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.labelSmall,
-        ),
+        Text(label, style: Theme.of(context).textTheme.labelSmall),
       ],
     );
   }

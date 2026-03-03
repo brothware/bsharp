@@ -35,7 +35,9 @@ String stripHtml(String html) {
   return html
       .replaceAll(RegExp(r'<br\s*/?>'), '\n')
       .replaceAll(
-          RegExp(r'</(?:p|div|li|tr|h[1-6])>', caseSensitive: false), '\n')
+        RegExp(r'</(?:p|div|li|tr|h[1-6])>', caseSensitive: false),
+        '\n',
+      )
       .replaceAll(RegExp(r'<[^>]*>'), '')
       .replaceAll('&nbsp;', ' ')
       .replaceAll('&amp;', '&')
@@ -55,7 +57,10 @@ String formatFileSize(int bytes) {
 String messagePreview(String content, {int maxLength = 100}) {
   final stripped = content
       .replaceAll(RegExp(r'<br\s*/?>'), ' ')
-      .replaceAll(RegExp(r'</(?:p|div|li|tr|h[1-6])>', caseSensitive: false), ' ')
+      .replaceAll(
+        RegExp(r'</(?:p|div|li|tr|h[1-6])>', caseSensitive: false),
+        ' ',
+      )
       .replaceAll(RegExp(r'<[^>]*>'), '')
       .replaceAll('&nbsp;', ' ')
       .replaceAll('&amp;', '&')

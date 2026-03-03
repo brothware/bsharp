@@ -83,10 +83,8 @@ abstract class PortalAttendanceTypeCount with _$PortalAttendanceTypeCount {
 
 @freezed
 abstract class PortalSubject with _$PortalSubject {
-  const factory PortalSubject({
-    required int id,
-    required String name,
-  }) = _PortalSubject;
+  const factory PortalSubject({required int id, required String name}) =
+      _PortalSubject;
 }
 
 @freezed

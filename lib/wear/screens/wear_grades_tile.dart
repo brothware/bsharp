@@ -77,7 +77,12 @@ class WearGradesTile extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.fromLTRB(8, 0, 8, wearListBottomInset(shape)),
+                padding: EdgeInsets.fromLTRB(
+                  8,
+                  0,
+                  8,
+                  wearListBottomInset(shape),
+                ),
                 itemCount: recent.length,
                 itemBuilder: (context, index) {
                   final rm = recent[index];
@@ -92,13 +97,16 @@ class WearGradesTile extends ConsumerWidget {
 
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 3),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       color: isNew
-                          ? theme.colorScheme.tertiaryContainer
-                              .withValues(alpha: 0.3)
+                          ? theme.colorScheme.tertiaryContainer.withValues(
+                              alpha: 0.3,
+                            )
                           : null,
                     ),
                     child: Row(
@@ -184,9 +192,7 @@ class WearGradesTile extends ConsumerWidget {
 
   void _openDetail(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const WearGradesDetailScreen(),
-      ),
+      MaterialPageRoute<void>(builder: (_) => const WearGradesDetailScreen()),
     );
   }
 

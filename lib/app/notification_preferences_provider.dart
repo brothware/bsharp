@@ -57,10 +57,11 @@ class NotificationPreferences {
 
 final notificationPreferencesProvider =
     NotifierProvider<NotificationPreferencesNotifier, NotificationPreferences>(
-  NotificationPreferencesNotifier.new,
-);
+      NotificationPreferencesNotifier.new,
+    );
 
-class NotificationPreferencesNotifier extends Notifier<NotificationPreferences> {
+class NotificationPreferencesNotifier
+    extends Notifier<NotificationPreferences> {
   static const _prefix = 'notif_';
   static const _gradesKey = '${_prefix}grades';
   static const _messagesKey = '${_prefix}messages';
@@ -100,18 +101,22 @@ class NotificationPreferencesNotifier extends Notifier<NotificationPreferences> 
 
   Future<void> toggleCategory(ChangeCategory category) async {
     final updated = switch (category) {
-      ChangeCategory.grades =>
-        state.copyWith(gradesEnabled: !state.gradesEnabled),
-      ChangeCategory.messages =>
-        state.copyWith(messagesEnabled: !state.messagesEnabled),
-      ChangeCategory.schedule =>
-        state.copyWith(scheduleEnabled: !state.scheduleEnabled),
-      ChangeCategory.attendance =>
-        state.copyWith(attendanceEnabled: !state.attendanceEnabled),
-      ChangeCategory.homework =>
-        state.copyWith(homeworkEnabled: !state.homeworkEnabled),
-      ChangeCategory.notes =>
-        state.copyWith(notesEnabled: !state.notesEnabled),
+      ChangeCategory.grades => state.copyWith(
+        gradesEnabled: !state.gradesEnabled,
+      ),
+      ChangeCategory.messages => state.copyWith(
+        messagesEnabled: !state.messagesEnabled,
+      ),
+      ChangeCategory.schedule => state.copyWith(
+        scheduleEnabled: !state.scheduleEnabled,
+      ),
+      ChangeCategory.attendance => state.copyWith(
+        attendanceEnabled: !state.attendanceEnabled,
+      ),
+      ChangeCategory.homework => state.copyWith(
+        homeworkEnabled: !state.homeworkEnabled,
+      ),
+      ChangeCategory.notes => state.copyWith(notesEnabled: !state.notesEnabled),
     };
     await update(updated);
   }

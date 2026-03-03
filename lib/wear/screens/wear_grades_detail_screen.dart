@@ -65,7 +65,12 @@ class _WearGradesDetailScreenState
                           controller: _scrollController,
                           child: ListView.builder(
                             controller: _scrollController,
-                            padding: EdgeInsets.fromLTRB(4, 0, 4, wearListBottomInset(shape)),
+                            padding: EdgeInsets.fromLTRB(
+                              4,
+                              0,
+                              4,
+                              wearListBottomInset(shape),
+                            ),
                             itemCount: subjectGrades.length,
                             itemBuilder: (context, index) =>
                                 _WearSubjectSection(sg: subjectGrades[index]),
@@ -96,8 +101,9 @@ class _WearTermSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final ct = currentTerm;
-    final currentIndex =
-        ct != null ? terms.indexWhere((t) => t.id == ct.id) : 0;
+    final currentIndex = ct != null
+        ? terms.indexWhere((t) => t.id == ct.id)
+        : 0;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -107,7 +113,11 @@ class _WearTermSelector extends ConsumerWidget {
             final prev = (currentIndex - 1) % terms.length;
             onChanged(terms[prev].id);
           },
-          child: Icon(Icons.chevron_left, size: 18, color: theme.colorScheme.primary),
+          child: Icon(
+            Icons.chevron_left,
+            size: 18,
+            color: theme.colorScheme.primary,
+          ),
         ),
         const SizedBox(width: 4),
         Flexible(
@@ -126,7 +136,11 @@ class _WearTermSelector extends ConsumerWidget {
             final next = (currentIndex + 1) % terms.length;
             onChanged(terms[next].id);
           },
-          child: Icon(Icons.chevron_right, size: 18, color: theme.colorScheme.primary),
+          child: Icon(
+            Icons.chevron_right,
+            size: 18,
+            color: theme.colorScheme.primary,
+          ),
         ),
       ],
     );

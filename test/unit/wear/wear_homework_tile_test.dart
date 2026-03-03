@@ -15,13 +15,10 @@ Widget _buildTile({List<PortalHomework> homework = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       homeworksProvider.overrideWith((ref) => homework),
     ],
-    child: const MaterialApp(
-      home: Scaffold(body: WearHomeworkTile()),
-    ),
+    child: const MaterialApp(home: Scaffold(body: WearHomeworkTile())),
   );
 }
 
@@ -47,15 +44,19 @@ void main() {
       final tomorrow = DateTime.now().add(const Duration(days: 1));
       final dateStr =
           '${tomorrow.year}-${tomorrow.month.toString().padLeft(2, '0')}-${tomorrow.day.toString().padLeft(2, '0')}';
-      await tester.pumpWidget(_buildTile(homework: [
-        PortalHomework(
-          id: 1,
-          subjectName: 'Mathematics',
-          date: '2025-01-01',
-          dueDate: dateStr,
-          content: 'Solve exercises 1-5',
+      await tester.pumpWidget(
+        _buildTile(
+          homework: [
+            PortalHomework(
+              id: 1,
+              subjectName: 'Mathematics',
+              date: '2025-01-01',
+              dueDate: dateStr,
+              content: 'Solve exercises 1-5',
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('Mathematics'), findsOneWidget);
@@ -66,15 +67,19 @@ void main() {
       final tomorrow = DateTime.now().add(const Duration(days: 1));
       final dateStr =
           '${tomorrow.year}-${tomorrow.month.toString().padLeft(2, '0')}-${tomorrow.day.toString().padLeft(2, '0')}';
-      await tester.pumpWidget(_buildTile(homework: [
-        PortalHomework(
-          id: 1,
-          subjectName: 'Math',
-          date: '2025-01-01',
-          dueDate: dateStr,
-          content: 'Task',
+      await tester.pumpWidget(
+        _buildTile(
+          homework: [
+            PortalHomework(
+              id: 1,
+              subjectName: 'Math',
+              date: '2025-01-01',
+              dueDate: dateStr,
+              content: 'Task',
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       final listView = tester.widget<ListView>(find.byType(ListView));

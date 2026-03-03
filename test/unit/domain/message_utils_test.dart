@@ -53,17 +53,11 @@ void main() {
 
   group('messagePreview', () {
     test('strips HTML tags', () {
-      expect(
-        messagePreview('<p>Hello <b>world</b></p>'),
-        'Hello world',
-      );
+      expect(messagePreview('<p>Hello <b>world</b></p>'), 'Hello world');
     });
 
     test('collapses whitespace', () {
-      expect(
-        messagePreview('Hello   \n  world'),
-        'Hello world',
-      );
+      expect(messagePreview('Hello   \n  world'), 'Hello world');
     });
 
     test('truncates long text', () {

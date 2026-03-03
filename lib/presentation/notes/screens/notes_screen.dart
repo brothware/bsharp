@@ -29,8 +29,9 @@ class NotesScreen extends ConsumerWidget {
                 _TabWithBadge(label: t.notes.infoTab, count: info.length),
               ],
               labelColor: Theme.of(context).colorScheme.primary,
-              unselectedLabelColor:
-                  Theme.of(context).colorScheme.onSurfaceVariant,
+              unselectedLabelColor: Theme.of(
+                context,
+              ).colorScheme.onSurfaceVariant,
             ),
             Expanded(
               child: TabBarView(
@@ -138,11 +139,7 @@ class _ReprimandTile extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: Icon(icon, color: color),
-        title: Text(
-          item.content,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
+        title: Text(item.content, maxLines: 2, overflow: TextOverflow.ellipsis),
         subtitle: Text(
           '${item.teacherName} • ${item.date}',
           style: theme.textTheme.bodySmall?.copyWith(
@@ -155,10 +152,10 @@ class _ReprimandTile extends StatelessWidget {
   }
 
   static (IconData, Color) _iconForType(int type) => switch (type) {
-        1 => (Icons.emoji_events_outlined, Colors.green),
-        2 => (Icons.warning_amber_outlined, Colors.orange),
-        _ => (Icons.info_outlined, Colors.blue),
-      };
+    1 => (Icons.emoji_events_outlined, Colors.green),
+    2 => (Icons.warning_amber_outlined, Colors.orange),
+    _ => (Icons.info_outlined, Colors.blue),
+  };
 
   void _showDetail(BuildContext context, PortalReprimand item) {
     showModalBottomSheet<void>(
@@ -182,10 +179,10 @@ class _ReprimandDetailSheetState extends ConsumerState<_ReprimandDetailSheet> {
   String? _translatedContent;
 
   String _labelForType(int type) => switch (type) {
-        1 => t.notes.praise,
-        2 => t.notes.remark,
-        _ => t.notes.info,
-      };
+    1 => t.notes.praise,
+    2 => t.notes.remark,
+    _ => t.notes.info,
+  };
 
   @override
   Widget build(BuildContext context) {

@@ -15,13 +15,10 @@ Widget _buildTile({List<PortalBulletin> bulletins = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       bulletinsProvider.overrideWith((ref) => bulletins),
     ],
-    child: const MaterialApp(
-      home: Scaffold(body: WearBulletinsTile()),
-    ),
+    child: const MaterialApp(home: Scaffold(body: WearBulletinsTile())),
   );
 }
 
@@ -43,16 +40,20 @@ void main() {
     });
 
     testWidgets('shows bulletin items', (tester) async {
-      await tester.pumpWidget(_buildTile(bulletins: [
-        const PortalBulletin(
-          id: 1,
-          title: 'School Trip',
-          content: 'We are going to...',
-          date: '2025-06-15',
-          author: 'Director',
-          isRead: true,
+      await tester.pumpWidget(
+        _buildTile(
+          bulletins: [
+            const PortalBulletin(
+              id: 1,
+              title: 'School Trip',
+              content: 'We are going to...',
+              date: '2025-06-15',
+              author: 'Director',
+              isRead: true,
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('School Trip'), findsOneWidget);
@@ -60,40 +61,48 @@ void main() {
     });
 
     testWidgets('shows unread badge', (tester) async {
-      await tester.pumpWidget(_buildTile(bulletins: [
-        const PortalBulletin(
-          id: 1,
-          title: 'Announcement',
-          content: 'Text',
-          date: '2025-06-15',
-          author: 'Admin',
-          isRead: false,
+      await tester.pumpWidget(
+        _buildTile(
+          bulletins: [
+            const PortalBulletin(
+              id: 1,
+              title: 'Announcement',
+              content: 'Text',
+              date: '2025-06-15',
+              author: 'Admin',
+              isRead: false,
+            ),
+            const PortalBulletin(
+              id: 2,
+              title: 'Announcement 2',
+              content: 'Text',
+              date: '2025-06-16',
+              author: 'Admin',
+              isRead: false,
+            ),
+          ],
         ),
-        const PortalBulletin(
-          id: 2,
-          title: 'Announcement 2',
-          content: 'Text',
-          date: '2025-06-16',
-          author: 'Admin',
-          isRead: false,
-        ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('2'), findsOneWidget);
     });
 
     testWidgets('unread bulletins have bold title', (tester) async {
-      await tester.pumpWidget(_buildTile(bulletins: [
-        const PortalBulletin(
-          id: 1,
-          title: 'Unread Item',
-          content: 'Text',
-          date: '2025-06-15',
-          author: 'Admin',
-          isRead: false,
+      await tester.pumpWidget(
+        _buildTile(
+          bulletins: [
+            const PortalBulletin(
+              id: 1,
+              title: 'Unread Item',
+              content: 'Text',
+              date: '2025-06-15',
+              author: 'Admin',
+              isRead: false,
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       final textWidget = tester.widget<Text>(find.text('Unread Item'));

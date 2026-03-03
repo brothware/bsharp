@@ -19,8 +19,7 @@ Widget _buildScreen({
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       attendancesProvider.overrideWith((ref) => attendances),
       attendanceTypesProvider.overrideWith((ref) => types),
       eventsProvider.overrideWith((ref) => []),

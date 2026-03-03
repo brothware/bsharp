@@ -27,11 +27,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.lock_clock,
-                size: 64,
-                color: theme.colorScheme.error,
-              ),
+              Icon(Icons.lock_clock, size: 64, color: theme.colorScheme.error),
               const SizedBox(height: 16),
               Text(
                 t.childMode.tooManyAttempts,
@@ -59,7 +55,8 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
         child: PinPad(
           key: _padKey,
           title: t.childMode.enterParentPin,
-          errorMessage: _error ??
+          errorMessage:
+              _error ??
               (childModeState.failedAttempts > 0
                   ? t.childMode.attemptsRemaining(remaining: remaining)
                   : null),
@@ -70,8 +67,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   }
 
   void _onPinEntered(String pin) {
-    final success =
-        ref.read(childModeProvider.notifier).exitChildMode(pin);
+    final success = ref.read(childModeProvider.notifier).exitChildMode(pin);
     if (success) {
       Navigator.of(context).pop(true);
     } else {

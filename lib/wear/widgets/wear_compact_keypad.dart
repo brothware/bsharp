@@ -40,10 +40,7 @@ class WearCompactKeypad extends StatelessWidget {
                                 size: 16,
                                 color: theme.colorScheme.onSurface,
                               )
-                            : Text(
-                                key,
-                                style: theme.textTheme.titleMedium,
-                              ),
+                            : Text(key, style: theme.textTheme.titleMedium),
                       ),
                     ),
                   ),

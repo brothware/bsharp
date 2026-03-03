@@ -61,8 +61,7 @@ class WearTileHeader extends ConsumerWidget {
         Icon(icon, size: 20, color: theme.colorScheme.primary),
         const SizedBox(height: 2),
         Text(title, style: titleStyle, overflow: TextOverflow.ellipsis),
-        if (trailing case final trailing?)
-          Center(child: trailing),
+        if (trailing case final trailing?) Center(child: trailing),
       ],
     );
   }

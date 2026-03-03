@@ -76,11 +76,7 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: ResponsiveBuilder(
-            phone: Text('phone'),
-          ),
-        ),
+        const MaterialApp(home: ResponsiveBuilder(phone: Text('phone'))),
       );
 
       expect(find.text('phone'), findsOneWidget);
@@ -95,10 +91,7 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: ResponsiveBuilder(
-            phone: Text('phone'),
-            tablet: Text('tablet'),
-          ),
+          home: ResponsiveBuilder(phone: Text('phone'), tablet: Text('tablet')),
         ),
       );
 

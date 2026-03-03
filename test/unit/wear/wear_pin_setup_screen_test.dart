@@ -75,8 +75,9 @@ void main() {
         ProviderScope(
           overrides: [
             credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
           ],
           child: MaterialApp(
             home: Builder(

@@ -27,8 +27,8 @@ class WeekDayHeader extends StatelessWidget {
           color: isSelected
               ? theme.colorScheme.primaryContainer
               : isToday
-                  ? theme.colorScheme.secondaryContainer
-                  : null,
+              ? theme.colorScheme.secondaryContainer
+              : null,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -50,10 +50,9 @@ class WeekDayHeader extends StatelessWidget {
                 color: isSelected
                     ? theme.colorScheme.onPrimaryContainer
                     : isToday
-                        ? theme.colorScheme.onSecondaryContainer
-                        : null,
-                fontWeight:
-                    isSelected || isToday ? FontWeight.bold : null,
+                    ? theme.colorScheme.onSecondaryContainer
+                    : null,
+                fontWeight: isSelected || isToday ? FontWeight.bold : null,
               ),
             ),
           ],

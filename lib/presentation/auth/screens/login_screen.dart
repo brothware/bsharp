@@ -209,11 +209,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
-                    Icons.school,
-                    size: 64,
-                    color: AppColors.seaGreen,
-                  ),
+                  const Icon(Icons.school, size: 64, color: AppColors.seaGreen),
                   const SizedBox(height: 16),
                   Text(
                     'BSharp',
@@ -322,9 +318,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           onPressed: _isLoading
               ? null
               : () => setState(() {
-                    _students = null;
-                    _selectedStudentId = null;
-                  }),
+                  _students = null;
+                  _selectedStudentId = null;
+                }),
         ),
         title: Text(t.setup.selectStudent),
       ),
@@ -350,19 +346,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: ListTile(
                             leading: CircleAvatar(
                               child: Text(
-                                student.name.isNotEmpty
-                                    ? student.name[0]
-                                    : '?',
+                                student.name.isNotEmpty ? student.name[0] : '?',
                               ),
                             ),
-                            title:
-                                Text('${student.name} ${student.surname}'),
+                            title: Text('${student.name} ${student.surname}'),
                             trailing: isSelected
                                 ? const Icon(Icons.check_circle)
                                 : null,
-                            onTap: () => setState(
-                              () => _selectedStudentId = student.id,
-                            ),
+                            onTap: () =>
+                                setState(() => _selectedStudentId = student.id),
                           ),
                         );
                       },
@@ -370,10 +362,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   FilledButton(
-                    onPressed:
-                        _selectedStudentId != null && !_isLoading
-                            ? () => _finishLogin(_selectedStudentId!)
-                            : null,
+                    onPressed: _selectedStudentId != null && !_isLoading
+                        ? () => _finishLogin(_selectedStudentId!)
+                        : null,
                     child: _isLoading
                         ? const SizedBox(
                             width: 20,

@@ -25,8 +25,9 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
   return NotificationService();
 });
 
-final syncStatusProvider =
-    NotifierProvider<SyncStatusNotifier, SyncStatus>(SyncStatusNotifier.new);
+final syncStatusProvider = NotifierProvider<SyncStatusNotifier, SyncStatus>(
+  SyncStatusNotifier.new,
+);
 
 class SyncStatusNotifier extends Notifier<SyncStatus> {
   @override
@@ -54,16 +55,19 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
         parentPassHash: creds.passHash,
       );
 
-      final syncDataSource =
-          MobileSyncDataSource(client: factory.createMobileSyncClient());
+      final syncDataSource = MobileSyncDataSource(
+        client: factory.createMobileSyncClient(),
+      );
 
       final now = DateTime.now();
       final startDate = now
           .subtract(const Duration(days: 100))
           .toIso8601String()
           .substring(0, 10);
-      final endDate =
-          now.add(const Duration(days: 100)).toIso8601String().substring(0, 10);
+      final endDate = now
+          .add(const Duration(days: 100))
+          .toIso8601String()
+          .substring(0, 10);
 
       final result = await syncDataSource.fullSync(
         studentId: studentId,
@@ -137,21 +141,18 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     int pupilId,
   ) async {
     try {
-      final authService =
-          AuthService(webLoginClient: factory.createWebLoginClient());
+      final authService = AuthService(
+        webLoginClient: factory.createWebLoginClient(),
+      );
       final tokenResult = await authService.obtainPortalToken(
         login: creds.login,
         passwordHash: creds.passHash,
       );
 
-      final token = tokenResult.when(
-        success: (t) => t,
-        failure: (_) => null,
-      );
+      final token = tokenResult.when(success: (t) => t, failure: (_) => null);
       if (token == null) return;
 
-      final portalDs =
-          PortalDataSource(client: factory.createPortalClient());
+      final portalDs = PortalDataSource(client: factory.createPortalClient());
       final userResult = await portalDs.getView(
         school: creds.school,
         token: token,
@@ -168,8 +169,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
 
       if (messagesToken == null) return;
 
-      final pocztaDs =
-          PocztaDataSource(client: factory.createPocztaClient());
+      final pocztaDs = PocztaDataSource(client: factory.createPocztaClient());
       final sessionResult = await pocztaDs.establishSession(
         school: creds.school,
         messagesToken: messagesToken,
@@ -266,45 +266,63 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     };
 
     await _fetchPortalView(
-      portalDs, creds, token, 'bulletins', params,
-      (items) => ref.read(bulletinsProvider.notifier).state =
-          _parseBulletins(items),
+      portalDs,
+      creds,
+      token,
+      'bulletins',
+      params,
+      (items) =>
+          ref.read(bulletinsProvider.notifier).state = _parseBulletins(items),
     );
 
-    final changelogParams = {
-      ...params,
-      'limit': '100',
-      'offset': '0',
-    };
+    final changelogParams = {...params, 'limit': '100', 'offset': '0'};
     await _fetchPortalView(
-      portalDs, creds, null, 'changelog',
+      portalDs,
+      creds,
+      null,
+      'changelog',
       {...changelogParams, 'type': 'mark'},
       (items) => ref.read(gradeChangelogProvider.notifier).state =
           _parseChangelog(items),
     );
 
     await _fetchPortalView(
-      portalDs, creds, null, 'changelog',
+      portalDs,
+      creds,
+      null,
+      'changelog',
       {...changelogParams, 'type': 'attendance'},
       (items) => ref.read(attendanceChangelogProvider.notifier).state =
           _parseChangelog(items),
     );
 
     await _fetchPortalView(
-      portalDs, creds, null, 'reprimands', params,
-      (items) => ref.read(reprimandsProvider.notifier).state =
-          _parseReprimands(items),
+      portalDs,
+      creds,
+      null,
+      'reprimands',
+      params,
+      (items) =>
+          ref.read(reprimandsProvider.notifier).state = _parseReprimands(items),
     );
 
     await _fetchPortalView(
-      portalDs, creds, null, 'tests', params,
+      portalDs,
+      creds,
+      null,
+      'tests',
+      params,
       (items) => ref.read(testsProvider.notifier).state = _parseTests(items),
     );
 
     await _fetchPortalView(
-      portalDs, creds, null, 'homeworks', params,
-      (items) => ref.read(homeworksProvider.notifier).state =
-          _parseHomeworks(items),
+      portalDs,
+      creds,
+      null,
+      'homeworks',
+      params,
+      (items) =>
+          ref.read(homeworksProvider.notifier).state = _parseHomeworks(items),
     );
   }
 
@@ -335,12 +353,13 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
   }
 
   Future<String?> _refreshToken(_Credentials creds) async {
-    final authService =
-        AuthService(webLoginClient: ApiClientFactory(
-      school: creds.school,
-      parentLogin: creds.login,
-      parentPassHash: creds.passHash,
-    ).createWebLoginClient());
+    final authService = AuthService(
+      webLoginClient: ApiClientFactory(
+        school: creds.school,
+        parentLogin: creds.login,
+        parentPassHash: creds.passHash,
+      ).createWebLoginClient(),
+    );
     final result = await authService.obtainPortalToken(
       login: creds.login,
       passwordHash: creds.passHash,
@@ -356,14 +375,16 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     for (final item in data) {
       if (item is! Map<String, dynamic>) continue;
       try {
-        result.add(PortalBulletin(
-          id: item['id'] as int,
-          title: (item['title'] ?? '') as String,
-          content: '',
-          date: (item['dateTime'] ?? '') as String,
-          author: (item['author'] ?? '') as String,
-          isRead: item['read'] != null,
-        ));
+        result.add(
+          PortalBulletin(
+            id: item['id'] as int,
+            title: (item['title'] ?? '') as String,
+            content: '',
+            date: (item['dateTime'] ?? '') as String,
+            author: (item['author'] ?? '') as String,
+            isRead: item['read'] != null,
+          ),
+        );
       } on Object {
         continue;
       }
@@ -376,16 +397,17 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     for (final item in data) {
       if (item is! Map<String, dynamic>) continue;
       try {
-        result.add(PortalChangelog(
-          type: (item['type'] ?? '') as String,
-          dateTime: (item['dateTime'] ?? '') as String,
-          subjectName: (item['subjectName'] ?? '') as String,
-          user: (item['user'] ?? '') as String,
-          newName: (item['newName'] ?? '') as String,
-          newAdditionalInfo:
-              (item['newAdditionalInfo'] ?? '') as String,
-          action: (item['action'] ?? '') as String,
-        ));
+        result.add(
+          PortalChangelog(
+            type: (item['type'] ?? '') as String,
+            dateTime: (item['dateTime'] ?? '') as String,
+            subjectName: (item['subjectName'] ?? '') as String,
+            user: (item['user'] ?? '') as String,
+            newName: (item['newName'] ?? '') as String,
+            newAdditionalInfo: (item['newAdditionalInfo'] ?? '') as String,
+            action: (item['action'] ?? '') as String,
+          ),
+        );
       } on Object {
         continue;
       }
@@ -398,13 +420,15 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     for (final item in data) {
       if (item is! Map<String, dynamic>) continue;
       try {
-        result.add(PortalReprimand(
-          id: item['id'] as int,
-          date: (item['date'] ?? '') as String,
-          teacherName: (item['teacherName'] ?? '') as String,
-          content: (item['content'] ?? '') as String,
-          type: item['type'] as int,
-        ));
+        result.add(
+          PortalReprimand(
+            id: item['id'] as int,
+            date: (item['date'] ?? '') as String,
+            teacherName: (item['teacherName'] ?? '') as String,
+            content: (item['content'] ?? '') as String,
+            type: item['type'] as int,
+          ),
+        );
       } on Object {
         continue;
       }
@@ -421,13 +445,15 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
         final date = dateTime != null
             ? dateTime.substring(0, 10)
             : (item['date'] ?? '') as String;
-        result.add(PortalTest(
-          id: item['id'] as int,
-          subjectName: (item['subjectName'] ?? '') as String,
-          date: date,
-          title: item['title'] as String?,
-          description: item['description'] as String?,
-        ));
+        result.add(
+          PortalTest(
+            id: item['id'] as int,
+            subjectName: (item['subjectName'] ?? '') as String,
+            date: date,
+            title: item['title'] as String?,
+            description: item['description'] as String?,
+          ),
+        );
       } on Object {
         continue;
       }
@@ -440,13 +466,15 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     for (final item in data) {
       if (item is! Map<String, dynamic>) continue;
       try {
-        result.add(PortalHomework(
-          id: item['id'] as int,
-          subjectName: (item['subjectName'] ?? '') as String,
-          date: (item['date'] ?? '') as String,
-          dueDate: (item['dueDate'] ?? item['date'] ?? '') as String,
-          content: (item['content'] ?? item['description'] ?? '') as String,
-        ));
+        result.add(
+          PortalHomework(
+            id: item['id'] as int,
+            subjectName: (item['subjectName'] ?? '') as String,
+            date: (item['date'] ?? '') as String,
+            dueDate: (item['dueDate'] ?? item['date'] ?? '') as String,
+            content: (item['content'] ?? item['description'] ?? '') as String,
+          ),
+        );
       } on Object {
         continue;
       }
@@ -484,8 +512,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
           syncData.eventTypeTeachers;
     }
     if (syncData.eventTypeTerms.isNotEmpty) {
-      ref.read(eventTypeTermsProvider.notifier).state =
-          syncData.eventTypeTerms;
+      ref.read(eventTypeTermsProvider.notifier).state = syncData.eventTypeTerms;
     }
     if (syncData.eventSubjects.isNotEmpty) {
       ref.read(eventSubjectsProvider.notifier).state = syncData.eventSubjects;
@@ -530,16 +557,18 @@ List<PocztaMessage> parsePocztaMessages(List<dynamic> data) {
       final dateStr = item['date'] as String?;
       if (dateStr == null) continue;
 
-      result.add(PocztaMessage(
-        id: item['id'] as int,
-        title: (item['subject'] ?? '') as String,
-        senderName: senderName,
-        sendTime: DateTime.parse(dateStr),
-        preview: item['content'] as String?,
-        isRead: item['read_at'] != null,
-        isStarred: item['stared'] == true,
-        content: item['content'] as String?,
-      ));
+      result.add(
+        PocztaMessage(
+          id: item['id'] as int,
+          title: (item['subject'] ?? '') as String,
+          senderName: senderName,
+          sendTime: DateTime.parse(dateStr),
+          preview: item['content'] as String?,
+          isRead: item['read_at'] != null,
+          isStarred: item['stared'] == true,
+          content: item['content'] as String?,
+        ),
+      );
     } on Object {
       continue;
     }

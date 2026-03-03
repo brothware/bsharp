@@ -127,8 +127,7 @@ void main() {
     });
 
     test('translates prefix-match with abbreviated ensemble names', () {
-      final result =
-          translateSubjectName('Zespół inst. Marching Band I st.');
+      final result = translateSubjectName('Zespół inst. Marching Band I st.');
       expect(result, isNotEmpty);
       expect(result, isNot('Zespół inst. Marching Band I st.'));
     });
@@ -216,10 +215,7 @@ void main() {
         translateAttendanceName('Spóźnienie nieusprawiedliwione'),
         isNotEmpty,
       );
-      expect(
-        translateAttendanceName('Konkurs muzyczny'),
-        isNotEmpty,
-      );
+      expect(translateAttendanceName('Konkurs muzyczny'), isNotEmpty);
     });
 
     test('falls back to original for unknown names', () {

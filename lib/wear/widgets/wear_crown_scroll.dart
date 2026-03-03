@@ -67,8 +67,10 @@ class _WearCrownScrollState extends ConsumerState<WearCrownScroll> {
       widget.onBoundaryDown?.call();
       return;
     }
-    final target = (controller.offset + delta * widget.scrollSensitivity)
-        .clamp(pos.minScrollExtent, pos.maxScrollExtent);
+    final target = (controller.offset + delta * widget.scrollSensitivity).clamp(
+      pos.minScrollExtent,
+      pos.maxScrollExtent,
+    );
     controller.animateTo(
       target,
       duration: const Duration(milliseconds: 100),

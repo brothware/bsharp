@@ -74,31 +74,34 @@ void main() {
       expect(find.byType(AlertDialog), findsNothing);
     });
 
-    testWidgets('in child mode only shows active item, hides sync/about/logout',
-        (tester) async {
-      final fakeSecure = FakeKeyValueStore();
-      await fakeSecure.write(key: 'child_mode_pin', value: '1234');
-      await fakeSecure.write(key: 'child_mode_active', value: 'true');
-      final storage = CredentialStorage(store: fakeSecure);
+    testWidgets(
+      'in child mode only shows active item, hides sync/about/logout',
+      (tester) async {
+        final fakeSecure = FakeKeyValueStore();
+        await fakeSecure.write(key: 'child_mode_pin', value: '1234');
+        await fakeSecure.write(key: 'child_mode_active', value: 'true');
+        final storage = CredentialStorage(store: fakeSecure);
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
-          ],
-          child: const MaterialApp(home: Scaffold(body: WearSettingsTile())),
-        ),
-      );
-      await tester.pump();
-      await tester.pump();
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              credentialStorageProvider.overrideWithValue(storage),
+              wearScreenShapeProvider.overrideWith(
+                (_) => WearScreenShape.rectangular,
+              ),
+            ],
+            child: const MaterialApp(home: Scaffold(body: WearSettingsTile())),
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
 
-      expect(find.text('Child mode active'), findsOneWidget);
-      expect(find.byIcon(Icons.sync), findsNothing);
-      expect(find.byIcon(Icons.info_outline), findsNothing);
-      expect(find.byIcon(Icons.logout), findsNothing);
-    });
+        expect(find.text('Child mode active'), findsOneWidget);
+        expect(find.byIcon(Icons.sync), findsNothing);
+        expect(find.byIcon(Icons.info_outline), findsNothing);
+        expect(find.byIcon(Icons.logout), findsNothing);
+      },
+    );
 
     testWidgets('parent mode shows all items', (tester) async {
       await tester.pumpWidget(await _buildApp());

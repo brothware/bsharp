@@ -58,21 +58,16 @@ class PinPadState extends State<PinPad> with SingleTickerProviderStateMixin {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          widget.title,
-          style: theme.textTheme.titleLarge,
-        ),
+        Text(widget.title, style: theme.textTheme.titleLarge),
         const SizedBox(height: 24),
         AnimatedBuilder(
           animation: _shakeAnimation,
           builder: (context, child) {
-            final offset = _shakeAnimation.value *
+            final offset =
+                _shakeAnimation.value *
                 10 *
                 ((_shakeController.value * 8).round().isOdd ? 1 : -1);
-            return Transform.translate(
-              offset: Offset(offset, 0),
-              child: child,
-            );
+            return Transform.translate(offset: Offset(offset, 0), child: child);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -129,10 +124,7 @@ class PinPadState extends State<PinPad> with SingleTickerProviderStateMixin {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: key.isEmpty
                         ? const SizedBox(width: 72, height: 72)
-                        : _KeyButton(
-                            label: key,
-                            onTap: () => _onKeyTap(key),
-                          ),
+                        : _KeyButton(label: key, onTap: () => _onKeyTap(key)),
                   ),
               ],
             ),
@@ -185,10 +177,7 @@ class _KeyButton extends StatelessWidget {
                   Icons.backspace_outlined,
                   color: theme.colorScheme.onSurface,
                 )
-              : Text(
-                  label,
-                  style: theme.textTheme.headlineMedium,
-                ),
+              : Text(label, style: theme.textTheme.headlineMedium),
         ),
       ),
     );

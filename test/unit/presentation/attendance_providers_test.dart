@@ -181,17 +181,16 @@ void main() {
           attendancesProvider.overrideWith(
             (ref) => [_attendance(id: 1, eventsId: 1, typesId: 1)],
           ),
-          attendanceTypesProvider.overrideWith(
-            (ref) => [presentType],
-          ),
+          attendanceTypesProvider.overrideWith((ref) => [presentType]),
           eventsProvider.overrideWith(
             (ref) => [_event(id: 1, date: DateTime(2026, 2, 27))],
           ),
         ],
       );
 
-      final day =
-          container.read(attendanceForDayProvider(DateTime(2026, 2, 27)));
+      final day = container.read(
+        attendanceForDayProvider(DateTime(2026, 2, 27)),
+      );
       expect(day, isNotNull);
       expect(day!.entries.length, 1);
     });
@@ -205,8 +204,9 @@ void main() {
         ],
       );
 
-      final day =
-          container.read(attendanceForDayProvider(DateTime(2026, 2, 27)));
+      final day = container.read(
+        attendanceForDayProvider(DateTime(2026, 2, 27)),
+      );
       expect(day, isNull);
     });
   });
@@ -215,9 +215,7 @@ void main() {
     test('returns days for selected month', () {
       final container = ProviderContainer(
         overrides: [
-          selectedMonthProvider.overrideWith(
-            (ref) => DateTime(2026, 2),
-          ),
+          selectedMonthProvider.overrideWith((ref) => DateTime(2026, 2)),
         ],
       );
 

@@ -67,10 +67,7 @@ void main() {
             attendance: _attendance(typesId: 2),
             type: absentType,
           ),
-          AttendanceEntry(
-            attendance: _attendance(typesId: 3),
-            type: lateType,
-          ),
+          AttendanceEntry(attendance: _attendance(typesId: 3), type: lateType),
         ],
       );
 
@@ -82,10 +79,7 @@ void main() {
       final day = AttendanceDay(
         date: DateTime(2026, 2, 27),
         entries: [
-          AttendanceEntry(
-            attendance: _attendance(),
-            type: presentType,
-          ),
+          AttendanceEntry(attendance: _attendance(), type: presentType),
         ],
       );
       expect(day.status, AttendanceDayStatus.present);
@@ -128,10 +122,7 @@ void main() {
       final day = AttendanceDay(
         date: DateTime(2026, 2, 27),
         entries: [
-          AttendanceEntry(
-            attendance: _attendance(typesId: 3),
-            type: lateType,
-          ),
+          AttendanceEntry(attendance: _attendance(typesId: 3), type: lateType),
         ],
       );
       expect(day.status, AttendanceDayStatus.late);
@@ -162,10 +153,7 @@ void main() {
     });
 
     test('status is noData when empty', () {
-      final day = AttendanceDay(
-        date: DateTime(2026, 2, 27),
-        entries: [],
-      );
+      final day = AttendanceDay(date: DateTime(2026, 2, 27), entries: []);
       expect(day.status, AttendanceDayStatus.noData);
     });
   });

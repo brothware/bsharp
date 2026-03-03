@@ -105,10 +105,13 @@ class SettingsScreen extends ConsumerWidget {
   void _showLanguageDialog(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(localeProvider.notifier);
 
-    String localeKey(Locale l) =>
-        l.countryCode != null ? '${l.languageCode}_${l.countryCode}' : l.languageCode;
+    String localeKey(Locale l) => l.countryCode != null
+        ? '${l.languageCode}_${l.countryCode}'
+        : l.languageCode;
 
-    final currentKey = notifier.isSystemLocale ? 'system' : localeKey(ref.read(localeProvider));
+    final currentKey = notifier.isSystemLocale
+        ? 'system'
+        : localeKey(ref.read(localeProvider));
 
     showDialog<void>(
       context: context,
@@ -184,9 +187,7 @@ class SettingsScreen extends ConsumerWidget {
                     },
                   ),
                   onTap: () {
-                    ref
-                        .read(themeModeProvider.notifier)
-                        .setThemeMode(mode);
+                    ref.read(themeModeProvider.notifier).setThemeMode(mode);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -279,9 +280,7 @@ class SettingsScreen extends ConsumerWidget {
                 }
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(t.settings.passwordChangePending),
-                  ),
+                  SnackBar(content: Text(t.settings.passwordChangePending)),
                 );
               },
               child: Text(t.common.change),
@@ -306,9 +305,7 @@ class _SyncSection extends ConsumerWidget {
       children: [
         ListTile(
           leading: Icon(
-            syncStatus == SyncStatus.syncing
-                ? Icons.sync
-                : Icons.sync_outlined,
+            syncStatus == SyncStatus.syncing ? Icons.sync : Icons.sync_outlined,
           ),
           title: Text(t.settings.syncNow),
           subtitle: Text(
@@ -366,9 +363,7 @@ class _SyncSection extends ConsumerWidget {
             children: [
               for (final minutes in NotificationPreferences.validIntervals)
                 ListTile(
-                  title: Text(
-                    t.settings.syncIntervalValue(minutes: minutes),
-                  ),
+                  title: Text(t.settings.syncIntervalValue(minutes: minutes)),
                   leading: Radio<int>(
                     value: minutes,
                     groupValue: prefs.syncIntervalMinutes,
@@ -472,7 +467,6 @@ class _NotifToggle extends ConsumerWidget {
   }
 }
 
-
 class _AboutSection extends ConsumerWidget {
   const _AboutSection();
 
@@ -485,7 +479,10 @@ class _AboutSection extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: const Text('BSharp'),
-          subtitle: ref.watch(packageInfoProvider).whenOrNull(
+          subtitle:
+              ref
+                  .watch(packageInfoProvider)
+                  .whenOrNull(
                     data: (info) =>
                         Text(t.settings.version(version: info.version)),
                   ) ??
@@ -557,17 +554,13 @@ class _TranslationSectionState extends ConsumerState<_TranslationSection> {
                 : t.translation.engineOnDevice,
           ),
           subtitle: Text(
-            hasKey
-                ? t.translation.engineDeepL
-                : t.translation.engineOnDevice,
+            hasKey ? t.translation.engineDeepL : t.translation.engineOnDevice,
           ),
         ),
         ListTile(
           leading: const Icon(Icons.key),
           title: Text(t.translation.deeplApiKey),
-          subtitle: hasKey
-              ? const Text('********')
-              : null,
+          subtitle: hasKey ? const Text('********') : null,
           trailing: hasKey
               ? IconButton(
                   icon: const Icon(Icons.delete_outline),
@@ -675,8 +668,8 @@ class _SectionHeader extends StatelessWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-            ),
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }

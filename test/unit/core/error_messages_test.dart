@@ -5,17 +5,11 @@ import 'package:bsharp/core/error/result.dart';
 void main() {
   group('errorMessage', () {
     test('MissingCredentials returns login prompt', () {
-      expect(
-        errorMessage(const MissingCredentials()),
-        contains('log in'),
-      );
+      expect(errorMessage(const MissingCredentials()), contains('log in'));
     });
 
     test('ExpiredSession returns session message', () {
-      expect(
-        errorMessage(const ExpiredSession()),
-        contains('Session expired'),
-      );
+      expect(errorMessage(const ExpiredSession()), contains('Session expired'));
     });
 
     test('InvalidCredentials returns credentials message', () {
@@ -26,45 +20,27 @@ void main() {
     });
 
     test('NoConnection returns network message', () {
-      expect(
-        errorMessage(const NoConnection()),
-        contains('connection'),
-      );
+      expect(errorMessage(const NoConnection()), contains('connection'));
     });
 
     test('ConnectionTimeout returns timeout message', () {
-      expect(
-        errorMessage(const ConnectionTimeout()),
-        contains('timed out'),
-      );
+      expect(errorMessage(const ConnectionTimeout()), contains('timed out'));
     });
 
     test('RateLimited returns rate limit message', () {
-      expect(
-        errorMessage(const RateLimited()),
-        contains('Too many'),
-      );
+      expect(errorMessage(const RateLimited()), contains('Too many'));
     });
 
     test('LicenseExpired returns license message', () {
-      expect(
-        errorMessage(const LicenseExpired()),
-        contains('licence'),
-      );
+      expect(errorMessage(const LicenseExpired()), contains('licence'));
     });
 
     test('DatabaseError returns database message', () {
-      expect(
-        errorMessage(const DatabaseError()),
-        contains('Database'),
-      );
+      expect(errorMessage(const DatabaseError()), contains('Database'));
     });
 
     test('ProtocolMismatch returns protocol message', () {
-      expect(
-        errorMessage(const ProtocolMismatch()),
-        contains('protocol'),
-      );
+      expect(errorMessage(const ProtocolMismatch()), contains('protocol'));
     });
 
     test('DatabaseIdChanged returns sync message', () {
@@ -82,31 +58,19 @@ void main() {
     });
 
     test('UnknownFailure without message returns generic', () {
-      expect(
-        errorMessage(const UnknownFailure()),
-        contains('unexpected'),
-      );
+      expect(errorMessage(const UnknownFailure()), contains('unexpected'));
     });
 
     test('ViewNotFound returns not found message', () {
-      expect(
-        errorMessage(const ViewNotFound()),
-        contains('not found'),
-      );
+      expect(errorMessage(const ViewNotFound()), contains('not found'));
     });
 
     test('MutationFailed returns retry message', () {
-      expect(
-        errorMessage(const MutationFailed()),
-        contains('try again'),
-      );
+      expect(errorMessage(const MutationFailed()), contains('try again'));
     });
 
     test('SessionExpired returns session message', () {
-      expect(
-        errorMessage(const SessionExpired()),
-        contains('Session expired'),
-      );
+      expect(errorMessage(const SessionExpired()), contains('Session expired'));
     });
 
     test('all failure types produce non-empty messages', () {

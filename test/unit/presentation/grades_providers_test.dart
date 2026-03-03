@@ -189,91 +189,88 @@ void main() {
       final result = container.read(subjectGradesProvider);
       expect(result.length, 2);
 
-      final math =
-          result.firstWhere((sg) => sg.subjectName == 'Math');
+      final math = result.firstWhere((sg) => sg.subjectName == 'Math');
       expect(math.resolvedMarks.length, 2);
 
-      final polish =
-          result.firstWhere((sg) => sg.subjectName == 'Polish');
+      final polish = result.firstWhere((sg) => sg.subjectName == 'Polish');
       expect(polish.resolvedMarks.length, 1);
     });
 
-    test('resolves scale-based marks with abbreviation and effective value', () {
-      final container = ProviderContainer(
-        overrides: [
-          marksProvider.overrideWith(
-            (ref) => [
-              _mark(id: 1, markGroupsId: 10, markScalesId: 118),
-            ],
-          ),
-          markGroupsProvider.overrideWith(
-            (ref) => [
-              const MarkGroup(
-                id: 10,
-                isPattern: 0,
-                markType: 1,
-                visibility: 1,
-                position: 0,
-                weight: 1,
-                eventTypeTermsId: 500,
-              ),
-            ],
-          ),
-          markScalesProvider.overrideWith(
-            (ref) => [
-              const MarkScale(
-                id: 118,
-                markScaleGroupsId: 10,
-                abbreviation: '4+',
-                name: 'B plus',
-                markValue: 4.5,
-                classified: 1,
-                noCountToAverage: 0,
-              ),
-            ],
-          ),
-          eventTypeTermsProvider.overrideWith(
-            (ref) => [
-              const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
-            ],
-          ),
-          eventTypesProvider.overrideWith(
-            (ref) => [
-              const EventType(
-                id: 248,
-                subjectsId: 100,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-            ],
-          ),
-          subjectsProvider.overrideWith(
-            (ref) => [
-              const Subject(
-                id: 100,
-                subjectsEduId: 100,
-                name: 'Music',
-                abbr: 'MUZ',
-              ),
-            ],
-          ),
-        ],
-      );
+    test(
+      'resolves scale-based marks with abbreviation and effective value',
+      () {
+        final container = ProviderContainer(
+          overrides: [
+            marksProvider.overrideWith(
+              (ref) => [_mark(id: 1, markGroupsId: 10, markScalesId: 118)],
+            ),
+            markGroupsProvider.overrideWith(
+              (ref) => [
+                const MarkGroup(
+                  id: 10,
+                  isPattern: 0,
+                  markType: 1,
+                  visibility: 1,
+                  position: 0,
+                  weight: 1,
+                  eventTypeTermsId: 500,
+                ),
+              ],
+            ),
+            markScalesProvider.overrideWith(
+              (ref) => [
+                const MarkScale(
+                  id: 118,
+                  markScaleGroupsId: 10,
+                  abbreviation: '4+',
+                  name: 'B plus',
+                  markValue: 4.5,
+                  classified: 1,
+                  noCountToAverage: 0,
+                ),
+              ],
+            ),
+            eventTypeTermsProvider.overrideWith(
+              (ref) => [
+                const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
+              ],
+            ),
+            eventTypesProvider.overrideWith(
+              (ref) => [
+                const EventType(
+                  id: 248,
+                  subjectsId: 100,
+                  teachingLevel: 0,
+                  substitution: 0,
+                ),
+              ],
+            ),
+            subjectsProvider.overrideWith(
+              (ref) => [
+                const Subject(
+                  id: 100,
+                  subjectsEduId: 100,
+                  name: 'Music',
+                  abbr: 'MUZ',
+                ),
+              ],
+            ),
+          ],
+        );
 
-      final result = container.read(subjectGradesProvider);
-      expect(result.length, 1);
-      final rm = result.first.resolvedMarks.first;
-      expect(rm.displayValue, '4+');
-      expect(rm.effectiveValue, 4.5);
-    });
+        final result = container.read(subjectGradesProvider);
+        expect(result.length, 1);
+        final rm = result.first.resolvedMarks.first;
+        expect(rm.displayValue, '4+');
+        expect(rm.effectiveValue, 4.5);
+      },
+    );
 
     test('resolves point-based marks with value/max format', () {
       final container = ProviderContainer(
         overrides: [
           marksProvider.overrideWith(
-            (ref) => [
-              _mark(id: 1, markGroupsId: 10, markValue: 8),
-            ],
+            (ref) => [_mark(id: 1, markGroupsId: 10, markValue: 8)],
           ),
           markGroupsProvider.overrideWith(
             (ref) => [
@@ -405,11 +402,7 @@ void main() {
         overrides: [
           marksProvider.overrideWith(
             (ref) => [
-              _mark(
-                id: 1,
-                markGroupsId: 10,
-                markValue: 3,
-              ),
+              _mark(id: 1, markGroupsId: 10, markValue: 3),
               Mark(
                 id: 2,
                 markGroupsId: 10,
@@ -529,18 +522,8 @@ void main() {
           ),
           subjectsProvider.overrideWith(
             (ref) => [
-              const Subject(
-                id: 100,
-                subjectsEduId: 100,
-                name: 'A',
-                abbr: 'A',
-              ),
-              const Subject(
-                id: 200,
-                subjectsEduId: 200,
-                name: 'B',
-                abbr: 'B',
-              ),
+              const Subject(id: 100, subjectsEduId: 100, name: 'A', abbr: 'A'),
+              const Subject(id: 200, subjectsEduId: 200, name: 'B', abbr: 'B'),
             ],
           ),
         ],
@@ -603,12 +586,7 @@ void main() {
           ),
           subjectsProvider.overrideWith(
             (ref) => [
-              const Subject(
-                id: 100,
-                subjectsEduId: 100,
-                name: 'A',
-                abbr: 'A',
-              ),
+              const Subject(id: 100, subjectsEduId: 100, name: 'A', abbr: 'A'),
             ],
           ),
         ],

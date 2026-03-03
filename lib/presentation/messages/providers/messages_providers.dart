@@ -12,8 +12,9 @@ final trashProvider = StateProvider<List<PocztaMessage>>((ref) => []);
 
 final receiversProvider = StateProvider<List<PocztaReceiver>>((ref) => []);
 
-final pocztaDataSourceProvider =
-    StateProvider<PocztaDataSource?>((ref) => null);
+final pocztaDataSourceProvider = StateProvider<PocztaDataSource?>(
+  (ref) => null,
+);
 
 final unreadCountProvider = Provider<int>((ref) {
   final inbox = ref.watch(inboxProvider);
@@ -27,8 +28,9 @@ final starredMessagesProvider = Provider<List<PocztaMessage>>((ref) {
 
 enum MessageFolder { inbox, sent, trash }
 
-final selectedFolderProvider =
-    StateProvider<MessageFolder>((ref) => MessageFolder.inbox);
+final selectedFolderProvider = StateProvider<MessageFolder>(
+  (ref) => MessageFolder.inbox,
+);
 
 final currentFolderMessagesProvider = Provider<List<PocztaMessage>>((ref) {
   final folder = ref.watch(selectedFolderProvider);

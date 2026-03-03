@@ -59,19 +59,15 @@ class ChildModeConfigScreen extends ConsumerWidget {
             title: t.schedule.title,
             icon: Icons.calendar_today_outlined,
             value: state.config.scheduleVisible,
-            onChanged: (v) => _updateFeature(
-              ref,
-              state.config.copyWith(scheduleVisible: v),
-            ),
+            onChanged: (v) =>
+                _updateFeature(ref, state.config.copyWith(scheduleVisible: v)),
           ),
           _FeatureToggle(
             title: t.grades.title,
             icon: Icons.grade_outlined,
             value: state.config.gradesVisible,
-            onChanged: (v) => _updateFeature(
-              ref,
-              state.config.copyWith(gradesVisible: v),
-            ),
+            onChanged: (v) =>
+                _updateFeature(ref, state.config.copyWith(gradesVisible: v)),
           ),
           _FeatureToggle(
             title: t.attendance.title,
@@ -86,37 +82,29 @@ class ChildModeConfigScreen extends ConsumerWidget {
             title: t.messages.title,
             icon: Icons.mail_outline,
             value: state.config.messagesVisible,
-            onChanged: (v) => _updateFeature(
-              ref,
-              state.config.copyWith(messagesVisible: v),
-            ),
+            onChanged: (v) =>
+                _updateFeature(ref, state.config.copyWith(messagesVisible: v)),
           ),
           _FeatureToggle(
             title: t.notes.title,
             icon: Icons.note_outlined,
             value: state.config.notesVisible,
-            onChanged: (v) => _updateFeature(
-              ref,
-              state.config.copyWith(notesVisible: v),
-            ),
+            onChanged: (v) =>
+                _updateFeature(ref, state.config.copyWith(notesVisible: v)),
           ),
           _FeatureToggle(
             title: t.settings.title,
             icon: Icons.settings_outlined,
             value: state.config.settingsVisible,
-            onChanged: (v) => _updateFeature(
-              ref,
-              state.config.copyWith(settingsVisible: v),
-            ),
+            onChanged: (v) =>
+                _updateFeature(ref, state.config.copyWith(settingsVisible: v)),
           ),
           const Divider(),
           _SectionHeader(title: t.childMode.mode),
           if (state.isPinSet)
             ListTile(
               leading: Icon(
-                state.isChildMode
-                    ? Icons.child_care
-                    : Icons.supervisor_account,
+                state.isChildMode ? Icons.child_care : Icons.supervisor_account,
                 color: state.isChildMode ? Colors.orange : Colors.green,
               ),
               title: Text(
@@ -145,19 +133,15 @@ class ChildModeConfigScreen extends ConsumerWidget {
   }
 
   void _navigateToPinSetup(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<bool>(
-        builder: (_) => const PinSetupScreen(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<bool>(builder: (_) => const PinSetupScreen()));
   }
 
   void _navigateToPinEntry(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<bool>(
-        builder: (_) => const PinEntryScreen(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<bool>(builder: (_) => const PinEntryScreen()));
   }
 
   void _confirmRemovePin(BuildContext context, WidgetRef ref) {
@@ -200,8 +184,8 @@ class _SectionHeader extends StatelessWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-            ),
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }

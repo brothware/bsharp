@@ -6,14 +6,10 @@ import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
 
 Widget _buildApp(WearScreenShape shape) {
   return ProviderScope(
-    overrides: [
-      wearScreenShapeProvider.overrideWith((_) => shape),
-    ],
+    overrides: [wearScreenShapeProvider.overrideWith((_) => shape)],
     child: MaterialApp(
       home: Scaffold(
-        body: WearScreenLayout(
-          child: Container(key: const Key('content')),
-        ),
+        body: WearScreenLayout(child: Container(key: const Key('content'))),
       ),
     ),
   );

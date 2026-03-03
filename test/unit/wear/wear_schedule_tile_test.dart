@@ -41,13 +41,10 @@ Widget _buildTile({List<Event> events = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       eventsProvider.overrideWith((ref) => events),
     ],
-    child: const MaterialApp(
-      home: Scaffold(body: WearScheduleTile()),
-    ),
+    child: const MaterialApp(home: Scaffold(body: WearScheduleTile())),
   );
 }
 
@@ -62,10 +59,19 @@ void main() {
     });
 
     testWidgets('shows lesson items when events exist', (tester) async {
-      await tester.pumpWidget(_buildTile(events: [
-        _event(number: 1, startTime: '08:00:00', endTime: '08:45:00'),
-        _event(id: 2, number: 2, startTime: '08:55:00', endTime: '09:40:00'),
-      ]));
+      await tester.pumpWidget(
+        _buildTile(
+          events: [
+            _event(number: 1, startTime: '08:00:00', endTime: '08:45:00'),
+            _event(
+              id: 2,
+              number: 2,
+              startTime: '08:55:00',
+              endTime: '09:40:00',
+            ),
+          ],
+        ),
+      );
       await tester.pump();
 
       expect(find.text('1'), findsOneWidget);
@@ -75,9 +81,7 @@ void main() {
     });
 
     testWidgets('shows strikethrough for cancelled lesson', (tester) async {
-      await tester.pumpWidget(_buildTile(events: [
-        _event(status: 2),
-      ]));
+      await tester.pumpWidget(_buildTile(events: [_event(status: 2)]));
       await tester.pump();
 
       final textWidgets = tester.widgetList<Text>(find.byType(Text));

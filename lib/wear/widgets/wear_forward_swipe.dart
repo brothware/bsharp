@@ -23,8 +23,10 @@ class _WearForwardSwipeState extends State<WearForwardSwipe> {
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
     if (details.primaryDelta == null) return;
     setState(() {
-      _dragOffset =
-          (_dragOffset + details.primaryDelta!).clamp(double.negativeInfinity, 0.0);
+      _dragOffset = (_dragOffset + details.primaryDelta!).clamp(
+        double.negativeInfinity,
+        0.0,
+      );
     });
   }
 

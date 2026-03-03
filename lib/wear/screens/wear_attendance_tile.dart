@@ -21,10 +21,7 @@ class WearAttendanceTile extends ConsumerWidget {
       onTriggered: () => _openDetail(context),
       child: Column(
         children: [
-          WearTileHeader(
-            icon: Icons.event_available,
-            title: t.nav.attendance,
-          ),
+          WearTileHeader(icon: Icons.event_available, title: t.nav.attendance),
           Expanded(
             child: stats.totalLessons == 0
                 ? Center(
@@ -126,16 +123,10 @@ class _StatChip extends StatelessWidget {
         Container(
           width: 8,
           height: 8,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-          ),
+          decoration: BoxDecoration(shape: BoxShape.circle, color: color),
         ),
         const SizedBox(width: 3),
-        Text(
-          '$label $value',
-          style: theme.textTheme.labelSmall,
-        ),
+        Text('$label $value', style: theme.textTheme.labelSmall),
       ],
     );
   }

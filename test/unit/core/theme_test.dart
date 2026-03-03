@@ -37,9 +37,7 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
       container = ProviderContainer(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-        ],
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
       );
     });
 
@@ -52,16 +50,16 @@ void main() {
     });
 
     test('setThemeMode persists light', () async {
-      await container.read(themeModeProvider.notifier).setThemeMode(
-            ThemeMode.light,
-          );
+      await container
+          .read(themeModeProvider.notifier)
+          .setThemeMode(ThemeMode.light);
       expect(container.read(themeModeProvider), ThemeMode.light);
     });
 
     test('setThemeMode persists dark', () async {
-      await container.read(themeModeProvider.notifier).setThemeMode(
-            ThemeMode.dark,
-          );
+      await container
+          .read(themeModeProvider.notifier)
+          .setThemeMode(ThemeMode.dark);
       expect(container.read(themeModeProvider), ThemeMode.dark);
     });
 
@@ -84,9 +82,7 @@ void main() {
       SharedPreferences.setMockInitialValues({'theme_mode': 'dark'});
       final prefs = await SharedPreferences.getInstance();
       final newContainer = ProviderContainer(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-        ],
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
       );
       addTearDown(newContainer.dispose);
 

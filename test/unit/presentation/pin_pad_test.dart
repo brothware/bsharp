@@ -36,10 +36,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PinPad(
-              title: 'Create PIN',
-              onComplete: (_) {},
-            ),
+            body: PinPad(title: 'Create PIN', onComplete: (_) {}),
           ),
         ),
       );
@@ -55,7 +52,9 @@ void main() {
 
     testWidgets('calls onComplete after entering full PIN', (tester) async {
       String? enteredPin;
-      await tester.pumpWidget(buildPinPad(onComplete: (pin) => enteredPin = pin));
+      await tester.pumpWidget(
+        buildPinPad(onComplete: (pin) => enteredPin = pin),
+      );
 
       await tester.tap(find.text('1'));
       await tester.tap(find.text('2'));
@@ -68,7 +67,9 @@ void main() {
 
     testWidgets('does not call onComplete before PIN is full', (tester) async {
       String? enteredPin;
-      await tester.pumpWidget(buildPinPad(onComplete: (pin) => enteredPin = pin));
+      await tester.pumpWidget(
+        buildPinPad(onComplete: (pin) => enteredPin = pin),
+      );
 
       await tester.tap(find.text('1'));
       await tester.tap(find.text('2'));
@@ -80,7 +81,9 @@ void main() {
 
     testWidgets('delete removes last digit', (tester) async {
       String? enteredPin;
-      await tester.pumpWidget(buildPinPad(onComplete: (pin) => enteredPin = pin));
+      await tester.pumpWidget(
+        buildPinPad(onComplete: (pin) => enteredPin = pin),
+      );
 
       await tester.tap(find.text('1'));
       await tester.tap(find.text('2'));
@@ -98,14 +101,10 @@ void main() {
       await tester.pump();
 
       final containers = tester.widgetList<Container>(
-        find.descendant(
-          of: find.byType(Row),
-          matching: find.byType(Container),
-        ),
+        find.descendant(of: find.byType(Row), matching: find.byType(Container)),
       );
       final dots = containers.where(
-        (c) =>
-            c.constraints?.maxWidth == 16 && c.constraints?.maxHeight == 16,
+        (c) => c.constraints?.maxWidth == 16 && c.constraints?.maxHeight == 16,
       );
       expect(dots.length, 6);
     });
@@ -115,11 +114,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PinPad(
-              key: key,
-              title: 'Enter PIN',
-              onComplete: (_) {},
-            ),
+            body: PinPad(key: key, title: 'Enter PIN', onComplete: (_) {}),
           ),
         ),
       );

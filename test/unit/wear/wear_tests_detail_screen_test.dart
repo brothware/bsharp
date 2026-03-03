@@ -15,8 +15,7 @@ Widget _buildScreen({List<PortalTest> tests = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       testsProvider.overrideWith((ref) => tests),
     ],
     child: const MaterialApp(home: WearTestsDetailScreen()),
@@ -40,20 +39,24 @@ void main() {
     });
 
     testWidgets('shows all tests sorted by date', (tester) async {
-      await tester.pumpWidget(_buildScreen(tests: [
-        const PortalTest(
-          id: 1,
-          subjectName: 'History',
-          date: '2025-01-15',
-          title: 'WWII test',
+      await tester.pumpWidget(
+        _buildScreen(
+          tests: [
+            const PortalTest(
+              id: 1,
+              subjectName: 'History',
+              date: '2025-01-15',
+              title: 'WWII test',
+            ),
+            const PortalTest(
+              id: 2,
+              subjectName: 'Biology',
+              date: '2025-02-20',
+              description: 'Cells and tissues',
+            ),
+          ],
         ),
-        const PortalTest(
-          id: 2,
-          subjectName: 'Biology',
-          date: '2025-02-20',
-          description: 'Cells and tissues',
-        ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('History'), findsOneWidget);

@@ -17,8 +17,7 @@ class WearTestsDetailScreen extends ConsumerStatefulWidget {
       _WearTestsDetailScreenState();
 }
 
-class _WearTestsDetailScreenState
-    extends ConsumerState<WearTestsDetailScreen> {
+class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
   final _scrollController = ScrollController();
 
   @override
@@ -31,8 +30,10 @@ class _WearTestsDetailScreenState
   Widget build(BuildContext context) {
     final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final allTests = ref.watch(testsProvider);
-    final upcomingIds =
-        ref.watch(upcomingTestsProvider).map((t) => t.id).toSet();
+    final upcomingIds = ref
+        .watch(upcomingTestsProvider)
+        .map((t) => t.id)
+        .toSet();
     final theme = Theme.of(context);
 
     final sorted = List<PortalTest>.from(allTests)
@@ -44,10 +45,7 @@ class _WearTestsDetailScreenState
         body: WearScreenLayout(
           child: Column(
             children: [
-              WearTileHeader(
-                icon: Icons.quiz_outlined,
-                title: t.tests.title,
-              ),
+              WearTileHeader(icon: Icons.quiz_outlined, title: t.tests.title),
               const SizedBox(height: 4),
               Expanded(
                 child: sorted.isEmpty
@@ -65,7 +63,12 @@ class _WearTestsDetailScreenState
                           controller: _scrollController,
                           child: ListView.builder(
                             controller: _scrollController,
-                            padding: EdgeInsets.fromLTRB(4, 0, 4, wearListBottomInset(shape)),
+                            padding: EdgeInsets.fromLTRB(
+                              4,
+                              0,
+                              4,
+                              wearListBottomInset(shape),
+                            ),
                             itemCount: sorted.length,
                             itemBuilder: (context, index) {
                               final test = sorted[index];
@@ -80,7 +83,7 @@ class _WearTestsDetailScreenState
                                   borderRadius: BorderRadius.circular(8),
                                   color: isUpcoming
                                       ? theme.colorScheme.primaryContainer
-                                          .withValues(alpha: 0.2)
+                                            .withValues(alpha: 0.2)
                                       : null,
                                 ),
                                 child: Column(
@@ -88,23 +91,28 @@ class _WearTestsDetailScreenState
                                   children: [
                                     Text(
                                       test.subjectName,
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
                                       test.date,
-                                      style: theme.textTheme.labelSmall?.copyWith(
-                                        color: theme.colorScheme.onSurfaceVariant,
-                                      ),
+                                      style: theme.textTheme.labelSmall
+                                          ?.copyWith(
+                                            color: theme
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                     ),
                                     if (test.title != null)
                                       Text(
                                         test.title!,
-                                        style: theme.textTheme.bodySmall?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: theme.textTheme.bodySmall
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     if (test.description != null)

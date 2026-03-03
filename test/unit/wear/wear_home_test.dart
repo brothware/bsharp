@@ -16,8 +16,7 @@ Widget _buildApp({List<Override> overrides = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       ...overrides,
     ],
     child: const MaterialApp(home: WearHome()),
@@ -99,8 +98,9 @@ void main() {
       expect(find.text('Remarks'), findsOneWidget);
     });
 
-    testWidgets('settings tile shows child mode toggle when PIN set',
-        (tester) async {
+    testWidgets('settings tile shows child mode toggle when PIN set', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildApp());
       await tester.pump();
 
@@ -134,8 +134,9 @@ void main() {
         ProviderScope(
           overrides: [
             credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
           ],
           child: const MaterialApp(home: WearHome()),
         ),
@@ -151,42 +152,45 @@ void main() {
       expect(find.text('Homework'), findsOneWidget);
     });
 
-    testWidgets('child mode with all features hidden shows new tiles + settings',
-        (tester) async {
-      final fakeSecure = FakeKeyValueStore();
-      await fakeSecure.write(key: 'child_mode_pin', value: '1234');
-      await fakeSecure.write(key: 'child_mode_active', value: 'true');
-      await fakeSecure.write(
-        key: 'child_mode_config',
-        value: jsonEncode({
-          'scheduleVisible': false,
-          'gradesVisible': false,
-          'attendanceVisible': false,
-          'messagesVisible': false,
-          'settingsVisible': false,
-          'notesVisible': false,
-        }),
-      );
-      final storage = CredentialStorage(store: fakeSecure);
+    testWidgets(
+      'child mode with all features hidden shows new tiles + settings',
+      (tester) async {
+        final fakeSecure = FakeKeyValueStore();
+        await fakeSecure.write(key: 'child_mode_pin', value: '1234');
+        await fakeSecure.write(key: 'child_mode_active', value: 'true');
+        await fakeSecure.write(
+          key: 'child_mode_config',
+          value: jsonEncode({
+            'scheduleVisible': false,
+            'gradesVisible': false,
+            'attendanceVisible': false,
+            'messagesVisible': false,
+            'settingsVisible': false,
+            'notesVisible': false,
+          }),
+        );
+        final storage = CredentialStorage(store: fakeSecure);
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
-          ],
-          child: const MaterialApp(home: WearHome()),
-        ),
-      );
-      await tester.pump();
-      await tester.pump();
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              credentialStorageProvider.overrideWithValue(storage),
+              wearScreenShapeProvider.overrideWith(
+                (_) => WearScreenShape.rectangular,
+              ),
+            ],
+            child: const MaterialApp(home: WearHome()),
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
 
-      final indicator = tester.widget<WearPageIndicator>(
-        find.byType(WearPageIndicator),
-      );
-      expect(indicator.count, 4);
-    });
+        final indicator = tester.widget<WearPageIndicator>(
+          find.byType(WearPageIndicator),
+        );
+        expect(indicator.count, 4);
+      },
+    );
 
     testWidgets('parent mode shows all tiles', (tester) async {
       await tester.pumpWidget(_buildApp());

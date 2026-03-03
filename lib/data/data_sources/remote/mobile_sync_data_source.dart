@@ -44,16 +44,12 @@ class MobileSyncDataSource {
     });
   }
 
-  Future<Result<Map<String, dynamic>>> _post(
-    Map<String, dynamic> data,
-  ) async {
+  Future<Result<Map<String, dynamic>>> _post(Map<String, dynamic> data) async {
     try {
       final response = await _client.post<Map<String, dynamic>>(
         '/njson.php',
         data: data,
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ),
+        options: Options(contentType: Headers.formUrlEncodedContentType),
       );
 
       if (response.data == null) {

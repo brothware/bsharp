@@ -105,7 +105,12 @@ class _WearScheduleDetailScreenState
                             child: ListView.builder(
                               controller: _scrollController,
                               physics: const BouncingScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(4, 0, 4, wearListBottomInset(shape)),
+                              padding: EdgeInsets.fromLTRB(
+                                4,
+                                0,
+                                4,
+                                wearListBottomInset(shape),
+                              ),
                               itemCount: entries.length,
                               itemBuilder: (context, index) =>
                                   _WearDetailLessonItem(entry: entries[index]),
@@ -165,8 +170,9 @@ class _WearDetailLessonItem extends StatelessWidget {
                       '${t.schedule.lessonFallback} ${entry.event.number}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    decoration:
-                        entry.isCancelled ? TextDecoration.lineThrough : null,
+                    decoration: entry.isCancelled
+                        ? TextDecoration.lineThrough
+                        : null,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

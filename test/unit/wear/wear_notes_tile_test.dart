@@ -15,13 +15,10 @@ Widget _buildTile({List<PortalReprimand> reprimands = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       reprimandsProvider.overrideWith((ref) => reprimands),
     ],
-    child: const MaterialApp(
-      home: Scaffold(body: WearNotesTile()),
-    ),
+    child: const MaterialApp(home: Scaffold(body: WearNotesTile())),
   );
 }
 
@@ -43,15 +40,19 @@ void main() {
     });
 
     testWidgets('shows remark items with warning icon', (tester) async {
-      await tester.pumpWidget(_buildTile(reprimands: [
-        const PortalReprimand(
-          id: 1,
-          date: '2025-01-15',
-          teacherName: 'Jan Kowalski',
-          content: 'Forgot homework',
-          type: 2,
+      await tester.pumpWidget(
+        _buildTile(
+          reprimands: [
+            const PortalReprimand(
+              id: 1,
+              date: '2025-01-15',
+              teacherName: 'Jan Kowalski',
+              content: 'Forgot homework',
+              type: 2,
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('Forgot homework'), findsOneWidget);
@@ -60,15 +61,19 @@ void main() {
     });
 
     testWidgets('shows praise items with trophy icon', (tester) async {
-      await tester.pumpWidget(_buildTile(reprimands: [
-        const PortalReprimand(
-          id: 1,
-          date: '2025-01-15',
-          teacherName: 'Anna Nowak',
-          content: 'Excellent presentation',
-          type: 1,
+      await tester.pumpWidget(
+        _buildTile(
+          reprimands: [
+            const PortalReprimand(
+              id: 1,
+              date: '2025-01-15',
+              teacherName: 'Anna Nowak',
+              content: 'Excellent presentation',
+              type: 1,
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('Excellent presentation'), findsOneWidget);
@@ -76,15 +81,19 @@ void main() {
     });
 
     testWidgets('uses NeverScrollableScrollPhysics on list', (tester) async {
-      await tester.pumpWidget(_buildTile(reprimands: [
-        const PortalReprimand(
-          id: 1,
-          date: '2025-01-15',
-          teacherName: 'T',
-          content: 'C',
-          type: 0,
+      await tester.pumpWidget(
+        _buildTile(
+          reprimands: [
+            const PortalReprimand(
+              id: 1,
+              date: '2025-01-15',
+              teacherName: 'T',
+              content: 'C',
+              type: 0,
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       final listView = tester.widget<ListView>(find.byType(ListView));

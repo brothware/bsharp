@@ -71,7 +71,8 @@ class _WearMessageDetailScreenState
     final message = widget.message;
     final rawContent = _fullContent ?? message.content;
     final displayTitle = _translatedTitle ?? message.title;
-    final displayContent = _translatedContent ??
+    final displayContent =
+        _translatedContent ??
         (rawContent != null ? stripHtml(rawContent) : null);
 
     return WearSwipeDismiss(
@@ -109,10 +110,7 @@ class _WearMessageDetailScreenState
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Divider(
-                  height: 8,
-                  color: theme.colorScheme.outlineVariant,
-                ),
+                Divider(height: 8, color: theme.colorScheme.outlineVariant),
                 Expanded(
                   child: WearCrownScroll(
                     controller: _scrollController,
@@ -120,46 +118,48 @@ class _WearMessageDetailScreenState
                       controller: _scrollController,
                       child: ListView(
                         controller: _scrollController,
-                      padding:
-                          EdgeInsets.only(bottom: wearListBottomInset(shape)),
-                    children: [
-                      if (_loadingContent)
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Center(
-                            child: SizedBox(
-                              width: 16,
-                              height: 16,
-                              child:
-                                  CircularProgressIndicator(strokeWidth: 2),
+                        padding: EdgeInsets.only(
+                          bottom: wearListBottomInset(shape),
+                        ),
+                        children: [
+                          if (_loadingContent)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Center(
+                                child: SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ),
+                            )
+                          else if (displayContent != null)
+                            Text(
+                              displayContent,
+                              style: theme.textTheme.bodySmall,
                             ),
-                          ),
-                        )
-                      else if (displayContent != null)
-                        Text(
-                          displayContent,
-                          style: theme.textTheme.bodySmall,
-                        ),
-                      if (message.files != null &&
-                          message.files!.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            '${t.messages.attachments} (${message.files!.length})',
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
+                          if (message.files != null &&
+                              message.files!.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                '${t.messages.attachments} (${message.files!.length})',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      if (rawContent != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: WearTranslateButton(
-                            sourceText: stripHtml(rawContent),
-                            onTranslated: _handleContentTranslation,
-                          ),
-                        ),
-                      ],
+                          if (rawContent != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: WearTranslateButton(
+                                sourceText: stripHtml(rawContent),
+                                onTranslated: _handleContentTranslation,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),

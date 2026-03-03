@@ -39,8 +39,7 @@ Widget _buildScreen({List<Event> events = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       eventsProvider.overrideWith((ref) => events),
     ],
     child: const MaterialApp(home: WearScheduleDetailScreen()),
@@ -67,10 +66,19 @@ void main() {
     });
 
     testWidgets('shows lesson entries for today', (tester) async {
-      await tester.pumpWidget(_buildScreen(events: [
-        _event(number: 1),
-        _event(id: 2, number: 2, startTime: '09:00:00', endTime: '09:45:00'),
-      ]));
+      await tester.pumpWidget(
+        _buildScreen(
+          events: [
+            _event(number: 1),
+            _event(
+              id: 2,
+              number: 2,
+              startTime: '09:00:00',
+              endTime: '09:45:00',
+            ),
+          ],
+        ),
+      );
       await tester.pump();
 
       expect(find.text('08:00 - 08:45'), findsOneWidget);

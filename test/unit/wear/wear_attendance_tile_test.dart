@@ -20,15 +20,12 @@ Widget _buildTile({
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       attendancesProvider.overrideWith((ref) => attendances),
       attendanceTypesProvider.overrideWith((ref) => types),
       eventsProvider.overrideWith((ref) => []),
     ],
-    child: const MaterialApp(
-      home: Scaffold(body: WearAttendanceTile()),
-    ),
+    child: const MaterialApp(home: Scaffold(body: WearAttendanceTile())),
   );
 }
 

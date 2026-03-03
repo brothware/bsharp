@@ -16,8 +16,7 @@ Widget _buildScreen({List<PortalReprimand> reprimands = const []}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       reprimandsProvider.overrideWith((ref) => reprimands),
       isTranslationAvailableProvider.overrideWithValue(false),
     ],
@@ -37,37 +36,45 @@ void main() {
     });
 
     testWidgets('shows remarks by default', (tester) async {
-      await tester.pumpWidget(_buildScreen(reprimands: [
-        const PortalReprimand(
-          id: 1,
-          date: '2025-01-15',
-          teacherName: 'Jan K.',
-          content: 'Disrupted class',
-          type: 2,
+      await tester.pumpWidget(
+        _buildScreen(
+          reprimands: [
+            const PortalReprimand(
+              id: 1,
+              date: '2025-01-15',
+              teacherName: 'Jan K.',
+              content: 'Disrupted class',
+              type: 2,
+            ),
+          ],
         ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('Disrupted class'), findsOneWidget);
     });
 
     testWidgets('switches to praise tab', (tester) async {
-      await tester.pumpWidget(_buildScreen(reprimands: [
-        const PortalReprimand(
-          id: 1,
-          date: '2025-01-15',
-          teacherName: 'Jan K.',
-          content: 'Disrupted class',
-          type: 2,
+      await tester.pumpWidget(
+        _buildScreen(
+          reprimands: [
+            const PortalReprimand(
+              id: 1,
+              date: '2025-01-15',
+              teacherName: 'Jan K.',
+              content: 'Disrupted class',
+              type: 2,
+            ),
+            const PortalReprimand(
+              id: 2,
+              date: '2025-01-15',
+              teacherName: 'Anna N.',
+              content: 'Great work',
+              type: 1,
+            ),
+          ],
         ),
-        const PortalReprimand(
-          id: 2,
-          date: '2025-01-15',
-          teacherName: 'Anna N.',
-          content: 'Great work',
-          type: 1,
-        ),
-      ]));
+      );
       await tester.pump();
 
       expect(find.text('Disrupted class'), findsOneWidget);

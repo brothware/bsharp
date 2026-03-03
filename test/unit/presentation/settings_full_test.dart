@@ -126,8 +126,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.text('Are you sure you want to log out? '
-            'Saved data will be deleted.'),
+        find.text(
+          'Are you sure you want to log out? '
+          'Saved data will be deleted.',
+        ),
         findsOneWidget,
       );
       expect(find.text('Cancel'), findsOneWidget);

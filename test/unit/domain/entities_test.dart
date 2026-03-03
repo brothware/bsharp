@@ -77,12 +77,7 @@ void main() {
     });
 
     test('Group construction', () {
-      const group = Group(
-        id: 1,
-        groupsEduId: 400,
-        name: 'Class 3a',
-        type: 'C',
-      );
+      const group = Group(id: 1, groupsEduId: 400, name: 'Class 3a', type: 'C');
       expect(group.type, 'C');
     });
 
@@ -240,32 +235,19 @@ void main() {
 
   group('Organization entities', () {
     test('StudentGroup construction', () {
-      const sg = StudentGroup(
-        id: 1,
-        studentsId: 1,
-        groupsId: 1,
-        number: 15,
-      );
+      const sg = StudentGroup(id: 1, studentsId: 1, groupsId: 1, number: 15);
       expect(sg.number, 15);
     });
 
     test('GroupEducator construction', () {
-      const ge = GroupEducator(
-        id: 1,
-        groupsId: 1,
-        teachersEducatorId: 5,
-      );
+      const ge = GroupEducator(id: 1, groupsId: 1, teachersEducatorId: 5);
       expect(ge.teachersEducatorId, 5);
     });
   });
 
   group('Permission entities', () {
     test('PermissionGroup construction', () {
-      const pg = PermissionGroup(
-        id: 1,
-        permissionGroupsId: 1,
-        name: 'Admin',
-      );
+      const pg = PermissionGroup(id: 1, permissionGroupsId: 1, name: 'Admin');
       expect(pg.name, 'Admin');
     });
   });

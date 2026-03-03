@@ -9,15 +9,14 @@ import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 
 final attendancesProvider = StateProvider<List<Attendance>>((ref) => []);
 
-final attendanceTypesProvider =
-    StateProvider<List<AttendanceType>>((ref) => []);
-
-final selectedMonthProvider = StateProvider<DateTime>(
-  (ref) {
-    final now = DateTime.now();
-    return DateTime(now.year, now.month);
-  },
+final attendanceTypesProvider = StateProvider<List<AttendanceType>>(
+  (ref) => [],
 );
+
+final selectedMonthProvider = StateProvider<DateTime>((ref) {
+  final now = DateTime.now();
+  return DateTime(now.year, now.month);
+});
 
 final attendanceDaysProvider = Provider<Map<DateTime, AttendanceDay>>((ref) {
   final attendances = ref.watch(attendancesProvider);
@@ -42,9 +41,7 @@ final currentStatsTermProvider = Provider<Term?>((ref) {
   final now = DateTime.now();
   final semesters = terms.where((t) => t.type == TermType.semester);
   final current = semesters.where(
-    (t) =>
-        !t.startDate.isAfter(now) &&
-        !t.endDate.isBefore(now),
+    (t) => !t.startDate.isAfter(now) && !t.endDate.isBefore(now),
   );
   if (current.isNotEmpty) return current.first;
   return null;
@@ -71,8 +68,10 @@ final attendanceStatsProvider = Provider<AttendanceStats>((ref) {
   return calculateStats(filtered, types);
 });
 
-final attendanceForDayProvider =
-    Provider.family<AttendanceDay?, DateTime>((ref, date) {
+final attendanceForDayProvider = Provider.family<AttendanceDay?, DateTime>((
+  ref,
+  date,
+) {
   final days = ref.watch(attendanceDaysProvider);
   final dayKey = DateTime(date.year, date.month, date.day);
   return days[dayKey];
@@ -115,11 +114,9 @@ final staleUnexcusedAbsencesProvider = Provider<List<UnexcusedAbsence>>((ref) {
     if (event == null) continue;
     if (event.date.isAfter(cutoff)) continue;
 
-    result.add(UnexcusedAbsence(
-      attendance: a,
-      type: type,
-      eventDate: event.date,
-    ));
+    result.add(
+      UnexcusedAbsence(attendance: a, type: type, eventDate: event.date),
+    );
   }
 
   result.sort((a, b) => a.eventDate.compareTo(b.eventDate));

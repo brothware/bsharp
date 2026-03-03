@@ -25,14 +25,16 @@ void main() {
       expect(container.read(syncStatusProvider), SyncStatus.idle);
     });
 
-    test('sync transitions to syncing then failed without credentials',
-        () async {
-      final notifier = container.read(syncStatusProvider.notifier);
-      final future = notifier.sync();
-      expect(container.read(syncStatusProvider), SyncStatus.syncing);
-      await future;
-      expect(container.read(syncStatusProvider), SyncStatus.failed);
-    });
+    test(
+      'sync transitions to syncing then failed without credentials',
+      () async {
+        final notifier = container.read(syncStatusProvider.notifier);
+        final future = notifier.sync();
+        expect(container.read(syncStatusProvider), SyncStatus.syncing);
+        await future;
+        expect(container.read(syncStatusProvider), SyncStatus.failed);
+      },
+    );
 
     test('reset sets state to idle', () async {
       final notifier = container.read(syncStatusProvider.notifier);

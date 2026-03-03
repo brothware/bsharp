@@ -15,9 +15,7 @@ class ChildSwitcher extends ConsumerWidget {
     }
 
     return PopupMenuButton<int>(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       onSelected: (id) {
         final student = students.firstWhere((s) => s.id == id);
         ref.read(activeStudentProvider.notifier).switchTo(student);
@@ -54,10 +52,7 @@ class ChildSwitcher extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: 14,
-            child: Text(
-              active.name[0],
-              style: const TextStyle(fontSize: 12),
-            ),
+            child: Text(active.name[0], style: const TextStyle(fontSize: 12)),
           ),
           const SizedBox(width: 8),
           Text(

@@ -41,10 +41,7 @@ class ChangelogScreen extends ConsumerWidget {
 }
 
 class _ChangelogTab extends ConsumerWidget {
-  const _ChangelogTab({
-    required this.groupedProvider,
-    required this.isGrade,
-  });
+  const _ChangelogTab({required this.groupedProvider, required this.isGrade});
 
   final Provider<Map<String, List<PortalChangelog>>> groupedProvider;
   final bool isGrade;

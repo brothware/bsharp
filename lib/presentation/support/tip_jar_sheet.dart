@@ -30,13 +30,13 @@ class _TipJarSheetState extends ConsumerState<TipJarSheet> {
       switch (state) {
         case TipJarPurchased():
           Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(t.support.purchaseSuccess)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(t.support.purchaseSuccess)));
         case TipJarFailed(:final message):
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
         default:
           break;
       }
@@ -54,10 +54,7 @@ class _TipJarSheetState extends ConsumerState<TipJarSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              t.support.tipJar,
-              style: theme.textTheme.titleLarge,
-            ),
+            Text(t.support.tipJar, style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(
               t.support.subtitle,
@@ -83,36 +80,36 @@ class _TipJarSheetState extends ConsumerState<TipJarSheet> {
   Widget _buildContent(TipJarState state, ThemeData theme) {
     return switch (state) {
       TipJarLoading() => const Padding(
-          padding: EdgeInsets.all(24),
-          child: CircularProgressIndicator(),
-        ),
+        padding: EdgeInsets.all(24),
+        child: CircularProgressIndicator(),
+      ),
       TipJarAvailable(:final products) => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (final product in products)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: FilledButton.tonal(
-                  onPressed: () {
-                    final service = ref.read(tipJarServiceProvider);
-                    service?.purchase(product);
-                  },
-                  style: FilledButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 56),
-                  ),
-                  child: Text(
-                    '${_productLabel(product.id)} — ${product.price}',
-                    style: theme.textTheme.titleMedium,
-                  ),
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final product in products)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: FilledButton.tonal(
+                onPressed: () {
+                  final service = ref.read(tipJarServiceProvider);
+                  service?.purchase(product);
+                },
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 56),
+                ),
+                child: Text(
+                  '${_productLabel(product.id)} — ${product.price}',
+                  style: theme.textTheme.titleMedium,
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
+      ),
       TipJarUnavailable() => Text(t.support.productsUnavailable),
       TipJarPurchasing() => const Padding(
-          padding: EdgeInsets.all(24),
-          child: CircularProgressIndicator(),
-        ),
+        padding: EdgeInsets.all(24),
+        child: CircularProgressIndicator(),
+      ),
       TipJarPurchased() => Text(t.support.purchaseSuccess),
       TipJarFailed() => Text(t.support.purchaseFailed),
     };

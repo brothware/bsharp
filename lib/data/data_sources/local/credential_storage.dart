@@ -5,7 +5,7 @@ import 'package:bsharp/data/data_sources/local/key_value_store_native.dart'
 
 class CredentialStorage {
   CredentialStorage({KeyValueStore? store})
-      : _store = store ?? platform.createDefaultStore();
+    : _store = store ?? platform.createDefaultStore();
 
   final KeyValueStore _store;
 
@@ -32,8 +32,7 @@ class CredentialStorage {
     return value != null ? int.tryParse(value) : null;
   }
 
-  Future<String?> getMessagesToken() =>
-      _store.read(key: _messagesTokenKey);
+  Future<String?> getMessagesToken() => _store.read(key: _messagesTokenKey);
 
   Future<void> saveCredentials({
     required String school,
@@ -48,22 +47,17 @@ class CredentialStorage {
   }
 
   Future<void> saveSelectedStudentId(int studentId) =>
-      _store.write(
-        key: _selectedStudentIdKey,
-        value: studentId.toString(),
-      );
+      _store.write(key: _selectedStudentIdKey, value: studentId.toString());
 
   Future<void> saveMessagesToken(String token) =>
       _store.write(key: _messagesTokenKey, value: token);
 
-  Future<String?> getChildModePin() =>
-      _store.read(key: _childModePinKey);
+  Future<String?> getChildModePin() => _store.read(key: _childModePinKey);
 
   Future<void> saveChildModePin(String pin) =>
       _store.write(key: _childModePinKey, value: pin);
 
-  Future<void> clearChildModePin() =>
-      _store.delete(key: _childModePinKey);
+  Future<void> clearChildModePin() => _store.delete(key: _childModePinKey);
 
   Future<bool> isChildModeActive() async {
     final value = await _store.read(key: _childModeActiveKey);
@@ -73,8 +67,7 @@ class CredentialStorage {
   Future<void> saveChildModeActive({required bool active}) =>
       _store.write(key: _childModeActiveKey, value: active.toString());
 
-  Future<String?> getChildModeConfig() =>
-      _store.read(key: _childModeConfigKey);
+  Future<String?> getChildModeConfig() => _store.read(key: _childModeConfigKey);
 
   Future<void> saveChildModeConfig(String configJson) =>
       _store.write(key: _childModeConfigKey, value: configJson);
@@ -84,11 +77,10 @@ class CredentialStorage {
     return value != null ? (int.tryParse(value) ?? 0) : 0;
   }
 
-  Future<void> saveChildModeFailedAttempts(int attempts) =>
-      _store.write(
-        key: _childModeFailedAttemptsKey,
-        value: attempts.toString(),
-      );
+  Future<void> saveChildModeFailedAttempts(int attempts) => _store.write(
+    key: _childModeFailedAttemptsKey,
+    value: attempts.toString(),
+  );
 
   Future<DateTime?> getChildModeLockedUntil() async {
     final value = await _store.read(key: _childModeLockedUntilKey);
@@ -108,20 +100,18 @@ class CredentialStorage {
   }
 
   Future<void> clearChildModeState() => Future.wait([
-        _store.delete(key: _childModeActiveKey),
-        _store.delete(key: _childModeConfigKey),
-        _store.delete(key: _childModeFailedAttemptsKey),
-        _store.delete(key: _childModeLockedUntilKey),
-      ]);
+    _store.delete(key: _childModeActiveKey),
+    _store.delete(key: _childModeConfigKey),
+    _store.delete(key: _childModeFailedAttemptsKey),
+    _store.delete(key: _childModeLockedUntilKey),
+  ]);
 
-  Future<String?> getDeeplApiKey() =>
-      _store.read(key: _deeplApiKeyKey);
+  Future<String?> getDeeplApiKey() => _store.read(key: _deeplApiKeyKey);
 
   Future<void> saveDeeplApiKey(String key) =>
       _store.write(key: _deeplApiKeyKey, value: key);
 
-  Future<void> clearDeeplApiKey() =>
-      _store.delete(key: _deeplApiKeyKey);
+  Future<void> clearDeeplApiKey() => _store.delete(key: _deeplApiKeyKey);
 
   Future<bool> hasCredentials() async {
     final results = await Future.wait([

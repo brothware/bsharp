@@ -63,13 +63,13 @@ class ChildModeConfig {
   }
 
   Map<String, dynamic> toJson() => {
-        'gradesVisible': gradesVisible,
-        'scheduleVisible': scheduleVisible,
-        'attendanceVisible': attendanceVisible,
-        'messagesVisible': messagesVisible,
-        'settingsVisible': settingsVisible,
-        'notesVisible': notesVisible,
-      };
+    'gradesVisible': gradesVisible,
+    'scheduleVisible': scheduleVisible,
+    'attendanceVisible': attendanceVisible,
+    'messagesVisible': messagesVisible,
+    'settingsVisible': settingsVisible,
+    'notesVisible': notesVisible,
+  };
 }
 
 enum ChildModeFeature {
@@ -122,8 +122,7 @@ class ChildModeState {
   }
 }
 
-final childModeProvider =
-    NotifierProvider<ChildModeNotifier, ChildModeState>(
+final childModeProvider = NotifierProvider<ChildModeNotifier, ChildModeState>(
   ChildModeNotifier.new,
 );
 
@@ -197,10 +196,7 @@ class ChildModeNotifier extends Notifier<ChildModeState> {
     if (_storedPin == null) return false;
 
     if (pin == _storedPin) {
-      state = state.copyWith(
-        failedAttempts: 0,
-        clearLock: true,
-      );
+      state = state.copyWith(failedAttempts: 0, clearLock: true);
       _persistLockState();
       return true;
     }

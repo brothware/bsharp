@@ -89,10 +89,7 @@ class _BulletinDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              bulletin.title,
-              style: theme.textTheme.titleLarge,
-            ),
+            Text(bulletin.title, style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
             Row(
               children: [
@@ -124,10 +121,7 @@ class _BulletinDetailScreen extends StatelessWidget {
               ],
             ),
             const Divider(height: 24),
-            SelectableText(
-              bulletin.content,
-              style: theme.textTheme.bodyMedium,
-            ),
+            SelectableText(bulletin.content, style: theme.textTheme.bodyMedium),
           ],
         ),
       ),

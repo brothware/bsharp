@@ -20,10 +20,7 @@ class WearTestsTile extends ConsumerWidget {
       onTriggered: () => _openDetail(context),
       child: Column(
         children: [
-          WearTileHeader(
-            icon: Icons.quiz_outlined,
-            title: t.tests.title,
-          ),
+          WearTileHeader(icon: Icons.quiz_outlined, title: t.tests.title),
           if (upcoming.isEmpty)
             Expanded(
               child: Center(
@@ -50,18 +47,26 @@ class WearTestsTile extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.fromLTRB(8, 0, 8, wearListBottomInset(shape)),
+                padding: EdgeInsets.fromLTRB(
+                  8,
+                  0,
+                  8,
+                  wearListBottomInset(shape),
+                ),
                 itemCount: upcoming.take(3).length,
                 itemBuilder: (context, index) {
                   final test = upcoming[index];
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 3),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: theme.colorScheme.primaryContainer
-                          .withValues(alpha: 0.2),
+                      color: theme.colorScheme.primaryContainer.withValues(
+                        alpha: 0.2,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,9 +104,7 @@ class WearTestsTile extends ConsumerWidget {
 
   void _openDetail(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const WearTestsDetailScreen(),
-      ),
+      MaterialPageRoute<void>(builder: (_) => const WearTestsDetailScreen()),
     );
   }
 }

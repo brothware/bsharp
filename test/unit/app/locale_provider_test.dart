@@ -14,16 +14,15 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
       container = ProviderContainer(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-        ],
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
       );
     });
 
     test('defaults to system locale when no stored preference', () {
       final locale = container.read(localeProvider);
-      final supported =
-          LocaleNotifier.supportedLocales.map((l) => l.languageCode);
+      final supported = LocaleNotifier.supportedLocales.map(
+        (l) => l.languageCode,
+      );
       expect(supported, contains(locale.languageCode));
     });
 
@@ -66,9 +65,7 @@ void main() {
       SharedPreferences.setMockInitialValues({'locale': 'en'});
       final prefs = await SharedPreferences.getInstance();
       final c = ProviderContainer(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-        ],
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
       );
 
       final locale = c.read(localeProvider);

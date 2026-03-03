@@ -23,9 +23,7 @@ class PortalDataSource {
       final response = await _client.post<Map<String, dynamic>>(
         '/api.php',
         data: data,
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ),
+        options: Options(contentType: Headers.formUrlEncodedContentType),
       );
 
       if (response.data == null) {
@@ -49,14 +47,8 @@ class PortalDataSource {
     try {
       final response = await _client.post<Map<String, dynamic>>(
         '/api.php',
-        data: {
-          'school': school,
-          'token': token,
-          'data': data,
-        },
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ),
+        data: {'school': school, 'token': token, 'data': data},
+        options: Options(contentType: Headers.formUrlEncodedContentType),
       );
 
       if (response.data == null) {

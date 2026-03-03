@@ -21,10 +21,7 @@ class WearHomeworkTile extends ConsumerWidget {
       onTriggered: () => _openDetail(context),
       child: Column(
         children: [
-          WearTileHeader(
-            icon: Icons.assignment,
-            title: t.homework.title,
-          ),
+          WearTileHeader(icon: Icons.assignment, title: t.homework.title),
           if (homework.isEmpty)
             Expanded(
               child: Center(
@@ -51,15 +48,22 @@ class WearHomeworkTile extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.fromLTRB(8, 0, 8, wearListBottomInset(shape)),
+                padding: EdgeInsets.fromLTRB(
+                  8,
+                  0,
+                  8,
+                  wearListBottomInset(shape),
+                ),
                 itemCount: homework.take(3).length,
                 itemBuilder: (context, index) {
                   final hw = homework[index];
                   final sColor = subjectColor(hw.subjectName.hashCode);
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 3),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -99,9 +103,7 @@ class WearHomeworkTile extends ConsumerWidget {
 
   void _openDetail(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const WearHomeworkDetailScreen(),
-      ),
+      MaterialPageRoute<void>(builder: (_) => const WearHomeworkDetailScreen()),
     );
   }
 }

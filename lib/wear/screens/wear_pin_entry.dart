@@ -38,10 +38,7 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
                     color: theme.colorScheme.error,
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    t.childMode.locked,
-                    style: theme.textTheme.bodySmall,
-                  ),
+                  Text(t.childMode.locked, style: theme.textTheme.bodySmall),
                   const SizedBox(height: 4),
                   Text(
                     t.childMode.tryAgainLater,
@@ -124,12 +121,12 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
     });
 
     if (_pin.length == _pinLength) {
-      final success =
-          ref.read(childModeProvider.notifier).exitChildMode(_pin);
+      final success = ref.read(childModeProvider.notifier).exitChildMode(_pin);
       if (success) {
         Navigator.of(context).pop();
       } else {
-        final remaining = ChildModeNotifier.maxAttempts -
+        final remaining =
+            ChildModeNotifier.maxAttempts -
             ref.read(childModeProvider).failedAttempts;
         setState(() {
           _error = remaining > 0

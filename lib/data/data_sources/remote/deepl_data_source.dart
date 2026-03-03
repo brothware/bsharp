@@ -3,12 +3,12 @@ import 'package:bsharp/core/error/result.dart';
 
 class DeepLDataSource {
   DeepLDataSource({required String apiKey})
-      : _client = Dio(
-          BaseOptions(
-            baseUrl: 'https://api-free.deepl.com',
-            headers: {'Authorization': 'DeepL-Auth-Key $apiKey'},
-          ),
-        );
+    : _client = Dio(
+        BaseOptions(
+          baseUrl: 'https://api-free.deepl.com',
+          headers: {'Authorization': 'DeepL-Auth-Key $apiKey'},
+        ),
+      );
 
   final Dio _client;
 

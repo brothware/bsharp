@@ -5,7 +5,7 @@ KeyValueStore createDefaultStore() => SecureKeyValueStore();
 
 class SecureKeyValueStore implements KeyValueStore {
   SecureKeyValueStore([FlutterSecureStorage? storage])
-      : _storage = storage ?? const FlutterSecureStorage();
+    : _storage = storage ?? const FlutterSecureStorage();
 
   final FlutterSecureStorage _storage;
 

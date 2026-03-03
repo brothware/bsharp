@@ -33,14 +33,12 @@ void main() {
 
   group('Entity enums', () {
     test('SyncAction roundtrip', () {
-      for (final action
-          in ['I', 'U', 'D']) {
-        final parsed =
-            action == 'I'
-                ? 'insert'
-                : action == 'U'
-                    ? 'update'
-                    : 'delete';
+      for (final action in ['I', 'U', 'D']) {
+        final parsed = action == 'I'
+            ? 'insert'
+            : action == 'U'
+            ? 'update'
+            : 'delete';
         expect(parsed, isNotEmpty);
       }
     });

@@ -28,9 +28,7 @@ void main() {
               ),
             ],
           ),
-          homeworkFilterProvider.overrideWith(
-            (ref) => HomeworkFilter.upcoming,
-          ),
+          homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.upcoming),
         ],
       );
 
@@ -54,9 +52,7 @@ void main() {
               ),
             ],
           ),
-          homeworkFilterProvider.overrideWith(
-            (ref) => HomeworkFilter.past,
-          ),
+          homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.past),
         ],
       );
 
@@ -85,9 +81,7 @@ void main() {
               ),
             ],
           ),
-          homeworkFilterProvider.overrideWith(
-            (ref) => HomeworkFilter.all,
-          ),
+          homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.all),
         ],
       );
 
@@ -125,9 +119,7 @@ void main() {
               ),
             ],
           ),
-          homeworkFilterProvider.overrideWith(
-            (ref) => HomeworkFilter.all,
-          ),
+          homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.all),
         ],
       );
 

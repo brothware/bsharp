@@ -157,11 +157,9 @@ class WearChildModeScreen extends ConsumerWidget {
   }
 
   void _navigateToPinSetup(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<bool>(
-        builder: (_) => const WearPinSetupScreen(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<bool>(builder: (_) => const WearPinSetupScreen()));
   }
 
   void _showRemovePinDialog(BuildContext context, WidgetRef ref) {
@@ -200,9 +198,9 @@ class _WearSectionLabel extends StatelessWidget {
       child: Text(
         label,
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 10,
-            ),
+          color: Theme.of(context).colorScheme.primary,
+          fontSize: 10,
+        ),
       ),
     );
   }
@@ -277,10 +275,7 @@ class _WearFeatureToggle extends StatelessWidget {
           SizedBox(
             height: 24,
             child: FittedBox(
-              child: Switch(
-                value: value,
-                onChanged: onChanged,
-              ),
+              child: Switch(value: value, onChanged: onChanged),
             ),
           ),
         ],

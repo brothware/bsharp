@@ -100,9 +100,7 @@ class _ActiveLesson extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                isCurrent
-                    ? t.dashboard.currentLesson
-                    : t.dashboard.nextLesson,
+                isCurrent ? t.dashboard.currentLesson : t.dashboard.nextLesson,
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: cs.onPrimaryContainer.withValues(alpha: 0.7),
                 ),
@@ -171,9 +169,9 @@ class _MetadataRow extends StatelessWidget {
   }
 
   Widget _dot(Color color) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        child: Text('\u00b7', style: TextStyle(color: color)),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 5),
+    child: Text('\u00b7', style: TextStyle(color: color)),
+  );
 }
 
 class _InactiveLesson extends StatelessWidget {
@@ -196,9 +194,7 @@ class _InactiveLesson extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: Text(
-            allEnded
-                ? t.dashboard.allLessonsEnded
-                : t.dashboard.noLessonsToday,
+            allEnded ? t.dashboard.allLessonsEnded : t.dashboard.noLessonsToday,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: cs.onSurfaceVariant,
             ),

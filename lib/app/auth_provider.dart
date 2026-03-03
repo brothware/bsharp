@@ -15,8 +15,9 @@ final authServiceProvider = Provider<AuthService>(
   ),
 );
 
-final authStateProvider =
-    AsyncNotifierProvider<AuthNotifier, AuthState>(AuthNotifier.new);
+final authStateProvider = AsyncNotifierProvider<AuthNotifier, AuthState>(
+  AuthNotifier.new,
+);
 
 class AuthNotifier extends AsyncNotifier<AuthState> {
   @override

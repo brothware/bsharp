@@ -10,18 +10,13 @@ import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 
 class ComposeMessageView extends ConsumerStatefulWidget {
-  const ComposeMessageView({
-    super.key,
-    this.replyTo,
-    this.prefilledRecipient,
-  });
+  const ComposeMessageView({super.key, this.replyTo, this.prefilledRecipient});
 
   final PocztaMessage? replyTo;
   final PocztaReceiver? prefilledRecipient;
 
   @override
-  ConsumerState<ComposeMessageView> createState() =>
-      _ComposeMessageViewState();
+  ConsumerState<ComposeMessageView> createState() => _ComposeMessageViewState();
 }
 
 class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
@@ -39,13 +34,12 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     _titleController.addListener(_onFieldChanged);
     _contentController.addListener(_onFieldChanged);
     if (widget.replyTo != null) {
-      _titleController.text = t.messages.replyPrefix(title: widget.replyTo!.title);
+      _titleController.text = t.messages.replyPrefix(
+        title: widget.replyTo!.title,
+      );
       final sender = widget.replyTo!.senderName;
       if (sender.isNotEmpty) {
-        _selectedRecipients.add(PocztaReceiver(
-          id: 'user_reply',
-          name: sender,
-        ));
+        _selectedRecipients.add(PocztaReceiver(id: 'user_reply', name: sender));
       }
     }
     if (widget.prefilledRecipient != null) {
@@ -92,11 +86,13 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
         final receivers = <PocztaReceiver>[];
         for (final item in data) {
           if (item is! Map<String, dynamic>) continue;
-          receivers.add(PocztaReceiver(
-            id: (item['id'] ?? '').toString(),
-            name: (item['name'] ?? '') as String,
-            role: item['role'] as String?,
-          ));
+          receivers.add(
+            PocztaReceiver(
+              id: (item['id'] ?? '').toString(),
+              name: (item['name'] ?? '') as String,
+              role: item['role'] as String?,
+            ),
+          );
         }
         setState(() {
           _searchResults = receivers;
@@ -112,7 +108,9 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     final theme = Theme.of(context);
     final fieldBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.3)),
+      borderSide: BorderSide(
+        color: theme.colorScheme.outline.withValues(alpha: 0.3),
+      ),
     );
     final focusedBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
@@ -192,12 +190,12 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
                               : null,
                           onTap: () {
                             setState(() {
-                              final existingIndex =
-                                  _selectedRecipients.indexWhere(
-                                (r) =>
-                                    r.id == receiver.id ||
-                                    r.name == receiver.name,
-                              );
+                              final existingIndex = _selectedRecipients
+                                  .indexWhere(
+                                    (r) =>
+                                        r.id == receiver.id ||
+                                        r.name == receiver.name,
+                                  );
                               if (existingIndex >= 0) {
                                 _selectedRecipients[existingIndex] = receiver;
                               } else {
@@ -279,10 +277,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     final text = _contentController.text;
     if (text.isEmpty) return;
     final service = ref.read(translationServiceProvider);
-    final result = await service.translate(
-      text: text,
-      targetLang: 'pl',
-    );
+    final result = await service.translate(text: text, targetLang: 'pl');
     if (!mounted) return;
     result.when(
       success: (translated) => _contentController.text = translated,
@@ -308,10 +303,8 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     Navigator.of(context).pop({
       'title': _titleController.text,
       'content': htmlContent,
-      'recipientIds':
-          _selectedRecipients.map((r) => r.recipientId).toList(),
-      if (widget.replyTo != null)
-        'previousMessageId': widget.replyTo!.id,
+      'recipientIds': _selectedRecipients.map((r) => r.recipientId).toList(),
+      if (widget.replyTo != null) 'previousMessageId': widget.replyTo!.id,
     });
   }
 }
@@ -378,9 +371,7 @@ class _FormattingToolbar extends StatelessWidget {
           '${text.substring(0, offset)}$before$after${text.substring(offset)}';
       controller
         ..text = newText
-        ..selection = TextSelection.collapsed(
-          offset: offset + before.length,
-        );
+        ..selection = TextSelection.collapsed(offset: offset + before.length);
       return;
     }
 

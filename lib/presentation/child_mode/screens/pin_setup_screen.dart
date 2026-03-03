@@ -53,9 +53,9 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
     ref.read(childModeProvider.notifier).setupPin(pin).then((success) {
       if (success && mounted) {
         Navigator.of(context).pop(true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(t.childMode.pinSetSuccess)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(t.childMode.pinSetSuccess)));
       }
     });
   }

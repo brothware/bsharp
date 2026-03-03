@@ -85,7 +85,9 @@ class UpcomingHomeworkCard extends ConsumerWidget {
                           width: 3,
                           height: 24,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE91E63).withValues(alpha: 0.4),
+                            color: const Color(
+                              0xFFE91E63,
+                            ).withValues(alpha: 0.4),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),

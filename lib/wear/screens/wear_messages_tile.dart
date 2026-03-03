@@ -25,8 +25,10 @@ class WearMessagesTile extends ConsumerWidget {
           title: t.nav.messages,
           trailing: unread > 0
               ? Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 1,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.error,
                     borderRadius: BorderRadius.circular(8),
@@ -92,10 +94,7 @@ class WearMessagesTile extends ConsumerWidget {
 }
 
 class _WearMessageItem extends StatelessWidget {
-  const _WearMessageItem({
-    required this.message,
-    required this.onTap,
-  });
+  const _WearMessageItem({required this.message, required this.onTap});
 
   final PocztaMessage message;
   final VoidCallback onTap;

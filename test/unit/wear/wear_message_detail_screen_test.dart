@@ -35,14 +35,11 @@ Widget _buildScreen({required PocztaMessage message}) {
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       pocztaDataSourceProvider.overrideWith((ref) => null),
       isTranslationAvailableProvider.overrideWithValue(false),
     ],
-    child: MaterialApp(
-      home: WearMessageDetailScreen(message: message),
-    ),
+    child: MaterialApp(home: WearMessageDetailScreen(message: message)),
   );
 }
 
@@ -69,9 +66,7 @@ void main() {
 
     testWidgets('shows content when available', (tester) async {
       await tester.pumpWidget(
-        _buildScreen(
-          message: _msg(content: '<p>Hello world</p>'),
-        ),
+        _buildScreen(message: _msg(content: '<p>Hello world</p>')),
       );
       await tester.pump();
       await tester.pump();

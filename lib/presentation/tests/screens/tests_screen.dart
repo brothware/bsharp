@@ -25,8 +25,8 @@ class TestsScreen extends ConsumerWidget {
                   Text(
                     t.tests.upcoming,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   for (final test in upcoming)
@@ -37,9 +37,8 @@ class TestsScreen extends ConsumerWidget {
                   Text(
                     t.tests.all,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   for (final test in tests)

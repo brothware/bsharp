@@ -111,8 +111,7 @@ sealed class AuthFailure extends AppFailure {
 
   const factory AuthFailure.missingCredentials({String? message}) =
       MissingCredentials;
-  const factory AuthFailure.expiredSession({String? message}) =
-      ExpiredSession;
+  const factory AuthFailure.expiredSession({String? message}) = ExpiredSession;
   const factory AuthFailure.invalidCredentials({String? message}) =
       InvalidCredentials;
 }

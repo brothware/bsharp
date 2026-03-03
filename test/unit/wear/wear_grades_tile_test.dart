@@ -37,14 +37,21 @@ ResolvedMark _resolved({
   String? comments,
   DateTime? date,
 }) {
-  final mark = _mark(id: id, markValue: markValue, comments: comments, date: date);
+  final mark = _mark(
+    id: id,
+    markValue: markValue,
+    comments: comments,
+    date: date,
+  );
   return ResolvedMark(
     mark: mark,
-    displayValue: displayValue ?? (markValue != null
-        ? (markValue == markValue.roundToDouble()
-            ? markValue.toInt().toString()
-            : markValue.toStringAsFixed(1))
-        : '?'),
+    displayValue:
+        displayValue ??
+        (markValue != null
+            ? (markValue == markValue.roundToDouble()
+                  ? markValue.toInt().toString()
+                  : markValue.toStringAsFixed(1))
+            : '?'),
     effectiveValue: markValue,
     countsToAverage: markValue != null,
   );
@@ -58,14 +65,11 @@ Widget _buildTile({
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider
-          .overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       subjectGradesProvider.overrideWith((ref) => subjectGrades),
       newGradeIdsProvider.overrideWith((ref) => newIds),
     ],
-    child: const MaterialApp(
-      home: Scaffold(body: WearGradesTile()),
-    ),
+    child: const MaterialApp(home: Scaffold(body: WearGradesTile())),
   );
 }
 
@@ -88,12 +92,16 @@ void main() {
     });
 
     testWidgets('shows recent grades with values', (tester) async {
-      await tester.pumpWidget(_buildTile(subjectGrades: [
-        _sg([
-          _resolved(id: 1, markValue: 5.0),
-          _resolved(id: 2, markValue: 3.0),
-        ]),
-      ]));
+      await tester.pumpWidget(
+        _buildTile(
+          subjectGrades: [
+            _sg([
+              _resolved(id: 1, markValue: 5.0),
+              _resolved(id: 2, markValue: 3.0),
+            ]),
+          ],
+        ),
+      );
       await tester.pump();
 
       expect(find.text('5'), findsOneWidget);
@@ -118,32 +126,40 @@ void main() {
     });
 
     testWidgets('shows NEW badge for new grades', (tester) async {
-      await tester.pumpWidget(_buildTile(
-        subjectGrades: [_sg([_resolved(id: 1, markValue: 5.0)])],
-        newIds: {1},
-      ));
+      await tester.pumpWidget(
+        _buildTile(
+          subjectGrades: [
+            _sg([_resolved(id: 1, markValue: 5.0)]),
+          ],
+          newIds: {1},
+        ),
+      );
       await tester.pump();
 
       expect(find.text('NEW'), findsOneWidget);
     });
 
     testWidgets('shows total count in header', (tester) async {
-      await tester.pumpWidget(_buildTile(subjectGrades: [
-        _sg([
-          _resolved(id: 1),
-          _resolved(id: 2),
-          _resolved(id: 3),
-        ]),
-      ]));
+      await tester.pumpWidget(
+        _buildTile(
+          subjectGrades: [
+            _sg([_resolved(id: 1), _resolved(id: 2), _resolved(id: 3)]),
+          ],
+        ),
+      );
       await tester.pump();
 
       expect(find.text('3'), findsOneWidget);
     });
 
     testWidgets('shows ? for null markValue', (tester) async {
-      await tester.pumpWidget(_buildTile(subjectGrades: [
-        _sg([_resolved(id: 1, markValue: null)]),
-      ]));
+      await tester.pumpWidget(
+        _buildTile(
+          subjectGrades: [
+            _sg([_resolved(id: 1, markValue: null)]),
+          ],
+        ),
+      );
       await tester.pump();
 
       expect(find.text('?'), findsOneWidget);

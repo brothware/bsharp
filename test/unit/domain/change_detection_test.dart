@@ -11,20 +11,27 @@ void main() {
     });
 
     test('totalCount returns correct count', () {
-      final cs = ChangeSet(changes: [
-        const ChangeItem(category: ChangeCategory.grades, title: 'New grade'),
-        const ChangeItem(category: ChangeCategory.messages, title: 'New message'),
-      ]);
+      final cs = ChangeSet(
+        changes: [
+          const ChangeItem(category: ChangeCategory.grades, title: 'New grade'),
+          const ChangeItem(
+            category: ChangeCategory.messages,
+            title: 'New message',
+          ),
+        ],
+      );
       expect(cs.totalCount, 2);
       expect(cs.isNotEmpty, isTrue);
     });
 
     test('byCategory filters correctly', () {
-      final cs = ChangeSet(changes: [
-        const ChangeItem(category: ChangeCategory.grades, title: 'Grade 1'),
-        const ChangeItem(category: ChangeCategory.grades, title: 'Grade 2'),
-        const ChangeItem(category: ChangeCategory.messages, title: 'Message'),
-      ]);
+      final cs = ChangeSet(
+        changes: [
+          const ChangeItem(category: ChangeCategory.grades, title: 'Grade 1'),
+          const ChangeItem(category: ChangeCategory.grades, title: 'Grade 2'),
+          const ChangeItem(category: ChangeCategory.messages, title: 'Message'),
+        ],
+      );
 
       expect(cs.byCategory(ChangeCategory.grades).length, 2);
       expect(cs.byCategory(ChangeCategory.messages).length, 1);
@@ -32,11 +39,13 @@ void main() {
     });
 
     test('countByCategory returns correct count', () {
-      final cs = ChangeSet(changes: [
-        const ChangeItem(category: ChangeCategory.grades, title: 'A'),
-        const ChangeItem(category: ChangeCategory.grades, title: 'B'),
-        const ChangeItem(category: ChangeCategory.homework, title: 'C'),
-      ]);
+      final cs = ChangeSet(
+        changes: [
+          const ChangeItem(category: ChangeCategory.grades, title: 'A'),
+          const ChangeItem(category: ChangeCategory.grades, title: 'B'),
+          const ChangeItem(category: ChangeCategory.homework, title: 'C'),
+        ],
+      );
 
       expect(cs.countByCategory(ChangeCategory.grades), 2);
       expect(cs.countByCategory(ChangeCategory.homework), 1);
@@ -44,23 +53,29 @@ void main() {
     });
 
     test('merge combines two change sets', () {
-      final cs1 = ChangeSet(changes: [
-        const ChangeItem(category: ChangeCategory.grades, title: 'A'),
-      ]);
-      final cs2 = ChangeSet(changes: [
-        const ChangeItem(category: ChangeCategory.messages, title: 'B'),
-      ]);
+      final cs1 = ChangeSet(
+        changes: [
+          const ChangeItem(category: ChangeCategory.grades, title: 'A'),
+        ],
+      );
+      final cs2 = ChangeSet(
+        changes: [
+          const ChangeItem(category: ChangeCategory.messages, title: 'B'),
+        ],
+      );
 
       final merged = cs1.merge(cs2);
       expect(merged.totalCount, 2);
     });
 
     test('grouped returns map of changes by category', () {
-      final cs = ChangeSet(changes: [
-        const ChangeItem(category: ChangeCategory.grades, title: 'A'),
-        const ChangeItem(category: ChangeCategory.grades, title: 'B'),
-        const ChangeItem(category: ChangeCategory.messages, title: 'C'),
-      ]);
+      final cs = ChangeSet(
+        changes: [
+          const ChangeItem(category: ChangeCategory.grades, title: 'A'),
+          const ChangeItem(category: ChangeCategory.grades, title: 'B'),
+          const ChangeItem(category: ChangeCategory.messages, title: 'C'),
+        ],
+      );
 
       final grouped = cs.grouped;
       expect(grouped.length, 2);
@@ -69,10 +84,12 @@ void main() {
     });
 
     test('summary produces English text', () {
-      final cs = ChangeSet(changes: [
-        const ChangeItem(category: ChangeCategory.grades, title: 'A'),
-        const ChangeItem(category: ChangeCategory.messages, title: 'B'),
-      ]);
+      final cs = ChangeSet(
+        changes: [
+          const ChangeItem(category: ChangeCategory.grades, title: 'A'),
+          const ChangeItem(category: ChangeCategory.messages, title: 'B'),
+        ],
+      );
 
       final summary = cs.summary(
         gradesLabel: (n) => '$n grades',
@@ -106,9 +123,7 @@ void main() {
 
   group('BackoffStrategy', () {
     test('returns base interval for zero failures', () {
-      const backoff = BackoffStrategy(
-        baseInterval: Duration(minutes: 30),
-      );
+      const backoff = BackoffStrategy(baseInterval: Duration(minutes: 30));
       expect(backoff.intervalAfterFailures(0), const Duration(minutes: 30));
     });
 
@@ -145,9 +160,7 @@ void main() {
     });
 
     test('negative failures return base interval', () {
-      const backoff = BackoffStrategy(
-        baseInterval: Duration(minutes: 30),
-      );
+      const backoff = BackoffStrategy(baseInterval: Duration(minutes: 30));
       expect(backoff.intervalAfterFailures(-1), const Duration(minutes: 30));
     });
   });

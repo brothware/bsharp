@@ -32,8 +32,9 @@ class MainShell extends ConsumerWidget {
     }
 
     final currentBranch = navigationShell.currentIndex;
-    final visibleIndex =
-        visible.indexWhere((e) => e.branchIndex == currentBranch);
+    final visibleIndex = visible.indexWhere(
+      (e) => e.branchIndex == currentBranch,
+    );
     if (visibleIndex == -1 && visible.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         navigationShell.goBranch(visible.first.branchIndex);
@@ -43,10 +44,12 @@ class MainShell extends ConsumerWidget {
 
     final syncStatus = ref.watch(syncStatusProvider);
     final unreadCount = ref.watch(unreadCountProvider);
-    final messagesVisible =
-        notifier.isFeatureVisible(ChildModeFeature.messages);
-    final settingsVisible =
-        notifier.isFeatureVisible(ChildModeFeature.settings);
+    final messagesVisible = notifier.isFeatureVisible(
+      ChildModeFeature.messages,
+    );
+    final settingsVisible = notifier.isFeatureVisible(
+      ChildModeFeature.settings,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -66,8 +69,7 @@ class MainShell extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.sync),
               tooltip: t.settings.sync,
-              onPressed: () =>
-                  ref.read(syncStatusProvider.notifier).sync(),
+              onPressed: () => ref.read(syncStatusProvider.notifier).sync(),
             ),
           if (messagesVisible)
             IconButton(
@@ -92,7 +94,8 @@ class MainShell extends ConsumerWidget {
                 SingleChildScrollView(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height -
+                      minHeight:
+                          MediaQuery.of(context).size.height -
                           MediaQuery.of(context).padding.top -
                           kToolbarHeight,
                     ),

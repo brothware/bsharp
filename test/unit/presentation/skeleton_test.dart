@@ -6,9 +6,7 @@ void main() {
   group('ShimmerBox', () {
     testWidgets('renders with default size', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: ShimmerBox(width: 100)),
-        ),
+        const MaterialApp(home: Scaffold(body: ShimmerBox(width: 100))),
       );
 
       expect(find.byType(ShimmerBox), findsOneWidget);
@@ -16,9 +14,7 @@ void main() {
 
     testWidgets('animates over time', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: ShimmerBox(width: 100)),
-        ),
+        const MaterialApp(home: Scaffold(body: ShimmerBox(width: 100))),
       );
 
       await tester.pump(const Duration(milliseconds: 750));
@@ -41,9 +37,7 @@ void main() {
   group('SkeletonListTile', () {
     testWidgets('renders with leading indicator', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: SkeletonListTile()),
-        ),
+        const MaterialApp(home: Scaffold(body: SkeletonListTile())),
       );
 
       expect(find.byType(SkeletonListTile), findsOneWidget);
@@ -64,9 +58,7 @@ void main() {
   group('SkeletonCard', () {
     testWidgets('renders with default height', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: SkeletonCard()),
-        ),
+        const MaterialApp(home: Scaffold(body: SkeletonCard())),
       );
 
       expect(find.byType(SkeletonCard), findsOneWidget);
@@ -75,9 +67,7 @@ void main() {
 
     testWidgets('renders with custom height', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: SkeletonCard(height: 120)),
-        ),
+        const MaterialApp(home: Scaffold(body: SkeletonCard(height: 120))),
       );
 
       expect(find.byType(SkeletonCard), findsOneWidget);
@@ -87,9 +77,7 @@ void main() {
   group('SkeletonList', () {
     testWidgets('renders default number of items', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: SkeletonList()),
-        ),
+        const MaterialApp(home: Scaffold(body: SkeletonList())),
       );
 
       expect(find.byType(SkeletonListTile), findsNWidgets(6));
@@ -97,9 +85,7 @@ void main() {
 
     testWidgets('renders custom number of items', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: SkeletonList(itemCount: 3)),
-        ),
+        const MaterialApp(home: Scaffold(body: SkeletonList(itemCount: 3))),
       );
 
       expect(find.byType(SkeletonListTile), findsNWidgets(3));

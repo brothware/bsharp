@@ -5,8 +5,7 @@ import 'package:bsharp/domain/entities/sync_action.dart';
 
 final studentsProvider = StateProvider<List<Student>>((ref) => []);
 
-final activeStudentProvider =
-    NotifierProvider<ActiveStudentNotifier, Student?>(
+final activeStudentProvider = NotifierProvider<ActiveStudentNotifier, Student?>(
   ActiveStudentNotifier.new,
 );
 
@@ -32,10 +31,5 @@ class ActiveStudentNotifier extends Notifier<Student?> {
   }
 }
 
-Student placeholderStudent() => const Student(
-      id: 0,
-      usersEduId: 0,
-      name: '',
-      surname: '',
-      sex: Sex.male,
-    );
+Student placeholderStudent() =>
+    const Student(id: 0, usersEduId: 0, name: '', surname: '', sex: Sex.male);

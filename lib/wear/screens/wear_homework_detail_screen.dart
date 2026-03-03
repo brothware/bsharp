@@ -61,7 +61,12 @@ class _WearHomeworkDetailScreenState
                           controller: _scrollController,
                           child: ListView.builder(
                             controller: _scrollController,
-                            padding: EdgeInsets.fromLTRB(4, 0, 4, wearListBottomInset(shape)),
+                            padding: EdgeInsets.fromLTRB(
+                              4,
+                              0,
+                              4,
+                              wearListBottomInset(shape),
+                            ),
                             itemCount: homework.length,
                             itemBuilder: (context, index) {
                               final hw = homework[index];
@@ -79,22 +84,29 @@ class _WearHomeworkDetailScreenState
                                   children: [
                                     Text(
                                       hw.subjectName,
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
                                       t.homework.dueDate(date: hw.dueDate),
-                                      style: theme.textTheme.labelSmall?.copyWith(
-                                        color: theme.colorScheme.onSurfaceVariant,
-                                      ),
+                                      style: theme.textTheme.labelSmall
+                                          ?.copyWith(
+                                            color: theme
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                     ),
                                     Text(
                                       t.homework.assignedDate(date: hw.date),
-                                      style: theme.textTheme.labelSmall?.copyWith(
-                                        color: theme.colorScheme.onSurfaceVariant,
-                                      ),
+                                      style: theme.textTheme.labelSmall
+                                          ?.copyWith(
+                                            color: theme
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
@@ -118,10 +130,7 @@ class _WearHomeworkDetailScreenState
 }
 
 class _WearHomeworkFilter extends StatelessWidget {
-  const _WearHomeworkFilter({
-    required this.filter,
-    required this.onChanged,
-  });
+  const _WearHomeworkFilter({required this.filter, required this.onChanged});
 
   final HomeworkFilter filter;
   final ValueChanged<HomeworkFilter> onChanged;
@@ -140,7 +149,11 @@ class _WearHomeworkFilter extends StatelessWidget {
             final prev = (current - 1) % filters.length;
             onChanged(filters[prev]);
           },
-          child: Icon(Icons.chevron_left, size: 18, color: theme.colorScheme.primary),
+          child: Icon(
+            Icons.chevron_left,
+            size: 18,
+            color: theme.colorScheme.primary,
+          ),
         ),
         const SizedBox(width: 4),
         Text(
@@ -156,7 +169,11 @@ class _WearHomeworkFilter extends StatelessWidget {
             final next = (current + 1) % filters.length;
             onChanged(filters[next]);
           },
-          child: Icon(Icons.chevron_right, size: 18, color: theme.colorScheme.primary),
+          child: Icon(
+            Icons.chevron_right,
+            size: 18,
+            color: theme.colorScheme.primary,
+          ),
         ),
       ],
     );

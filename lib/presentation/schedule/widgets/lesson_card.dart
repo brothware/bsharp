@@ -3,11 +3,7 @@ import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 
 class LessonCard extends StatelessWidget {
-  const LessonCard({
-    super.key,
-    required this.entry,
-    this.onTap,
-  });
+  const LessonCard({super.key, required this.entry, this.onTap});
 
   final ScheduleEntry entry;
   final VoidCallback? onTap;
@@ -29,9 +25,7 @@ class LessonCard extends StatelessWidget {
             children: [
               Container(
                 width: 4,
-                color: isCancelled
-                    ? theme.colorScheme.error
-                    : color,
+                color: isCancelled ? theme.colorScheme.error : color,
               ),
               Expanded(
                 child: Padding(
@@ -72,9 +66,9 @@ class LessonCard extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    entry.subjectName ?? t.schedule.lessonFallback,
-                                    style:
-                                        theme.textTheme.titleSmall?.copyWith(
+                                    entry.subjectName ??
+                                        t.schedule.lessonFallback,
+                                    style: theme.textTheme.titleSmall?.copyWith(
                                       decoration: isCancelled
                                           ? TextDecoration.lineThrough
                                           : null,
@@ -96,11 +90,12 @@ class LessonCard extends StatelessWidget {
                                     if (entry.teacherName != null)
                                       entry.teacherName!,
                                     if (entry.roomName != null)
-                                      t.schedule.roomPrefix(name: entry.roomName!),
+                                      t.schedule.roomPrefix(
+                                        name: entry.roomName!,
+                                      ),
                                   ].join(' • '),
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color:
-                                        theme.colorScheme.onSurfaceVariant,
+                                    color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ),
@@ -113,8 +108,7 @@ class LessonCard extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     fontStyle: FontStyle.italic,
-                                    color:
-                                        theme.colorScheme.onSurfaceVariant,
+                                    color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ),
@@ -155,25 +149,25 @@ class _ChangeIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final (icon, color, label) = switch (changeType) {
       ScheduleChangeType.cancelled => (
-          Icons.cancel_outlined,
-          Theme.of(context).colorScheme.error,
-          t.schedule.cancelled,
-        ),
+        Icons.cancel_outlined,
+        Theme.of(context).colorScheme.error,
+        t.schedule.cancelled,
+      ),
       ScheduleChangeType.substitution => (
-          Icons.swap_horiz,
-          Colors.orange,
-          t.schedule.substitution,
-        ),
+        Icons.swap_horiz,
+        Colors.orange,
+        t.schedule.substitution,
+      ),
       ScheduleChangeType.roomChanged => (
-          Icons.room_outlined,
-          Colors.blue,
-          t.schedule.roomChanged,
-        ),
+        Icons.room_outlined,
+        Colors.blue,
+        t.schedule.roomChanged,
+      ),
       ScheduleChangeType.added => (
-          Icons.add_circle_outline,
-          Colors.green,
-          t.schedule.added,
-        ),
+        Icons.add_circle_outline,
+        Colors.green,
+        t.schedule.added,
+      ),
     };
 
     return Tooltip(

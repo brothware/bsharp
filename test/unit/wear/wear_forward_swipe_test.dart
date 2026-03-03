@@ -4,8 +4,9 @@ import 'package:bsharp/wear/widgets/wear_forward_swipe.dart';
 
 void main() {
   group('WearForwardSwipe', () {
-    testWidgets('fires onTriggered when leftward drag exceeds threshold',
-        (tester) async {
+    testWidgets('fires onTriggered when leftward drag exceeds threshold', (
+      tester,
+    ) async {
       var triggered = false;
 
       await tester.pumpWidget(

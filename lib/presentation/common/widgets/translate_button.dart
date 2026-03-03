@@ -31,38 +31,38 @@ class _TranslateButtonState extends ConsumerState<TranslateButton> {
 
     return switch (_state) {
       _TranslationState.idle => TextButton.icon(
-          onPressed: _translate,
-          icon: const Icon(Icons.translate, size: 18),
-          label: Text(t.translation.translate),
-        ),
+        onPressed: _translate,
+        icon: const Icon(Icons.translate, size: 18),
+        label: Text(t.translation.translate),
+      ),
       _TranslationState.loading => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                t.translation.translating,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              t.translation.translating,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ),
+      ),
       _TranslationState.translated => TextButton.icon(
-          onPressed: _showOriginal,
-          icon: const Icon(Icons.translate, size: 18),
-          label: Text(t.translation.showOriginal),
-        ),
+        onPressed: _showOriginal,
+        icon: const Icon(Icons.translate, size: 18),
+        label: Text(t.translation.showOriginal),
+      ),
       _TranslationState.error => TextButton.icon(
-          onPressed: _translate,
-          icon: const Icon(Icons.error_outline, size: 18),
-          label: Text(t.translation.translationFailed),
-        ),
+        onPressed: _translate,
+        icon: const Icon(Icons.error_outline, size: 18),
+        label: Text(t.translation.translationFailed),
+      ),
     };
   }
 

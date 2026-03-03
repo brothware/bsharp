@@ -19,8 +19,7 @@ class WearNotesDetailScreen extends ConsumerStatefulWidget {
 
 enum _NotesTab { remarks, praises, info }
 
-class _WearNotesDetailScreenState
-    extends ConsumerState<WearNotesDetailScreen> {
+class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
   var _activeTab = _NotesTab.remarks;
   final _translations = <int, String>{};
   final _scrollController = ScrollController();
@@ -74,7 +73,12 @@ class _WearNotesDetailScreenState
                           controller: _scrollController,
                           child: ListView.builder(
                             controller: _scrollController,
-                            padding: EdgeInsets.fromLTRB(4, 0, 4, wearListBottomInset(shape)),
+                            padding: EdgeInsets.fromLTRB(
+                              4,
+                              0,
+                              4,
+                              wearListBottomInset(shape),
+                            ),
                             itemCount: items.length,
                             itemBuilder: (context, index) {
                               final item = items[index];
@@ -196,10 +200,10 @@ class _WearNoteDetailItem extends StatelessWidget {
   final ValueChanged<String?> onTranslated;
 
   static (IconData, Color) _iconForType(int type) => switch (type) {
-        1 => (Icons.emoji_events, Colors.green),
-        2 => (Icons.warning_amber, Colors.orange),
-        _ => (Icons.info_outline, Colors.blue),
-      };
+    1 => (Icons.emoji_events, Colors.green),
+    2 => (Icons.warning_amber, Colors.orange),
+    _ => (Icons.info_outline, Colors.blue),
+  };
 
   @override
   Widget build(BuildContext context) {

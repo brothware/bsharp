@@ -12,14 +12,14 @@ import '../data/credential_storage_test.dart';
 void main() {
   group('WearPinEntry', () {
     testWidgets('renders title and keypad', (tester) async {
-      final storage =
-          CredentialStorage(store: FakeKeyValueStore());
+      final storage = CredentialStorage(store: FakeKeyValueStore());
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
           ],
           child: const MaterialApp(home: WearPinEntry()),
         ),
@@ -27,22 +27,20 @@ void main() {
       await tester.pump();
 
       expect(find.text('Enter parent PIN'), findsOneWidget);
-      for (final digit in [
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-      ]) {
+      for (final digit in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) {
         expect(find.text(digit), findsOneWidget);
       }
     });
 
     testWidgets('shows pin dots', (tester) async {
-      final storage =
-          CredentialStorage(store: FakeKeyValueStore());
+      final storage = CredentialStorage(store: FakeKeyValueStore());
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
           ],
           child: const MaterialApp(home: WearPinEntry()),
         ),
@@ -50,14 +48,10 @@ void main() {
       await tester.pump();
 
       final containers = tester.widgetList<Container>(
-        find.descendant(
-          of: find.byType(Row),
-          matching: find.byType(Container),
-        ),
+        find.descendant(of: find.byType(Row), matching: find.byType(Container)),
       );
       final dots = containers.where(
-        (c) =>
-            c.constraints?.maxWidth == 12 && c.constraints?.maxHeight == 12,
+        (c) => c.constraints?.maxWidth == 12 && c.constraints?.maxHeight == 12,
       );
       expect(dots.length, 4);
     });
@@ -72,8 +66,9 @@ void main() {
         ProviderScope(
           overrides: [
             credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
           ],
           child: const MaterialApp(home: WearPinEntry()),
         ),
@@ -90,8 +85,9 @@ void main() {
       expect(find.text('Attempts remaining: 4'), findsOneWidget);
     });
 
-    testWidgets('shows decreasing attempts on repeated wrong PINs',
-        (tester) async {
+    testWidgets('shows decreasing attempts on repeated wrong PINs', (
+      tester,
+    ) async {
       final fakeSecure = FakeKeyValueStore();
       await fakeSecure.write(key: 'child_mode_pin', value: '1234');
       await fakeSecure.write(key: 'child_mode_active', value: 'true');
@@ -101,8 +97,9 @@ void main() {
         ProviderScope(
           overrides: [
             credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
           ],
           child: const MaterialApp(home: WearPinEntry()),
         ),
@@ -142,8 +139,9 @@ void main() {
         ProviderScope(
           overrides: [
             credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
           ],
           child: const MaterialApp(home: WearPinEntry()),
         ),
@@ -157,14 +155,14 @@ void main() {
     });
 
     testWidgets('delete button removes last entered digit', (tester) async {
-      final storage =
-          CredentialStorage(store: FakeKeyValueStore());
+      final storage = CredentialStorage(store: FakeKeyValueStore());
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider
-                .overrideWith((_) => WearScreenShape.rectangular),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
           ],
           child: const MaterialApp(home: WearPinEntry()),
         ),

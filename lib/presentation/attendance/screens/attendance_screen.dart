@@ -25,16 +25,14 @@ class AttendanceScreen extends ConsumerWidget {
                 Tab(text: t.attendance.statistics),
               ],
               labelColor: Theme.of(context).colorScheme.primary,
-              unselectedLabelColor:
-                  Theme.of(context).colorScheme.onSurfaceVariant,
+              unselectedLabelColor: Theme.of(
+                context,
+              ).colorScheme.onSurfaceVariant,
               indicatorSize: TabBarIndicatorSize.label,
             ),
             Expanded(
               child: TabBarView(
-                children: [
-                  _CalendarTab(),
-                  const AttendanceStatsView(),
-                ],
+                children: [_CalendarTab(), const AttendanceStatsView()],
               ),
             ),
           ],
@@ -67,11 +65,7 @@ class _CalendarTab extends ConsumerWidget {
     );
   }
 
-  void _showDayDetail(
-    BuildContext context,
-    DateTime date,
-    AttendanceDay day,
-  ) {
+  void _showDayDetail(BuildContext context, DateTime date, AttendanceDay day) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,

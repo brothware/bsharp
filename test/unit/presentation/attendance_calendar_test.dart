@@ -30,9 +30,7 @@ void main() {
         eventsProvider.overrideWith((ref) => events),
         selectedMonthProvider.overrideWith((ref) => DateTime(2026, 2)),
       ],
-      child: const MaterialApp(
-        home: Scaffold(body: AttendanceScreen()),
-      ),
+      child: const MaterialApp(home: Scaffold(body: AttendanceScreen())),
     );
   }
 
@@ -50,27 +48,29 @@ void main() {
   });
 
   testWidgets('shows calendar when attendances present', (tester) async {
-    await tester.pumpWidget(wrap(
-      attendances: [
-        const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
-      ],
-      types: [presentType],
-      events: [
-        Event(
-          id: 1,
-          date: DateTime(2026, 2, 27),
-          number: 1,
-          startTime: '08:00:00',
-          endTime: '08:45:00',
-          eventTypesId: 1,
-          status: 1,
-          substitution: 0,
-          type: 0,
-          attr: 0,
-          locked: 0,
-        ),
-      ],
-    ));
+    await tester.pumpWidget(
+      wrap(
+        attendances: [
+          const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+        ],
+        types: [presentType],
+        events: [
+          Event(
+            id: 1,
+            date: DateTime(2026, 2, 27),
+            number: 1,
+            startTime: '08:00:00',
+            endTime: '08:45:00',
+            eventTypesId: 1,
+            status: 1,
+            substitution: 0,
+            type: 0,
+            attr: 0,
+            locked: 0,
+          ),
+        ],
+      ),
+    );
 
     expect(find.text('Present'), findsOneWidget);
     expect(find.text('Excused'), findsOneWidget);
@@ -87,53 +87,57 @@ void main() {
   });
 
   testWidgets('shows month name in calendar', (tester) async {
-    await tester.pumpWidget(wrap(
-      attendances: [
-        const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
-      ],
-      types: [presentType],
-      events: [
-        Event(
-          id: 1,
-          date: DateTime(2026, 2, 15),
-          number: 1,
-          startTime: '08:00:00',
-          endTime: '08:45:00',
-          eventTypesId: 1,
-          status: 1,
-          substitution: 0,
-          type: 0,
-          attr: 0,
-          locked: 0,
-        ),
-      ],
-    ));
+    await tester.pumpWidget(
+      wrap(
+        attendances: [
+          const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+        ],
+        types: [presentType],
+        events: [
+          Event(
+            id: 1,
+            date: DateTime(2026, 2, 15),
+            number: 1,
+            startTime: '08:00:00',
+            endTime: '08:45:00',
+            eventTypesId: 1,
+            status: 1,
+            substitution: 0,
+            type: 0,
+            attr: 0,
+            locked: 0,
+          ),
+        ],
+      ),
+    );
 
     expect(find.text('February 2026'), findsOneWidget);
   });
 
   testWidgets('shows weekday headers', (tester) async {
-    await tester.pumpWidget(wrap(
-      attendances: [
-        const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
-      ],
-      types: [presentType],
-      events: [
-        Event(
-          id: 1,
-          date: DateTime(2026, 2, 15),
-          number: 1,
-          startTime: '08:00:00',
-          endTime: '08:45:00',
-          eventTypesId: 1,
-          status: 1,
-          substitution: 0,
-          type: 0,
-          attr: 0,
-          locked: 0,
-        ),
-      ],
-    ));
+    await tester.pumpWidget(
+      wrap(
+        attendances: [
+          const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+        ],
+        types: [presentType],
+        events: [
+          Event(
+            id: 1,
+            date: DateTime(2026, 2, 15),
+            number: 1,
+            startTime: '08:00:00',
+            endTime: '08:45:00',
+            eventTypesId: 1,
+            status: 1,
+            substitution: 0,
+            type: 0,
+            attr: 0,
+            locked: 0,
+          ),
+        ],
+      ),
+    );
 
     expect(find.text('Mon'), findsOneWidget);
     expect(find.text('Fri'), findsOneWidget);
@@ -145,27 +149,13 @@ void main() {
         overrides: [
           attendancesProvider.overrideWith(
             (ref) => [
-              const Attendance(
-                id: 1,
-                eventsId: 1,
-                studentsId: 1,
-                typesId: 1,
-              ),
-              const Attendance(
-                id: 2,
-                eventsId: 2,
-                studentsId: 1,
-                typesId: 1,
-              ),
+              const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+              const Attendance(id: 2, eventsId: 2, studentsId: 1, typesId: 1),
             ],
           ),
-          attendanceTypesProvider.overrideWith(
-            (ref) => [presentType],
-          ),
+          attendanceTypesProvider.overrideWith((ref) => [presentType]),
         ],
-        child: const MaterialApp(
-          home: Scaffold(body: AttendanceStatsView()),
-        ),
+        child: const MaterialApp(home: Scaffold(body: AttendanceStatsView())),
       ),
     );
 

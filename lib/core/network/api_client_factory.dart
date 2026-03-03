@@ -12,16 +12,18 @@ class ApiClientFactory {
     required String school,
     required String parentLogin,
     required String parentPassHash,
-  })  : _school = school,
-        _parentLogin = parentLogin,
-        _parentPassHash = parentPassHash;
+  }) : _school = school,
+       _parentLogin = parentLogin,
+       _parentPassHash = parentPassHash;
 
   final String _school;
   final String _parentLogin;
   final String _parentPassHash;
 
   static const _proxy = AppConstants.proxyBaseUrl;
-  static const _webExtra = kIsWeb ? {'withCredentials': true} : <String, dynamic>{};
+  static const _webExtra = kIsWeb
+      ? {'withCredentials': true}
+      : <String, dynamic>{};
 
   Dio createMobileSyncClient() {
     final baseUrl = kIsWeb
@@ -31,10 +33,12 @@ class ApiClientFactory {
     final dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
-        connectTimeout:
-            const Duration(milliseconds: AppConstants.connectTimeoutMs),
-        receiveTimeout:
-            const Duration(milliseconds: AppConstants.receiveTimeoutMs),
+        connectTimeout: const Duration(
+          milliseconds: AppConstants.connectTimeoutMs,
+        ),
+        receiveTimeout: const Duration(
+          milliseconds: AppConstants.receiveTimeoutMs,
+        ),
         headers: kIsWeb ? null : {'User-Agent': AppConstants.userAgent},
         extra: _webExtra,
       ),
@@ -52,35 +56,35 @@ class ApiClientFactory {
   }
 
   Dio createPortalClient() {
-    const baseUrl =
-        kIsWeb ? '$_proxy/portal' : 'https://rodzic.mobireg.pl';
+    const baseUrl = kIsWeb ? '$_proxy/portal' : 'https://rodzic.mobireg.pl';
 
     return Dio(
       BaseOptions(
         baseUrl: baseUrl,
-        connectTimeout:
-            const Duration(milliseconds: AppConstants.connectTimeoutMs),
-        receiveTimeout:
-            const Duration(milliseconds: AppConstants.receiveTimeoutMs),
+        connectTimeout: const Duration(
+          milliseconds: AppConstants.connectTimeoutMs,
+        ),
+        receiveTimeout: const Duration(
+          milliseconds: AppConstants.receiveTimeoutMs,
+        ),
         extra: _webExtra,
       ),
     );
   }
 
   Dio createPocztaClient() {
-    const baseUrl =
-        kIsWeb ? '$_proxy/poczta' : 'https://poczta.mobireg.pl';
+    const baseUrl = kIsWeb ? '$_proxy/poczta' : 'https://poczta.mobireg.pl';
 
     final dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
-        connectTimeout:
-            const Duration(milliseconds: AppConstants.connectTimeoutMs),
-        receiveTimeout:
-            const Duration(milliseconds: AppConstants.receiveTimeoutMs),
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
+        connectTimeout: const Duration(
+          milliseconds: AppConstants.connectTimeoutMs,
+        ),
+        receiveTimeout: const Duration(
+          milliseconds: AppConstants.receiveTimeoutMs,
+        ),
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
         extra: _webExtra,
       ),
     );
@@ -91,16 +95,19 @@ class ApiClientFactory {
   }
 
   Dio createWebLoginClient() {
-    final baseUrl =
-        kIsWeb ? '$_proxy/login/$_school' : 'https://mobireg.pl/$_school';
+    final baseUrl = kIsWeb
+        ? '$_proxy/login/$_school'
+        : 'https://mobireg.pl/$_school';
 
     return Dio(
       BaseOptions(
         baseUrl: baseUrl,
-        connectTimeout:
-            const Duration(milliseconds: AppConstants.connectTimeoutMs),
-        receiveTimeout:
-            const Duration(milliseconds: AppConstants.receiveTimeoutMs),
+        connectTimeout: const Duration(
+          milliseconds: AppConstants.connectTimeoutMs,
+        ),
+        receiveTimeout: const Duration(
+          milliseconds: AppConstants.receiveTimeoutMs,
+        ),
         followRedirects: false,
         validateStatus: (status) =>
             status != null && (status < 400 || status == 302),

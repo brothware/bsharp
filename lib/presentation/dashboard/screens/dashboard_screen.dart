@@ -50,8 +50,8 @@ class DashboardScreen extends ConsumerWidget {
     return Text(
       text,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
     );
   }
 
@@ -73,10 +73,7 @@ class DashboardScreen extends ConsumerWidget {
         UnexcusedAbsencesCard(),
         RecentGradesCard(),
         SizedBox(height: 8),
-        _PairedRow(
-          left: UpcomingHomeworkCard(),
-          right: UpcomingTestsCard(),
-        ),
+        _PairedRow(left: UpcomingHomeworkCard(), right: UpcomingTestsCard()),
       ],
     );
   }

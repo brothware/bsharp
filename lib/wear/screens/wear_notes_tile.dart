@@ -56,7 +56,12 @@ class WearNotesTile extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.fromLTRB(8, 0, 8, wearListBottomInset(shape)),
+                padding: EdgeInsets.fromLTRB(
+                  8,
+                  0,
+                  8,
+                  wearListBottomInset(shape),
+                ),
                 itemCount: combined.take(3).length,
                 itemBuilder: (context, index) {
                   return _WearNoteItem(item: combined[index]);
@@ -70,9 +75,7 @@ class WearNotesTile extends ConsumerWidget {
 
   void _openDetail(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const WearNotesDetailScreen(),
-      ),
+      MaterialPageRoute<void>(builder: (_) => const WearNotesDetailScreen()),
     );
   }
 
@@ -99,10 +102,10 @@ class _WearNoteItem extends StatelessWidget {
   final PortalReprimand item;
 
   static (IconData, Color) _iconForType(int type) => switch (type) {
-        1 => (Icons.emoji_events, Colors.green),
-        2 => (Icons.warning_amber, Colors.orange),
-        _ => (Icons.info_outline, Colors.blue),
-      };
+    1 => (Icons.emoji_events, Colors.green),
+    2 => (Icons.warning_amber, Colors.orange),
+    _ => (Icons.info_outline, Colors.blue),
+  };
 
   @override
   Widget build(BuildContext context) {

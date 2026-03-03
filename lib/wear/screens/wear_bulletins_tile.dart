@@ -24,8 +24,10 @@ class WearBulletinsTile extends ConsumerWidget {
           title: t.bulletins.title,
           trailing: unread > 0
               ? Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 1,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.error,
                     borderRadius: BorderRadius.circular(8),
@@ -69,12 +71,12 @@ class WearBulletinsTile extends ConsumerWidget {
               padding: EdgeInsets.fromLTRB(8, 0, 8, wearListBottomInset(shape)),
               itemCount: bulletins.take(4).length,
               itemBuilder: (context, index) {
-                  final item = bulletins[index];
-                  return InkWell(
-                    onTap: () => _openDetail(context, item),
-                    borderRadius: BorderRadius.circular(8),
-                    child: _WearBulletinItem(item: item),
-                  );
+                final item = bulletins[index];
+                return InkWell(
+                  onTap: () => _openDetail(context, item),
+                  borderRadius: BorderRadius.circular(8),
+                  child: _WearBulletinItem(item: item),
+                );
               },
             ),
           ),
@@ -128,7 +130,9 @@ class _WearBulletinItem extends StatelessWidget {
                 Text(
                   item.title,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    fontWeight: item.isRead ? FontWeight.normal : FontWeight.bold,
+                    fontWeight: item.isRead
+                        ? FontWeight.normal
+                        : FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

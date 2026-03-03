@@ -56,10 +56,7 @@ void main() {
         translateGradeName('Nieklasyfikowana'),
         translateGradeName('Nieklasyfikowany'),
       );
-      expect(
-        translateGradeName('Zwolniona'),
-        translateGradeName('Zwolniony'),
-      );
+      expect(translateGradeName('Zwolniona'), translateGradeName('Zwolniony'));
     });
   });
 

@@ -5,7 +5,10 @@ import 'package:bsharp/core/error/result.dart';
 
 class ErrorMappingInterceptor extends Interceptor {
   @override
-  void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     final data = response.data;
     if (data is Map<String, dynamic> && data.containsKey('errno')) {
       final errno = data['errno'] as int;

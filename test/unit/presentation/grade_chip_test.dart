@@ -26,11 +26,13 @@ ResolvedMark _resolved({
   final mark = _mark(markValue: markValue, weight: weight);
   return ResolvedMark(
     mark: mark,
-    displayValue: displayValue ?? (markValue != null
-        ? (markValue == markValue.roundToDouble()
-            ? markValue.toInt().toString()
-            : markValue.toStringAsFixed(1))
-        : '?'),
+    displayValue:
+        displayValue ??
+        (markValue != null
+            ? (markValue == markValue.roundToDouble()
+                  ? markValue.toInt().toString()
+                  : markValue.toStringAsFixed(1))
+            : '?'),
     effectiveValue: effectiveValue ?? markValue,
   );
 }
@@ -100,9 +102,7 @@ void main() {
     testWidgets('shows weight indicator when weight > 1', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: GradeChip(resolvedMark: _resolved(weight: 3)),
-          ),
+          home: Scaffold(body: GradeChip(resolvedMark: _resolved(weight: 3))),
         ),
       );
 
@@ -112,9 +112,7 @@ void main() {
     testWidgets('hides weight indicator when weight is 1', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: GradeChip(resolvedMark: _resolved(weight: 1)),
-          ),
+          home: Scaffold(body: GradeChip(resolvedMark: _resolved(weight: 1))),
         ),
       );
 
@@ -136,9 +134,7 @@ void main() {
     testWidgets('hides NEW badge when not new', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: GradeChip(resolvedMark: _resolved()),
-          ),
+          home: Scaffold(body: GradeChip(resolvedMark: _resolved())),
         ),
       );
 

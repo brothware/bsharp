@@ -35,9 +35,7 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
         locale: TranslationProvider.of(context).flutterLocale,
         supportedLocales: AppLocaleUtils.supportedLocales,
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        home: const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
+        home: const Scaffold(body: Center(child: CircularProgressIndicator())),
       ),
       error: (_, __) {
         _initialSyncTriggered = false;
@@ -57,9 +55,7 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
       data: (authState) {
         if (authState == AuthState.authenticated && !_initialSyncTriggered) {
           _initialSyncTriggered = true;
-          Future.microtask(
-            () => ref.read(syncStatusProvider.notifier).sync(),
-          );
+          Future.microtask(() => ref.read(syncStatusProvider.notifier).sync());
         }
         if (authState != AuthState.authenticated) {
           _initialSyncTriggered = false;
