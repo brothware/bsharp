@@ -35,9 +35,17 @@ final translationServiceProvider = Provider<TranslationService>((ref) {
   return service;
 });
 
+final _isDesktopProvider = Provider<bool>((ref) {
+  if (kIsWeb) return false;
+  return defaultTargetPlatform == TargetPlatform.linux ||
+      defaultTargetPlatform == TargetPlatform.macOS ||
+      defaultTargetPlatform == TargetPlatform.windows;
+});
+
 final isTranslationAvailableProvider = Provider<bool>((ref) {
   final locale = ref.watch(localeProvider);
   if (locale.languageCode == 'pl') return false;
+  if (ref.watch(_isDesktopProvider)) return true;
   final service = ref.watch(translationServiceProvider);
   return service.isAvailable;
 });
