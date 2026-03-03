@@ -240,66 +240,86 @@ void main() {
   });
 
   group('ChangelogScreen', () {
-    testWidgets('shows empty state', (tester) async {
+    testWidgets('shows tabs for grades and attendance', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            changelogProvider.overrideWith((ref) => []),
+            gradeChangelogProvider.overrideWith((ref) => []),
+            attendanceChangelogProvider.overrideWith((ref) => []),
           ],
           child: const MaterialApp(home: Scaffold(body: ChangelogScreen())),
         ),
       );
 
-      expect(find.text('No changes'), findsOneWidget);
+      expect(find.text('Grades'), findsOneWidget);
+      expect(find.text('Attendance'), findsOneWidget);
     });
 
-    testWidgets('shows changelog entries grouped by date', (tester) async {
+    testWidgets('shows empty state when no grades', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            changelogProvider.overrideWith(
+            gradeChangelogProvider.overrideWith((ref) => []),
+            attendanceChangelogProvider.overrideWith((ref) => []),
+          ],
+          child: const MaterialApp(home: Scaffold(body: ChangelogScreen())),
+        ),
+      );
+
+      expect(find.text('No changes'), findsAtLeastNWidgets(1));
+    });
+
+    testWidgets('shows grade changelog entries', (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            gradeChangelogProvider.overrideWith(
               (ref) => [
                 const PortalChangelog(
-                  date: '2026-02-27',
-                  description: 'New math grade',
-                  type: 'grade',
-                ),
-                const PortalChangelog(
-                  date: '2026-02-27',
-                  description: 'Schedule change',
-                  type: 'schedule',
+                  type: 'mark',
+                  dateTime: '2026-02-27 10:00:00',
+                  subjectName: 'Math',
+                  user: 'Jan Kowalski',
+                  newName: '5+',
+                  newAdditionalInfo: 'Test',
+                  action: 'I',
                 ),
               ],
             ),
+            attendanceChangelogProvider.overrideWith((ref) => []),
           ],
           child: const MaterialApp(home: Scaffold(body: ChangelogScreen())),
         ),
       );
 
       expect(find.text('2026-02-27'), findsOneWidget);
-      expect(find.text('New math grade'), findsOneWidget);
-      expect(find.text('Schedule change'), findsOneWidget);
+      expect(find.textContaining('5+'), findsOneWidget);
+      expect(find.textContaining('Math'), findsOneWidget);
     });
 
-    testWidgets('shows type-specific icons', (tester) async {
+    testWidgets('shows action-specific icons', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            changelogProvider.overrideWith(
+            gradeChangelogProvider.overrideWith(
               (ref) => [
                 const PortalChangelog(
-                  date: '2026-02-27',
-                  description: 'Test',
-                  type: 'grade',
+                  type: 'mark',
+                  dateTime: '2026-02-27 10:00:00',
+                  subjectName: 'Math',
+                  user: 'Jan',
+                  newName: '5',
+                  action: 'I',
                 ),
               ],
             ),
+            attendanceChangelogProvider.overrideWith((ref) => []),
           ],
           child: const MaterialApp(home: Scaffold(body: ChangelogScreen())),
         ),
       );
 
-      expect(find.byIcon(Icons.grade_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.add_circle_outline), findsOneWidget);
     });
   });
 }

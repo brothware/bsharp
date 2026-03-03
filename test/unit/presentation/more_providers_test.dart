@@ -231,36 +231,80 @@ void main() {
     });
   });
 
-  group('groupedChangelogProvider', () {
-    test('groups by date descending', () {
+  group('groupedGradeChangelogProvider', () {
+    test('groups grade changelog by date descending', () {
       final container = ProviderContainer(
         overrides: [
-          changelogProvider.overrideWith(
+          gradeChangelogProvider.overrideWith(
             (ref) => [
               const PortalChangelog(
-                date: '2026-02-27',
-                description: 'New grade',
-                type: 'grade',
+                type: 'mark',
+                dateTime: '2026-02-27 10:00:00',
+                subjectName: 'Math',
+                user: 'Jan Kowalski',
+                newName: '5+',
+                newAdditionalInfo: 'Test',
+                action: 'I',
               ),
               const PortalChangelog(
-                date: '2026-02-26',
-                description: 'Attendance',
-                type: 'attendance',
+                type: 'mark',
+                dateTime: '2026-02-26 09:00:00',
+                subjectName: 'Polish',
+                user: 'Anna Nowak',
+                newName: '4',
+                action: 'U',
               ),
               const PortalChangelog(
-                date: '2026-02-27',
-                description: 'Message',
-                type: 'message',
+                type: 'mark',
+                dateTime: '2026-02-27 14:00:00',
+                subjectName: 'English',
+                user: 'Piotr Zieliński',
+                newName: '3',
+                action: 'I',
               ),
             ],
           ),
         ],
       );
 
-      final grouped = container.read(groupedChangelogProvider);
+      final grouped = container.read(groupedGradeChangelogProvider);
       expect(grouped.length, 2);
       expect(grouped.keys.first, '2026-02-27');
       expect(grouped['2026-02-27']!.length, 2);
+    });
+  });
+
+  group('groupedAttendanceChangelogProvider', () {
+    test('groups attendance changelog by date descending', () {
+      final container = ProviderContainer(
+        overrides: [
+          attendanceChangelogProvider.overrideWith(
+            (ref) => [
+              const PortalChangelog(
+                type: 'attendance',
+                dateTime: '2026-02-27 08:00:00',
+                subjectName: 'Math',
+                user: 'Jan Kowalski',
+                newName: 'Present',
+                action: 'I',
+              ),
+              const PortalChangelog(
+                type: 'attendance',
+                dateTime: '2026-02-26 08:00:00',
+                subjectName: 'Polish',
+                user: 'Anna Nowak',
+                newName: 'Absent',
+                action: 'I',
+              ),
+            ],
+          ),
+        ],
+      );
+
+      final grouped = container.read(groupedAttendanceChangelogProvider);
+      expect(grouped.length, 2);
+      expect(grouped['2026-02-27']!.length, 1);
+      expect(grouped['2026-02-26']!.length, 1);
     });
   });
 
