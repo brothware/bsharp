@@ -14,11 +14,12 @@ class WearNotesTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final shape = ref.watch(wearScreenShapeProvider).requireValue;
-    final notes = ref.watch(notesProvider);
+    final remarks = ref.watch(remarksProvider);
     final praises = ref.watch(praisesProvider);
+    final info = ref.watch(infoProvider);
     final theme = Theme.of(context);
 
-    final combined = [...notes, ...praises]
+    final combined = [...remarks, ...praises, ...info]
       ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
 
     return WearForwardSwipe(
@@ -42,7 +43,7 @@ class WearNotesTile extends ConsumerWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      t.notes.noNotes,
+                      t.notes.noRemarks,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -97,10 +98,16 @@ class _WearNoteItem extends StatelessWidget {
 
   final PortalReprimand item;
 
+  static (IconData, Color) _iconForType(int type) => switch (type) {
+        1 => (Icons.emoji_events, Colors.green),
+        2 => (Icons.warning_amber, Colors.orange),
+        _ => (Icons.info_outline, Colors.blue),
+      };
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isNote = item.type == 0;
+    final (icon, color) = _iconForType(item.type);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 3),
@@ -108,11 +115,7 @@ class _WearNoteItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            isNote ? Icons.warning_amber : Icons.emoji_events,
-            size: 14,
-            color: isNote ? Colors.orange : Colors.green,
-          ),
+          Icon(icon, size: 14, color: color),
           const SizedBox(width: 6),
           Expanded(
             child: Column(

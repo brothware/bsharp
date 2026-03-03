@@ -12,41 +12,21 @@ class NotesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notes = ref.watch(notesProvider);
+    final remarks = ref.watch(remarksProvider);
     final praises = ref.watch(praisesProvider);
+    final info = ref.watch(infoProvider);
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: RefreshIndicator(
         onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
         child: Column(
           children: [
             TabBar(
               tabs: [
-                Tab(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(t.notes.notesTab),
-                      if (notes.isNotEmpty) ...[
-                        const SizedBox(width: 6),
-                        _CountBadge(count: notes.length),
-                      ],
-                    ],
-                  ),
-                ),
-                Tab(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(t.notes.praisesTab),
-                      if (praises.isNotEmpty) ...[
-                        const SizedBox(width: 6),
-                        _CountBadge(count: praises.length),
-                      ],
-                    ],
-                  ),
-                ),
+                _TabWithBadge(label: t.notes.remarksTab, count: remarks.length),
+                _TabWithBadge(label: t.notes.praisesTab, count: praises.length),
+                _TabWithBadge(label: t.notes.infoTab, count: info.length),
               ],
               labelColor: Theme.of(context).colorScheme.primary,
               unselectedLabelColor:
@@ -56,14 +36,19 @@ class NotesScreen extends ConsumerWidget {
               child: TabBarView(
                 children: [
                   _ReprimandList(
-                    items: notes,
-                    emptyIcon: Icons.note_outlined,
-                    emptyText: t.notes.noNotes,
+                    items: remarks,
+                    emptyIcon: Icons.warning_amber_outlined,
+                    emptyText: t.notes.noRemarks,
                   ),
                   _ReprimandList(
                     items: praises,
                     emptyIcon: Icons.emoji_events_outlined,
                     emptyText: t.notes.noPraises,
+                  ),
+                  _ReprimandList(
+                    items: info,
+                    emptyIcon: Icons.info_outlined,
+                    emptyText: t.notes.noInfo,
                   ),
                 ],
               ),
@@ -75,26 +60,38 @@ class NotesScreen extends ConsumerWidget {
   }
 }
 
-class _CountBadge extends StatelessWidget {
-  const _CountBadge({required this.count});
+class _TabWithBadge extends StatelessWidget {
+  const _TabWithBadge({required this.label, required this.count});
 
+  final String label;
   final int count;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Text(
-        '$count',
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: theme.colorScheme.primary,
-          fontWeight: FontWeight.bold,
-        ),
+    return Tab(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(label),
+          if (count > 0) ...[
+            const SizedBox(width: 6),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                '$count',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
@@ -136,14 +133,11 @@ class _ReprimandTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isNote = item.type == 0;
+    final (icon, color) = _iconForType(item.type);
 
     return Card(
       child: ListTile(
-        leading: Icon(
-          isNote ? Icons.warning_amber_outlined : Icons.emoji_events_outlined,
-          color: isNote ? Colors.orange : Colors.green,
-        ),
+        leading: Icon(icon, color: color),
         title: Text(
           item.content,
           maxLines: 2,
@@ -159,6 +153,12 @@ class _ReprimandTile extends StatelessWidget {
       ),
     );
   }
+
+  static (IconData, Color) _iconForType(int type) => switch (type) {
+        1 => (Icons.emoji_events_outlined, Colors.green),
+        2 => (Icons.warning_amber_outlined, Colors.orange),
+        _ => (Icons.info_outlined, Colors.blue),
+      };
 
   void _showDetail(BuildContext context, PortalReprimand item) {
     showModalBottomSheet<void>(
@@ -181,6 +181,12 @@ class _ReprimandDetailSheet extends ConsumerStatefulWidget {
 class _ReprimandDetailSheetState extends ConsumerState<_ReprimandDetailSheet> {
   String? _translatedContent;
 
+  String _labelForType(int type) => switch (type) {
+        1 => t.notes.praise,
+        2 => t.notes.remark,
+        _ => t.notes.info,
+      };
+
   @override
   Widget build(BuildContext context) {
     final item = widget.item;
@@ -195,14 +201,12 @@ class _ReprimandDetailSheetState extends ConsumerState<_ReprimandDetailSheet> {
           Row(
             children: [
               Icon(
-                item.type == 0
-                    ? Icons.warning_amber_outlined
-                    : Icons.emoji_events_outlined,
-                color: item.type == 0 ? Colors.orange : Colors.green,
+                _ReprimandTile._iconForType(item.type).$1,
+                color: _ReprimandTile._iconForType(item.type).$2,
               ),
               const SizedBox(width: 8),
               Text(
-                item.type == 0 ? t.notes.note : t.notes.praise,
+                _labelForType(item.type),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ],

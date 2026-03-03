@@ -71,15 +71,21 @@ final upcomingTestsProvider = Provider<List<PortalTest>>((ref) {
     ..sort((a, b) => _parseDate(a.date).compareTo(_parseDate(b.date)));
 });
 
-final notesProvider = Provider<List<PortalReprimand>>((ref) {
+final remarksProvider = Provider<List<PortalReprimand>>((ref) {
   final all = ref.watch(reprimandsProvider);
-  return all.where((r) => r.type == 0).toList()
+  return all.where((r) => r.type == 2).toList()
     ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
 });
 
 final praisesProvider = Provider<List<PortalReprimand>>((ref) {
   final all = ref.watch(reprimandsProvider);
   return all.where((r) => r.type == 1).toList()
+    ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
+});
+
+final infoProvider = Provider<List<PortalReprimand>>((ref) {
+  final all = ref.watch(reprimandsProvider);
+  return all.where((r) => r.type == 0).toList()
     ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
 });
 

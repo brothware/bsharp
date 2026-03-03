@@ -17,9 +17,11 @@ class WearNotesDetailScreen extends ConsumerStatefulWidget {
       _WearNotesDetailScreenState();
 }
 
+enum _NotesTab { remarks, praises, info }
+
 class _WearNotesDetailScreenState
     extends ConsumerState<WearNotesDetailScreen> {
-  var _showNotes = true;
+  var _activeTab = _NotesTab.remarks;
   final _translations = <int, String>{};
   final _scrollController = ScrollController();
 
@@ -32,12 +34,16 @@ class _WearNotesDetailScreenState
   @override
   Widget build(BuildContext context) {
     final shape = ref.watch(wearScreenShapeProvider).requireValue;
-    final notes = ref.watch(notesProvider);
+    final remarks = ref.watch(remarksProvider);
     final praises = ref.watch(praisesProvider);
+    final info = ref.watch(infoProvider);
     final theme = Theme.of(context);
 
-    final items = _showNotes ? notes : praises;
-    final emptyText = _showNotes ? t.notes.noNotes : t.notes.noPraises;
+    final (items, emptyText) = switch (_activeTab) {
+      _NotesTab.remarks => (remarks, t.notes.noRemarks),
+      _NotesTab.praises => (praises, t.notes.noPraises),
+      _NotesTab.info => (info, t.notes.noInfo),
+    };
 
     return WearSwipeDismiss(
       child: Scaffold(
@@ -46,9 +52,9 @@ class _WearNotesDetailScreenState
           child: Column(
             children: [
               _WearNotesTabSelector(
-                showNotes: _showNotes,
-                onChanged: (showNotes) {
-                  setState(() => _showNotes = showNotes);
+                activeTab: _activeTab,
+                onChanged: (tab) {
+                  setState(() => _activeTab = tab);
                 },
               ),
               const SizedBox(height: 4),
@@ -100,12 +106,12 @@ class _WearNotesDetailScreenState
 
 class _WearNotesTabSelector extends StatelessWidget {
   const _WearNotesTabSelector({
-    required this.showNotes,
+    required this.activeTab,
     required this.onChanged,
   });
 
-  final bool showNotes;
-  final ValueChanged<bool> onChanged;
+  final _NotesTab activeTab;
+  final ValueChanged<_NotesTab> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -114,16 +120,23 @@ class _WearNotesTabSelector extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _TabButton(
-          label: t.notes.notesTab,
-          isSelected: showNotes,
-          onTap: () => onChanged(true),
+          label: t.notes.remarksTab,
+          isSelected: activeTab == _NotesTab.remarks,
+          onTap: () => onChanged(_NotesTab.remarks),
           theme: theme,
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 4),
         _TabButton(
           label: t.notes.praisesTab,
-          isSelected: !showNotes,
-          onTap: () => onChanged(false),
+          isSelected: activeTab == _NotesTab.praises,
+          onTap: () => onChanged(_NotesTab.praises),
+          theme: theme,
+        ),
+        const SizedBox(width: 4),
+        _TabButton(
+          label: t.notes.infoTab,
+          isSelected: activeTab == _NotesTab.info,
+          onTap: () => onChanged(_NotesTab.info),
           theme: theme,
         ),
       ],
@@ -182,10 +195,16 @@ class _WearNoteDetailItem extends StatelessWidget {
   final String? translatedContent;
   final ValueChanged<String?> onTranslated;
 
+  static (IconData, Color) _iconForType(int type) => switch (type) {
+        1 => (Icons.emoji_events, Colors.green),
+        2 => (Icons.warning_amber, Colors.orange),
+        _ => (Icons.info_outline, Colors.blue),
+      };
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isNote = item.type == 0;
+    final (icon, color) = _iconForType(item.type);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2),
@@ -195,11 +214,7 @@ class _WearNoteDetailItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                isNote ? Icons.warning_amber : Icons.emoji_events,
-                size: 14,
-                color: isNote ? Colors.orange : Colors.green,
-              ),
+              Icon(icon, size: 14, color: color),
               const SizedBox(width: 4),
               Expanded(
                 child: Text(

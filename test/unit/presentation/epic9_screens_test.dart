@@ -106,7 +106,7 @@ void main() {
   });
 
   group('NotesScreen', () {
-    testWidgets('shows tabs for notes and praises', (tester) async {
+    testWidgets('shows tabs for remarks, praises, and info', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -116,11 +116,12 @@ void main() {
         ),
       );
 
-      expect(find.text('Notes'), findsOneWidget);
+      expect(find.text('Remarks'), findsOneWidget);
       expect(find.text('Praise'), findsOneWidget);
+      expect(find.text('Information'), findsOneWidget);
     });
 
-    testWidgets('shows note items', (tester) async {
+    testWidgets('shows remark items', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -131,7 +132,7 @@ void main() {
                   date: '2026-02-27',
                   teacherName: 'Jan Kowalski',
                   content: 'Talking in class',
-                  type: 0,
+                  type: 2,
                 ),
               ],
             ),
@@ -153,15 +154,15 @@ void main() {
                   id: 1,
                   date: '2026-02-27',
                   teacherName: 'Jan',
-                  content: 'Note 1',
-                  type: 0,
+                  content: 'Remark 1',
+                  type: 2,
                 ),
                 const PortalReprimand(
                   id: 2,
                   date: '2026-02-27',
                   teacherName: 'Anna',
-                  content: 'Note 2',
-                  type: 0,
+                  content: 'Remark 2',
+                  type: 2,
                 ),
               ],
             ),

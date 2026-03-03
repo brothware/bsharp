@@ -138,8 +138,8 @@ void main() {
     });
   });
 
-  group('notesProvider and praisesProvider', () {
-    test('separates notes (type 0) and praises (type 1)', () {
+  group('remarksProvider, praisesProvider, and infoProvider', () {
+    test('separates remarks (type 2), praises (type 1), info (type 0)', () {
       final container = ProviderContainer(
         overrides: [
           reprimandsProvider.overrideWith(
@@ -148,7 +148,7 @@ void main() {
                 id: 1,
                 date: '2026-02-27',
                 teacherName: 'Jan',
-                content: 'Note',
+                content: 'Info',
                 type: 0,
               ),
               const PortalReprimand(
@@ -162,7 +162,14 @@ void main() {
                 id: 3,
                 date: '2026-02-26',
                 teacherName: 'Piotr',
-                content: 'Note2',
+                content: 'Remark',
+                type: 2,
+              ),
+              const PortalReprimand(
+                id: 4,
+                date: '2026-02-25',
+                teacherName: 'Maria',
+                content: 'Info2',
                 type: 0,
               ),
             ],
@@ -170,14 +177,18 @@ void main() {
         ],
       );
 
-      final notes = container.read(notesProvider);
-      expect(notes.length, 2);
-      expect(notes.every((r) => r.type == 0), isTrue);
-      expect(notes.first.date, '2026-02-27');
+      final info = container.read(infoProvider);
+      expect(info.length, 2);
+      expect(info.every((r) => r.type == 0), isTrue);
+      expect(info.first.date, '2026-02-27');
 
       final praises = container.read(praisesProvider);
       expect(praises.length, 1);
       expect(praises.first.type, 1);
+
+      final remarks = container.read(remarksProvider);
+      expect(remarks.length, 1);
+      expect(remarks.first.type, 2);
     });
   });
 

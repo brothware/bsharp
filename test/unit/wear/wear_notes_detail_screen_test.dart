@@ -27,22 +27,23 @@ Widget _buildScreen({List<PortalReprimand> reprimands = const []}) {
 
 void main() {
   group('WearNotesDetailScreen', () {
-    testWidgets('shows Notes/Praise tab selector', (tester) async {
+    testWidgets('shows tab selector with all three tabs', (tester) async {
       await tester.pumpWidget(_buildScreen());
       await tester.pump();
 
-      expect(find.text('Notes'), findsOneWidget);
+      expect(find.text('Remarks'), findsOneWidget);
       expect(find.text('Praise'), findsOneWidget);
+      expect(find.text('Information'), findsOneWidget);
     });
 
-    testWidgets('shows notes by default', (tester) async {
+    testWidgets('shows remarks by default', (tester) async {
       await tester.pumpWidget(_buildScreen(reprimands: [
         const PortalReprimand(
           id: 1,
           date: '2025-01-15',
           teacherName: 'Jan K.',
           content: 'Disrupted class',
-          type: 0,
+          type: 2,
         ),
       ]));
       await tester.pump();
@@ -57,7 +58,7 @@ void main() {
           date: '2025-01-15',
           teacherName: 'Jan K.',
           content: 'Disrupted class',
-          type: 0,
+          type: 2,
         ),
         const PortalReprimand(
           id: 2,
@@ -83,7 +84,7 @@ void main() {
       await tester.pumpWidget(_buildScreen());
       await tester.pump();
 
-      expect(find.text('No notes'), findsOneWidget);
+      expect(find.text('No remarks'), findsOneWidget);
     });
   });
 }

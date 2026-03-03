@@ -96,7 +96,7 @@ void main() {
         await tester.pumpAndSettle();
       }
 
-      expect(find.text('Notes and praise'), findsOneWidget);
+      expect(find.text('Remarks'), findsOneWidget);
     });
 
     testWidgets('settings tile shows child mode toggle when PIN set',

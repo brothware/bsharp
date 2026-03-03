@@ -27,11 +27,11 @@ Widget _buildTile({List<PortalReprimand> reprimands = const []}) {
 
 void main() {
   group('WearNotesTile', () {
-    testWidgets('shows empty state when no notes', (tester) async {
+    testWidgets('shows empty state when no data', (tester) async {
       await tester.pumpWidget(_buildTile());
       await tester.pump();
 
-      expect(find.text('No notes'), findsOneWidget);
+      expect(find.text('No remarks'), findsOneWidget);
       expect(find.byIcon(Icons.sticky_note_2_outlined), findsWidgets);
     });
 
@@ -39,17 +39,17 @@ void main() {
       await tester.pumpWidget(_buildTile());
       await tester.pump();
 
-      expect(find.text('Notes and praise'), findsOneWidget);
+      expect(find.text('Remarks'), findsOneWidget);
     });
 
-    testWidgets('shows note items with warning icon', (tester) async {
+    testWidgets('shows remark items with warning icon', (tester) async {
       await tester.pumpWidget(_buildTile(reprimands: [
         const PortalReprimand(
           id: 1,
           date: '2025-01-15',
           teacherName: 'Jan Kowalski',
           content: 'Forgot homework',
-          type: 0,
+          type: 2,
         ),
       ]));
       await tester.pump();
