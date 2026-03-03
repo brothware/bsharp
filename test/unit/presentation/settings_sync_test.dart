@@ -47,12 +47,6 @@ void main() {
       expect(find.text('Every 30 minutes'), findsOneWidget);
     });
 
-    testWidgets('shows full sync option', (tester) async {
-      await tester.pumpWidget(await _buildSettings());
-      await tester.pump();
-
-      expect(find.text('Full synchronisation'), findsOneWidget);
-    });
   });
 
   group('Settings - Notification Section', () {

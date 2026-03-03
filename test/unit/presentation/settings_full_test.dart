@@ -138,37 +138,6 @@ void main() {
     });
   });
 
-  group('Settings - Data Section', () {
-    testWidgets('shows clear cache option', (tester) async {
-      await tester.pumpWidget(await _buildSettings());
-      await tester.pump();
-      await tester.scrollUntilVisible(
-        find.text('Clear cache'),
-        200,
-      );
-
-      expect(find.text('Clear cache'), findsOneWidget);
-    });
-
-    testWidgets('tapping clear cache shows confirmation', (tester) async {
-      await tester.pumpWidget(await _buildSettings());
-      await tester.pump();
-      await tester.scrollUntilVisible(
-        find.text('Clear cache'),
-        200,
-      );
-
-      await tester.tap(find.text('Clear cache'));
-      await tester.pumpAndSettle();
-
-      expect(
-        find.textContaining('Are you sure you want to delete'),
-        findsOneWidget,
-      );
-      expect(find.text('Clear'), findsOneWidget);
-    });
-  });
-
   group('Settings - About Section', () {
     testWidgets('shows app name and version', (tester) async {
       await tester.pumpWidget(await _buildSettings());

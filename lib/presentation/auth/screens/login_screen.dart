@@ -8,6 +8,7 @@ import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/auth/providers/setup_providers.dart';
+import 'package:bsharp/presentation/common/widgets/support_badge.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -299,6 +300,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Text(t.auth.switchAccount),
                     ),
                   ],
+                  const SizedBox(height: 16),
+                  const Center(child: SupportBadge()),
                 ],
               ),
             ),

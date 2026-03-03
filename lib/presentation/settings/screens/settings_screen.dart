@@ -9,7 +9,10 @@ import 'package:bsharp/data/services/translation_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.dart';
+import 'package:bsharp/app/support_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:bsharp/presentation/support/tip_jar_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -75,9 +78,6 @@ class SettingsScreen extends ConsumerWidget {
             ),
             onTap: () => _confirmLogout(context, ref),
           ),
-          const Divider(),
-          _SectionHeader(title: t.settings.data),
-          const _DataSection(),
           const Divider(),
           _SectionHeader(title: t.settings.about),
           const _AboutSection(),
@@ -335,14 +335,6 @@ class _SyncSection extends ConsumerWidget {
           ),
           onTap: () => _showIntervalPicker(context, ref, prefs),
         ),
-        ListTile(
-          leading: const Icon(Icons.cloud_download_outlined),
-          title: Text(t.settings.fullSync),
-          subtitle: Text(t.settings.fullSyncSubtitle),
-          onTap: syncStatus == SyncStatus.syncing
-              ? null
-              : () => ref.read(syncStatusProvider.notifier).forceFullSync(),
-        ),
       ],
     );
   }
@@ -480,73 +472,28 @@ class _NotifToggle extends ConsumerWidget {
   }
 }
 
-class _DataSection extends ConsumerWidget {
-  const _DataSection();
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final syncStatus = ref.watch(syncStatusProvider);
-
-    return Column(
-      children: [
-        ListTile(
-          leading: const Icon(Icons.cleaning_services_outlined),
-          title: Text(t.settings.clearCache),
-          subtitle: Text(t.settings.clearCacheSubtitle),
-          onTap: () => _confirmClearCache(context, ref),
-        ),
-        ListTile(
-          leading: const Icon(Icons.cloud_download_outlined),
-          title: Text(t.settings.fullSync),
-          subtitle: Text(t.settings.fullSyncSubtitle),
-          onTap: syncStatus == SyncStatus.syncing
-              ? null
-              : () => ref.read(syncStatusProvider.notifier).forceFullSync(),
-        ),
-      ],
-    );
-  }
-
-  void _confirmClearCache(BuildContext context, WidgetRef ref) {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(t.settings.clearCacheConfirmTitle),
-        content: Text(t.settings.clearCacheConfirmBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(t.common.cancel),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              ref.read(syncStatusProvider.notifier).forceFullSync();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(t.settings.cacheCleared),
-                ),
-              );
-            },
-            child: Text(t.common.clear),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AboutSection extends StatelessWidget {
+class _AboutSection extends ConsumerWidget {
   const _AboutSection();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isIos = ref.watch(isIosProvider);
+
     return Column(
       children: [
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: const Text('BSharp'),
           subtitle: Text(t.settings.version(version: '0.1.0')),
+        ),
+        ListTile(
+          leading: const Icon(Icons.coffee_outlined),
+          title: Text(t.support.title),
+          subtitle: Text(t.support.subtitle),
+          onTap: () => isIos
+              ? showTipJarSheet(context)
+              : launchUrl(Uri.parse(supportUrl)),
         ),
         ListTile(
           leading: const Icon(Icons.description_outlined),
