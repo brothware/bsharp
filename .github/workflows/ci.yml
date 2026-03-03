@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
   push:
-    branches: [main]
+    branches: [master]
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -127,18 +127,18 @@ jobs:
           storeFile=release.jks
           EOF
 
-      - run: flutter build apk --release
-      - run: flutter build appbundle --release
+      - run: flutter build apk --flavor phone --release
+      - run: flutter build appbundle --flavor phone --release
 
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-phone-release.apk
 
       - uses: actions/upload-artifact@v4
         with:
           name: android-aab
-          path: build/app/outputs/bundle/release/app-release.aab
+          path: build/app/outputs/bundle/phoneRelease/app-phone-release.aab
 
   build-ios:
     runs-on: macos-latest
@@ -226,12 +226,12 @@ jobs:
           EOF
           fi
 
-      - run: flutter build apk --release --target=lib/main_wear.dart
+      - run: flutter build apk --flavor wear --release --target=lib/main_wear.dart
 
       - uses: actions/upload-artifact@v4
         with:
           name: wearos-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-wear-release.apk
 
   deploy-pages:
     if: github.event_name == 'push'
