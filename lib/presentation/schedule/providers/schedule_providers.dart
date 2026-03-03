@@ -1,9 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/room.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
+import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
+
+enum ScheduleViewMode { list, linear }
+
+final scheduleViewModeProvider =
+    StateProvider<ScheduleViewMode>((ref) => ScheduleViewMode.list);
 
 final eventsProvider = StateProvider<List<Event>>((ref) => []);
 
@@ -125,4 +133,42 @@ final weekEntriesProvider =
     for (final day in days)
       day: ref.watch(scheduleEntriesForDateProvider(day)),
   };
+});
+
+int _timeToMinutes(String time) {
+  final parts = time.split(':');
+  if (parts.length < 2) return 0;
+  return int.parse(parts[0]) * 60 + int.parse(parts[1]);
+}
+
+final timelineItemsForDateProvider =
+    Provider.family<List<TimelineItem>, DateTime>((ref, date) {
+  final entries = ref.watch(scheduleEntriesForDateProvider(date));
+  final customEvents = ref.watch(customEventsProvider);
+  final occurrences = ref.watch(customEventOccurrencesProvider);
+
+  final eventMap = {for (final e in customEvents) e.id: e};
+
+  final items = <TimelineItem>[
+    for (final entry in entries) LessonTimelineItem(entry: entry),
+    for (final occ in occurrences)
+      if (isSameDay(occ.date, date) && eventMap.containsKey(occ.customEventId))
+        CustomEventTimelineItem(
+          event: eventMap[occ.customEventId]!,
+          occurrenceDate: occ.date,
+        ),
+  ]..sort(
+      (a, b) => _timeToMinutes(a.startTime).compareTo(_timeToMinutes(b.startTime)),
+    );
+
+  return items;
+});
+
+final hasWeekendEventsProvider = Provider<bool>((ref) {
+  final weekStart = ref.watch(selectedWeekStartProvider);
+  final saturday = weekStart.add(const Duration(days: 5));
+  final sunday = weekStart.add(const Duration(days: 6));
+  final satItems = ref.watch(timelineItemsForDateProvider(saturday));
+  final sunItems = ref.watch(timelineItemsForDateProvider(sunday));
+  return satItems.isNotEmpty || sunItems.isNotEmpty;
 });
