@@ -485,7 +485,11 @@ class _AboutSection extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: const Text('BSharp'),
-          subtitle: Text(t.settings.version(version: '0.1.0')),
+          subtitle: ref.watch(packageInfoProvider).whenOrNull(
+                    data: (info) =>
+                        Text(t.settings.version(version: info.version)),
+                  ) ??
+              const SizedBox.shrink(),
         ),
         ListTile(
           leading: const Icon(Icons.coffee_outlined),
@@ -498,17 +502,20 @@ class _AboutSection extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.description_outlined),
           title: Text(t.settings.licenses),
-          onTap: () => showLicensePage(
-            context: context,
-            applicationName: 'BSharp',
-            applicationVersion: '0.1.0',
-          ),
+          onTap: () {
+            final version = ref.read(packageInfoProvider).valueOrNull?.version;
+            showLicensePage(
+              context: context,
+              applicationName: 'BSharp',
+              applicationVersion: version,
+            );
+          },
         ),
         ListTile(
           leading: const Icon(Icons.code),
           title: Text(t.settings.sourceCode),
           subtitle: const Text('GitHub'),
-          onTap: () {},
+          onTap: () => launchUrl(Uri.parse(sourceCodeUrl)),
         ),
       ],
     );

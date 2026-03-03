@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/support_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/settings/screens/settings_screen.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
@@ -19,6 +21,14 @@ Future<Widget> _buildSettings({String? locale}) async {
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
+      packageInfoProvider.overrideWith(
+        (_) async => PackageInfo(
+          appName: 'BSharp',
+          packageName: 'pl.brothware.bsharp',
+          version: '1.2.3',
+          buildNumber: '42',
+        ),
+      ),
     ],
     child: const MaterialApp(home: SettingsScreen()),
   );
@@ -145,7 +155,7 @@ void main() {
       await _scrollTo(tester, 'BSharp');
 
       expect(find.text('BSharp'), findsOneWidget);
-      expect(find.text('Version 0.1.0'), findsOneWidget);
+      expect(find.text('Version 1.2.3'), findsOneWidget);
     });
 
     testWidgets('shows licenses option', (tester) async {
