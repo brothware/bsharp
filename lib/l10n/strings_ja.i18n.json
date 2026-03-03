@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "最近の変更",
-    "noChanges": "変更なし",
-    "grade": "成績",
-    "attendanceLabel": "出欠",
-    "messageLabel": "メッセージ",
-    "scheduleLabel": "時間割",
-    "homeworkLabel": "宿題",
-    "testLabel": "テスト"
+    "noChanges": "変更なし"
   },
   "translation": {
     "translate": "翻訳",

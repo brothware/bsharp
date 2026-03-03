@@ -358,13 +358,7 @@
   },
   "changelog": {
     "title": "Nedavne promene",
-    "noChanges": "Nema promena",
-    "grade": "Ocena",
-    "attendanceLabel": "Prisustvo",
-    "messageLabel": "Poruka",
-    "scheduleLabel": "Raspored",
-    "homeworkLabel": "Domaći zadatak",
-    "testLabel": "Kontrolni"
+    "noChanges": "Nema promena"
   },
   "translation": {
     "translate": "Prevedi",

@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Siste endringer",
-    "noChanges": "Ingen endringer",
-    "grade": "Karakter",
-    "attendanceLabel": "Fremmøte",
-    "messageLabel": "Melding",
-    "scheduleLabel": "Timeplan",
-    "homeworkLabel": "Lekse",
-    "testLabel": "Prøve"
+    "noChanges": "Ingen endringer"
   },
   "translation": {
     "translate": "Oversett",

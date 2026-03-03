@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Senaste ändringar",
-    "noChanges": "Inga ändringar",
-    "grade": "Betyg",
-    "attendanceLabel": "Närvaro",
-    "messageLabel": "Meddelande",
-    "scheduleLabel": "Schema",
-    "homeworkLabel": "Läxa",
-    "testLabel": "Prov"
+    "noChanges": "Inga ändringar"
   },
   "translation": {
     "translate": "Översätt",

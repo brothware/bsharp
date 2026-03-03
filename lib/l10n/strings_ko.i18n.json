@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "최근 변경사항",
-    "noChanges": "변경사항 없음",
-    "grade": "성적",
-    "attendanceLabel": "출결",
-    "messageLabel": "메시지",
-    "scheduleLabel": "시간표",
-    "homeworkLabel": "숙제",
-    "testLabel": "시험"
+    "noChanges": "변경사항 없음"
   },
   "translation": {
     "translate": "번역",

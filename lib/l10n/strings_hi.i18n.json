@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "हाल के बदलाव",
-    "noChanges": "कोई बदलाव नहीं",
-    "grade": "अंक",
-    "attendanceLabel": "उपस्थिति",
-    "messageLabel": "संदेश",
-    "scheduleLabel": "समय-सारणी",
-    "homeworkLabel": "गृहकार्य",
-    "testLabel": "परीक्षा"
+    "noChanges": "कोई बदलाव नहीं"
   },
   "translation": {
     "translate": "अनुवाद करें",

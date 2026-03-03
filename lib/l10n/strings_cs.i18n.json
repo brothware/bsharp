@@ -358,13 +358,7 @@
   },
   "changelog": {
     "title": "Poslední změny",
-    "noChanges": "Žádné změny",
-    "grade": "Známka",
-    "attendanceLabel": "Docházka",
-    "messageLabel": "Zpráva",
-    "scheduleLabel": "Rozvrh",
-    "homeworkLabel": "Úkol",
-    "testLabel": "Test"
+    "noChanges": "Žádné změny"
   },
   "translation": {
     "translate": "Přeložit",

@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Alterações recentes",
-    "noChanges": "Sem alterações",
-    "grade": "Nota",
-    "attendanceLabel": "Presença",
-    "messageLabel": "Mensagem",
-    "scheduleLabel": "Horário",
-    "homeworkLabel": "Trabalho de casa",
-    "testLabel": "Teste"
+    "noChanges": "Sem alterações"
   },
   "translation": {
     "translate": "Traduzir",

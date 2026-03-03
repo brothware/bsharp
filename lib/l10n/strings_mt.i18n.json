@@ -361,13 +361,7 @@
   },
   "changelog": {
     "title": "Bidliet riċenti",
-    "noChanges": "M'hemmx bidliet",
-    "grade": "Marka",
-    "attendanceLabel": "Attendenza",
-    "messageLabel": "Messaġġ",
-    "scheduleLabel": "Skeda",
-    "homeworkLabel": "Homework",
-    "testLabel": "Test"
+    "noChanges": "M'hemmx bidliet"
   },
   "translation": {
     "translate": "Ittraduċi",

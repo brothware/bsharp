@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Πρόσφατες αλλαγές",
-    "noChanges": "Δεν υπάρχουν αλλαγές",
-    "grade": "Βαθμός",
-    "attendanceLabel": "Παρουσίες",
-    "messageLabel": "Μήνυμα",
-    "scheduleLabel": "Πρόγραμμα",
-    "homeworkLabel": "Εργασία",
-    "testLabel": "Διαγώνισμα"
+    "noChanges": "Δεν υπάρχουν αλλαγές"
   },
   "translation": {
     "translate": "Μετάφραση",

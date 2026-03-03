@@ -364,13 +364,7 @@
   },
   "changelog": {
     "title": "Athruithne le deireanas",
-    "noChanges": "Gan athruithne",
-    "grade": "Gradam",
-    "attendanceLabel": "Tinreamh",
-    "messageLabel": "Teachtaireacht",
-    "scheduleLabel": "Amhclar",
-    "homeworkLabel": "Obair bhaile",
-    "testLabel": "Scrudu"
+    "noChanges": "Gan athruithne"
   },
   "translation": {
     "translate": "Aistrigh",

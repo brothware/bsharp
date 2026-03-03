@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Legutóbbi változások",
-    "noChanges": "Nincsenek változások",
-    "grade": "Jegy",
-    "attendanceLabel": "Hiányzás",
-    "messageLabel": "Üzenet",
-    "scheduleLabel": "Órarend",
-    "homeworkLabel": "Házi feladat",
-    "testLabel": "Dolgozat"
+    "noChanges": "Nincsenek változások"
   },
   "translation": {
     "translate": "Fordítás",

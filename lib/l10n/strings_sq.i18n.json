@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Ndryshimet e fundit",
-    "noChanges": "Nuk ka ndryshime",
-    "grade": "Notë",
-    "attendanceLabel": "Frekuentimi",
-    "messageLabel": "Mesazhi",
-    "scheduleLabel": "Orari",
-    "homeworkLabel": "Detyra e shtëpisë",
-    "testLabel": "Testi"
+    "noChanges": "Nuk ka ndryshime"
   },
   "translation": {
     "translate": "Përkthe",

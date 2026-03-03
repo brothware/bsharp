@@ -358,13 +358,7 @@
   },
   "changelog": {
     "title": "Останні зміни",
-    "noChanges": "Немає змін",
-    "grade": "Оцінка",
-    "attendanceLabel": "Відвідуваність",
-    "messageLabel": "Повідомлення",
-    "scheduleLabel": "Розклад",
-    "homeworkLabel": "Домашнє завдання",
-    "testLabel": "Контрольна"
+    "noChanges": "Немає змін"
   },
   "translation": {
     "translate": "Перекласти",

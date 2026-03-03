@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Неодамнешни промени",
-    "noChanges": "Нема промени",
-    "grade": "Оценка",
-    "attendanceLabel": "Присуство",
-    "messageLabel": "Порака",
-    "scheduleLabel": "Распоред",
-    "homeworkLabel": "Домашна задача",
-    "testLabel": "Тест"
+    "noChanges": "Нема промени"
   },
   "translation": {
     "translate": "Преведи",

@@ -358,13 +358,7 @@
   },
   "changelog": {
     "title": "Апошнія змены",
-    "noChanges": "Няма змен",
-    "grade": "Адзнака",
-    "attendanceLabel": "Наведвальнасць",
-    "messageLabel": "Паведамленне",
-    "scheduleLabel": "Расклад",
-    "homeworkLabel": "Хатняе заданне",
-    "testLabel": "Кантрольная"
+    "noChanges": "Няма змен"
   },
   "translation": {
     "translate": "Перакласці",

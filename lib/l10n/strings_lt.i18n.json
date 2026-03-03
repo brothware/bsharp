@@ -361,13 +361,7 @@
   },
   "changelog": {
     "title": "Paskutiniai pakeitimai",
-    "noChanges": "Nėra pakeitimų",
-    "grade": "Pažymys",
-    "attendanceLabel": "Lankomumas",
-    "messageLabel": "Žinutė",
-    "scheduleLabel": "Tvarkaraštis",
-    "homeworkLabel": "Namų darbas",
-    "testLabel": "Kontrolinis"
+    "noChanges": "Nėra pakeitimų"
   },
   "translation": {
     "translate": "Versti",

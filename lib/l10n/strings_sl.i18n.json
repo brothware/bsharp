@@ -361,13 +361,7 @@
   },
   "changelog": {
     "title": "Nedavne spremembe",
-    "noChanges": "Ni sprememb",
-    "grade": "Ocena",
-    "attendanceLabel": "Prisotnost",
-    "messageLabel": "Sporočilo",
-    "scheduleLabel": "Urnik",
-    "homeworkLabel": "Domača naloga",
-    "testLabel": "Preizkus"
+    "noChanges": "Ni sprememb"
   },
   "translation": {
     "translate": "Prevedi",

@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Son değişiklikler",
-    "noChanges": "Değişiklik yok",
-    "grade": "Not",
-    "attendanceLabel": "Devamsızlık",
-    "messageLabel": "Mesaj",
-    "scheduleLabel": "Ders programı",
-    "homeworkLabel": "Ödev",
-    "testLabel": "Sınav"
+    "noChanges": "Değişiklik yok"
   },
   "translation": {
     "translate": "Çevir",

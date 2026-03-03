@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Viimased muudatused",
-    "noChanges": "Muudatusi pole",
-    "grade": "Hinne",
-    "attendanceLabel": "Kohalviibimine",
-    "messageLabel": "Sõnum",
-    "scheduleLabel": "Tunniplaan",
-    "homeworkLabel": "Kodutöö",
-    "testLabel": "Kontrolltöö"
+    "noChanges": "Muudatusi pole"
   },
   "translation": {
     "translate": "Tõlgi",

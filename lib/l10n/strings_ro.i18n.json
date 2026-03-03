@@ -358,13 +358,7 @@
   },
   "changelog": {
     "title": "Modificări recente",
-    "noChanges": "Fără modificări",
-    "grade": "Notă",
-    "attendanceLabel": "Prezență",
-    "messageLabel": "Mesaj",
-    "scheduleLabel": "Orar",
-    "homeworkLabel": "Temă",
-    "testLabel": "Lucrare"
+    "noChanges": "Fără modificări"
   },
   "translation": {
     "translate": "Traduce",

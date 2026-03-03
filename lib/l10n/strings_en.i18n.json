@@ -359,12 +359,14 @@
   "changelog": {
     "title": "Recent changes",
     "noChanges": "No changes",
-    "grade": "Grade",
-    "attendanceLabel": "Attendance",
-    "messageLabel": "Message",
-    "scheduleLabel": "Schedule",
-    "homeworkLabel": "Homework",
-    "testLabel": "Test"
+    "gradesTab": "Grades",
+    "attendanceTab": "Attendance",
+    "gradeAdded": "Grade added",
+    "gradeUpdated": "Grade updated",
+    "gradeDeleted": "Grade deleted",
+    "attendanceAdded": "Attendance added",
+    "attendanceUpdated": "Attendance updated",
+    "attendanceDeleted": "Attendance deleted"
   },
   "translation": {
     "translate": "Translate",

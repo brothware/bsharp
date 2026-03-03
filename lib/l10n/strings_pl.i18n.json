@@ -362,12 +362,14 @@
   "changelog": {
     "title": "Ostatnie zmiany",
     "noChanges": "Brak zmian",
-    "grade": "Ocena",
-    "attendanceLabel": "Frekwencja",
-    "messageLabel": "Wiadomość",
-    "scheduleLabel": "Plan lekcji",
-    "homeworkLabel": "Zadanie",
-    "testLabel": "Sprawdzian"
+    "gradesTab": "Oceny",
+    "attendanceTab": "Obecności",
+    "gradeAdded": "Dodano ocenę",
+    "gradeUpdated": "Zmieniono ocenę",
+    "gradeDeleted": "Usunięto ocenę",
+    "attendanceAdded": "Dodano obecność",
+    "attendanceUpdated": "Zmieniono obecność",
+    "attendanceDeleted": "Usunięto obecność"
   },
   "translation": {
     "translate": "Przetłumacz",

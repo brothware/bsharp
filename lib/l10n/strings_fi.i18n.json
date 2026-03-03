@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Viimeisimmät muutokset",
-    "noChanges": "Ei muutoksia",
-    "grade": "Arvosana",
-    "attendanceLabel": "Läsnäolo",
-    "messageLabel": "Viesti",
-    "scheduleLabel": "Lukujärjestys",
-    "homeworkLabel": "Kotitehtävä",
-    "testLabel": "Koe"
+    "noChanges": "Ei muutoksia"
   },
   "translation": {
     "translate": "Käännä",

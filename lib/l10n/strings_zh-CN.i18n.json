@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "最近变更",
-    "noChanges": "没有变更",
-    "grade": "成绩",
-    "attendanceLabel": "出勤",
-    "messageLabel": "消息",
-    "scheduleLabel": "课程表",
-    "homeworkLabel": "作业",
-    "testLabel": "考试"
+    "noChanges": "没有变更"
   },
   "translation": {
     "translate": "翻译",

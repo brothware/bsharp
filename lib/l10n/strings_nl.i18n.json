@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Recente wijzigingen",
-    "noChanges": "Geen wijzigingen",
-    "grade": "Cijfer",
-    "attendanceLabel": "Aanwezigheid",
-    "messageLabel": "Bericht",
-    "scheduleLabel": "Rooster",
-    "homeworkLabel": "Huiswerk",
-    "testLabel": "Toets"
+    "noChanges": "Geen wijzigingen"
   },
   "translation": {
     "translate": "Vertalen",

@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "最近變更",
-    "noChanges": "沒有變更",
-    "grade": "成績",
-    "attendanceLabel": "出勤",
-    "messageLabel": "訊息",
-    "scheduleLabel": "課表",
-    "homeworkLabel": "作業",
-    "testLabel": "考試"
+    "noChanges": "沒有變更"
   },
   "translation": {
     "translate": "翻譯",

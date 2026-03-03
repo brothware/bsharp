@@ -355,13 +355,7 @@
   },
   "changelog": {
     "title": "Pēdējās izmaiņas",
-    "noChanges": "Nav izmaiņu",
-    "grade": "Atzīme",
-    "attendanceLabel": "Apmeklējums",
-    "messageLabel": "Ziņojums",
-    "scheduleLabel": "Grafiks",
-    "homeworkLabel": "Mājas darbs",
-    "testLabel": "Kontroldarbs"
+    "noChanges": "Nav izmaiņu"
   },
   "translation": {
     "translate": "Tulkot",
