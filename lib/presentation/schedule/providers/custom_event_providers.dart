@@ -1,22 +1,24 @@
 import 'dart:io';
 
+import 'package:bsharp/data/data_sources/local/custom_event_dao.dart';
+import 'package:bsharp/data/data_sources/local/database.dart'
+    hide CustomEvent, CustomEventOccurrence;
+import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-import 'package:bsharp/data/data_sources/local/custom_event_dao.dart';
-import 'package:bsharp/data/data_sources/local/database.dart' hide CustomEvent, CustomEventOccurrence;
-import 'package:bsharp/domain/entities/custom_event.dart';
-
 final _customEventDatabaseProvider = Provider<AppDatabase>((ref) {
   late final AppDatabase db;
-  db = AppDatabase(LazyDatabase(() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dir.path, 'custom_events.db'));
-    return NativeDatabase.createInBackground(file);
-  }));
+  db = AppDatabase(
+    LazyDatabase(() async {
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dir.path, 'custom_events.db'));
+      return NativeDatabase.createInBackground(file);
+    }),
+  );
   ref.onDispose(db.close);
   return db;
 });
@@ -26,8 +28,7 @@ final customEventDaoProvider = Provider<CustomEventDao>((ref) {
   return CustomEventDao(db);
 });
 
-final customEventsProvider =
-    StateProvider<List<CustomEvent>>((ref) => []);
+final customEventsProvider = StateProvider<List<CustomEvent>>((ref) => []);
 
 final customEventOccurrencesProvider =
     StateProvider<List<({int customEventId, DateTime date})>>((ref) => []);

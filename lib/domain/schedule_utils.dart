@@ -28,7 +28,8 @@ class ScheduleEntry {
   bool get isSubstitution => event.substitution != 0;
   bool get isLocked => event.locked != 0;
 
-  String get timeRange => '${_formatTime(event.startTime)} - '
+  String get timeRange =>
+      '${_formatTime(event.startTime)} - '
       '${_formatTime(event.endTime)}';
 
   static String _formatTime(String time) {

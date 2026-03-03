@@ -1,14 +1,9 @@
-import 'package:flutter/material.dart';
-
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
+import 'package:flutter/material.dart';
 
 class CustomEventCard extends StatelessWidget {
-  const CustomEventCard({
-    required this.item,
-    super.key,
-    this.onTap,
-  });
+  const CustomEventCard({required this.item, super.key, this.onTap});
 
   final CustomEventTimelineItem item;
   final VoidCallback? onTap;
@@ -65,8 +60,7 @@ class CustomEventCard extends StatelessWidget {
                                 child: Text(
                                   item.event.place!,
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color:
-                                        theme.colorScheme.onSurfaceVariant,
+                                    color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ),

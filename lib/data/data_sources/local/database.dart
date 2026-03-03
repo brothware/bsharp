@@ -8,8 +8,7 @@ class Accounts extends Table {
   TextColumn get login => text()();
   TextColumn get passwordHash => text()();
   BoolColumn get isActive => boolean().withDefault(const Constant(false))();
-  DateTimeColumn get createdAt =>
-      dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
 class SyncMetadata extends Table {
@@ -468,8 +467,7 @@ class TranslationCacheEntries extends Table {
   TextColumn get sourceHash => text()();
   TextColumn get targetLang => text()();
   TextColumn get translatedText => text()();
-  DateTimeColumn get createdAt =>
-      dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
 class CustomEvents extends Table {
@@ -544,15 +542,15 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) => m.createAll(),
-        onUpgrade: (m, from, to) async {
-          if (from < 2) {
-            await m.createTable(translationCacheEntries);
-          }
-          if (from < 3) {
-            await m.createTable(customEvents);
-            await m.createTable(customEventOccurrences);
-          }
-        },
-      );
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(translationCacheEntries);
+      }
+      if (from < 3) {
+        await m.createTable(customEvents);
+        await m.createTable(customEventOccurrences);
+      }
+    },
+  );
 }

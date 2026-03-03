@@ -1,5 +1,3 @@
-import 'package:go_router/go_router.dart';
-
 import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:bsharp/presentation/attendance/screens/attendance_screen.dart';
 import 'package:bsharp/presentation/auth/screens/login_screen.dart';
@@ -15,6 +13,7 @@ import 'package:bsharp/presentation/schedule/screens/custom_event_form_screen.da
 import 'package:bsharp/presentation/schedule/screens/schedule_screen.dart';
 import 'package:bsharp/presentation/settings/screens/settings_screen.dart';
 import 'package:bsharp/presentation/tests/screens/tests_screen.dart';
+import 'package:go_router/go_router.dart';
 
 abstract final class AppRoutes {
   static const login = '/login';

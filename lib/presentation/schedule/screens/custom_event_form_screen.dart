@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:bsharp/domain/custom_event_utils.dart';
 import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomEventFormScreen extends ConsumerStatefulWidget {
   const CustomEventFormScreen({super.key, this.event});
@@ -40,10 +39,13 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
     final e = widget.event;
     _titleController = TextEditingController(text: e?.title ?? '');
     _placeController = TextEditingController(text: e?.place ?? '');
-    _descriptionController =
-        TextEditingController(text: e?.description ?? '');
-    _startTime = e != null ? _parseTime(e.startTime) : const TimeOfDay(hour: 15, minute: 0);
-    _endTime = e != null ? _parseTime(e.endTime) : const TimeOfDay(hour: 16, minute: 0);
+    _descriptionController = TextEditingController(text: e?.description ?? '');
+    _startTime = e != null
+        ? _parseTime(e.startTime)
+        : const TimeOfDay(hour: 15, minute: 0);
+    _endTime = e != null
+        ? _parseTime(e.endTime)
+        : const TimeOfDay(hour: 16, minute: 0);
     _colorIndex = e?.colorIndex ?? 0;
     _recurrenceType = e?.recurrenceType ?? RecurrenceType.occurrence;
     _recurrenceStartDate = e?.recurrenceStartDate;
@@ -64,11 +66,12 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
       now.add(const Duration(days: 365)),
     );
     setState(() {
-      _occurrenceDates = occs
-          .where((o) => o.customEventId == widget.event!.id)
-          .map((o) => o.date)
-          .toList()
-        ..sort();
+      _occurrenceDates =
+          occs
+              .where((o) => o.customEventId == widget.event!.id)
+              .map((o) => o.date)
+              .toList()
+            ..sort();
     });
   }
 
@@ -82,10 +85,7 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
 
   TimeOfDay _parseTime(String time) {
     final parts = time.split(':');
-    return TimeOfDay(
-      hour: int.parse(parts[0]),
-      minute: int.parse(parts[1]),
-    );
+    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
   }
 
   String _formatTimeOfDay(TimeOfDay tod) =>
@@ -120,10 +120,9 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
               decoration: InputDecoration(
                 labelText: t.schedule.customEvent.eventTitle,
               ),
-              validator: (v) =>
-                  v == null || v.trim().isEmpty
-                      ? t.schedule.customEvent.titleRequired
-                      : null,
+              validator: (v) => v == null || v.trim().isEmpty
+                  ? t.schedule.customEvent.titleRequired
+                  : null,
               textCapitalization: TextCapitalization.sentences,
             ),
             const SizedBox(height: 12),
@@ -199,10 +198,8 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
               _DateRangePicker(
                 startDate: _recurrenceStartDate,
                 endDate: _recurrenceEndDate,
-                onStartChanged: (d) =>
-                    setState(() => _recurrenceStartDate = d),
-                onEndChanged: (d) =>
-                    setState(() => _recurrenceEndDate = d),
+                onStartChanged: (d) => setState(() => _recurrenceStartDate = d),
+                onEndChanged: (d) => setState(() => _recurrenceEndDate = d),
               ),
               const SizedBox(height: 12),
               Text(
@@ -214,8 +211,7 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
                 spacing: 8,
                 children: List.generate(7, (i) {
                   final weekday = i + 1;
-                  final selected =
-                      weekdayBitmaskHas(_weekdayBitmask, weekday);
+                  final selected = weekdayBitmaskHas(_weekdayBitmask, weekday);
                   return FilterChip(
                     label: Text(dayLabel(weekday)),
                     selected: selected,
@@ -245,9 +241,8 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
                   for (final date in _occurrenceDates)
                     Chip(
                       label: Text(formatDateFull(date)),
-                      onDeleted: () => setState(
-                        () => _occurrenceDates.remove(date),
-                      ),
+                      onDeleted: () =>
+                          setState(() => _occurrenceDates.remove(date)),
                     ),
                 ],
               ),
@@ -260,10 +255,7 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
 
   Future<void> _pickTime({required bool isStart}) async {
     final initial = isStart ? _startTime : _endTime;
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: initial,
-    );
+    final picked = await showTimePicker(context: context, initialTime: initial);
     if (picked != null) {
       setState(() {
         if (isStart) {
@@ -332,30 +324,30 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
       endTime: _formatTimeOfDay(_endTime),
       colorIndex: _colorIndex,
       recurrenceType: _recurrenceType,
-      recurrenceStartDate:
-          _recurrenceType == RecurrenceType.weekly ? _recurrenceStartDate : null,
-      recurrenceEndDate:
-          _recurrenceType == RecurrenceType.weekly ? _recurrenceEndDate : null,
-      recurrenceWeekdays:
-          _recurrenceType == RecurrenceType.weekly ? _weekdayBitmask : null,
+      recurrenceStartDate: _recurrenceType == RecurrenceType.weekly
+          ? _recurrenceStartDate
+          : null,
+      recurrenceEndDate: _recurrenceType == RecurrenceType.weekly
+          ? _recurrenceEndDate
+          : null,
+      recurrenceWeekdays: _recurrenceType == RecurrenceType.weekly
+          ? _weekdayBitmask
+          : null,
     );
 
     await saveCustomEvent(ref, event, _occurrenceDates);
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(t.schedule.customEvent.saved)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(t.schedule.customEvent.saved)));
       Navigator.of(context).pop();
     }
   }
 }
 
 class _ColorPicker extends StatelessWidget {
-  const _ColorPicker({
-    required this.selectedIndex,
-    required this.onChanged,
-  });
+  const _ColorPicker({required this.selectedIndex, required this.onChanged});
 
   final int selectedIndex;
   final ValueChanged<int> onChanged;
@@ -426,10 +418,7 @@ class _TimeTile extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              time.format(context),
-              style: theme.textTheme.titleMedium,
-            ),
+            Text(time.format(context), style: theme.textTheme.titleMedium),
           ],
         ),
       ),
@@ -468,10 +457,7 @@ class _DateRangePicker extends StatelessWidget {
             },
             borderRadius: BorderRadius.circular(12),
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 border: Border.all(color: theme.colorScheme.outline),
                 borderRadius: BorderRadius.circular(12),
@@ -487,9 +473,7 @@ class _DateRangePicker extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    startDate != null
-                        ? formatDateFull(startDate!)
-                        : '—',
+                    startDate != null ? formatDateFull(startDate!) : '—',
                     style: theme.textTheme.bodyMedium,
                   ),
                 ],
@@ -511,10 +495,7 @@ class _DateRangePicker extends StatelessWidget {
             },
             borderRadius: BorderRadius.circular(12),
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 border: Border.all(color: theme.colorScheme.outline),
                 borderRadius: BorderRadius.circular(12),

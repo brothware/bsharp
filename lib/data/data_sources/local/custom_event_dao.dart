@@ -1,8 +1,7 @@
-import 'package:drift/drift.dart';
-
 import 'package:bsharp/data/data_sources/local/database.dart';
 import 'package:bsharp/domain/custom_event_utils.dart';
 import 'package:bsharp/domain/entities/custom_event.dart' as domain;
+import 'package:drift/drift.dart';
 
 part 'custom_event_dao.g.dart';
 
@@ -12,9 +11,9 @@ class CustomEventDao extends DatabaseAccessor<AppDatabase>
   CustomEventDao(super.db);
 
   Future<List<domain.CustomEvent>> getAllForAccount(int accountId) async {
-    final rows = await (select(customEvents)
-          ..where((t) => t.accountId.equals(accountId)))
-        .get();
+    final rows = await (select(
+      customEvents,
+    )..where((t) => t.accountId.equals(accountId))).get();
     return rows.map(_toEntity).toList();
   }
 
@@ -23,17 +22,24 @@ class CustomEventDao extends DatabaseAccessor<AppDatabase>
     DateTime start,
     DateTime end,
   ) async {
-    final query = select(customEventOccurrences).join([
-      innerJoin(
-        customEvents,
-        customEvents.id.equalsExp(customEventOccurrences.customEventId),
-      ),
-    ])
-      ..where(customEvents.accountId.equals(accountId))
-      ..where(customEventOccurrences.date
-          .isBiggerOrEqualValue(DateTime(start.year, start.month, start.day)))
-      ..where(customEventOccurrences.date
-          .isSmallerOrEqualValue(DateTime(end.year, end.month, end.day)));
+    final query =
+        select(customEventOccurrences).join([
+            innerJoin(
+              customEvents,
+              customEvents.id.equalsExp(customEventOccurrences.customEventId),
+            ),
+          ])
+          ..where(customEvents.accountId.equals(accountId))
+          ..where(
+            customEventOccurrences.date.isBiggerOrEqualValue(
+              DateTime(start.year, start.month, start.day),
+            ),
+          )
+          ..where(
+            customEventOccurrences.date.isSmallerOrEqualValue(
+              DateTime(end.year, end.month, end.day),
+            ),
+          );
 
     final rows = await query.get();
     return rows.map((row) {
@@ -79,19 +85,16 @@ class CustomEventDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<void> deleteEvent(int eventId) async {
-    await (delete(customEventOccurrences)
-          ..where((t) => t.customEventId.equals(eventId)))
-        .go();
+    await (delete(
+      customEventOccurrences,
+    )..where((t) => t.customEventId.equals(eventId))).go();
     await (delete(customEvents)..where((t) => t.id.equals(eventId))).go();
   }
 
-  Future<void> replaceOccurrences(
-    int eventId,
-    List<DateTime> dates,
-  ) async {
-    await (delete(customEventOccurrences)
-          ..where((t) => t.customEventId.equals(eventId)))
-        .go();
+  Future<void> replaceOccurrences(int eventId, List<DateTime> dates) async {
+    await (delete(
+      customEventOccurrences,
+    )..where((t) => t.customEventId.equals(eventId))).go();
     for (final date in dates) {
       await into(customEventOccurrences).insert(
         CustomEventOccurrencesCompanion.insert(
@@ -103,9 +106,9 @@ class CustomEventDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<void> regenerateWeeklyOccurrences(int eventId) async {
-    final row = await (select(customEvents)
-          ..where((t) => t.id.equals(eventId)))
-        .getSingle();
+    final row = await (select(
+      customEvents,
+    )..where((t) => t.id.equals(eventId))).getSingle();
     final entity = _toEntity(row);
     if (entity.recurrenceType != domain.RecurrenceType.weekly) return;
     final dates = generateOccurrences(entity);
@@ -113,17 +116,17 @@ class CustomEventDao extends DatabaseAccessor<AppDatabase>
   }
 
   domain.CustomEvent _toEntity(CustomEvent row) => domain.CustomEvent(
-        id: row.id,
-        accountId: row.accountId,
-        title: row.title,
-        place: row.place,
-        description: row.description,
-        startTime: row.startTime,
-        endTime: row.endTime,
-        colorIndex: row.colorIndex,
-        recurrenceType: domain.RecurrenceType.fromIndex(row.recurrenceType),
-        recurrenceStartDate: row.recurrenceStartDate,
-        recurrenceEndDate: row.recurrenceEndDate,
-        recurrenceWeekdays: row.recurrenceWeekdays,
-      );
+    id: row.id,
+    accountId: row.accountId,
+    title: row.title,
+    place: row.place,
+    description: row.description,
+    startTime: row.startTime,
+    endTime: row.endTime,
+    colorIndex: row.colorIndex,
+    recurrenceType: domain.RecurrenceType.fromIndex(row.recurrenceType),
+    recurrenceStartDate: row.recurrenceStartDate,
+    recurrenceEndDate: row.recurrenceEndDate,
+    recurrenceWeekdays: row.recurrenceWeekdays,
+  );
 }

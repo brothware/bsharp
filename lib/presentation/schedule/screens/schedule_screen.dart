@@ -1,7 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
@@ -14,6 +10,9 @@ import 'package:bsharp/presentation/schedule/widgets/lesson_card.dart';
 import 'package:bsharp/presentation/schedule/widgets/lesson_detail_sheet.dart';
 import 'package:bsharp/presentation/schedule/widgets/linear_day_view.dart';
 import 'package:bsharp/presentation/schedule/widgets/week_day_header.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ScheduleScreen extends ConsumerWidget {
   const ScheduleScreen({super.key});
@@ -41,8 +40,8 @@ class ScheduleScreen extends ConsumerWidget {
               viewMode: viewMode,
               onPrevious: () => _changeWeek(ref, -1),
               onNext: () => _changeWeek(ref, 1),
-              onToday: () =>
-                  ref.read(selectedDateProvider.notifier).state = DateTime.now(),
+              onToday: () => ref.read(selectedDateProvider.notifier).state =
+                  DateTime.now(),
               onToggleView: () {
                 final next = viewMode == ScheduleViewMode.list
                     ? ScheduleViewMode.linear
@@ -75,8 +74,8 @@ class ScheduleScreen extends ConsumerWidget {
                 '${dayLabelFull(selectedDate.weekday)}, '
                 '${formatDateFull(selectedDate)}',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
           ),
@@ -98,12 +97,14 @@ class ScheduleScreen extends ConsumerWidget {
     final current = ref.read(selectedDateProvider);
     if (direction > 0) {
       final monday = startOfWeek(current);
-      ref.read(selectedDateProvider.notifier).state =
-          monday.add(const Duration(days: 7));
+      ref.read(selectedDateProvider.notifier).state = monday.add(
+        const Duration(days: 7),
+      );
     } else {
       final friday = endOfWeek(current);
-      ref.read(selectedDateProvider.notifier).state =
-          friday.subtract(const Duration(days: 7));
+      ref.read(selectedDateProvider.notifier).state = friday.subtract(
+        const Duration(days: 7),
+      );
     }
   }
 
@@ -152,13 +153,13 @@ class _DayTimelineList extends ConsumerWidget {
           final item = items[index];
           return switch (item) {
             LessonTimelineItem() => LessonCard(
-                entry: item.entry,
-                onTap: () => ScheduleScreen._showItemDetail(context, item),
-              ),
+              entry: item.entry,
+              onTap: () => ScheduleScreen._showItemDetail(context, item),
+            ),
             CustomEventTimelineItem() => CustomEventCard(
-                item: item,
-                onTap: () => ScheduleScreen._showItemDetail(context, item),
-              ),
+              item: item,
+              onTap: () => ScheduleScreen._showItemDetail(context, item),
+            ),
           };
         },
       ),
@@ -187,8 +188,7 @@ class _WeekNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final weekEnd = endOfWeek(weekStart);
-    final isCurrentWeek =
-        isSameDay(startOfWeek(DateTime.now()), weekStart);
+    final isCurrentWeek = isSameDay(startOfWeek(DateTime.now()), weekStart);
 
     return Row(
       children: [
@@ -205,10 +205,7 @@ class _WeekNavigator extends StatelessWidget {
           ),
         ),
         if (!isCurrentWeek)
-          TextButton(
-            onPressed: onToday,
-            child: Text(t.schedule.today),
-          ),
+          TextButton(onPressed: onToday, child: Text(t.schedule.today)),
         IconButton(
           icon: Icon(
             viewMode == ScheduleViewMode.list
@@ -244,10 +241,7 @@ class _EmptyDay extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
           const SizedBox(height: 12),
-          Text(
-            t.schedule.noEvents,
-            style: theme.textTheme.titleMedium,
-          ),
+          Text(t.schedule.noEvents, style: theme.textTheme.titleMedium),
           const SizedBox(height: 4),
           Text(
             t.schedule.noEventsSubtitle,

@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomEventDetailSheet extends ConsumerWidget {
   const CustomEventDetailSheet({
@@ -53,10 +52,7 @@ class CustomEventDetailSheet extends ConsumerWidget {
                   icon: const Icon(Icons.edit_outlined),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    context.push(
-                      AppRoutes.customEventEdit,
-                      extra: event,
-                    );
+                    context.push(AppRoutes.customEventEdit, extra: event);
                   },
                 ),
                 IconButton(
@@ -93,10 +89,7 @@ class CustomEventDetailSheet extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            event.title,
-                            style: theme.textTheme.titleLarge,
-                          ),
+                          Text(event.title, style: theme.textTheme.titleLarge),
                           Text(
                             '${_formatTime(event.startTime)} - '
                             '${_formatTime(event.endTime)}',
@@ -131,10 +124,7 @@ class CustomEventDetailSheet extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    event.description!,
-                    style: theme.textTheme.bodyMedium,
-                  ),
+                  Text(event.description!, style: theme.textTheme.bodyMedium),
                 ],
               ],
             ),

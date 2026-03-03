@@ -45,10 +45,7 @@ class LessonTimelineItem implements TimelineItem {
 }
 
 class CustomEventTimelineItem implements TimelineItem {
-  CustomEventTimelineItem({
-    required this.event,
-    required this.occurrenceDate,
-  });
+  CustomEventTimelineItem({required this.event, required this.occurrenceDate});
 
   final CustomEvent event;
   final DateTime occurrenceDate;

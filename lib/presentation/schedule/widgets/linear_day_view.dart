@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const _startHour = 7;
 const _endHour = 20;
@@ -14,11 +13,7 @@ const _totalHeight = (_endHour - _startHour) * _hourHeight;
 const _leftMargin = 52.0;
 
 class LinearDayView extends ConsumerStatefulWidget {
-  const LinearDayView({
-    required this.date,
-    required this.onItemTap,
-    super.key,
-  });
+  const LinearDayView({required this.date, required this.onItemTap, super.key});
 
   final DateTime date;
   final void Function(TimelineItem item) onItemTap;
@@ -73,7 +68,9 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
     final now = DateTime.now();
     if (_isToday) {
       final offset = _timeToY(now.hour * 60.0 + now.minute) - 100;
-      _scrollController.jumpTo(offset.clamp(0, _scrollController.position.maxScrollExtent));
+      _scrollController.jumpTo(
+        offset.clamp(0, _scrollController.position.maxScrollExtent),
+      );
     } else {
       _scrollController.jumpTo(0);
     }
@@ -122,8 +119,7 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
                 ),
               ),
             ],
-            for (final item in items)
-              _buildEventCard(context, item),
+            for (final item in items) _buildEventCard(context, item),
             if (_isToday) _buildTimeIndicator(theme),
           ],
         ),
@@ -135,7 +131,10 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
     final startMin = _parseMinutes(item.startTime);
     final endMin = _parseMinutes(item.endTime);
     final top = _timeToY(startMin.toDouble());
-    final height = ((endMin - startMin) / 60 * _hourHeight).clamp(24.0, _totalHeight);
+    final height = ((endMin - startMin) / 60 * _hourHeight).clamp(
+      24.0,
+      _totalHeight,
+    );
     final theme = Theme.of(context);
 
     return Positioned(
@@ -154,8 +153,10 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
               Expanded(
                 child: Container(
                   color: item.displayColor.withValues(alpha: 0.15),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -212,9 +213,7 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
               shape: BoxShape.circle,
             ),
           ),
-          Expanded(
-            child: Container(height: 2, color: Colors.red),
-          ),
+          Expanded(child: Container(height: 2, color: Colors.red)),
         ],
       ),
     );
