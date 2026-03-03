@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+
+import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:bsharp/presentation/attendance/screens/attendance_screen.dart';
 import 'package:bsharp/presentation/auth/screens/login_screen.dart';
 import 'package:bsharp/presentation/bulletins/screens/bulletins_screen.dart';
@@ -9,6 +11,7 @@ import 'package:bsharp/presentation/grades/screens/grades_screen.dart';
 import 'package:bsharp/presentation/homework/screens/homework_screen.dart';
 import 'package:bsharp/presentation/messages/screens/messages_screen.dart';
 import 'package:bsharp/presentation/notes/screens/notes_screen.dart';
+import 'package:bsharp/presentation/schedule/screens/custom_event_form_screen.dart';
 import 'package:bsharp/presentation/schedule/screens/schedule_screen.dart';
 import 'package:bsharp/presentation/settings/screens/settings_screen.dart';
 import 'package:bsharp/presentation/tests/screens/tests_screen.dart';
@@ -26,6 +29,8 @@ abstract final class AppRoutes {
   static const tests = '/tests';
   static const bulletins = '/bulletins';
   static const changelog = '/changelog';
+  static const customEventCreate = '/custom-event/create';
+  static const customEventEdit = '/custom-event/edit';
 }
 
 enum AuthState { unauthenticated, authenticated }
@@ -132,6 +137,15 @@ GoRouter createRouter({required AuthState authState}) {
       GoRoute(
         path: AppRoutes.settings,
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.customEventCreate,
+        builder: (context, state) => const CustomEventFormScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.customEventEdit,
+        builder: (context, state) =>
+            CustomEventFormScreen(event: state.extra! as CustomEvent),
       ),
     ],
   );
