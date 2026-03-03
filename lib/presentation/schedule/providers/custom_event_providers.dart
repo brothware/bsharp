@@ -1,30 +1,17 @@
-import 'dart:io';
-
+import 'package:bsharp/data/data_sources/local/connection/custom_event_connection.dart';
 import 'package:bsharp/data/data_sources/local/custom_event_dao.dart';
 import 'package:bsharp/data/data_sources/local/database.dart'
     hide CustomEvent, CustomEventOccurrence;
 import 'package:bsharp/domain/entities/custom_event.dart';
-import 'package:drift/drift.dart' hide Column;
-import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
-final _customEventDatabaseProvider = Provider<AppDatabase>((ref) {
-  late final AppDatabase db;
-  db = AppDatabase(
-    LazyDatabase(() async {
-      final dir = await getApplicationDocumentsDirectory();
-      final file = File(p.join(dir.path, 'custom_events.db'));
-      return NativeDatabase.createInBackground(file);
-    }),
-  );
-  ref.onDispose(db.close);
-  return db;
+final _customEventDatabaseInitProvider = FutureProvider<AppDatabase?>((ref) {
+  return createCustomEventDatabase();
 });
 
-final customEventDaoProvider = Provider<CustomEventDao>((ref) {
-  final db = ref.watch(_customEventDatabaseProvider);
+final customEventDaoProvider = Provider<CustomEventDao?>((ref) {
+  final db = ref.watch(_customEventDatabaseInitProvider).valueOrNull;
+  if (db == null) return null;
   return CustomEventDao(db);
 });
 
@@ -35,6 +22,7 @@ final customEventOccurrencesProvider =
 
 Future<void> loadCustomEvents(WidgetRef ref, int accountId) async {
   final dao = ref.read(customEventDaoProvider);
+  if (dao == null) return;
   final events = await dao.getAllForAccount(accountId);
   ref.read(customEventsProvider.notifier).state = events;
 
@@ -51,6 +39,7 @@ Future<void> saveCustomEvent(
   List<DateTime> occurrenceDates,
 ) async {
   final dao = ref.read(customEventDaoProvider);
+  if (dao == null) return;
   if (event.id == 0) {
     final id = await dao.insertEvent(event);
     if (event.recurrenceType == RecurrenceType.weekly) {
@@ -75,6 +64,7 @@ Future<void> deleteCustomEvent(
   int accountId,
 ) async {
   final dao = ref.read(customEventDaoProvider);
+  if (dao == null) return;
   await dao.deleteEvent(eventId);
   await loadCustomEvents(ref, accountId);
 }

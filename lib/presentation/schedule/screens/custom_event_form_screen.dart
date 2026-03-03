@@ -59,6 +59,7 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
 
   Future<void> _loadExistingOccurrences() async {
     final dao = ref.read(customEventDaoProvider);
+    if (dao == null) return;
     final now = DateTime.now();
     final occs = await dao.getOccurrencesInRange(
       widget.event!.accountId,
