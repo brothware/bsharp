@@ -1,7 +1,7 @@
 name: bsharp
 description: BSharp - Polish e-Grade register client
 publish_to: 'none'
-version: 1.0.1+2
+version: 0.0.0+0
 
 environment:
   sdk: ^3.10.4
