@@ -61,6 +61,13 @@ class MainShell extends ConsumerWidget {
                 height: 20,
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
+            )
+          else
+            IconButton(
+              icon: const Icon(Icons.sync),
+              tooltip: t.settings.sync,
+              onPressed: () =>
+                  ref.read(syncStatusProvider.notifier).sync(),
             ),
           if (messagesVisible)
             IconButton(
