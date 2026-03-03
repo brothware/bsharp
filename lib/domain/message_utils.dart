@@ -46,11 +46,22 @@ String stripHtml(String html) {
       .trim();
 }
 
+String formatFileSize(int bytes) {
+  if (bytes < 1024) return '$bytes B';
+  if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
+  return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+}
+
 String messagePreview(String content, {int maxLength = 100}) {
   final stripped = content
       .replaceAll(RegExp(r'<br\s*/?>'), ' ')
       .replaceAll(RegExp(r'</(?:p|div|li|tr|h[1-6])>', caseSensitive: false), ' ')
       .replaceAll(RegExp(r'<[^>]*>'), '')
+      .replaceAll('&nbsp;', ' ')
+      .replaceAll('&amp;', '&')
+      .replaceAll('&lt;', '<')
+      .replaceAll('&gt;', '>')
+      .replaceAll('&quot;', '"')
       .replaceAll(RegExp(r'\s+'), ' ')
       .trim();
   if (stripped.length <= maxLength) return stripped;

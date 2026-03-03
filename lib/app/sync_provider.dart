@@ -214,6 +214,36 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     }
   }
 
+  Future<void> syncMessages() async {
+    final pocztaDs = ref.read(pocztaDataSourceProvider);
+    if (pocztaDs == null || !pocztaDs.hasSession) return;
+
+    final results = await Future.wait([
+      pocztaDs.getInbox(),
+      pocztaDs.getSent(),
+      pocztaDs.getTrash(),
+    ]);
+
+    results[0].when(
+      success: (data) {
+        ref.read(inboxProvider.notifier).state = _parseMessages(data);
+      },
+      failure: (_) {},
+    );
+    results[1].when(
+      success: (data) {
+        ref.read(sentProvider.notifier).state = _parseMessages(data);
+      },
+      failure: (_) {},
+    );
+    results[2].when(
+      success: (data) {
+        ref.read(trashProvider.notifier).state = _parseMessages(data);
+      },
+      failure: (_) {},
+    );
+  }
+
   Future<void> _syncPortalData(
     PortalDataSource portalDs,
     _Credentials creds,
@@ -318,33 +348,8 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     return result.when(success: (t) => t, failure: (_) => null);
   }
 
-  List<PocztaMessage> _parseMessages(List<dynamic> data) {
-    final result = <PocztaMessage>[];
-    for (final item in data) {
-      if (item is! Map<String, dynamic>) continue;
-      try {
-        final author = item['author'] as Map<String, dynamic>?;
-        final senderName = author?['name'] as String? ?? '';
-
-        final dateStr = item['date'] as String?;
-        if (dateStr == null) continue;
-
-        result.add(PocztaMessage(
-          id: item['id'] as int,
-          title: (item['subject'] ?? '') as String,
-          senderName: senderName,
-          sendTime: DateTime.parse(dateStr),
-          preview: item['content'] as String?,
-          isRead: item['read_at'] != null,
-          isStarred: item['stared'] == true,
-          content: item['content'] as String?,
-        ));
-      } on Object {
-        continue;
-      }
-    }
-    return result;
-  }
+  List<PocztaMessage> _parseMessages(List<dynamic> data) =>
+      parsePocztaMessages(data);
 
   List<PortalBulletin> _parseBulletins(List<dynamic> data) {
     final result = <PortalBulletin>[];
@@ -485,6 +490,9 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     if (syncData.eventSubjects.isNotEmpty) {
       ref.read(eventSubjectsProvider.notifier).state = syncData.eventSubjects;
     }
+    if (syncData.eventEvents.isNotEmpty) {
+      ref.read(eventEventsProvider.notifier).state = syncData.eventEvents;
+    }
     if (syncData.marks.isNotEmpty) {
       ref.read(marksProvider.notifier).state = syncData.marks;
     }
@@ -509,6 +517,34 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
           syncData.attendanceTypes;
     }
   }
+}
+
+List<PocztaMessage> parsePocztaMessages(List<dynamic> data) {
+  final result = <PocztaMessage>[];
+  for (final item in data) {
+    if (item is! Map<String, dynamic>) continue;
+    try {
+      final author = item['author'] as Map<String, dynamic>?;
+      final senderName = author?['name'] as String? ?? '';
+
+      final dateStr = item['date'] as String?;
+      if (dateStr == null) continue;
+
+      result.add(PocztaMessage(
+        id: item['id'] as int,
+        title: (item['subject'] ?? '') as String,
+        senderName: senderName,
+        sendTime: DateTime.parse(dateStr),
+        preview: item['content'] as String?,
+        isRead: item['read_at'] != null,
+        isStarred: item['stared'] == true,
+        content: item['content'] as String?,
+      ));
+    } on Object {
+      continue;
+    }
+  }
+  return result;
 }
 
 class _Credentials {

@@ -4,6 +4,8 @@ import 'package:bsharp/domain/entities/poczta.dart';
 
 final inboxProvider = StateProvider<List<PocztaMessage>>((ref) => []);
 
+final inboxHasMoreProvider = StateProvider<bool>((ref) => true);
+
 final sentProvider = StateProvider<List<PocztaMessage>>((ref) => []);
 
 final trashProvider = StateProvider<List<PocztaMessage>>((ref) => []);

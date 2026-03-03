@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -13,12 +14,14 @@ class MessageDetailView extends ConsumerStatefulWidget {
     this.onReply,
     this.onDelete,
     this.onToggleStar,
+    this.onFilesLoaded,
   });
 
   final PocztaMessage message;
   final VoidCallback? onReply;
   final VoidCallback? onDelete;
   final VoidCallback? onToggleStar;
+  final void Function(List<PocztaAttachment> files)? onFilesLoaded;
 
   @override
   ConsumerState<MessageDetailView> createState() => _MessageDetailViewState();
@@ -26,6 +29,7 @@ class MessageDetailView extends ConsumerStatefulWidget {
 
 class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
   String? _fullContent;
+  List<PocztaAttachment>? _detailFiles;
   var _loadingContent = true;
   String? _translatedTitle;
   String? _translatedContent;
@@ -49,8 +53,21 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
     result.when(
       success: (data) {
         final content = data['content'] as String?;
+        final filesRaw = data['files'] as List<dynamic>?;
+        final files = filesRaw
+            ?.whereType<Map<String, dynamic>>()
+            .map((f) => PocztaAttachment(
+                  name: (f['name'] ?? '') as String,
+                  url: (f['url'] ?? '') as String,
+                  size: int.tryParse('${f['size'] ?? ''}'),
+                ))
+            .toList();
+        if (files != null && files.isNotEmpty) {
+          widget.onFilesLoaded?.call(files);
+        }
         setState(() {
           _fullContent = content;
+          _detailFiles = files;
           _loadingContent = false;
         });
       },
@@ -163,15 +180,15 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
                 displayContent,
                 style: theme.textTheme.bodyMedium,
               ),
-            if (message.files != null && message.files!.isNotEmpty) ...[
+            if ((_detailFiles ?? message.files) case final files?
+                when files.isNotEmpty) ...[
               const SizedBox(height: 16),
               Text(
                 t.messages.attachments,
                 style: theme.textTheme.titleSmall,
               ),
               const SizedBox(height: 8),
-              for (final file in message.files!)
-                _AttachmentTile(attachment: file),
+              for (final file in files) _AttachmentTile(attachment: file),
             ],
           ],
         ),
@@ -208,7 +225,17 @@ class _AttachmentTile extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
+        subtitle: attachment.size != null
+            ? Text(
+                formatFileSize(attachment.size!),
+                style: theme.textTheme.bodySmall,
+              )
+            : null,
         trailing: const Icon(Icons.download_outlined),
+        onTap: () => launchUrl(
+          Uri.parse(attachment.url),
+          mode: LaunchMode.externalApplication,
+        ),
       ),
     );
   }

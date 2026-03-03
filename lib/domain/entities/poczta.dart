@@ -22,6 +22,7 @@ abstract class PocztaAttachment with _$PocztaAttachment {
   const factory PocztaAttachment({
     required String name,
     required String url,
+    int? size,
   }) = _PocztaAttachment;
 }
 
