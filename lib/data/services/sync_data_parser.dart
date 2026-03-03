@@ -20,6 +20,7 @@ class SyncData {
     this.eventTypeTeachers = const [],
     this.eventTypeTerms = const [],
     this.eventSubjects = const [],
+    this.eventEvents = const [],
     this.marks = const [],
     this.markGroups = const [],
     this.markKinds = const [],
@@ -39,6 +40,7 @@ class SyncData {
   final List<EventTypeTeacher> eventTypeTeachers;
   final List<EventTypeTerm> eventTypeTerms;
   final List<EventSubject> eventSubjects;
+  final List<EventEvent> eventEvents;
   final List<Mark> marks;
   final List<MarkGroup> markGroups;
   final List<MarkKind> markKinds;
@@ -63,6 +65,7 @@ class SyncDataParser {
       eventTypeTerms:
           _parseList(data['EventTypeTerms'], _parseEventTypeTerm),
       eventSubjects: _parseList(data['EventSubjects'], _parseEventSubject),
+      eventEvents: _parseList(data['EventEvents'], _parseEventEvent),
       marks: _parseList(data['Marks'], _parseMark),
       markGroups: _parseList(data['MarkGroups'], _parseMarkGroup),
       markKinds: _parseList(data['MarkKinds'], _parseMarkKind),
@@ -252,6 +255,12 @@ class SyncDataParser {
         isPattern: _intOrDefault(j, 'is_pattern', 0),
         position: _intOrDefault(j, 'position', 0),
         weight: _intOrDefault(j, 'weight', 1),
+      );
+
+  EventEvent _parseEventEvent(Map<String, dynamic> j) => EventEvent(
+        id: _int(j, 'id'),
+        events1Id: _int(j, 'events1_id'),
+        events2Id: _int(j, 'events2_id'),
       );
 
   EventTypeTerm _parseEventTypeTerm(Map<String, dynamic> j) => EventTypeTerm(

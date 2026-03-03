@@ -109,6 +109,8 @@
     "lessonConfirmed": "Lesson confirmed",
     "lessonCancelled": "Lesson cancelled",
     "lessonAdded": "Lesson added",
+    "originalSubject": "Originally",
+    "originalTeacher": "Original teacher",
     "previousWeek": "Previous week",
     "nextWeek": "Next week",
     "lesson(context=one)": "lesson",

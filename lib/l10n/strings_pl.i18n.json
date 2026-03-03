@@ -109,6 +109,8 @@
     "lessonConfirmed": "Lekcja zatwierdzona",
     "lessonCancelled": "Lekcja odwołana",
     "lessonAdded": "Lekcja dodana",
+    "originalSubject": "Zamiast",
+    "originalTeacher": "Pierwotny nauczyciel",
     "previousWeek": "Poprzedni tydzień",
     "nextWeek": "Następny tydzień",
     "lesson(context=one)": "lekcja",

@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/room.dart';
-import 'package:bsharp/domain/entities/subject.dart';
-import 'package:bsharp/domain/entities/teacher.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
@@ -15,6 +13,8 @@ final eventTypeTeachersProvider =
     StateProvider<List<EventTypeTeacher>>((ref) => []);
 
 final eventSubjectsProvider = StateProvider<List<EventSubject>>((ref) => []);
+
+final eventEventsProvider = StateProvider<List<EventEvent>>((ref) => []);
 
 final eventTypeTermsProvider =
     StateProvider<List<EventTypeTerm>>((ref) => []);
@@ -33,16 +33,22 @@ final selectedWeekStartProvider = Provider<DateTime>((ref) {
 final eventsForDateProvider =
     Provider.family<List<Event>, DateTime>((ref, date) {
   final events = ref.watch(eventsProvider);
-  return events.where((e) => isSameDay(e.date, date)).toList()
+  final eventEvents = ref.watch(eventEventsProvider);
+  final replacedIds = {for (final ee in eventEvents) ee.events1Id};
+  return events
+      .where((e) => isSameDay(e.date, date) && !replacedIds.contains(e.id))
+      .toList()
     ..sort((a, b) => a.number.compareTo(b.number));
 });
 
 final scheduleEntriesForDateProvider =
     Provider.family<List<ScheduleEntry>, DateTime>((ref, date) {
   final events = ref.watch(eventsForDateProvider(date));
+  final allEvents = ref.watch(eventsProvider);
   final eventTypes = ref.watch(eventTypesProvider);
   final eventTypeTeachers = ref.watch(eventTypeTeachersProvider);
   final eventSubs = ref.watch(eventSubjectsProvider);
+  final eventEvents = ref.watch(eventEventsProvider);
   final subjects = ref.watch(subjectsProvider);
   final teachers = ref.watch(teachersProvider);
   final rooms = ref.watch(roomsProvider);
@@ -51,21 +57,26 @@ final scheduleEntriesForDateProvider =
   final subjectMap = {for (final s in subjects) s.id: s};
   final teacherMap = {for (final t in teachers) t.id: t};
   final roomMap = {for (final r in rooms) r.id: r};
+  final allEventsMap = {for (final e in allEvents) e.id: e};
+  final originalIdMap = {for (final ee in eventEvents) ee.events2Id: ee.events1Id};
+
+  String? resolveSubject(int eventTypesId) {
+    final et = eventTypeMap[eventTypesId];
+    final raw = et != null ? subjectMap[et.subjectsId]?.name : null;
+    return raw != null ? translateSubjectName(raw) : null;
+  }
+
+  String? resolveTeacher(int eventTypesId) {
+    final link = eventTypeTeachers
+        .where((ett) => ett.eventTypesId == eventTypesId);
+    if (link.isEmpty) return null;
+    final t = teacherMap[link.first.teachersId];
+    return t != null ? '${t.name} ${t.surname}' : null;
+  }
 
   return events.map((event) {
-    final eventType = eventTypeMap[event.eventTypesId];
-    final rawSubject =
-        eventType != null ? subjectMap[eventType.subjectsId]?.name : null;
-    final subjectName =
-        rawSubject != null ? translateSubjectName(rawSubject) : null;
-
-    final teacherLink = eventTypeTeachers
-        .where((ett) => ett.eventTypesId == event.eventTypesId);
-    final teacher = teacherLink.isNotEmpty
-        ? teacherMap[teacherLink.first.teachersId]
-        : null;
-    final teacherName =
-        teacher != null ? '${teacher.name} ${teacher.surname}' : null;
+    final subjectName = resolveSubject(event.eventTypesId);
+    final teacherName = resolveTeacher(event.eventTypesId);
 
     final roomName =
         event.roomsId != null ? roomMap[event.roomsId]?.name : null;
@@ -82,6 +93,17 @@ final scheduleEntriesForDateProvider =
       changeType = ScheduleChangeType.substitution;
     }
 
+    String? originalSubjectName;
+    String? originalTeacherName;
+    if (event.substitution == 2) {
+      final origId = originalIdMap[event.id];
+      final origEvent = origId != null ? allEventsMap[origId] : null;
+      if (origEvent != null) {
+        originalSubjectName = resolveSubject(origEvent.eventTypesId);
+        originalTeacherName = resolveTeacher(origEvent.eventTypesId);
+      }
+    }
+
     return ScheduleEntry(
       event: event,
       subjectName: subjectName,
@@ -89,6 +111,8 @@ final scheduleEntriesForDateProvider =
       roomName: roomName,
       topic: topic.isNotEmpty ? topic : null,
       changeType: changeType,
+      originalSubjectName: originalSubjectName,
+      originalTeacherName: originalTeacherName,
     );
   }).toList();
 });

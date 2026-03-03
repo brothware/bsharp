@@ -95,6 +95,20 @@ class LessonDetailSheet extends StatelessWidget {
                   _StatusBanner(changeType: entry.changeType!),
                 ],
                 const SizedBox(height: 24),
+                if (entry.originalSubjectName != null &&
+                    entry.originalSubjectName != entry.subjectName)
+                  _DetailRow(
+                    icon: Icons.swap_horiz,
+                    label: t.schedule.originalSubject,
+                    value: entry.originalSubjectName!,
+                  ),
+                if (entry.originalTeacherName != null &&
+                    entry.originalTeacherName != entry.teacherName)
+                  _DetailRow(
+                    icon: Icons.person_off_outlined,
+                    label: t.schedule.originalTeacher,
+                    value: entry.originalTeacherName!,
+                  ),
                 if (entry.teacherName != null)
                   _DetailRow(
                     icon: Icons.person_outline,

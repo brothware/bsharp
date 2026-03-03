@@ -11,6 +11,8 @@ class ScheduleEntry {
     this.roomName,
     this.topic,
     this.changeType,
+    this.originalSubjectName,
+    this.originalTeacherName,
   });
 
   final Event event;
@@ -19,6 +21,8 @@ class ScheduleEntry {
   final String? roomName;
   final String? topic;
   final ScheduleChangeType? changeType;
+  final String? originalSubjectName;
+  final String? originalTeacherName;
 
   bool get isCancelled => event.status == 2;
   bool get isSubstitution => event.substitution != 0;
