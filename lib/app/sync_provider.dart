@@ -221,41 +221,71 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     int pupilId,
   ) async {
     final now = DateTime.now();
-    final dateFrom = now
-        .subtract(const Duration(days: 100))
-        .toIso8601String()
-        .substring(0, 10);
-    final dateTo =
-        now.add(const Duration(days: 100)).toIso8601String().substring(0, 10);
+    final schoolYearStart = now.month >= 9
+        ? DateTime(now.year, 9, 1)
+        : DateTime(now.year - 1, 9, 1);
+    final schoolYearEnd = DateTime(schoolYearStart.year + 1, 8, 31);
+    final dateFrom = schoolYearStart.toIso8601String().substring(0, 10);
+    final dateTo = schoolYearEnd.toIso8601String().substring(0, 10);
     final pupilIdStr = pupilId.toString();
 
-    final bulletinsResult = await portalDs.getView(
-      school: creds.school,
-      token: token,
-      view: 'bulletins',
-      params: {'pupilId': pupilIdStr, 'dateFrom': dateFrom, 'dateTo': dateTo},
-    );
-    bulletinsResult.when(
-      success: (data) {
-        final items = data['items'] as List<dynamic>? ?? [];
-        ref.read(bulletinsProvider.notifier).state = _parseBulletins(items);
-      },
-      failure: (_) {},
+    final params = {
+      'pupilId': pupilIdStr,
+      'dateFrom': dateFrom,
+      'dateTo': dateTo,
+    };
+
+    await _fetchPortalView(
+      portalDs, creds, token, 'bulletins', params,
+      (items) => ref.read(bulletinsProvider.notifier).state =
+          _parseBulletins(items),
     );
 
-    final freshToken = await _refreshToken(creds);
-    if (freshToken == null) return;
-
-    final changelogResult = await portalDs.getView(
-      school: creds.school,
-      token: freshToken,
-      view: 'changelog',
-      params: {'pupilId': pupilIdStr, 'dateFrom': dateFrom, 'dateTo': dateTo},
+    await _fetchPortalView(
+      portalDs, creds, null, 'changelog', params,
+      (items) => ref.read(changelogProvider.notifier).state =
+          _parseChangelog(items),
     );
-    changelogResult.when(
+
+    await _fetchPortalView(
+      portalDs, creds, null, 'reprimands', params,
+      (items) => ref.read(reprimandsProvider.notifier).state =
+          _parseReprimands(items),
+    );
+
+    await _fetchPortalView(
+      portalDs, creds, null, 'tests', params,
+      (items) => ref.read(testsProvider.notifier).state = _parseTests(items),
+    );
+
+    await _fetchPortalView(
+      portalDs, creds, null, 'homeworks', params,
+      (items) => ref.read(homeworksProvider.notifier).state =
+          _parseHomeworks(items),
+    );
+  }
+
+  Future<void> _fetchPortalView(
+    PortalDataSource portalDs,
+    _Credentials creds,
+    String? token,
+    String view,
+    Map<String, String> params,
+    void Function(List<dynamic> items) onSuccess,
+  ) async {
+    final viewToken = token ?? await _refreshToken(creds);
+    if (viewToken == null) return;
+
+    final result = await portalDs.getView(
+      school: creds.school,
+      token: viewToken,
+      view: view,
+      params: params,
+    );
+    result.when(
       success: (data) {
         final items = data['items'] as List<dynamic>? ?? [];
-        ref.read(changelogProvider.notifier).state = _parseChangelog(items);
+        onSuccess(items);
       },
       failure: (_) {},
     );
@@ -332,6 +362,67 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
           date: (item['date'] ?? '') as String,
           description: (item['description'] ?? '') as String,
           type: (item['type'] ?? '') as String,
+        ));
+      } on Object {
+        continue;
+      }
+    }
+    return result;
+  }
+
+  List<PortalReprimand> _parseReprimands(List<dynamic> data) {
+    final result = <PortalReprimand>[];
+    for (final item in data) {
+      if (item is! Map<String, dynamic>) continue;
+      try {
+        result.add(PortalReprimand(
+          id: item['id'] as int,
+          date: (item['date'] ?? '') as String,
+          teacherName: (item['teacherName'] ?? '') as String,
+          content: (item['content'] ?? '') as String,
+          type: item['type'] as int,
+        ));
+      } on Object {
+        continue;
+      }
+    }
+    return result;
+  }
+
+  List<PortalTest> _parseTests(List<dynamic> data) {
+    final result = <PortalTest>[];
+    for (final item in data) {
+      if (item is! Map<String, dynamic>) continue;
+      try {
+        final dateTime = item['dateTime'] as String?;
+        final date = dateTime != null
+            ? dateTime.substring(0, 10)
+            : (item['date'] ?? '') as String;
+        result.add(PortalTest(
+          id: item['id'] as int,
+          subjectName: (item['subjectName'] ?? '') as String,
+          date: date,
+          title: item['title'] as String?,
+          description: item['description'] as String?,
+        ));
+      } on Object {
+        continue;
+      }
+    }
+    return result;
+  }
+
+  List<PortalHomework> _parseHomeworks(List<dynamic> data) {
+    final result = <PortalHomework>[];
+    for (final item in data) {
+      if (item is! Map<String, dynamic>) continue;
+      try {
+        result.add(PortalHomework(
+          id: item['id'] as int,
+          subjectName: (item['subjectName'] ?? '') as String,
+          date: (item['date'] ?? '') as String,
+          dueDate: (item['dueDate'] ?? item['date'] ?? '') as String,
+          content: (item['content'] ?? item['description'] ?? '') as String,
         ));
       } on Object {
         continue;
