@@ -202,36 +202,28 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
     String? description,
     String? comment,
   ) {
-    final parts = <String>[
-      ?category,
-      if (description != null && description.isNotEmpty) description,
-      if (comment != null && comment.isNotEmpty) comment,
-    ];
-    if (parts.isEmpty) return const SizedBox.shrink();
+    final hasCategory = category != null;
+    final hasDescription = description != null && description.isNotEmpty;
+    final hasComment = comment != null && comment.isNotEmpty;
+    if (!hasCategory && !hasDescription && !hasComment) {
+      return const SizedBox.shrink();
+    }
 
-    const separator = '\n---\n';
     return Padding(
       padding: const EdgeInsets.only(top: 8),
-      child: TranslateButton(
-        sourceText: parts.join(separator),
-        onTranslated: (translated) {
+      child: MultiTranslateButton(
+        fields: [
+          if (hasCategory) TranslationField(category),
+          if (hasDescription) TranslationField(description),
+          if (hasComment) TranslationField(comment),
+        ],
+        onTranslated: (translations) {
           setState(() {
-            if (translated != null) {
-              final segments = translated.split(separator);
+            if (translations != null) {
               var i = 0;
-              if (category != null && i < segments.length) {
-                _translatedCategory = segments[i++];
-              }
-              if (description != null &&
-                  description.isNotEmpty &&
-                  i < segments.length) {
-                _translatedDescription = segments[i++];
-              }
-              if (comment != null &&
-                  comment.isNotEmpty &&
-                  i < segments.length) {
-                _translatedComment = segments[i];
-              }
+              if (hasCategory) _translatedCategory = translations[i++];
+              if (hasDescription) _translatedDescription = translations[i++];
+              if (hasComment) _translatedComment = translations[i];
             } else {
               _translatedCategory = null;
               _translatedDescription = null;

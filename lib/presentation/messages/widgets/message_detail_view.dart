@@ -147,17 +147,16 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
               ],
             ),
             if (rawContent != null)
-              TranslateButton(
-                sourceText: '${message.title}\n---\n$rawContent',
-                isHtml: true,
-                onTranslated: (translated) {
+              MultiTranslateButton(
+                fields: [
+                  TranslationField(message.title),
+                  TranslationField(rawContent, isHtml: true),
+                ],
+                onTranslated: (translations) {
                   setState(() {
-                    if (translated != null) {
-                      final parts = translated.split('\n---\n');
-                      _translatedTitle = parts.first;
-                      _translatedContent = parts.length > 1
-                          ? stripHtml(parts.sublist(1).join('\n---\n'))
-                          : null;
+                    if (translations != null) {
+                      _translatedTitle = translations[0];
+                      _translatedContent = stripHtml(translations[1]);
                     } else {
                       _translatedTitle = null;
                       _translatedContent = null;
