@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
@@ -43,25 +43,20 @@ class _WearMessageDetailScreenState
   }
 
   Future<void> _fetchFullContent() async {
-    final pocztaDs = ref.read(pocztaDataSourceProvider);
-    if (pocztaDs == null || !pocztaDs.hasSession) {
-      if (mounted) setState(() => _loadingContent = false);
+    final dataProvider = ref.read(activeDataProviderProvider);
+    final data = await dataProvider.readMessage(widget.message.id);
+    if (!mounted) return;
+
+    if (data == null) {
+      setState(() => _loadingContent = false);
       return;
     }
 
-    final result = await pocztaDs.readMessage(widget.message.id);
-    if (!mounted) return;
-
-    result.when(
-      success: (data) {
-        final content = data['content'] as String?;
-        setState(() {
-          _fullContent = content;
-          _loadingContent = false;
-        });
-      },
-      failure: (_) => setState(() => _loadingContent = false),
-    );
+    final content = data['content'] as String?;
+    setState(() {
+      _fullContent = content;
+      _loadingContent = false;
+    });
   }
 
   @override

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 
 class MessageDetailView extends ConsumerStatefulWidget {
   const MessageDetailView({
@@ -41,40 +41,35 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
   }
 
   Future<void> _fetchFullContent() async {
-    final pocztaDs = ref.read(pocztaDataSourceProvider);
-    if (pocztaDs == null || !pocztaDs.hasSession) {
-      if (mounted) setState(() => _loadingContent = false);
+    final dataProvider = ref.read(activeDataProviderProvider);
+    final data = await dataProvider.readMessage(widget.message.id);
+    if (!mounted) return;
+
+    if (data == null) {
+      setState(() => _loadingContent = false);
       return;
     }
 
-    final result = await pocztaDs.readMessage(widget.message.id);
-    if (!mounted) return;
-
-    result.when(
-      success: (data) {
-        final content = data['content'] as String?;
-        final filesRaw = data['files'] as List<dynamic>?;
-        final files = filesRaw
-            ?.whereType<Map<String, dynamic>>()
-            .map(
-              (f) => PocztaAttachment(
-                name: (f['name'] ?? '') as String,
-                url: (f['url'] ?? '') as String,
-                size: int.tryParse('${f['size'] ?? ''}'),
-              ),
-            )
-            .toList();
-        if (files != null && files.isNotEmpty) {
-          widget.onFilesLoaded?.call(files);
-        }
-        setState(() {
-          _fullContent = content;
-          _detailFiles = files;
-          _loadingContent = false;
-        });
-      },
-      failure: (_) => setState(() => _loadingContent = false),
-    );
+    final content = data['content'] as String?;
+    final filesRaw = data['files'] as List<dynamic>?;
+    final files = filesRaw
+        ?.whereType<Map<String, dynamic>>()
+        .map(
+          (f) => PocztaAttachment(
+            name: (f['name'] ?? '') as String,
+            url: (f['url'] ?? '') as String,
+            size: int.tryParse('${f['size'] ?? ''}'),
+          ),
+        )
+        .toList();
+    if (files != null && files.isNotEmpty) {
+      widget.onFilesLoaded?.call(files);
+    }
+    setState(() {
+      _fullContent = content;
+      _detailFiles = files;
+      _loadingContent = false;
+    });
   }
 
   @override

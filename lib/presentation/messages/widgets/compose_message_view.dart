@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/translation_provider.dart';
-import 'package:bsharp/data/services/translation_service.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 
 class ComposeMessageView extends ConsumerStatefulWidget {
   const ComposeMessageView({super.key, this.replyTo, this.prefilledRecipient});
@@ -75,32 +74,14 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
   }
 
   Future<void> _performSearch(String query) async {
-    final pocztaDs = ref.read(pocztaDataSourceProvider);
-    if (pocztaDs == null || !pocztaDs.hasSession) return;
-
-    final result = await pocztaDs.searchReceivers(query);
+    final dataProvider = ref.read(activeDataProviderProvider);
+    final receivers = await dataProvider.searchReceivers(query);
     if (!mounted) return;
 
-    result.when(
-      success: (data) {
-        final receivers = <PocztaReceiver>[];
-        for (final item in data) {
-          if (item is! Map<String, dynamic>) continue;
-          receivers.add(
-            PocztaReceiver(
-              id: (item['id'] ?? '').toString(),
-              name: (item['name'] ?? '') as String,
-              role: item['role'] as String?,
-            ),
-          );
-        }
-        setState(() {
-          _searchResults = receivers;
-          _isSearching = true;
-        });
-      },
-      failure: (_) {},
-    );
+    setState(() {
+      _searchResults = receivers;
+      _isSearching = true;
+    });
   }
 
   @override

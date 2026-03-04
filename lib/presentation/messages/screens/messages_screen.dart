@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
@@ -106,7 +108,7 @@ class _MessageListState extends ConsumerState<_MessageList> {
         if (m.id == message.id) m.copyWith(isStarred: !m.isStarred) else m,
     ];
 
-    ref.read(pocztaDataSourceProvider)?.toggleStar(message.id);
+    ref.read(activeDataProviderProvider).toggleStar(message.id);
   }
 
   void _removeMessage(PocztaMessage message) {
@@ -123,17 +125,17 @@ class _MessageListState extends ConsumerState<_MessageList> {
     final index = messages.indexWhere((m) => m.id == message.id);
     notifier.state = messages.where((m) => m.id != message.id).toList();
 
-    final pocztaDs = ref.read(pocztaDataSourceProvider);
+    final dataProvider = ref.read(activeDataProviderProvider);
     final syncNotifier = ref.read(syncStatusProvider.notifier);
 
     if (folder == MessageFolder.trash) {
-      pocztaDs?.restoreMessage(message.id).then((_) {
+      dataProvider.restoreMessage(message.id).then((_) {
         if (mounted) syncNotifier.syncMessages();
       });
       return;
     }
 
-    pocztaDs?.deleteMessage(message.id).then((_) {
+    dataProvider.deleteMessage(message.id).then((_) {
       if (mounted) syncNotifier.syncMessages();
     });
 
@@ -151,7 +153,7 @@ class _MessageListState extends ConsumerState<_MessageList> {
             restored.insert(index.clamp(0, restored.length), message);
             notifier.state = restored;
 
-            pocztaDs?.restoreMessage(message.id).then((_) {
+            dataProvider.restoreMessage(message.id).then((_) {
               syncNotifier.syncMessages();
             });
           },
@@ -162,23 +164,17 @@ class _MessageListState extends ConsumerState<_MessageList> {
 
   Future<void> _loadMoreInbox() async {
     setState(() => _isLoadingMore = true);
-    final pocztaDs = ref.read(pocztaDataSourceProvider);
+    final dataProvider = ref.read(activeDataProviderProvider);
     final currentInbox = ref.read(inboxProvider);
-    final result = await pocztaDs?.getInbox(skip: currentInbox.length);
+    final newMessages = await dataProvider.loadMoreInbox(currentInbox.length);
     if (!mounted) return;
-    result?.when(
-      success: (data) {
-        final newMessages = parsePocztaMessages(data);
-        if (newMessages.length < _inboxPageSize) {
-          ref.read(inboxHasMoreProvider.notifier).state = false;
-        }
-        ref.read(inboxProvider.notifier).state = [
-          ...currentInbox,
-          ...newMessages,
-        ];
-      },
-      failure: (_) {},
-    );
+    if (newMessages.length < _inboxPageSize) {
+      ref.read(inboxHasMoreProvider.notifier).state = false;
+    }
+    ref.read(inboxProvider.notifier).state = [
+      ...currentInbox,
+      ...newMessages,
+    ];
     if (mounted) setState(() => _isLoadingMore = false);
   }
 
@@ -264,7 +260,10 @@ class _MessageListState extends ConsumerState<_MessageList> {
               },
             ),
           ),
-          if (isInbox)
+          if (isInbox &&
+              ref
+                  .watch(activeDataProviderProvider)
+                  .supports(DataProviderCapability.sendMessages))
             Positioned(
               bottom: 16,
               right: 16,
