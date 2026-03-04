@@ -37,6 +37,9 @@ app.*.map.json
 *.g.dart
 *.freezed.dart
 
+lib/l10n/_missing_translations.json
+lib/l10n/_unused_translations.json
+
 *.apk
 *.jks
 /decompiled/
