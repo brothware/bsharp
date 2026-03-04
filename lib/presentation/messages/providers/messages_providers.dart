@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 
 final inboxProvider = StateProvider<List<PocztaMessage>>((ref) => []);
@@ -11,10 +10,6 @@ final sentProvider = StateProvider<List<PocztaMessage>>((ref) => []);
 final trashProvider = StateProvider<List<PocztaMessage>>((ref) => []);
 
 final receiversProvider = StateProvider<List<PocztaReceiver>>((ref) => []);
-
-final pocztaDataSourceProvider = StateProvider<PocztaDataSource?>(
-  (ref) => null,
-);
 
 final unreadCountProvider = Provider<int>((ref) {
   final inbox = ref.watch(inboxProvider);
