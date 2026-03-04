@@ -1,11 +1,41 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:workmanager/workmanager.dart';
 
 abstract interface class BackgroundSyncScheduler {
   void schedule({required Duration interval});
   void cancel();
   bool get isScheduled;
+}
+
+const backgroundSyncTaskName = 'com.bsharp.backgroundSync';
+
+class WorkmanagerSyncScheduler implements BackgroundSyncScheduler {
+  bool _scheduled = false;
+
+  @override
+  bool get isScheduled => _scheduled;
+
+  @override
+  void schedule({required Duration interval}) {
+    unawaited(
+      Workmanager().registerPeriodicTask(
+        backgroundSyncTaskName,
+        backgroundSyncTaskName,
+        frequency: interval,
+        existingWorkPolicy: ExistingWorkPolicy.replace,
+        constraints: Constraints(networkType: NetworkType.connected),
+      ),
+    );
+    _scheduled = true;
+  }
+
+  @override
+  void cancel() {
+    unawaited(Workmanager().cancelByUniqueName(backgroundSyncTaskName));
+    _scheduled = false;
+  }
 }
 
 class WebSyncScheduler implements BackgroundSyncScheduler {
