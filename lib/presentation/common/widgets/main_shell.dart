@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bsharp/app/child_mode_provider.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
 import 'package:bsharp/presentation/common/widgets/child_switcher.dart';
@@ -22,11 +24,15 @@ class MainShell extends ConsumerWidget {
     final notifier = ref.read(childModeProvider.notifier);
     ref.watch(childModeProvider);
 
+    final provider = ref.watch(activeDataProviderProvider);
     final allItems = _allDestinations();
     final visible = <_IndexedNavItem>[];
     for (var i = 0; i < allItems.length; i++) {
       final feature = allItems[i].feature;
-      if (feature == null || notifier.isFeatureVisible(feature)) {
+      final cap = allItems[i].capability;
+      final featureOk = feature == null || notifier.isFeatureVisible(feature);
+      final capOk = cap == null || provider.supports(cap);
+      if (featureOk && capOk) {
         visible.add(_IndexedNavItem(branchIndex: i, item: allItems[i]));
       }
     }
@@ -44,9 +50,9 @@ class MainShell extends ConsumerWidget {
 
     final syncStatus = ref.watch(syncStatusProvider);
     final unreadCount = ref.watch(unreadCountProvider);
-    final messagesVisible = notifier.isFeatureVisible(
-      ChildModeFeature.messages,
-    );
+    final messagesVisible =
+        notifier.isFeatureVisible(ChildModeFeature.messages) &&
+        provider.supports(DataProviderCapability.messages);
     final settingsVisible = notifier.isFeatureVisible(
       ChildModeFeature.settings,
     );
@@ -56,21 +62,23 @@ class MainShell extends ConsumerWidget {
         centerTitle: false,
         title: _buildTitle(context, ref),
         actions: [
-          if (syncStatus == SyncStatus.syncing)
-            const Padding(
-              padding: EdgeInsets.only(right: 8),
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
+          if (provider.requiresCredentials) ...[
+            if (syncStatus == SyncStatus.syncing)
+              const Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              )
+            else
+              IconButton(
+                icon: const Icon(Icons.sync),
+                tooltip: t.settings.sync,
+                onPressed: () => ref.read(syncStatusProvider.notifier).sync(),
               ),
-            )
-          else
-            IconButton(
-              icon: const Icon(Icons.sync),
-              tooltip: t.settings.sync,
-              onPressed: () => ref.read(syncStatusProvider.notifier).sync(),
-            ),
+          ],
           if (messagesVisible)
             IconButton(
               icon: Badge(
@@ -157,44 +165,52 @@ class MainShell extends ConsumerWidget {
         selectedIcon: Icons.calendar_today,
         label: t.nav.schedule,
         feature: ChildModeFeature.schedule,
+        capability: DataProviderCapability.schedule,
       ),
       _NavItem(
         icon: Icons.grade_outlined,
         selectedIcon: Icons.grade,
         label: t.nav.grades,
         feature: ChildModeFeature.grades,
+        capability: DataProviderCapability.grades,
       ),
       _NavItem(
         icon: Icons.check_circle_outline,
         selectedIcon: Icons.check_circle,
         label: t.nav.attendance,
         feature: ChildModeFeature.attendance,
+        capability: DataProviderCapability.attendance,
       ),
       _NavItem(
         icon: Icons.assignment_outlined,
         selectedIcon: Icons.assignment,
         label: t.nav.homework,
+        capability: DataProviderCapability.homework,
       ),
       _NavItem(
         icon: Icons.note_outlined,
         selectedIcon: Icons.note,
         label: t.nav.notes,
         feature: ChildModeFeature.notes,
+        capability: DataProviderCapability.notes,
       ),
       _NavItem(
         icon: Icons.quiz_outlined,
         selectedIcon: Icons.quiz,
         label: t.nav.tests,
+        capability: DataProviderCapability.tests,
       ),
       _NavItem(
         icon: Icons.campaign_outlined,
         selectedIcon: Icons.campaign,
         label: t.nav.bulletins,
+        capability: DataProviderCapability.bulletins,
       ),
       _NavItem(
         icon: Icons.history_outlined,
         selectedIcon: Icons.history,
         label: t.nav.changelog,
+        capability: DataProviderCapability.changelog,
       ),
     ];
   }
@@ -300,10 +316,12 @@ class _NavItem {
     required this.selectedIcon,
     required this.label,
     this.feature,
+    this.capability,
   });
 
   final IconData icon;
   final IconData selectedIcon;
   final String label;
   final ChildModeFeature? feature;
+  final DataProviderCapability? capability;
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
@@ -55,7 +56,16 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
       data: (authState) {
         if (authState == AuthState.authenticated && !_initialSyncTriggered) {
           _initialSyncTriggered = true;
-          Future.microtask(() => ref.read(syncStatusProvider.notifier).sync());
+          final isDemo = ref.read(demoModeProvider);
+          if (!isDemo) {
+            Future.microtask(
+              () => ref.read(syncStatusProvider.notifier).sync(),
+            );
+          } else {
+            Future.microtask(
+              () => ref.read(syncStatusProvider.notifier).markCompleted(),
+            );
+          }
         }
         if (authState != AuthState.authenticated) {
           _initialSyncTriggered = false;

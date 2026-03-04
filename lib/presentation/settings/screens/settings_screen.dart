@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
@@ -22,6 +23,8 @@ class SettingsScreen extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
     final theme = Theme.of(context);
+    final provider = ref.watch(activeDataProviderProvider);
+    final isCredentialBased = provider.requiresCredentials;
 
     return Scaffold(
       appBar: AppBar(title: Text(t.settings.title)),
@@ -40,9 +43,11 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: Text(_languageSubtitle(ref)),
             onTap: () => _showLanguageDialog(context, ref),
           ),
-          const Divider(),
-          _SectionHeader(title: t.settings.syncSection),
-          const _SyncSection(),
+          if (isCredentialBased) ...[
+            const Divider(),
+            _SectionHeader(title: t.settings.syncSection),
+            const _SyncSection(),
+          ],
           const Divider(),
           _SectionHeader(title: t.settings.notifications),
           const _NotificationSection(),
@@ -65,11 +70,12 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const Divider(),
           _SectionHeader(title: t.settings.account),
-          ListTile(
-            leading: const Icon(Icons.password),
-            title: Text(t.settings.changePassword),
-            onTap: () => _showChangePasswordDialog(context, ref),
-          ),
+          if (isCredentialBased)
+            ListTile(
+              leading: const Icon(Icons.password),
+              title: Text(t.settings.changePassword),
+              onTap: () => _showChangePasswordDialog(context, ref),
+            ),
           ListTile(
             leading: Icon(Icons.logout, color: theme.colorScheme.error),
             title: Text(

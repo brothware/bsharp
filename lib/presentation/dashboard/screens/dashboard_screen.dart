@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
 import 'package:bsharp/presentation/dashboard/widgets/current_lesson_card.dart';
@@ -18,6 +20,7 @@ class DashboardScreen extends ConsumerWidget {
     final syncStatus = ref.watch(syncStatusProvider);
     final lastSync = ref.watch(lastSyncTimeProvider);
     final size = screenSizeOf(context);
+    final provider = ref.watch(activeDataProviderProvider);
 
     return RefreshIndicator(
       onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
@@ -34,8 +37,8 @@ class DashboardScreen extends ConsumerWidget {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             sliver: size == ScreenSize.phone
-                ? _buildPhoneLayout()
-                : _buildWideLayout(),
+                ? _buildPhoneLayout(provider)
+                : _buildWideLayout(provider),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
         ],
@@ -64,37 +67,41 @@ class DashboardScreen extends ConsumerWidget {
     return '${dt.day}.${dt.month.toString().padLeft(2, '0')} ${dt.hour}:${dt.minute.toString().padLeft(2, '0')}';
   }
 
-  Widget _buildPhoneLayout() {
-    return SliverList.list(
-      children: const [
-        CurrentLessonCard(),
-        SizedBox(height: 8),
-        UnreadMessagesCard(),
-        UnexcusedAbsencesCard(),
-        RecentGradesCard(),
-        SizedBox(height: 8),
-        _PairedRow(left: UpcomingHomeworkCard(), right: UpcomingTestsCard()),
-      ],
-    );
+  Widget _buildPhoneLayout(SchoolDataProvider provider) {
+    final cards = _buildCards(provider);
+    return SliverList.list(children: cards);
   }
 
-  Widget _buildWideLayout() {
-    return SliverList.list(
-      children: const [
-        CurrentLessonCard(),
-        SizedBox(height: 8),
-        UnreadMessagesCard(),
-        UnexcusedAbsencesCard(),
-        RecentGradesCard(),
-        SizedBox(height: 8),
-        IntrinsicHeight(
-          child: _PairedRow(
-            left: UpcomingHomeworkCard(),
-            right: UpcomingTestsCard(),
-          ),
-        ),
-      ],
-    );
+  Widget _buildWideLayout(SchoolDataProvider provider) {
+    final cards = _buildCards(provider);
+    return SliverList.list(children: cards);
+  }
+
+  List<Widget> _buildCards(SchoolDataProvider provider) {
+    final hasSchedule = provider.supports(DataProviderCapability.schedule);
+    final hasMessages = provider.supports(DataProviderCapability.messages);
+    final hasAttendance = provider.supports(DataProviderCapability.attendance);
+    final hasGrades = provider.supports(DataProviderCapability.grades);
+    final hasHomework = provider.supports(DataProviderCapability.homework);
+    final hasTests = provider.supports(DataProviderCapability.tests);
+
+    return [
+      if (hasSchedule) const CurrentLessonCard(),
+      if (hasSchedule) const SizedBox(height: 8),
+      if (hasMessages) const UnreadMessagesCard(),
+      if (hasAttendance) const UnexcusedAbsencesCard(),
+      if (hasGrades) const RecentGradesCard(),
+      if (hasHomework || hasTests) const SizedBox(height: 8),
+      if (hasHomework && hasTests)
+        const _PairedRow(
+          left: UpcomingHomeworkCard(),
+          right: UpcomingTestsCard(),
+        )
+      else if (hasHomework)
+        const UpcomingHomeworkCard()
+      else if (hasTests)
+        const UpcomingTestsCard(),
+    ];
   }
 }
 

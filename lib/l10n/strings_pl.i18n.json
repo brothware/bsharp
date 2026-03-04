@@ -49,7 +49,8 @@
     "schoolId": "Identyfikator szkoły",
     "schoolIdHint": "np. sp1warszawa",
     "loginAs": "Zaloguj się jako ${name}",
-    "switchAccount": "Zmień konto"
+    "switchAccount": "Zmień konto",
+    "demoMode": "Tryb demo"
   },
   "setup": {
     "title": "Konfiguracja",
