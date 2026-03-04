@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:bsharp/wear/screens/wear_tests_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 

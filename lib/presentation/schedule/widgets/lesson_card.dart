@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/material.dart';
 
 class LessonCard extends StatelessWidget {
-  const LessonCard({super.key, required this.entry, this.onTap});
+  const LessonCard({required this.entry, super.key, this.onTap});
 
   final ScheduleEntry entry;
   final VoidCallback? onTap;

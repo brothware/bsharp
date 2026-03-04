@@ -1,14 +1,13 @@
+import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bsharp/app/auth_provider.dart';
-import 'package:bsharp/app/child_mode_provider.dart';
-import 'package:bsharp/data/data_sources/local/credential_storage.dart';
-import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.dart';
 
 import '../data/credential_storage_test.dart';
 
-Widget _buildApp({ChildModeState? initialState, CredentialStorage? storage}) {
+Widget _buildApp({CredentialStorage? storage}) {
   final store = storage ?? CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [credentialStorageProvider.overrideWithValue(store)],

@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/message_utils.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('formatMessageDate', () {
@@ -11,19 +11,13 @@ void main() {
 
     test('shows Yesterday for yesterday', () {
       final yesterday = DateTime.now().subtract(const Duration(days: 1));
-      final msg = DateTime(
-        yesterday.year,
-        yesterday.month,
-        yesterday.day,
-        10,
-        0,
-      );
+      final msg = DateTime(yesterday.year, yesterday.month, yesterday.day, 10);
       expect(formatMessageDate(msg), 'Yesterday');
     });
 
     test('shows day.month for same year', () {
       final now = DateTime.now();
-      final msg = DateTime(now.year, 1, 5, 10, 0);
+      final msg = DateTime(now.year, 1, 5, 10);
       final today = DateTime(now.year, now.month, now.day);
       final msgDay = DateTime(now.year, 1, 5);
       final yesterday = today.subtract(const Duration(days: 1));
@@ -34,7 +28,7 @@ void main() {
     });
 
     test('shows full date for different year', () {
-      final msg = DateTime(2025, 6, 15, 10, 0);
+      final msg = DateTime(2025, 6, 15, 10);
       expect(formatMessageDate(msg), '15.06.2025');
     });
   });

@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:bsharp/core/constants/app_constants.dart';
+import 'package:dio/dio.dart';
 
 class MobileAuthInterceptor extends Interceptor {
   MobileAuthInterceptor({

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TranslateButton extends ConsumerStatefulWidget {
   const TranslateButton({
@@ -22,7 +22,6 @@ class TranslateButton extends ConsumerStatefulWidget {
 
 class _TranslateButtonState extends ConsumerState<TranslateButton> {
   _TranslationState _state = _TranslationState.idle;
-  String? _translatedText;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +81,6 @@ class _TranslateButtonState extends ConsumerState<TranslateButton> {
 
     result.when(
       success: (translated) {
-        _translatedText = translated;
         setState(() => _state = _TranslationState.translated);
         widget.onTranslated(translated);
       },

@@ -1,7 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final studentsProvider = StateProvider<List<Student>>((ref) => []);
 

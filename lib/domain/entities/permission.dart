@@ -7,8 +7,8 @@ abstract class PermissionGroup with _$PermissionGroup {
   const factory PermissionGroup({
     required int id,
     required int permissionGroupsId,
-    int? parentId,
     required String name,
+    int? parentId,
     String? description,
     String? additionalDescription,
     String? image,

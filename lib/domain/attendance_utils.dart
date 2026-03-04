@@ -179,7 +179,7 @@ Map<DateTime, AttendanceDay> groupByDay(
 }
 
 List<DateTime> calendarDays(int year, int month) {
-  final first = DateTime(year, month, 1);
+  final first = DateTime(year, month);
   final daysInMonth = DateTime(year, month + 1, 0).day;
   final startWeekday = first.weekday;
 

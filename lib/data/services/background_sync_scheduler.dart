@@ -13,7 +13,7 @@ class WebSyncScheduler implements BackgroundSyncScheduler {
 
   final Future<void> Function() onSync;
   Timer? _timer;
-  bool _isVisible = true;
+  bool isVisible = true;
 
   @override
   bool get isScheduled => _timer?.isActive ?? false;
@@ -22,7 +22,7 @@ class WebSyncScheduler implements BackgroundSyncScheduler {
   void schedule({required Duration interval}) {
     cancel();
     _timer = Timer.periodic(interval, (_) {
-      if (_isVisible) onSync();
+      if (isVisible) onSync();
     });
   }
 
@@ -30,10 +30,6 @@ class WebSyncScheduler implements BackgroundSyncScheduler {
   void cancel() {
     _timer?.cancel();
     _timer = null;
-  }
-
-  void setVisibility({required bool visible}) {
-    _isVisible = visible;
   }
 }
 

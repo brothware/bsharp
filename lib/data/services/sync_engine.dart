@@ -28,11 +28,7 @@ class SyncEngine {
         _consecutiveFailures = 0;
         final now = DateTime.now();
         _updateState(
-          _state.copyWith(
-            status: SyncState.completed,
-            lastSyncTime: now,
-            lastError: null,
-          ),
+          _state.copyWith(status: SyncState.completed, lastSyncTime: now),
         );
         return const ChangeSet();
       },
@@ -47,8 +43,9 @@ class SyncEngine {
   }
 
   Future<Result<void>> forceFullSync({required int studentId}) async {
-    if (_state.isSyncing)
+    if (_state.isSyncing) {
       return const Result.failure(UnknownFailure(message: 'Sync in progress'));
+    }
 
     _updateState(_state.copyWith(status: SyncState.syncing));
 
@@ -59,11 +56,7 @@ class SyncEngine {
         _consecutiveFailures = 0;
         final now = DateTime.now();
         _updateState(
-          _state.copyWith(
-            status: SyncState.completed,
-            lastSyncTime: now,
-            lastError: null,
-          ),
+          _state.copyWith(status: SyncState.completed, lastSyncTime: now),
         );
         return const Result.success(null);
       },

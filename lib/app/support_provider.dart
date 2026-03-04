@@ -1,8 +1,7 @@
+import 'package:bsharp/data/services/tip_jar_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
-import 'package:bsharp/data/services/tip_jar_service.dart';
 
 const supportUrl = 'https://buymeacoffee.com/dawidsliwas';
 const sourceCodeUrl = 'https://github.com/brothware/bsharp';

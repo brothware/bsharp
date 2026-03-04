@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/room.dart';
 import 'package:bsharp/domain/entities/subject.dart';
@@ -7,9 +5,11 @@ import 'package:bsharp/domain/entities/teacher.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Event _event({
+  Event event({
     int id = 1,
     DateTime? date,
     int number = 1,
@@ -42,9 +42,9 @@ void main() {
         overrides: [
           eventsProvider.overrideWith(
             (ref) => [
-              _event(id: 1, number: 3, date: DateTime(2026, 2, 27)),
-              _event(id: 2, number: 1, date: DateTime(2026, 2, 27)),
-              _event(id: 3, number: 2, date: DateTime(2026, 2, 28)),
+              event(number: 3, date: DateTime(2026, 2, 27)),
+              event(id: 2, date: DateTime(2026, 2, 27)),
+              event(id: 3, number: 2, date: DateTime(2026, 2, 28)),
             ],
           ),
         ],
@@ -62,14 +62,12 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           eventsProvider.overrideWith(
-            (ref) => [_event(date: DateTime(2026, 2, 27))],
+            (ref) => [event(date: DateTime(2026, 2, 27))],
           ),
         ],
       );
 
-      final result = container.read(
-        eventsForDateProvider(DateTime(2026, 3, 1)),
-      );
+      final result = container.read(eventsForDateProvider(DateTime(2026, 3)));
       expect(result, isEmpty);
     });
   });
@@ -79,14 +77,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           eventsProvider.overrideWith(
-            (ref) => [
-              _event(
-                id: 1,
-                eventTypesId: 10,
-                roomsId: 100,
-                date: DateTime(2026, 2, 27),
-              ),
-            ],
+            (ref) => [event(roomsId: 100, date: DateTime(2026, 2, 27))],
           ),
           eventTypesProvider.overrideWith(
             (ref) => [
@@ -145,7 +136,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           eventsProvider.overrideWith(
-            (ref) => [_event(status: 2, date: DateTime(2026, 2, 27))],
+            (ref) => [event(status: 2, date: DateTime(2026, 2, 27))],
           ),
           eventTypesProvider.overrideWith((ref) => []),
           eventTypeTeachersProvider.overrideWith((ref) => []),
@@ -166,7 +157,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           eventsProvider.overrideWith(
-            (ref) => [_event(substitution: 1, date: DateTime(2026, 2, 27))],
+            (ref) => [event(substitution: 1, date: DateTime(2026, 2, 27))],
           ),
           eventTypesProvider.overrideWith((ref) => []),
           eventTypeTeachersProvider.overrideWith((ref) => []),
@@ -187,7 +178,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           eventsProvider.overrideWith(
-            (ref) => [_event(id: 42, date: DateTime(2026, 2, 27))],
+            (ref) => [event(id: 42, date: DateTime(2026, 2, 27))],
           ),
           eventTypesProvider.overrideWith((ref) => []),
           eventTypeTeachersProvider.overrideWith((ref) => []),
@@ -196,7 +187,11 @@ void main() {
           roomsProvider.overrideWith((ref) => []),
           eventSubjectsProvider.overrideWith(
             (ref) => [
-              EventSubject(id: 1, eventsId: 42, content: 'Quadratic equations'),
+              const EventSubject(
+                id: 1,
+                eventsId: 42,
+                content: 'Quadratic equations',
+              ),
             ],
           ),
         ],

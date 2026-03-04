@@ -6,10 +6,10 @@ part 'group.freezed.dart';
 abstract class Group with _$Group {
   const factory Group({
     required int id,
-    int? parentId,
     required int groupsEduId,
     required String name,
     required String type,
+    int? parentId,
     String? attr,
   }) = _Group;
 }

@@ -1,8 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/domain/entities/portal.dart';
-import 'package:bsharp/domain/entities/teacher.dart';
-import 'package:bsharp/domain/entities/user_reprimand.dart';
-import 'package:bsharp/domain/entities/sync_action.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final homeworksProvider = StateProvider<List<PortalHomework>>((ref) => []);
 
@@ -140,7 +137,7 @@ Map<String, List<PortalChangelog>> _groupChangelogByDate(
 DateTime _parseDate(String date) {
   try {
     return DateTime.parse(date);
-  } catch (_) {
+  } on FormatException {
     final parts = date.split('.');
     if (parts.length == 3) {
       return DateTime(

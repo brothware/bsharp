@@ -1,8 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/services/sync_engine.dart';
 import 'package:bsharp/domain/entities/settings.dart';
 import 'package:bsharp/domain/repositories/sync_repository.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class _FakeSyncRepository implements SyncRepository {
   Result<void> fullSyncResult = const Result.success(null);
@@ -29,7 +29,7 @@ class _FakeSyncRepository implements SyncRepository {
         version: '1.0',
         protocol: '1.6.0',
         id: 'test',
-        time: DateTime(2025, 1, 1),
+        time: DateTime(2025),
         permissions: 0,
       ),
     );

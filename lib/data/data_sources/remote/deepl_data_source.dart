@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:bsharp/core/error/result.dart';
+import 'package:dio/dio.dart';
 
 class DeepLDataSource {
   DeepLDataSource({required String apiKey})

@@ -1,6 +1,6 @@
+import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
 
 void main() {
   group('WearVerticalOverscrollPager', () {

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:bsharp/core/constants/app_colors.dart';
+import 'package:flutter/material.dart';
 
 abstract final class AppTheme {
   static ThemeData light() {
@@ -8,7 +8,6 @@ abstract final class AppTheme {
       primary: AppColors.seaGreen,
       secondary: AppColors.primaryBlue,
       tertiary: AppColors.accentOrange,
-      brightness: Brightness.light,
     );
 
     return ThemeData(

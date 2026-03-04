@@ -1,8 +1,8 @@
+import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
-import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
 
 Widget _buildApp(WearScreenShape shape) {
   return ProviderScope(

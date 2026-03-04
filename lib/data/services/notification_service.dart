@@ -1,7 +1,7 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
   NotificationService({FlutterLocalNotificationsPlugin? plugin})
@@ -25,11 +25,7 @@ class NotificationService {
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
+    const iosSettings = DarwinInitializationSettings();
     const linuxSettings = LinuxInitializationSettings(
       defaultActionName: 'Open',
     );
@@ -71,8 +67,6 @@ class NotificationService {
       config.channelId,
       config.channelName,
       channelDescription: config.channelDescription,
-      importance: Importance.defaultImportance,
-      priority: Priority.defaultPriority,
       number: count,
     );
 

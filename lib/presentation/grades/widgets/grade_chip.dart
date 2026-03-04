@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/material.dart';
 
 class GradeChip extends StatelessWidget {
   const GradeChip({

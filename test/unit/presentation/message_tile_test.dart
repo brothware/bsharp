@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/presentation/messages/widgets/message_tile.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  PocztaMessage _msg({
+  PocztaMessage msg0({
     int id = 1,
     String title = 'Message subject',
     String senderName = 'Jan Kowalski',
@@ -30,34 +30,34 @@ void main() {
   }
 
   testWidgets('shows sender name and title', (tester) async {
-    await tester.pumpWidget(wrap(MessageTile(message: _msg())));
+    await tester.pumpWidget(wrap(MessageTile(message: msg0())));
 
     expect(find.text('Jan Kowalski'), findsOneWidget);
     expect(find.text('Message subject'), findsOneWidget);
   });
 
   testWidgets('shows sender initial in avatar', (tester) async {
-    await tester.pumpWidget(wrap(MessageTile(message: _msg())));
+    await tester.pumpWidget(wrap(MessageTile(message: msg0())));
 
     expect(find.text('J'), findsOneWidget);
   });
 
   testWidgets('shows preview text', (tester) async {
     await tester.pumpWidget(
-      wrap(MessageTile(message: _msg(preview: 'Preview content'))),
+      wrap(MessageTile(message: msg0(preview: 'Preview content'))),
     );
 
     expect(find.text('Preview content'), findsOneWidget);
   });
 
   testWidgets('shows star icon when starred', (tester) async {
-    await tester.pumpWidget(wrap(MessageTile(message: _msg(isStarred: true))));
+    await tester.pumpWidget(wrap(MessageTile(message: msg0(isStarred: true))));
 
     expect(find.byIcon(Icons.star), findsOneWidget);
   });
 
   testWidgets('does not show star when not starred', (tester) async {
-    await tester.pumpWidget(wrap(MessageTile(message: _msg(isStarred: false))));
+    await tester.pumpWidget(wrap(MessageTile(message: msg0())));
 
     expect(find.byIcon(Icons.star), findsNothing);
   });
@@ -66,7 +66,7 @@ void main() {
     await tester.pumpWidget(
       wrap(
         MessageTile(
-          message: _msg(
+          message: msg0(
             files: [const PocztaAttachment(name: 'doc.pdf', url: 'http://x')],
           ),
         ),
@@ -79,7 +79,7 @@ void main() {
   testWidgets('triggers onTap callback', (tester) async {
     var tapped = false;
     await tester.pumpWidget(
-      wrap(MessageTile(message: _msg(), onTap: () => tapped = true)),
+      wrap(MessageTile(message: msg0(), onTap: () => tapped = true)),
     );
 
     await tester.tap(find.byType(ListTile));
@@ -91,7 +91,7 @@ void main() {
       id: 1,
       title: 'Test',
       senderName: 'Test',
-      sendTime: DateTime(2025, 6, 15, 10, 0),
+      sendTime: DateTime(2025, 6, 15, 10),
       isRead: false,
       isStarred: false,
     );

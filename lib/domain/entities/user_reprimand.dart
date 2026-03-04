@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_reprimand.freezed.dart';
 
@@ -12,7 +12,7 @@ abstract class UserReprimand with _$UserReprimand {
     required ReprimandKind kind,
     required DateTime getDate,
     required String content,
-    DateTime? addTime,
     required int status,
+    DateTime? addTime,
   }) = _UserReprimand;
 }

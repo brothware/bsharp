@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
@@ -181,8 +181,9 @@ void main() {
       final notifier = container.read(childModeProvider.notifier);
 
       await notifier.setupPin('1234');
-      notifier.verifyPin('0000');
-      notifier.verifyPin('0000');
+      notifier
+        ..verifyPin('0000')
+        ..verifyPin('0000');
       expect(container.read(childModeProvider).failedAttempts, 2);
 
       notifier.verifyPin('1234');
@@ -191,9 +192,8 @@ void main() {
 
     test('enterChildMode requires PIN to be set', () async {
       final container = _createContainer();
-      final notifier = container.read(childModeProvider.notifier);
-
-      notifier.enterChildMode();
+      final notifier = container.read(childModeProvider.notifier)
+        ..enterChildMode();
       expect(container.read(childModeProvider).isChildMode, isFalse);
 
       await notifier.setupPin('1234');
@@ -217,11 +217,11 @@ void main() {
 
     test('updateConfig changes feature visibility', () {
       final container = _createContainer();
-      final notifier = container.read(childModeProvider.notifier);
-
-      notifier.updateConfig(
-        const ChildModeConfig(messagesVisible: true, gradesVisible: false),
-      );
+      container
+          .read(childModeProvider.notifier)
+          .updateConfig(
+            const ChildModeConfig(messagesVisible: true, gradesVisible: false),
+          );
 
       final config = container.read(childModeProvider).config;
       expect(config.messagesVisible, isTrue);
@@ -232,9 +232,8 @@ void main() {
       'isFeatureVisible returns true in parent mode regardless of config',
       () async {
         final container = _createContainer();
-        final notifier = container.read(childModeProvider.notifier);
-
-        notifier.updateConfig(const ChildModeConfig(messagesVisible: false));
+        final notifier = container.read(childModeProvider.notifier)
+          ..updateConfig(const ChildModeConfig());
 
         expect(notifier.isFeatureVisible(ChildModeFeature.messages), isTrue);
       },
@@ -245,10 +244,9 @@ void main() {
       final notifier = container.read(childModeProvider.notifier);
 
       await notifier.setupPin('1234');
-      notifier.updateConfig(
-        const ChildModeConfig(messagesVisible: false, gradesVisible: true),
-      );
-      notifier.enterChildMode();
+      notifier
+        ..updateConfig(const ChildModeConfig())
+        ..enterChildMode();
 
       expect(notifier.isFeatureVisible(ChildModeFeature.messages), isFalse);
       expect(notifier.isFeatureVisible(ChildModeFeature.grades), isTrue);
@@ -258,9 +256,8 @@ void main() {
       final fakeStorage = FakeKeyValueStore();
       await fakeStorage.write(key: 'child_mode_pin', value: '9999');
       final storage = CredentialStorage(store: fakeStorage);
-      final container = _createContainer(storage: storage);
-
-      container.read(childModeProvider);
+      final container = _createContainer(storage: storage)
+        ..read(childModeProvider);
       await Future<void>.delayed(Duration.zero);
 
       expect(container.read(childModeProvider).isPinSet, isTrue);
@@ -285,8 +282,9 @@ void main() {
       final notifier = container.read(childModeProvider.notifier);
 
       await notifier.setupPin('1234');
-      notifier.enterChildMode();
-      notifier.exitChildMode('1234');
+      notifier
+        ..enterChildMode()
+        ..exitChildMode('1234');
 
       expect(await storage.isChildModeActive(), isFalse);
     });
@@ -295,11 +293,11 @@ void main() {
       final fakeStorage = FakeKeyValueStore();
       final storage = CredentialStorage(store: fakeStorage);
       final container = _createContainer(storage: storage);
-      final notifier = container.read(childModeProvider.notifier);
-
-      notifier.updateConfig(
-        const ChildModeConfig(messagesVisible: true, gradesVisible: false),
-      );
+      container
+          .read(childModeProvider.notifier)
+          .updateConfig(
+            const ChildModeConfig(messagesVisible: true, gradesVisible: false),
+          );
 
       final json = await storage.getChildModeConfig();
       expect(json, isNotNull);
@@ -324,9 +322,8 @@ void main() {
         }),
       );
       final storage = CredentialStorage(store: fakeStorage);
-      final container = _createContainer(storage: storage);
-
-      container.read(childModeProvider);
+      final container = _createContainer(storage: storage)
+        ..read(childModeProvider);
       await Future<void>.delayed(Duration.zero);
 
       final state = container.read(childModeProvider);
@@ -345,9 +342,8 @@ void main() {
         value: lockedUntil.toIso8601String(),
       );
       final storage = CredentialStorage(store: fakeStorage);
-      final container = _createContainer(storage: storage);
-
-      container.read(childModeProvider);
+      final container = _createContainer(storage: storage)
+        ..read(childModeProvider);
       await Future<void>.delayed(Duration.zero);
 
       final state = container.read(childModeProvider);
@@ -374,8 +370,9 @@ void main() {
       final notifier = container.read(childModeProvider.notifier);
 
       await notifier.setupPin('1234');
-      notifier.updateConfig(const ChildModeConfig(messagesVisible: true));
-      notifier.enterChildMode();
+      notifier
+        ..updateConfig(const ChildModeConfig(messagesVisible: true))
+        ..enterChildMode();
       await notifier.removePin();
 
       expect(await storage.getChildModePin(), isNull);

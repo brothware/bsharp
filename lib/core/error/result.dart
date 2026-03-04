@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart' show immutable;
+
+@immutable
 sealed class Result<T> {
   const Result();
 
@@ -82,10 +85,9 @@ final class Failure<T> extends Result<T> {
   String toString() => 'Failure($failure)';
 }
 
+@immutable
 sealed class AppFailure {
   const AppFailure({this.message});
-
-  final String? message;
 
   factory AppFailure.fromErrno(int errno, [String? message]) {
     return switch (errno) {
@@ -104,6 +106,8 @@ sealed class AppFailure {
       _ => UnknownFailure(errno: errno, message: message),
     };
   }
+
+  final String? message;
 }
 
 sealed class AuthFailure extends AppFailure {

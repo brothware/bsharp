@@ -1,5 +1,5 @@
-import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 import 'package:bsharp/core/error/result.dart';
+import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 
 class MlKitTranslationSource {
   OnDeviceTranslator? _translator;

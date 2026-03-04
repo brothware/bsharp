@@ -1,6 +1,6 @@
+import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 
 class WearTileHeader extends ConsumerWidget {
   const WearTileHeader({

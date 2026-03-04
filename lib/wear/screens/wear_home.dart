@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/wear/screens/wear_attendance_tile.dart';
 import 'package:bsharp/wear/screens/wear_bulletins_tile.dart';
@@ -14,6 +11,9 @@ import 'package:bsharp/wear/screens/wear_tests_tile.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_page_indicator.dart';
 import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final wearPageIndexProvider = StateProvider<int>((ref) => 0);
 

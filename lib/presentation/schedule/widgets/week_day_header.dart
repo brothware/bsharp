@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:flutter/material.dart';
 
 class WeekDayHeader extends StatelessWidget {
   const WeekDayHeader({
-    super.key,
     required this.date,
     required this.isSelected,
+    super.key,
     this.onTap,
   });
 

@@ -1,9 +1,9 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Event _event({
+  Event event({
     int id = 1,
     int number = 1,
     String startTime = '08:00:00',
@@ -29,45 +29,43 @@ void main() {
 
   group('ScheduleEntry', () {
     test('isCancelled when status is 2', () {
-      final entry = ScheduleEntry(event: _event(status: 2));
+      final entry = ScheduleEntry(event: event(status: 2));
       expect(entry.isCancelled, isTrue);
     });
 
     test('is not cancelled when status is 0 (scheduled)', () {
-      final entry = ScheduleEntry(event: _event(status: 0));
+      final entry = ScheduleEntry(event: event(status: 0));
       expect(entry.isCancelled, isFalse);
     });
 
     test('is not cancelled when status is 1 (completed)', () {
-      final entry = ScheduleEntry(event: _event(status: 1));
+      final entry = ScheduleEntry(event: event());
       expect(entry.isCancelled, isFalse);
     });
 
     test('isSubstitution when substitution is non-zero', () {
-      final entry = ScheduleEntry(event: _event(substitution: 1));
+      final entry = ScheduleEntry(event: event(substitution: 1));
       expect(entry.isSubstitution, isTrue);
     });
 
     test('is not substitution when substitution is 0', () {
-      final entry = ScheduleEntry(event: _event(substitution: 0));
+      final entry = ScheduleEntry(event: event());
       expect(entry.isSubstitution, isFalse);
     });
 
     test('isLocked when locked is non-zero', () {
-      final entry = ScheduleEntry(event: _event(locked: 1));
+      final entry = ScheduleEntry(event: event(locked: 1));
       expect(entry.isLocked, isTrue);
     });
 
     test('timeRange formats correctly', () {
-      final entry = ScheduleEntry(
-        event: _event(startTime: '08:00:00', endTime: '08:45:00'),
-      );
+      final entry = ScheduleEntry(event: event());
       expect(entry.timeRange, '08:00 - 08:45');
     });
 
     test('timeRange handles short format', () {
       final entry = ScheduleEntry(
-        event: _event(startTime: '8:00', endTime: '8:45'),
+        event: event(startTime: '8:00', endTime: '8:45'),
       );
       expect(entry.timeRange, '8:00 - 8:45');
     });
@@ -93,7 +91,7 @@ void main() {
     });
 
     test('returns Monday for a Sunday', () {
-      final sun = DateTime(2026, 3, 1);
+      final sun = DateTime(2026, 3);
       final monday = startOfWeek(sun);
       expect(monday, DateTime(2026, 2, 23));
     });

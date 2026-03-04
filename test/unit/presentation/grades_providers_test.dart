@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/mark.dart';
 import 'package:bsharp/domain/entities/subject.dart';
@@ -7,9 +5,11 @@ import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Mark _mark({
+  Mark mark({
     int id = 1,
     int markGroupsId = 1,
     double? markValue = 5,
@@ -42,14 +42,14 @@ void main() {
         id: 1,
         name: 'Semester 1',
         type: TermType.semester,
-        startDate: DateTime(2025, 9, 1),
+        startDate: DateTime(2025, 9),
         endDate: DateTime(2026, 1, 31),
       );
       final term2 = Term(
         id: 2,
         name: 'Semester 2',
         type: TermType.semester,
-        startDate: DateTime(2026, 2, 1),
+        startDate: DateTime(2026, 2),
         endDate: DateTime(2026, 6, 30),
       );
 
@@ -68,14 +68,14 @@ void main() {
         id: 1,
         name: 'Past',
         type: TermType.semester,
-        startDate: DateTime(2025, 1, 1),
+        startDate: DateTime(2025),
         endDate: DateTime(2025, 6, 30),
       );
       final current = Term(
         id: 2,
         name: 'Current',
         type: TermType.semester,
-        startDate: DateTime(2025, 9, 1),
+        startDate: DateTime(2025, 9),
         endDate: DateTime(2027, 6, 30),
       );
 
@@ -93,7 +93,7 @@ void main() {
         id: 1,
         name: 'Old',
         type: TermType.year,
-        startDate: DateTime(2020, 9, 1),
+        startDate: DateTime(2020, 9),
         endDate: DateTime(2021, 6, 30),
       );
 
@@ -118,9 +118,9 @@ void main() {
         overrides: [
           marksProvider.overrideWith(
             (ref) => [
-              _mark(id: 1, markGroupsId: 10, markValue: 5),
-              _mark(id: 2, markGroupsId: 10, markValue: 4),
-              _mark(id: 3, markGroupsId: 20, markValue: 3),
+              mark(markGroupsId: 10),
+              mark(id: 2, markGroupsId: 10, markValue: 4),
+              mark(id: 3, markGroupsId: 20, markValue: 3),
             ],
           ),
           markGroupsProvider.overrideWith(
@@ -131,7 +131,6 @@ void main() {
                 markType: 1,
                 visibility: 1,
                 position: 0,
-                weight: 1,
                 eventTypeTermsId: 500,
               ),
               const MarkGroup(
@@ -140,7 +139,6 @@ void main() {
                 markType: 1,
                 visibility: 1,
                 position: 0,
-                weight: 1,
                 eventTypeTermsId: 501,
               ),
             ],
@@ -202,7 +200,7 @@ void main() {
         final container = ProviderContainer(
           overrides: [
             marksProvider.overrideWith(
-              (ref) => [_mark(id: 1, markGroupsId: 10, markScalesId: 118)],
+              (ref) => [mark(markGroupsId: 10, markScalesId: 118)],
             ),
             markGroupsProvider.overrideWith(
               (ref) => [
@@ -212,7 +210,6 @@ void main() {
                   markType: 1,
                   visibility: 1,
                   position: 0,
-                  weight: 1,
                   eventTypeTermsId: 500,
                 ),
               ],
@@ -270,7 +267,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           marksProvider.overrideWith(
-            (ref) => [_mark(id: 1, markGroupsId: 10, markValue: 8)],
+            (ref) => [mark(markGroupsId: 10, markValue: 8)],
           ),
           markGroupsProvider.overrideWith(
             (ref) => [
@@ -280,7 +277,6 @@ void main() {
                 markType: 2,
                 visibility: 1,
                 position: 0,
-                weight: 1,
                 eventTypeTermsId: 500,
                 markValueRangeMax: 10,
               ),
@@ -324,10 +320,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           marksProvider.overrideWith(
-            (ref) => [
-              _mark(id: 1, markGroupsId: 10),
-              _mark(id: 2, markGroupsId: 20),
-            ],
+            (ref) => [mark(markGroupsId: 10), mark(id: 2, markGroupsId: 20)],
           ),
           markGroupsProvider.overrideWith(
             (ref) => [
@@ -337,7 +330,6 @@ void main() {
                 markType: 1,
                 visibility: 1,
                 position: 0,
-                weight: 1,
                 eventTypeTermsId: 500,
               ),
               const MarkGroup(
@@ -346,7 +338,6 @@ void main() {
                 markType: 1,
                 visibility: 1,
                 position: 0,
-                weight: 1,
                 eventTypeTermsId: 501,
               ),
             ],
@@ -402,15 +393,14 @@ void main() {
         overrides: [
           marksProvider.overrideWith(
             (ref) => [
-              _mark(id: 1, markGroupsId: 10, markValue: 3),
+              mark(markGroupsId: 10, markValue: 3),
               Mark(
                 id: 2,
                 markGroupsId: 10,
                 pupilUsersId: 1,
                 teacherUsersId: 1,
                 markValue: 5,
-                weight: 1,
-                getDate: DateTime(2026, 3, 1),
+                getDate: DateTime(2026, 3),
                 modified: 0,
               ),
             ],
@@ -423,7 +413,6 @@ void main() {
                 markType: 1,
                 visibility: 1,
                 position: 0,
-                weight: 1,
                 eventTypeTermsId: 500,
               ),
             ],
@@ -472,8 +461,8 @@ void main() {
         overrides: [
           marksProvider.overrideWith(
             (ref) => [
-              _mark(id: 1, markGroupsId: 10, markValue: 5),
-              _mark(id: 2, markGroupsId: 20, markValue: 3),
+              mark(markGroupsId: 10),
+              mark(id: 2, markGroupsId: 20, markValue: 3),
             ],
           ),
           markGroupsProvider.overrideWith(
@@ -484,7 +473,6 @@ void main() {
                 markType: 1,
                 visibility: 1,
                 position: 0,
-                weight: 1,
                 eventTypeTermsId: 500,
               ),
               const MarkGroup(
@@ -493,7 +481,6 @@ void main() {
                 markType: 1,
                 visibility: 1,
                 position: 0,
-                weight: 1,
                 eventTypeTermsId: 501,
               ),
             ],
@@ -551,9 +538,9 @@ void main() {
         overrides: [
           marksProvider.overrideWith(
             (ref) => [
-              _mark(id: 1, markGroupsId: 10, markValue: 5),
-              _mark(id: 2, markGroupsId: 10, markValue: 5),
-              _mark(id: 3, markGroupsId: 10, markValue: 4),
+              mark(markGroupsId: 10),
+              mark(id: 2, markGroupsId: 10),
+              mark(id: 3, markGroupsId: 10, markValue: 4),
             ],
           ),
           markGroupsProvider.overrideWith(
@@ -564,7 +551,6 @@ void main() {
                 markType: 1,
                 visibility: 1,
                 position: 0,
-                weight: 1,
                 eventTypeTermsId: 500,
               ),
             ],

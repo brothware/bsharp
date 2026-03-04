@@ -1,6 +1,6 @@
+import 'package:bsharp/app/child_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:bsharp/app/child_provider.dart';
 
 class ChildSwitcher extends ConsumerWidget {
   const ChildSwitcher({super.key});

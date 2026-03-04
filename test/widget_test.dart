@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/app/app.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'unit/data/credential_storage_test.dart';
@@ -23,7 +23,7 @@ void main() {
       ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
-          authStateProvider.overrideWith(() => _FakeAuthNotifier()),
+          authStateProvider.overrideWith(_FakeAuthNotifier.new),
           credentialStorageProvider.overrideWithValue(_fakeStorage()),
         ],
         child: TranslationProvider(child: const BSharpApp()),
@@ -44,7 +44,7 @@ void main() {
       ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
-          authStateProvider.overrideWith(() => _FakeAuthNotifier()),
+          authStateProvider.overrideWith(_FakeAuthNotifier.new),
           credentialStorageProvider.overrideWithValue(_fakeStorage()),
         ],
         child: TranslationProvider(child: const BSharpApp()),

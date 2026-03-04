@@ -1,10 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final todayLessonsProvider = Provider<List<ScheduleEntry>>((ref) {
   final now = DateTime.now();

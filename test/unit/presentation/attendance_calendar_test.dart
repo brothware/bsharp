@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -8,6 +5,9 @@ import 'package:bsharp/presentation/attendance/providers/attendance_providers.da
 import 'package:bsharp/presentation/attendance/screens/attendance_screen.dart';
 import 'package:bsharp/presentation/attendance/widgets/attendance_stats_view.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   const presentType = AttendanceType(

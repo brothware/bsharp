@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class AnimatedMessageRemoval extends StatefulWidget {
   const AnimatedMessageRemoval({
-    super.key,
     required this.isRemoving,
     required this.onRemoved,
     required this.child,
+    super.key,
   });
 
   final bool isRemoving;
@@ -73,8 +73,8 @@ class _AnimatedMessageRemovalState extends State<AnimatedMessageRemoval>
 
 class MessageTile extends StatelessWidget {
   const MessageTile({
-    super.key,
     required this.message,
+    super.key,
     this.onTap,
     this.onStar,
     this.onDelete,

@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'attendance.freezed.dart';
 
@@ -19,8 +19,8 @@ abstract class AttendanceType with _$AttendanceType {
     required int id,
     required String name,
     required String abbr,
-    String? style,
     required AttendanceCountAs countAs,
     required AttendanceExcuseStatus excuseStatus,
+    String? style,
   }) = _AttendanceType;
 }

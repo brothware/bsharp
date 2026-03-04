@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -7,6 +5,8 @@ import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/grades/widgets/grade_chip.dart';
 import 'package:bsharp/presentation/grades/widgets/grade_detail_sheet.dart';
 import 'package:bsharp/presentation/grades/widgets/term_selector.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GradesScreen extends ConsumerWidget {
   const GradesScreen({super.key});
@@ -29,7 +29,7 @@ class GradesScreen extends ConsumerWidget {
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                     child: Row(
                       children: [
-                        Expanded(child: TermSelector()),
+                        const Expanded(child: TermSelector()),
                         const SizedBox(width: 8),
                         _AverageChip(
                           label: t.grades.weightedAverageLabel,

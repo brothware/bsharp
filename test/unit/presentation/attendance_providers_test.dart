@@ -1,6 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -8,6 +5,8 @@ import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   const presentType = AttendanceType(
@@ -26,7 +25,7 @@ void main() {
     excuseStatus: AttendanceExcuseStatus.unexcused,
   );
 
-  Attendance _attendance({int id = 1, int eventsId = 1, int typesId = 1}) {
+  Attendance attendance({int id = 1, int eventsId = 1, int typesId = 1}) {
     return Attendance(
       id: id,
       eventsId: eventsId,
@@ -35,7 +34,7 @@ void main() {
     );
   }
 
-  Event _event({int id = 1, DateTime? date}) {
+  Event event({int id = 1, DateTime? date}) {
     return Event(
       id: id,
       date: date ?? DateTime(2026, 2, 27),
@@ -56,18 +55,15 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           attendancesProvider.overrideWith(
-            (ref) => [
-              _attendance(id: 1, eventsId: 1, typesId: 1),
-              _attendance(id: 2, eventsId: 2, typesId: 2),
-            ],
+            (ref) => [attendance(), attendance(id: 2, eventsId: 2, typesId: 2)],
           ),
           attendanceTypesProvider.overrideWith(
             (ref) => [presentType, absentType],
           ),
           eventsProvider.overrideWith(
             (ref) => [
-              _event(id: 1, date: DateTime(2026, 2, 27)),
-              _event(id: 2, date: DateTime(2026, 2, 28)),
+              event(date: DateTime(2026, 2, 27)),
+              event(id: 2, date: DateTime(2026, 2, 28)),
             ],
           ),
         ],
@@ -98,9 +94,9 @@ void main() {
         overrides: [
           attendancesProvider.overrideWith(
             (ref) => [
-              _attendance(id: 1, eventsId: 1, typesId: 1),
-              _attendance(id: 2, eventsId: 2, typesId: 1),
-              _attendance(id: 3, eventsId: 3, typesId: 2),
+              attendance(),
+              attendance(id: 2, eventsId: 2),
+              attendance(id: 3, eventsId: 3, typesId: 2),
             ],
           ),
           attendanceTypesProvider.overrideWith(
@@ -108,9 +104,9 @@ void main() {
           ),
           eventsProvider.overrideWith(
             (ref) => [
-              _event(id: 1, date: DateTime(2025, 10, 1)),
-              _event(id: 2, date: DateTime(2026, 3, 1)),
-              _event(id: 3, date: DateTime(2026, 3, 15)),
+              event(date: DateTime(2025, 10)),
+              event(id: 2, date: DateTime(2026, 3)),
+              event(id: 3, date: DateTime(2026, 3, 15)),
             ],
           ),
           selectedStatsTermIdProvider.overrideWith((ref) => 0),
@@ -128,9 +124,9 @@ void main() {
         overrides: [
           attendancesProvider.overrideWith(
             (ref) => [
-              _attendance(id: 1, eventsId: 1, typesId: 1),
-              _attendance(id: 2, eventsId: 2, typesId: 1),
-              _attendance(id: 3, eventsId: 3, typesId: 2),
+              attendance(),
+              attendance(id: 2, eventsId: 2),
+              attendance(id: 3, eventsId: 3, typesId: 2),
             ],
           ),
           attendanceTypesProvider.overrideWith(
@@ -138,9 +134,9 @@ void main() {
           ),
           eventsProvider.overrideWith(
             (ref) => [
-              _event(id: 1, date: DateTime(2025, 10, 1)),
-              _event(id: 2, date: DateTime(2026, 3, 1)),
-              _event(id: 3, date: DateTime(2026, 3, 15)),
+              event(date: DateTime(2025, 10)),
+              event(id: 2, date: DateTime(2026, 3)),
+              event(id: 3, date: DateTime(2026, 3, 15)),
             ],
           ),
           termsProvider.overrideWith(
@@ -150,7 +146,7 @@ void main() {
                 parentId: 1,
                 name: 'Semestr 1',
                 type: TermType.semester,
-                startDate: DateTime(2025, 9, 1),
+                startDate: DateTime(2025, 9),
                 endDate: DateTime(2026, 2, 15),
               ),
               Term(
@@ -178,12 +174,10 @@ void main() {
     test('returns day data for matching date', () {
       final container = ProviderContainer(
         overrides: [
-          attendancesProvider.overrideWith(
-            (ref) => [_attendance(id: 1, eventsId: 1, typesId: 1)],
-          ),
+          attendancesProvider.overrideWith((ref) => [attendance()]),
           attendanceTypesProvider.overrideWith((ref) => [presentType]),
           eventsProvider.overrideWith(
-            (ref) => [_event(id: 1, date: DateTime(2026, 2, 27))],
+            (ref) => [event(date: DateTime(2026, 2, 27))],
           ),
         ],
       );

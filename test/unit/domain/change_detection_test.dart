@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ChangeSet', () {
@@ -11,13 +11,10 @@ void main() {
     });
 
     test('totalCount returns correct count', () {
-      final cs = ChangeSet(
+      const cs = ChangeSet(
         changes: [
-          const ChangeItem(category: ChangeCategory.grades, title: 'New grade'),
-          const ChangeItem(
-            category: ChangeCategory.messages,
-            title: 'New message',
-          ),
+          ChangeItem(category: ChangeCategory.grades, title: 'New grade'),
+          ChangeItem(category: ChangeCategory.messages, title: 'New message'),
         ],
       );
       expect(cs.totalCount, 2);
@@ -25,11 +22,11 @@ void main() {
     });
 
     test('byCategory filters correctly', () {
-      final cs = ChangeSet(
+      const cs = ChangeSet(
         changes: [
-          const ChangeItem(category: ChangeCategory.grades, title: 'Grade 1'),
-          const ChangeItem(category: ChangeCategory.grades, title: 'Grade 2'),
-          const ChangeItem(category: ChangeCategory.messages, title: 'Message'),
+          ChangeItem(category: ChangeCategory.grades, title: 'Grade 1'),
+          ChangeItem(category: ChangeCategory.grades, title: 'Grade 2'),
+          ChangeItem(category: ChangeCategory.messages, title: 'Message'),
         ],
       );
 
@@ -39,11 +36,11 @@ void main() {
     });
 
     test('countByCategory returns correct count', () {
-      final cs = ChangeSet(
+      const cs = ChangeSet(
         changes: [
-          const ChangeItem(category: ChangeCategory.grades, title: 'A'),
-          const ChangeItem(category: ChangeCategory.grades, title: 'B'),
-          const ChangeItem(category: ChangeCategory.homework, title: 'C'),
+          ChangeItem(category: ChangeCategory.grades, title: 'A'),
+          ChangeItem(category: ChangeCategory.grades, title: 'B'),
+          ChangeItem(category: ChangeCategory.homework, title: 'C'),
         ],
       );
 
@@ -53,15 +50,11 @@ void main() {
     });
 
     test('merge combines two change sets', () {
-      final cs1 = ChangeSet(
-        changes: [
-          const ChangeItem(category: ChangeCategory.grades, title: 'A'),
-        ],
+      const cs1 = ChangeSet(
+        changes: [ChangeItem(category: ChangeCategory.grades, title: 'A')],
       );
-      final cs2 = ChangeSet(
-        changes: [
-          const ChangeItem(category: ChangeCategory.messages, title: 'B'),
-        ],
+      const cs2 = ChangeSet(
+        changes: [ChangeItem(category: ChangeCategory.messages, title: 'B')],
       );
 
       final merged = cs1.merge(cs2);
@@ -69,11 +62,11 @@ void main() {
     });
 
     test('grouped returns map of changes by category', () {
-      final cs = ChangeSet(
+      const cs = ChangeSet(
         changes: [
-          const ChangeItem(category: ChangeCategory.grades, title: 'A'),
-          const ChangeItem(category: ChangeCategory.grades, title: 'B'),
-          const ChangeItem(category: ChangeCategory.messages, title: 'C'),
+          ChangeItem(category: ChangeCategory.grades, title: 'A'),
+          ChangeItem(category: ChangeCategory.grades, title: 'B'),
+          ChangeItem(category: ChangeCategory.messages, title: 'C'),
         ],
       );
 
@@ -84,10 +77,10 @@ void main() {
     });
 
     test('summary produces English text', () {
-      final cs = ChangeSet(
+      const cs = ChangeSet(
         changes: [
-          const ChangeItem(category: ChangeCategory.grades, title: 'A'),
-          const ChangeItem(category: ChangeCategory.messages, title: 'B'),
+          ChangeItem(category: ChangeCategory.grades, title: 'A'),
+          ChangeItem(category: ChangeCategory.messages, title: 'B'),
         ],
       );
 
@@ -123,34 +116,23 @@ void main() {
 
   group('BackoffStrategy', () {
     test('returns base interval for zero failures', () {
-      const backoff = BackoffStrategy(baseInterval: Duration(minutes: 30));
+      const backoff = BackoffStrategy();
       expect(backoff.intervalAfterFailures(0), const Duration(minutes: 30));
     });
 
     test('doubles interval after 1 failure', () {
-      const backoff = BackoffStrategy(
-        baseInterval: Duration(minutes: 30),
-        multiplier: 2.0,
-      );
+      const backoff = BackoffStrategy();
       expect(backoff.intervalAfterFailures(1), const Duration(minutes: 60));
     });
 
     test('caps at maxInterval', () {
-      const backoff = BackoffStrategy(
-        baseInterval: Duration(minutes: 30),
-        maxInterval: Duration(hours: 4),
-        multiplier: 2.0,
-      );
+      const backoff = BackoffStrategy();
 
       expect(backoff.intervalAfterFailures(10), const Duration(hours: 4));
     });
 
     test('progressive backoff with multiple failures', () {
-      const backoff = BackoffStrategy(
-        baseInterval: Duration(minutes: 15),
-        maxInterval: Duration(hours: 4),
-        multiplier: 2.0,
-      );
+      const backoff = BackoffStrategy(baseInterval: Duration(minutes: 15));
 
       expect(backoff.intervalAfterFailures(0), const Duration(minutes: 15));
       expect(backoff.intervalAfterFailures(1), const Duration(minutes: 30));
@@ -160,7 +142,7 @@ void main() {
     });
 
     test('negative failures return base interval', () {
-      const backoff = BackoffStrategy(baseInterval: Duration(minutes: 30));
+      const backoff = BackoffStrategy();
       expect(backoff.intervalAfterFailures(-1), const Duration(minutes: 30));
     });
   });

@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/router.dart';
@@ -10,6 +7,9 @@ import 'package:bsharp/presentation/common/theme/app_theme.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BSharpWearApp extends ConsumerStatefulWidget {
   const BSharpWearApp({super.key});

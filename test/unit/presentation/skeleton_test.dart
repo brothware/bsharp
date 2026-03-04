@@ -1,6 +1,6 @@
+import 'package:bsharp/presentation/common/widgets/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bsharp/presentation/common/widgets/skeleton.dart';
 
 void main() {
   group('ShimmerBox', () {

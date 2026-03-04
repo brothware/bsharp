@@ -7,15 +7,15 @@ abstract class Mark with _$Mark {
   const factory Mark({
     required int id,
     required int markGroupsId,
-    int? markScalesId,
     required int pupilUsersId,
     required int teacherUsersId,
+    required DateTime getDate,
+    required int modified,
+    int? markScalesId,
     double? markValue,
     String? comments,
     @Default(1) int weight,
-    required DateTime getDate,
     DateTime? addTime,
-    required int modified,
     int? eventsId,
   }) = _Mark;
 }
@@ -24,21 +24,21 @@ abstract class Mark with _$Mark {
 abstract class MarkGroup with _$MarkGroup {
   const factory MarkGroup({
     required int id,
+    required int isPattern,
+    required int markType,
+    required int visibility,
+    required int position,
     int? parentId,
     int? parentType,
     int? markGroupGroupsId,
-    required int isPattern,
     int? eventTypeTermsId,
     int? markKindsId,
     String? abbreviation,
     String? description,
-    required int markType,
     String? markFormat,
     int? markDivisionGroupsId,
     int? markScaleGroupsId,
-    required int visibility,
     String? cssStyle,
-    required int position,
     @Default(1) int weight,
     double? markValueRangeMin,
     double? markValueRangeMax,
@@ -51,17 +51,17 @@ abstract class MarkGroup with _$MarkGroup {
 abstract class MarkKind with _$MarkKind {
   const factory MarkKind({
     required int id,
-    int? parentId,
     required String name,
     required String abbreviation,
-    int? subjectsId,
     required int public,
-    int? addByUsersId,
     required int defaultMarkType,
-    int? defaultMarkScaleGroupsId,
-    int? defaultMarkDivisionGroupsId,
     required int defaultWeight,
     required int position,
+    int? parentId,
+    int? subjectsId,
+    int? addByUsersId,
+    int? defaultMarkScaleGroupsId,
+    int? defaultMarkDivisionGroupsId,
     String? cssStyle,
   }) = _MarkKind;
 }
@@ -73,10 +73,10 @@ abstract class MarkScale with _$MarkScale {
     required int markScaleGroupsId,
     required String abbreviation,
     required String name,
-    double? markValue,
-    String? image,
     required int classified,
     required int noCountToAverage,
+    double? markValue,
+    String? image,
     String? cssStyle,
     int? markScaleEduId,
   }) = _MarkScale;
@@ -88,11 +88,11 @@ abstract class MarkScaleGroup with _$MarkScaleGroup {
     required int id,
     required String name,
     required int public,
+    required int isSystem,
+    required int isDefault,
     int? addByUsersId,
     String? markTypes,
     int? markScaleGroupEduId,
-    required int isSystem,
-    required int isDefault,
   }) = _MarkScaleGroup;
 }
 
@@ -117,11 +117,11 @@ abstract class MarkDivisionGroup with _$MarkDivisionGroup {
 abstract class MarkGroupGroup with _$MarkGroupGroup {
   const factory MarkGroupGroup({
     required int id,
-    int? markDivisionGroupsId,
     required String name,
-    int? parentId,
     required int isPattern,
     required int position,
+    int? markDivisionGroupsId,
+    int? parentId,
     @Default(1) int weight,
   }) = _MarkGroupGroup;
 }

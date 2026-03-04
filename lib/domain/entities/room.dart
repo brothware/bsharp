@@ -6,8 +6,8 @@ part 'room.freezed.dart';
 abstract class Room with _$Room {
   const factory Room({
     required int id,
-    int? patronsId,
     required String name,
+    int? patronsId,
     String? description,
   }) = _Room;
 }

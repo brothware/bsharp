@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:bsharp/app/support_provider.dart';
 import 'package:bsharp/data/services/tip_jar_service.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void showTipJarSheet(BuildContext context) {
   showModalBottomSheet<void>(

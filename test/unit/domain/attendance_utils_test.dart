@@ -1,8 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   const presentType = AttendanceType(
@@ -29,7 +29,7 @@ void main() {
     excuseStatus: AttendanceExcuseStatus.unset,
   );
 
-  Attendance _attendance({int id = 1, int eventsId = 1, int typesId = 1}) {
+  Attendance attendance({int id = 1, int eventsId = 1, int typesId = 1}) {
     return Attendance(
       id: id,
       eventsId: eventsId,
@@ -38,7 +38,7 @@ void main() {
     );
   }
 
-  Event _event({int id = 1, DateTime? date, int number = 1}) {
+  Event event({int id = 1, DateTime? date, int number = 1}) {
     return Event(
       id: id,
       date: date ?? DateTime(2026, 2, 27),
@@ -59,15 +59,9 @@ void main() {
       final day = AttendanceDay(
         date: DateTime(2026, 2, 27),
         entries: [
-          AttendanceEntry(
-            attendance: _attendance(typesId: 1),
-            type: presentType,
-          ),
-          AttendanceEntry(
-            attendance: _attendance(typesId: 2),
-            type: absentType,
-          ),
-          AttendanceEntry(attendance: _attendance(typesId: 3), type: lateType),
+          AttendanceEntry(attendance: attendance(), type: presentType),
+          AttendanceEntry(attendance: attendance(typesId: 2), type: absentType),
+          AttendanceEntry(attendance: attendance(typesId: 3), type: lateType),
         ],
       );
 
@@ -78,9 +72,7 @@ void main() {
     test('status is present when all present', () {
       final day = AttendanceDay(
         date: DateTime(2026, 2, 27),
-        entries: [
-          AttendanceEntry(attendance: _attendance(), type: presentType),
-        ],
+        entries: [AttendanceEntry(attendance: attendance(), type: presentType)],
       );
       expect(day.status, AttendanceDayStatus.present);
     });
@@ -89,10 +81,7 @@ void main() {
       final day = AttendanceDay(
         date: DateTime(2026, 2, 27),
         entries: [
-          AttendanceEntry(
-            attendance: _attendance(typesId: 2),
-            type: absentType,
-          ),
+          AttendanceEntry(attendance: attendance(typesId: 2), type: absentType),
         ],
       );
       expect(day.status, AttendanceDayStatus.unexcused);
@@ -110,7 +99,7 @@ void main() {
         date: DateTime(2026, 2, 27),
         entries: [
           AttendanceEntry(
-            attendance: _attendance(typesId: 4),
+            attendance: attendance(typesId: 4),
             type: excusedType,
           ),
         ],
@@ -122,7 +111,7 @@ void main() {
       final day = AttendanceDay(
         date: DateTime(2026, 2, 27),
         entries: [
-          AttendanceEntry(attendance: _attendance(typesId: 3), type: lateType),
+          AttendanceEntry(attendance: attendance(typesId: 3), type: lateType),
         ],
       );
       expect(day.status, AttendanceDayStatus.late);
@@ -139,12 +128,9 @@ void main() {
       final day = AttendanceDay(
         date: DateTime(2026, 2, 27),
         entries: [
+          AttendanceEntry(attendance: attendance(), type: presentType),
           AttendanceEntry(
-            attendance: _attendance(typesId: 1),
-            type: presentType,
-          ),
-          AttendanceEntry(
-            attendance: _attendance(typesId: 4),
+            attendance: attendance(typesId: 4),
             type: excusedType,
           ),
         ],
@@ -184,11 +170,7 @@ void main() {
   group('calculateStats', () {
     test('counts present and absent correctly', () {
       final stats = calculateStats(
-        [
-          _attendance(id: 1, typesId: 1),
-          _attendance(id: 2, typesId: 1),
-          _attendance(id: 3, typesId: 2),
-        ],
+        [attendance(), attendance(id: 2), attendance(id: 3, typesId: 2)],
         [presentType, absentType],
       );
 
@@ -207,9 +189,9 @@ void main() {
     test('builds type counts map', () {
       final stats = calculateStats(
         [
-          _attendance(id: 1, typesId: 1),
-          _attendance(id: 2, typesId: 3),
-          _attendance(id: 3, typesId: 3),
+          attendance(),
+          attendance(id: 2, typesId: 3),
+          attendance(id: 3, typesId: 3),
         ],
         [presentType, lateType],
       );
@@ -219,10 +201,7 @@ void main() {
     });
 
     test('skips attendances with unknown type', () {
-      final stats = calculateStats(
-        [_attendance(id: 1, typesId: 999)],
-        [presentType],
-      );
+      final stats = calculateStats([attendance(typesId: 999)], [presentType]);
       expect(stats.totalLessons, 0);
     });
   });
@@ -230,16 +209,16 @@ void main() {
   group('groupByDay', () {
     test('groups attendances by event date', () {
       final events = [
-        _event(id: 1, date: DateTime(2026, 2, 27), number: 1),
-        _event(id: 2, date: DateTime(2026, 2, 27), number: 2),
-        _event(id: 3, date: DateTime(2026, 2, 28), number: 1),
+        event(date: DateTime(2026, 2, 27)),
+        event(id: 2, date: DateTime(2026, 2, 27), number: 2),
+        event(id: 3, date: DateTime(2026, 2, 28)),
       ];
 
       final result = groupByDay(
         [
-          _attendance(id: 1, eventsId: 1, typesId: 1),
-          _attendance(id: 2, eventsId: 2, typesId: 1),
-          _attendance(id: 3, eventsId: 3, typesId: 2),
+          attendance(),
+          attendance(id: 2, eventsId: 2),
+          attendance(id: 3, eventsId: 3, typesId: 2),
         ],
         [presentType, absentType],
         events,
@@ -251,11 +230,9 @@ void main() {
     });
 
     test('skips attendances with unknown type', () {
-      final result = groupByDay(
-        [_attendance(id: 1, eventsId: 1, typesId: 999)],
-        [presentType],
-        [_event(id: 1)],
-      );
+      final result = groupByDay([attendance(typesId: 999)], [presentType], [
+        event(),
+      ]);
       expect(result, isEmpty);
     });
   });
@@ -284,7 +261,7 @@ void main() {
 
     test('handles months starting on Monday', () {
       final days = calendarDays(2026, 6);
-      expect(days.first, DateTime(2026, 6, 1));
+      expect(days.first, DateTime(2026, 6));
     });
   });
 }

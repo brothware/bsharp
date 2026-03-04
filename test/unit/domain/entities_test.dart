@@ -1,4 +1,3 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/group.dart';
@@ -16,6 +15,7 @@ import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/teacher.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/entities/user_reprimand.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Core entities', () {
@@ -86,7 +86,7 @@ void main() {
         id: 1,
         name: 'School year 2025/2026',
         type: TermType.year,
-        startDate: DateTime(2025, 9, 1),
+        startDate: DateTime(2025, 9),
         endDate: DateTime(2026, 6, 30),
       );
       expect(term.type, TermType.year);
@@ -212,7 +212,6 @@ void main() {
         recipientUsersId: 1,
         title: 'Test',
         content: 'Hello',
-        hide: 0,
       );
       expect(message.readTime, isNull);
     });

@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/wear/screens/wear_messages_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
@@ -21,7 +21,7 @@ PocztaMessage _msg({
     id: id,
     title: title,
     senderName: sender,
-    sendTime: DateTime(2025, 6, 15, 10, 0),
+    sendTime: DateTime(2025, 6, 15, 10),
     isRead: isRead,
     isStarred: isStarred,
   );
@@ -53,13 +53,8 @@ void main() {
       await tester.pumpWidget(
         _buildTile(
           inbox: [
-            _msg(id: 1, title: 'Zebranie', sender: 'Anna Nowak'),
-            _msg(
-              id: 2,
-              title: 'Wycieczka',
-              sender: 'Jan Kowalski',
-              isRead: true,
-            ),
+            _msg(title: 'Zebranie', sender: 'Anna Nowak'),
+            _msg(id: 2, title: 'Wycieczka', isRead: true),
           ],
         ),
       );
@@ -87,13 +82,7 @@ void main() {
 
     testWidgets('shows unread count badge', (tester) async {
       await tester.pumpWidget(
-        _buildTile(
-          inbox: [
-            _msg(id: 1, isRead: false),
-            _msg(id: 2, isRead: false),
-            _msg(id: 3, isRead: true),
-          ],
-        ),
+        _buildTile(inbox: [_msg(), _msg(id: 2), _msg(id: 3, isRead: true)]),
       );
       await tester.pump();
 
@@ -101,9 +90,7 @@ void main() {
     });
 
     testWidgets('unread messages have bold sender name', (tester) async {
-      await tester.pumpWidget(
-        _buildTile(inbox: [_msg(id: 1, sender: 'Unread', isRead: false)]),
-      );
+      await tester.pumpWidget(_buildTile(inbox: [_msg(sender: 'Unread')]));
       await tester.pump();
 
       final textWidget = tester.widget<Text>(find.text('Unread'));

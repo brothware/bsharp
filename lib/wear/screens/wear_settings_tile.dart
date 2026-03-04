@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
@@ -10,6 +8,8 @@ import 'package:bsharp/wear/screens/wear_language_screen.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class WearSettingsTile extends ConsumerWidget {
   const WearSettingsTile({super.key});

@@ -38,7 +38,7 @@ class PocztaDataSource {
         options: Options(headers: {'Accept': 'text/html'}),
       );
       final pageHtml = pageResponse.data ?? '';
-      final csrfMatch = RegExp(r'"csrfToken":"([^"]+)"').firstMatch(pageHtml);
+      final csrfMatch = RegExp('"csrfToken":"([^"]+)"').firstMatch(pageHtml);
       if (csrfMatch != null) {
         _csrfToken = csrfMatch.group(1)!;
         return const Result.success(null);
@@ -175,7 +175,10 @@ class PocztaDataSource {
       );
       final data = response.data;
       if (data is Map<String, dynamic>) return Result.success(data);
-      return const Result.success({'types': {}, 'users': []});
+      return const Result.success(<String, dynamic>{
+        'types': <String, dynamic>{},
+        'users': <dynamic>[],
+      });
     } on DioException catch (e) {
       if (e.error is AppFailure) {
         return Result.failure(e.error! as AppFailure);

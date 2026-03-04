@@ -6,20 +6,20 @@ part 'event.freezed.dart';
 abstract class Event with _$Event {
   const factory Event({
     required int id,
-    String? name,
     required DateTime date,
     required int number,
     required String startTime,
     required String endTime,
-    int? roomsId,
     required int eventTypesId,
     required int status,
     required int substitution,
     required int type,
     required int attr,
+    required int locked,
+    String? name,
+    int? roomsId,
     int? termsId,
     int? lessonGroupsId,
-    required int locked,
   }) = _Event;
 }
 
@@ -27,9 +27,9 @@ abstract class Event with _$Event {
 abstract class EventType with _$EventType {
   const factory EventType({
     required int id,
-    int? subjectsId,
     required int teachingLevel,
     required int substitution,
+    int? subjectsId,
   }) = _EventType;
 }
 

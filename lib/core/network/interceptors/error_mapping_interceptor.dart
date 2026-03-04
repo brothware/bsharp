@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:bsharp/core/error/result.dart';
+import 'package:dio/dio.dart';
 
 class ErrorMappingInterceptor extends Interceptor {
   @override

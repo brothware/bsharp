@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/presentation/schedule/widgets/lesson_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Event _event({
+  Event event({
     int number = 1,
     String startTime = '08:00:00',
     String endTime = '08:45:00',
@@ -33,7 +33,7 @@ void main() {
 
   testWidgets('displays subject name and time range', (tester) async {
     final entry = ScheduleEntry(
-      event: _event(startTime: '08:00:00', endTime: '08:45:00'),
+      event: event(),
       subjectName: 'Math',
       teacherName: 'Jan Kowalski',
       roomName: '201',
@@ -48,7 +48,7 @@ void main() {
 
   testWidgets('shows teacher and room info', (tester) async {
     final entry = ScheduleEntry(
-      event: _event(),
+      event: event(),
       subjectName: 'English',
       teacherName: 'Anna Nowak',
       roomName: '105',
@@ -61,7 +61,7 @@ void main() {
 
   testWidgets('shows topic in italic', (tester) async {
     final entry = ScheduleEntry(
-      event: _event(),
+      event: event(),
       subjectName: 'Physics',
       topic: 'Gravitational force',
     );
@@ -73,7 +73,7 @@ void main() {
 
   testWidgets('shows cancelled indicator', (tester) async {
     final entry = ScheduleEntry(
-      event: _event(status: 0),
+      event: event(status: 0),
       subjectName: 'PE',
       changeType: ScheduleChangeType.cancelled,
     );
@@ -85,7 +85,7 @@ void main() {
 
   testWidgets('shows substitution indicator', (tester) async {
     final entry = ScheduleEntry(
-      event: _event(substitution: 1),
+      event: event(substitution: 1),
       subjectName: 'English',
       changeType: ScheduleChangeType.substitution,
     );
@@ -97,7 +97,7 @@ void main() {
 
   testWidgets('triggers onTap callback', (tester) async {
     var tapped = false;
-    final entry = ScheduleEntry(event: _event(), subjectName: 'Chemistry');
+    final entry = ScheduleEntry(event: event(), subjectName: 'Chemistry');
 
     await tester.pumpWidget(
       wrap(LessonCard(entry: entry, onTap: () => tapped = true)),
@@ -108,7 +108,7 @@ void main() {
   });
 
   testWidgets('shows default subject name when null', (tester) async {
-    final entry = ScheduleEntry(event: _event());
+    final entry = ScheduleEntry(event: event());
 
     await tester.pumpWidget(wrap(LessonCard(entry: entry)));
 
@@ -117,7 +117,7 @@ void main() {
 
   testWidgets('shows lesson number', (tester) async {
     final entry = ScheduleEntry(
-      event: _event(number: 5),
+      event: event(number: 5),
       subjectName: 'Biology',
     );
 

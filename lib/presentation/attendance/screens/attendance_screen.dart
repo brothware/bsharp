@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -7,6 +5,8 @@ import 'package:bsharp/presentation/attendance/providers/attendance_providers.da
 import 'package:bsharp/presentation/attendance/widgets/attendance_calendar.dart';
 import 'package:bsharp/presentation/attendance/widgets/attendance_day_detail.dart';
 import 'package:bsharp/presentation/attendance/widgets/attendance_stats_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AttendanceScreen extends ConsumerWidget {
   const AttendanceScreen({super.key});

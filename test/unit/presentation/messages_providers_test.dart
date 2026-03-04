@@ -1,14 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  PocztaMessage _msg({
-    int id = 1,
-    bool isRead = false,
-    bool isStarred = false,
-  }) {
+  PocztaMessage msg({int id = 1, bool isRead = false, bool isStarred = false}) {
     return PocztaMessage(
       id: id,
       title: 'Test',
@@ -24,11 +20,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           inboxProvider.overrideWith(
-            (ref) => [
-              _msg(id: 1, isRead: false),
-              _msg(id: 2, isRead: true),
-              _msg(id: 3, isRead: false),
-            ],
+            (ref) => [msg(), msg(id: 2, isRead: true), msg(id: 3)],
           ),
         ],
       );
@@ -40,7 +32,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           inboxProvider.overrideWith(
-            (ref) => [_msg(id: 1, isRead: true), _msg(id: 2, isRead: true)],
+            (ref) => [msg(isRead: true), msg(id: 2, isRead: true)],
           ),
         ],
       );
@@ -60,9 +52,9 @@ void main() {
         overrides: [
           inboxProvider.overrideWith(
             (ref) => [
-              _msg(id: 1, isStarred: true),
-              _msg(id: 2, isStarred: false),
-              _msg(id: 3, isStarred: true),
+              msg(isStarred: true),
+              msg(id: 2),
+              msg(id: 3, isStarred: true),
             ],
           ),
         ],
@@ -78,8 +70,8 @@ void main() {
     test('returns inbox when inbox selected', () {
       final container = ProviderContainer(
         overrides: [
-          inboxProvider.overrideWith((ref) => [_msg(id: 1), _msg(id: 2)]),
-          sentProvider.overrideWith((ref) => [_msg(id: 3)]),
+          inboxProvider.overrideWith((ref) => [msg(), msg(id: 2)]),
+          sentProvider.overrideWith((ref) => [msg(id: 3)]),
         ],
       );
 
@@ -91,8 +83,8 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           selectedFolderProvider.overrideWith((ref) => MessageFolder.sent),
-          inboxProvider.overrideWith((ref) => [_msg(id: 1)]),
-          sentProvider.overrideWith((ref) => [_msg(id: 2), _msg(id: 3)]),
+          inboxProvider.overrideWith((ref) => [msg()]),
+          sentProvider.overrideWith((ref) => [msg(id: 2), msg(id: 3)]),
         ],
       );
 
@@ -104,7 +96,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           selectedFolderProvider.overrideWith((ref) => MessageFolder.trash),
-          trashProvider.overrideWith((ref) => [_msg(id: 4)]),
+          trashProvider.overrideWith((ref) => [msg(id: 4)]),
         ],
       );
 

@@ -9,9 +9,9 @@ abstract class PocztaMessage with _$PocztaMessage {
     required String title,
     required String senderName,
     required DateTime sendTime,
-    String? preview,
     required bool isRead,
     required bool isStarred,
+    String? preview,
     String? content,
     List<PocztaAttachment>? files,
   }) = _PocztaMessage;

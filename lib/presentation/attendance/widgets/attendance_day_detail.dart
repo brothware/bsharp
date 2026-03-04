@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/material.dart';
 
 class AttendanceDayDetail extends StatelessWidget {
-  const AttendanceDayDetail({super.key, required this.date, required this.day});
+  const AttendanceDayDetail({required this.date, required this.day, super.key});
 
   final DateTime date;
   final AttendanceDay day;

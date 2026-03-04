@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class WearHomeworkDetailScreen extends ConsumerStatefulWidget {
   const WearHomeworkDetailScreen({super.key});

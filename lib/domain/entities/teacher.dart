@@ -7,11 +7,11 @@ abstract class Teacher with _$Teacher {
   const factory Teacher({
     required int id,
     required String login,
-    int? usersEduId,
     required String name,
     required String surname,
+    required int userType,
+    int? usersEduId,
     String? phone,
     String? pin,
-    required int userType,
   }) = _Teacher;
 }

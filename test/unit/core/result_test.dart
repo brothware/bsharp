@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/core/error/result.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Result', () {

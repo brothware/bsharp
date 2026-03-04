@@ -1,7 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/core/constants/app_colors.dart';
 import 'package:bsharp/domain/entities/mark.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 Mark _mark({
   int id = 1,
@@ -228,7 +228,7 @@ void main() {
           position: 0,
         ),
       };
-      final mark = _mark(markValue: null);
+      final mark = _mark();
       final rm = resolveMark(mark: mark, scaleById: {}, groupById: groupById);
 
       expect(rm.displayValue, '?');
@@ -251,9 +251,7 @@ void main() {
       final sg = SubjectGrades(
         subjectName: 'Math',
         subjectId: 1,
-        resolvedMarks: [
-          _resolved(effectiveValue: null, countsToAverage: false),
-        ],
+        resolvedMarks: [_resolved(countsToAverage: false)],
       );
       expect(sg.weightedAverage, isNull);
     });
@@ -272,8 +270,8 @@ void main() {
         subjectName: 'Math',
         subjectId: 1,
         resolvedMarks: [
-          _resolved(id: 1, effectiveValue: 5, weight: 1),
-          _resolved(id: 2, effectiveValue: 3, weight: 1),
+          _resolved(effectiveValue: 5),
+          _resolved(id: 2, effectiveValue: 3),
         ],
       );
       expect(sg.weightedAverage, 4.0);
@@ -284,8 +282,8 @@ void main() {
         subjectName: 'Math',
         subjectId: 1,
         resolvedMarks: [
-          _resolved(id: 1, effectiveValue: 5, weight: 3),
-          _resolved(id: 2, effectiveValue: 3, weight: 1),
+          _resolved(effectiveValue: 5, weight: 3),
+          _resolved(id: 2, effectiveValue: 3),
         ],
       );
       expect(sg.weightedAverage, closeTo(4.5, 0.01));
@@ -296,8 +294,8 @@ void main() {
         subjectName: 'Math',
         subjectId: 1,
         resolvedMarks: [
-          _resolved(id: 1, effectiveValue: 4, weight: 1),
-          _resolved(id: 2, effectiveValue: null, countsToAverage: false),
+          _resolved(effectiveValue: 4),
+          _resolved(id: 2, countsToAverage: false),
         ],
       );
       expect(sg.weightedAverage, 4.0);
@@ -308,7 +306,7 @@ void main() {
         subjectName: 'Math',
         subjectId: 1,
         resolvedMarks: [
-          _resolved(id: 1, effectiveValue: 4, weight: 1),
+          _resolved(effectiveValue: 4),
           _resolved(id: 2, effectiveValue: 2, weight: 0),
         ],
       );
@@ -360,7 +358,7 @@ void main() {
     test('formats to 2 decimal places', () {
       expect(formatAverage(4.5), '4.50');
       expect(formatAverage(3.333), '3.33');
-      expect(formatAverage(5.0), '5.00');
+      expect(formatAverage(5), '5.00');
     });
   });
 
@@ -371,7 +369,7 @@ void main() {
 
     test('counts rounded effective values correctly', () {
       final resolved = [
-        _resolved(id: 1, effectiveValue: 5),
+        _resolved(effectiveValue: 5),
         _resolved(id: 2, effectiveValue: 5),
         _resolved(id: 3, effectiveValue: 4),
         _resolved(id: 4, effectiveValue: 3),
@@ -383,10 +381,7 @@ void main() {
     });
 
     test('ignores resolved marks with null effectiveValue', () {
-      final resolved = [
-        _resolved(id: 1, effectiveValue: 5),
-        _resolved(id: 2, effectiveValue: null),
-      ];
+      final resolved = [_resolved(effectiveValue: 5), _resolved(id: 2)];
       final dist = gradeDistribution(resolved);
       expect(dist.length, 1);
       expect(dist['5'], 1);

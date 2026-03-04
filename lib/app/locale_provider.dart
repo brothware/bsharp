@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final localeProvider = NotifierProvider<LocaleNotifier, Locale>(
   LocaleNotifier.new,
@@ -22,7 +22,7 @@ class LocaleNotifier extends Notifier<Locale> {
 
   @override
   Locale build() {
-    ref.listenSelf((prev, next) {
+    listenSelf((prev, next) {
       if (prev != null) {
         LocaleSettings.setLocaleRaw(next.languageCode);
       }

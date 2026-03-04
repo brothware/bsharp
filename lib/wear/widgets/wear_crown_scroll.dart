@@ -1,6 +1,6 @@
+import 'package:bsharp/wear/wear_crown_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:bsharp/wear/wear_crown_input.dart';
 
 class WearCrownScroll extends ConsumerStatefulWidget {
   const WearCrownScroll({

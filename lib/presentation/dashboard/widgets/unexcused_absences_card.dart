@@ -1,8 +1,8 @@
+import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 
 class UnexcusedAbsencesCard extends ConsumerWidget {
   const UnexcusedAbsencesCard({super.key});

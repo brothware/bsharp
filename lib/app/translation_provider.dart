@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/data/data_sources/local/connection/connection.dart';
@@ -7,6 +5,8 @@ import 'package:bsharp/data/data_sources/local/database.dart';
 import 'package:bsharp/data/data_sources/local/mlkit_translation_source.dart';
 import 'package:bsharp/data/data_sources/remote/deepl_data_source.dart';
 import 'package:bsharp/data/services/translation_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final _isMobileProvider = Provider<bool>((ref) {
   return !kIsWeb &&
@@ -29,7 +29,7 @@ final translationServiceProvider = Provider<TranslationService>((ref) {
   final deepL = deeplKey != null ? DeepLDataSource(apiKey: deeplKey) : null;
 
   final service = TranslationService(database: db, mlKit: mlKit, deepL: deepL);
-  ref.onDispose(() => service.dispose());
+  ref.onDispose(service.dispose);
   return service;
 });
 

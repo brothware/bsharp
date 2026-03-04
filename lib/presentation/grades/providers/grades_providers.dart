@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/domain/entities/mark.dart';
 import 'package:bsharp/domain/entities/subject.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -8,6 +7,7 @@ import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final marksProvider = StateProvider<List<Mark>>((ref) => []);
 

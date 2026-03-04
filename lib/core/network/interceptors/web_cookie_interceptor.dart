@@ -12,7 +12,10 @@ class WebCookieInterceptor extends Interceptor {
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     final jar = response.headers['x-cookie-jar']?.first;
     if (jar != null && jar.isNotEmpty) {
       _cookies = _mergeCookies(_cookies, jar);

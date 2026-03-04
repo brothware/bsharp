@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:bsharp/core/error/error_messages.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/material.dart';
 
 class ErrorCard extends StatelessWidget {
   const ErrorCard({required this.failure, this.onRetry, super.key});

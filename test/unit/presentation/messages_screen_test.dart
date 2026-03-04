@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/messages/screens/messages_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  PocztaMessage _msg({int id = 1, String title = 'Test', bool isRead = false}) {
+  PocztaMessage msg({int id = 1, String title = 'Test', bool isRead = false}) {
     return PocztaMessage(
       id: id,
       title: title,
@@ -50,8 +50,8 @@ void main() {
     await tester.pumpWidget(
       wrap(
         inbox: [
-          _msg(id: 1, title: 'Pierwsza'),
-          _msg(id: 2, title: 'Druga'),
+          msg(title: 'Pierwsza'),
+          msg(id: 2, title: 'Druga'),
         ],
       ),
     );
@@ -77,7 +77,7 @@ void main() {
   });
 
   testWidgets('shows compose FAB on inbox', (tester) async {
-    await tester.pumpWidget(wrap(inbox: [_msg()]));
+    await tester.pumpWidget(wrap(inbox: [msg()]));
 
     expect(find.byIcon(Icons.edit), findsOneWidget);
   });

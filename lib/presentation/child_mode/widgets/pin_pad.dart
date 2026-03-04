@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 
 class PinPad extends StatefulWidget {
   const PinPad({
-    super.key,
     required this.onComplete,
-    this.pinLength = 4,
     required this.title,
+    super.key,
+    this.pinLength = 4,
     this.errorMessage,
   });
 

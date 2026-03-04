@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/material.dart';
 
 class LessonDetailSheet extends StatelessWidget {
-  const LessonDetailSheet({super.key, required this.entry});
+  const LessonDetailSheet({required this.entry, super.key});
 
   final ScheduleEntry entry;
 

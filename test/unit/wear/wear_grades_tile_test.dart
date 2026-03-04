@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/mark.dart';
@@ -8,6 +5,9 @@ import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/wear/screens/wear_grades_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
@@ -24,7 +24,6 @@ Mark _mark({
     teacherUsersId: 1,
     markValue: markValue,
     comments: comments,
-    weight: 1,
     getDate: date ?? DateTime.now(),
     modified: 0,
   );
@@ -95,10 +94,7 @@ void main() {
       await tester.pumpWidget(
         _buildTile(
           subjectGrades: [
-            _sg([
-              _resolved(id: 1, markValue: 5.0),
-              _resolved(id: 2, markValue: 3.0),
-            ]),
+            _sg([_resolved(), _resolved(id: 2, markValue: 3)]),
           ],
         ),
       );
@@ -129,7 +125,7 @@ void main() {
       await tester.pumpWidget(
         _buildTile(
           subjectGrades: [
-            _sg([_resolved(id: 1, markValue: 5.0)]),
+            _sg([_resolved()]),
           ],
           newIds: {1},
         ),
@@ -143,7 +139,7 @@ void main() {
       await tester.pumpWidget(
         _buildTile(
           subjectGrades: [
-            _sg([_resolved(id: 1), _resolved(id: 2), _resolved(id: 3)]),
+            _sg([_resolved(), _resolved(id: 2), _resolved(id: 3)]),
           ],
         ),
       );
@@ -156,7 +152,7 @@ void main() {
       await tester.pumpWidget(
         _buildTile(
           subjectGrades: [
-            _sg([_resolved(id: 1, markValue: null)]),
+            _sg([_resolved(markValue: null)]),
           ],
         ),
       );
