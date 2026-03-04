@@ -56,8 +56,12 @@ class DemoDataProvider implements SchoolDataProvider {
   }) async {}
 
   @override
-  Future<void> loadSchoolData(Ref ref, {required int studentId}) async {
-    final now = DateTime.now();
+  Future<void> loadSchoolData(
+    Ref ref, {
+    required int studentId,
+    DateTime? now,
+  }) async {
+    now ??= DateTime.now();
     final schoolYearStart = now.month >= 9
         ? DateTime(now.year, 9)
         : DateTime(now.year - 1, 9);
@@ -119,6 +123,7 @@ class DemoDataProvider implements SchoolDataProvider {
       markGroups,
       markScales,
       teachers,
+      now,
     );
 
     final attendanceTypes = _buildAttendanceTypes();
@@ -141,8 +146,8 @@ class DemoDataProvider implements SchoolDataProvider {
   }
 
   @override
-  Future<void> loadMessages(Ref ref) async {
-    final now = DateTime.now();
+  Future<void> loadMessages(Ref ref, {DateTime? now}) async {
+    now ??= DateTime.now();
     ref.read(inboxProvider.notifier).value = _buildInbox(now);
     ref.read(sentProvider.notifier).value = _buildSent(now);
     ref.read(trashProvider.notifier).value = _buildTrash(now);
@@ -528,9 +533,9 @@ class DemoDataProvider implements SchoolDataProvider {
     List<MarkGroup> markGroups,
     List<MarkScale> markScales,
     List<Teacher> teachers,
+    DateTime now,
   ) {
     final rng = Random(42);
-    final now = DateTime.now();
     final marks = <Mark>[];
     var id = 1;
 
