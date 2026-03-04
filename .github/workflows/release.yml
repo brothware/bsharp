@@ -329,7 +329,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: pl.brothware.bsharp
           releaseFiles: app-wear-release.aab
-          track: internal
+          track: wear:internal
           releaseName: v${{ needs.version.outputs.version }}
           status: completed
 

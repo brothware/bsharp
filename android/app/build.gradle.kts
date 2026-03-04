@@ -40,9 +40,11 @@ android {
     productFlavors {
         create("phone") {
             dimension = "platform"
+            versionCode = flutter.versionCode * 10 + 1
         }
         create("wear") {
             dimension = "platform"
+            versionCode = flutter.versionCode * 10 + 2
         }
     }
 
