@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/error/result.dart';
-import 'package:bsharp/data/data_sources/remote/auth_service.dart';
 import 'package:bsharp/domain/entities/student.dart';
-import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/auth/providers/setup_providers.dart';
 import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
 
 enum _SetupStep { credentials, studentPicker }
@@ -60,16 +58,6 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     super.dispose();
   }
 
-  SetupApiState _getApi() {
-    return ref.read(
-      setupApiProvider((
-        school: _schoolController.text.trim(),
-        parentLogin: _loginController.text.trim(),
-        parentPassHash: _passwordHash,
-      )),
-    );
-  }
-
   Future<void> _validateAndLogin() async {
     final school = _schoolController.text.trim();
     final login = _loginController.text.trim();
@@ -85,10 +73,14 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       _errorMessage = null;
     });
 
-    _passwordHash = AuthService.hashPassword(password);
+    final provider = ref.read(activeDataProviderProvider);
+    _passwordHash = provider.hashPassword(password);
 
-    final api = _getApi();
-    final result = await api.syncDataSource.getSettings();
+    final result = await provider.validateCredentials(
+      school: school,
+      login: login,
+      passwordHash: _passwordHash,
+    );
 
     await result.when(
       success: (_) => _loadStudents(),
@@ -107,43 +99,31 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       _errorMessage = null;
     });
 
-    final api = _getApi();
-    final result = await api.syncDataSource.getStudents();
+    final provider = ref.read(activeDataProviderProvider);
 
-    result.when(
-      success: (data) {
-        final studentsJson = data['ParentStudents'] as List<dynamic>? ?? [];
-        final students = studentsJson
-            .whereType<Map<String, dynamic>>()
-            .map(
-              (json) => Student(
-                id: json['id'] as int,
-                usersEduId: json['users_edu_id'] as int,
-                name: json['name'] as String,
-                surname: json['surname'] as String,
-                sex: Sex.fromString(json['sex'] as String),
-              ),
-            )
-            .toList();
+    try {
+      final students = await provider.fetchStudents(
+        school: _schoolController.text.trim(),
+        login: _loginController.text.trim(),
+        passwordHash: _passwordHash,
+      );
 
-        setState(() {
-          _isLoading = false;
-          _students = students;
-          _step = _SetupStep.studentPicker;
-        });
+      setState(() {
+        _isLoading = false;
+        _students = students;
+        _step = _SetupStep.studentPicker;
+      });
 
-        if (students.length == 1) {
-          _selectedStudentId = students.first.id;
-          _finishSetup();
-        }
-      },
-      failure: (failure) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = _mapFailureMessage(failure);
-        });
-      },
-    );
+      if (students.length == 1) {
+        _selectedStudentId = students.first.id;
+        _finishSetup();
+      }
+    } on Exception catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString();
+      });
+    }
   }
 
   Future<void> _finishSetup() async {

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/constants/app_colors.dart';
 import 'package:bsharp/core/error/result.dart';
-import 'package:bsharp/data/data_sources/remote/auth_service.dart';
 import 'package:bsharp/domain/entities/student.dart';
-import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/auth/providers/setup_providers.dart';
 import 'package:bsharp/presentation/common/widgets/support_badge.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -83,21 +81,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _errorMessage = null;
     });
 
-    _passwordHash = AuthService.hashPassword(password);
+    final provider = ref.read(activeDataProviderProvider);
+    _passwordHash = provider.hashPassword(password);
 
-    final api = ref.read(
-      setupApiProvider((
-        school: school,
-        parentLogin: login,
-        parentPassHash: _passwordHash,
-      )),
+    final result = await provider.validateCredentials(
+      school: school,
+      login: login,
+      passwordHash: _passwordHash,
     );
-    final result = await api.syncDataSource.getSettings();
 
     if (!mounted) return;
 
     await result.when(
-      success: (_) => _loadStudents(api),
+      success: (_) => _loadStudents(),
       failure: (failure) {
         setState(() {
           _isLoading = false;
@@ -107,44 +103,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Future<void> _loadStudents(SetupApiState api) async {
-    final result = await api.syncDataSource.getStudents();
+  Future<void> _loadStudents() async {
+    final provider = ref.read(activeDataProviderProvider);
 
-    if (!mounted) return;
+    try {
+      final students = await provider.fetchStudents(
+        school: _schoolController.text.trim(),
+        login: _loginController.text.trim(),
+        passwordHash: _passwordHash,
+      );
 
-    await result.when(
-      success: (data) async {
-        final studentsJson = data['ParentStudents'] as List<dynamic>? ?? [];
-        final students = studentsJson
-            .whereType<Map<String, dynamic>>()
-            .map(
-              (json) => Student(
-                id: json['id'] as int,
-                usersEduId: json['users_edu_id'] as int,
-                name: json['name'] as String,
-                surname: json['surname'] as String,
-                sex: Sex.fromString(json['sex'] as String),
-              ),
-            )
-            .toList();
+      if (!mounted) return;
 
-        if (students.length == 1) {
-          await _finishLogin(students.first.id);
-          return;
-        }
+      if (students.length == 1) {
+        await _finishLogin(students.first.id);
+        return;
+      }
 
-        setState(() {
-          _isLoading = false;
-          _students = students;
-        });
-      },
-      failure: (failure) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = _mapFailureMessage(failure);
-        });
-      },
-    );
+      setState(() {
+        _isLoading = false;
+        _students = students;
+      });
+    } on Exception {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _errorMessage = t.errors.unknownError;
+      });
+    }
   }
 
   Future<void> _finishLogin(int studentId) async {
@@ -168,6 +154,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       LicenseExpired() => t.errors.licenseExpired,
       _ => failure.message ?? t.errors.unknownError,
     };
+  }
+
+  Future<void> _handleDemoMode() async {
+    setState(() => _isLoading = true);
+    await activateDemoMode(ref);
   }
 
   void _switchAccount() {
@@ -296,6 +287,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Text(t.auth.switchAccount),
                     ),
                   ],
+                  const SizedBox(height: 12),
+                  OutlinedButton(
+                    onPressed: _isLoading ? null : _handleDemoMode,
+                    child: Text(t.auth.demoMode),
+                  ),
                   const SizedBox(height: 16),
                   const Center(child: SupportBadge()),
                 ],
