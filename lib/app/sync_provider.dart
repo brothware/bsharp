@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/notification_preferences_provider.dart';
@@ -6,6 +5,7 @@ import 'package:bsharp/data/services/background_sync_scheduler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum SyncStatus { idle, syncing, completed, failed }
 

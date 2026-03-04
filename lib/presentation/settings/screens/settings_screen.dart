@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/notification_preferences_provider.dart';
+import 'package:bsharp/app/support_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/data/services/translation_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.dart';
-import 'package:bsharp/app/support_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/support/tip_jar_sheet.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -21,7 +21,6 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
-    final locale = ref.watch(localeProvider);
     final theme = Theme.of(context);
     final provider = ref.watch(activeDataProviderProvider);
     final isCredentialBased = provider.requiresCredentials;
@@ -119,6 +118,11 @@ class SettingsScreen extends ConsumerWidget {
         ? 'system'
         : localeKey(ref.read(localeProvider));
 
+    final localesByKey = {
+      for (final locale in LocaleNotifier.supportedLocales)
+        localeKey(locale): locale,
+    };
+
     showDialog<void>(
       context: context,
       builder: (context) {
@@ -126,41 +130,41 @@ class SettingsScreen extends ConsumerWidget {
           title: Text(t.settings.chooseLanguage),
           content: SizedBox(
             width: double.maxFinite,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                ListTile(
-                  title: Text(t.settings.languageSystem),
-                  leading: Radio<String>(
-                    value: 'system',
-                    groupValue: currentKey,
-                    onChanged: (_) {
+            child: RadioGroup<String>(
+              groupValue: currentKey,
+              onChanged: (value) {
+                if (value == 'system') {
+                  ref.read(localeProvider.notifier).resetToSystem();
+                } else {
+                  final locale = localesByKey[value];
+                  if (locale != null) {
+                    ref.read(localeProvider.notifier).setLocale(locale);
+                  }
+                }
+                Navigator.of(context).pop();
+              },
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  ListTile(
+                    title: Text(t.settings.languageSystem),
+                    leading: const Radio<String>(value: 'system'),
+                    onTap: () {
                       ref.read(localeProvider.notifier).resetToSystem();
                       Navigator.of(context).pop();
                     },
                   ),
-                  onTap: () {
-                    ref.read(localeProvider.notifier).resetToSystem();
-                    Navigator.of(context).pop();
-                  },
-                ),
-                for (final locale in LocaleNotifier.supportedLocales)
-                  ListTile(
-                    title: Text(localeDisplayName(locale)),
-                    leading: Radio<String>(
-                      value: localeKey(locale),
-                      groupValue: currentKey,
-                      onChanged: (_) {
+                  for (final locale in LocaleNotifier.supportedLocales)
+                    ListTile(
+                      title: Text(localeDisplayName(locale)),
+                      leading: Radio<String>(value: localeKey(locale)),
+                      onTap: () {
                         ref.read(localeProvider.notifier).setLocale(locale);
                         Navigator.of(context).pop();
                       },
                     ),
-                    onTap: () {
-                      ref.read(localeProvider.notifier).setLocale(locale);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -174,30 +178,28 @@ class SettingsScreen extends ConsumerWidget {
       builder: (context) {
         return AlertDialog(
           title: Text(t.settings.chooseTheme),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              for (final mode in ThemeMode.values)
-                ListTile(
-                  title: Text(_themeLabel(mode)),
-                  leading: Radio<ThemeMode>(
-                    value: mode,
-                    groupValue: ref.watch(themeModeProvider),
-                    onChanged: (value) {
-                      if (value != null) {
-                        ref
-                            .read(themeModeProvider.notifier)
-                            .setThemeMode(value);
-                      }
+          content: RadioGroup<ThemeMode>(
+            groupValue: ref.watch(themeModeProvider),
+            onChanged: (value) {
+              if (value != null) {
+                ref.read(themeModeProvider.notifier).setThemeMode(value);
+              }
+              Navigator.of(context).pop();
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final mode in ThemeMode.values)
+                  ListTile(
+                    title: Text(_themeLabel(mode)),
+                    leading: Radio<ThemeMode>(value: mode),
+                    onTap: () {
+                      ref.read(themeModeProvider.notifier).setThemeMode(mode);
                       Navigator.of(context).pop();
                     },
                   ),
-                  onTap: () {
-                    ref.read(themeModeProvider.notifier).setThemeMode(mode);
-                    Navigator.of(context).pop();
-                  },
-                ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -364,32 +366,32 @@ class _SyncSection extends ConsumerWidget {
       builder: (context) {
         return AlertDialog(
           title: Text(t.settings.syncIntervalTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              for (final minutes in NotificationPreferences.validIntervals)
-                ListTile(
-                  title: Text(t.settings.syncIntervalValue(minutes: minutes)),
-                  leading: Radio<int>(
-                    value: minutes,
-                    groupValue: prefs.syncIntervalMinutes,
-                    onChanged: (value) {
-                      if (value != null) {
-                        ref
-                            .read(notificationPreferencesProvider.notifier)
-                            .setSyncInterval(value);
-                      }
+          content: RadioGroup<int>(
+            groupValue: prefs.syncIntervalMinutes,
+            onChanged: (value) {
+              if (value != null) {
+                ref
+                    .read(notificationPreferencesProvider.notifier)
+                    .setSyncInterval(value);
+              }
+              Navigator.of(context).pop();
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final minutes in NotificationPreferences.validIntervals)
+                  ListTile(
+                    title: Text(t.settings.syncIntervalValue(minutes: minutes)),
+                    leading: Radio<int>(value: minutes),
+                    onTap: () {
+                      ref
+                          .read(notificationPreferencesProvider.notifier)
+                          .setSyncInterval(minutes);
                       Navigator.of(context).pop();
                     },
                   ),
-                  onTap: () {
-                    ref
-                        .read(notificationPreferencesProvider.notifier)
-                        .setSyncInterval(minutes);
-                    Navigator.of(context).pop();
-                  },
-                ),
-            ],
+              ],
+            ),
           ),
         );
       },

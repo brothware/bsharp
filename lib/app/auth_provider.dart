@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/providers/mobireg_data_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final credentialStorageProvider = Provider<CredentialStorage>(
   (ref) => CredentialStorage(),

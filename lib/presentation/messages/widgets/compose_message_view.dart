@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ComposeMessageView extends ConsumerStatefulWidget {
   const ComposeMessageView({super.key, this.replyTo, this.prefilledRecipient});
@@ -266,7 +266,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     );
   }
 
-  static final _allowedTags = RegExp(r'</?[biu]>');
+  static final _allowedTags = RegExp('</?[biu]>');
 
   void _send(BuildContext context) {
     final plainText = _contentController.text;

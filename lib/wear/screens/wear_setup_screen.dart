@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum _SetupStep { credentials, studentPicker }
 
@@ -116,7 +116,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
       if (students.length == 1) {
         _selectedStudentId = students.first.id;
-        _finishSetup();
+        await _finishSetup();
       }
     } on Exception catch (e) {
       setState(() {

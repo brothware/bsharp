@@ -1,8 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/providers/demo_data_provider.dart';
 import 'package:bsharp/data/providers/mobireg_data_provider.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final activeDataProviderProvider = StateProvider<SchoolDataProvider>(
   (ref) => MobiregDataProvider(),

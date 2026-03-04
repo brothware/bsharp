@@ -1,5 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final inboxProvider = StateProvider<List<PocztaMessage>>((ref) => []);
 

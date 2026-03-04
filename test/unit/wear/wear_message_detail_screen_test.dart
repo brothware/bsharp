@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/translation_provider.dart';
@@ -9,6 +6,9 @@ import 'package:bsharp/data/providers/demo_data_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
@@ -23,7 +23,7 @@ PocztaMessage _msg({
     id: id,
     title: title,
     senderName: sender,
-    sendTime: DateTime(2025, 6, 15, 10, 0),
+    sendTime: DateTime(2025, 6, 15, 10),
     isRead: true,
     isStarred: false,
     content: content,

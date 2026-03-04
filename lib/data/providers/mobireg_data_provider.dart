@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bsharp/app/child_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
 import 'package:bsharp/data/data_sources/remote/auth_service.dart';
@@ -16,7 +16,7 @@ import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
-import 'package:bsharp/app/child_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MobiregDataProvider implements SchoolDataProvider {
   ApiClientFactory? _factory;
@@ -414,8 +414,8 @@ class MobiregDataProvider implements SchoolDataProvider {
     final portalDs = PortalDataSource(client: factory.createPortalClient());
     final now = DateTime.now();
     final schoolYearStart = now.month >= 9
-        ? DateTime(now.year, 9, 1)
-        : DateTime(now.year - 1, 9, 1);
+        ? DateTime(now.year, 9)
+        : DateTime(now.year - 1, 9);
     final schoolYearEnd = DateTime(schoolYearStart.year + 1, 8, 31);
     final dateFrom = schoolYearStart.toIso8601String().substring(0, 10);
     final dateTo = schoolYearEnd.toIso8601String().substring(0, 10);

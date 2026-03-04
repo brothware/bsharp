@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/child_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
@@ -21,6 +20,7 @@ import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 String _l({required String pl, required String en}) {
   final locale = LocaleSettings.currentLocale;
@@ -59,8 +59,8 @@ class DemoDataProvider implements SchoolDataProvider {
   Future<void> loadSchoolData(Ref ref, {required int studentId}) async {
     final now = DateTime.now();
     final schoolYearStart = now.month >= 9
-        ? DateTime(now.year, 9, 1)
-        : DateTime(now.year - 1, 9, 1);
+        ? DateTime(now.year, 9)
+        : DateTime(now.year - 1, 9);
     final schoolYearEnd = DateTime(schoolYearStart.year + 1, 6, 30);
     final semesterEnd = DateTime(schoolYearStart.year + 1, 1, 31);
 
@@ -202,7 +202,7 @@ class DemoDataProvider implements SchoolDataProvider {
     ),
   ];
 
-  List<Teacher> _buildTeachers() => [
+  List<Teacher> _buildTeachers() => const [
     Teacher(
       id: 1,
       login: 'anowak',
@@ -261,7 +261,7 @@ class DemoDataProvider implements SchoolDataProvider {
     ),
   ];
 
-  List<Subject> _buildSubjects() => [
+  List<Subject> _buildSubjects() => const [
     Subject(id: 1, name: 'Matematyka', abbr: 'MAT'),
     Subject(id: 2, name: 'Język polski', abbr: 'POL'),
     Subject(id: 3, name: 'Język angielski', abbr: 'ANG'),
@@ -311,7 +311,7 @@ class DemoDataProvider implements SchoolDataProvider {
       parentId: 1,
       name: _l(pl: 'Semestr II', en: 'Semester II'),
       type: TermType.semester,
-      startDate: DateTime(semesterEnd.year, 2, 1),
+      startDate: DateTime(semesterEnd.year, 2),
       endDate: schoolYearEnd,
     ),
   ];

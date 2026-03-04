@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MessageDetailView extends ConsumerStatefulWidget {
   const MessageDetailView({
-    super.key,
     required this.message,
+    super.key,
     this.onReply,
     this.onDelete,
     this.onToggleStar,
@@ -171,7 +171,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
               )
             else if (displayContent != null)
               SelectableText(displayContent, style: theme.textTheme.bodyMedium),
-            if ((_detailFiles ?? message.files) case final files?
+            if (_detailFiles ?? message.files case final files?
                 when files.isNotEmpty) ...[
               const SizedBox(height: 16),
               Text(t.messages.attachments, style: theme.textTheme.titleSmall),

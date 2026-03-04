@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
@@ -9,6 +7,8 @@ import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
 import 'package:bsharp/presentation/messages/widgets/message_detail_view.dart';
 import 'package:bsharp/presentation/messages/widgets/message_tile.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const _loadMoreThreshold = 80.0;
 const _inboxPageSize = 25;
@@ -61,9 +61,9 @@ class MessagesScreen extends ConsumerWidget {
                 ref.read(selectedFolderProvider.notifier).state = folder;
               },
             ),
-            Expanded(
+            const Expanded(
               child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
                 children: [
                   _MessageList(folder: MessageFolder.inbox),
                   _MessageList(folder: MessageFolder.sent),
@@ -139,27 +139,27 @@ class _MessageListState extends ConsumerState<_MessageList> {
       if (mounted) syncNotifier.syncMessages();
     });
 
-    final messenger = ScaffoldMessenger.of(context);
-    messenger.clearSnackBars();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(t.messages.deleted(title: message.title)),
-        persist: false,
-        action: SnackBarAction(
-          label: t.common.undo,
-          onPressed: () {
-            final current = notifier.state;
-            final restored = List<PocztaMessage>.of(current);
-            restored.insert(index.clamp(0, restored.length), message);
-            notifier.state = restored;
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(t.messages.deleted(title: message.title)),
+          persist: false,
+          action: SnackBarAction(
+            label: t.common.undo,
+            onPressed: () {
+              final current = notifier.state;
+              final restored = List<PocztaMessage>.of(current);
+              restored.insert(index.clamp(0, restored.length), message);
+              notifier.state = restored;
 
-            dataProvider.restoreMessage(message.id).then((_) {
-              syncNotifier.syncMessages();
-            });
-          },
+              dataProvider.restoreMessage(message.id).then((_) {
+                syncNotifier.syncMessages();
+              });
+            },
+          ),
         ),
-      ),
-    );
+      );
   }
 
   Future<void> _loadMoreInbox() async {

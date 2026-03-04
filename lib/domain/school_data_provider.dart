@@ -1,7 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/student.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum DataProviderCapability {
   grades,

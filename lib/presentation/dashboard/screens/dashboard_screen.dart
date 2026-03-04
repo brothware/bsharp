@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
@@ -11,6 +9,8 @@ import 'package:bsharp/presentation/dashboard/widgets/unexcused_absences_card.da
 import 'package:bsharp/presentation/dashboard/widgets/unread_messages_card.dart';
 import 'package:bsharp/presentation/dashboard/widgets/upcoming_homework_card.dart';
 import 'package:bsharp/presentation/dashboard/widgets/upcoming_tests_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
