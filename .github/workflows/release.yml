@@ -222,10 +222,18 @@ jobs:
       - name: Build WearOS APK
         run: flutter build apk --flavor wear --release --target=lib/main_wear.dart --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
+      - name: Build WearOS AAB
+        run: flutter build appbundle --flavor wear --release --target=lib/main_wear.dart --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
+
       - uses: actions/upload-artifact@v4
         with:
           name: release-wearos-apk
           path: build/app/outputs/flutter-apk/app-wear-release.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-wearos-aab
+          path: build/app/outputs/bundle/wearRelease/app-wear-release.aab
 
   create-release:
     runs-on: ubuntu-latest
@@ -245,6 +253,7 @@ jobs:
           mv release-android-apk/app-phone-release.apk bsharp-${{ needs.version.outputs.version }}.apk
           mv release-android-aab/app-phone-release.aab bsharp-${{ needs.version.outputs.version }}.aab
           mv release-wearos-apk/app-wear-release.apk bsharp-wear-${{ needs.version.outputs.version }}.apk
+          mv release-wearos-aab/app-wear-release.aab bsharp-wear-${{ needs.version.outputs.version }}.aab
           tar -czf bsharp-web-${{ needs.version.outputs.version }}.tar.gz -C release-web .
           tar -czf bsharp-ios-${{ needs.version.outputs.version }}.tar.gz -C release-ios .
 
@@ -283,6 +292,7 @@ jobs:
             artifacts/bsharp-${{ needs.version.outputs.version }}.apk
             artifacts/bsharp-${{ needs.version.outputs.version }}.aab
             artifacts/bsharp-wear-${{ needs.version.outputs.version }}.apk
+            artifacts/bsharp-wear-${{ needs.version.outputs.version }}.aab
             artifacts/bsharp-web-${{ needs.version.outputs.version }}.tar.gz
             artifacts/bsharp-ios-${{ needs.version.outputs.version }}.tar.gz
           generate_release_notes: true
@@ -312,13 +322,13 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: release-wearos-apk
+          name: release-wearos-aab
 
       - uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: pl.brothware.bsharp.wear
-          releaseFiles: app-wear-release.apk
+          releaseFiles: app-wear-release.aab
           track: internal
           releaseName: v${{ needs.version.outputs.version }}
           status: completed
