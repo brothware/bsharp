@@ -24,9 +24,9 @@ void main() {
   }) {
     return ProviderScope(
       overrides: [
-        inboxProvider.overrideWith((ref) => inbox),
-        sentProvider.overrideWith((ref) => sent),
-        trashProvider.overrideWith((ref) => trash),
+        inboxProvider.overrideWithBuild((ref, _) => inbox),
+        sentProvider.overrideWithBuild((ref, _) => sent),
+        trashProvider.overrideWithBuild((ref, _) => trash),
       ],
       child: const MaterialApp(home: Scaffold(body: MessagesScreen())),
     );

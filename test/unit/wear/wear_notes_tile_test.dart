@@ -16,7 +16,7 @@ Widget _buildTile({List<PortalReprimand> reprimands = const []}) {
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      reprimandsProvider.overrideWith((ref) => reprimands),
+      reprimandsProvider.overrideWithBuild((ref, _) => reprimands),
     ],
     child: const MaterialApp(home: Scaffold(body: WearNotesTile())),
   );

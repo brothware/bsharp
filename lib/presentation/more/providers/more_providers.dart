@@ -1,29 +1,73 @@
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final homeworksProvider = StateProvider<List<PortalHomework>>((ref) => []);
+part 'more_providers.g.dart';
 
-final testsProvider = StateProvider<List<PortalTest>>((ref) => []);
+@Riverpod(keepAlive: true)
+class Homeworks extends _$Homeworks {
+  @override
+  List<PortalHomework> build() => [];
+  List<PortalHomework> get value => state;
+  set value(List<PortalHomework> v) => state = v;
+}
 
-final reprimandsProvider = StateProvider<List<PortalReprimand>>((ref) => []);
+@Riverpod(keepAlive: true)
+class Tests extends _$Tests {
+  @override
+  List<PortalTest> build() => [];
+  List<PortalTest> get value => state;
+  set value(List<PortalTest> v) => state = v;
+}
 
-final bulletinsProvider = StateProvider<List<PortalBulletin>>((ref) => []);
+@Riverpod(keepAlive: true)
+class Reprimands extends _$Reprimands {
+  @override
+  List<PortalReprimand> build() => [];
+  List<PortalReprimand> get value => state;
+  set value(List<PortalReprimand> v) => state = v;
+}
 
-final gradeChangelogProvider = StateProvider<List<PortalChangelog>>(
-  (ref) => [],
-);
+@Riverpod(keepAlive: true)
+class Bulletins extends _$Bulletins {
+  @override
+  List<PortalBulletin> build() => [];
+  List<PortalBulletin> get value => state;
+  set value(List<PortalBulletin> v) => state = v;
+}
 
-final attendanceChangelogProvider = StateProvider<List<PortalChangelog>>(
-  (ref) => [],
-);
+@Riverpod(keepAlive: true)
+class GradeChangelog extends _$GradeChangelog {
+  @override
+  List<PortalChangelog> build() => [];
+  List<PortalChangelog> get value => state;
+  set value(List<PortalChangelog> v) => state = v;
+}
+
+@Riverpod(keepAlive: true)
+class AttendanceChangelog extends _$AttendanceChangelog {
+  @override
+  List<PortalChangelog> build() => [];
+  List<PortalChangelog> get value => state;
+  set value(List<PortalChangelog> v) => state = v;
+}
 
 enum HomeworkFilter { upcoming, past, all }
 
-final homeworkFilterProvider = StateProvider<HomeworkFilter>(
-  (ref) => HomeworkFilter.upcoming,
-);
+class HomeworkFilterNotifier extends Notifier<HomeworkFilter> {
+  @override
+  HomeworkFilter build() => HomeworkFilter.upcoming;
+  HomeworkFilter get value => state;
+  set value(HomeworkFilter v) => state = v;
+}
 
-final filteredHomeworksProvider = Provider<List<PortalHomework>>((ref) {
+final homeworkFilterProvider =
+    NotifierProvider<HomeworkFilterNotifier, HomeworkFilter>(
+      HomeworkFilterNotifier.new,
+    );
+
+@Riverpod(keepAlive: true)
+List<PortalHomework> filteredHomeworks(Ref ref) {
   final all = ref.watch(homeworksProvider);
   final filter = ref.watch(homeworkFilterProvider);
   final now = DateTime.now();
@@ -45,20 +89,20 @@ final filteredHomeworksProvider = Provider<List<PortalHomework>>((ref) {
 
   return filtered
     ..sort((a, b) => _parseDate(a.dueDate).compareTo(_parseDate(b.dueDate)));
-});
+}
 
-final groupedHomeworksProvider = Provider<Map<String, List<PortalHomework>>>((
-  ref,
-) {
+@Riverpod(keepAlive: true)
+Map<String, List<PortalHomework>> groupedHomeworks(Ref ref) {
   final homeworks = ref.watch(filteredHomeworksProvider);
   final grouped = <String, List<PortalHomework>>{};
   for (final hw in homeworks) {
     grouped.putIfAbsent(hw.dueDate, () => []).add(hw);
   }
   return grouped;
-});
+}
 
-final upcomingHomeworkProvider = Provider<List<PortalHomework>>((ref) {
+@Riverpod(keepAlive: true)
+List<PortalHomework> upcomingHomework(Ref ref) {
   final all = ref.watch(homeworksProvider);
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
@@ -70,9 +114,10 @@ final upcomingHomeworkProvider = Provider<List<PortalHomework>>((ref) {
       )
       .toList()
     ..sort((a, b) => _parseDate(a.dueDate).compareTo(_parseDate(b.dueDate)));
-});
+}
 
-final upcomingTestsProvider = Provider<List<PortalTest>>((ref) {
+@Riverpod(keepAlive: true)
+List<PortalTest> upcomingTests(Ref ref) {
   final all = ref.watch(testsProvider);
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
@@ -84,40 +129,44 @@ final upcomingTestsProvider = Provider<List<PortalTest>>((ref) {
       )
       .toList()
     ..sort((a, b) => _parseDate(a.date).compareTo(_parseDate(b.date)));
-});
+}
 
-final remarksProvider = Provider<List<PortalReprimand>>((ref) {
+@Riverpod(keepAlive: true)
+List<PortalReprimand> remarks(Ref ref) {
   final all = ref.watch(reprimandsProvider);
   return all.where((r) => r.type == 2).toList()
     ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
-});
+}
 
-final praisesProvider = Provider<List<PortalReprimand>>((ref) {
+@Riverpod(keepAlive: true)
+List<PortalReprimand> praises(Ref ref) {
   final all = ref.watch(reprimandsProvider);
   return all.where((r) => r.type == 1).toList()
     ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
-});
+}
 
-final infoProvider = Provider<List<PortalReprimand>>((ref) {
+@Riverpod(keepAlive: true)
+List<PortalReprimand> info(Ref ref) {
   final all = ref.watch(reprimandsProvider);
   return all.where((r) => r.type == 0).toList()
     ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
-});
+}
 
-final unreadBulletinsCountProvider = Provider<int>((ref) {
+@Riverpod(keepAlive: true)
+int unreadBulletinsCount(Ref ref) {
   final bulletins = ref.watch(bulletinsProvider);
   return bulletins.where((b) => !b.isRead).length;
-});
+}
 
-final groupedGradeChangelogProvider =
-    Provider<Map<String, List<PortalChangelog>>>((ref) {
-      return _groupChangelogByDate(ref.watch(gradeChangelogProvider));
-    });
+@Riverpod(keepAlive: true)
+Map<String, List<PortalChangelog>> groupedGradeChangelog(Ref ref) {
+  return _groupChangelogByDate(ref.watch(gradeChangelogProvider));
+}
 
-final groupedAttendanceChangelogProvider =
-    Provider<Map<String, List<PortalChangelog>>>((ref) {
-      return _groupChangelogByDate(ref.watch(attendanceChangelogProvider));
-    });
+@Riverpod(keepAlive: true)
+Map<String, List<PortalChangelog>> groupedAttendanceChangelog(Ref ref) {
+  return _groupChangelogByDate(ref.watch(attendanceChangelogProvider));
+}
 
 Map<String, List<PortalChangelog>> _groupChangelogByDate(
   List<PortalChangelog> entries,

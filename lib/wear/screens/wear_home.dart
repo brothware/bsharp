@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/wear/screens/wear_attendance_tile.dart';
 import 'package:bsharp/wear/screens/wear_bulletins_tile.dart';
@@ -14,8 +16,17 @@ import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final wearPageIndexProvider = StateProvider<int>((ref) => 0);
+part 'wear_home.g.dart';
+
+@Riverpod(keepAlive: true)
+class WearPageIndex extends _$WearPageIndex {
+  @override
+  int build() => 0;
+  int get value => state;
+  set value(int v) => state = v;
+}
 
 class WearHome extends ConsumerStatefulWidget {
   const WearHome({super.key});
@@ -49,7 +60,7 @@ class _WearHomeState extends ConsumerState<WearHome> {
         _topOverscroll += overscroll.abs();
       case ScrollEndNotification():
         if (_topOverscroll >= _dismissThreshold) {
-          SystemNavigator.pop();
+          unawaited(SystemNavigator.pop());
         }
         _topOverscroll = 0;
       default:
@@ -63,10 +74,10 @@ class _WearHomeState extends ConsumerState<WearHome> {
     ref.watch(childModeProvider);
     final notifier = ref.read(childModeProvider.notifier);
 
-    ref.listen(childModeProvider.select((s) => s.mode), (_, __) {
+    ref.listen(childModeProvider.select((s) => s.mode), (_, _) {
       if (_controller.hasClients) {
         _controller.jumpToPage(0);
-        ref.read(wearPageIndexProvider.notifier).state = 0;
+        ref.read(wearPageIndexProvider.notifier).value = 0;
       }
     });
 
@@ -101,7 +112,7 @@ class _WearHomeState extends ConsumerState<WearHome> {
                   scrollDirection: Axis.vertical,
                   controller: _controller,
                   onPageChanged: (i) =>
-                      ref.read(wearPageIndexProvider.notifier).state = i,
+                      ref.read(wearPageIndexProvider.notifier).value = i,
                   children: tiles,
                 ),
               ),

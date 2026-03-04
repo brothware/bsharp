@@ -55,13 +55,15 @@ void main() {
   group('lastSyncTimeProvider', () {
     test('initial value is null', () {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       expect(container.read(lastSyncTimeProvider), isNull);
     });
 
     test('can be updated', () {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       final now = DateTime.now();
-      container.read(lastSyncTimeProvider.notifier).state = now;
+      container.read(lastSyncTimeProvider.notifier).value = now;
       expect(container.read(lastSyncTimeProvider), now);
     });
   });

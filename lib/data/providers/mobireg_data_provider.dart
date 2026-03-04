@@ -207,7 +207,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     final inboxResult = await pocztaDs.getInbox();
     inboxResult.when(
       success: (data) {
-        ref.read(inboxProvider.notifier).state = parsePocztaMessages(data);
+        ref.read(inboxProvider.notifier).value = parsePocztaMessages(data);
       },
       failure: (_) {},
     );
@@ -215,7 +215,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     final sentResult = await pocztaDs.getSent();
     sentResult.when(
       success: (data) {
-        ref.read(sentProvider.notifier).state = parsePocztaMessages(data);
+        ref.read(sentProvider.notifier).value = parsePocztaMessages(data);
       },
       failure: (_) {},
     );
@@ -223,7 +223,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     final trashResult = await pocztaDs.getTrash();
     trashResult.when(
       success: (data) {
-        ref.read(trashProvider.notifier).state = parsePocztaMessages(data);
+        ref.read(trashProvider.notifier).value = parsePocztaMessages(data);
       },
       failure: (_) {},
     );
@@ -242,19 +242,19 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     results[0].when(
       success: (data) {
-        ref.read(inboxProvider.notifier).state = parsePocztaMessages(data);
+        ref.read(inboxProvider.notifier).value = parsePocztaMessages(data);
       },
       failure: (_) {},
     );
     results[1].when(
       success: (data) {
-        ref.read(sentProvider.notifier).state = parsePocztaMessages(data);
+        ref.read(sentProvider.notifier).value = parsePocztaMessages(data);
       },
       failure: (_) {},
     );
     results[2].when(
       success: (data) {
-        ref.read(trashProvider.notifier).state = parsePocztaMessages(data);
+        ref.read(trashProvider.notifier).value = parsePocztaMessages(data);
       },
       failure: (_) {},
     );
@@ -338,60 +338,60 @@ class MobiregDataProvider implements SchoolDataProvider {
     final syncData = parser.parse(data);
 
     if (syncData.students.isNotEmpty) {
-      ref.read(studentsProvider.notifier).state = syncData.students;
+      ref.read(studentsProvider.notifier).value = syncData.students;
     }
     if (syncData.teachers.isNotEmpty) {
-      ref.read(teachersProvider.notifier).state = syncData.teachers;
+      ref.read(teachersProvider.notifier).value = syncData.teachers;
     }
     if (syncData.subjects.isNotEmpty) {
-      ref.read(subjectsProvider.notifier).state = syncData.subjects;
+      ref.read(subjectsProvider.notifier).value = syncData.subjects;
     }
     if (syncData.terms.isNotEmpty) {
-      ref.read(termsProvider.notifier).state = syncData.terms;
+      ref.read(termsProvider.notifier).value = syncData.terms;
     }
     if (syncData.rooms.isNotEmpty) {
-      ref.read(roomsProvider.notifier).state = syncData.rooms;
+      ref.read(roomsProvider.notifier).value = syncData.rooms;
     }
     if (syncData.events.isNotEmpty) {
-      ref.read(eventsProvider.notifier).state = syncData.events;
+      ref.read(eventsProvider.notifier).value = syncData.events;
     }
     if (syncData.eventTypes.isNotEmpty) {
-      ref.read(eventTypesProvider.notifier).state = syncData.eventTypes;
+      ref.read(eventTypesProvider.notifier).value = syncData.eventTypes;
     }
     if (syncData.eventTypeTeachers.isNotEmpty) {
-      ref.read(eventTypeTeachersProvider.notifier).state =
+      ref.read(eventTypeTeachersProvider.notifier).value =
           syncData.eventTypeTeachers;
     }
     if (syncData.eventTypeTerms.isNotEmpty) {
-      ref.read(eventTypeTermsProvider.notifier).state = syncData.eventTypeTerms;
+      ref.read(eventTypeTermsProvider.notifier).value = syncData.eventTypeTerms;
     }
     if (syncData.eventSubjects.isNotEmpty) {
-      ref.read(eventSubjectsProvider.notifier).state = syncData.eventSubjects;
+      ref.read(eventSubjectsProvider.notifier).value = syncData.eventSubjects;
     }
     if (syncData.eventEvents.isNotEmpty) {
-      ref.read(eventEventsProvider.notifier).state = syncData.eventEvents;
+      ref.read(eventEventsProvider.notifier).value = syncData.eventEvents;
     }
     if (syncData.marks.isNotEmpty) {
-      ref.read(marksProvider.notifier).state = syncData.marks;
+      ref.read(marksProvider.notifier).value = syncData.marks;
     }
     if (syncData.markGroups.isNotEmpty) {
-      ref.read(markGroupsProvider.notifier).state = syncData.markGroups;
+      ref.read(markGroupsProvider.notifier).value = syncData.markGroups;
     }
     if (syncData.markKinds.isNotEmpty) {
-      ref.read(markKindsProvider.notifier).state = syncData.markKinds;
+      ref.read(markKindsProvider.notifier).value = syncData.markKinds;
     }
     if (syncData.markScales.isNotEmpty) {
-      ref.read(markScalesProvider.notifier).state = syncData.markScales;
+      ref.read(markScalesProvider.notifier).value = syncData.markScales;
     }
     if (syncData.markGroupGroups.isNotEmpty) {
-      ref.read(markGroupGroupsProvider.notifier).state =
+      ref.read(markGroupGroupsProvider.notifier).value =
           syncData.markGroupGroups;
     }
     if (syncData.attendances.isNotEmpty) {
-      ref.read(attendancesProvider.notifier).state = syncData.attendances;
+      ref.read(attendancesProvider.notifier).value = syncData.attendances;
     }
     if (syncData.attendanceTypes.isNotEmpty) {
-      ref.read(attendanceTypesProvider.notifier).state =
+      ref.read(attendanceTypesProvider.notifier).value =
           syncData.attendanceTypes;
     }
   }
@@ -434,7 +434,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       'bulletins',
       params,
       (items) =>
-          ref.read(bulletinsProvider.notifier).state = _parseBulletins(items),
+          ref.read(bulletinsProvider.notifier).value = _parseBulletins(items),
     );
 
     final changelogParams = {...params, 'limit': '100', 'offset': '0'};
@@ -456,7 +456,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       await refreshToken(),
       'changelog',
       {...changelogParams, 'type': 'mark'},
-      (items) => ref.read(gradeChangelogProvider.notifier).state =
+      (items) => ref.read(gradeChangelogProvider.notifier).value =
           _parseChangelog(items),
     );
 
@@ -466,7 +466,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       await refreshToken(),
       'changelog',
       {...changelogParams, 'type': 'attendance'},
-      (items) => ref.read(attendanceChangelogProvider.notifier).state =
+      (items) => ref.read(attendanceChangelogProvider.notifier).value =
           _parseChangelog(items),
     );
 
@@ -477,7 +477,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       'reprimands',
       params,
       (items) =>
-          ref.read(reprimandsProvider.notifier).state = _parseReprimands(items),
+          ref.read(reprimandsProvider.notifier).value = _parseReprimands(items),
     );
 
     await _fetchPortalView(
@@ -486,7 +486,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       await refreshToken(),
       'tests',
       params,
-      (items) => ref.read(testsProvider.notifier).state = _parseTests(items),
+      (items) => ref.read(testsProvider.notifier).value = _parseTests(items),
     );
 
     await _fetchPortalView(
@@ -496,7 +496,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       'homeworks',
       params,
       (items) =>
-          ref.read(homeworksProvider.notifier).state = _parseHomeworks(items),
+          ref.read(homeworksProvider.notifier).value = _parseHomeworks(items),
     );
   }
 

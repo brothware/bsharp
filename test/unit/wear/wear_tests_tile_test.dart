@@ -16,7 +16,7 @@ Widget _buildTile({List<PortalTest> tests = const []}) {
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      testsProvider.overrideWith((ref) => tests),
+      testsProvider.overrideWithBuild((ref, _) => tests),
     ],
     child: const MaterialApp(home: Scaffold(body: WearTestsTile())),
   );

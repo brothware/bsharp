@@ -8,30 +8,92 @@ import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final marksProvider = StateProvider<List<Mark>>((ref) => []);
+part 'grades_providers.g.dart';
 
-final markGroupsProvider = StateProvider<List<MarkGroup>>((ref) => []);
+@Riverpod(keepAlive: true)
+class Marks extends _$Marks {
+  @override
+  List<Mark> build() => [];
+  List<Mark> get value => state;
+  set value(List<Mark> v) => state = v;
+}
 
-final markScalesProvider = StateProvider<List<MarkScale>>((ref) => []);
+@Riverpod(keepAlive: true)
+class MarkGroups extends _$MarkGroups {
+  @override
+  List<MarkGroup> build() => [];
+  List<MarkGroup> get value => state;
+  set value(List<MarkGroup> v) => state = v;
+}
 
-final markKindsProvider = StateProvider<List<MarkKind>>((ref) => []);
+@Riverpod(keepAlive: true)
+class MarkScales extends _$MarkScales {
+  @override
+  List<MarkScale> build() => [];
+  List<MarkScale> get value => state;
+  set value(List<MarkScale> v) => state = v;
+}
 
-final markGroupGroupsProvider = StateProvider<List<MarkGroupGroup>>(
-  (ref) => [],
-);
+@Riverpod(keepAlive: true)
+class MarkKinds extends _$MarkKinds {
+  @override
+  List<MarkKind> build() => [];
+  List<MarkKind> get value => state;
+  set value(List<MarkKind> v) => state = v;
+}
 
-final subjectsProvider = StateProvider<List<Subject>>((ref) => []);
+@Riverpod(keepAlive: true)
+class MarkGroupGroups extends _$MarkGroupGroups {
+  @override
+  List<MarkGroupGroup> build() => [];
+  List<MarkGroupGroup> get value => state;
+  set value(List<MarkGroupGroup> v) => state = v;
+}
 
-final teachersProvider = StateProvider<List<Teacher>>((ref) => []);
+@Riverpod(keepAlive: true)
+class Subjects extends _$Subjects {
+  @override
+  List<Subject> build() => [];
+  List<Subject> get value => state;
+  set value(List<Subject> v) => state = v;
+}
 
-final termsProvider = StateProvider<List<Term>>((ref) => []);
+@Riverpod(keepAlive: true)
+class Teachers extends _$Teachers {
+  @override
+  List<Teacher> build() => [];
+  List<Teacher> get value => state;
+  set value(List<Teacher> v) => state = v;
+}
 
-final selectedTermIdProvider = StateProvider<int?>((ref) => null);
+@Riverpod(keepAlive: true)
+class Terms extends _$Terms {
+  @override
+  List<Term> build() => [];
+  List<Term> get value => state;
+  set value(List<Term> v) => state = v;
+}
 
-final newGradeIdsProvider = StateProvider<Set<int>>((ref) => {});
+@Riverpod(keepAlive: true)
+class SelectedTermId extends _$SelectedTermId {
+  @override
+  int? build() => null;
+  int? get value => state;
+  set value(int? v) => state = v;
+}
 
-final currentTermProvider = Provider<Term?>((ref) {
+@Riverpod(keepAlive: true)
+class NewGradeIds extends _$NewGradeIds {
+  @override
+  Set<int> build() => {};
+  Set<int> get value => state;
+  set value(Set<int> v) => state = v;
+}
+
+@Riverpod(keepAlive: true)
+Term? currentTerm(Ref ref) {
   final terms = ref.watch(termsProvider);
   final selectedId = ref.watch(selectedTermIdProvider);
 
@@ -50,9 +112,10 @@ final currentTermProvider = Provider<Term?>((ref) {
     return current.first;
   }
   return terms.isNotEmpty ? terms.first : null;
-});
+}
 
-final subjectGradesProvider = Provider<List<SubjectGrades>>((ref) {
+@Riverpod(keepAlive: true)
+List<SubjectGrades> subjectGrades(Ref ref) {
   final marks = ref.watch(marksProvider);
   final groups = ref.watch(markGroupsProvider);
   final scales = ref.watch(markScalesProvider);
@@ -61,7 +124,7 @@ final subjectGradesProvider = Provider<List<SubjectGrades>>((ref) {
   final eventTypeTerms = ref.watch(eventTypeTermsProvider);
   final eventTypes = ref.watch(eventTypesProvider);
   final subjects = ref.watch(subjectsProvider);
-  final currentTerm = ref.watch(currentTermProvider);
+  final term = ref.watch(currentTermProvider);
   final terms = ref.watch(termsProvider);
 
   final groupById = {for (final g in groups) g.id: g};
@@ -73,11 +136,11 @@ final subjectGradesProvider = Provider<List<SubjectGrades>>((ref) {
   final subjectById = {for (final s in subjects) s.id: s};
 
   final allowedTermIds = <int>{};
-  if (currentTerm != null) {
-    allowedTermIds.add(currentTerm.id);
-    if (currentTerm.type == TermType.year) {
+  if (term != null) {
+    allowedTermIds.add(term.id);
+    if (term.type == TermType.year) {
       for (final t in terms) {
-        if (t.parentId == currentTerm.id) allowedTermIds.add(t.id);
+        if (t.parentId == term.id) allowedTermIds.add(t.id);
       }
     }
   }
@@ -171,30 +234,32 @@ final subjectGradesProvider = Provider<List<SubjectGrades>>((ref) {
 
   result.sort((a, b) => a.subjectName.compareTo(b.subjectName));
   return result;
-});
+}
 
-final overallWeightedAverageProvider = Provider<double?>((ref) {
-  final subjectGrades = ref.watch(subjectGradesProvider);
-  final averages = subjectGrades
+@Riverpod(keepAlive: true)
+double? overallWeightedAverage(Ref ref) {
+  final grades = ref.watch(subjectGradesProvider);
+  final averages = grades
       .map((sg) => sg.weightedAverage)
       .whereType<double>()
       .toList();
   if (averages.isEmpty) return null;
   return averages.reduce((a, b) => a + b) / averages.length;
-});
+}
 
-final overallSimpleAverageProvider = Provider<double?>((ref) {
-  final subjectGrades = ref.watch(subjectGradesProvider);
-  final averages = subjectGrades
+@Riverpod(keepAlive: true)
+double? overallSimpleAverage(Ref ref) {
+  final grades = ref.watch(subjectGradesProvider);
+  final averages = grades
       .map((sg) => sg.simpleAverage)
       .whereType<double>()
       .toList();
   if (averages.isEmpty) return null;
   return averages.reduce((a, b) => a + b) / averages.length;
-});
+}
 
 final gradeDistributionProvider = Provider<Map<String, int>>((ref) {
-  final subjectGrades = ref.watch(subjectGradesProvider);
-  final allResolved = subjectGrades.expand((sg) => sg.resolvedMarks).toList();
+  final grades = ref.watch(subjectGradesProvider);
+  final allResolved = grades.expand((sg) => sg.resolvedMarks).toList();
   return gradeDistribution(allResolved);
 });

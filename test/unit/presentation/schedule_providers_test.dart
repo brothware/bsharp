@@ -40,8 +40,8 @@ void main() {
     test('filters events by date and sorts by number', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWith(
-            (ref) => [
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [
               event(number: 3, date: DateTime(2026, 2, 27)),
               event(id: 2, date: DateTime(2026, 2, 27)),
               event(id: 3, number: 2, date: DateTime(2026, 2, 28)),
@@ -49,6 +49,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final result = container.read(
         eventsForDateProvider(DateTime(2026, 2, 27)),
@@ -61,11 +62,12 @@ void main() {
     test('returns empty for date with no events', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWith(
-            (ref) => [event(date: DateTime(2026, 2, 27))],
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [event(date: DateTime(2026, 2, 27))],
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final result = container.read(eventsForDateProvider(DateTime(2026, 3)));
       expect(result, isEmpty);
@@ -76,11 +78,11 @@ void main() {
     test('resolves subject, teacher, and room names', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWith(
-            (ref) => [event(roomsId: 100, date: DateTime(2026, 2, 27))],
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [event(roomsId: 100, date: DateTime(2026, 2, 27))],
           ),
-          eventTypesProvider.overrideWith(
-            (ref) => [
+          eventTypesProvider.overrideWithBuild(
+            (ref, _) => [
               const EventType(
                 id: 10,
                 subjectsId: 200,
@@ -89,13 +91,13 @@ void main() {
               ),
             ],
           ),
-          eventTypeTeachersProvider.overrideWith(
-            (ref) => [
+          eventTypeTeachersProvider.overrideWithBuild(
+            (ref, _) => [
               const EventTypeTeacher(id: 1, teachersId: 300, eventTypesId: 10),
             ],
           ),
-          subjectsProvider.overrideWith(
-            (ref) => [
+          subjectsProvider.overrideWithBuild(
+            (ref, _) => [
               const Subject(
                 id: 200,
                 subjectsEduId: 1,
@@ -104,8 +106,8 @@ void main() {
               ),
             ],
           ),
-          teachersProvider.overrideWith(
-            (ref) => [
+          teachersProvider.overrideWithBuild(
+            (ref, _) => [
               const Teacher(
                 id: 300,
                 login: 'jkowalski',
@@ -116,12 +118,13 @@ void main() {
               ),
             ],
           ),
-          roomsProvider.overrideWith(
-            (ref) => [const Room(id: 100, name: '201')],
+          roomsProvider.overrideWithBuild(
+            (ref, _) => [const Room(id: 100, name: '201')],
           ),
-          eventSubjectsProvider.overrideWith((ref) => []),
+          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
+      addTearDown(container.dispose);
 
       final entries = container.read(
         scheduleEntriesForDateProvider(DateTime(2026, 2, 27)),
@@ -135,17 +138,18 @@ void main() {
     test('detects cancelled status', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWith(
-            (ref) => [event(status: 2, date: DateTime(2026, 2, 27))],
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [event(status: 2, date: DateTime(2026, 2, 27))],
           ),
-          eventTypesProvider.overrideWith((ref) => []),
-          eventTypeTeachersProvider.overrideWith((ref) => []),
-          subjectsProvider.overrideWith((ref) => []),
-          teachersProvider.overrideWith((ref) => []),
-          roomsProvider.overrideWith((ref) => []),
-          eventSubjectsProvider.overrideWith((ref) => []),
+          eventTypesProvider.overrideWithBuild((ref, _) => []),
+          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
+          subjectsProvider.overrideWithBuild((ref, _) => []),
+          teachersProvider.overrideWithBuild((ref, _) => []),
+          roomsProvider.overrideWithBuild((ref, _) => []),
+          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
+      addTearDown(container.dispose);
 
       final entries = container.read(
         scheduleEntriesForDateProvider(DateTime(2026, 2, 27)),
@@ -156,17 +160,18 @@ void main() {
     test('detects substitution', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWith(
-            (ref) => [event(substitution: 1, date: DateTime(2026, 2, 27))],
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [event(substitution: 1, date: DateTime(2026, 2, 27))],
           ),
-          eventTypesProvider.overrideWith((ref) => []),
-          eventTypeTeachersProvider.overrideWith((ref) => []),
-          subjectsProvider.overrideWith((ref) => []),
-          teachersProvider.overrideWith((ref) => []),
-          roomsProvider.overrideWith((ref) => []),
-          eventSubjectsProvider.overrideWith((ref) => []),
+          eventTypesProvider.overrideWithBuild((ref, _) => []),
+          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
+          subjectsProvider.overrideWithBuild((ref, _) => []),
+          teachersProvider.overrideWithBuild((ref, _) => []),
+          roomsProvider.overrideWithBuild((ref, _) => []),
+          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
+      addTearDown(container.dispose);
 
       final entries = container.read(
         scheduleEntriesForDateProvider(DateTime(2026, 2, 27)),
@@ -177,16 +182,16 @@ void main() {
     test('resolves event topic', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWith(
-            (ref) => [event(id: 42, date: DateTime(2026, 2, 27))],
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [event(id: 42, date: DateTime(2026, 2, 27))],
           ),
-          eventTypesProvider.overrideWith((ref) => []),
-          eventTypeTeachersProvider.overrideWith((ref) => []),
-          subjectsProvider.overrideWith((ref) => []),
-          teachersProvider.overrideWith((ref) => []),
-          roomsProvider.overrideWith((ref) => []),
-          eventSubjectsProvider.overrideWith(
-            (ref) => [
+          eventTypesProvider.overrideWithBuild((ref, _) => []),
+          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
+          subjectsProvider.overrideWithBuild((ref, _) => []),
+          teachersProvider.overrideWithBuild((ref, _) => []),
+          roomsProvider.overrideWithBuild((ref, _) => []),
+          eventSubjectsProvider.overrideWithBuild(
+            (ref, _) => [
               const EventSubject(
                 id: 1,
                 eventsId: 42,
@@ -196,6 +201,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final entries = container.read(
         scheduleEntriesForDateProvider(DateTime(2026, 2, 27)),
@@ -208,16 +214,19 @@ void main() {
     test('returns map with 5 weekdays', () {
       final container = ProviderContainer(
         overrides: [
-          selectedDateProvider.overrideWith((ref) => DateTime(2026, 2, 27)),
-          eventsProvider.overrideWith((ref) => []),
-          eventTypesProvider.overrideWith((ref) => []),
-          eventTypeTeachersProvider.overrideWith((ref) => []),
-          subjectsProvider.overrideWith((ref) => []),
-          teachersProvider.overrideWith((ref) => []),
-          roomsProvider.overrideWith((ref) => []),
-          eventSubjectsProvider.overrideWith((ref) => []),
+          selectedDateProvider.overrideWithBuild(
+            (ref, _) => DateTime(2026, 2, 27),
+          ),
+          eventsProvider.overrideWithBuild((ref, _) => []),
+          eventTypesProvider.overrideWithBuild((ref, _) => []),
+          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
+          subjectsProvider.overrideWithBuild((ref, _) => []),
+          teachersProvider.overrideWithBuild((ref, _) => []),
+          roomsProvider.overrideWithBuild((ref, _) => []),
+          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
+      addTearDown(container.dispose);
 
       final weekMap = container.read(weekEntriesProvider);
       expect(weekMap.length, 5);
@@ -228,9 +237,12 @@ void main() {
     test('derives Monday from selected date', () {
       final container = ProviderContainer(
         overrides: [
-          selectedDateProvider.overrideWith((ref) => DateTime(2026, 2, 27)),
+          selectedDateProvider.overrideWithBuild(
+            (ref, _) => DateTime(2026, 2, 27),
+          ),
         ],
       );
+      addTearDown(container.dispose);
 
       final monday = container.read(selectedWeekStartProvider);
       expect(monday.weekday, DateTime.monday);

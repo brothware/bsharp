@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:bsharp/app/auth_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'child_mode_provider.g.dart';
 
 enum AppMode { parent, child }
 
@@ -122,18 +125,17 @@ class ChildModeState {
   }
 }
 
-final childModeProvider = NotifierProvider<ChildModeNotifier, ChildModeState>(
-  ChildModeNotifier.new,
-);
+typedef ChildModeNotifier = ChildMode;
 
-class ChildModeNotifier extends Notifier<ChildModeState> {
+@Riverpod(keepAlive: true)
+class ChildMode extends _$ChildMode {
   static const maxAttempts = 5;
   static const lockoutDuration = Duration(minutes: 5);
   String? _storedPin;
 
   @override
   ChildModeState build() {
-    _loadState();
+    unawaited(_loadState());
     return const ChildModeState();
   }
 
@@ -235,21 +237,25 @@ class ChildModeNotifier extends Notifier<ChildModeState> {
   }
 
   void _persistMode() {
-    ref
-        .read(credentialStorageProvider)
-        .saveChildModeActive(active: state.isChildMode);
+    unawaited(
+      ref
+          .read(credentialStorageProvider)
+          .saveChildModeActive(active: state.isChildMode),
+    );
   }
 
   void _persistConfig() {
-    ref
-        .read(credentialStorageProvider)
-        .saveChildModeConfig(jsonEncode(state.config.toJson()));
+    unawaited(
+      ref
+          .read(credentialStorageProvider)
+          .saveChildModeConfig(jsonEncode(state.config.toJson())),
+    );
   }
 
   void _persistLockState() {
-    ref.read(credentialStorageProvider)
-      ..saveChildModeFailedAttempts(state.failedAttempts)
-      ..saveChildModeLockedUntil(state.lockedUntil);
+    final storage = ref.read(credentialStorageProvider);
+    unawaited(storage.saveChildModeFailedAttempts(state.failedAttempts));
+    unawaited(storage.saveChildModeLockedUntil(state.lockedUntil));
   }
 
   bool isFeatureVisible(ChildModeFeature feature) {

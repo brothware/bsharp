@@ -64,7 +64,7 @@ class DemoDataProvider implements SchoolDataProvider {
     final schoolYearEnd = DateTime(schoolYearStart.year + 1, 6, 30);
     final semesterEnd = DateTime(schoolYearStart.year + 1, 1, 31);
 
-    ref.read(studentsProvider.notifier).state = [
+    ref.read(studentsProvider.notifier).value = [
       const Student(
         id: 1,
         usersEduId: 1,
@@ -75,77 +75,77 @@ class DemoDataProvider implements SchoolDataProvider {
     ];
 
     final teachers = _buildTeachers();
-    ref.read(teachersProvider.notifier).state = teachers;
+    ref.read(teachersProvider.notifier).value = teachers;
 
     final subjects = _buildSubjects();
-    ref.read(subjectsProvider.notifier).state = subjects;
+    ref.read(subjectsProvider.notifier).value = subjects;
 
-    ref.read(roomsProvider.notifier).state = _buildRooms();
+    ref.read(roomsProvider.notifier).value = _buildRooms();
 
     final terms = _buildTerms(schoolYearStart, schoolYearEnd, semesterEnd);
-    ref.read(termsProvider.notifier).state = terms;
+    ref.read(termsProvider.notifier).value = terms;
 
     final eventTypes = _buildEventTypes(subjects, teachers);
-    ref.read(eventTypesProvider.notifier).state = eventTypes
+    ref.read(eventTypesProvider.notifier).value = eventTypes
         .map((e) => e.eventType)
         .toList();
-    ref.read(eventTypeTeachersProvider.notifier).state = eventTypes
+    ref.read(eventTypeTeachersProvider.notifier).value = eventTypes
         .map((e) => e.eventTypeTeacher)
         .toList();
-    ref.read(eventTypeTermsProvider.notifier).state = eventTypes
+    ref.read(eventTypeTermsProvider.notifier).value = eventTypes
         .map((e) => e.eventTypeTerm)
         .toList();
 
     final events = _buildEvents(now, eventTypes);
-    ref.read(eventsProvider.notifier).state = events;
-    ref.read(eventSubjectsProvider.notifier).state = _buildEventSubjects(
+    ref.read(eventsProvider.notifier).value = events;
+    ref.read(eventSubjectsProvider.notifier).value = _buildEventSubjects(
       events,
     );
-    ref.read(eventEventsProvider.notifier).state = [];
+    ref.read(eventEventsProvider.notifier).value = [];
 
     final markScales = _buildMarkScales();
-    ref.read(markScalesProvider.notifier).state = markScales;
+    ref.read(markScalesProvider.notifier).value = markScales;
 
     final markKinds = _buildMarkKinds();
-    ref.read(markKindsProvider.notifier).state = markKinds;
+    ref.read(markKindsProvider.notifier).value = markKinds;
 
     final markGroupGroups = _buildMarkGroupGroups(subjects);
-    ref.read(markGroupGroupsProvider.notifier).state = markGroupGroups;
+    ref.read(markGroupGroupsProvider.notifier).value = markGroupGroups;
 
     final markGroups = _buildMarkGroups(eventTypes, markKinds, markGroupGroups);
-    ref.read(markGroupsProvider.notifier).state = markGroups;
+    ref.read(markGroupsProvider.notifier).value = markGroups;
 
-    ref.read(marksProvider.notifier).state = _buildMarks(
+    ref.read(marksProvider.notifier).value = _buildMarks(
       markGroups,
       markScales,
       teachers,
     );
 
     final attendanceTypes = _buildAttendanceTypes();
-    ref.read(attendanceTypesProvider.notifier).state = attendanceTypes;
+    ref.read(attendanceTypesProvider.notifier).value = attendanceTypes;
 
-    ref.read(attendancesProvider.notifier).state = _buildAttendances(
+    ref.read(attendancesProvider.notifier).value = _buildAttendances(
       events,
       attendanceTypes,
     );
 
-    ref.read(homeworksProvider.notifier).state = _buildHomeworks(now);
-    ref.read(testsProvider.notifier).state = _buildTests(now);
-    ref.read(reprimandsProvider.notifier).state = _buildReprimands(
+    ref.read(homeworksProvider.notifier).value = _buildHomeworks(now);
+    ref.read(testsProvider.notifier).value = _buildTests(now);
+    ref.read(reprimandsProvider.notifier).value = _buildReprimands(
       now,
       teachers,
     );
-    ref.read(bulletinsProvider.notifier).state = _buildBulletins(now);
-    ref.read(gradeChangelogProvider.notifier).state = _buildChangelog(now);
-    ref.read(attendanceChangelogProvider.notifier).state = [];
+    ref.read(bulletinsProvider.notifier).value = _buildBulletins(now);
+    ref.read(gradeChangelogProvider.notifier).value = _buildChangelog(now);
+    ref.read(attendanceChangelogProvider.notifier).value = [];
   }
 
   @override
   Future<void> loadMessages(Ref ref) async {
     final now = DateTime.now();
-    ref.read(inboxProvider.notifier).state = _buildInbox(now);
-    ref.read(sentProvider.notifier).state = _buildSent(now);
-    ref.read(trashProvider.notifier).state = _buildTrash(now);
+    ref.read(inboxProvider.notifier).value = _buildInbox(now);
+    ref.read(sentProvider.notifier).value = _buildSent(now);
+    ref.read(trashProvider.notifier).value = _buildTrash(now);
   }
 
   @override

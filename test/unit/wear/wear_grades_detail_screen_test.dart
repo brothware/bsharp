@@ -47,7 +47,7 @@ Widget _buildScreen({
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       subjectGradesProvider.overrideWith((ref) => subjectGrades),
-      termsProvider.overrideWith((ref) => terms),
+      termsProvider.overrideWithBuild((ref, _) => terms),
     ],
     child: const MaterialApp(home: WearGradesDetailScreen()),
   );

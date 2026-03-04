@@ -16,7 +16,7 @@ Widget _buildTile({List<PortalBulletin> bulletins = const []}) {
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      bulletinsProvider.overrideWith((ref) => bulletins),
+      bulletinsProvider.overrideWithBuild((ref, _) => bulletins),
     ],
     child: const MaterialApp(home: Scaffold(body: WearBulletinsTile())),
   );

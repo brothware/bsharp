@@ -10,8 +10,8 @@ void main() {
       final past = DateTime.now().subtract(const Duration(days: 5));
       final container = ProviderContainer(
         overrides: [
-          homeworksProvider.overrideWith(
-            (ref) => [
+          homeworksProvider.overrideWithBuild(
+            (ref, _) => [
               PortalHomework(
                 id: 1,
                 subjectName: 'Mat',
@@ -28,9 +28,12 @@ void main() {
               ),
             ],
           ),
-          homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.upcoming),
+          homeworkFilterProvider.overrideWithBuild(
+            (ref, _) => HomeworkFilter.upcoming,
+          ),
         ],
       );
+      addTearDown(container.dispose);
 
       final result = container.read(filteredHomeworksProvider);
       expect(result.length, 1);
@@ -41,8 +44,8 @@ void main() {
       final past = DateTime.now().subtract(const Duration(days: 5));
       final container = ProviderContainer(
         overrides: [
-          homeworksProvider.overrideWith(
-            (ref) => [
+          homeworksProvider.overrideWithBuild(
+            (ref, _) => [
               PortalHomework(
                 id: 1,
                 subjectName: 'Mat',
@@ -52,9 +55,12 @@ void main() {
               ),
             ],
           ),
-          homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.past),
+          homeworkFilterProvider.overrideWithBuild(
+            (ref, _) => HomeworkFilter.past,
+          ),
         ],
       );
+      addTearDown(container.dispose);
 
       final result = container.read(filteredHomeworksProvider);
       expect(result.length, 1);
@@ -63,8 +69,8 @@ void main() {
     test('returns all homeworks', () {
       final container = ProviderContainer(
         overrides: [
-          homeworksProvider.overrideWith(
-            (ref) => [
+          homeworksProvider.overrideWithBuild(
+            (ref, _) => [
               const PortalHomework(
                 id: 1,
                 subjectName: 'A',
@@ -81,9 +87,12 @@ void main() {
               ),
             ],
           ),
-          homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.all),
+          homeworkFilterProvider.overrideWithBuild(
+            (ref, _) => HomeworkFilter.all,
+          ),
         ],
       );
+      addTearDown(container.dispose);
 
       final result = container.read(filteredHomeworksProvider);
       expect(result.length, 2);
@@ -94,8 +103,8 @@ void main() {
     test('groups by due date', () {
       final container = ProviderContainer(
         overrides: [
-          homeworksProvider.overrideWith(
-            (ref) => [
+          homeworksProvider.overrideWithBuild(
+            (ref, _) => [
               const PortalHomework(
                 id: 1,
                 subjectName: 'A',
@@ -119,9 +128,12 @@ void main() {
               ),
             ],
           ),
-          homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.all),
+          homeworkFilterProvider.overrideWithBuild(
+            (ref, _) => HomeworkFilter.all,
+          ),
         ],
       );
+      addTearDown(container.dispose);
 
       final grouped = container.read(groupedHomeworksProvider);
       expect(grouped.length, 2);
@@ -134,8 +146,8 @@ void main() {
     test('separates remarks (type 2), praises (type 1), info (type 0)', () {
       final container = ProviderContainer(
         overrides: [
-          reprimandsProvider.overrideWith(
-            (ref) => [
+          reprimandsProvider.overrideWithBuild(
+            (ref, _) => [
               const PortalReprimand(
                 id: 1,
                 date: '2026-02-27',
@@ -168,6 +180,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final info = container.read(infoProvider);
       expect(info.length, 2);
@@ -188,8 +201,8 @@ void main() {
     test('counts unread bulletins', () {
       final container = ProviderContainer(
         overrides: [
-          bulletinsProvider.overrideWith(
-            (ref) => [
+          bulletinsProvider.overrideWithBuild(
+            (ref, _) => [
               const PortalBulletin(
                 id: 1,
                 title: 'A',
@@ -218,6 +231,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       expect(container.read(unreadBulletinsCountProvider), 2);
     });
@@ -227,8 +241,8 @@ void main() {
     test('groups grade changelog by date descending', () {
       final container = ProviderContainer(
         overrides: [
-          gradeChangelogProvider.overrideWith(
-            (ref) => [
+          gradeChangelogProvider.overrideWithBuild(
+            (ref, _) => [
               const PortalChangelog(
                 type: 'mark',
                 dateTime: '2026-02-27 10:00:00',
@@ -258,6 +272,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final grouped = container.read(groupedGradeChangelogProvider);
       expect(grouped.length, 2);
@@ -270,8 +285,8 @@ void main() {
     test('groups attendance changelog by date descending', () {
       final container = ProviderContainer(
         overrides: [
-          attendanceChangelogProvider.overrideWith(
-            (ref) => [
+          attendanceChangelogProvider.overrideWithBuild(
+            (ref, _) => [
               const PortalChangelog(
                 type: 'attendance',
                 dateTime: '2026-02-27 08:00:00',
@@ -292,6 +307,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final grouped = container.read(groupedAttendanceChangelogProvider);
       expect(grouped.length, 2);
@@ -308,8 +324,8 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
-          testsProvider.overrideWith(
-            (ref) => [
+          testsProvider.overrideWithBuild(
+            (ref, _) => [
               PortalTest(
                 id: 1,
                 subjectName: 'Mat',
@@ -329,6 +345,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final upcoming = container.read(upcomingTestsProvider);
       expect(upcoming.length, 2);

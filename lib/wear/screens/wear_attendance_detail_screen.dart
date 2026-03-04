@@ -44,13 +44,13 @@ class WearAttendanceDetailScreen extends ConsumerWidget {
               Expanded(
                 child: WearVerticalOverscrollPager(
                   onPrevious: () {
-                    ref.read(selectedMonthProvider.notifier).state = DateTime(
+                    ref.read(selectedMonthProvider.notifier).value = DateTime(
                       month.year,
                       month.month - 1,
                     );
                   },
                   onNext: () {
-                    ref.read(selectedMonthProvider.notifier).state = DateTime(
+                    ref.read(selectedMonthProvider.notifier).value = DateTime(
                       month.year,
                       month.month + 1,
                     );

@@ -1,22 +1,27 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final studentsProvider = StateProvider<List<Student>>((ref) => []);
+part 'child_provider.g.dart';
 
-final activeStudentProvider = NotifierProvider<ActiveStudentNotifier, Student?>(
-  ActiveStudentNotifier.new,
-);
+@Riverpod(keepAlive: true)
+class Students extends _$Students {
+  @override
+  List<Student> build() => [];
+  List<Student> get value => state;
+  set value(List<Student> v) => state = v;
+}
 
-class ActiveStudentNotifier extends Notifier<Student?> {
+@Riverpod(keepAlive: true)
+class ActiveStudent extends _$ActiveStudent {
   @override
   Student? build() {
     final students = ref.watch(studentsProvider);
     if (students.isEmpty) return null;
 
     final selectedIdAsync = ref.watch(selectedStudentIdProvider);
-    final selectedId = selectedIdAsync.valueOrNull;
+    final selectedId = selectedIdAsync.value;
     if (selectedId != null) {
       final match = students.where((s) => s.id == selectedId);
       if (match.isNotEmpty) return match.first;

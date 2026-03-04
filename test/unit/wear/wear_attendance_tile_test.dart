@@ -21,9 +21,9 @@ Widget _buildTile({
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      attendancesProvider.overrideWith((ref) => attendances),
-      attendanceTypesProvider.overrideWith((ref) => types),
-      eventsProvider.overrideWith((ref) => []),
+      attendancesProvider.overrideWithBuild((ref, _) => attendances),
+      attendanceTypesProvider.overrideWithBuild((ref, _) => types),
+      eventsProvider.overrideWithBuild((ref, _) => []),
     ],
     child: const MaterialApp(home: Scaffold(body: WearAttendanceTile())),
   );

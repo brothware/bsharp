@@ -41,7 +41,7 @@ class _WearHomeworkDetailScreenState
               _WearHomeworkFilter(
                 filter: filter,
                 onChanged: (f) {
-                  ref.read(homeworkFilterProvider.notifier).state = f;
+                  ref.read(homeworkFilterProvider.notifier).value = f;
                 },
               ),
               const SizedBox(height: 4),

@@ -37,7 +37,9 @@ Widget _buildScreen({required PocztaMessage message}) {
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      activeDataProviderProvider.overrideWith((ref) => DemoDataProvider()),
+      activeDataProviderProvider.overrideWithBuild(
+        (ref, _) => DemoDataProvider(),
+      ),
       isTranslationAvailableProvider.overrideWithValue(false),
     ],
     child: MaterialApp(home: WearMessageDetailScreen(message: message)),

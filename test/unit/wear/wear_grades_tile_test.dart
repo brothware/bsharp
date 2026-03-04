@@ -66,7 +66,7 @@ Widget _buildTile({
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       subjectGradesProvider.overrideWith((ref) => subjectGrades),
-      newGradeIdsProvider.overrideWith((ref) => newIds),
+      newGradeIdsProvider.overrideWithBuild((ref, _) => newIds),
     ],
     child: const MaterialApp(home: Scaffold(body: WearGradesTile())),
   );

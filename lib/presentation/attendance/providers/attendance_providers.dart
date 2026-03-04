@@ -5,28 +5,57 @@ import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final attendancesProvider = StateProvider<List<Attendance>>((ref) => []);
+part 'attendance_providers.g.dart';
 
-final attendanceTypesProvider = StateProvider<List<AttendanceType>>(
-  (ref) => [],
-);
+@Riverpod(keepAlive: true)
+class Attendances extends _$Attendances {
+  @override
+  List<Attendance> build() => [];
+  List<Attendance> get value => state;
+  set value(List<Attendance> v) => state = v;
+}
 
-final selectedMonthProvider = StateProvider<DateTime>((ref) {
-  final now = DateTime.now();
-  return DateTime(now.year, now.month);
-});
+@Riverpod(keepAlive: true)
+class AttendanceTypes extends _$AttendanceTypes {
+  @override
+  List<AttendanceType> build() => [];
+  List<AttendanceType> get value => state;
+  set value(List<AttendanceType> v) => state = v;
+}
 
-final attendanceDaysProvider = Provider<Map<DateTime, AttendanceDay>>((ref) {
+@Riverpod(keepAlive: true)
+class SelectedMonth extends _$SelectedMonth {
+  @override
+  DateTime build() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month);
+  }
+
+  DateTime get value => state;
+
+  set value(DateTime v) => state = v;
+}
+
+@Riverpod(keepAlive: true)
+Map<DateTime, AttendanceDay> attendanceDays(Ref ref) {
   final attendances = ref.watch(attendancesProvider);
   final types = ref.watch(attendanceTypesProvider);
   final events = ref.watch(eventsProvider);
   return groupByDay(attendances, types, events);
-});
+}
 
-final selectedStatsTermIdProvider = StateProvider<int?>((ref) => null);
+@Riverpod(keepAlive: true)
+class SelectedStatsTermId extends _$SelectedStatsTermId {
+  @override
+  int? build() => null;
+  int? get value => state;
+  set value(int? v) => state = v;
+}
 
-final currentStatsTermProvider = Provider<Term?>((ref) {
+@Riverpod(keepAlive: true)
+Term? currentStatsTerm(Ref ref) {
   final terms = ref.watch(termsProvider);
   final selectedId = ref.watch(selectedStatsTermIdProvider);
 
@@ -44,9 +73,10 @@ final currentStatsTermProvider = Provider<Term?>((ref) {
   );
   if (current.isNotEmpty) return current.first;
   return null;
-});
+}
 
-final attendanceStatsProvider = Provider<AttendanceStats>((ref) {
+@Riverpod(keepAlive: true)
+AttendanceStats attendanceStats(Ref ref) {
   final attendances = ref.watch(attendancesProvider);
   final types = ref.watch(attendanceTypesProvider);
   final events = ref.watch(eventsProvider);
@@ -65,16 +95,14 @@ final attendanceStatsProvider = Provider<AttendanceStats>((ref) {
   }).toList();
 
   return calculateStats(filtered, types);
-});
+}
 
-final attendanceForDayProvider = Provider.family<AttendanceDay?, DateTime>((
-  ref,
-  date,
-) {
+@Riverpod(keepAlive: true)
+AttendanceDay? attendanceForDay(Ref ref, DateTime date) {
   final days = ref.watch(attendanceDaysProvider);
   final dayKey = DateTime(date.year, date.month, date.day);
   return days[dayKey];
-});
+}
 
 final calendarDaysProvider = Provider<List<DateTime>>((ref) {
   final month = ref.watch(selectedMonthProvider);
@@ -93,7 +121,8 @@ class UnexcusedAbsence {
   final DateTime eventDate;
 }
 
-final staleUnexcusedAbsencesProvider = Provider<List<UnexcusedAbsence>>((ref) {
+@Riverpod(keepAlive: true)
+List<UnexcusedAbsence> staleUnexcusedAbsences(Ref ref) {
   final attendances = ref.watch(attendancesProvider);
   final types = ref.watch(attendanceTypesProvider);
   final events = ref.watch(eventsProvider);
@@ -120,4 +149,4 @@ final staleUnexcusedAbsencesProvider = Provider<List<UnexcusedAbsence>>((ref) {
 
   result.sort((a, b) => a.eventDate.compareTo(b.eventDate));
   return result;
-});
+}

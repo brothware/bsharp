@@ -5,10 +5,12 @@ import 'package:bsharp/app/router.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/providers/mobireg_data_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final credentialStorageProvider = Provider<CredentialStorage>(
-  (ref) => CredentialStorage(),
-);
+part 'auth_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+CredentialStorage credentialStorage(Ref ref) => CredentialStorage();
 
 final authStateProvider = AsyncNotifierProvider<AuthNotifier, AuthState>(
   AuthNotifier.new,
@@ -33,13 +35,14 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   Future<void> logout() async {
     final storage = ref.read(credentialStorageProvider);
     await storage.clearAll();
-    ref.read(activeDataProviderProvider.notifier).state = MobiregDataProvider();
-    ref.read(demoModeProvider.notifier).state = false;
+    ref.read(activeDataProviderProvider.notifier).value = MobiregDataProvider();
+    ref.read(demoModeProvider.notifier).value = false;
     state = const AsyncData(AuthState.unauthenticated);
   }
 }
 
-final selectedStudentIdProvider = FutureProvider<int?>((ref) async {
+@Riverpod(keepAlive: true)
+Future<int?> selectedStudentId(Ref ref) async {
   final storage = ref.watch(credentialStorageProvider);
   return storage.getSelectedStudentId();
-});
+}

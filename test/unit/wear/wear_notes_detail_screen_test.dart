@@ -17,7 +17,7 @@ Widget _buildScreen({List<PortalReprimand> reprimands = const []}) {
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      reprimandsProvider.overrideWith((ref) => reprimands),
+      reprimandsProvider.overrideWithBuild((ref, _) => reprimands),
       isTranslationAvailableProvider.overrideWithValue(false),
     ],
     child: const MaterialApp(home: WearNotesDetailScreen()),

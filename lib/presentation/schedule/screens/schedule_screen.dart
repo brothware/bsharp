@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
@@ -40,13 +42,13 @@ class ScheduleScreen extends ConsumerWidget {
               viewMode: viewMode,
               onPrevious: () => _changeWeek(ref, -1),
               onNext: () => _changeWeek(ref, 1),
-              onToday: () => ref.read(selectedDateProvider.notifier).state =
+              onToday: () => ref.read(selectedDateProvider.notifier).value =
                   DateTime.now(),
               onToggleView: () {
                 final next = viewMode == ScheduleViewMode.list
                     ? ScheduleViewMode.linear
                     : ScheduleViewMode.list;
-                ref.read(scheduleViewModeProvider.notifier).state = next;
+                ref.read(scheduleViewModeProvider.notifier).value = next;
               },
             ),
           ),
@@ -60,7 +62,7 @@ class ScheduleScreen extends ConsumerWidget {
                       date: day,
                       isSelected: isSameDay(day, selectedDate),
                       onTap: () =>
-                          ref.read(selectedDateProvider.notifier).state = day,
+                          ref.read(selectedDateProvider.notifier).value = day,
                     ),
                   ),
               ],
@@ -97,12 +99,12 @@ class ScheduleScreen extends ConsumerWidget {
     final current = ref.read(selectedDateProvider);
     if (direction > 0) {
       final monday = startOfWeek(current);
-      ref.read(selectedDateProvider.notifier).state = monday.add(
+      ref.read(selectedDateProvider.notifier).value = monday.add(
         const Duration(days: 7),
       );
     } else {
       final friday = endOfWeek(current);
-      ref.read(selectedDateProvider.notifier).state = friday.subtract(
+      ref.read(selectedDateProvider.notifier).value = friday.subtract(
         const Duration(days: 7),
       );
     }
@@ -111,20 +113,24 @@ class ScheduleScreen extends ConsumerWidget {
   static void _showItemDetail(BuildContext context, TimelineItem item) {
     switch (item) {
       case LessonTimelineItem():
-        showModalBottomSheet<void>(
-          context: context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (_) => LessonDetailSheet(entry: item.entry),
+        unawaited(
+          showModalBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (_) => LessonDetailSheet(entry: item.entry),
+          ),
         );
       case CustomEventTimelineItem():
-        showModalBottomSheet<void>(
-          context: context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (_) => CustomEventDetailSheet(
-            event: item.event,
-            date: item.occurrenceDate,
+        unawaited(
+          showModalBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (_) => CustomEventDetailSheet(
+              event: item.event,
+              date: item.occurrenceDate,
+            ),
           ),
         );
     }

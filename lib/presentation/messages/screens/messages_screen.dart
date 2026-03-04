@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
@@ -58,7 +60,7 @@ class MessagesScreen extends ConsumerWidget {
               indicatorSize: TabBarIndicatorSize.label,
               onTap: (index) {
                 final folder = MessageFolder.values[index];
-                ref.read(selectedFolderProvider.notifier).state = folder;
+                ref.read(selectedFolderProvider.notifier).value = folder;
               },
             ),
             const Expanded(
@@ -94,21 +96,31 @@ class _MessageListState extends ConsumerState<_MessageList> {
 
   MessageFolder get folder => widget.folder;
 
-  StateProvider<List<PocztaMessage>> get _folderProvider => switch (folder) {
-    MessageFolder.inbox => inboxProvider,
-    MessageFolder.sent => sentProvider,
-    MessageFolder.trash => trashProvider,
+  List<PocztaMessage> _readFolder() => switch (folder) {
+    MessageFolder.inbox => ref.read(inboxProvider),
+    MessageFolder.sent => ref.read(sentProvider),
+    MessageFolder.trash => ref.read(trashProvider),
   };
 
+  void _writeFolder(List<PocztaMessage> value) {
+    switch (folder) {
+      case MessageFolder.inbox:
+        ref.read(inboxProvider.notifier).value = value;
+      case MessageFolder.sent:
+        ref.read(sentProvider.notifier).value = value;
+      case MessageFolder.trash:
+        ref.read(trashProvider.notifier).value = value;
+    }
+  }
+
   void _toggleStar(PocztaMessage message) {
-    final provider = _folderProvider;
-    final messages = ref.read(provider);
-    ref.read(provider.notifier).state = [
+    final messages = _readFolder();
+    _writeFolder([
       for (final m in messages)
         if (m.id == message.id) m.copyWith(isStarred: !m.isStarred) else m,
-    ];
+    ]);
 
-    ref.read(activeDataProviderProvider).toggleStar(message.id);
+    unawaited(ref.read(activeDataProviderProvider).toggleStar(message.id));
   }
 
   void _removeMessage(PocztaMessage message) {
@@ -120,24 +132,19 @@ class _MessageListState extends ConsumerState<_MessageList> {
     if (!mounted) return;
     setState(() => _removingIds.remove(message.id));
 
-    final notifier = ref.read(_folderProvider.notifier);
-    final messages = notifier.state;
+    final messages = _readFolder();
     final index = messages.indexWhere((m) => m.id == message.id);
-    notifier.state = messages.where((m) => m.id != message.id).toList();
+    _writeFolder(messages.where((m) => m.id != message.id).toList());
 
     final dataProvider = ref.read(activeDataProviderProvider);
     final syncNotifier = ref.read(syncStatusProvider.notifier);
 
     if (folder == MessageFolder.trash) {
-      dataProvider.restoreMessage(message.id).then((_) {
-        if (mounted) syncNotifier.syncMessages();
-      });
+      unawaited(_restoreAndSync(dataProvider, syncNotifier, message.id));
       return;
     }
 
-    dataProvider.deleteMessage(message.id).then((_) {
-      if (mounted) syncNotifier.syncMessages();
-    });
+    unawaited(_deleteAndSync(dataProvider, syncNotifier, message.id));
 
     ScaffoldMessenger.of(context)
       ..clearSnackBars()
@@ -148,14 +155,14 @@ class _MessageListState extends ConsumerState<_MessageList> {
           action: SnackBarAction(
             label: t.common.undo,
             onPressed: () {
-              final current = notifier.state;
+              final current = _readFolder();
               final restored = List<PocztaMessage>.of(current);
               restored.insert(index.clamp(0, restored.length), message);
-              notifier.state = restored;
+              _writeFolder(restored);
 
-              dataProvider.restoreMessage(message.id).then((_) {
-                syncNotifier.syncMessages();
-              });
+              unawaited(
+                _restoreAndSync(dataProvider, syncNotifier, message.id),
+              );
             },
           ),
         ),
@@ -169,10 +176,28 @@ class _MessageListState extends ConsumerState<_MessageList> {
     final newMessages = await dataProvider.loadMoreInbox(currentInbox.length);
     if (!mounted) return;
     if (newMessages.length < _inboxPageSize) {
-      ref.read(inboxHasMoreProvider.notifier).state = false;
+      ref.read(inboxHasMoreProvider.notifier).value = false;
     }
-    ref.read(inboxProvider.notifier).state = [...currentInbox, ...newMessages];
+    ref.read(inboxProvider.notifier).value = [...currentInbox, ...newMessages];
     if (mounted) setState(() => _isLoadingMore = false);
+  }
+
+  Future<void> _restoreAndSync(
+    SchoolDataProvider dataProvider,
+    SyncStatusNotifier syncNotifier,
+    int messageId,
+  ) async {
+    await dataProvider.restoreMessage(messageId);
+    if (mounted) await syncNotifier.syncMessages();
+  }
+
+  Future<void> _deleteAndSync(
+    SchoolDataProvider dataProvider,
+    SyncStatusNotifier syncNotifier,
+    int messageId,
+  ) async {
+    await dataProvider.deleteMessage(messageId);
+    if (mounted) await syncNotifier.syncMessages();
   }
 
   bool _onScrollNotification(ScrollNotification notification) {
@@ -187,14 +212,14 @@ class _MessageListState extends ConsumerState<_MessageList> {
 
     if (overscroll > _loadMoreThreshold && !_overscrollTriggered) {
       _overscrollTriggered = true;
-      _loadMoreInbox();
+      unawaited(_loadMoreInbox());
     } else if (overscroll <= 0) {
       _overscrollTriggered = false;
     }
 
     if (notification is ScrollEndNotification &&
         metrics.pixels >= metrics.maxScrollExtent) {
-      _loadMoreInbox();
+      unawaited(_loadMoreInbox());
     }
 
     return false;
@@ -230,7 +255,7 @@ class _MessageListState extends ConsumerState<_MessageList> {
                     )
                   : null,
               itemCount: itemCount,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (context, index) {
                 if (index >= messages.length) {
                   return const Padding(
@@ -279,26 +304,27 @@ class _MessageListState extends ConsumerState<_MessageList> {
       _markAsRead(message);
     }
 
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => MessageDetailView(
-          message: message,
-          onReply: folder == MessageFolder.inbox
-              ? () => _openCompose(context, replyTo: message)
-              : null,
-          onDelete: () {
-            Navigator.of(context).pop();
-            _removeMessage(message);
-          },
-          onToggleStar: () => _toggleStar(message),
-          onFilesLoaded: (files) {
-            final provider = _folderProvider;
-            final messages = ref.read(provider);
-            ref.read(provider.notifier).state = [
-              for (final m in messages)
-                if (m.id == message.id) m.copyWith(files: files) else m,
-            ];
-          },
+    unawaited(
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => MessageDetailView(
+            message: message,
+            onReply: folder == MessageFolder.inbox
+                ? () => _openCompose(context, replyTo: message)
+                : null,
+            onDelete: () {
+              Navigator.of(context).pop();
+              _removeMessage(message);
+            },
+            onToggleStar: () => _toggleStar(message),
+            onFilesLoaded: (files) {
+              final messages = _readFolder();
+              _writeFolder([
+                for (final m in messages)
+                  if (m.id == message.id) m.copyWith(files: files) else m,
+              ]);
+            },
+          ),
         ),
       ),
     );
@@ -306,16 +332,18 @@ class _MessageListState extends ConsumerState<_MessageList> {
 
   void _markAsRead(PocztaMessage message) {
     final inbox = ref.read(inboxProvider);
-    ref.read(inboxProvider.notifier).state = [
+    ref.read(inboxProvider.notifier).value = [
       for (final m in inbox)
         if (m.id == message.id) m.copyWith(isRead: true) else m,
     ];
   }
 
   void _openCompose(BuildContext context, {PocztaMessage? replyTo}) {
-    Navigator.of(context).push(
-      MaterialPageRoute<Map<String, dynamic>>(
-        builder: (_) => ComposeMessageView(replyTo: replyTo),
+    unawaited(
+      Navigator.of(context).push(
+        MaterialPageRoute<Map<String, dynamic>>(
+          builder: (_) => ComposeMessageView(replyTo: replyTo),
+        ),
       ),
     );
   }

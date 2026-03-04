@@ -19,11 +19,12 @@ void main() {
     test('counts unread messages', () {
       final container = ProviderContainer(
         overrides: [
-          inboxProvider.overrideWith(
-            (ref) => [msg(), msg(id: 2, isRead: true), msg(id: 3)],
+          inboxProvider.overrideWithBuild(
+            (ref, _) => [msg(), msg(id: 2, isRead: true), msg(id: 3)],
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       expect(container.read(unreadCountProvider), 2);
     });
@@ -31,17 +32,19 @@ void main() {
     test('returns 0 when all read', () {
       final container = ProviderContainer(
         overrides: [
-          inboxProvider.overrideWith(
-            (ref) => [msg(isRead: true), msg(id: 2, isRead: true)],
+          inboxProvider.overrideWithBuild(
+            (ref, _) => [msg(isRead: true), msg(id: 2, isRead: true)],
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       expect(container.read(unreadCountProvider), 0);
     });
 
     test('returns 0 when empty', () {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       expect(container.read(unreadCountProvider), 0);
     });
   });
@@ -50,8 +53,8 @@ void main() {
     test('filters starred messages', () {
       final container = ProviderContainer(
         overrides: [
-          inboxProvider.overrideWith(
-            (ref) => [
+          inboxProvider.overrideWithBuild(
+            (ref, _) => [
               msg(isStarred: true),
               msg(id: 2),
               msg(id: 3, isStarred: true),
@@ -59,6 +62,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final starred = container.read(starredMessagesProvider);
       expect(starred.length, 2);
@@ -70,10 +74,11 @@ void main() {
     test('returns inbox when inbox selected', () {
       final container = ProviderContainer(
         overrides: [
-          inboxProvider.overrideWith((ref) => [msg(), msg(id: 2)]),
-          sentProvider.overrideWith((ref) => [msg(id: 3)]),
+          inboxProvider.overrideWithBuild((ref, _) => [msg(), msg(id: 2)]),
+          sentProvider.overrideWithBuild((ref, _) => [msg(id: 3)]),
         ],
       );
+      addTearDown(container.dispose);
 
       final messages = container.read(currentFolderMessagesProvider);
       expect(messages.length, 2);
@@ -82,11 +87,14 @@ void main() {
     test('returns sent when sent selected', () {
       final container = ProviderContainer(
         overrides: [
-          selectedFolderProvider.overrideWith((ref) => MessageFolder.sent),
-          inboxProvider.overrideWith((ref) => [msg()]),
-          sentProvider.overrideWith((ref) => [msg(id: 2), msg(id: 3)]),
+          selectedFolderProvider.overrideWithBuild(
+            (ref, _) => MessageFolder.sent,
+          ),
+          inboxProvider.overrideWithBuild((ref, _) => [msg()]),
+          sentProvider.overrideWithBuild((ref, _) => [msg(id: 2), msg(id: 3)]),
         ],
       );
+      addTearDown(container.dispose);
 
       final messages = container.read(currentFolderMessagesProvider);
       expect(messages.length, 2);
@@ -95,10 +103,13 @@ void main() {
     test('returns trash when trash selected', () {
       final container = ProviderContainer(
         overrides: [
-          selectedFolderProvider.overrideWith((ref) => MessageFolder.trash),
-          trashProvider.overrideWith((ref) => [msg(id: 4)]),
+          selectedFolderProvider.overrideWithBuild(
+            (ref, _) => MessageFolder.trash,
+          ),
+          trashProvider.overrideWithBuild((ref, _) => [msg(id: 4)]),
         ],
       );
+      addTearDown(container.dispose);
 
       final messages = container.read(currentFolderMessagesProvider);
       expect(messages.length, 1);

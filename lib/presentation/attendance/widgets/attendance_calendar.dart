@@ -65,7 +65,7 @@ class AttendanceCalendar extends ConsumerWidget {
 
   void _changeMonth(WidgetRef ref, int direction) {
     final current = ref.read(selectedMonthProvider);
-    ref.read(selectedMonthProvider.notifier).state = DateTime(
+    ref.read(selectedMonthProvider.notifier).value = DateTime(
       current.year,
       current.month + direction,
     );
@@ -73,7 +73,7 @@ class AttendanceCalendar extends ConsumerWidget {
 
   void _goToToday(WidgetRef ref) {
     final now = DateTime.now();
-    ref.read(selectedMonthProvider.notifier).state = DateTime(
+    ref.read(selectedMonthProvider.notifier).value = DateTime(
       now.year,
       now.month,
     );

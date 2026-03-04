@@ -46,7 +46,7 @@ class _WearGradesDetailScreenState
                   terms: terms,
                   currentTerm: currentTerm,
                   onChanged: (id) {
-                    ref.read(selectedTermIdProvider.notifier).state = id;
+                    ref.read(selectedTermIdProvider.notifier).value = id;
                   },
                 ),
               Expanded(

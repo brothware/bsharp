@@ -54,7 +54,7 @@ class _TermFilterChips extends ConsumerWidget {
           label: Text(t.attendance.fullYear),
           selected: isAllSelected,
           onSelected: (_) {
-            ref.read(selectedStatsTermIdProvider.notifier).state = 0;
+            ref.read(selectedStatsTermIdProvider.notifier).value = 0;
           },
         ),
         for (final term in semesters)
@@ -62,7 +62,7 @@ class _TermFilterChips extends ConsumerWidget {
             label: Text(translateTermName(term.name)),
             selected: currentTerm?.id == term.id,
             onSelected: (_) {
-              ref.read(selectedStatsTermIdProvider.notifier).state = term.id;
+              ref.read(selectedStatsTermIdProvider.notifier).value = term.id;
             },
           ),
       ],

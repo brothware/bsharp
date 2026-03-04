@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/translation_utils.dart';
@@ -37,7 +39,7 @@ class HomeworkScreen extends ConsumerWidget {
               ],
               selected: {filter},
               onSelectionChanged: (s) =>
-                  ref.read(homeworkFilterProvider.notifier).state = s.first,
+                  ref.read(homeworkFilterProvider.notifier).value = s.first,
             ),
           ),
           Expanded(
@@ -108,24 +110,26 @@ class _DateGroup extends StatelessWidget {
   }
 
   void _showDetail(BuildContext context, PortalHomework hw) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              translateSubjectName(hw.subjectName),
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
-            Text(t.homework.assignedDate(date: hw.date)),
-            Text(t.homework.dueDate(date: hw.dueDate)),
-            const SizedBox(height: 16),
-            Text(hw.content),
-          ],
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (_) => Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                translateSubjectName(hw.subjectName),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(t.homework.assignedDate(date: hw.date)),
+              Text(t.homework.dueDate(date: hw.dueDate)),
+              const SizedBox(height: 16),
+              Text(hw.content),
+            ],
+          ),
         ),
       ),
     );

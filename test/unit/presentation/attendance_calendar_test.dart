@@ -25,10 +25,10 @@ void main() {
   }) {
     return ProviderScope(
       overrides: [
-        attendancesProvider.overrideWith((ref) => attendances),
-        attendanceTypesProvider.overrideWith((ref) => types),
-        eventsProvider.overrideWith((ref) => events),
-        selectedMonthProvider.overrideWith((ref) => DateTime(2026, 2)),
+        attendancesProvider.overrideWithBuild((ref, _) => attendances),
+        attendanceTypesProvider.overrideWithBuild((ref, _) => types),
+        eventsProvider.overrideWithBuild((ref, _) => events),
+        selectedMonthProvider.overrideWithBuild((ref, _) => DateTime(2026, 2)),
       ],
       child: const MaterialApp(home: Scaffold(body: AttendanceScreen())),
     );
@@ -147,13 +147,13 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          attendancesProvider.overrideWith(
-            (ref) => [
+          attendancesProvider.overrideWithBuild(
+            (ref, _) => [
               const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
               const Attendance(id: 2, eventsId: 2, studentsId: 1, typesId: 1),
             ],
           ),
-          attendanceTypesProvider.overrideWith((ref) => [presentType]),
+          attendanceTypesProvider.overrideWithBuild((ref, _) => [presentType]),
         ],
         child: const MaterialApp(home: Scaffold(body: AttendanceStatsView())),
       ),

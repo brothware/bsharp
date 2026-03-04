@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
-Future<Widget> _buildApp({List<Override> overrides = const []}) async {
+Future<Widget> _buildApp({List<Object> extraOverrides = const []}) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
   final storage = CredentialStorage(store: FakeKeyValueStore());
@@ -19,7 +19,7 @@ Future<Widget> _buildApp({List<Override> overrides = const []}) async {
       credentialStorageProvider.overrideWithValue(storage),
       sharedPreferencesProvider.overrideWithValue(prefs),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      ...overrides,
+      ...extraOverrides.cast(),
     ],
     child: const MaterialApp(home: Scaffold(body: WearSettingsTile())),
   );

@@ -42,7 +42,7 @@ Widget _buildTile({List<Event> events = const []}) {
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      eventsProvider.overrideWith((ref) => events),
+      eventsProvider.overrideWithBuild((ref, _) => events),
     ],
     child: const MaterialApp(home: Scaffold(body: WearScheduleTile())),
   );

@@ -14,7 +14,7 @@ void main() {
     testWidgets('shows empty state', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [homeworksProvider.overrideWith((ref) => [])],
+          overrides: [homeworksProvider.overrideWithBuild((ref, _) => [])],
           child: const MaterialApp(home: Scaffold(body: HomeworkScreen())),
         ),
       );
@@ -25,7 +25,7 @@ void main() {
     testWidgets('shows filter segments', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [homeworksProvider.overrideWith((ref) => [])],
+          overrides: [homeworksProvider.overrideWithBuild((ref, _) => [])],
           child: const MaterialApp(home: Scaffold(body: HomeworkScreen())),
         ),
       );
@@ -39,8 +39,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            homeworksProvider.overrideWith(
-              (ref) => [
+            homeworksProvider.overrideWithBuild(
+              (ref, _) => [
                 const PortalHomework(
                   id: 1,
                   subjectName: 'Math',
@@ -50,7 +50,9 @@ void main() {
                 ),
               ],
             ),
-            homeworkFilterProvider.overrideWith((ref) => HomeworkFilter.all),
+            homeworkFilterProvider.overrideWithBuild(
+              (ref, _) => HomeworkFilter.all,
+            ),
           ],
           child: const MaterialApp(home: Scaffold(body: HomeworkScreen())),
         ),
@@ -65,7 +67,7 @@ void main() {
     testWidgets('shows empty state', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [testsProvider.overrideWith((ref) => [])],
+          overrides: [testsProvider.overrideWithBuild((ref, _) => [])],
           child: const MaterialApp(home: Scaffold(body: TestsScreen())),
         ),
       );
@@ -77,8 +79,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            testsProvider.overrideWith(
-              (ref) => [
+            testsProvider.overrideWithBuild(
+              (ref, _) => [
                 const PortalTest(
                   id: 1,
                   subjectName: 'Physics',
@@ -101,7 +103,7 @@ void main() {
     testWidgets('shows tabs for remarks, praises, and info', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [reprimandsProvider.overrideWith((ref) => [])],
+          overrides: [reprimandsProvider.overrideWithBuild((ref, _) => [])],
           child: const MaterialApp(home: Scaffold(body: NotesScreen())),
         ),
       );
@@ -115,8 +117,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            reprimandsProvider.overrideWith(
-              (ref) => [
+            reprimandsProvider.overrideWithBuild(
+              (ref, _) => [
                 const PortalReprimand(
                   id: 1,
                   date: '2026-02-27',
@@ -138,8 +140,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            reprimandsProvider.overrideWith(
-              (ref) => [
+            reprimandsProvider.overrideWithBuild(
+              (ref, _) => [
                 const PortalReprimand(
                   id: 1,
                   date: '2026-02-27',
@@ -169,7 +171,7 @@ void main() {
     testWidgets('shows empty state', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [bulletinsProvider.overrideWith((ref) => [])],
+          overrides: [bulletinsProvider.overrideWithBuild((ref, _) => [])],
           child: const MaterialApp(home: Scaffold(body: BulletinsScreen())),
         ),
       );
@@ -181,8 +183,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            bulletinsProvider.overrideWith(
-              (ref) => [
+            bulletinsProvider.overrideWithBuild(
+              (ref, _) => [
                 const PortalBulletin(
                   id: 1,
                   title: 'Important announcement',
@@ -206,8 +208,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            bulletinsProvider.overrideWith(
-              (ref) => [
+            bulletinsProvider.overrideWithBuild(
+              (ref, _) => [
                 const PortalBulletin(
                   id: 1,
                   title: 'Read',
@@ -232,8 +234,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            gradeChangelogProvider.overrideWith((ref) => []),
-            attendanceChangelogProvider.overrideWith((ref) => []),
+            gradeChangelogProvider.overrideWithBuild((ref, _) => []),
+            attendanceChangelogProvider.overrideWithBuild((ref, _) => []),
           ],
           child: const MaterialApp(home: Scaffold(body: ChangelogScreen())),
         ),
@@ -247,8 +249,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            gradeChangelogProvider.overrideWith((ref) => []),
-            attendanceChangelogProvider.overrideWith((ref) => []),
+            gradeChangelogProvider.overrideWithBuild((ref, _) => []),
+            attendanceChangelogProvider.overrideWithBuild((ref, _) => []),
           ],
           child: const MaterialApp(home: Scaffold(body: ChangelogScreen())),
         ),
@@ -261,8 +263,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            gradeChangelogProvider.overrideWith(
-              (ref) => [
+            gradeChangelogProvider.overrideWithBuild(
+              (ref, _) => [
                 const PortalChangelog(
                   type: 'mark',
                   dateTime: '2026-02-27 10:00:00',
@@ -274,7 +276,7 @@ void main() {
                 ),
               ],
             ),
-            attendanceChangelogProvider.overrideWith((ref) => []),
+            attendanceChangelogProvider.overrideWithBuild((ref, _) => []),
           ],
           child: const MaterialApp(home: Scaffold(body: ChangelogScreen())),
         ),
@@ -289,8 +291,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            gradeChangelogProvider.overrideWith(
-              (ref) => [
+            gradeChangelogProvider.overrideWithBuild(
+              (ref, _) => [
                 const PortalChangelog(
                   type: 'mark',
                   dateTime: '2026-02-27 10:00:00',
@@ -301,7 +303,7 @@ void main() {
                 ),
               ],
             ),
-            attendanceChangelogProvider.overrideWith((ref) => []),
+            attendanceChangelogProvider.overrideWithBuild((ref, _) => []),
           ],
           child: const MaterialApp(home: Scaffold(body: ChangelogScreen())),
         ),

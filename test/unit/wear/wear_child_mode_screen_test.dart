@@ -9,13 +9,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
-Widget _buildApp({List<Override> overrides = const []}) {
+Widget _buildApp({List<Object> extraOverrides = const []}) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      ...overrides,
+      ...extraOverrides.cast(),
     ],
     child: const MaterialApp(home: WearChildModeScreen()),
   );

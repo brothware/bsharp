@@ -32,8 +32,9 @@ void main() {
   group('currentTermProvider', () {
     test('returns null when no terms', () {
       final container = ProviderContainer(
-        overrides: [termsProvider.overrideWith((ref) => [])],
+        overrides: [termsProvider.overrideWithBuild((ref, _) => [])],
       );
+      addTearDown(container.dispose);
       expect(container.read(currentTermProvider), isNull);
     });
 
@@ -55,10 +56,11 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
-          termsProvider.overrideWith((ref) => [term1, term2]),
-          selectedTermIdProvider.overrideWith((ref) => 2),
+          termsProvider.overrideWithBuild((ref, _) => [term1, term2]),
+          selectedTermIdProvider.overrideWithBuild((ref, _) => 2),
         ],
       );
+      addTearDown(container.dispose);
 
       expect(container.read(currentTermProvider)?.id, 2);
     });
@@ -81,9 +83,10 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
-          termsProvider.overrideWith((ref) => [past, current]),
+          termsProvider.overrideWithBuild((ref, _) => [past, current]),
         ],
       );
+      addTearDown(container.dispose);
 
       expect(container.read(currentTermProvider)?.id, 2);
     });
@@ -99,9 +102,10 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
-          termsProvider.overrideWith((ref) => [term]),
+          termsProvider.overrideWithBuild((ref, _) => [term]),
         ],
       );
+      addTearDown(container.dispose);
 
       expect(container.read(currentTermProvider)?.id, 1);
     });
@@ -110,21 +114,22 @@ void main() {
   group('subjectGradesProvider', () {
     test('returns empty list when no marks', () {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       expect(container.read(subjectGradesProvider), isEmpty);
     });
 
     test('groups marks by subject via mark groups', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWith(
-            (ref) => [
+          marksProvider.overrideWithBuild(
+            (ref, _) => [
               mark(markGroupsId: 10),
               mark(id: 2, markGroupsId: 10, markValue: 4),
               mark(id: 3, markGroupsId: 20, markValue: 3),
             ],
           ),
-          markGroupsProvider.overrideWith(
-            (ref) => [
+          markGroupsProvider.overrideWithBuild(
+            (ref, _) => [
               const MarkGroup(
                 id: 10,
                 isPattern: 0,
@@ -143,14 +148,14 @@ void main() {
               ),
             ],
           ),
-          eventTypeTermsProvider.overrideWith(
-            (ref) => [
+          eventTypeTermsProvider.overrideWithBuild(
+            (ref, _) => [
               const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
               const EventTypeTerm(id: 501, termsId: 1, eventTypesId: 249),
             ],
           ),
-          eventTypesProvider.overrideWith(
-            (ref) => [
+          eventTypesProvider.overrideWithBuild(
+            (ref, _) => [
               const EventType(
                 id: 248,
                 subjectsId: 100,
@@ -165,8 +170,8 @@ void main() {
               ),
             ],
           ),
-          subjectsProvider.overrideWith(
-            (ref) => [
+          subjectsProvider.overrideWithBuild(
+            (ref, _) => [
               const Subject(
                 id: 100,
                 subjectsEduId: 100,
@@ -183,6 +188,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final result = container.read(subjectGradesProvider);
       expect(result.length, 2);
@@ -199,11 +205,11 @@ void main() {
       () {
         final container = ProviderContainer(
           overrides: [
-            marksProvider.overrideWith(
-              (ref) => [mark(markGroupsId: 10, markScalesId: 118)],
+            marksProvider.overrideWithBuild(
+              (ref, _) => [mark(markGroupsId: 10, markScalesId: 118)],
             ),
-            markGroupsProvider.overrideWith(
-              (ref) => [
+            markGroupsProvider.overrideWithBuild(
+              (ref, _) => [
                 const MarkGroup(
                   id: 10,
                   isPattern: 0,
@@ -214,8 +220,8 @@ void main() {
                 ),
               ],
             ),
-            markScalesProvider.overrideWith(
-              (ref) => [
+            markScalesProvider.overrideWithBuild(
+              (ref, _) => [
                 const MarkScale(
                   id: 118,
                   markScaleGroupsId: 10,
@@ -227,13 +233,13 @@ void main() {
                 ),
               ],
             ),
-            eventTypeTermsProvider.overrideWith(
-              (ref) => [
+            eventTypeTermsProvider.overrideWithBuild(
+              (ref, _) => [
                 const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
               ],
             ),
-            eventTypesProvider.overrideWith(
-              (ref) => [
+            eventTypesProvider.overrideWithBuild(
+              (ref, _) => [
                 const EventType(
                   id: 248,
                   subjectsId: 100,
@@ -242,8 +248,8 @@ void main() {
                 ),
               ],
             ),
-            subjectsProvider.overrideWith(
-              (ref) => [
+            subjectsProvider.overrideWithBuild(
+              (ref, _) => [
                 const Subject(
                   id: 100,
                   subjectsEduId: 100,
@@ -254,6 +260,7 @@ void main() {
             ),
           ],
         );
+        addTearDown(container.dispose);
 
         final result = container.read(subjectGradesProvider);
         expect(result.length, 1);
@@ -266,11 +273,11 @@ void main() {
     test('resolves point-based marks with value/max format', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWith(
-            (ref) => [mark(markGroupsId: 10, markValue: 8)],
+          marksProvider.overrideWithBuild(
+            (ref, _) => [mark(markGroupsId: 10, markValue: 8)],
           ),
-          markGroupsProvider.overrideWith(
-            (ref) => [
+          markGroupsProvider.overrideWithBuild(
+            (ref, _) => [
               const MarkGroup(
                 id: 10,
                 isPattern: 0,
@@ -282,13 +289,13 @@ void main() {
               ),
             ],
           ),
-          eventTypeTermsProvider.overrideWith(
-            (ref) => [
+          eventTypeTermsProvider.overrideWithBuild(
+            (ref, _) => [
               const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
             ],
           ),
-          eventTypesProvider.overrideWith(
-            (ref) => [
+          eventTypesProvider.overrideWithBuild(
+            (ref, _) => [
               const EventType(
                 id: 248,
                 subjectsId: 100,
@@ -297,8 +304,8 @@ void main() {
               ),
             ],
           ),
-          subjectsProvider.overrideWith(
-            (ref) => [
+          subjectsProvider.overrideWithBuild(
+            (ref, _) => [
               const Subject(
                 id: 100,
                 subjectsEduId: 100,
@@ -309,6 +316,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final result = container.read(subjectGradesProvider);
       final rm = result.first.resolvedMarks.first;
@@ -319,11 +327,11 @@ void main() {
     test('sorts subjects alphabetically', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWith(
-            (ref) => [mark(markGroupsId: 10), mark(id: 2, markGroupsId: 20)],
+          marksProvider.overrideWithBuild(
+            (ref, _) => [mark(markGroupsId: 10), mark(id: 2, markGroupsId: 20)],
           ),
-          markGroupsProvider.overrideWith(
-            (ref) => [
+          markGroupsProvider.overrideWithBuild(
+            (ref, _) => [
               const MarkGroup(
                 id: 10,
                 isPattern: 0,
@@ -342,14 +350,14 @@ void main() {
               ),
             ],
           ),
-          eventTypeTermsProvider.overrideWith(
-            (ref) => [
+          eventTypeTermsProvider.overrideWithBuild(
+            (ref, _) => [
               const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
               const EventTypeTerm(id: 501, termsId: 1, eventTypesId: 249),
             ],
           ),
-          eventTypesProvider.overrideWith(
-            (ref) => [
+          eventTypesProvider.overrideWithBuild(
+            (ref, _) => [
               const EventType(
                 id: 248,
                 subjectsId: 200,
@@ -364,8 +372,8 @@ void main() {
               ),
             ],
           ),
-          subjectsProvider.overrideWith(
-            (ref) => [
+          subjectsProvider.overrideWithBuild(
+            (ref, _) => [
               const Subject(
                 id: 100,
                 subjectsEduId: 100,
@@ -382,6 +390,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final result = container.read(subjectGradesProvider);
       expect(result[0].subjectName, 'Biology');
@@ -391,8 +400,8 @@ void main() {
     test('sorts marks by date descending within subject', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWith(
-            (ref) => [
+          marksProvider.overrideWithBuild(
+            (ref, _) => [
               mark(markGroupsId: 10, markValue: 3),
               Mark(
                 id: 2,
@@ -405,8 +414,8 @@ void main() {
               ),
             ],
           ),
-          markGroupsProvider.overrideWith(
-            (ref) => [
+          markGroupsProvider.overrideWithBuild(
+            (ref, _) => [
               const MarkGroup(
                 id: 10,
                 isPattern: 0,
@@ -417,13 +426,13 @@ void main() {
               ),
             ],
           ),
-          eventTypeTermsProvider.overrideWith(
-            (ref) => [
+          eventTypeTermsProvider.overrideWithBuild(
+            (ref, _) => [
               const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
             ],
           ),
-          eventTypesProvider.overrideWith(
-            (ref) => [
+          eventTypesProvider.overrideWithBuild(
+            (ref, _) => [
               const EventType(
                 id: 248,
                 subjectsId: 100,
@@ -432,8 +441,8 @@ void main() {
               ),
             ],
           ),
-          subjectsProvider.overrideWith(
-            (ref) => [
+          subjectsProvider.overrideWithBuild(
+            (ref, _) => [
               const Subject(
                 id: 100,
                 subjectsEduId: 100,
@@ -444,6 +453,7 @@ void main() {
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final result = container.read(subjectGradesProvider);
       expect(result.first.resolvedMarks.first.mark.id, 2);
@@ -453,20 +463,21 @@ void main() {
   group('overallWeightedAverageProvider', () {
     test('returns null when no subjects', () {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       expect(container.read(overallWeightedAverageProvider), isNull);
     });
 
     test('calculates mean of subject weighted averages', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWith(
-            (ref) => [
+          marksProvider.overrideWithBuild(
+            (ref, _) => [
               mark(markGroupsId: 10),
               mark(id: 2, markGroupsId: 20, markValue: 3),
             ],
           ),
-          markGroupsProvider.overrideWith(
-            (ref) => [
+          markGroupsProvider.overrideWithBuild(
+            (ref, _) => [
               const MarkGroup(
                 id: 10,
                 isPattern: 0,
@@ -485,14 +496,14 @@ void main() {
               ),
             ],
           ),
-          eventTypeTermsProvider.overrideWith(
-            (ref) => [
+          eventTypeTermsProvider.overrideWithBuild(
+            (ref, _) => [
               const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
               const EventTypeTerm(id: 501, termsId: 1, eventTypesId: 249),
             ],
           ),
-          eventTypesProvider.overrideWith(
-            (ref) => [
+          eventTypesProvider.overrideWithBuild(
+            (ref, _) => [
               const EventType(
                 id: 248,
                 subjectsId: 100,
@@ -507,14 +518,15 @@ void main() {
               ),
             ],
           ),
-          subjectsProvider.overrideWith(
-            (ref) => [
+          subjectsProvider.overrideWithBuild(
+            (ref, _) => [
               const Subject(id: 100, subjectsEduId: 100, name: 'A', abbr: 'A'),
               const Subject(id: 200, subjectsEduId: 200, name: 'B', abbr: 'B'),
             ],
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       expect(container.read(overallWeightedAverageProvider), 4.0);
     });
@@ -523,6 +535,7 @@ void main() {
   group('overallSimpleAverageProvider', () {
     test('returns null when no subjects', () {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       expect(container.read(overallSimpleAverageProvider), isNull);
     });
   });
@@ -530,21 +543,22 @@ void main() {
   group('gradeDistributionProvider', () {
     test('returns empty map for no marks', () {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       expect(container.read(gradeDistributionProvider), isEmpty);
     });
 
     test('counts by rounded effective value', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWith(
-            (ref) => [
+          marksProvider.overrideWithBuild(
+            (ref, _) => [
               mark(markGroupsId: 10),
               mark(id: 2, markGroupsId: 10),
               mark(id: 3, markGroupsId: 10, markValue: 4),
             ],
           ),
-          markGroupsProvider.overrideWith(
-            (ref) => [
+          markGroupsProvider.overrideWithBuild(
+            (ref, _) => [
               const MarkGroup(
                 id: 10,
                 isPattern: 0,
@@ -555,13 +569,13 @@ void main() {
               ),
             ],
           ),
-          eventTypeTermsProvider.overrideWith(
-            (ref) => [
+          eventTypeTermsProvider.overrideWithBuild(
+            (ref, _) => [
               const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
             ],
           ),
-          eventTypesProvider.overrideWith(
-            (ref) => [
+          eventTypesProvider.overrideWithBuild(
+            (ref, _) => [
               const EventType(
                 id: 248,
                 subjectsId: 100,
@@ -570,13 +584,14 @@ void main() {
               ),
             ],
           ),
-          subjectsProvider.overrideWith(
-            (ref) => [
+          subjectsProvider.overrideWithBuild(
+            (ref, _) => [
               const Subject(id: 100, subjectsEduId: 100, name: 'A', abbr: 'A'),
             ],
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final dist = container.read(gradeDistributionProvider);
       expect(dist['5'], 2);

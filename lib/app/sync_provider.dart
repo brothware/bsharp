@@ -6,12 +6,16 @@ import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'sync_provider.g.dart';
 
 enum SyncStatus { idle, syncing, completed, failed }
 
-final notificationServiceProvider = Provider<NotificationService>((ref) {
+@Riverpod(keepAlive: true)
+NotificationService notificationService(Ref ref) {
   return NotificationService();
-});
+}
 
 final syncStatusProvider = NotifierProvider<SyncStatusNotifier, SyncStatus>(
   SyncStatusNotifier.new,
@@ -20,6 +24,8 @@ final syncStatusProvider = NotifierProvider<SyncStatusNotifier, SyncStatus>(
 class SyncStatusNotifier extends Notifier<SyncStatus> {
   @override
   SyncStatus build() => SyncStatus.idle;
+  SyncStatus get value => state;
+  set value(SyncStatus v) => state = v;
 
   Future<ChangeSet> sync() async {
     if (state == SyncStatus.syncing) return const ChangeSet();
@@ -54,7 +60,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       }
 
       state = SyncStatus.completed;
-      ref.read(lastSyncTimeProvider.notifier).state = DateTime.now();
+      ref.read(lastSyncTimeProvider.notifier).value = DateTime.now();
 
       await _checkUnexcusedAbsences();
 
@@ -67,7 +73,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
 
   void markCompleted() {
     state = SyncStatus.completed;
-    ref.read(lastSyncTimeProvider.notifier).state = DateTime.now();
+    ref.read(lastSyncTimeProvider.notifier).value = DateTime.now();
   }
 
   Future<void> _checkUnexcusedAbsences() async {
@@ -121,13 +127,19 @@ class _Credentials {
   final String passHash;
 }
 
-final lastSyncTimeProvider = StateProvider<DateTime?>((ref) => null);
+@Riverpod(keepAlive: true)
+class LastSyncTime extends _$LastSyncTime {
+  @override
+  DateTime? build() => null;
+  DateTime? get value => state;
+  set value(DateTime? v) => state = v;
+}
 
-final backgroundSyncSchedulerProvider = Provider<BackgroundSyncScheduler?>(
-  (ref) => null,
-);
+@Riverpod(keepAlive: true)
+BackgroundSyncScheduler? backgroundSyncScheduler(Ref ref) => null;
 
-final syncIntervalProvider = Provider<Duration>((ref) {
+@Riverpod(keepAlive: true)
+Duration syncInterval(Ref ref) {
   final prefs = ref.watch(notificationPreferencesProvider);
   return Duration(minutes: prefs.syncIntervalMinutes);
-});
+}

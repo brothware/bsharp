@@ -16,7 +16,7 @@ Widget _buildTile({List<PortalHomework> homework = const []}) {
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      homeworksProvider.overrideWith((ref) => homework),
+      homeworksProvider.overrideWithBuild((ref, _) => homework),
     ],
     child: const MaterialApp(home: Scaffold(body: WearHomeworkTile())),
   );

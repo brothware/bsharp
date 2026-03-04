@@ -27,7 +27,7 @@ void main() {
   group('ActiveStudentNotifier', () {
     test('returns null when no students', () {
       final container = ProviderContainer(
-        overrides: [studentsProvider.overrideWith((ref) => [])],
+        overrides: [studentsProvider.overrideWithBuild((ref, _) => [])],
       );
       expect(container.read(activeStudentProvider), isNull);
     });
@@ -38,7 +38,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
-          studentsProvider.overrideWith((ref) => [jan, anna]),
+          studentsProvider.overrideWithBuild((ref, _) => [jan, anna]),
           credentialStorageProvider.overrideWithValue(storage),
         ],
       );
@@ -52,7 +52,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
-          studentsProvider.overrideWith((ref) => [jan, anna]),
+          studentsProvider.overrideWithBuild((ref, _) => [jan, anna]),
           credentialStorageProvider.overrideWithValue(storage),
         ],
       );
@@ -67,7 +67,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
-          studentsProvider.overrideWith((ref) => [jan, anna]),
+          studentsProvider.overrideWithBuild((ref, _) => [jan, anna]),
           credentialStorageProvider.overrideWithValue(storage),
         ],
       );

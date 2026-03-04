@@ -54,20 +54,24 @@ void main() {
     test('groups by event date', () {
       final container = ProviderContainer(
         overrides: [
-          attendancesProvider.overrideWith(
-            (ref) => [attendance(), attendance(id: 2, eventsId: 2, typesId: 2)],
+          attendancesProvider.overrideWithBuild(
+            (ref, _) => [
+              attendance(),
+              attendance(id: 2, eventsId: 2, typesId: 2),
+            ],
           ),
-          attendanceTypesProvider.overrideWith(
-            (ref) => [presentType, absentType],
+          attendanceTypesProvider.overrideWithBuild(
+            (ref, _) => [presentType, absentType],
           ),
-          eventsProvider.overrideWith(
-            (ref) => [
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [
               event(date: DateTime(2026, 2, 27)),
               event(id: 2, date: DateTime(2026, 2, 28)),
             ],
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final days = container.read(attendanceDaysProvider);
       expect(days.length, 2);
@@ -78,11 +82,12 @@ void main() {
     test('returns empty when no attendances', () {
       final container = ProviderContainer(
         overrides: [
-          attendancesProvider.overrideWith((ref) => []),
-          attendanceTypesProvider.overrideWith((ref) => []),
-          eventsProvider.overrideWith((ref) => []),
+          attendancesProvider.overrideWithBuild((ref, _) => []),
+          attendanceTypesProvider.overrideWithBuild((ref, _) => []),
+          eventsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
+      addTearDown(container.dispose);
 
       expect(container.read(attendanceDaysProvider), isEmpty);
     });
@@ -92,26 +97,27 @@ void main() {
     test('calculates stats from all attendances when no term selected', () {
       final container = ProviderContainer(
         overrides: [
-          attendancesProvider.overrideWith(
-            (ref) => [
+          attendancesProvider.overrideWithBuild(
+            (ref, _) => [
               attendance(),
               attendance(id: 2, eventsId: 2),
               attendance(id: 3, eventsId: 3, typesId: 2),
             ],
           ),
-          attendanceTypesProvider.overrideWith(
-            (ref) => [presentType, absentType],
+          attendanceTypesProvider.overrideWithBuild(
+            (ref, _) => [presentType, absentType],
           ),
-          eventsProvider.overrideWith(
-            (ref) => [
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [
               event(date: DateTime(2025, 10)),
               event(id: 2, date: DateTime(2026, 3)),
               event(id: 3, date: DateTime(2026, 3, 15)),
             ],
           ),
-          selectedStatsTermIdProvider.overrideWith((ref) => 0),
+          selectedStatsTermIdProvider.overrideWithBuild((ref, _) => 0),
         ],
       );
+      addTearDown(container.dispose);
 
       final stats = container.read(attendanceStatsProvider);
       expect(stats.totalLessons, 3);
@@ -122,25 +128,25 @@ void main() {
     test('filters stats by selected semester', () {
       final container = ProviderContainer(
         overrides: [
-          attendancesProvider.overrideWith(
-            (ref) => [
+          attendancesProvider.overrideWithBuild(
+            (ref, _) => [
               attendance(),
               attendance(id: 2, eventsId: 2),
               attendance(id: 3, eventsId: 3, typesId: 2),
             ],
           ),
-          attendanceTypesProvider.overrideWith(
-            (ref) => [presentType, absentType],
+          attendanceTypesProvider.overrideWithBuild(
+            (ref, _) => [presentType, absentType],
           ),
-          eventsProvider.overrideWith(
-            (ref) => [
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [
               event(date: DateTime(2025, 10)),
               event(id: 2, date: DateTime(2026, 3)),
               event(id: 3, date: DateTime(2026, 3, 15)),
             ],
           ),
-          termsProvider.overrideWith(
-            (ref) => [
+          termsProvider.overrideWithBuild(
+            (ref, _) => [
               Term(
                 id: 4,
                 parentId: 1,
@@ -159,9 +165,10 @@ void main() {
               ),
             ],
           ),
-          selectedStatsTermIdProvider.overrideWith((ref) => 7),
+          selectedStatsTermIdProvider.overrideWithBuild((ref, _) => 7),
         ],
       );
+      addTearDown(container.dispose);
 
       final stats = container.read(attendanceStatsProvider);
       expect(stats.totalLessons, 2);
@@ -174,13 +181,14 @@ void main() {
     test('returns day data for matching date', () {
       final container = ProviderContainer(
         overrides: [
-          attendancesProvider.overrideWith((ref) => [attendance()]),
-          attendanceTypesProvider.overrideWith((ref) => [presentType]),
-          eventsProvider.overrideWith(
-            (ref) => [event(date: DateTime(2026, 2, 27))],
+          attendancesProvider.overrideWithBuild((ref, _) => [attendance()]),
+          attendanceTypesProvider.overrideWithBuild((ref, _) => [presentType]),
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [event(date: DateTime(2026, 2, 27))],
           ),
         ],
       );
+      addTearDown(container.dispose);
 
       final day = container.read(
         attendanceForDayProvider(DateTime(2026, 2, 27)),
@@ -192,11 +200,12 @@ void main() {
     test('returns null for date with no data', () {
       final container = ProviderContainer(
         overrides: [
-          attendancesProvider.overrideWith((ref) => []),
-          attendanceTypesProvider.overrideWith((ref) => []),
-          eventsProvider.overrideWith((ref) => []),
+          attendancesProvider.overrideWithBuild((ref, _) => []),
+          attendanceTypesProvider.overrideWithBuild((ref, _) => []),
+          eventsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
+      addTearDown(container.dispose);
 
       final day = container.read(
         attendanceForDayProvider(DateTime(2026, 2, 27)),
@@ -209,9 +218,12 @@ void main() {
     test('returns days for selected month', () {
       final container = ProviderContainer(
         overrides: [
-          selectedMonthProvider.overrideWith((ref) => DateTime(2026, 2)),
+          selectedMonthProvider.overrideWithBuild(
+            (ref, _) => DateTime(2026, 2),
+          ),
         ],
       );
+      addTearDown(container.dispose);
 
       final days = container.read(calendarDaysProvider);
       expect(days.length % 7, 0);

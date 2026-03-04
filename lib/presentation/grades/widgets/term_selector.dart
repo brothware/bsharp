@@ -31,7 +31,7 @@ class TermSelector extends ConsumerWidget {
       ],
       onChanged: (id) {
         if (id != null) {
-          ref.read(selectedTermIdProvider.notifier).state = id;
+          ref.read(selectedTermIdProvider.notifier).value = id;
         }
       },
     );

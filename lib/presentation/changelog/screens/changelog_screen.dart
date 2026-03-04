@@ -20,17 +20,11 @@ class ChangelogScreen extends ConsumerWidget {
               Tab(text: t.changelog.attendanceTab),
             ],
           ),
-          Expanded(
+          const Expanded(
             child: TabBarView(
               children: [
-                _ChangelogTab(
-                  groupedProvider: groupedGradeChangelogProvider,
-                  isGrade: true,
-                ),
-                _ChangelogTab(
-                  groupedProvider: groupedAttendanceChangelogProvider,
-                  isGrade: false,
-                ),
+                _ChangelogTab(isGrade: true),
+                _ChangelogTab(isGrade: false),
               ],
             ),
           ),
@@ -41,14 +35,15 @@ class ChangelogScreen extends ConsumerWidget {
 }
 
 class _ChangelogTab extends ConsumerWidget {
-  const _ChangelogTab({required this.groupedProvider, required this.isGrade});
+  const _ChangelogTab({required this.isGrade});
 
-  final Provider<Map<String, List<PortalChangelog>>> groupedProvider;
   final bool isGrade;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final grouped = ref.watch(groupedProvider);
+    final grouped = isGrade
+        ? ref.watch(groupedGradeChangelogProvider)
+        : ref.watch(groupedAttendanceChangelogProvider);
 
     return RefreshIndicator(
       onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),

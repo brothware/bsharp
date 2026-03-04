@@ -33,7 +33,7 @@ Widget _buildTile({List<PocztaMessage> inbox = const []}) {
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      inboxProvider.overrideWith((ref) => inbox),
+      inboxProvider.overrideWithBuild((ref, _) => inbox),
     ],
     child: const MaterialApp(home: Scaffold(body: WearMessagesTile())),
   );
