@@ -36,7 +36,7 @@ class NotificationService {
       linux: linuxSettings,
     );
 
-    await _plugin.initialize(settings);
+    await _plugin.initialize(settings: settings);
     _initialized = true;
   }
 
@@ -83,7 +83,12 @@ class NotificationService {
         ? items.first.subtitle ?? ''
         : items.take(3).map((i) => i.title).join(', ');
 
-    await _plugin.show(category.index, title, body, details);
+    await _plugin.show(
+      id: category.index,
+      title: title,
+      body: body,
+      notificationDetails: details,
+    );
   }
 
   _ChannelConfig _channelConfig(ChangeCategory category) {
@@ -123,7 +128,7 @@ class NotificationService {
 
   Future<void> showUnexcusedAbsenceAlert(int count) async {
     if (!_initialized || count == 0) {
-      await _plugin.cancel(_unexcusedNotificationId);
+      await _plugin.cancel(id: _unexcusedNotificationId);
       return;
     }
 
@@ -143,10 +148,10 @@ class NotificationService {
     );
 
     await _plugin.show(
-      _unexcusedNotificationId,
-      t.notification.unexcusedAbsenceTitle,
-      t.notification.unexcusedAbsenceBody(count: count),
-      details,
+      id: _unexcusedNotificationId,
+      title: t.notification.unexcusedAbsenceTitle,
+      body: t.notification.unexcusedAbsenceBody(count: count),
+      notificationDetails: details,
     );
   }
 

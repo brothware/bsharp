@@ -1,7 +1,8 @@
 enum SyncAction {
   insert,
   update,
-  delete;
+  delete
+  ;
 
   static SyncAction fromString(String value) => switch (value) {
     'I' => insert,
@@ -19,7 +20,8 @@ enum SyncAction {
 
 enum Sex {
   female,
-  male;
+  male
+  ;
 
   static Sex fromString(String value) => switch (value) {
     'K' => female,
@@ -37,7 +39,8 @@ enum AttendanceCountAs {
   present,
   absent,
   late,
-  other;
+  other
+  ;
 
   static AttendanceCountAs fromString(String value) => switch (value) {
     'P' => present,
@@ -51,7 +54,8 @@ enum AttendanceExcuseStatus {
   excused,
   unexcused,
   auto,
-  unset;
+  unset
+  ;
 
   static AttendanceExcuseStatus fromString(String? value) => switch (value) {
     'E' => excused,
@@ -63,7 +67,8 @@ enum AttendanceExcuseStatus {
 
 enum ReprimandKind {
   note,
-  praise;
+  praise
+  ;
 
   static ReprimandKind fromInt(int value) => switch (value) {
     0 => note,
@@ -79,7 +84,8 @@ enum ReprimandKind {
 
 enum TermType {
   year,
-  semester;
+  semester
+  ;
 
   static TermType fromString(String value) => switch (value) {
     'Y' => year,

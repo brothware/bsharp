@@ -4,7 +4,8 @@ part 'custom_event.freezed.dart';
 
 enum RecurrenceType {
   occurrence,
-  weekly;
+  weekly
+  ;
 
   static RecurrenceType fromIndex(int index) =>
       index == 1 ? weekly : occurrence;
