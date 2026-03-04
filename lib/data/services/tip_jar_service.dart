@@ -36,12 +36,12 @@ final class TipJarFailed extends TipJarState {
 
 class TipJarService {
   TipJarService() {
-    _init();
+    unawaited(_init());
   }
 
   static const coffeeId = 'bsharp_tip_coffee';
   static const mealId = 'bsharp_tip_meal';
-  static const _productIds = {coffeeId, mealId};
+  static const Set<String> _productIds = {coffeeId, mealId};
 
   final _stateController = StreamController<TipJarState>.broadcast();
   StreamSubscription<List<PurchaseDetails>>? _purchaseSub;
@@ -88,14 +88,14 @@ class TipJarService {
         case PurchaseStatus.restored:
           _stateController.add(const TipJarPurchased());
           if (purchase.pendingCompletePurchase) {
-            InAppPurchase.instance.completePurchase(purchase);
+            unawaited(InAppPurchase.instance.completePurchase(purchase));
           }
         case PurchaseStatus.error:
           _stateController.add(
             TipJarFailed(purchase.error?.message ?? 'Purchase failed'),
           );
         case PurchaseStatus.canceled:
-          _restoreAvailableState();
+          unawaited(_restoreAvailableState());
         case PurchaseStatus.pending:
           _stateController.add(const TipJarPurchasing());
       }
@@ -116,7 +116,7 @@ class TipJarService {
   }
 
   void dispose() {
-    _purchaseSub?.cancel();
-    _stateController.close();
+    unawaited(_purchaseSub?.cancel());
+    unawaited(_stateController.close());
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
@@ -85,9 +87,11 @@ class WearBulletinsTile extends ConsumerWidget {
   }
 
   void _openDetail(BuildContext context, PortalBulletin bulletin) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => WearBulletinDetailScreen(bulletin: bulletin),
+    unawaited(
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => WearBulletinDetailScreen(bulletin: bulletin),
+        ),
       ),
     );
   }

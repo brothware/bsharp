@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
@@ -157,30 +159,36 @@ class WearChildModeScreen extends ConsumerWidget {
   }
 
   void _navigateToPinSetup(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute<bool>(builder: (_) => const WearPinSetupScreen()));
+    unawaited(
+      Navigator.of(
+        context,
+      ).push(
+        MaterialPageRoute<bool>(builder: (_) => const WearPinSetupScreen()),
+      ),
+    );
   }
 
   void _showRemovePinDialog(BuildContext context, WidgetRef ref) {
-    showDialog<void>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(t.childMode.removePinTitle),
-        content: Text(t.childMode.removePinBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(t.common.cancel),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              ref.read(childModeProvider.notifier).removePin();
-            },
-            child: Text(t.childMode.removePin),
-          ),
-        ],
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(t.childMode.removePinTitle),
+          content: Text(t.childMode.removePinBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(t.common.cancel),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                unawaited(ref.read(childModeProvider.notifier).removePin());
+              },
+              child: Text(t.childMode.removePin),
+            ),
+          ],
+        ),
       ),
     );
   }

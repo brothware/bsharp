@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -43,7 +45,7 @@ class PinPadState extends State<PinPad> with SingleTickerProviderStateMixin {
   }
 
   void shake() {
-    _shakeController.forward(from: 0);
+    unawaited(_shakeController.forward(from: 0));
     setState(() => _pin = '');
   }
 
@@ -134,7 +136,7 @@ class PinPadState extends State<PinPad> with SingleTickerProviderStateMixin {
   }
 
   void _onKeyTap(String key) {
-    HapticFeedback.lightImpact();
+    unawaited(HapticFeedback.lightImpact());
     if (key == 'del') {
       if (_pin.isNotEmpty) {
         setState(() => _pin = _pin.substring(0, _pin.length - 1));

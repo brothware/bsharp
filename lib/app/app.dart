@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
@@ -38,7 +40,7 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         home: const Scaffold(body: Center(child: CircularProgressIndicator())),
       ),
-      error: (_, __) {
+      error: (_, _) {
         _initialSyncTriggered = false;
         final router = createRouter(authState: AuthState.unauthenticated);
         return MaterialApp.router(
@@ -58,12 +60,16 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
           _initialSyncTriggered = true;
           final isDemo = ref.read(demoModeProvider);
           if (!isDemo) {
-            Future.microtask(
-              () => ref.read(syncStatusProvider.notifier).sync(),
+            unawaited(
+              Future.microtask(
+                () => ref.read(syncStatusProvider.notifier).sync(),
+              ),
             );
           } else {
-            Future.microtask(
-              () => ref.read(syncStatusProvider.notifier).markCompleted(),
+            unawaited(
+              Future.microtask(
+                () => ref.read(syncStatusProvider.notifier).markCompleted(),
+              ),
             );
           }
         }

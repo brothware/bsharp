@@ -85,7 +85,7 @@ class SyncEngine {
   }
 
   void dispose() {
-    _stateController.close();
+    unawaited(_stateController.close());
   }
 }
 

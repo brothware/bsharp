@@ -22,7 +22,7 @@ class WebSyncScheduler implements BackgroundSyncScheduler {
   void schedule({required Duration interval}) {
     cancel();
     _timer = Timer.periodic(interval, (_) {
-      if (isVisible) onSync();
+      if (isVisible) unawaited(onSync());
     });
   }
 

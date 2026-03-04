@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
@@ -37,7 +39,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
   @override
   void initState() {
     super.initState();
-    _fetchFullContent();
+    unawaited(_fetchFullContent());
   }
 
   Future<void> _fetchFullContent() async {

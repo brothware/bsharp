@@ -20,8 +20,8 @@ class ApiClientFactory {
   final String _parentLogin;
   final String _parentPassHash;
 
-  static const _proxy = AppConstants.proxyBaseUrl;
-  static const _webExtra = kIsWeb
+  static const String _proxy = AppConstants.proxyBaseUrl;
+  static const Map<String, dynamic> _webExtra = kIsWeb
       ? {'withCredentials': true}
       : <String, dynamic>{};
 

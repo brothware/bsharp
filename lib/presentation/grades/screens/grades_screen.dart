@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -192,13 +194,15 @@ class _SubjectSection extends StatelessWidget {
   }
 
   void _showDetail(BuildContext context, ResolvedMark rm) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => GradeDetailSheet(
-        resolvedMark: rm,
-        subjectName: subjectGrades.subjectName,
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (_) => GradeDetailSheet(
+          resolvedMark: rm,
+          subjectName: subjectGrades.subjectName,
+        ),
       ),
     );
   }

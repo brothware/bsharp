@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/router.dart';
@@ -57,7 +59,11 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
       data: (authState) {
         if (authState == AuthState.authenticated && !_initialSyncTriggered) {
           _initialSyncTriggered = true;
-          Future.microtask(() => ref.read(syncStatusProvider.notifier).sync());
+          unawaited(
+            Future.microtask(
+              () => ref.read(syncStatusProvider.notifier).sync(),
+            ),
+          );
         }
         if (authState != AuthState.authenticated) {
           _initialSyncTriggered = false;
@@ -69,7 +75,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
       },
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (_, __) =>
+      error: (_, _) =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
 

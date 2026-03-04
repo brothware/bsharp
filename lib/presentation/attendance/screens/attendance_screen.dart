@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -66,11 +68,13 @@ class _CalendarTab extends ConsumerWidget {
   }
 
   void _showDayDetail(BuildContext context, DateTime date, AttendanceDay day) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => AttendanceDayDetail(date: date, day: day),
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (_) => AttendanceDayDetail(date: date, day: day),
+      ),
     );
   }
 }

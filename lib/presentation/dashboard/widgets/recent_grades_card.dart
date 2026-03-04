@@ -63,7 +63,7 @@ class RecentGradesCard extends ConsumerWidget {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: recent.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
                       final entry = recent[index];
                       final isNew = newIds.contains(entry.mark.mark.id);

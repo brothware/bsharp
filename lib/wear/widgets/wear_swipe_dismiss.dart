@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,7 +46,7 @@ class _WearSwipeDismissState extends State<WearSwipeDismiss>
 
   void _onHorizontalDragEnd(DragEndDetails details) {
     if (_dragOffset.abs() >= _dismissThreshold) {
-      HapticFeedback.lightImpact();
+      unawaited(HapticFeedback.lightImpact());
       Navigator.of(context).pop();
     } else {
       setState(() => _dragOffset = 0);

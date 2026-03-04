@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
@@ -123,111 +125,131 @@ class SettingsScreen extends ConsumerWidget {
         localeKey(locale): locale,
     };
 
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(t.settings.chooseLanguage),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: RadioGroup<String>(
-              groupValue: currentKey,
-              onChanged: (value) {
-                if (value == 'system') {
-                  ref.read(localeProvider.notifier).resetToSystem();
-                } else {
-                  final locale = localesByKey[value];
-                  if (locale != null) {
-                    ref.read(localeProvider.notifier).setLocale(locale);
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(t.settings.chooseLanguage),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: RadioGroup<String>(
+                groupValue: currentKey,
+                onChanged: (value) {
+                  if (value == 'system') {
+                    unawaited(
+                      ref.read(localeProvider.notifier).resetToSystem(),
+                    );
+                  } else {
+                    final locale = localesByKey[value];
+                    if (locale != null) {
+                      unawaited(
+                        ref.read(localeProvider.notifier).setLocale(locale),
+                      );
+                    }
                   }
+                  Navigator.of(context).pop();
+                },
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    ListTile(
+                      title: Text(t.settings.languageSystem),
+                      leading: const Radio<String>(value: 'system'),
+                      onTap: () {
+                        unawaited(
+                          ref.read(localeProvider.notifier).resetToSystem(),
+                        );
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    for (final locale in LocaleNotifier.supportedLocales)
+                      ListTile(
+                        title: Text(localeDisplayName(locale)),
+                        leading: Radio<String>(value: localeKey(locale)),
+                        onTap: () {
+                          unawaited(
+                            ref.read(localeProvider.notifier).setLocale(locale),
+                          );
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _showThemeDialog(BuildContext context, WidgetRef ref) {
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(t.settings.chooseTheme),
+            content: RadioGroup<ThemeMode>(
+              groupValue: ref.watch(themeModeProvider),
+              onChanged: (value) {
+                if (value != null) {
+                  unawaited(
+                    ref.read(themeModeProvider.notifier).setThemeMode(value),
+                  );
                 }
                 Navigator.of(context).pop();
               },
-              child: ListView(
-                shrinkWrap: true,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  ListTile(
-                    title: Text(t.settings.languageSystem),
-                    leading: const Radio<String>(value: 'system'),
-                    onTap: () {
-                      ref.read(localeProvider.notifier).resetToSystem();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  for (final locale in LocaleNotifier.supportedLocales)
+                  for (final mode in ThemeMode.values)
                     ListTile(
-                      title: Text(localeDisplayName(locale)),
-                      leading: Radio<String>(value: localeKey(locale)),
+                      title: Text(_themeLabel(mode)),
+                      leading: Radio<ThemeMode>(value: mode),
                       onTap: () {
-                        ref.read(localeProvider.notifier).setLocale(locale);
+                        unawaited(
+                          ref
+                              .read(themeModeProvider.notifier)
+                              .setThemeMode(mode),
+                        );
                         Navigator.of(context).pop();
                       },
                     ),
                 ],
               ),
             ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showThemeDialog(BuildContext context, WidgetRef ref) {
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(t.settings.chooseTheme),
-          content: RadioGroup<ThemeMode>(
-            groupValue: ref.watch(themeModeProvider),
-            onChanged: (value) {
-              if (value != null) {
-                ref.read(themeModeProvider.notifier).setThemeMode(value);
-              }
-              Navigator.of(context).pop();
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final mode in ThemeMode.values)
-                  ListTile(
-                    title: Text(_themeLabel(mode)),
-                    leading: Radio<ThemeMode>(value: mode),
-                    onTap: () {
-                      ref.read(themeModeProvider.notifier).setThemeMode(mode);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-              ],
-            ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
   void _confirmLogout(BuildContext context, WidgetRef ref) {
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(t.settings.logoutConfirmTitle),
-          content: Text(t.settings.logoutConfirmBody),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(t.common.cancel),
-            ),
-            FilledButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                ref.read(authStateProvider.notifier).logout();
-              },
-              child: Text(t.settings.logoutButton),
-            ),
-          ],
-        );
-      },
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(t.settings.logoutConfirmTitle),
+            content: Text(t.settings.logoutConfirmBody),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(t.common.cancel),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  unawaited(ref.read(authStateProvider.notifier).logout());
+                },
+                child: Text(t.settings.logoutButton),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -236,66 +258,68 @@ class SettingsScreen extends ConsumerWidget {
     final newPasswordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
 
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(t.settings.changePassword),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: oldPasswordController,
-                decoration: InputDecoration(
-                  labelText: t.settings.currentPassword,
-                  border: const OutlineInputBorder(),
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(t.settings.changePassword),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: oldPasswordController,
+                  decoration: InputDecoration(
+                    labelText: t.settings.currentPassword,
+                    border: const OutlineInputBorder(),
+                  ),
+                  obscureText: true,
                 ),
-                obscureText: true,
+                const SizedBox(height: 12),
+                TextField(
+                  controller: newPasswordController,
+                  decoration: InputDecoration(
+                    labelText: t.settings.newPassword,
+                    border: const OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: confirmPasswordController,
+                  decoration: InputDecoration(
+                    labelText: t.settings.confirmPassword,
+                    border: const OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(t.common.cancel),
               ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: newPasswordController,
-                decoration: InputDecoration(
-                  labelText: t.settings.newPassword,
-                  border: const OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: confirmPasswordController,
-                decoration: InputDecoration(
-                  labelText: t.settings.confirmPassword,
-                  border: const OutlineInputBorder(),
-                ),
-                obscureText: true,
+              FilledButton(
+                onPressed: () {
+                  if (newPasswordController.text !=
+                      confirmPasswordController.text) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(t.settings.passwordsMismatch)),
+                    );
+                    return;
+                  }
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(t.settings.passwordChangePending)),
+                  );
+                },
+                child: Text(t.common.change),
               ),
             ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(t.common.cancel),
-            ),
-            FilledButton(
-              onPressed: () {
-                if (newPasswordController.text !=
-                    confirmPasswordController.text) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(t.settings.passwordsMismatch)),
-                  );
-                  return;
-                }
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(t.settings.passwordChangePending)),
-                );
-              },
-              child: Text(t.common.change),
-            ),
-          ],
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -361,40 +385,48 @@ class _SyncSection extends ConsumerWidget {
     WidgetRef ref,
     NotificationPreferences prefs,
   ) {
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(t.settings.syncIntervalTitle),
-          content: RadioGroup<int>(
-            groupValue: prefs.syncIntervalMinutes,
-            onChanged: (value) {
-              if (value != null) {
-                ref
-                    .read(notificationPreferencesProvider.notifier)
-                    .setSyncInterval(value);
-              }
-              Navigator.of(context).pop();
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final minutes in NotificationPreferences.validIntervals)
-                  ListTile(
-                    title: Text(t.settings.syncIntervalValue(minutes: minutes)),
-                    leading: Radio<int>(value: minutes),
-                    onTap: () {
-                      ref
-                          .read(notificationPreferencesProvider.notifier)
-                          .setSyncInterval(minutes);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-              ],
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(t.settings.syncIntervalTitle),
+            content: RadioGroup<int>(
+              groupValue: prefs.syncIntervalMinutes,
+              onChanged: (value) {
+                if (value != null) {
+                  unawaited(
+                    ref
+                        .read(notificationPreferencesProvider.notifier)
+                        .setSyncInterval(value),
+                  );
+                }
+                Navigator.of(context).pop();
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (final minutes in NotificationPreferences.validIntervals)
+                    ListTile(
+                      title: Text(
+                        t.settings.syncIntervalValue(minutes: minutes),
+                      ),
+                      leading: Radio<int>(value: minutes),
+                      onTap: () {
+                        unawaited(
+                          ref
+                              .read(notificationPreferencesProvider.notifier)
+                              .setSyncInterval(minutes),
+                        );
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -508,7 +540,7 @@ class _AboutSection extends ConsumerWidget {
           leading: const Icon(Icons.description_outlined),
           title: Text(t.settings.licenses),
           onTap: () {
-            final version = ref.read(packageInfoProvider).valueOrNull?.version;
+            final version = ref.read(packageInfoProvider).value?.version;
             showLicensePage(
               context: context,
               applicationName: 'BSharp',
@@ -520,7 +552,7 @@ class _AboutSection extends ConsumerWidget {
           leading: const Icon(Icons.code),
           title: Text(t.settings.sourceCode),
           subtitle: const Text('GitHub'),
-          onTap: () => launchUrl(Uri.parse(sourceCodeUrl)),
+          onTap: () => unawaited(launchUrl(Uri.parse(sourceCodeUrl))),
         ),
       ],
     );
@@ -548,7 +580,7 @@ class _TranslationSectionState extends ConsumerState<_TranslationSection> {
   @override
   Widget build(BuildContext context) {
     final deeplKey = ref.watch(deeplApiKeyProvider);
-    final hasKey = deeplKey.valueOrNull != null;
+    final hasKey = deeplKey.value != null;
     final service = ref.watch(translationServiceProvider);
     final engine = service.preferredEngine;
 
@@ -595,43 +627,45 @@ class _TranslationSectionState extends ConsumerState<_TranslationSection> {
     _apiKeyController.clear();
     _obscureKey = true;
 
-    showDialog<void>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text(t.translation.deeplApiKey),
-          content: TextField(
-            controller: _apiKeyController,
-            obscureText: _obscureKey,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscureKey ? Icons.visibility : Icons.visibility_off,
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (context) => StatefulBuilder(
+          builder: (context, setDialogState) => AlertDialog(
+            title: Text(t.translation.deeplApiKey),
+            content: TextField(
+              controller: _apiKeyController,
+              obscureText: _obscureKey,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureKey ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () =>
+                      setDialogState(() => _obscureKey = !_obscureKey),
                 ),
-                onPressed: () =>
-                    setDialogState(() => _obscureKey = !_obscureKey),
               ),
             ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(t.common.cancel),
+              ),
+              FilledButton(
+                onPressed: () async {
+                  final key = _apiKeyController.text.trim();
+                  if (key.isNotEmpty) {
+                    final storage = ref.read(credentialStorageProvider);
+                    await storage.saveDeeplApiKey(key);
+                    ref.invalidate(deeplApiKeyProvider);
+                  }
+                  if (context.mounted) Navigator.of(context).pop();
+                },
+                child: Text(t.common.save),
+              ),
+            ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(t.common.cancel),
-            ),
-            FilledButton(
-              onPressed: () async {
-                final key = _apiKeyController.text.trim();
-                if (key.isNotEmpty) {
-                  final storage = ref.read(credentialStorageProvider);
-                  await storage.saveDeeplApiKey(key);
-                  ref.invalidate(deeplApiKeyProvider);
-                }
-                if (context.mounted) Navigator.of(context).pop();
-              },
-              child: Text(t.common.save),
-            ),
-          ],
         ),
       ),
     );

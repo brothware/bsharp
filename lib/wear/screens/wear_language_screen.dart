@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
@@ -41,7 +43,9 @@ class WearLanguageScreen extends ConsumerWidget {
                         label: t.settings.languageSystem,
                         isSelected: isSystem,
                         onTap: () {
-                          ref.read(localeProvider.notifier).resetToSystem();
+                          unawaited(
+                            ref.read(localeProvider.notifier).resetToSystem(),
+                          );
                           Navigator.of(context).pop();
                         },
                       );
@@ -57,9 +61,11 @@ class WearLanguageScreen extends ConsumerWidget {
                       label: localeDisplayName(flutterLocale),
                       isSelected: isSelected,
                       onTap: () {
-                        ref
-                            .read(localeProvider.notifier)
-                            .setLocale(flutterLocale);
+                        unawaited(
+                          ref
+                              .read(localeProvider.notifier)
+                              .setLocale(flutterLocale),
+                        );
                         Navigator.of(context).pop();
                       },
                     );

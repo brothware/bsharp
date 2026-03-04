@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -85,9 +87,11 @@ class WearMessagesTile extends ConsumerWidget {
   }
 
   void _openDetail(BuildContext context, PocztaMessage message) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => WearMessageDetailScreen(message: message),
+    unawaited(
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => WearMessageDetailScreen(message: message),
+        ),
       ),
     );
   }

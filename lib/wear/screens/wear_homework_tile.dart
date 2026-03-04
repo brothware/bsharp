@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
@@ -102,8 +104,12 @@ class WearHomeworkTile extends ConsumerWidget {
   }
 
   void _openDetail(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const WearHomeworkDetailScreen()),
+    unawaited(
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => const WearHomeworkDetailScreen(),
+        ),
+      ),
     );
   }
 }

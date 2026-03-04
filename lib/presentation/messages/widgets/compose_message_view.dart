@@ -69,7 +69,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
       return;
     }
     _debounce = Timer(const Duration(milliseconds: 300), () {
-      _performSearch(query);
+      unawaited(_performSearch(query));
     });
   }
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -32,7 +34,7 @@ class _WearForwardSwipeState extends State<WearForwardSwipe> {
 
   void _onHorizontalDragEnd(DragEndDetails details) {
     if (_dragOffset.abs() >= _threshold) {
-      HapticFeedback.lightImpact();
+      unawaited(HapticFeedback.lightImpact());
       widget.onTriggered();
     }
     setState(() => _dragOffset = 0);

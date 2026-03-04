@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/domain/custom_event_utils.dart';
 import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
@@ -53,7 +55,7 @@ class _CustomEventFormScreenState extends ConsumerState<CustomEventFormScreen> {
     _weekdayBitmask = e?.recurrenceWeekdays ?? 0;
 
     if (_isEditing && _recurrenceType == RecurrenceType.occurrence) {
-      _loadExistingOccurrences();
+      unawaited(_loadExistingOccurrences());
     }
   }
 

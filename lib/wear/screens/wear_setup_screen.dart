@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/error/result.dart';
@@ -31,7 +33,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   @override
   void initState() {
     super.initState();
-    _checkNeedsSetup();
+    unawaited(_checkNeedsSetup());
   }
 
   Future<void> _checkNeedsSetup() async {

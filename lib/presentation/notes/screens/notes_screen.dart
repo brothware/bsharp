@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/portal.dart';
@@ -158,9 +160,11 @@ class _ReprimandTile extends StatelessWidget {
   };
 
   void _showDetail(BuildContext context, PortalReprimand item) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (_) => _ReprimandDetailSheet(item: item),
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (_) => _ReprimandDetailSheet(item: item),
+      ),
     );
   }
 }

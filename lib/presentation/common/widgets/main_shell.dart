@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/router.dart';
@@ -266,37 +268,39 @@ class _PhoneBottomNav extends StatelessWidget {
     BuildContext context,
     List<_IndexedNavItem> overflow,
   ) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (sheetContext) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var i = 0; i < overflow.length; i++)
-              ListTile(
-                leading: Icon(
-                  currentVisibleIndex == _phoneVisibleCount + i
-                      ? overflow[i].item.selectedIcon
-                      : overflow[i].item.icon,
-                  color: currentVisibleIndex == _phoneVisibleCount + i
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (sheetContext) => SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var i = 0; i < overflow.length; i++)
+                ListTile(
+                  leading: Icon(
+                    currentVisibleIndex == _phoneVisibleCount + i
+                        ? overflow[i].item.selectedIcon
+                        : overflow[i].item.icon,
+                    color: currentVisibleIndex == _phoneVisibleCount + i
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
+                  ),
+                  title: Text(
+                    overflow[i].item.label,
+                    style: currentVisibleIndex == _phoneVisibleCount + i
+                        ? TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          )
+                        : null,
+                  ),
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    onTap(_phoneVisibleCount + i);
+                  },
                 ),
-                title: Text(
-                  overflow[i].item.label,
-                  style: currentVisibleIndex == _phoneVisibleCount + i
-                      ? TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        )
-                      : null,
-                ),
-                onTap: () {
-                  Navigator.of(sheetContext).pop();
-                  onTap(_phoneVisibleCount + i);
-                },
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );

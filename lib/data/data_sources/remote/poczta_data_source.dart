@@ -108,7 +108,7 @@ class PocztaDataSource {
           'content': content,
           'odbiorcy': recipients,
           'kopiaDo': copyTo ?? [],
-          if (previousMessageId != null) 'previousMessageId': previousMessageId,
+          'previousMessageId': ?previousMessageId,
         },
         options: _authOptions(),
       );

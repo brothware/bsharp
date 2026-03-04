@@ -11,7 +11,7 @@ final localeProvider = NotifierProvider<LocaleNotifier, Locale>(
 class LocaleNotifier extends Notifier<Locale> {
   static const _key = 'locale';
 
-  static final supportedLocales = AppLocale.values
+  static final List<Locale> supportedLocales = AppLocale.values
       .map((l) => l.flutterLocale)
       .toList();
 
@@ -24,7 +24,7 @@ class LocaleNotifier extends Notifier<Locale> {
   Locale build() {
     listenSelf((prev, next) {
       if (prev != null) {
-        LocaleSettings.setLocaleRaw(next.languageCode);
+        LocaleSettings.setLocaleRawSync(next.languageCode);
       }
     });
 

@@ -203,7 +203,7 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
     String? comment,
   ) {
     final parts = <String>[
-      if (category != null) category,
+      ?category,
       if (description != null && description.isNotEmpty) description,
       if (comment != null && comment.isNotEmpty) comment,
     ];

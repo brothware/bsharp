@@ -8,7 +8,7 @@ part 'custom_event_dao.g.dart';
 @DriftAccessor(tables: [CustomEvents, CustomEventOccurrences])
 class CustomEventDao extends DatabaseAccessor<AppDatabase>
     with _$CustomEventDaoMixin {
-  CustomEventDao(super.db);
+  CustomEventDao(super.attachedDatabase);
 
   Future<List<domain.CustomEvent>> getAllForAccount(int accountId) async {
     final rows = await (select(

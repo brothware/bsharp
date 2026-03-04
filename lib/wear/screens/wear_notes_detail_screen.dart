@@ -20,7 +20,7 @@ class WearNotesDetailScreen extends ConsumerStatefulWidget {
 enum _NotesTab { remarks, praises, info }
 
 class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
-  var _activeTab = _NotesTab.remarks;
+  _NotesTab _activeTab = _NotesTab.remarks;
   final _translations = <int, String>{};
   final _scrollController = ScrollController();
 

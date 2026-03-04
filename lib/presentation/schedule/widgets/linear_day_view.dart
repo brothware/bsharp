@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 const _startHour = 7;
 const _endHour = 20;
 const _hourHeight = 80.0;
-const _totalHeight = (_endHour - _startHour) * _hourHeight;
+const double _totalHeight = (_endHour - _startHour) * _hourHeight;
 const _leftMargin = 52.0;
 
 class LinearDayView extends ConsumerStatefulWidget {

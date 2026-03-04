@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -33,10 +35,10 @@ class _WearVerticalOverscrollPagerState
         _bottomAccumulated += overscroll;
       case ScrollEndNotification():
         if (_topAccumulated >= widget.threshold) {
-          HapticFeedback.lightImpact();
+          unawaited(HapticFeedback.lightImpact());
           widget.onPrevious();
         } else if (_bottomAccumulated >= widget.threshold) {
-          HapticFeedback.lightImpact();
+          unawaited(HapticFeedback.lightImpact());
           widget.onNext();
         }
         _topAccumulated = 0;

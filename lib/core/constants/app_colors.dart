@@ -18,8 +18,12 @@ abstract final class AppColors {
   static const attendanceLate = Color(0xFFFFC107);
   static const attendanceExcused = Color(0xFF2196F3);
 
-  static const gradientStart = primaryGreen;
-  static const gradientEnd = primaryBlue;
+  static const Color gradientStart = primaryGreen;
+  static const Color gradientEnd = primaryBlue;
 
-  static const gradientColors = [gradientStart, seaGreen, gradientEnd];
+  static const List<Color> gradientColors = [
+    gradientStart,
+    seaGreen,
+    gradientEnd,
+  ];
 }

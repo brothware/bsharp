@@ -42,7 +42,7 @@ class WearTileHeader extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          if (trailing != null) trailing!,
+          ?trailing,
         ],
       ),
     );

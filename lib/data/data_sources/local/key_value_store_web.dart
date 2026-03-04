@@ -31,8 +31,6 @@ class WebKeyValueStore implements KeyValueStore {
         keysToRemove.add(key);
       }
     }
-    for (final key in keysToRemove) {
-      storage.removeItem(key);
-    }
+    keysToRemove.forEach(storage.removeItem);
   }
 }

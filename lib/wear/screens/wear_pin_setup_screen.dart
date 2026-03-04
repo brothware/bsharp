@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_compact_keypad.dart';
@@ -77,7 +79,7 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
   }
 
   void _onKeyTap(String key) {
-    HapticFeedback.lightImpact();
+    unawaited(HapticFeedback.lightImpact());
 
     if (key == 'del') {
       if (_pin.isNotEmpty) {
@@ -108,7 +110,7 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
 
   void _confirmPin() {
     if (_pin == _firstPin) {
-      ref.read(childModeProvider.notifier).setupPin(_pin);
+      unawaited(ref.read(childModeProvider.notifier).setupPin(_pin));
       Navigator.of(context).pop(true);
     } else {
       setState(() {

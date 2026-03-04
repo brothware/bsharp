@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/child_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +20,7 @@ class ChildSwitcher extends ConsumerWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       onSelected: (id) {
         final student = students.firstWhere((s) => s.id == id);
-        ref.read(activeStudentProvider.notifier).switchTo(student);
+        unawaited(ref.read(activeStudentProvider.notifier).switchTo(student));
       },
       itemBuilder: (context) => [
         for (final student in students)

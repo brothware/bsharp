@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:bsharp/domain/attendance_utils.dart';
@@ -94,9 +95,11 @@ class WearAttendanceTile extends ConsumerWidget {
   }
 
   void _openDetail(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const WearAttendanceDetailScreen(),
+    unawaited(
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => const WearAttendanceDetailScreen(),
+        ),
       ),
     );
   }

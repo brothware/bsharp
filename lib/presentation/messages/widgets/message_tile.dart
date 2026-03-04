@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
@@ -51,7 +53,7 @@ class _AnimatedMessageRemovalState extends State<AnimatedMessageRemoval>
   void didUpdateWidget(AnimatedMessageRemoval oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isRemoving && !oldWidget.isRemoving) {
-      _controller.forward();
+      unawaited(_controller.forward());
     }
   }
 

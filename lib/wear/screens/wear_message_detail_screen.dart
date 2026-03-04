@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
@@ -33,7 +35,7 @@ class _WearMessageDetailScreenState
   @override
   void initState() {
     super.initState();
-    _fetchFullContent();
+    unawaited(_fetchFullContent());
   }
 
   @override

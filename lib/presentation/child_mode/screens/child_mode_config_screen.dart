@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/child_mode/screens/pin_entry_screen.dart';
@@ -133,36 +135,42 @@ class ChildModeConfigScreen extends ConsumerWidget {
   }
 
   void _navigateToPinSetup(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute<bool>(builder: (_) => const PinSetupScreen()));
+    unawaited(
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute<bool>(builder: (_) => const PinSetupScreen())),
+    );
   }
 
   void _navigateToPinEntry(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute<bool>(builder: (_) => const PinEntryScreen()));
+    unawaited(
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute<bool>(builder: (_) => const PinEntryScreen())),
+    );
   }
 
   void _confirmRemovePin(BuildContext context, WidgetRef ref) {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(t.childMode.removePinTitle),
-        content: Text(t.childMode.removePinBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(t.common.cancel),
-          ),
-          FilledButton(
-            onPressed: () {
-              ref.read(childModeProvider.notifier).removePin();
-              Navigator.of(context).pop();
-            },
-            child: Text(t.common.delete),
-          ),
-        ],
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(t.childMode.removePinTitle),
+          content: Text(t.childMode.removePinBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(t.common.cancel),
+            ),
+            FilledButton(
+              onPressed: () {
+                unawaited(ref.read(childModeProvider.notifier).removePin());
+                Navigator.of(context).pop();
+              },
+              child: Text(t.common.delete),
+            ),
+          ],
+        ),
       ),
     );
   }
