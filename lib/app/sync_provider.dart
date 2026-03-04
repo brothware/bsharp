@@ -3,8 +3,15 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/data/services/background_sync_scheduler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
+import 'package:bsharp/data/services/sync_snapshot.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
+import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
+import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
+import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -32,6 +39,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     state = SyncStatus.syncing;
     try {
       final provider = ref.read(activeDataProviderProvider);
+      var accountId = 1;
 
       if (provider.requiresCredentials) {
         final creds = await _getCredentials();
@@ -46,6 +54,8 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
           return const ChangeSet();
         }
 
+        accountId = studentId;
+
         await provider.authenticate(
           school: creds.school,
           login: creds.login,
@@ -59,14 +69,50 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
         await provider.loadMessages(ref);
       }
 
+      await loadCustomEventsFromRef(ref, accountId);
+
       state = SyncStatus.completed;
       ref.read(lastSyncTimeProvider.notifier).value = DateTime.now();
 
+      final changeSet = await _detectChanges();
+
       await _checkUnexcusedAbsences();
 
-      return const ChangeSet();
+      if (changeSet.isNotEmpty) {
+        final service = ref.read(notificationServiceProvider);
+        final prefs = ref.read(notificationPreferencesProvider);
+        await service.initialize();
+        await service.showChanges(changeSet, prefs);
+      }
+
+      return changeSet;
     } on Exception {
       state = SyncStatus.failed;
+      return const ChangeSet();
+    }
+  }
+
+  Future<ChangeSet> _detectChanges() async {
+    try {
+      final prefs = ref.read(sharedPreferencesProvider);
+      final previousSnapshot = await SyncSnapshot.load(prefs);
+
+      final marks = ref.read(marksProvider);
+      final events = ref.read(eventsProvider);
+      final attendances = ref.read(attendancesProvider);
+      final inbox = ref.read(inboxProvider);
+
+      final currentSnapshot = SyncSnapshot(
+        markIds: marks.map((m) => m.id).toSet(),
+        eventIds: events.map((e) => e.id).toSet(),
+        attendanceIds: attendances.map((a) => a.id).toSet(),
+        inboxMessageIds: inbox.map((m) => m.id).toSet(),
+      );
+
+      final changeSet = currentSnapshot.diff(previousSnapshot);
+      await currentSnapshot.save(prefs);
+      return changeSet;
+    } on Object {
       return const ChangeSet();
     }
   }
@@ -136,7 +182,16 @@ class LastSyncTime extends _$LastSyncTime {
 }
 
 @Riverpod(keepAlive: true)
-BackgroundSyncScheduler? backgroundSyncScheduler(Ref ref) => null;
+BackgroundSyncScheduler? backgroundSyncScheduler(Ref ref) {
+  if (kIsWeb) return null;
+
+  final scheduler = WorkmanagerSyncScheduler();
+  final interval = ref.watch(syncIntervalProvider);
+  scheduler.schedule(interval: interval);
+
+  ref.onDispose(scheduler.cancel);
+  return scheduler;
+}
 
 @Riverpod(keepAlive: true)
 Duration syncInterval(Ref ref) {
