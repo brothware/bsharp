@@ -43,7 +43,6 @@ android {
         }
         create("wear") {
             dimension = "platform"
-            applicationIdSuffix = ".wear"
         }
     }
 
