@@ -224,6 +224,18 @@ class PocztaDataSource {
     }
   }
 
+  Future<Result<void>> downloadFile(String url, String savePath) async {
+    try {
+      await _client.download(url, savePath);
+      return const Result.success(null);
+    } on DioException catch (e) {
+      if (e.error is AppFailure) {
+        return Result.failure(e.error! as AppFailure);
+      }
+      return Result.failure(UnknownFailure(message: e.message));
+    }
+  }
+
   Options _authOptions() {
     return Options(
       headers: {

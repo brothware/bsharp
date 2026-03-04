@@ -17,6 +17,7 @@ import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MobiregDataProvider implements SchoolDataProvider {
   ApiClientFactory? _factory;
@@ -331,6 +332,17 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     final result = await pocztaDs.getInbox(skip: skip);
     return result.when(success: parsePocztaMessages, failure: (_) => []);
+  }
+
+  @override
+  Future<String?> downloadAttachment(String url, String filename) async {
+    final pocztaDs = _pocztaDs;
+    if (pocztaDs == null || !pocztaDs.hasSession) return null;
+
+    final dir = await getTemporaryDirectory();
+    final savePath = '${dir.path}/$filename';
+    final result = await pocztaDs.downloadFile(url, savePath);
+    return result.when(success: (_) => savePath, failure: (_) => null);
   }
 
   void _applyData(Ref ref, Map<String, dynamic> data) {

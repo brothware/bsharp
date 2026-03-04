@@ -7,7 +7,7 @@ import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:open_filex/open_filex.dart';
 
 class MessageDetailView extends ConsumerStatefulWidget {
   const MessageDetailView({
@@ -150,13 +150,13 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
               MultiTranslateButton(
                 fields: [
                   TranslationField(message.title),
-                  TranslationField(rawContent, isHtml: true),
+                  TranslationField(stripHtml(rawContent)),
                 ],
                 onTranslated: (translations) {
                   setState(() {
                     if (translations != null) {
                       _translatedTitle = translations[0];
-                      _translatedContent = stripHtml(translations[1]);
+                      _translatedContent = translations[1];
                     } else {
                       _translatedTitle = null;
                       _translatedContent = null;
@@ -193,37 +193,68 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
   }
 }
 
-class _AttachmentTile extends StatelessWidget {
+class _AttachmentTile extends ConsumerStatefulWidget {
   const _AttachmentTile({required this.attachment});
 
   final PocztaAttachment attachment;
+
+  @override
+  ConsumerState<_AttachmentTile> createState() => _AttachmentTileState();
+}
+
+class _AttachmentTileState extends ConsumerState<_AttachmentTile> {
+  var _downloading = false;
+
+  Future<void> _download() async {
+    setState(() => _downloading = true);
+    try {
+      final dataProvider = ref.read(activeDataProviderProvider);
+      final path = await dataProvider.downloadAttachment(
+        widget.attachment.url,
+        widget.attachment.name,
+      );
+      if (!mounted) return;
+      if (path != null) {
+        await OpenFilex.open(path);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(t.messages.downloadFailed)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _downloading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Card(
       child: ListTile(
-        leading: Icon(
-          _fileIcon(attachment.name),
-          color: theme.colorScheme.primary,
-        ),
+        leading: _downloading
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : Icon(
+                _fileIcon(widget.attachment.name),
+                color: theme.colorScheme.primary,
+              ),
         title: Text(
-          attachment.name,
+          widget.attachment.name,
           style: theme.textTheme.bodyMedium,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        subtitle: attachment.size != null
+        subtitle: widget.attachment.size != null
             ? Text(
-                formatFileSize(attachment.size!),
+                formatFileSize(widget.attachment.size!),
                 style: theme.textTheme.bodySmall,
               )
             : null,
         trailing: const Icon(Icons.download_outlined),
-        onTap: () => launchUrl(
-          Uri.parse(attachment.url),
-          mode: LaunchMode.externalApplication,
-        ),
+        onTap: _downloading ? null : _download,
       ),
     );
   }

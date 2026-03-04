@@ -183,6 +183,9 @@ class DemoDataProvider implements SchoolDataProvider {
   Future<List<PocztaMessage>> loadMoreInbox(int skip) async => [];
 
   @override
+  Future<String?> downloadAttachment(String url, String filename) async => null;
+
+  @override
   String hashPassword(String password) => '';
 
   @override

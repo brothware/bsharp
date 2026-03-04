@@ -278,7 +278,8 @@
     "deleted": "Usunięto: ${title}",
     "message(context=one)": "wiadomość",
     "message(context=few)": "wiadomości",
-    "message(context=many)": "wiadomości"
+    "message(context=many)": "wiadomości",
+    "downloadFailed": "Pobieranie nie powiodło się"
   },
   "settings": {
     "title": "Ustawienia",

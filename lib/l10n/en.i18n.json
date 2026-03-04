@@ -275,7 +275,8 @@
     "underline": "Underline",
     "deleted": "Deleted: ${title}",
     "message(context=one)": "message",
-    "message(context=other)": "messages"
+    "message(context=other)": "messages",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Settings",

@@ -57,6 +57,8 @@ abstract class SchoolDataProvider {
 
   Future<List<PocztaMessage>> loadMoreInbox(int skip);
 
+  Future<String?> downloadAttachment(String url, String filename);
+
   String hashPassword(String password);
 
   Future<Result<void>> validateCredentials({
