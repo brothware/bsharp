@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/constants/app_colors.dart';
@@ -30,7 +32,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _loadStoredCredentials();
+    unawaited(_loadStoredCredentials());
   }
 
   @override
@@ -161,21 +163,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     await activateDemoMode(ref);
   }
 
-  void _switchAccount() {
+  Future<void> _switchAccount() async {
     final storage = ref.read(credentialStorageProvider);
-    storage.clearAll().then((_) {
-      if (mounted) {
-        setState(() {
-          _hasStoredCredentials = false;
-          _schoolController.clear();
-          _loginController.clear();
-          _passwordController.clear();
-          _errorMessage = null;
-          _students = null;
-          _selectedStudentId = null;
-        });
-      }
-    });
+    await storage.clearAll();
+    if (mounted) {
+      setState(() {
+        _hasStoredCredentials = false;
+        _schoolController.clear();
+        _loginController.clear();
+        _passwordController.clear();
+        _errorMessage = null;
+        _students = null;
+        _selectedStudentId = null;
+      });
+    }
   }
 
   @override

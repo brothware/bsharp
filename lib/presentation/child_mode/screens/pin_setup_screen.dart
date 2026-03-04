@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/child_mode/widgets/pin_pad.dart';
@@ -33,7 +35,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
     );
   }
 
-  void _onPinEntered(String pin) {
+  Future<void> _onPinEntered(String pin) async {
     if (_firstPin == null) {
       setState(() {
         _firstPin = pin;
@@ -50,13 +52,12 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
       return;
     }
 
-    ref.read(childModeProvider.notifier).setupPin(pin).then((success) {
-      if (success && mounted) {
-        Navigator.of(context).pop(true);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(t.childMode.pinSetSuccess)));
-      }
-    });
+    final success = await ref.read(childModeProvider.notifier).setupPin(pin);
+    if (success && mounted) {
+      Navigator.of(context).pop(true);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(t.childMode.pinSetSuccess)));
+    }
   }
 }

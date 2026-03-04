@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
@@ -52,7 +54,9 @@ class CustomEventDetailSheet extends ConsumerWidget {
                   icon: const Icon(Icons.edit_outlined),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    context.push(AppRoutes.customEventEdit, extra: event);
+                    unawaited(
+                      context.push(AppRoutes.customEventEdit, extra: event),
+                    );
                   },
                 ),
                 IconButton(
@@ -134,8 +138,8 @@ class CustomEventDetailSheet extends ConsumerWidget {
     );
   }
 
-  void _confirmDelete(BuildContext context, WidgetRef ref) {
-    showDialog<bool>(
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(t.schedule.customEvent.deleteConfirmTitle),
@@ -151,17 +155,16 @@ class CustomEventDetailSheet extends ConsumerWidget {
           ),
         ],
       ),
-    ).then((confirmed) async {
-      if ((confirmed ?? false) && context.mounted) {
-        await deleteCustomEvent(ref, event.id, event.accountId);
-        if (context.mounted) {
-          Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(t.schedule.customEvent.deleted)),
-          );
-        }
+    );
+    if ((confirmed ?? false) && context.mounted) {
+      await deleteCustomEvent(ref, event.id, event.accountId);
+      if (context.mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(t.schedule.customEvent.deleted)),
+        );
       }
-    });
+    }
   }
 
   static String _formatTime(String time) {
