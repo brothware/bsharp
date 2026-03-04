@@ -275,7 +275,8 @@
     "deleted": "Dzēsts: ${title}",
     "message(context=one)": "ziņojums",
     "message(context=other)": "ziņojumi",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Iestatījumi",

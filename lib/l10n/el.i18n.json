@@ -275,7 +275,8 @@
     "deleted": "Διαγράφηκε: ${title}",
     "message(context=one)": "μήνυμα",
     "message(context=other)": "μηνύματα",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Ρυθμίσεις",

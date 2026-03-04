@@ -278,7 +278,8 @@
     "message(context=one)": "poruka",
     "message(context=few)": "poruke",
     "message(context=other)": "poruka",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Postavke",

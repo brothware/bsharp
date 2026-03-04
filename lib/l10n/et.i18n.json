@@ -275,7 +275,8 @@
     "deleted": "Kustutatud: ${title}",
     "message(context=one)": "sõnum",
     "message(context=other)": "sõnumit",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Seaded",

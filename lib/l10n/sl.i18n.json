@@ -281,7 +281,8 @@
     "message(context=two)": "sporočili",
     "message(context=few)": "sporočila",
     "message(context=other)": "sporočil",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Nastavitve",

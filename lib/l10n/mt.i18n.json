@@ -281,7 +281,8 @@
     "message(context=few)": "messaġġi",
     "message(context=many)": "messaġġ",
     "message(context=other)": "messaġġi",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Settings",

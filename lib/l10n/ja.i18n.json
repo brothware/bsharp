@@ -275,7 +275,8 @@
     "deleted": "削除済み: ${title}",
     "message(context=one)": "件のメッセージ",
     "message(context=other)": "件のメッセージ",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "設定",

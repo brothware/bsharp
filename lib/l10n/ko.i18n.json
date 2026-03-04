@@ -275,7 +275,8 @@
     "deleted": "삭제됨: ${title}",
     "message(context=one)": "메시지",
     "message(context=other)": "메시지",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "설정",

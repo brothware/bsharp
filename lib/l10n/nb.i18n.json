@@ -275,7 +275,8 @@
     "deleted": "Slettet: ${title}",
     "message(context=one)": "melding",
     "message(context=other)": "meldinger",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Innstillinger",

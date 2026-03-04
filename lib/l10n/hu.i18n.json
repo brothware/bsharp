@@ -275,7 +275,8 @@
     "deleted": "Törölve: ${title}",
     "message(context=one)": "üzenet",
     "message(context=other)": "üzenet",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Beállítások",

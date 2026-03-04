@@ -275,7 +275,8 @@
     "deleted": "已删除：${title}",
     "message(context=one)": "条消息",
     "message(context=other)": "条消息",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "设置",

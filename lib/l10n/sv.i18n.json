@@ -275,7 +275,8 @@
     "deleted": "Raderat: ${title}",
     "message(context=one)": "meddelande",
     "message(context=other)": "meddelanden",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Inställningar",

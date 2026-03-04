@@ -275,7 +275,8 @@
     "deleted": "Избришано: ${title}",
     "message(context=one)": "порака",
     "message(context=other)": "пораки",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Поставки",

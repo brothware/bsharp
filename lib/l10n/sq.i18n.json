@@ -275,7 +275,8 @@
     "deleted": "Fshirë: ${title}",
     "message(context=one)": "mesazh",
     "message(context=other)": "mesazhe",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Cilësimet",

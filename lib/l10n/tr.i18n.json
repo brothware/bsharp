@@ -275,7 +275,8 @@
     "deleted": "Silindi: ${title}",
     "message(context=one)": "mesaj",
     "message(context=other)": "mesaj",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Ayarlar",

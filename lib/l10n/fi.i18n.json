@@ -275,7 +275,8 @@
     "deleted": "Poistettu: ${title}",
     "message(context=one)": "viesti",
     "message(context=other)": "viestiä",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Asetukset",

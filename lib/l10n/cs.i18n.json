@@ -278,7 +278,8 @@
     "message(context=one)": "zpráva",
     "message(context=few)": "zprávy",
     "message(context=other)": "zpráv",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Nastavení",

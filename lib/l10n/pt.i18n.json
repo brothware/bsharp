@@ -275,7 +275,8 @@
     "deleted": "Eliminado: ${title}",
     "message(context=one)": "mensagem",
     "message(context=other)": "mensagens",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Definições",

@@ -275,7 +275,8 @@
     "deleted": "Изтрито: ${title}",
     "message(context=one)": "съобщение",
     "message(context=other)": "съобщения",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Настройки",

@@ -281,7 +281,8 @@
     "message(context=few)": "žinutės",
     "message(context=many)": "žinučių",
     "message(context=other)": "žinutės",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Nustatymai",

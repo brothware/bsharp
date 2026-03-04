@@ -275,7 +275,8 @@
     "deleted": "हटाया गया: ${title}",
     "message(context=one)": "संदेश",
     "message(context=other)": "संदेश",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "सेटिंग्स",

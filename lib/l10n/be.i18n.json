@@ -278,7 +278,9 @@
     "message(context=one)": "паведамленне",
     "message(context=few)": "паведамленні",
     "message(context=many)": "паведамленняў",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "message(context=other)": "messages",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Наладкі",

@@ -278,7 +278,8 @@
     "message(context=one)": "mesaj",
     "message(context=few)": "mesaje",
     "message(context=other)": "de mesaje",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Setări",

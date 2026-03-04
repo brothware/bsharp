@@ -284,7 +284,8 @@
     "message(context=few)": "theachtaireacht",
     "message(context=many)": "dteachtaireacht",
     "message(context=other)": "teachtaireacht",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Socruithe",

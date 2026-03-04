@@ -275,7 +275,8 @@
     "deleted": "Verwijderd: ${title}",
     "message(context=one)": "bericht",
     "message(context=other)": "berichten",
-    "replyPrefix": "Re: ${title}"
+    "replyPrefix": "Re: ${title}",
+    "downloadFailed": "Download failed"
   },
   "settings": {
     "title": "Instellingen",
