@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+changed_dart=$(git diff --cached --name-only --diff-filter=ACMR -- '*.dart' || true)
+
+if [ -z "$changed_dart" ]; then
+  exit 0
+fi
+
+echo "pre-commit: checking staged Dart files..."
+
+echo "$changed_dart" | xargs dart format --set-exit-if-changed || {
+  echo "Fix: dart format ."
+  exit 1
+}
+
+dart analyze --fatal-warnings || {
+  echo "Fix: resolve analyzer warnings"
+  exit 1
+}
+
+flutter test --reporter compact || {
+  echo "Fix: failing tests"
+  exit 1
+}
