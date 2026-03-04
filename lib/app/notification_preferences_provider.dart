@@ -1,6 +1,7 @@
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationPreferences {
   const NotificationPreferences({
@@ -13,6 +14,20 @@ class NotificationPreferences {
     this.syncIntervalMinutes = 30,
   });
 
+  factory NotificationPreferences.fromSharedPreferences(
+    SharedPreferences prefs,
+  ) {
+    return NotificationPreferences(
+      gradesEnabled: prefs.getBool(_gradesKey) ?? true,
+      messagesEnabled: prefs.getBool(_messagesKey) ?? true,
+      scheduleEnabled: prefs.getBool(_scheduleKey) ?? true,
+      attendanceEnabled: prefs.getBool(_attendanceKey) ?? false,
+      homeworkEnabled: prefs.getBool(_homeworkKey) ?? true,
+      notesEnabled: prefs.getBool(_notesKey) ?? true,
+      syncIntervalMinutes: prefs.getInt(_intervalKey) ?? 30,
+    );
+  }
+
   final bool gradesEnabled;
   final bool messagesEnabled;
   final bool scheduleEnabled;
@@ -20,6 +35,16 @@ class NotificationPreferences {
   final bool homeworkEnabled;
   final bool notesEnabled;
   final int syncIntervalMinutes;
+
+  static const validIntervals = [15, 30, 45, 60];
+
+  static const _gradesKey = 'notif_grades';
+  static const _messagesKey = 'notif_messages';
+  static const _scheduleKey = 'notif_schedule';
+  static const _attendanceKey = 'notif_attendance';
+  static const _homeworkKey = 'notif_homework';
+  static const _notesKey = 'notif_notes';
+  static const _intervalKey = 'notif_interval';
 
   bool isCategoryEnabled(ChangeCategory category) {
     return switch (category) {
@@ -51,8 +76,6 @@ class NotificationPreferences {
       syncIntervalMinutes: syncIntervalMinutes ?? this.syncIntervalMinutes,
     );
   }
-
-  static const validIntervals = [15, 30, 45, 60];
 }
 
 final notificationPreferencesProvider =

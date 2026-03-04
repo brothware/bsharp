@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -38,6 +40,29 @@ class NotificationService {
 
     await _plugin.initialize(settings: settings);
     _initialized = true;
+  }
+
+  Future<bool> requestPermission() async {
+    if (Platform.isAndroid) {
+      final android = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      return await android?.requestNotificationsPermission() ?? false;
+    }
+    if (Platform.isIOS) {
+      final ios = _plugin
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
+      return await ios?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          ) ??
+          false;
+    }
+    return true;
   }
 
   Future<void> showChanges(
