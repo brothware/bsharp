@@ -1,3 +1,5 @@
+> This documents Mobireg-specific API error codes. Other data providers handle errors independently.
+
 # Mobireg API Error Codes
 
 Both APIs return errors as JSON objects with `errno` and `message` fields:
