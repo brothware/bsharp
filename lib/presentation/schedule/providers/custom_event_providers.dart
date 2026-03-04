@@ -35,18 +35,27 @@ class CustomEventOccurrences extends _$CustomEventOccurrences {
   set value(List<({int customEventId, DateTime date})> v) => state = v;
 }
 
-Future<void> loadCustomEvents(WidgetRef ref, int accountId) async {
-  final dao = ref.read(customEventDaoProvider);
+Future<void> _loadCustomEventsFrom(
+  T Function<T>(ProviderListenable<T>) read,
+  int accountId,
+) async {
+  final dao = read(customEventDaoProvider);
   if (dao == null) return;
   final events = await dao.getAllForAccount(accountId);
-  ref.read(customEventsProvider.notifier).value = events;
+  read(customEventsProvider.notifier).value = events;
 
   final now = DateTime.now();
   final start = now.subtract(const Duration(days: 180));
   final end = now.add(const Duration(days: 180));
   final occurrences = await dao.getOccurrencesInRange(accountId, start, end);
-  ref.read(customEventOccurrencesProvider.notifier).value = occurrences;
+  read(customEventOccurrencesProvider.notifier).value = occurrences;
 }
+
+Future<void> loadCustomEvents(WidgetRef ref, int accountId) =>
+    _loadCustomEventsFrom(ref.read, accountId);
+
+Future<void> loadCustomEventsFromRef(Ref ref, int accountId) =>
+    _loadCustomEventsFrom(ref.read, accountId);
 
 Future<void> saveCustomEvent(
   WidgetRef ref,
