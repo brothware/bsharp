@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:bsharp/l10n/strings.g.dart';
@@ -24,7 +25,7 @@ class LocaleNotifier extends Notifier<Locale> {
   Locale build() {
     listenSelf((prev, next) {
       if (prev != null) {
-        LocaleSettings.setLocaleRawSync(next.languageCode);
+        unawaited(LocaleSettings.setLocaleRaw(next.languageCode));
       }
     });
 

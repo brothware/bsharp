@@ -14,7 +14,7 @@ void main() async {
   final stored = prefs.getString('locale');
   final initialLocale =
       stored ?? LocaleNotifier.resolveSystemLocale().languageCode;
-  LocaleSettings.setLocaleRawSync(initialLocale);
+  await LocaleSettings.setLocaleRaw(initialLocale);
 
   runApp(
     ProviderScope(
