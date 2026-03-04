@@ -171,10 +171,7 @@ class _MessageListState extends ConsumerState<_MessageList> {
     if (newMessages.length < _inboxPageSize) {
       ref.read(inboxHasMoreProvider.notifier).state = false;
     }
-    ref.read(inboxProvider.notifier).state = [
-      ...currentInbox,
-      ...newMessages,
-    ];
+    ref.read(inboxProvider.notifier).state = [...currentInbox, ...newMessages];
     if (mounted) setState(() => _isLoadingMore = false);
   }
 

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/data/providers/demo_data_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 
@@ -36,7 +37,7 @@ Widget _buildScreen({required PocztaMessage message}) {
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      pocztaDataSourceProvider.overrideWith((ref) => null),
+      activeDataProviderProvider.overrideWith((ref) => DemoDataProvider()),
       isTranslationAvailableProvider.overrideWithValue(false),
     ],
     child: MaterialApp(home: WearMessageDetailScreen(message: message)),

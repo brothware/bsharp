@@ -266,10 +266,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     if (pocztaDs == null || !pocztaDs.hasSession) return null;
 
     final result = await pocztaDs.readMessage(messageId);
-    return result.when(
-      success: (data) => data,
-      failure: (_) => null,
-    );
+    return result.when(success: (data) => data, failure: (_) => null);
   }
 
   @override
@@ -333,10 +330,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     if (pocztaDs == null || !pocztaDs.hasSession) return [];
 
     final result = await pocztaDs.getInbox(skip: skip);
-    return result.when(
-      success: parsePocztaMessages,
-      failure: (_) => [],
-    );
+    return result.when(success: parsePocztaMessages, failure: (_) => []);
   }
 
   void _applyData(Ref ref, Map<String, dynamic> data) {
