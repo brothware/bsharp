@@ -31,6 +31,9 @@ class WebKeyValueStore implements KeyValueStore {
         keysToRemove.add(key);
       }
     }
-    keysToRemove.forEach(storage.removeItem);
+    // ignore: prefer_foreach, JS interop members cannot be torn off
+    for (final key in keysToRemove) {
+      storage.removeItem(key);
+    }
   }
 }
