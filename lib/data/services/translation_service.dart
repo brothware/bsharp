@@ -118,6 +118,8 @@ class TranslationService {
     return result.map((translations) => translations.first);
   }
 
+  static const _nlMarker = ' \u2023 ';
+
   Future<Result<String>> _translateWithMlKit(
     String text,
     String sourceLang,
@@ -128,10 +130,14 @@ class TranslationService {
         TranslationFailed(message: 'ML Kit not available'),
       );
     }
-    return _mlKit.translate(
-      text: text,
+    final prepared = text.replaceAll('\n', _nlMarker);
+    final result = await _mlKit.translate(
+      text: prepared,
       sourceLang: sourceLang,
       targetLang: targetLang,
+    );
+    return result.map(
+      (translated) => translated.replaceAll(RegExp(r'\s*\u2023\s*'), '\n'),
     );
   }
 
