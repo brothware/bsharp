@@ -24,7 +24,7 @@ class WorkmanagerSyncScheduler implements BackgroundSyncScheduler {
         backgroundSyncTaskName,
         backgroundSyncTaskName,
         frequency: interval,
-        existingWorkPolicy: ExistingWorkPolicy.replace,
+        existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
         constraints: Constraints(networkType: NetworkType.connected),
       ),
     );

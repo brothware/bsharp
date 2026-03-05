@@ -1,6 +1,6 @@
 import Flutter
 import UIKit
-import workmanager
+import workmanager_apple
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -10,12 +10,9 @@ import workmanager
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
 
-    WorkmanagerPlugin.setPluginRegistrantCallback { registry in
-      GeneratedPluginRegistrant.register(with: registry)
-    }
-
-    UIApplication.shared.setMinimumBackgroundFetchInterval(
-      TimeInterval(15 * 60)
+    WorkmanagerPlugin.registerPeriodicTask(
+      withIdentifier: "com.bsharp.backgroundSync",
+      frequency: NSNumber(value: 15 * 60)
     )
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
