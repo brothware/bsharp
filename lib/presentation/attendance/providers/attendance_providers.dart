@@ -45,12 +45,14 @@ Map<DateTime, AttendanceDay> attendanceDays(Ref ref) {
   final events = ref.watch(eventsProvider);
   final eventTypes = ref.watch(eventTypesProvider);
   final subjects = ref.watch(subjectsProvider);
+  final eventEvents = ref.watch(eventEventsProvider);
   return groupByDay(
     attendances,
     types,
     events,
     eventTypes: eventTypes,
     subjects: subjects,
+    eventEvents: eventEvents,
   );
 }
 

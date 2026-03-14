@@ -5,6 +5,10 @@ import 'package:bsharp/domain/entities/subject.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+EventEvent eventEvent({int id = 1, int events1Id = 1, int events2Id = 2}) {
+  return EventEvent(id: id, events1Id: events1Id, events2Id: events2Id);
+}
+
 void main() {
   const presentType = AttendanceType(
     id: 1,
@@ -266,6 +270,19 @@ void main() {
 
       final entries = result[DateTime(2026, 2, 27)]!.entries;
       expect(entries.first.subjectName, isNull);
+    });
+
+    test('excludes attendance for replaced events', () {
+      final result = groupByDay(
+        [attendance(), attendance(id: 2, eventsId: 2)],
+        [presentType],
+        [event(), event(id: 2, number: 1)],
+        eventEvents: [eventEvent(events1Id: 1, events2Id: 2)],
+      );
+
+      final entries = result[DateTime(2026, 2, 27)]!.entries;
+      expect(entries.length, 1);
+      expect(entries.first.attendance.eventsId, 2);
     });
   });
 

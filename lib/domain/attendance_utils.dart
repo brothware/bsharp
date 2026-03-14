@@ -158,11 +158,13 @@ Map<DateTime, AttendanceDay> groupByDay(
   List<Event> events, {
   List<EventType> eventTypes = const [],
   List<Subject> subjects = const [],
+  List<EventEvent> eventEvents = const [],
 }) {
   final typeMap = {for (final t in types) t.id: t};
   final eventMap = {for (final e in events) e.id: e};
   final eventTypeMap = {for (final et in eventTypes) et.id: et};
   final subjectMap = {for (final s in subjects) s.id: s};
+  final replacedIds = {for (final ee in eventEvents) ee.events1Id};
   final days = <DateTime, List<AttendanceEntry>>{};
 
   for (final a in attendances) {
@@ -170,6 +172,8 @@ Map<DateTime, AttendanceDay> groupByDay(
     if (type == null) continue;
 
     final event = eventMap[a.eventsId];
+    if (event != null && replacedIds.contains(event.id)) continue;
+
     final date = event?.date ?? DateTime(2000);
     final dayKey = DateTime(date.year, date.month, date.day);
 
