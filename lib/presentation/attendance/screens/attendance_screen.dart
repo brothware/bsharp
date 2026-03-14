@@ -7,6 +7,8 @@ import 'package:bsharp/presentation/attendance/providers/attendance_providers.da
 import 'package:bsharp/presentation/attendance/widgets/attendance_calendar.dart';
 import 'package:bsharp/presentation/attendance/widgets/attendance_day_detail.dart';
 import 'package:bsharp/presentation/attendance/widgets/attendance_stats_view.dart';
+import 'package:bsharp/presentation/common/responsive.dart';
+import 'package:bsharp/presentation/common/widgets/swipe_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,6 +36,9 @@ class AttendanceScreen extends ConsumerWidget {
             ),
             Expanded(
               child: TabBarView(
+                physics: screenSizeOf(context) == ScreenSize.phone
+                    ? const NeverScrollableScrollPhysics()
+                    : null,
                 children: [_CalendarTab(), const AttendanceStatsView()],
               ),
             ),
@@ -48,22 +53,41 @@ class _CalendarTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final attendances = ref.watch(attendancesProvider);
+    final selectedMonth = ref.watch(selectedMonthProvider);
 
     if (attendances.isEmpty) {
       return _EmptyState();
     }
 
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        AttendanceCalendar(
-          onDayTap: (date, day) {
-            if (day != null) {
-              _showDayDetail(context, date, day);
-            }
-          },
-        ),
-      ],
+    return SwipeNavigator(
+      enabled: screenSizeOf(context) == ScreenSize.phone,
+      onSwipeForward: () {
+        final next = DateTime(selectedMonth.year, selectedMonth.month + 1);
+        ref.read(selectedMonthProvider.notifier).value = next;
+      },
+      onSwipeBackward: () {
+        final prev = DateTime(selectedMonth.year, selectedMonth.month - 1);
+        ref.read(selectedMonthProvider.notifier).value = prev;
+      },
+      contentBuilder: (offset) {
+        final month = DateTime(
+          selectedMonth.year,
+          selectedMonth.month + offset,
+        );
+        return ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            AttendanceCalendar(
+              month: offset == 0 ? null : month,
+              onDayTap: (date, day) {
+                if (day != null) {
+                  _showDayDetail(context, date, day);
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

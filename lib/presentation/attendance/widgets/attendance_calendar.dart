@@ -6,14 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AttendanceCalendar extends ConsumerWidget {
-  const AttendanceCalendar({super.key, this.onDayTap});
+  const AttendanceCalendar({super.key, this.month, this.onDayTap});
 
+  final DateTime? month;
   final void Function(DateTime date, AttendanceDay? day)? onDayTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedMonth = ref.watch(selectedMonthProvider);
-    final days = ref.watch(calendarDaysProvider);
+    final providerMonth = ref.watch(selectedMonthProvider);
+    final selectedMonth = month ?? providerMonth;
+    final days = month != null
+        ? calendarDays(month!.year, month!.month)
+        : ref.watch(calendarDaysProvider);
     final attendanceDays = ref.watch(attendanceDaysProvider);
 
     return Column(
