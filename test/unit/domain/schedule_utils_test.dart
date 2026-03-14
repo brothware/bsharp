@@ -69,6 +69,50 @@ void main() {
       );
       expect(entry.timeRange, '8:00 - 8:45');
     });
+
+    test('displayLessonNumber shows event number by default', () {
+      final entry = ScheduleEntry(event: event(number: 3));
+      expect(entry.displayLessonNumber, '3');
+    });
+
+    test('displayLessonNumber shows dash for replaced entries', () {
+      final entry = ScheduleEntry(event: event(), isReplaced: true);
+      expect(entry.displayLessonNumber, '-');
+    });
+
+    test('displayLessonNumber shows contiguous range', () {
+      final entry = ScheduleEntry(
+        event: event(),
+        replacedLessonNumbers: [5, 6, 7],
+      );
+      expect(entry.displayLessonNumber, '5-7');
+    });
+
+    test('displayLessonNumber shows comma-separated for non-contiguous', () {
+      final entry = ScheduleEntry(
+        event: event(),
+        replacedLessonNumbers: [2, 5, 7],
+      );
+      expect(entry.displayLessonNumber, '2, 5, 7');
+    });
+
+    test('displayLessonNumber shows single number in list', () {
+      final entry = ScheduleEntry(
+        event: event(),
+        replacedLessonNumbers: [4],
+      );
+      expect(entry.displayLessonNumber, '4');
+    });
+
+    test('isReplaced defaults to false', () {
+      final entry = ScheduleEntry(event: event());
+      expect(entry.isReplaced, isFalse);
+    });
+
+    test('replacedLessonNumbers defaults to empty', () {
+      final entry = ScheduleEntry(event: event());
+      expect(entry.replacedLessonNumbers, isEmpty);
+    });
   });
 
   group('startOfWeek', () {

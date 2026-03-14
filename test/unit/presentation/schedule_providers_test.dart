@@ -208,6 +208,101 @@ void main() {
       );
       expect(entries.first.topic, 'Quadratic equations');
     });
+
+    test('marks replaced originals and enriches replacement entries', () {
+      final container = ProviderContainer(
+        overrides: [
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [
+              event(id: 10, number: 5, date: DateTime(2026, 3, 5)),
+              event(id: 11, number: 6, date: DateTime(2026, 3, 5)),
+              event(id: 12, number: 7, date: DateTime(2026, 3, 5)),
+              event(
+                id: 20,
+                number: 0,
+                date: DateTime(2026, 3, 5),
+                substitution: 2,
+                startTime: '10:40:00',
+                endTime: '13:00:00',
+              ),
+            ],
+          ),
+          eventEventsProvider.overrideWithBuild(
+            (ref, _) => [
+              const EventEvent(id: 1, events1Id: 20, events2Id: 10),
+              const EventEvent(id: 2, events1Id: 20, events2Id: 11),
+              const EventEvent(id: 3, events1Id: 20, events2Id: 12),
+            ],
+          ),
+          eventTypesProvider.overrideWithBuild((ref, _) => []),
+          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
+          subjectsProvider.overrideWithBuild((ref, _) => []),
+          teachersProvider.overrideWithBuild((ref, _) => []),
+          roomsProvider.overrideWithBuild((ref, _) => []),
+          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final entries = container.read(
+        scheduleEntriesForDateProvider(DateTime(2026, 3, 5)),
+      );
+
+      expect(entries.length, 4);
+
+      final replaced = entries.where((e) => e.isReplaced).toList();
+      expect(replaced.length, 3);
+      for (final r in replaced) {
+        expect(r.changeType, ScheduleChangeType.cancelled);
+        expect(r.displayLessonNumber, '-');
+      }
+
+      final replacement = entries
+          .where((e) => !e.isReplaced && e.event.substitution == 2)
+          .first;
+      expect(replacement.replacedLessonNumbers, [5, 6, 7]);
+      expect(replacement.displayLessonNumber, '5-7');
+      expect(replacement.changeType, ScheduleChangeType.substitution);
+    });
+
+    test('sorts replaced originals before replacement', () {
+      final container = ProviderContainer(
+        overrides: [
+          eventsProvider.overrideWithBuild(
+            (ref, _) => [
+              event(id: 10, number: 5, date: DateTime(2026, 3, 5)),
+              event(id: 11, number: 6, date: DateTime(2026, 3, 5)),
+              event(
+                id: 20,
+                number: 0,
+                date: DateTime(2026, 3, 5),
+                substitution: 2,
+              ),
+            ],
+          ),
+          eventEventsProvider.overrideWithBuild(
+            (ref, _) => [
+              const EventEvent(id: 1, events1Id: 20, events2Id: 10),
+              const EventEvent(id: 2, events1Id: 20, events2Id: 11),
+            ],
+          ),
+          eventTypesProvider.overrideWithBuild((ref, _) => []),
+          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
+          subjectsProvider.overrideWithBuild((ref, _) => []),
+          teachersProvider.overrideWithBuild((ref, _) => []),
+          roomsProvider.overrideWithBuild((ref, _) => []),
+          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final entries = container.read(
+        scheduleEntriesForDateProvider(DateTime(2026, 3, 5)),
+      );
+
+      final numbers = entries.map((e) => e.event.number).toList();
+      expect(numbers, [5, 6, 0]);
+    });
   });
 
   group('weekEntriesProvider', () {

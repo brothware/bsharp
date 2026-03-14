@@ -43,15 +43,21 @@ void main() {
     );
   }
 
-  Event event({int id = 1, DateTime? date, int number = 1}) {
+  Event event({
+    int id = 1,
+    DateTime? date,
+    int number = 1,
+    int status = 1,
+    int eventTypesId = 1,
+  }) {
     return Event(
       id: id,
       date: date ?? DateTime(2026, 2, 27),
       number: number,
       startTime: '08:00:00',
       endTime: '08:45:00',
-      eventTypesId: 1,
-      status: 1,
+      eventTypesId: eventTypesId,
+      status: status,
       substitution: 0,
       type: 0,
       attr: 0,
@@ -272,12 +278,64 @@ void main() {
       expect(entries.first.subjectName, isNull);
     });
 
-    test('excludes attendance for replaced events', () {
+    test('collapses replaced events into single replacement entry', () {
       final result = groupByDay(
-        [attendance(), attendance(id: 2, eventsId: 2)],
+        [
+          attendance(eventsId: 10),
+          attendance(id: 2, eventsId: 11),
+          attendance(id: 3, eventsId: 12),
+        ],
         [presentType],
-        [event(), event(id: 2, number: 1)],
-        eventEvents: [eventEvent(events1Id: 1, events2Id: 2)],
+        [
+          event(id: 10),
+          event(id: 11, number: 2),
+          event(id: 12, number: 3),
+          event(id: 20, number: 0, eventTypesId: 20),
+        ],
+        eventTypes: [
+          const EventType(
+            id: 1,
+            teachingLevel: 0,
+            substitution: 0,
+            subjectsId: 10,
+          ),
+          const EventType(
+            id: 20,
+            teachingLevel: 0,
+            substitution: 2,
+            subjectsId: 11,
+          ),
+        ],
+        subjects: [
+          const Subject(id: 10, name: 'Math', abbr: 'M'),
+          const Subject(id: 11, name: 'PE', abbr: 'PE'),
+        ],
+        eventEvents: [
+          eventEvent(events1Id: 20, events2Id: 10),
+          eventEvent(id: 2, events1Id: 20, events2Id: 11),
+          eventEvent(id: 3, events1Id: 20, events2Id: 12),
+        ],
+      );
+
+      final entries = result[DateTime(2026, 2, 27)]!.entries;
+      expect(entries.length, 1);
+      expect(entries.first.event!.id, 20);
+      expect(entries.first.subjectName, contains('PE'));
+    });
+
+    test('excludes attendance for standalone cancelled events', () {
+      final result = groupByDay(
+        [
+          attendance(),
+          attendance(id: 2, eventsId: 2),
+          attendance(id: 3, eventsId: 3),
+        ],
+        [presentType],
+        [
+          event(status: 2),
+          event(id: 2),
+          event(id: 3, status: 2),
+        ],
       );
 
       final entries = result[DateTime(2026, 2, 27)]!.entries;
