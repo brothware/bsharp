@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/room.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/domain/translation_utils.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,10 +16,25 @@ part 'schedule_providers.g.dart';
 enum ScheduleViewMode { list, linear }
 
 class ScheduleViewModeNotifier extends Notifier<ScheduleViewMode> {
+  static const _key = 'schedule_view_mode';
+
   @override
-  ScheduleViewMode build() => ScheduleViewMode.list;
+  ScheduleViewMode build() {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    final stored = prefs.getString(_key);
+    return stored == 'linear' ? ScheduleViewMode.linear : ScheduleViewMode.list;
+  }
+
   ScheduleViewMode get value => state;
-  set value(ScheduleViewMode v) => state = v;
+
+  set value(ScheduleViewMode v) {
+    unawaited(
+      ref
+          .read(sharedPreferencesProvider)
+          .setString(_key, v == ScheduleViewMode.linear ? 'linear' : 'list'),
+    );
+    state = v;
+  }
 }
 
 final scheduleViewModeProvider =
