@@ -34,7 +34,7 @@ void main() {
       expect(find.text('Grades'), findsOneWidget);
       expect(find.text('Attendance'), findsOneWidget);
       expect(find.text('Messages'), findsOneWidget);
-      expect(find.text('Remarks'), findsOneWidget);
+      expect(find.text('Annotations'), findsOneWidget);
       expect(find.text('Settings'), findsOneWidget);
     });
 

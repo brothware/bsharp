@@ -65,7 +65,7 @@ void main() {
       expect(find.text('Grades'), findsOneWidget);
       expect(find.text('Attendance'), findsOneWidget);
       expect(find.text('Messages'), findsOneWidget);
-      expect(find.text('Notes'), findsAtLeast(1));
+      expect(find.text('Annotations'), findsAtLeast(1));
       expect(find.text('Settings'), findsOneWidget);
       expect(find.byType(Switch), findsNWidgets(6));
     });

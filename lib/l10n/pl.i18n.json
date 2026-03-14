@@ -323,7 +323,7 @@
     "passwordChangePending": "Zmiana hasła zostanie zaimplementowana",
     "licenses": "Licencje",
     "sourceCode": "Kod źródłowy",
-    "notesNotif": "Uwagi i pochwały",
+    "notesNotif": "Adnotacje i pochwały",
     "syncSection": "Synchronizacja",
     "sync": "Synchronizuj",
     "syncing": "Synchronizacja...",
@@ -462,8 +462,8 @@
     "unexcusedAbsenceBody": "${count} nieusprawiedliwiona(-e) nieobecność(-ci) starsza(-e) niż tydzień",
     "homeworkName": "Zadania domowe",
     "homeworkDescription": "Powiadomienia o nowych zadaniach",
-    "notesName": "Uwagi",
-    "notesDescription": "Powiadomienia o uwagach i pochwałach"
+    "notesName": "Adnotacje",
+    "notesDescription": "Powiadomienia o adnotacjach i pochwałach"
   },
   "gradeNames": {
     "celujacy": "Celujący",

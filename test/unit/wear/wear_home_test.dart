@@ -2,19 +2,24 @@ import 'dart:convert';
 
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_page_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
-Widget _buildApp({List<Object> extraOverrides = const []}) {
+Future<Widget> _buildApp({List<Object> extraOverrides = const []}) async {
+  SharedPreferences.setMockInitialValues({});
+  final prefs = await SharedPreferences.getInstance();
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       ...extraOverrides.cast(),
@@ -26,7 +31,7 @@ Widget _buildApp({List<Object> extraOverrides = const []}) {
 void main() {
   group('WearHome', () {
     testWidgets('renders PageView with page indicator', (tester) async {
-      await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       expect(find.byType(PageView), findsOneWidget);
@@ -34,14 +39,14 @@ void main() {
     });
 
     testWidgets('first page is schedule tile', (tester) async {
-      await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       expect(find.byIcon(Icons.calendar_today), findsOneWidget);
     });
 
     testWidgets('can swipe to grades tile', (tester) async {
-      await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       await tester.drag(find.byType(PageView), const Offset(0, -500));
@@ -51,7 +56,7 @@ void main() {
     });
 
     testWidgets('can swipe to attendance tile', (tester) async {
-      await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       await tester.drag(find.byType(PageView), const Offset(0, -500));
@@ -63,7 +68,7 @@ void main() {
     });
 
     testWidgets('can swipe to homework tile', (tester) async {
-      await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       for (var i = 0; i < 3; i++) {
@@ -75,7 +80,7 @@ void main() {
     });
 
     testWidgets('can swipe to tests tile', (tester) async {
-      await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       for (var i = 0; i < 4; i++) {
@@ -87,7 +92,7 @@ void main() {
     });
 
     testWidgets('can swipe to notes tile', (tester) async {
-      await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       for (var i = 0; i < 5; i++) {
@@ -95,13 +100,13 @@ void main() {
         await tester.pumpAndSettle();
       }
 
-      expect(find.text('Remarks'), findsOneWidget);
+      expect(find.text('Annotations'), findsOneWidget);
     });
 
     testWidgets('settings tile shows child mode toggle when PIN set', (
       tester,
     ) async {
-      await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       for (var i = 0; i < 8; i++) {
@@ -193,7 +198,7 @@ void main() {
     );
 
     testWidgets('parent mode shows all tiles', (tester) async {
-      await tester.pumpWidget(_buildApp());
+      await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       final indicator = tester.widget<WearPageIndicator>(

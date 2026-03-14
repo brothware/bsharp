@@ -320,7 +320,7 @@
     "passwordChangePending": "Password change will be implemented",
     "licenses": "Licences",
     "sourceCode": "Source code",
-    "notesNotif": "Notes and praise",
+    "notesNotif": "Annotations and praise",
     "syncSection": "Synchronisation",
     "sync": "Sync",
     "syncing": "Syncing...",
@@ -459,8 +459,8 @@
     "unexcusedAbsenceBody": "${count} unexcused absence(s) older than a week still not excused",
     "homeworkName": "Homework",
     "homeworkDescription": "Notifications about new homework",
-    "notesName": "Notes",
-    "notesDescription": "Notifications about notes and praise"
+    "notesName": "Annotations",
+    "notesDescription": "Notifications about annotations and praise"
   },
   "gradeNames": {
     "celujacy": "Excellent",

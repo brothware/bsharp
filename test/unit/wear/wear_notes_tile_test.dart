@@ -36,7 +36,7 @@ void main() {
       await tester.pumpWidget(_buildTile());
       await tester.pump();
 
-      expect(find.text('Remarks'), findsOneWidget);
+      expect(find.text('Annotations'), findsOneWidget);
     });
 
     testWidgets('shows remark items with warning icon', (tester) async {

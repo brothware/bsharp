@@ -64,7 +64,7 @@ void main() {
       expect(find.text('Schedule'), findsOneWidget);
       expect(find.text('Attendance'), findsOneWidget);
       expect(find.text('Homework'), findsOneWidget);
-      expect(find.text('Notes and praise'), findsOneWidget);
+      expect(find.text('Annotations and praise'), findsOneWidget);
     });
 
     testWidgets('has SwitchListTile for each category', (tester) async {
