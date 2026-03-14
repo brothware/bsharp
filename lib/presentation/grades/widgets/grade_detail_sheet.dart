@@ -10,11 +10,13 @@ class GradeDetailSheet extends ConsumerStatefulWidget {
   const GradeDetailSheet({
     required this.resolvedMark,
     required this.subjectName,
+    this.scrollController,
     super.key,
   });
 
   final ResolvedMark resolvedMark;
   final String subjectName;
+  final ScrollController? scrollController;
 
   @override
   ConsumerState<GradeDetailSheet> createState() => _GradeDetailSheetState();
@@ -34,8 +36,6 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
     final kinds = ref.watch(markKindsProvider);
     final groups = ref.watch(markGroupsProvider);
     final teachers = ref.watch(teachersProvider);
-    final topPadding = MediaQuery.of(context).padding.top;
-    final screenHeight = MediaQuery.of(context).size.height;
     final translationAvailable = ref.watch(isTranslationAvailableProvider);
 
     final scale = mark.markScalesId != null
@@ -54,144 +54,143 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
     final displayValue = widget.resolvedMark.displayValue;
 
     return Container(
-      height: screenHeight - topPadding,
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      child: Column(
+      child: ListView(
+        controller: widget.scrollController,
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
         children: [
-          SizedBox(
-            height: 56,
-            child: Row(
-              children: [
-                const SizedBox(width: 4),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.of(context).pop(),
+          Center(
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              width: 32,
+              height: 4,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onSurfaceVariant.withValues(
+                  alpha: 0.4,
                 ),
-                Expanded(
-                  child: Text(
-                    widget.subjectName,
-                    style: theme.textTheme.titleMedium,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(width: 48),
-              ],
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-              children: [
-                const SizedBox(height: 8),
-                Center(
-                  child: Container(
-                    constraints: const BoxConstraints(
-                      minWidth: 72,
-                      minHeight: 72,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: color.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      displayValue,
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        color: color,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  widget.subjectName,
+                  style: theme.textTheme.titleMedium,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 16),
-                Center(
-                  child: Text(
-                    widget.subjectName,
-                    style: theme.textTheme.titleMedium,
-                  ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Center(
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 72,
+                minHeight: 72,
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                displayValue,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.bold,
                 ),
-                if (scale != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Center(
-                      child: Text(
-                        translateGradeName(scale.name),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  ),
-                const SizedBox(height: 24),
-                _DetailRow(
-                  icon: Icons.calendar_today,
-                  label: t.grades.date,
-                  value: _formatDate(mark.getDate),
-                ),
-                _DetailRow(
-                  icon: Icons.fitness_center,
-                  label: t.grades.weight,
-                  value: mark.weight.toString(),
-                ),
-                if (kind != null)
-                  _DetailRow(
-                    icon: Icons.category,
-                    label: t.grades.category,
-                    value:
-                        _translatedCategory ??
-                        translateGradeCategory(kind.name),
-                  ),
-                if (group?.description != null &&
-                    group!.description!.isNotEmpty)
-                  _DetailRow(
-                    icon: Icons.description,
-                    label: t.grades.description,
-                    value: _translatedDescription ?? group.description!,
-                  ),
-                if (teacher != null)
-                  _DetailRow(
-                    icon: Icons.person,
-                    label: t.grades.teacher,
-                    value: '${teacher.name} ${teacher.surname}',
-                  ),
-                if (mark.comments != null && mark.comments!.isNotEmpty)
-                  _DetailRow(
-                    icon: Icons.comment,
-                    label: t.grades.comment,
-                    value: _translatedComment ?? mark.comments!,
-                  ),
-                if (translationAvailable)
-                  _buildTranslateButton(
-                    kind?.name,
-                    group?.description,
-                    mark.comments,
-                  ),
-                if (widget.resolvedMark.effectiveValue != null)
-                  _DetailRow(
-                    icon: Icons.tag,
-                    label: t.grades.numericValue,
-                    value: widget.resolvedMark.effectiveValue!.toStringAsFixed(
-                      2,
-                    ),
-                  ),
-                if (widget.resolvedMark.isPointBased)
-                  _DetailRow(
-                    icon: Icons.score,
-                    label: t.grades.points,
-                    value:
-                        '${mark.markValue?.toInt() ?? "?"} / ${widget.resolvedMark.markMax!.toInt()}',
-                  ),
-                const SizedBox(height: 16),
-              ],
+              ),
             ),
           ),
+          const SizedBox(height: 16),
+          Center(
+            child: Text(
+              widget.subjectName,
+              style: theme.textTheme.titleMedium,
+            ),
+          ),
+          if (scale != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Center(
+                child: Text(
+                  translateGradeName(scale.name),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ),
+          const SizedBox(height: 24),
+          _DetailRow(
+            icon: Icons.calendar_today,
+            label: t.grades.date,
+            value: _formatDate(mark.getDate),
+          ),
+          _DetailRow(
+            icon: Icons.fitness_center,
+            label: t.grades.weight,
+            value: mark.weight.toString(),
+          ),
+          if (kind != null)
+            _DetailRow(
+              icon: Icons.category,
+              label: t.grades.category,
+              value: _translatedCategory ?? translateGradeCategory(kind.name),
+            ),
+          if (group?.description != null && group!.description!.isNotEmpty)
+            _DetailRow(
+              icon: Icons.description,
+              label: t.grades.description,
+              value: _translatedDescription ?? group.description!,
+            ),
+          if (teacher != null)
+            _DetailRow(
+              icon: Icons.person,
+              label: t.grades.teacher,
+              value: '${teacher.name} ${teacher.surname}',
+            ),
+          if (mark.comments != null && mark.comments!.isNotEmpty)
+            _DetailRow(
+              icon: Icons.comment,
+              label: t.grades.comment,
+              value: _translatedComment ?? mark.comments!,
+            ),
+          if (translationAvailable)
+            _buildTranslateButton(
+              kind?.name,
+              group?.description,
+              mark.comments,
+            ),
+          if (widget.resolvedMark.effectiveValue != null)
+            _DetailRow(
+              icon: Icons.tag,
+              label: t.grades.numericValue,
+              value: widget.resolvedMark.effectiveValue!.toStringAsFixed(
+                2,
+              ),
+            ),
+          if (widget.resolvedMark.isPointBased)
+            _DetailRow(
+              icon: Icons.score,
+              label: t.grades.points,
+              value:
+                  '${mark.markValue?.toInt() ?? "?"} / ${widget.resolvedMark.markMax!.toInt()}',
+            ),
+          const SizedBox(height: 16),
         ],
       ),
     );
