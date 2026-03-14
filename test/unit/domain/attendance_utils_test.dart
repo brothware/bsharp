@@ -1,6 +1,7 @@
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/event.dart';
+import 'package:bsharp/domain/entities/subject.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -234,6 +235,37 @@ void main() {
         event(),
       ]);
       expect(result, isEmpty);
+    });
+
+    test('resolves subject name from event type', () {
+      final result = groupByDay(
+        [attendance()],
+        [presentType],
+        [event()],
+        eventTypes: [
+          const EventType(
+            id: 1,
+            teachingLevel: 0,
+            substitution: 0,
+            subjectsId: 10,
+          ),
+        ],
+        subjects: [const Subject(id: 10, name: 'Matematyka', abbr: 'Mat')],
+      );
+
+      final entries = result[DateTime(2026, 2, 27)]!.entries;
+      expect(entries.first.subjectName, isNotNull);
+    });
+
+    test('leaves subjectName null when no event type match', () {
+      final result = groupByDay(
+        [attendance()],
+        [presentType],
+        [event()],
+      );
+
+      final entries = result[DateTime(2026, 2, 27)]!.entries;
+      expect(entries.first.subjectName, isNull);
     });
   });
 

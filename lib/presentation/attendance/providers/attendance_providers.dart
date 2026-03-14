@@ -43,7 +43,15 @@ Map<DateTime, AttendanceDay> attendanceDays(Ref ref) {
   final attendances = ref.watch(attendancesProvider);
   final types = ref.watch(attendanceTypesProvider);
   final events = ref.watch(eventsProvider);
-  return groupByDay(attendances, types, events);
+  final eventTypes = ref.watch(eventTypesProvider);
+  final subjects = ref.watch(subjectsProvider);
+  return groupByDay(
+    attendances,
+    types,
+    events,
+    eventTypes: eventTypes,
+    subjects: subjects,
+  );
 }
 
 @Riverpod(keepAlive: true)

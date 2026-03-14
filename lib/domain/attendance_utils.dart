@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/event.dart';
+import 'package:bsharp/domain/entities/subject.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
+import 'package:bsharp/domain/translation_utils.dart';
 
 class AttendanceDay {
   AttendanceDay({required this.date, required this.entries});
@@ -153,10 +155,14 @@ AttendanceStats calculateStats(
 Map<DateTime, AttendanceDay> groupByDay(
   List<Attendance> attendances,
   List<AttendanceType> types,
-  List<Event> events,
-) {
+  List<Event> events, {
+  List<EventType> eventTypes = const [],
+  List<Subject> subjects = const [],
+}) {
   final typeMap = {for (final t in types) t.id: t};
   final eventMap = {for (final e in events) e.id: e};
+  final eventTypeMap = {for (final et in eventTypes) et.id: et};
+  final subjectMap = {for (final s in subjects) s.id: s};
   final days = <DateTime, List<AttendanceEntry>>{};
 
   for (final a in attendances) {
@@ -167,9 +173,23 @@ Map<DateTime, AttendanceDay> groupByDay(
     final date = event?.date ?? DateTime(2000);
     final dayKey = DateTime(date.year, date.month, date.day);
 
+    String? subjectName;
+    if (event != null) {
+      final et = eventTypeMap[event.eventTypesId];
+      final raw = et != null ? subjectMap[et.subjectsId]?.name : null;
+      if (raw != null) subjectName = translateSubjectName(raw);
+    }
+
     days
         .putIfAbsent(dayKey, () => [])
-        .add(AttendanceEntry(attendance: a, type: type, event: event));
+        .add(
+          AttendanceEntry(
+            attendance: a,
+            type: type,
+            event: event,
+            subjectName: subjectName,
+          ),
+        );
   }
 
   return {
