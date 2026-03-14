@@ -58,10 +58,12 @@ class LessonDetailSheet extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '${entry.event.number}',
+                          entry.displayLessonNumber,
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: color,
+                            color: entry.isReplaced
+                                ? theme.colorScheme.error
+                                : color,
                           ),
                         ),
                       ),

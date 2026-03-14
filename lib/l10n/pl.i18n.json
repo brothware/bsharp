@@ -99,6 +99,7 @@
     "noLessonsSubtitle": "Brak zaplanowanych lekcji na ten dzień",
     "cancelled": "Odwołana",
     "substitution": "Zastępstwo",
+    "replacement": "Zastępstwo",
     "roomChanged": "Zmiana sali",
     "added": "Dodana",
     "room": "Sala",

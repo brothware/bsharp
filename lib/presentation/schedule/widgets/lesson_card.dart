@@ -41,10 +41,12 @@ class LessonCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '${entry.event.number}',
+                              entry.displayLessonNumber,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: color,
+                                color: entry.isReplaced
+                                    ? theme.colorScheme.error
+                                    : color,
                               ),
                             ),
                             Text(
