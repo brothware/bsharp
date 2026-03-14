@@ -397,7 +397,7 @@ void main() {
       expect(result[1].subjectName, 'English');
     });
 
-    test('sorts marks by date descending within subject', () {
+    test('sorts marks by date ascending within subject', () {
       final container = ProviderContainer(
         overrides: [
           marksProvider.overrideWithBuild(
@@ -456,7 +456,8 @@ void main() {
       addTearDown(container.dispose);
 
       final result = container.read(subjectGradesProvider);
-      expect(result.first.resolvedMarks.first.mark.id, 2);
+      expect(result.first.resolvedMarks.first.mark.id, 1);
+      expect(result.first.resolvedMarks.last.mark.id, 2);
     });
   });
 

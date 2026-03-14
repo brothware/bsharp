@@ -176,17 +176,20 @@ class _SubjectSection extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-          child: Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: [
-              for (final rm in subjectGrades.resolvedMarks)
-                GradeChip(
-                  resolvedMark: rm,
-                  isNew: newGradeIds.contains(rm.mark.id),
-                  onTap: () => _showDetail(context, rm),
-                ),
-            ],
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final rm in subjectGrades.resolvedMarks)
+                  GradeChip(
+                    resolvedMark: rm,
+                    isNew: newGradeIds.contains(rm.mark.id),
+                    onTap: () => _showDetail(context, rm),
+                  ),
+              ],
+            ),
           ),
         ),
       ],
@@ -199,9 +202,16 @@ class _SubjectSection extends StatelessWidget {
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
-        builder: (_) => GradeDetailSheet(
-          resolvedMark: rm,
-          subjectName: subjectGrades.subjectName,
+        builder: (_) => DraggableScrollableSheet(
+          initialChildSize: 0.9,
+          minChildSize: 0.5,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (_, scrollController) => GradeDetailSheet(
+            resolvedMark: rm,
+            subjectName: subjectGrades.subjectName,
+            scrollController: scrollController,
+          ),
         ),
       ),
     );

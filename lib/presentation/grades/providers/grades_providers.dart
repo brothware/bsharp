@@ -221,7 +221,7 @@ List<SubjectGrades> subjectGrades(Ref ref) {
   final result = <SubjectGrades>[];
   for (final entry in resolvedByKey.entries) {
     final sorted = List<ResolvedMark>.from(entry.value)
-      ..sort((a, b) => b.mark.getDate.compareTo(a.mark.getDate));
+      ..sort((a, b) => a.mark.getDate.compareTo(b.mark.getDate));
 
     result.add(
       SubjectGrades(
