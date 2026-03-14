@@ -126,7 +126,7 @@ class _AverageChip extends StatelessWidget {
   }
 }
 
-class _SubjectSection extends StatelessWidget {
+class _SubjectSection extends ConsumerWidget {
   const _SubjectSection({
     required this.subjectGrades,
     required this.newGradeIds,
@@ -136,7 +136,7 @@ class _SubjectSection extends StatelessWidget {
   final Set<int> newGradeIds;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final weighted = subjectGrades.weightedAverage;
     final simple = subjectGrades.simpleAverage;
@@ -186,7 +186,7 @@ class _SubjectSection extends StatelessWidget {
                   GradeChip(
                     resolvedMark: rm,
                     isNew: newGradeIds.contains(rm.mark.id),
-                    onTap: () => _showDetail(context, rm),
+                    onTap: () => _showDetail(context, ref, rm),
                   ),
               ],
             ),
@@ -196,7 +196,10 @@ class _SubjectSection extends StatelessWidget {
     );
   }
 
-  void _showDetail(BuildContext context, ResolvedMark rm) {
+  void _showDetail(BuildContext context, WidgetRef ref, ResolvedMark rm) {
+    unawaited(
+      ref.read(newGradeIdsProvider.notifier).markAsRead(rm.mark.id),
+    );
     unawaited(
       showModalBottomSheet<void>(
         context: context,

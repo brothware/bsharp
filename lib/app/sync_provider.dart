@@ -101,6 +101,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       ref.read(lastSyncTimeProvider.notifier).value = DateTime.now();
 
       final changeSet = await _detectChanges();
+      await _trackNewGrades(changeSet);
 
       await _checkUnexcusedAbsences();
 
@@ -183,6 +184,15 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     } on Object {
       return const ChangeSet();
     }
+  }
+
+  Future<void> _trackNewGrades(ChangeSet changeSet) async {
+    final newIds = changeSet
+        .byCategory(ChangeCategory.grades)
+        .map((c) => c.entityId)
+        .whereType<int>()
+        .toSet();
+    await ref.read(newGradeIdsProvider.notifier).addNewIds(newIds);
   }
 
   void markCompleted() {

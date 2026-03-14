@@ -6,6 +6,7 @@ import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -84,12 +85,39 @@ class SelectedTermId extends _$SelectedTermId {
   set value(int? v) => state = v;
 }
 
-@Riverpod(keepAlive: true)
-class NewGradeIds extends _$NewGradeIds {
+final newGradeIdsProvider = NotifierProvider<NewGradeIdsNotifier, Set<int>>(
+  NewGradeIdsNotifier.new,
+);
+
+class NewGradeIdsNotifier extends Notifier<Set<int>> {
+  static const _key = 'new_grade_ids';
+
   @override
-  Set<int> build() => {};
-  Set<int> get value => state;
-  set value(Set<int> v) => state = v;
+  Set<int> build() {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    final stored = prefs.getStringList(_key);
+    if (stored == null) return {};
+    return stored.map(int.parse).toSet();
+  }
+
+  Future<void> addNewIds(Set<int> ids) async {
+    if (ids.isEmpty) return;
+    final updated = {...state, ...ids};
+    await _persist(updated);
+    state = updated;
+  }
+
+  Future<void> markAsRead(int id) async {
+    if (!state.contains(id)) return;
+    final updated = {...state}..remove(id);
+    await _persist(updated);
+    state = updated;
+  }
+
+  Future<void> _persist(Set<int> ids) async {
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.setStringList(_key, ids.map((e) => e.toString()).toList());
+  }
 }
 
 @Riverpod(keepAlive: true)

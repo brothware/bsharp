@@ -2,12 +2,14 @@ import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/mark.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/wear/screens/wear_grades_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
@@ -56,17 +58,22 @@ ResolvedMark _resolved({
   );
 }
 
-Widget _buildTile({
+Future<Widget> _buildTile({
   List<SubjectGrades> subjectGrades = const [],
   Set<int> newIds = const {},
-}) {
+}) async {
+  SharedPreferences.setMockInitialValues({
+    if (newIds.isNotEmpty)
+      'new_grade_ids': newIds.map((e) => e.toString()).toList(),
+  });
+  final prefs = await SharedPreferences.getInstance();
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       subjectGradesProvider.overrideWith((ref) => subjectGrades),
-      newGradeIdsProvider.overrideWithBuild((ref, _) => newIds),
     ],
     child: const MaterialApp(home: Scaffold(body: WearGradesTile())),
   );
@@ -83,7 +90,7 @@ SubjectGrades _sg(List<ResolvedMark> resolvedMarks) {
 void main() {
   group('WearGradesTile', () {
     testWidgets('shows empty state when no marks', (tester) async {
-      await tester.pumpWidget(_buildTile());
+      await tester.pumpWidget(await _buildTile());
       await tester.pump();
 
       expect(find.text('No grades'), findsOneWidget);
@@ -92,7 +99,7 @@ void main() {
 
     testWidgets('shows recent grades with values', (tester) async {
       await tester.pumpWidget(
-        _buildTile(
+        await _buildTile(
           subjectGrades: [
             _sg([_resolved(), _resolved(id: 2, markValue: 3)]),
           ],
@@ -115,7 +122,9 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(_buildTile(subjectGrades: [_sg(resolvedMarks)]));
+      await tester.pumpWidget(
+        await _buildTile(subjectGrades: [_sg(resolvedMarks)]),
+      );
       await tester.pump();
 
       expect(find.byType(Container), findsWidgets);
@@ -123,7 +132,7 @@ void main() {
 
     testWidgets('shows NEW badge for new grades', (tester) async {
       await tester.pumpWidget(
-        _buildTile(
+        await _buildTile(
           subjectGrades: [
             _sg([_resolved()]),
           ],
@@ -137,7 +146,7 @@ void main() {
 
     testWidgets('shows total count in header', (tester) async {
       await tester.pumpWidget(
-        _buildTile(
+        await _buildTile(
           subjectGrades: [
             _sg([_resolved(), _resolved(id: 2), _resolved(id: 3)]),
           ],
@@ -150,7 +159,7 @@ void main() {
 
     testWidgets('shows ? for null markValue', (tester) async {
       await tester.pumpWidget(
-        _buildTile(
+        await _buildTile(
           subjectGrades: [
             _sg([_resolved(markValue: null)]),
           ],
