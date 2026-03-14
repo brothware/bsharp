@@ -64,12 +64,14 @@ class AttendanceEntry {
     required this.type,
     this.event,
     this.subjectName,
+    this.displayLessonNumber,
   });
 
   final Attendance attendance;
   final AttendanceType type;
   final Event? event;
   final String? subjectName;
+  final String? displayLessonNumber;
 }
 
 enum AttendanceDayStatus { present, excused, unexcused, late, mixed, noData }
@@ -164,25 +166,85 @@ Map<DateTime, AttendanceDay> groupByDay(
   final eventMap = {for (final e in events) e.id: e};
   final eventTypeMap = {for (final et in eventTypes) et.id: et};
   final subjectMap = {for (final s in subjects) s.id: s};
-  final replacedIds = {for (final ee in eventEvents) ee.events1Id};
+  final replacedIds = {for (final ee in eventEvents) ee.events2Id};
+  final replacementIds = {for (final ee in eventEvents) ee.events1Id};
+  final replacedToReplacement = <int, int>{
+    for (final ee in eventEvents) ee.events2Id: ee.events1Id,
+  };
+  final replacementToOriginals = <int, List<int>>{};
+  for (final ee in eventEvents) {
+    replacementToOriginals
+        .putIfAbsent(ee.events1Id, () => [])
+        .add(ee.events2Id);
+  }
+  final emittedReplacements = <int>{};
   final days = <DateTime, List<AttendanceEntry>>{};
+
+  String? resolveSubjectName(Event e) {
+    final et = eventTypeMap[e.eventTypesId];
+    final raw = et != null ? subjectMap[et.subjectsId]?.name : null;
+    return raw != null ? translateSubjectName(raw) : null;
+  }
 
   for (final a in attendances) {
     final type = typeMap[a.typesId];
     if (type == null) continue;
 
     final event = eventMap[a.eventsId];
-    if (event != null && replacedIds.contains(event.id)) continue;
+    if (event != null && replacementIds.contains(event.id)) continue;
+    if (event != null && event.status == 2 && !replacedIds.contains(event.id)) {
+      continue;
+    }
+
+    if (event != null && replacedIds.contains(event.id)) {
+      final replacementId = replacedToReplacement[event.id]!;
+      if (emittedReplacements.contains(replacementId)) continue;
+      emittedReplacements.add(replacementId);
+
+      final replacementEvent = eventMap[replacementId];
+      final subjectName =
+          replacementEvent?.name ??
+          (replacementEvent != null
+              ? resolveSubjectName(replacementEvent)
+              : null) ??
+          resolveSubjectName(event) ??
+          event.name;
+
+      final origNumbers =
+          (replacementToOriginals[replacementId] ?? [])
+              .map((id) => eventMap[id]?.number ?? 0)
+              .where((n) => n > 0)
+              .toList()
+            ..sort();
+      String? lessonNumber;
+      if (origNumbers.isNotEmpty) {
+        final isContiguous =
+            origNumbers.length > 1 &&
+            origNumbers.last - origNumbers.first == origNumbers.length - 1;
+        lessonNumber = isContiguous
+            ? '${origNumbers.first}-${origNumbers.last}'
+            : origNumbers.join(', ');
+      }
+
+      final date = event.date;
+      final dayKey = DateTime(date.year, date.month, date.day);
+      days
+          .putIfAbsent(dayKey, () => [])
+          .add(
+            AttendanceEntry(
+              attendance: a,
+              type: type,
+              event: replacementEvent ?? event,
+              subjectName: subjectName,
+              displayLessonNumber: lessonNumber,
+            ),
+          );
+      continue;
+    }
 
     final date = event?.date ?? DateTime(2000);
     final dayKey = DateTime(date.year, date.month, date.day);
-
-    String? subjectName;
-    if (event != null) {
-      final et = eventTypeMap[event.eventTypesId];
-      final raw = et != null ? subjectMap[et.subjectsId]?.name : null;
-      if (raw != null) subjectName = translateSubjectName(raw);
-    }
+    final subjectName = event != null ? resolveSubjectName(event) : null;
 
     days
         .putIfAbsent(dayKey, () => [])

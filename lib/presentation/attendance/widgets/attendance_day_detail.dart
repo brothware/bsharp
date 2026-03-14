@@ -126,7 +126,8 @@ class _EntryTile extends StatelessWidget {
           SizedBox(
             width: 32,
             child: Text(
-              entry.event != null ? '${entry.event!.number}' : '-',
+              entry.displayLessonNumber ??
+                  (entry.event != null ? '${entry.event!.number}' : '-'),
               textAlign: TextAlign.center,
               style: theme.textTheme.titleSmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
@@ -148,7 +149,7 @@ class _EntryTile extends StatelessWidget {
               children: [
                 Text(
                   entry.subjectName ??
-                      '${t.schedule.lessonFallback} ${entry.event?.number ?? ""}',
+                      '${t.schedule.lessonFallback} ${entry.displayLessonNumber ?? entry.event?.number ?? ""}',
                   style: theme.textTheme.bodyMedium,
                 ),
                 Text(
