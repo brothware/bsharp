@@ -1,11 +1,10 @@
-import 'dart:io' show Platform;
-
 import 'package:bsharp/app/app.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/data/services/background_sync_scheduler.dart';
 import 'package:bsharp/data/services/background_sync_task.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +24,7 @@ void callbackDispatcher() {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isAndroid || Platform.isIOS) {
+  if (!kIsWeb) {
     await Workmanager().initialize(callbackDispatcher);
   }
 
