@@ -124,3 +124,23 @@ Color subjectColor(int subjectId) {
 bool isSameDay(DateTime a, DateTime b) {
   return a.year == b.year && a.month == b.month && a.day == b.day;
 }
+
+DateTime nextScheduleDay(DateTime date, {required bool includeWeekends}) {
+  final next = date.add(const Duration(days: 1));
+  if (includeWeekends || next.weekday <= DateTime.friday) return next;
+  return DateTime(
+    next.year,
+    next.month,
+    next.day + (DateTime.monday - next.weekday + 7) % 7,
+  );
+}
+
+DateTime previousScheduleDay(DateTime date, {required bool includeWeekends}) {
+  final prev = date.subtract(const Duration(days: 1));
+  if (includeWeekends || prev.weekday <= DateTime.friday) return prev;
+  return DateTime(
+    prev.year,
+    prev.month,
+    prev.day - (prev.weekday - DateTime.friday),
+  );
+}

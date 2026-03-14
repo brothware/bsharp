@@ -171,6 +171,106 @@ void main() {
     });
   });
 
+  group('nextScheduleDay', () {
+    test('Monday to Tuesday', () {
+      final mon = DateTime(2026, 3, 9);
+      expect(
+        nextScheduleDay(mon, includeWeekends: false),
+        DateTime(2026, 3, 10),
+      );
+    });
+
+    test('Friday to Monday when weekends excluded', () {
+      final fri = DateTime(2026, 3, 13);
+      expect(
+        nextScheduleDay(fri, includeWeekends: false),
+        DateTime(2026, 3, 16),
+      );
+    });
+
+    test('Friday to Saturday when weekends included', () {
+      final fri = DateTime(2026, 3, 13);
+      expect(
+        nextScheduleDay(fri, includeWeekends: true),
+        DateTime(2026, 3, 14),
+      );
+    });
+
+    test('Saturday to Monday when weekends excluded', () {
+      final sat = DateTime(2026, 3, 14);
+      expect(
+        nextScheduleDay(sat, includeWeekends: false),
+        DateTime(2026, 3, 16),
+      );
+    });
+
+    test('Sunday to Monday when weekends excluded', () {
+      final sun = DateTime(2026, 3, 15);
+      expect(
+        nextScheduleDay(sun, includeWeekends: false),
+        DateTime(2026, 3, 16),
+      );
+    });
+
+    test('crosses month boundary', () {
+      final fri = DateTime(2026, 1, 30);
+      expect(
+        nextScheduleDay(fri, includeWeekends: false),
+        DateTime(2026, 2, 2),
+      );
+    });
+  });
+
+  group('previousScheduleDay', () {
+    test('Tuesday to Monday', () {
+      final tue = DateTime(2026, 3, 10);
+      expect(
+        previousScheduleDay(tue, includeWeekends: false),
+        DateTime(2026, 3, 9),
+      );
+    });
+
+    test('Monday to Friday when weekends excluded', () {
+      final mon = DateTime(2026, 3, 16);
+      expect(
+        previousScheduleDay(mon, includeWeekends: false),
+        DateTime(2026, 3, 13),
+      );
+    });
+
+    test('Monday to Sunday when weekends included', () {
+      final mon = DateTime(2026, 3, 16);
+      expect(
+        previousScheduleDay(mon, includeWeekends: true),
+        DateTime(2026, 3, 15),
+      );
+    });
+
+    test('Sunday to Friday when weekends excluded', () {
+      final sun = DateTime(2026, 3, 15);
+      expect(
+        previousScheduleDay(sun, includeWeekends: false),
+        DateTime(2026, 3, 13),
+      );
+    });
+
+    test('Saturday to Friday when weekends excluded', () {
+      final sat = DateTime(2026, 3, 14);
+      expect(
+        previousScheduleDay(sat, includeWeekends: false),
+        DateTime(2026, 3, 13),
+      );
+    });
+
+    test('crosses month boundary', () {
+      final mon = DateTime(2026, 2, 2);
+      expect(
+        previousScheduleDay(mon, includeWeekends: false),
+        DateTime(2026, 1, 30),
+      );
+    });
+  });
+
   group('isSameDay', () {
     test('returns true for same date', () {
       expect(
