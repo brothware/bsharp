@@ -206,26 +206,27 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     final cache = ref.read(syncCacheProvider);
 
-    final inboxResult = await pocztaDs.getInbox();
-    inboxResult.when(
+    final results = await Future.wait([
+      pocztaDs.getInbox(),
+      pocztaDs.getSent(),
+      pocztaDs.getTrash(),
+    ]);
+
+    results[0].when(
       success: (data) {
         ref.read(inboxProvider.notifier).value = parsePocztaMessages(data);
         cache.saveMessages('inbox', data);
       },
       failure: (_) {},
     );
-
-    final sentResult = await pocztaDs.getSent();
-    sentResult.when(
+    results[1].when(
       success: (data) {
         ref.read(sentProvider.notifier).value = parsePocztaMessages(data);
         cache.saveMessages('sent', data);
       },
       failure: (_) {},
     );
-
-    final trashResult = await pocztaDs.getTrash();
-    trashResult.when(
+    results[2].when(
       success: (data) {
         ref.read(trashProvider.notifier).value = parsePocztaMessages(data);
         cache.saveMessages('trash', data);
@@ -360,16 +361,6 @@ class MobiregDataProvider implements SchoolDataProvider {
     int pupilId,
     SyncCache cache,
   ) async {
-    final authService = AuthService(
-      webLoginClient: factory.createWebLoginClient(),
-    );
-    final tokenResult = await authService.obtainPortalToken(
-      login: _login!,
-      passwordHash: _passwordHash!,
-    );
-    final token = tokenResult.when(success: (t) => t, failure: (_) => null);
-    if (token == null) return;
-
     final portalDs = PortalDataSource(client: factory.createPortalClient());
     final now = DateTime.now();
     final schoolYearStart = now.month >= 9
@@ -386,19 +377,9 @@ class MobiregDataProvider implements SchoolDataProvider {
       'dateTo': dateTo,
     };
 
-    await _fetchPortalView(
-      ref,
-      portalDs,
-      token,
-      'bulletins',
-      params,
-      cache,
-      (items) => applyPortalBulletins(ref, items),
-    );
-
     final changelogParams = {...params, 'limit': '100', 'offset': '0'};
 
-    Future<String?> refreshToken() async {
+    Future<String?> obtainToken() async {
       final result = await AuthService(
         webLoginClient: ApiClientFactory(
           school: _school!,
@@ -409,57 +390,59 @@ class MobiregDataProvider implements SchoolDataProvider {
       return result.when(success: (t) => t, failure: (_) => null);
     }
 
-    await _fetchPortalView(
-      ref,
-      portalDs,
-      await refreshToken(),
-      'changelog',
-      {...changelogParams, 'type': 'mark'},
-      cache,
-      (items) => applyPortalChangelog(ref, 'mark', items),
-      cacheKey: 'changelog_mark',
-    );
+    Future<void> fetchWithFreshToken(
+      String view,
+      Map<String, String> viewParams,
+      void Function(List<dynamic> items) onSuccess, {
+      String? cacheKey,
+    }) async {
+      final token = await obtainToken();
+      await _fetchPortalView(
+        ref,
+        portalDs,
+        token,
+        view,
+        viewParams,
+        cache,
+        onSuccess,
+        cacheKey: cacheKey,
+      );
+    }
 
-    await _fetchPortalView(
-      ref,
-      portalDs,
-      await refreshToken(),
-      'changelog',
-      {...changelogParams, 'type': 'attendance'},
-      cache,
-      (items) => applyPortalChangelog(ref, 'attendance', items),
-      cacheKey: 'changelog_attendance',
-    );
-
-    await _fetchPortalView(
-      ref,
-      portalDs,
-      await refreshToken(),
-      'reprimands',
-      params,
-      cache,
-      (items) => applyPortalReprimands(ref, items),
-    );
-
-    await _fetchPortalView(
-      ref,
-      portalDs,
-      await refreshToken(),
-      'tests',
-      params,
-      cache,
-      (items) => applyPortalTests(ref, items),
-    );
-
-    await _fetchPortalView(
-      ref,
-      portalDs,
-      await refreshToken(),
-      'homeworks',
-      params,
-      cache,
-      (items) => applyPortalHomeworks(ref, items),
-    );
+    await Future.wait([
+      fetchWithFreshToken(
+        'bulletins',
+        params,
+        (items) => applyPortalBulletins(ref, items),
+      ),
+      fetchWithFreshToken(
+        'changelog',
+        {...changelogParams, 'type': 'mark'},
+        (items) => applyPortalChangelog(ref, 'mark', items),
+        cacheKey: 'changelog_mark',
+      ),
+      fetchWithFreshToken(
+        'changelog',
+        {...changelogParams, 'type': 'attendance'},
+        (items) => applyPortalChangelog(ref, 'attendance', items),
+        cacheKey: 'changelog_attendance',
+      ),
+      fetchWithFreshToken(
+        'reprimands',
+        params,
+        (items) => applyPortalReprimands(ref, items),
+      ),
+      fetchWithFreshToken(
+        'tests',
+        params,
+        (items) => applyPortalTests(ref, items),
+      ),
+      fetchWithFreshToken(
+        'homeworks',
+        params,
+        (items) => applyPortalHomeworks(ref, items),
+      ),
+    ]);
   }
 
   Future<void> _fetchPortalView(

@@ -84,11 +84,15 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
           passwordHash: creds.passHash,
         );
 
-        await provider.loadSchoolData(ref, studentId: studentId);
-        await provider.loadMessages(ref);
+        await Future.wait([
+          provider.loadSchoolData(ref, studentId: studentId),
+          provider.loadMessages(ref),
+        ]);
       } else {
-        await provider.loadSchoolData(ref, studentId: 1);
-        await provider.loadMessages(ref);
+        await Future.wait([
+          provider.loadSchoolData(ref, studentId: 1),
+          provider.loadMessages(ref),
+        ]);
       }
 
       await loadCustomEventsFromRef(ref, accountId);
