@@ -5,6 +5,8 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/responsive.dart';
+import 'package:bsharp/presentation/common/widgets/swipe_navigator.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:bsharp/presentation/schedule/widgets/custom_event_card.dart';
 import 'package:bsharp/presentation/schedule/widgets/custom_event_detail_sheet.dart';
@@ -39,6 +41,7 @@ class ScheduleScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: _WeekNavigator(
               weekStart: weekStart,
+              selectedDate: selectedDate,
               viewMode: viewMode,
               onPrevious: () => _changeWeek(ref, -1),
               onNext: () => _changeWeek(ref, 1),
@@ -83,12 +86,37 @@ class ScheduleScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Expanded(
-            child: viewMode == ScheduleViewMode.list
-                ? _DayTimelineList(date: selectedDate)
-                : LinearDayView(
-                    date: selectedDate,
-                    onItemTap: (item) => _showItemDetail(context, item),
-                  ),
+            child: SwipeNavigator(
+              enabled: screenSizeOf(context) == ScreenSize.phone,
+              onSwipeForward: () {
+                ref.read(selectedDateProvider.notifier).value = nextScheduleDay(
+                  selectedDate,
+                  includeWeekends: hasWeekends,
+                );
+              },
+              onSwipeBackward: () {
+                ref
+                    .read(selectedDateProvider.notifier)
+                    .value = previousScheduleDay(
+                  selectedDate,
+                  includeWeekends: hasWeekends,
+                );
+              },
+              contentBuilder: (offset) {
+                var date = selectedDate;
+                for (var i = 0; i < offset.abs(); i++) {
+                  date = offset > 0
+                      ? nextScheduleDay(date, includeWeekends: hasWeekends)
+                      : previousScheduleDay(date, includeWeekends: hasWeekends);
+                }
+                return viewMode == ScheduleViewMode.list
+                    ? _DayTimelineList(date: date)
+                    : LinearDayView(
+                        date: date,
+                        onItemTap: (item) => _showItemDetail(context, item),
+                      );
+              },
+            ),
           ),
         ],
       ),
@@ -176,6 +204,7 @@ class _DayTimelineList extends ConsumerWidget {
 class _WeekNavigator extends StatelessWidget {
   const _WeekNavigator({
     required this.weekStart,
+    required this.selectedDate,
     required this.viewMode,
     required this.onPrevious,
     required this.onNext,
@@ -184,6 +213,7 @@ class _WeekNavigator extends StatelessWidget {
   });
 
   final DateTime weekStart;
+  final DateTime selectedDate;
   final ScheduleViewMode viewMode;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
@@ -194,7 +224,7 @@ class _WeekNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final weekEnd = endOfWeek(weekStart);
-    final isCurrentWeek = isSameDay(startOfWeek(DateTime.now()), weekStart);
+    final isToday = isSameDay(selectedDate, DateTime.now());
 
     return Row(
       children: [
@@ -210,7 +240,7 @@ class _WeekNavigator extends StatelessWidget {
             style: theme.textTheme.titleMedium,
           ),
         ),
-        if (!isCurrentWeek)
+        if (!isToday)
           TextButton(onPressed: onToday, child: Text(t.schedule.today)),
         IconButton(
           icon: Icon(
