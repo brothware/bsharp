@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:bsharp/app/app.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/data/services/background_sync_scheduler.dart';
@@ -23,7 +25,9 @@ void callbackDispatcher() {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Workmanager().initialize(callbackDispatcher);
+  if (Platform.isAndroid || Platform.isIOS) {
+    await Workmanager().initialize(callbackDispatcher);
+  }
 
   final prefs = await SharedPreferences.getInstance();
 
