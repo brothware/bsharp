@@ -1,8 +1,10 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../unit/data/credential_storage_test.dart';
 
@@ -13,10 +15,13 @@ void main() {
   group('SyncStatusNotifier', () {
     late ProviderContainer container;
 
-    setUp(() {
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
       container = ProviderContainer(
         overrides: [
           credentialStorageProvider.overrideWithValue(_emptyStorage()),
+          sharedPreferencesProvider.overrideWithValue(prefs),
         ],
       );
     });
