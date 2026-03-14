@@ -273,6 +273,7 @@ class _MessageListState extends ConsumerState<_MessageList> {
                     message: message,
                     showRestore: folder == MessageFolder.trash,
                     suppressUnread: folder != MessageFolder.inbox,
+                    showReadReceipt: folder == MessageFolder.sent,
                     onTap: () => _openDetail(context, message),
                     onStar: () => _toggleStar(message),
                     onDelete: () => _removeMessage(message),

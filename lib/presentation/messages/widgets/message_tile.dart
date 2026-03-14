@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
 import 'package:flutter/material.dart';
 
@@ -83,6 +84,7 @@ class MessageTile extends StatelessWidget {
     this.onRestore,
     this.showRestore = false,
     this.suppressUnread = false,
+    this.showReadReceipt = false,
   });
 
   final PocztaMessage message;
@@ -92,6 +94,7 @@ class MessageTile extends StatelessWidget {
   final VoidCallback? onRestore;
   final bool showRestore;
   final bool suppressUnread;
+  final bool showReadReceipt;
 
   @override
   Widget build(BuildContext context) {
@@ -150,13 +153,20 @@ class MessageTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(
-            formatMessageDate(message.sendTime),
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: isUnread
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurfaceVariant,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (showReadReceipt && message.recipients.isNotEmpty)
+                _ReadReceiptIcon(recipients: message.recipients),
+              Text(
+                formatMessageDate(message.sendTime),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: isUnread
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 4),
           Row(
@@ -242,6 +252,32 @@ class _ActionIcon extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Icon(icon, size: 20, color: color),
+    );
+  }
+}
+
+class _ReadReceiptIcon extends StatelessWidget {
+  const _ReadReceiptIcon({required this.recipients});
+
+  final List<PocztaRecipient> recipients;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final allRead = recipients.every((r) => r.readAt != null);
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: Tooltip(
+        message: allRead ? t.messages.readReceipt : t.messages.notReadYet,
+        child: Icon(
+          allRead ? Icons.done_all : Icons.done,
+          size: 16,
+          color: allRead
+              ? theme.colorScheme.primary
+              : theme.colorScheme.outline,
+        ),
+      ),
     );
   }
 }
