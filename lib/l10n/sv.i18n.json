@@ -279,7 +279,9 @@
     "replyPrefix": "Sv: ${title}",
     "downloadFailed": "Nedladdning misslyckades",
     "messageSent": "Meddelande skickat",
-    "sendFailed": "Kunde inte skicka meddelandet"
+    "sendFailed": "Kunde inte skicka meddelandet",
+    "readReceipt": "Läst",
+    "notReadYet": "Inte läst ännu"
   },
   "settings": {
     "title": "Inställningar",

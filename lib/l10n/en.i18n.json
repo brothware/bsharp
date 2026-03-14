@@ -279,7 +279,9 @@
     "message(context=other)": "messages",
     "downloadFailed": "Download failed",
     "messageSent": "Message sent",
-    "sendFailed": "Failed to send message"
+    "sendFailed": "Failed to send message",
+    "readReceipt": "Read",
+    "notReadYet": "Not read yet"
   },
   "settings": {
     "title": "Settings",

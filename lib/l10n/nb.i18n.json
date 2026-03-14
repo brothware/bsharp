@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Nedlasting mislyktes",
     "messageSent": "Melding sendt",
-    "sendFailed": "Kunne ikke sende melding"
+    "sendFailed": "Kunne ikke sende melding",
+    "readReceipt": "Lest",
+    "notReadYet": "Ikke lest ennå"
   },
   "settings": {
     "title": "Innstillinger",

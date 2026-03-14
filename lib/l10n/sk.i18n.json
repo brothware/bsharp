@@ -282,7 +282,9 @@
     "replyPrefix": "Odp: ${title}",
     "downloadFailed": "Sťahovanie zlyhalo",
     "messageSent": "Správa odoslaná",
-    "sendFailed": "Nepodarilo sa odoslať správu"
+    "sendFailed": "Nepodarilo sa odoslať správu",
+    "readReceipt": "Prečítané",
+    "notReadYet": "Zatiaľ neprečítané"
   },
   "settings": {
     "title": "Nastavenia",

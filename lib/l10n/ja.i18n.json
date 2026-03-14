@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "ダウンロードに失敗しました",
     "messageSent": "メッセージを送信しました",
-    "sendFailed": "メッセージの送信に失敗しました"
+    "sendFailed": "メッセージの送信に失敗しました",
+    "readReceipt": "既読",
+    "notReadYet": "未読"
   },
   "settings": {
     "title": "設定",

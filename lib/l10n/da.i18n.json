@@ -279,7 +279,9 @@
     "replyPrefix": "Sv: ${title}",
     "downloadFailed": "Download mislykkedes",
     "messageSent": "Besked sendt",
-    "sendFailed": "Kunne ikke sende besked"
+    "sendFailed": "Kunne ikke sende besked",
+    "readReceipt": "Læst",
+    "notReadYet": "Ikke læst endnu"
   },
   "settings": {
     "title": "Indstillinger",

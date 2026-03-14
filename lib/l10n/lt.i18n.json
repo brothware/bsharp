@@ -285,7 +285,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Atsisiuntimas nepavyko",
     "messageSent": "Žinutė išsiųsta",
-    "sendFailed": "Nepavyko išsiųsti žinutės"
+    "sendFailed": "Nepavyko išsiųsti žinutės",
+    "readReceipt": "Perskaityta",
+    "notReadYet": "Dar neperskaityta"
   },
   "settings": {
     "title": "Nustatymai",

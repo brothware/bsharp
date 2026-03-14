@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Η λήψη απέτυχε",
     "messageSent": "Το μήνυμα εστάλη",
-    "sendFailed": "Αποτυχία αποστολής μηνύματος"
+    "sendFailed": "Αποτυχία αποστολής μηνύματος",
+    "readReceipt": "Αναγνώστηκε",
+    "notReadYet": "Δεν έχει διαβαστεί ακόμα"
   },
   "settings": {
     "title": "Ρυθμίσεις",

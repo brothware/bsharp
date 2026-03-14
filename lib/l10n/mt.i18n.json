@@ -285,7 +285,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Il-download falla",
     "messageSent": "Messaġġ mibgħut",
-    "sendFailed": "Ma rnexxielekx tibgħat il-messaġġ"
+    "sendFailed": "Ma rnexxielekx tibgħat il-messaġġ",
+    "readReceipt": "Maqri",
+    "notReadYet": "Għadu mhux maqri"
   },
   "settings": {
     "title": "Issettjar",

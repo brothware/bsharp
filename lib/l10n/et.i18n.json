@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Allalaadimine ebaõnnestus",
     "messageSent": "Sõnum saadetud",
-    "sendFailed": "Sõnumi saatmine ebaõnnestus"
+    "sendFailed": "Sõnumi saatmine ebaõnnestus",
+    "readReceipt": "Loetud",
+    "notReadYet": "Pole veel loetud"
   },
   "settings": {
     "title": "Seaded",

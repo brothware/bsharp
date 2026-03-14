@@ -285,7 +285,9 @@
     "message(context=other)": "паведамленні",
     "downloadFailed": "Не ўдалося спампаваць",
     "messageSent": "Паведамленне адпраўлена",
-    "sendFailed": "Не ўдалося адправіць паведамленне"
+    "sendFailed": "Не ўдалося адправіць паведамленне",
+    "readReceipt": "Прачытана",
+    "notReadYet": "Яшчэ не прачытана"
   },
   "settings": {
     "title": "Наладкі",

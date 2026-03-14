@@ -279,7 +279,9 @@
     "replyPrefix": "Vá: ${title}",
     "downloadFailed": "Letöltés sikertelen",
     "messageSent": "Üzenet elküldve",
-    "sendFailed": "Az üzenet küldése sikertelen"
+    "sendFailed": "Az üzenet küldése sikertelen",
+    "readReceipt": "Elolvasva",
+    "notReadYet": "Még nem olvasták el"
   },
   "settings": {
     "title": "Beállítások",

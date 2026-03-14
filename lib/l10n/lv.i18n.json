@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Lejupielāde neizdevās",
     "messageSent": "Ziņojums nosūtīts",
-    "sendFailed": "Neizdevās nosūtīt ziņojumu"
+    "sendFailed": "Neizdevās nosūtīt ziņojumu",
+    "readReceipt": "Izlasīts",
+    "notReadYet": "Vēl nav izlasīts"
   },
   "settings": {
     "title": "Iestatījumi",

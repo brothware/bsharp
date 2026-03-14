@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Descarga fallida",
     "messageSent": "Mensaje enviado",
-    "sendFailed": "Error al enviar el mensaje"
+    "sendFailed": "Error al enviar el mensaje",
+    "readReceipt": "Leído",
+    "notReadYet": "Aún no leído"
   },
   "settings": {
     "title": "Ajustes",

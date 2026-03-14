@@ -285,7 +285,9 @@
     "replyPrefix": "Odg: ${title}",
     "downloadFailed": "Prenos ni uspel",
     "messageSent": "Sporočilo poslano",
-    "sendFailed": "Pošiljanje sporočila ni uspelo"
+    "sendFailed": "Pošiljanje sporočila ni uspelo",
+    "readReceipt": "Prebrano",
+    "notReadYet": "Še ni prebrano"
   },
   "settings": {
     "title": "Nastavitve",

@@ -279,7 +279,9 @@
     "replyPrefix": "Re : ${title}",
     "downloadFailed": "Échec du téléchargement",
     "messageSent": "Message envoyé",
-    "sendFailed": "Échec de l'envoi du message"
+    "sendFailed": "Échec de l'envoi du message",
+    "readReceipt": "Lu",
+    "notReadYet": "Pas encore lu"
   },
   "settings": {
     "title": "Paramètres",

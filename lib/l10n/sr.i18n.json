@@ -282,7 +282,9 @@
     "replyPrefix": "Odg: ${title}",
     "downloadFailed": "Преузимање није успело",
     "messageSent": "Порука послата",
-    "sendFailed": "Слање поруке није успело"
+    "sendFailed": "Слање поруке није успело",
+    "readReceipt": "Прочитано",
+    "notReadYet": "Још није прочитано"
   },
   "settings": {
     "title": "Podešavanja",

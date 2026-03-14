@@ -282,7 +282,9 @@
     "replyPrefix": "Răsp: ${title}",
     "downloadFailed": "Descărcarea a eșuat",
     "messageSent": "Mesaj trimis",
-    "sendFailed": "Trimiterea mesajului a eșuat"
+    "sendFailed": "Trimiterea mesajului a eșuat",
+    "readReceipt": "Citit",
+    "notReadYet": "Încă necitit"
   },
   "settings": {
     "title": "Setări",

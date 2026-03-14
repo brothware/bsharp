@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Изтеглянето не успя",
     "messageSent": "Съобщението е изпратено",
-    "sendFailed": "Неуспешно изпращане на съобщение"
+    "sendFailed": "Неуспешно изпращане на съобщение",
+    "readReceipt": "Прочетено",
+    "notReadYet": "Все още не е прочетено"
   },
   "settings": {
     "title": "Настройки",

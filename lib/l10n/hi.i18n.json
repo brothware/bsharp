@@ -279,7 +279,9 @@
     "replyPrefix": "उ: ${title}",
     "downloadFailed": "डाउनलोड विफल",
     "messageSent": "संदेश भेजा गया",
-    "sendFailed": "संदेश भेजने में विफल"
+    "sendFailed": "संदेश भेजने में विफल",
+    "readReceipt": "पढ़ा गया",
+    "notReadYet": "अभी तक नहीं पढ़ा"
   },
   "settings": {
     "title": "सेटिंग्स",

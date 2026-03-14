@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Преземањето не успеа",
     "messageSent": "Пораката е испратена",
-    "sendFailed": "Неуспешно испраќање на пораката"
+    "sendFailed": "Неуспешно испраќање на пораката",
+    "readReceipt": "Прочитано",
+    "notReadYet": "Сè уште не е прочитано"
   },
   "settings": {
     "title": "Поставки",

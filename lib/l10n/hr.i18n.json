@@ -282,7 +282,9 @@
     "replyPrefix": "Odg: ${title}",
     "downloadFailed": "Preuzimanje nije uspjelo",
     "messageSent": "Poruka poslana",
-    "sendFailed": "Slanje poruke nije uspjelo"
+    "sendFailed": "Slanje poruke nije uspjelo",
+    "readReceipt": "Pročitano",
+    "notReadYet": "Još nije pročitano"
   },
   "settings": {
     "title": "Postavke",

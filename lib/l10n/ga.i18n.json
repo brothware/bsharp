@@ -288,7 +288,9 @@
     "replyPrefix": "Ath: ${title}",
     "downloadFailed": "Theip ar an íoslódáil",
     "messageSent": "Teachtaireacht seolta",
-    "sendFailed": "Theip ar sheoladh na teachtaireachta"
+    "sendFailed": "Theip ar sheoladh na teachtaireachta",
+    "readReceipt": "Léite",
+    "notReadYet": "Gan léamh fós"
   },
   "settings": {
     "title": "Socruithe",

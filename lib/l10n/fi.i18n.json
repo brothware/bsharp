@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "Lataus epäonnistui",
     "messageSent": "Viesti lähetetty",
-    "sendFailed": "Viestin lähetys epäonnistui"
+    "sendFailed": "Viestin lähetys epäonnistui",
+    "readReceipt": "Luettu",
+    "notReadYet": "Ei vielä luettu"
   },
   "settings": {
     "title": "Asetukset",

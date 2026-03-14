@@ -279,7 +279,9 @@
     "replyPrefix": "Re: ${title}",
     "downloadFailed": "다운로드 실패",
     "messageSent": "메시지 전송됨",
-    "sendFailed": "메시지 전송 실패"
+    "sendFailed": "메시지 전송 실패",
+    "readReceipt": "읽음",
+    "notReadYet": "아직 읽지 않음"
   },
   "settings": {
     "title": "설정",

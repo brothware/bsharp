@@ -279,7 +279,9 @@
     "replyPrefix": "回复：${title}",
     "downloadFailed": "下载失败",
     "messageSent": "消息已发送",
-    "sendFailed": "消息发送失败"
+    "sendFailed": "消息发送失败",
+    "readReceipt": "已读",
+    "notReadYet": "未读"
   },
   "settings": {
     "title": "设置",

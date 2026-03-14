@@ -279,7 +279,9 @@
     "replyPrefix": "Përg: ${title}",
     "downloadFailed": "Shkarkimi dështoi",
     "messageSent": "Mesazhi u dërgua",
-    "sendFailed": "Dërgimi i mesazhit dështoi"
+    "sendFailed": "Dërgimi i mesazhit dështoi",
+    "readReceipt": "Lexuar",
+    "notReadYet": "Ende nuk është lexuar"
   },
   "settings": {
     "title": "Cilësimet",
