@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
@@ -6,17 +8,21 @@ import 'package:bsharp/data/data_sources/remote/mobile_sync_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/portal_data_source.dart';
 import 'package:bsharp/data/providers/mobireg_data_provider.dart';
+import 'package:bsharp/data/services/background_sync_scheduler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_data_parser.dart';
 import 'package:bsharp/data/services/sync_snapshot.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BackgroundSyncTask {
   Future<bool> execute() async {
     try {
+      debugPrint('BackgroundSync: task started');
+
       final storage = CredentialStorage();
       final results = await Future.wait([
         storage.getSchool(),
@@ -34,8 +40,11 @@ class BackgroundSyncTask {
           login == null ||
           passwordHash == null ||
           studentId == null) {
+        debugPrint('BackgroundSync: missing credentials');
         return false;
       }
+
+      debugPrint('BackgroundSync: credentials loaded');
 
       final prefs = await SharedPreferences.getInstance();
 
@@ -53,23 +62,35 @@ class BackgroundSyncTask {
         parentPassHash: passwordHash,
       );
 
-      final syncData = await _fetchMobileSyncData(factory, studentId);
-      if (syncData == null) return false;
-
-      final portalData = await _fetchPortalData(
+      final syncDataFuture = _fetchMobileSyncData(factory, studentId);
+      final portalDataFuture = _fetchPortalData(
         factory,
         school,
         login,
         passwordHash,
         studentId,
       );
-
-      final inboxMessages = await _fetchInboxMessages(
+      final inboxMessagesFuture = _fetchInboxMessages(
         factory,
         school,
         login,
         passwordHash,
       );
+
+      final syncData = await syncDataFuture;
+      if (syncData == null) {
+        debugPrint('BackgroundSync: sync data fetch failed');
+        return false;
+      }
+
+      final fetchResults = await Future.wait([
+        portalDataFuture,
+        inboxMessagesFuture,
+      ]);
+      final portalData = fetchResults[0] as _PortalData;
+      final inboxMessages = fetchResults[1] as List<PocztaMessage>;
+
+      debugPrint('BackgroundSync: all fetches complete');
 
       final currentSnapshot = SyncSnapshot.fromSyncData(
         syncData: syncData,
@@ -83,14 +104,25 @@ class BackgroundSyncTask {
       await currentSnapshot.save(prefs);
 
       if (changeSet.isNotEmpty) {
+        debugPrint(
+          'BackgroundSync: ${changeSet.changes.length} changes detected',
+        );
         final service = NotificationService();
         await service.initialize();
-        await service.requestPermission();
         await service.showChanges(changeSet, notifPrefs);
+      } else {
+        debugPrint('BackgroundSync: no changes');
+      }
+
+      if (Platform.isAndroid) {
+        WorkmanagerSyncScheduler.scheduleExpeditedSync(
+          delay: Duration(minutes: notifPrefs.syncIntervalMinutes),
+        );
       }
 
       return true;
-    } on Object {
+    } on Object catch (error, stack) {
+      debugPrint('BackgroundSync failed: $error\n$stack');
       return false;
     }
   }

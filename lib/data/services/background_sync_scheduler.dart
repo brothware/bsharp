@@ -10,6 +10,7 @@ abstract interface class BackgroundSyncScheduler {
 }
 
 const backgroundSyncTaskName = 'com.bsharp.backgroundSync';
+const _expeditedSyncTaskName = 'com.bsharp.backgroundSync.expedited';
 
 class WorkmanagerSyncScheduler implements BackgroundSyncScheduler {
   bool _scheduled = false;
@@ -26,6 +27,8 @@ class WorkmanagerSyncScheduler implements BackgroundSyncScheduler {
         frequency: interval,
         existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
         constraints: Constraints(networkType: NetworkType.connected),
+        backoffPolicy: BackoffPolicy.exponential,
+        backoffPolicyDelay: const Duration(minutes: 15),
       ),
     );
     _scheduled = true;
@@ -34,7 +37,23 @@ class WorkmanagerSyncScheduler implements BackgroundSyncScheduler {
   @override
   void cancel() {
     unawaited(Workmanager().cancelByUniqueName(backgroundSyncTaskName));
+    unawaited(Workmanager().cancelByUniqueName(_expeditedSyncTaskName));
     _scheduled = false;
+  }
+
+  static void scheduleExpeditedSync({required Duration delay}) {
+    unawaited(
+      Workmanager().registerOneOffTask(
+        _expeditedSyncTaskName,
+        backgroundSyncTaskName,
+        initialDelay: delay,
+        existingWorkPolicy: ExistingWorkPolicy.replace,
+        constraints: Constraints(networkType: NetworkType.connected),
+        outOfQuotaPolicy: OutOfQuotaPolicy.runAsNonExpeditedWorkRequest,
+        backoffPolicy: BackoffPolicy.exponential,
+        backoffPolicyDelay: const Duration(minutes: 15),
+      ),
+    );
   }
 }
 
