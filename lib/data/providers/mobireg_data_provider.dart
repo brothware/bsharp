@@ -1,21 +1,17 @@
-import 'package:bsharp/app/child_provider.dart';
+import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
 import 'package:bsharp/data/data_sources/remote/auth_service.dart';
 import 'package:bsharp/data/data_sources/remote/mobile_sync_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/portal_data_source.dart';
-import 'package:bsharp/data/services/sync_data_parser.dart';
+import 'package:bsharp/data/services/sync_cache.dart';
+import 'package:bsharp/data/services/sync_data_applier.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
-import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
-import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
-import 'package:bsharp/presentation/more/providers/more_providers.dart';
-import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -142,9 +138,12 @@ class MobiregDataProvider implements SchoolDataProvider {
       endDate: endDate,
     );
 
+    final cache = ref.read(syncCacheProvider);
+
     final syncOk = result.when(
       success: (data) {
-        _applyData(ref, data);
+        applySyncData(ref, data);
+        cache.saveSyncData(data);
         return true;
       },
       failure: (_) => false,
@@ -152,7 +151,7 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     if (!syncOk) throw Exception('Sync failed');
 
-    await _syncPortalData(ref, factory, studentId);
+    await _syncPortalData(ref, factory, studentId, cache);
   }
 
   @override
@@ -205,10 +204,13 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     _pocztaDs = pocztaDs;
 
+    final cache = ref.read(syncCacheProvider);
+
     final inboxResult = await pocztaDs.getInbox();
     inboxResult.when(
       success: (data) {
         ref.read(inboxProvider.notifier).value = parsePocztaMessages(data);
+        cache.saveMessages('inbox', data);
       },
       failure: (_) {},
     );
@@ -217,6 +219,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     sentResult.when(
       success: (data) {
         ref.read(sentProvider.notifier).value = parsePocztaMessages(data);
+        cache.saveMessages('sent', data);
       },
       failure: (_) {},
     );
@@ -225,6 +228,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     trashResult.when(
       success: (data) {
         ref.read(trashProvider.notifier).value = parsePocztaMessages(data);
+        cache.saveMessages('trash', data);
       },
       failure: (_) {},
     );
@@ -241,21 +245,26 @@ class MobiregDataProvider implements SchoolDataProvider {
       pocztaDs.getTrash(),
     ]);
 
+    final cache = ref.read(syncCacheProvider);
+
     results[0].when(
       success: (data) {
         ref.read(inboxProvider.notifier).value = parsePocztaMessages(data);
+        cache.saveMessages('inbox', data);
       },
       failure: (_) {},
     );
     results[1].when(
       success: (data) {
         ref.read(sentProvider.notifier).value = parsePocztaMessages(data);
+        cache.saveMessages('sent', data);
       },
       failure: (_) {},
     );
     results[2].when(
       success: (data) {
         ref.read(trashProvider.notifier).value = parsePocztaMessages(data);
+        cache.saveMessages('trash', data);
       },
       failure: (_) {},
     );
@@ -345,73 +354,11 @@ class MobiregDataProvider implements SchoolDataProvider {
     return result.when(success: (_) => savePath, failure: (_) => null);
   }
 
-  void _applyData(Ref ref, Map<String, dynamic> data) {
-    final parser = SyncDataParser();
-    final syncData = parser.parse(data);
-
-    if (syncData.students.isNotEmpty) {
-      ref.read(studentsProvider.notifier).value = syncData.students;
-    }
-    if (syncData.teachers.isNotEmpty) {
-      ref.read(teachersProvider.notifier).value = syncData.teachers;
-    }
-    if (syncData.subjects.isNotEmpty) {
-      ref.read(subjectsProvider.notifier).value = syncData.subjects;
-    }
-    if (syncData.terms.isNotEmpty) {
-      ref.read(termsProvider.notifier).value = syncData.terms;
-    }
-    if (syncData.rooms.isNotEmpty) {
-      ref.read(roomsProvider.notifier).value = syncData.rooms;
-    }
-    if (syncData.events.isNotEmpty) {
-      ref.read(eventsProvider.notifier).value = syncData.events;
-    }
-    if (syncData.eventTypes.isNotEmpty) {
-      ref.read(eventTypesProvider.notifier).value = syncData.eventTypes;
-    }
-    if (syncData.eventTypeTeachers.isNotEmpty) {
-      ref.read(eventTypeTeachersProvider.notifier).value =
-          syncData.eventTypeTeachers;
-    }
-    if (syncData.eventTypeTerms.isNotEmpty) {
-      ref.read(eventTypeTermsProvider.notifier).value = syncData.eventTypeTerms;
-    }
-    if (syncData.eventSubjects.isNotEmpty) {
-      ref.read(eventSubjectsProvider.notifier).value = syncData.eventSubjects;
-    }
-    if (syncData.eventEvents.isNotEmpty) {
-      ref.read(eventEventsProvider.notifier).value = syncData.eventEvents;
-    }
-    if (syncData.marks.isNotEmpty) {
-      ref.read(marksProvider.notifier).value = syncData.marks;
-    }
-    if (syncData.markGroups.isNotEmpty) {
-      ref.read(markGroupsProvider.notifier).value = syncData.markGroups;
-    }
-    if (syncData.markKinds.isNotEmpty) {
-      ref.read(markKindsProvider.notifier).value = syncData.markKinds;
-    }
-    if (syncData.markScales.isNotEmpty) {
-      ref.read(markScalesProvider.notifier).value = syncData.markScales;
-    }
-    if (syncData.markGroupGroups.isNotEmpty) {
-      ref.read(markGroupGroupsProvider.notifier).value =
-          syncData.markGroupGroups;
-    }
-    if (syncData.attendances.isNotEmpty) {
-      ref.read(attendancesProvider.notifier).value = syncData.attendances;
-    }
-    if (syncData.attendanceTypes.isNotEmpty) {
-      ref.read(attendanceTypesProvider.notifier).value =
-          syncData.attendanceTypes;
-    }
-  }
-
   Future<void> _syncPortalData(
     Ref ref,
     ApiClientFactory factory,
     int pupilId,
+    SyncCache cache,
   ) async {
     final authService = AuthService(
       webLoginClient: factory.createWebLoginClient(),
@@ -445,8 +392,8 @@ class MobiregDataProvider implements SchoolDataProvider {
       token,
       'bulletins',
       params,
-      (items) =>
-          ref.read(bulletinsProvider.notifier).value = _parseBulletins(items),
+      cache,
+      (items) => applyPortalBulletins(ref, items),
     );
 
     final changelogParams = {...params, 'limit': '100', 'offset': '0'};
@@ -468,8 +415,9 @@ class MobiregDataProvider implements SchoolDataProvider {
       await refreshToken(),
       'changelog',
       {...changelogParams, 'type': 'mark'},
-      (items) => ref.read(gradeChangelogProvider.notifier).value =
-          _parseChangelog(items),
+      cache,
+      (items) => applyPortalChangelog(ref, 'mark', items),
+      cacheKey: 'changelog_mark',
     );
 
     await _fetchPortalView(
@@ -478,8 +426,9 @@ class MobiregDataProvider implements SchoolDataProvider {
       await refreshToken(),
       'changelog',
       {...changelogParams, 'type': 'attendance'},
-      (items) => ref.read(attendanceChangelogProvider.notifier).value =
-          _parseChangelog(items),
+      cache,
+      (items) => applyPortalChangelog(ref, 'attendance', items),
+      cacheKey: 'changelog_attendance',
     );
 
     await _fetchPortalView(
@@ -488,8 +437,8 @@ class MobiregDataProvider implements SchoolDataProvider {
       await refreshToken(),
       'reprimands',
       params,
-      (items) =>
-          ref.read(reprimandsProvider.notifier).value = _parseReprimands(items),
+      cache,
+      (items) => applyPortalReprimands(ref, items),
     );
 
     await _fetchPortalView(
@@ -498,7 +447,8 @@ class MobiregDataProvider implements SchoolDataProvider {
       await refreshToken(),
       'tests',
       params,
-      (items) => ref.read(testsProvider.notifier).value = _parseTests(items),
+      cache,
+      (items) => applyPortalTests(ref, items),
     );
 
     await _fetchPortalView(
@@ -507,8 +457,8 @@ class MobiregDataProvider implements SchoolDataProvider {
       await refreshToken(),
       'homeworks',
       params,
-      (items) =>
-          ref.read(homeworksProvider.notifier).value = _parseHomeworks(items),
+      cache,
+      (items) => applyPortalHomeworks(ref, items),
     );
   }
 
@@ -518,8 +468,10 @@ class MobiregDataProvider implements SchoolDataProvider {
     String? token,
     String view,
     Map<String, String> params,
-    void Function(List<dynamic> items) onSuccess,
-  ) async {
+    SyncCache cache,
+    void Function(List<dynamic> items) onSuccess, {
+    String? cacheKey,
+  }) async {
     if (token == null) return;
 
     final result = await portalDs.getView(
@@ -532,121 +484,10 @@ class MobiregDataProvider implements SchoolDataProvider {
       success: (data) {
         final items = data['items'] as List<dynamic>? ?? [];
         onSuccess(items);
+        cache.savePortalView(cacheKey ?? view, items);
       },
       failure: (_) {},
     );
-  }
-
-  List<PortalBulletin> _parseBulletins(List<dynamic> data) {
-    final result = <PortalBulletin>[];
-    for (final item in data) {
-      if (item is! Map<String, dynamic>) continue;
-      try {
-        result.add(
-          PortalBulletin(
-            id: item['id'] as int,
-            title: (item['title'] ?? '') as String,
-            content: '',
-            date: (item['dateTime'] ?? '') as String,
-            author: (item['author'] ?? '') as String,
-            isRead: item['read'] != null,
-          ),
-        );
-      } on Object {
-        continue;
-      }
-    }
-    return result;
-  }
-
-  List<PortalChangelog> _parseChangelog(List<dynamic> data) {
-    final result = <PortalChangelog>[];
-    for (final item in data) {
-      if (item is! Map<String, dynamic>) continue;
-      try {
-        result.add(
-          PortalChangelog(
-            type: (item['type'] ?? '') as String,
-            dateTime: (item['dateTime'] ?? '') as String,
-            subjectName: (item['subjectName'] ?? '') as String,
-            user: (item['user'] ?? '') as String,
-            newName: (item['newName'] ?? '') as String,
-            newAdditionalInfo: (item['newAdditionalInfo'] ?? '') as String,
-            action: (item['action'] ?? '') as String,
-          ),
-        );
-      } on Object {
-        continue;
-      }
-    }
-    return result;
-  }
-
-  List<PortalReprimand> _parseReprimands(List<dynamic> data) {
-    final result = <PortalReprimand>[];
-    for (final item in data) {
-      if (item is! Map<String, dynamic>) continue;
-      try {
-        result.add(
-          PortalReprimand(
-            id: item['id'] as int,
-            date: (item['date'] ?? '') as String,
-            teacherName: (item['teacherName'] ?? '') as String,
-            content: (item['content'] ?? '') as String,
-            type: item['type'] as int,
-          ),
-        );
-      } on Object {
-        continue;
-      }
-    }
-    return result;
-  }
-
-  List<PortalTest> _parseTests(List<dynamic> data) {
-    final result = <PortalTest>[];
-    for (final item in data) {
-      if (item is! Map<String, dynamic>) continue;
-      try {
-        final dateTime = item['dateTime'] as String?;
-        final date = dateTime != null
-            ? dateTime.substring(0, 10)
-            : (item['date'] ?? '') as String;
-        result.add(
-          PortalTest(
-            id: item['id'] as int,
-            subjectName: (item['subjectName'] ?? '') as String,
-            date: date,
-            title: item['title'] as String?,
-            description: item['description'] as String?,
-          ),
-        );
-      } on Object {
-        continue;
-      }
-    }
-    return result;
-  }
-
-  List<PortalHomework> _parseHomeworks(List<dynamic> data) {
-    final result = <PortalHomework>[];
-    for (final item in data) {
-      if (item is! Map<String, dynamic>) continue;
-      try {
-        result.add(
-          PortalHomework(
-            id: item['id'] as int,
-            subjectName: (item['subjectName'] ?? '') as String,
-            date: (item['date'] ?? '') as String,
-            dueDate: (item['dueDate'] ?? item['date'] ?? '') as String,
-            content: (item['content'] ?? item['description'] ?? '') as String,
-          ),
-        );
-      } on Object {
-        continue;
-      }
-    }
-    return result;
   }
 }
 
