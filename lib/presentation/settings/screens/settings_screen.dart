@@ -337,7 +337,7 @@ class _SyncSection extends ConsumerWidget {
       children: [
         ListTile(
           leading: Icon(
-            syncStatus == SyncStatus.syncing ? Icons.sync : Icons.sync_outlined,
+            syncStatus.isBusy ? Icons.sync : Icons.sync_outlined,
           ),
           title: Text(t.settings.syncNow),
           subtitle: Text(
@@ -345,14 +345,14 @@ class _SyncSection extends ConsumerWidget {
                 ? t.settings.syncLast(time: _formatSyncTime(lastSync))
                 : t.settings.syncNever,
           ),
-          trailing: syncStatus == SyncStatus.syncing
+          trailing: syncStatus.isBusy
               ? const SizedBox(
                   width: 20,
                   height: 20,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : null,
-          onTap: syncStatus == SyncStatus.syncing
+          onTap: syncStatus.isBusy
               ? null
               : () => ref.read(syncStatusProvider.notifier).sync(),
         ),

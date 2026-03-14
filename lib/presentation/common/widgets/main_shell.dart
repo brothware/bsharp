@@ -65,7 +65,7 @@ class MainShell extends ConsumerWidget {
         title: _buildTitle(context, ref),
         actions: [
           if (provider.requiresCredentials) ...[
-            if (syncStatus == SyncStatus.syncing)
+            if (syncStatus.isBusy)
               const Padding(
                 padding: EdgeInsets.only(right: 8),
                 child: SizedBox(

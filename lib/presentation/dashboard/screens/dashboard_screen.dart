@@ -26,7 +26,7 @@ class DashboardScreen extends ConsumerWidget {
       onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
       child: CustomScrollView(
         slivers: [
-          if (syncStatus == SyncStatus.failed)
+          if (syncStatus == SyncStatus.failed && lastSync == null)
             SliverToBoxAdapter(child: _SyncFailedBanner(ref: ref)),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
