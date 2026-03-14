@@ -136,13 +136,13 @@
       "sun": "De Domhnaigh"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "L",
+      "tue": "M",
+      "wed": "C",
+      "thu": "D",
+      "fri": "A",
       "sat": "S",
-      "sun": "S"
+      "sun": "D"
     },
     "originalSubject": "O thus",
     "originalTeacher": "Muinteoir bunaidh",
@@ -166,7 +166,7 @@
       "addDate": "Cuir data leis",
       "dateRange": "Raon datai",
       "from": "O",
-      "to": "To",
+      "to": "Go dtí",
       "weekdays": "Laethanta na seachtaine",
       "deleteConfirmTitle": "Scrios imeacht",
       "deleteConfirmBody": "An bhfuil tu cinnte gur mian leat an t-imeacht seo a scriosadh?",
@@ -201,7 +201,7 @@
     "grade(context=many)": "ngradam",
     "grade(context=other)": "gradam",
     "other": "Eile",
-    "newBadge": "NEW",
+    "newBadge": "NUA",
     "weightPrefix": "u${weight}"
   },
   "attendance": {
@@ -251,8 +251,8 @@
       "nov": "Samhain",
       "dec": "Nollaig"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Il.",
+    "absentAbbr": "Al."
   },
   "messages": {
     "title": "Teachtaireachtai",

@@ -133,13 +133,13 @@
       "sun": "Svētdiena"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "P",
+      "tue": "O",
+      "wed": "T",
+      "thu": "C",
+      "fri": "Pk",
       "sat": "S",
-      "sun": "S"
+      "sun": "Sv"
     },
     "originalSubject": "Sākotnēji",
     "originalTeacher": "Sākotnējais skolotājs",
@@ -163,7 +163,7 @@
       "addDate": "Pievienot datumu",
       "dateRange": "Datumu diapazons",
       "from": "No",
-      "to": "To",
+      "to": "Līdz",
       "weekdays": "Darba dienas",
       "deleteConfirmTitle": "Dzēst notikumu",
       "deleteConfirmBody": "Vai tiešām vēlaties dzēst šo notikumu?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "atzīme",
     "grade(context=other)": "atzīmes",
     "other": "Cits",
-    "newBadge": "NEW",
+    "newBadge": "JAUNS",
     "weightPrefix": "sv${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "Novembris",
       "dec": "Decembris"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Kl.",
+    "absentAbbr": "Nk."
   },
   "messages": {
     "title": "Ziņojumi",

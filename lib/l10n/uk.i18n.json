@@ -134,13 +134,13 @@
       "sun": "Неділя"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "П",
+      "tue": "В",
+      "wed": "С",
+      "thu": "Ч",
+      "fri": "П",
+      "sat": "С",
+      "sun": "Н"
     },
     "originalSubject": "Початковий предмет",
     "originalTeacher": "Початковий вчитель",
@@ -164,7 +164,7 @@
       "addDate": "Додати дату",
       "dateRange": "Діапазон дат",
       "from": "Від",
-      "to": "To",
+      "to": "До",
       "weekdays": "Дні тижня",
       "deleteConfirmTitle": "Видалити подію",
       "deleteConfirmBody": "Ви впевнені, що хочете видалити цю подію?",
@@ -198,7 +198,7 @@
     "grade(context=few)": "оцінки",
     "grade(context=many)": "оцінок",
     "other": "Інше",
-    "newBadge": "NEW",
+    "newBadge": "НОВЕ",
     "weightPrefix": "в${weight}",
     "grade(context=other)": "оцінок"
   },
@@ -249,8 +249,8 @@
       "nov": "Листопад",
       "dec": "Грудень"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Пр.",
+    "absentAbbr": "Вд."
   },
   "messages": {
     "title": "Повідомлення",

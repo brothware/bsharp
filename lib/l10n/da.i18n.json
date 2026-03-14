@@ -135,10 +135,10 @@
     "dayLetter": {
       "mon": "M",
       "tue": "T",
-      "wed": "W",
+      "wed": "O",
       "thu": "T",
       "fri": "F",
-      "sat": "S",
+      "sat": "L",
       "sun": "S"
     },
     "originalSubject": "Oprindeligt",
@@ -163,7 +163,7 @@
       "addDate": "Tilføj dato",
       "dateRange": "Datointerval",
       "from": "Fra",
-      "to": "To",
+      "to": "Til",
       "weekdays": "Hverdage",
       "deleteConfirmTitle": "Slet begivenhed",
       "deleteConfirmBody": "Er du sikker på, at du vil slette denne begivenhed?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "karakter",
     "grade(context=other)": "karakterer",
     "other": "Andet",
-    "newBadge": "NEW",
+    "newBadge": "NY",
     "weightPrefix": "v${weight}"
   },
   "attendance": {

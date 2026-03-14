@@ -133,13 +133,13 @@
       "sun": "Vasárnap"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "H",
+      "tue": "K",
+      "wed": "Sz",
+      "thu": "Cs",
+      "fri": "P",
+      "sat": "Sz",
+      "sun": "V"
     },
     "originalSubject": "Eredetileg",
     "originalTeacher": "Eredeti tanár",
@@ -163,7 +163,7 @@
       "addDate": "Dátum hozzáadása",
       "dateRange": "Dátumtartomány",
       "from": "Ettől",
-      "to": "To",
+      "to": "Eddig",
       "weekdays": "Hétköznapok",
       "deleteConfirmTitle": "Esemény törlése",
       "deleteConfirmBody": "Biztosan törölni szeretné ezt az eseményt?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "jegy",
     "grade(context=other)": "jegy",
     "other": "Egyéb",
-    "newBadge": "NEW",
+    "newBadge": "ÚJ",
     "weightPrefix": "s${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "November",
       "dec": "December"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "J.",
+    "absentAbbr": "H."
   },
   "messages": {
     "title": "Üzenetek",

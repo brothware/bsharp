@@ -135,13 +135,13 @@
       "sun": "Nedelja"
     },
     "dayLetter": {
-      "mon": "M",
+      "mon": "P",
       "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "wed": "S",
+      "thu": "Č",
+      "fri": "P",
       "sat": "S",
-      "sun": "S"
+      "sun": "N"
     },
     "originalSubject": "Prvotno",
     "originalTeacher": "Prvotni učitelj",
@@ -165,7 +165,7 @@
       "addDate": "Dodaj datum",
       "dateRange": "Datumski obseg",
       "from": "Od",
-      "to": "To",
+      "to": "Do",
       "weekdays": "Delovni dnevi",
       "deleteConfirmTitle": "Izbriši dogodek",
       "deleteConfirmBody": "Ali ste prepričani, da želite izbrisati ta dogodek?",
@@ -199,7 +199,7 @@
     "grade(context=few)": "ocene",
     "grade(context=other)": "ocen",
     "other": "Drugo",
-    "newBadge": "NEW",
+    "newBadge": "NOVO",
     "weightPrefix": "u${weight}"
   },
   "attendance": {
@@ -250,7 +250,7 @@
       "dec": "december"
     },
     "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "absentAbbr": "Od."
   },
   "messages": {
     "title": "Sporočila",

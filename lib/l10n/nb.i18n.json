@@ -245,8 +245,8 @@
       "nov": "November",
       "dec": "Desember"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Ts.",
+    "absentAbbr": "Fr."
   },
   "messages": {
     "title": "Meldinger",

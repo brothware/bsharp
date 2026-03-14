@@ -133,13 +133,13 @@
       "sun": "रविवार"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "सो",
+      "tue": "मं",
+      "wed": "बु",
+      "thu": "गु",
+      "fri": "शु",
+      "sat": "श",
+      "sun": "र"
     },
     "originalSubject": "मूल विषय",
     "originalTeacher": "मूल शिक्षक",
@@ -163,7 +163,7 @@
       "addDate": "तारीख़ जोड़ें",
       "dateRange": "तारीख़ सीमा",
       "from": "से",
-      "to": "To",
+      "to": "तक",
       "weekdays": "कार्यदिवस",
       "deleteConfirmTitle": "कार्यक्रम हटाएँ",
       "deleteConfirmBody": "क्या आप इस कार्यक्रम को हटाना चाहते हैं?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "अंक",
     "grade(context=other)": "अंक",
     "other": "अन्य",
-    "newBadge": "NEW",
+    "newBadge": "नया",
     "weightPrefix": "भा${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "नवंबर",
       "dec": "दिसंबर"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "उ.",
+    "absentAbbr": "अ."
   },
   "messages": {
     "title": "संदेश",

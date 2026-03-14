@@ -134,13 +134,13 @@
       "sun": "Nedelja"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "P",
+      "tue": "U",
+      "wed": "S",
+      "thu": "Č",
+      "fri": "P",
       "sat": "S",
-      "sun": "S"
+      "sun": "N"
     },
     "originalSubject": "Prvobitno",
     "originalTeacher": "Prvobitni nastavnik",
@@ -164,7 +164,7 @@
       "addDate": "Dodaj datum",
       "dateRange": "Opseg datuma",
       "from": "Od",
-      "to": "To",
+      "to": "Do",
       "weekdays": "Radni dani",
       "deleteConfirmTitle": "Obriši događaj",
       "deleteConfirmBody": "Da li ste sigurni da želite da obrišete ovaj događaj?",
@@ -174,7 +174,7 @@
       "endBeforeStart": "Vreme završetka mora biti posle vremena početka",
       "noDatesSelected": "Izaberite bar jedan datum"
     },
-    "replacement": "Замена"
+    "replacement": "Zamena"
   },
   "grades": {
     "title": "Ocene",
@@ -197,7 +197,7 @@
     "grade(context=few)": "ocene",
     "grade(context=other)": "ocena",
     "other": "Ostalo",
-    "newBadge": "NEW",
+    "newBadge": "NOVO",
     "weightPrefix": "t${weight}"
   },
   "attendance": {
@@ -248,7 +248,7 @@
       "dec": "Decembar"
     },
     "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "absentAbbr": "Od."
   },
   "messages": {
     "title": "Poruke",
@@ -280,11 +280,11 @@
     "message(context=few)": "poruke",
     "message(context=other)": "poruka",
     "replyPrefix": "Odg: ${title}",
-    "downloadFailed": "Преузимање није успело",
-    "messageSent": "Порука послата",
-    "sendFailed": "Слање поруке није успело",
-    "readReceipt": "Прочитано",
-    "notReadYet": "Још није прочитано"
+    "downloadFailed": "Preuzimanje nije uspelo",
+    "messageSent": "Poruka poslata",
+    "sendFailed": "Slanje poruke nije uspelo",
+    "readReceipt": "Pročitano",
+    "notReadYet": "Još nije pročitano"
   },
   "settings": {
     "title": "Podešavanja",
@@ -333,10 +333,10 @@
     "sync": "Sinhronizuj",
     "syncing": "Sinhronizacija...",
     "languageSystem": "Sistemski",
-    "batteryOptimization": "Оптимизација батерије",
-    "batteryUnrestricted": "Неограничено",
-    "batteryRestricted": "Ограничено",
-    "batteryOptimizationSubtitle": "Неограничени режим побољшава поузданост синхронизације у позадини"
+    "batteryOptimization": "Optimizacija baterije",
+    "batteryUnrestricted": "Neograničeno",
+    "batteryRestricted": "Ograničeno",
+    "batteryOptimizationSubtitle": "Neograničeni režim poboljšava pouzdanost sinhronizacije u pozadini"
   },
   "childMode": {
     "title": "Dečji režim",
@@ -472,13 +472,13 @@
     "homeworkDescription": "Obaveštenja o novim domaćim zadacima",
     "notesName": "Beleške",
     "notesDescription": "Obaveštenja o beleškama i pohvalama",
-    "newGrade": "Нова оцена",
-    "scheduleChange": "Промена распореда",
-    "attendanceUpdate": "Промена присуства",
-    "newHomework": "Нови домаћи задатак",
-    "newTest": "Нови тест",
-    "newAnnotation": "Нова белешка",
-    "newMessage": "Нова порука"
+    "newGrade": "Nova ocena",
+    "scheduleChange": "Promena rasporeda",
+    "attendanceUpdate": "Promena prisustva",
+    "newHomework": "Novi domaći zadatak",
+    "newTest": "Novi test",
+    "newAnnotation": "Nova beleška",
+    "newMessage": "Nova poruka"
   },
   "gradeNames": {
     "celujacy": "Odličan",

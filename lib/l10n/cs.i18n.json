@@ -134,13 +134,13 @@
       "sun": "Neděle"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "P",
+      "tue": "Ú",
+      "wed": "S",
+      "thu": "Č",
+      "fri": "P",
       "sat": "S",
-      "sun": "S"
+      "sun": "N"
     },
     "originalSubject": "Původně",
     "originalTeacher": "Původní učitel",
@@ -164,7 +164,7 @@
       "addDate": "Přidat datum",
       "dateRange": "Rozsah dat",
       "from": "Od",
-      "to": "To",
+      "to": "Do",
       "weekdays": "Pracovní dny",
       "deleteConfirmTitle": "Smazat událost",
       "deleteConfirmBody": "Opravdu chcete smazat tuto událost?",
@@ -197,7 +197,7 @@
     "grade(context=few)": "známky",
     "grade(context=other)": "známek",
     "other": "Ostatní",
-    "newBadge": "NEW",
+    "newBadge": "NOVÉ",
     "weightPrefix": "v${weight}"
   },
   "attendance": {
@@ -247,8 +247,8 @@
       "nov": "Listopad",
       "dec": "Prosinec"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Př.",
+    "absentAbbr": "Ne."
   },
   "messages": {
     "title": "Zprávy",

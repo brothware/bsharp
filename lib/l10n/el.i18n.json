@@ -133,13 +133,13 @@
       "sun": "Κυριακή"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "Δ",
+      "tue": "Τ",
+      "wed": "Τ",
+      "thu": "Π",
+      "fri": "Π",
+      "sat": "Σ",
+      "sun": "Κ"
     },
     "originalSubject": "Αρχικά",
     "originalTeacher": "Αρχικός καθηγητής",
@@ -163,7 +163,7 @@
       "addDate": "Προσθήκη ημερομηνίας",
       "dateRange": "Εύρος ημερομηνιών",
       "from": "Από",
-      "to": "To",
+      "to": "Έως",
       "weekdays": "Καθημερινές",
       "deleteConfirmTitle": "Διαγραφή γεγονότος",
       "deleteConfirmBody": "Σίγουρα θέλετε να διαγράψετε αυτό το γεγονός;",
@@ -195,7 +195,7 @@
     "grade(context=one)": "βαθμός",
     "grade(context=other)": "βαθμοί",
     "other": "Άλλο",
-    "newBadge": "NEW",
+    "newBadge": "ΝΕΟ",
     "weightPrefix": "β${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "Νοέμβριος",
       "dec": "Δεκέμβριος"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Π.",
+    "absentAbbr": "Α."
   },
   "messages": {
     "title": "Μηνύματα",

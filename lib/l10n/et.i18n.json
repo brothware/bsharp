@@ -133,13 +133,13 @@
       "sun": "Pühapäev"
     },
     "dayLetter": {
-      "mon": "M",
+      "mon": "E",
       "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "wed": "K",
+      "thu": "N",
+      "fri": "R",
+      "sat": "L",
+      "sun": "P"
     },
     "originalSubject": "Algselt",
     "originalTeacher": "Algne õpetaja",
@@ -163,7 +163,7 @@
       "addDate": "Lisa kuupäev",
       "dateRange": "Kuupäevavahemik",
       "from": "Alates",
-      "to": "To",
+      "to": "Kuni",
       "weekdays": "Nädalapäevad",
       "deleteConfirmTitle": "Kustuta sündmus",
       "deleteConfirmBody": "Kas soovid kindlasti selle sündmuse kustutada?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "hinne",
     "grade(context=other)": "hinnet",
     "other": "Muu",
-    "newBadge": "NEW",
+    "newBadge": "UUS",
     "weightPrefix": "k${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "November",
       "dec": "Detsember"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Kh.",
+    "absentAbbr": "Pd."
   },
   "messages": {
     "title": "Sõnumid",

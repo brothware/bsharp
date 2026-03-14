@@ -133,13 +133,13 @@
       "sun": "星期日"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
     },
     "originalSubject": "原课程",
     "originalTeacher": "原教师",
@@ -163,7 +163,7 @@
       "addDate": "添加日期",
       "dateRange": "日期范围",
       "from": "从",
-      "to": "To",
+      "to": "至",
       "weekdays": "工作日",
       "deleteConfirmTitle": "删除事件",
       "deleteConfirmBody": "确定要删除此事件吗？",
@@ -195,7 +195,7 @@
     "grade(context=one)": "个成绩",
     "grade(context=other)": "个成绩",
     "other": "其他",
-    "newBadge": "NEW",
+    "newBadge": "新",
     "weightPrefix": "权${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "十一月",
       "dec": "十二月"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "到",
+    "absentAbbr": "缺"
   },
   "messages": {
     "title": "消息",

@@ -134,13 +134,13 @@
       "sun": "Nedjelja"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "P",
+      "tue": "U",
+      "wed": "S",
+      "thu": "Č",
+      "fri": "P",
       "sat": "S",
-      "sun": "S"
+      "sun": "N"
     },
     "originalSubject": "Prvobitno",
     "originalTeacher": "Prvobitni nastavnik",
@@ -164,7 +164,7 @@
       "addDate": "Dodaj datum",
       "dateRange": "Raspon datuma",
       "from": "Od",
-      "to": "To",
+      "to": "Do",
       "weekdays": "Radni dani",
       "deleteConfirmTitle": "Obriši događaj",
       "deleteConfirmBody": "Jeste li sigurni da želite obrisati ovaj događaj?",
@@ -197,7 +197,7 @@
     "grade(context=few)": "ocjene",
     "grade(context=other)": "ocjena",
     "other": "Ostalo",
-    "newBadge": "NEW",
+    "newBadge": "NOVO",
     "weightPrefix": "t${weight}"
   },
   "attendance": {
@@ -248,7 +248,7 @@
       "dec": "Decembar"
     },
     "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "absentAbbr": "Od."
   },
   "messages": {
     "title": "Poruke",

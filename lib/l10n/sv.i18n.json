@@ -135,10 +135,10 @@
     "dayLetter": {
       "mon": "M",
       "tue": "T",
-      "wed": "W",
+      "wed": "O",
       "thu": "T",
       "fri": "F",
-      "sat": "S",
+      "sat": "L",
       "sun": "S"
     },
     "originalSubject": "Ursprungligen",
@@ -163,7 +163,7 @@
       "addDate": "Lägg till datum",
       "dateRange": "Datumintervall",
       "from": "Från",
-      "to": "To",
+      "to": "Till",
       "weekdays": "Veckodagar",
       "deleteConfirmTitle": "Ta bort händelse",
       "deleteConfirmBody": "Är du säker på att du vill ta bort denna händelse?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "betyg",
     "grade(context=other)": "betyg",
     "other": "Övrigt",
-    "newBadge": "NEW",
+    "newBadge": "NY",
     "weightPrefix": "v${weight}"
   },
   "attendance": {

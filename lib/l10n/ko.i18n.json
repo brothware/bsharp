@@ -133,13 +133,13 @@
       "sun": "일요일"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "월",
+      "tue": "화",
+      "wed": "수",
+      "thu": "목",
+      "fri": "금",
+      "sat": "토",
+      "sun": "일"
     },
     "originalSubject": "원래 과목",
     "originalTeacher": "원래 교사",
@@ -163,7 +163,7 @@
       "addDate": "날짜 추가",
       "dateRange": "날짜 범위",
       "from": "시작",
-      "to": "To",
+      "to": "까지",
       "weekdays": "요일",
       "deleteConfirmTitle": "일정 삭제",
       "deleteConfirmBody": "이 일정을 삭제하시겠습니까?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "성적",
     "grade(context=other)": "성적",
     "other": "기타",
-    "newBadge": "NEW",
+    "newBadge": "신규",
     "weightPrefix": "w${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "11월",
       "dec": "12월"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "출",
+    "absentAbbr": "결"
   },
   "messages": {
     "title": "메시지",

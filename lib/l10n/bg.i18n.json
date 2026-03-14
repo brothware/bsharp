@@ -133,13 +133,13 @@
       "sun": "Неделя"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "П",
+      "tue": "В",
+      "wed": "С",
+      "thu": "Ч",
+      "fri": "П",
+      "sat": "С",
+      "sun": "Н"
     },
     "originalSubject": "Първоначално",
     "originalTeacher": "Първоначален учител",
@@ -163,7 +163,7 @@
       "addDate": "Добави дата",
       "dateRange": "Период",
       "from": "От",
-      "to": "To",
+      "to": "До",
       "weekdays": "Делнични дни",
       "deleteConfirmTitle": "Изтриване на събитие",
       "deleteConfirmBody": "Сигурни ли сте, че искате да изтриете това събитие?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "оценка",
     "grade(context=other)": "оценки",
     "other": "Други",
-    "newBadge": "NEW",
+    "newBadge": "НОВО",
     "weightPrefix": "т${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "Ноември",
       "dec": "Декември"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Пр.",
+    "absentAbbr": "От."
   },
   "messages": {
     "title": "Съобщения",

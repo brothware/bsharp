@@ -135,12 +135,12 @@
       "sun": "Sekmadienis"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
+      "mon": "P",
+      "tue": "A",
+      "wed": "T",
+      "thu": "K",
+      "fri": "Pn",
+      "sat": "Š",
       "sun": "S"
     },
     "originalSubject": "Iš pradžių",
@@ -165,7 +165,7 @@
       "addDate": "Pridėti datą",
       "dateRange": "Datų intervalas",
       "from": "Nuo",
-      "to": "To",
+      "to": "Iki",
       "weekdays": "Savaitės dienos",
       "deleteConfirmTitle": "Ištrinti įvykį",
       "deleteConfirmBody": "Ar tikrai norite ištrinti šį įvykį?",
@@ -199,7 +199,7 @@
     "grade(context=many)": "pažymių",
     "grade(context=other)": "pažymiai",
     "other": "Kita",
-    "newBadge": "NEW",
+    "newBadge": "NAUJA",
     "weightPrefix": "s${weight}"
   },
   "attendance": {
@@ -249,8 +249,8 @@
       "nov": "Lapkritis",
       "dec": "Gruodis"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Dal.",
+    "absentAbbr": "Ned."
   },
   "messages": {
     "title": "Žinutės",

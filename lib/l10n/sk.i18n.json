@@ -134,13 +134,13 @@
       "sun": "Nedeľa"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "P",
+      "tue": "U",
+      "wed": "S",
+      "thu": "Š",
+      "fri": "P",
       "sat": "S",
-      "sun": "S"
+      "sun": "N"
     },
     "originalSubject": "Pôvodne",
     "originalTeacher": "Pôvodný učiteľ",
@@ -164,7 +164,7 @@
       "addDate": "Pridať dátum",
       "dateRange": "Rozsah dátumov",
       "from": "Od",
-      "to": "To",
+      "to": "Do",
       "weekdays": "Pracovné dni",
       "deleteConfirmTitle": "Odstrániť udalosť",
       "deleteConfirmBody": "Naozaj chcete odstrániť túto udalosť?",
@@ -197,7 +197,7 @@
     "grade(context=few)": "známky",
     "grade(context=other)": "známok",
     "other": "Ostatné",
-    "newBadge": "NEW",
+    "newBadge": "NOVÉ",
     "weightPrefix": "v${weight}"
   },
   "attendance": {

@@ -133,13 +133,13 @@
       "sun": "E diel"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "H",
+      "tue": "M",
+      "wed": "M",
+      "thu": "E",
+      "fri": "P",
+      "sat": "Sh",
+      "sun": "D"
     },
     "originalSubject": "Fillimisht",
     "originalTeacher": "Mësuesi origjinal",
@@ -163,7 +163,7 @@
       "addDate": "Shto datë",
       "dateRange": "Intervali i datave",
       "from": "Nga",
-      "to": "To",
+      "to": "Deri",
       "weekdays": "Ditë pune",
       "deleteConfirmTitle": "Fshi ngjarjen",
       "deleteConfirmBody": "A jeni i sigurt që dëshironi ta fshini këtë ngjarje?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "notë",
     "grade(context=other)": "nota",
     "other": "Tjetër",
-    "newBadge": "NEW",
+    "newBadge": "E RE",
     "weightPrefix": "p${weight}"
   },
   "attendance": {
@@ -246,7 +246,7 @@
       "dec": "Dhjetor"
     },
     "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "absentAbbr": "Mu."
   },
   "messages": {
     "title": "Mesazhet",

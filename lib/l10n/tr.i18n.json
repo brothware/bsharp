@@ -133,13 +133,13 @@
       "sun": "Pazar"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "P",
+      "tue": "S",
+      "wed": "Ç",
+      "thu": "P",
+      "fri": "C",
+      "sat": "C",
+      "sun": "P"
     },
     "originalSubject": "Orijinal ders",
     "originalTeacher": "Orijinal öğretmen",
@@ -163,7 +163,7 @@
       "addDate": "Tarih ekle",
       "dateRange": "Tarih aralığı",
       "from": "Başlangıç",
-      "to": "To",
+      "to": "Bitiş",
       "weekdays": "Hafta içi",
       "deleteConfirmTitle": "Etkinliği sil",
       "deleteConfirmBody": "Bu etkinliği silmek istediğinizden emin misiniz?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "not",
     "grade(context=other)": "not",
     "other": "Diğer",
-    "newBadge": "NEW",
+    "newBadge": "YENİ",
     "weightPrefix": "a${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "Kasım",
       "dec": "Aralık"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "V.",
+    "absentAbbr": "Y."
   },
   "messages": {
     "title": "Mesajlar",

@@ -134,13 +134,13 @@
       "sun": "Нядзеля"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "mon": "П",
+      "tue": "А",
+      "wed": "С",
+      "thu": "Ч",
+      "fri": "П",
+      "sat": "С",
+      "sun": "Н"
     },
     "originalSubject": "Першапачаткова",
     "originalTeacher": "Першапачатковы выкладчык",
@@ -164,7 +164,7 @@
       "addDate": "Дадаць дату",
       "dateRange": "Дыяпазон дат",
       "from": "Ад",
-      "to": "To",
+      "to": "Да",
       "weekdays": "Дні тыдня",
       "deleteConfirmTitle": "Выдаліць падзею",
       "deleteConfirmBody": "Вы ўпэўнены, што хочаце выдаліць гэтую падзею?",
@@ -198,7 +198,7 @@
     "grade(context=few)": "адзнакі",
     "grade(context=many)": "адзнак",
     "other": "Іншае",
-    "newBadge": "NEW",
+    "newBadge": "НОВАЕ",
     "weightPrefix": "в${weight}",
     "grade(context=other)": "адзнак"
   },
@@ -249,8 +249,8 @@
       "nov": "Лістапад",
       "dec": "Снежань"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Пр.",
+    "absentAbbr": "Ад."
   },
   "messages": {
     "title": "Паведамленні",

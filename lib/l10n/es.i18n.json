@@ -133,13 +133,13 @@
       "sun": "Domingo"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "L",
+      "tue": "M",
+      "wed": "X",
+      "thu": "J",
+      "fri": "V",
       "sat": "S",
-      "sun": "S"
+      "sun": "D"
     },
     "originalSubject": "Originalmente",
     "originalTeacher": "Profesor original",
@@ -163,7 +163,7 @@
       "addDate": "Añadir fecha",
       "dateRange": "Rango de fechas",
       "from": "Desde",
-      "to": "To",
+      "to": "Hasta",
       "weekdays": "Días de la semana",
       "deleteConfirmTitle": "Eliminar evento",
       "deleteConfirmBody": "¿Está seguro de que desea eliminar este evento?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "nota",
     "grade(context=other)": "notas",
     "other": "Otros",
-    "newBadge": "NEW",
+    "newBadge": "NUEVO",
     "weightPrefix": "p${weight}"
   },
   "attendance": {

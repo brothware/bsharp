@@ -245,8 +245,8 @@
       "nov": "Ноември",
       "dec": "Декември"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Пр.",
+    "absentAbbr": "Отс."
   },
   "messages": {
     "title": "Пораки",

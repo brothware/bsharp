@@ -134,13 +134,13 @@
       "sun": "Duminică"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "J",
+      "fri": "V",
       "sat": "S",
-      "sun": "S"
+      "sun": "D"
     },
     "originalSubject": "Inițial",
     "originalTeacher": "Profesorul inițial",
@@ -164,7 +164,7 @@
       "addDate": "Adaugă dată",
       "dateRange": "Interval de date",
       "from": "De la",
-      "to": "To",
+      "to": "Până la",
       "weekdays": "Zile lucrătoare",
       "deleteConfirmTitle": "Șterge eveniment",
       "deleteConfirmBody": "Sunteți sigur că doriți să ștergeți acest eveniment?",
@@ -197,7 +197,7 @@
     "grade(context=few)": "note",
     "grade(context=other)": "de note",
     "other": "Altele",
-    "newBadge": "NEW",
+    "newBadge": "NOU",
     "weightPrefix": "p${weight}"
   },
   "attendance": {

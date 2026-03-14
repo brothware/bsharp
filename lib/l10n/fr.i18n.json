@@ -133,13 +133,13 @@
       "sun": "Dimanche"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "J",
+      "fri": "V",
       "sat": "S",
-      "sun": "S"
+      "sun": "D"
     },
     "originalSubject": "À l'origine",
     "originalTeacher": "Enseignant d'origine",
@@ -163,7 +163,7 @@
       "addDate": "Ajouter une date",
       "dateRange": "Plage de dates",
       "from": "De",
-      "to": "To",
+      "to": "Au",
       "weekdays": "Jours de la semaine",
       "deleteConfirmTitle": "Supprimer l'événement",
       "deleteConfirmBody": "Voulez-vous vraiment supprimer cet événement ?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "note",
     "grade(context=other)": "notes",
     "other": "Autre",
-    "newBadge": "NEW",
+    "newBadge": "NOUVEAU",
     "weightPrefix": "c${weight}"
   },
   "attendance": {

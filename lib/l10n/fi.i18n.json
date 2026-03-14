@@ -135,10 +135,10 @@
     "dayLetter": {
       "mon": "M",
       "tue": "T",
-      "wed": "W",
+      "wed": "K",
       "thu": "T",
-      "fri": "F",
-      "sat": "S",
+      "fri": "P",
+      "sat": "L",
       "sun": "S"
     },
     "originalSubject": "Alkuperäinen",
@@ -163,7 +163,7 @@
       "addDate": "Lisää päivämäärä",
       "dateRange": "Päivämääräväli",
       "from": "Alkaen",
-      "to": "To",
+      "to": "Asti",
       "weekdays": "Arkipäivät",
       "deleteConfirmTitle": "Poista tapahtuma",
       "deleteConfirmBody": "Haluatko varmasti poistaa tämän tapahtuman?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "arvosana",
     "grade(context=other)": "arvosanaa",
     "other": "Muu",
-    "newBadge": "NEW",
+    "newBadge": "UUSI",
     "weightPrefix": "p${weight}"
   },
   "attendance": {
@@ -245,8 +245,8 @@
       "nov": "Marraskuu",
       "dec": "Joulukuu"
     },
-    "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "presentAbbr": "Lä.",
+    "absentAbbr": "Po."
   },
   "messages": {
     "title": "Viestit",
@@ -276,7 +276,7 @@
     "deleted": "Poistettu: ${title}",
     "message(context=one)": "viesti",
     "message(context=other)": "viestiä",
-    "replyPrefix": "Re: ${title}",
+    "replyPrefix": "Vs: ${title}",
     "downloadFailed": "Lataus epäonnistui",
     "messageSent": "Viesti lähetetty",
     "sendFailed": "Viestin lähetys epäonnistui",

@@ -134,9 +134,9 @@
     },
     "dayLetter": {
       "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
+      "tue": "D",
+      "wed": "M",
+      "thu": "D",
       "fri": "F",
       "sat": "S",
       "sun": "S"
@@ -163,7 +163,7 @@
       "addDate": "Datum hinzufügen",
       "dateRange": "Zeitraum",
       "from": "Von",
-      "to": "To",
+      "to": "Bis",
       "weekdays": "Wochentage",
       "deleteConfirmTitle": "Termin löschen",
       "deleteConfirmBody": "Möchten Sie diesen Termin wirklich löschen?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "Note",
     "grade(context=other)": "Noten",
     "other": "Sonstige",
-    "newBadge": "NEW",
+    "newBadge": "NEU",
     "weightPrefix": "g${weight}"
   },
   "attendance": {

@@ -133,13 +133,13 @@
       "sun": "Domenica"
     },
     "dayLetter": {
-      "mon": "M",
-      "tue": "T",
-      "wed": "W",
-      "thu": "T",
-      "fri": "F",
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "G",
+      "fri": "V",
       "sat": "S",
-      "sun": "S"
+      "sun": "D"
     },
     "originalSubject": "Originariamente",
     "originalTeacher": "Insegnante originale",
@@ -163,7 +163,7 @@
       "addDate": "Aggiungi data",
       "dateRange": "Intervallo di date",
       "from": "Da",
-      "to": "To",
+      "to": "A",
       "weekdays": "Giorni feriali",
       "deleteConfirmTitle": "Elimina evento",
       "deleteConfirmBody": "Sei sicuro di voler eliminare questo evento?",
@@ -195,7 +195,7 @@
     "grade(context=one)": "voto",
     "grade(context=other)": "voti",
     "other": "Altro",
-    "newBadge": "NEW",
+    "newBadge": "NUOVO",
     "weightPrefix": "p${weight}"
   },
   "attendance": {
@@ -246,7 +246,7 @@
       "dec": "Dicembre"
     },
     "presentAbbr": "Pr.",
-    "absentAbbr": "Ab."
+    "absentAbbr": "As."
   },
   "messages": {
     "title": "Messaggi",
