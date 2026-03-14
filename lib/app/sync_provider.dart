@@ -3,6 +3,8 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/data/services/background_sync_scheduler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
+import 'package:bsharp/data/services/sync_cache.dart';
+import 'package:bsharp/data/services/sync_data_applier.dart';
 import 'package:bsharp/data/services/sync_snapshot.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
@@ -17,11 +19,25 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sync_provider.g.dart';
 
-enum SyncStatus { idle, syncing, completed, failed }
+enum SyncStatus {
+  idle,
+  hydrated,
+  syncing,
+  completed,
+  failed
+  ;
+
+  bool get isBusy => this == syncing;
+}
 
 @Riverpod(keepAlive: true)
 NotificationService notificationService(Ref ref) {
   return NotificationService();
+}
+
+@Riverpod(keepAlive: true)
+SyncCache syncCache(Ref ref) {
+  return SyncCache(ref.watch(sharedPreferencesProvider));
 }
 
 final syncStatusProvider = NotifierProvider<SyncStatusNotifier, SyncStatus>(
@@ -36,6 +52,12 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
 
   Future<ChangeSet> sync() async {
     if (state == SyncStatus.syncing) return const ChangeSet();
+
+    final cache = ref.read(syncCacheProvider);
+    if (state == SyncStatus.idle) {
+      _hydrateFromCache(cache);
+    }
+
     state = SyncStatus.syncing;
     try {
       final provider = ref.read(activeDataProviderProvider);
@@ -87,8 +109,50 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
 
       return changeSet;
     } on Exception {
-      state = SyncStatus.failed;
+      if (state == SyncStatus.syncing) {
+        state = SyncStatus.failed;
+      }
       return const ChangeSet();
+    }
+  }
+
+  void _hydrateFromCache(SyncCache cache) {
+    final syncData = cache.loadSyncData();
+    if (syncData != null) {
+      applySyncData(ref, syncData);
+    }
+
+    final portalViews = {
+      'bulletins': applyPortalBulletins,
+      'tests': applyPortalTests,
+      'homeworks': applyPortalHomeworks,
+      'reprimands': applyPortalReprimands,
+    };
+    for (final entry in portalViews.entries) {
+      final items = cache.loadPortalView(entry.key);
+      if (items != null) {
+        entry.value(ref, items);
+      }
+    }
+
+    final markChangelog = cache.loadPortalView('changelog_mark');
+    if (markChangelog != null) {
+      applyPortalChangelog(ref, 'mark', markChangelog);
+    }
+    final attendanceChangelog = cache.loadPortalView('changelog_attendance');
+    if (attendanceChangelog != null) {
+      applyPortalChangelog(ref, 'attendance', attendanceChangelog);
+    }
+
+    for (final folder in ['inbox', 'sent', 'trash']) {
+      final messages = cache.loadMessages(folder);
+      if (messages != null) {
+        applyMessages(ref, folder, messages);
+      }
+    }
+
+    if (syncData != null) {
+      state = SyncStatus.hydrated;
     }
   }
 

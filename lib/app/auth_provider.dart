@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/router.dart';
+import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/providers/mobireg_data_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,6 +36,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   Future<void> logout() async {
     final storage = ref.read(credentialStorageProvider);
     await storage.clearAll();
+    ref.read(syncCacheProvider).clear();
     ref.read(activeDataProviderProvider.notifier).value = MobiregDataProvider();
     ref.read(demoModeProvider.notifier).value = false;
     state = const AsyncData(AuthState.unauthenticated);
