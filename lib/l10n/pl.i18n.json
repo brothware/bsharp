@@ -327,7 +327,11 @@
     "syncSection": "Synchronizacja",
     "sync": "Synchronizuj",
     "syncing": "Synchronizacja...",
-    "languageSystem": "Systemowy"
+    "languageSystem": "Systemowy",
+    "batteryOptimization": "Optymalizacja baterii",
+    "batteryUnrestricted": "Bez ograniczeń",
+    "batteryRestricted": "Ograniczona",
+    "batteryOptimizationSubtitle": "Tryb bez ograniczeń poprawia niezawodność synchronizacji w tle"
   },
   "childMode": {
     "title": "Tryb dziecka",
