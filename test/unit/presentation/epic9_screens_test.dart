@@ -1,6 +1,7 @@
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/presentation/bulletins/screens/bulletins_screen.dart';
 import 'package:bsharp/presentation/changelog/screens/changelog_screen.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/homework/screens/homework_screen.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:bsharp/presentation/notes/screens/notes_screen.dart';
@@ -8,6 +9,7 @@ import 'package:bsharp/presentation/tests/screens/tests_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('HomeworkScreen', () {
@@ -100,10 +102,20 @@ void main() {
   });
 
   group('NotesScreen', () {
+    late SharedPreferences prefs;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      prefs = await SharedPreferences.getInstance();
+    });
+
     testWidgets('shows tabs for remarks, praises, and info', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [reprimandsProvider.overrideWithBuild((ref, _) => [])],
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            reprimandsProvider.overrideWithBuild((ref, _) => []),
+          ],
           child: const MaterialApp(home: Scaffold(body: NotesScreen())),
         ),
       );
@@ -117,6 +129,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
             reprimandsProvider.overrideWithBuild(
               (ref, _) => [
                 const PortalReprimand(
@@ -136,10 +149,11 @@ void main() {
       expect(find.text('Talking in class'), findsOneWidget);
     });
 
-    testWidgets('shows count badges', (tester) async {
+    testWidgets('shows unread count badges', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
             reprimandsProvider.overrideWithBuild(
               (ref, _) => [
                 const PortalReprimand(

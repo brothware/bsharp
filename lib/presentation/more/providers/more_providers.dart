@@ -1,4 +1,5 @@
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -129,6 +130,54 @@ List<PortalTest> upcomingTests(Ref ref) {
       )
       .toList()
     ..sort((a, b) => _parseDate(a.date).compareTo(_parseDate(b.date)));
+}
+
+final readNoteIdsProvider = NotifierProvider<ReadNoteIdsNotifier, Set<int>>(
+  ReadNoteIdsNotifier.new,
+);
+
+class ReadNoteIdsNotifier extends Notifier<Set<int>> {
+  static const _key = 'read_note_ids';
+
+  @override
+  Set<int> build() {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    final stored = prefs.getStringList(_key);
+    if (stored == null) return {};
+    return stored.map(int.parse).toSet();
+  }
+
+  Future<void> markAsRead(int id) async {
+    if (state.contains(id)) return;
+    final updated = {...state, id};
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.setStringList(
+      _key,
+      updated.map((e) => e.toString()).toList(),
+    );
+    state = updated;
+  }
+}
+
+@Riverpod(keepAlive: true)
+int unreadRemarksCount(Ref ref) {
+  final items = ref.watch(remarksProvider);
+  final readIds = ref.watch(readNoteIdsProvider);
+  return items.where((r) => !readIds.contains(r.id)).length;
+}
+
+@Riverpod(keepAlive: true)
+int unreadPraisesCount(Ref ref) {
+  final items = ref.watch(praisesProvider);
+  final readIds = ref.watch(readNoteIdsProvider);
+  return items.where((r) => !readIds.contains(r.id)).length;
+}
+
+@Riverpod(keepAlive: true)
+int unreadInfoCount(Ref ref) {
+  final items = ref.watch(infoProvider);
+  final readIds = ref.watch(readNoteIdsProvider);
+  return items.where((r) => !readIds.contains(r.id)).length;
 }
 
 @Riverpod(keepAlive: true)

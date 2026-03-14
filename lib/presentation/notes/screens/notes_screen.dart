@@ -17,6 +17,9 @@ class NotesScreen extends ConsumerWidget {
     final remarks = ref.watch(remarksProvider);
     final praises = ref.watch(praisesProvider);
     final info = ref.watch(infoProvider);
+    final unreadRemarks = ref.watch(unreadRemarksCountProvider);
+    final unreadPraises = ref.watch(unreadPraisesCountProvider);
+    final unreadInfo = ref.watch(unreadInfoCountProvider);
 
     return DefaultTabController(
       length: 3,
@@ -26,9 +29,15 @@ class NotesScreen extends ConsumerWidget {
           children: [
             TabBar(
               tabs: [
-                _TabWithBadge(label: t.notes.remarksTab, count: remarks.length),
-                _TabWithBadge(label: t.notes.praisesTab, count: praises.length),
-                _TabWithBadge(label: t.notes.infoTab, count: info.length),
+                _TabWithBadge(
+                  label: t.notes.remarksTab,
+                  count: unreadRemarks,
+                ),
+                _TabWithBadge(
+                  label: t.notes.praisesTab,
+                  count: unreadPraises,
+                ),
+                _TabWithBadge(label: t.notes.infoTab, count: unreadInfo),
               ],
               labelColor: Theme.of(context).colorScheme.primary,
               unselectedLabelColor: Theme.of(
@@ -128,27 +137,34 @@ class _ReprimandList extends StatelessWidget {
   }
 }
 
-class _ReprimandTile extends StatelessWidget {
+class _ReprimandTile extends ConsumerWidget {
   const _ReprimandTile({required this.item});
 
   final PortalReprimand item;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final readIds = ref.watch(readNoteIdsProvider);
+    final isRead = readIds.contains(item.id);
     final (icon, color) = _iconForType(item.type);
 
     return Card(
       child: ListTile(
         leading: Icon(icon, color: color),
-        title: Text(item.content, maxLines: 2, overflow: TextOverflow.ellipsis),
+        title: Text(
+          item.content,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: isRead ? null : const TextStyle(fontWeight: FontWeight.bold),
+        ),
         subtitle: Text(
           '${item.teacherName} • ${item.date}',
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        onTap: () => _showDetail(context, item),
+        onTap: () => _showDetail(context, ref, item),
       ),
     );
   }
@@ -159,7 +175,8 @@ class _ReprimandTile extends StatelessWidget {
     _ => (Icons.info_outlined, Colors.blue),
   };
 
-  void _showDetail(BuildContext context, PortalReprimand item) {
+  void _showDetail(BuildContext context, WidgetRef ref, PortalReprimand item) {
+    unawaited(ref.read(readNoteIdsProvider.notifier).markAsRead(item.id));
     unawaited(
       showModalBottomSheet<void>(
         context: context,

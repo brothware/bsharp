@@ -1,7 +1,9 @@
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('filteredHomeworksProvider', () {
@@ -313,6 +315,83 @@ void main() {
       expect(grouped.length, 2);
       expect(grouped['2026-02-27']!.length, 1);
       expect(grouped['2026-02-26']!.length, 1);
+    });
+  });
+
+  group('unreadRemarksCountProvider', () {
+    test('counts unread remarks', () async {
+      SharedPreferences.setMockInitialValues({
+        'read_note_ids': ['3'],
+      });
+      final prefs = await SharedPreferences.getInstance();
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          reprimandsProvider.overrideWithBuild(
+            (ref, _) => [
+              const PortalReprimand(
+                id: 3,
+                date: '2026-02-26',
+                teacherName: 'A',
+                content: 'read',
+                type: 2,
+              ),
+              const PortalReprimand(
+                id: 5,
+                date: '2026-02-27',
+                teacherName: 'B',
+                content: 'unread',
+                type: 2,
+              ),
+            ],
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      expect(container.read(unreadRemarksCountProvider), 1);
+    });
+  });
+
+  group('unreadPraisesCountProvider', () {
+    test('counts unread praises', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          reprimandsProvider.overrideWithBuild(
+            (ref, _) => [
+              const PortalReprimand(
+                id: 10,
+                date: '2026-02-27',
+                teacherName: 'C',
+                content: 'praise',
+                type: 1,
+              ),
+            ],
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      expect(container.read(unreadPraisesCountProvider), 1);
+    });
+  });
+
+  group('readNoteIdsProvider', () {
+    test('markAsRead persists and updates state', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final container = ProviderContainer(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      );
+      addTearDown(container.dispose);
+
+      expect(container.read(readNoteIdsProvider), isEmpty);
+      await container.read(readNoteIdsProvider.notifier).markAsRead(42);
+      expect(container.read(readNoteIdsProvider), contains(42));
+      expect(prefs.getStringList('read_note_ids'), contains('42'));
     });
   });
 
