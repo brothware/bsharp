@@ -12,6 +12,81 @@ const _hourHeight = 80.0;
 const double _totalHeight = (_endHour - _startHour) * _hourHeight;
 const _leftMargin = 52.0;
 
+class _LayoutSlot {
+  _LayoutSlot({
+    required this.item,
+    required this.column,
+    required this.totalColumns,
+  });
+
+  final TimelineItem item;
+  final int column;
+  final int totalColumns;
+}
+
+List<_LayoutSlot> _computeLayout(List<TimelineItem> items) {
+  if (items.isEmpty) return [];
+
+  int parseMin(String t) {
+    final p = t.split(':');
+    return p.length >= 2 ? int.parse(p[0]) * 60 + int.parse(p[1]) : 0;
+  }
+
+  final sorted = [...items]
+    ..sort(
+      (a, b) => parseMin(a.startTime).compareTo(parseMin(b.startTime)),
+    );
+
+  final groups = <List<TimelineItem>>[];
+  for (final item in sorted) {
+    final start = parseMin(item.startTime);
+    final end = parseMin(item.endTime);
+    var placed = false;
+    for (final group in groups) {
+      final overlaps = group.any((g) {
+        final gStart = parseMin(g.startTime);
+        final gEnd = parseMin(g.endTime);
+        return start < gEnd && gStart < end;
+      });
+      if (overlaps) {
+        group.add(item);
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) groups.add([item]);
+  }
+
+  final slots = <_LayoutSlot>[];
+  for (final group in groups) {
+    final columns = <int, List<TimelineItem>>{};
+    for (final item in group) {
+      final start = parseMin(item.startTime);
+      final end = parseMin(item.endTime);
+      var col = 0;
+      while (columns[col]?.any((g) {
+            final gStart = parseMin(g.startTime);
+            final gEnd = parseMin(g.endTime);
+            return start < gEnd && gStart < end;
+          }) ??
+          false) {
+        col++;
+      }
+      columns.putIfAbsent(col, () => []).add(item);
+    }
+    final totalCols = columns.length;
+    for (final entry in columns.entries) {
+      for (final item in entry.value) {
+        slots.add(
+          _LayoutSlot(item: item, column: entry.key, totalColumns: totalCols),
+        );
+      }
+    }
+  }
+
+  return slots;
+}
+
 class LinearDayView extends ConsumerStatefulWidget {
   const LinearDayView({required this.date, required this.onItemTap, super.key});
 
@@ -119,7 +194,8 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
                 ),
               ),
             ],
-            for (final item in items) _buildEventCard(context, item),
+            for (final slot in _computeLayout(items))
+              _buildEventCard(context, slot),
             if (_isToday) _buildTimeIndicator(theme),
           ],
         ),
@@ -127,7 +203,8 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
     );
   }
 
-  Widget _buildEventCard(BuildContext context, TimelineItem item) {
+  Widget _buildEventCard(BuildContext context, _LayoutSlot slot) {
+    final item = slot.item;
     final startMin = _parseMinutes(item.startTime);
     final endMin = _parseMinutes(item.endTime);
     final top = _timeToY(startMin.toDouble());
@@ -136,58 +213,74 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
       _totalHeight,
     );
     final theme = Theme.of(context);
+    final cancelled = item.isCancelled;
+    final sideColor = cancelled ? theme.colorScheme.error : item.displayColor;
 
     return Positioned(
       top: top,
-      left: _leftMargin + 12,
-      right: 8,
+      left:
+          _leftMargin +
+          12 +
+          slot.column *
+              (MediaQuery.of(context).size.width - _leftMargin - 12 - 8 - 24) /
+              slot.totalColumns,
+      width:
+          (MediaQuery.of(context).size.width - _leftMargin - 12 - 8 - 24) /
+              slot.totalColumns -
+          2,
       height: height,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: InkWell(
-          onTap: () => widget.onItemTap(item),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(width: 4, color: item.displayColor),
-              Expanded(
-                child: Container(
-                  color: item.displayColor.withValues(alpha: 0.15),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          item.displayTitle,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      if (item.displaySubtitle != null && height > 40)
+      child: Opacity(
+        opacity: cancelled ? 0.5 : 1.0,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: InkWell(
+            onTap: () => widget.onItemTap(item),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(width: 4, color: sideColor),
+                Expanded(
+                  child: Container(
+                    color: item.displayColor.withValues(alpha: 0.15),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
                         Flexible(
                           child: Text(
-                            item.displaySubtitle!,
+                            item.displayTitle,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              decoration: cancelled
+                                  ? TextDecoration.lineThrough
+                                  : null,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                    ],
+                        if (item.displaySubtitle != null && height > 40)
+                          Flexible(
+                            child: Text(
+                              item.displaySubtitle!,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                                fontSize: 11,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -10,12 +10,16 @@ sealed class TimelineItem {
   String get displayTitle;
   String? get displaySubtitle;
   Color get displayColor;
+  bool get isCancelled => false;
 }
 
 class LessonTimelineItem implements TimelineItem {
   LessonTimelineItem({required this.entry});
 
   final ScheduleEntry entry;
+
+  @override
+  bool get isCancelled => entry.isCancelled || entry.isReplaced;
 
   @override
   DateTime get date => entry.event.date;
@@ -27,7 +31,7 @@ class LessonTimelineItem implements TimelineItem {
   String get endTime => entry.event.endTime;
 
   @override
-  String get displayTitle => entry.subjectName ?? 'Lesson';
+  String get displayTitle => entry.subjectName ?? entry.event.name ?? '';
 
   @override
   String? get displaySubtitle {
@@ -49,6 +53,9 @@ class CustomEventTimelineItem implements TimelineItem {
 
   final CustomEvent event;
   final DateTime occurrenceDate;
+
+  @override
+  bool get isCancelled => false;
 
   @override
   DateTime get date => occurrenceDate;
