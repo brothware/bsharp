@@ -117,7 +117,10 @@ class _EntryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = attendanceTypeColor(entry.type.countAs);
+    final color = attendanceTypeColor(
+      entry.type.countAs,
+      entry.type.excuseStatus,
+    );
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),

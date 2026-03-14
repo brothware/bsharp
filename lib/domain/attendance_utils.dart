@@ -107,7 +107,15 @@ Color attendanceStatusColor(AttendanceDayStatus status) {
   };
 }
 
-Color attendanceTypeColor(AttendanceCountAs countAs) {
+Color attendanceTypeColor(
+  AttendanceCountAs countAs, [
+  AttendanceExcuseStatus? excuseStatus,
+]) {
+  if ((countAs == AttendanceCountAs.absent ||
+          countAs == AttendanceCountAs.late) &&
+      excuseStatus == AttendanceExcuseStatus.excused) {
+    return const Color(0xFF42A5F5);
+  }
   return switch (countAs) {
     AttendanceCountAs.present => const Color(0xFF4CAF50),
     AttendanceCountAs.absent => const Color(0xFFF44336),
