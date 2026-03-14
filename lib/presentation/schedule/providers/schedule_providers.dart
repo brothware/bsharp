@@ -97,11 +97,7 @@ DateTime selectedWeekStart(Ref ref) {
 @Riverpod(keepAlive: true)
 List<Event> eventsForDate(Ref ref, DateTime date) {
   final events = ref.watch(eventsProvider);
-  final eventEvents = ref.watch(eventEventsProvider);
-  final replacedIds = {for (final ee in eventEvents) ee.events1Id};
-  return events
-      .where((e) => isSameDay(e.date, date) && !replacedIds.contains(e.id))
-      .toList()
+  return events.where((e) => isSameDay(e.date, date)).toList()
     ..sort((a, b) => a.number.compareTo(b.number));
 }
 
@@ -122,9 +118,15 @@ List<ScheduleEntry> scheduleEntriesForDate(Ref ref, DateTime date) {
   final teacherMap = {for (final t in teachers) t.id: t};
   final roomMap = {for (final r in rooms) r.id: r};
   final allEventsMap = {for (final e in allEvents) e.id: e};
-  final originalIdMap = {
-    for (final ee in eventEvents) ee.events2Id: ee.events1Id,
-  };
+
+  final replacedIds = <int>{};
+  final replacementToOriginals = <int, List<int>>{};
+  for (final ee in eventEvents) {
+    replacedIds.add(ee.events2Id);
+    replacementToOriginals
+        .putIfAbsent(ee.events1Id, () => [])
+        .add(ee.events2Id);
+  }
 
   String? resolveSubject(int eventTypesId) {
     final et = eventTypeMap[eventTypesId];
@@ -154,35 +156,64 @@ List<ScheduleEntry> scheduleEntriesForDate(Ref ref, DateTime date) {
         .map((es) => es.content)
         .join(', ');
 
+    final isReplaced = replacedIds.contains(event.id);
+
     ScheduleChangeType? changeType;
-    if (event.status == 2) {
+    if (isReplaced) {
       changeType = ScheduleChangeType.cancelled;
-    } else if (event.substitution != 0) {
+    } else if (event.status == 2) {
+      changeType = ScheduleChangeType.cancelled;
+    } else if (replacementToOriginals.containsKey(event.id) ||
+        event.substitution != 0) {
       changeType = ScheduleChangeType.substitution;
     }
 
     String? originalSubjectName;
     String? originalTeacherName;
-    if (event.substitution == 2) {
-      final origId = originalIdMap[event.id];
-      final origEvent = origId != null ? allEventsMap[origId] : null;
+    var replacedLessonNumbers = const <int>[];
+
+    final originalIds = replacementToOriginals[event.id];
+    if (originalIds != null) {
+      replacedLessonNumbers =
+          originalIds
+              .map((id) => allEventsMap[id]?.number ?? 0)
+              .where((n) => n > 0)
+              .toList()
+            ..sort();
+
+      final firstOrigId = originalIds.first;
+      final origEvent = allEventsMap[firstOrigId];
       if (origEvent != null) {
         originalSubjectName = resolveSubject(origEvent.eventTypesId);
         originalTeacherName = resolveTeacher(origEvent.eventTypesId);
       }
     }
 
+    final resolvedSubjectName = originalIds != null
+        ? (event.name ?? subjectName ?? originalSubjectName)
+        : subjectName;
+
     return ScheduleEntry(
       event: event,
-      subjectName: subjectName,
+      subjectName: resolvedSubjectName,
       teacherName: teacherName,
       roomName: roomName,
       topic: topic.isNotEmpty ? topic : null,
       changeType: changeType,
       originalSubjectName: originalSubjectName,
       originalTeacherName: originalTeacherName,
+      replacedLessonNumbers: replacedLessonNumbers,
+      isReplaced: isReplaced,
     );
-  }).toList();
+  }).toList()..sort((a, b) {
+    final aKey = a.replacedLessonNumbers.isNotEmpty
+        ? a.replacedLessonNumbers.reduce((x, y) => x > y ? x : y) + 0.5
+        : a.event.number.toDouble();
+    final bKey = b.replacedLessonNumbers.isNotEmpty
+        ? b.replacedLessonNumbers.reduce((x, y) => x > y ? x : y) + 0.5
+        : b.event.number.toDouble();
+    return aKey.compareTo(bKey);
+  });
 }
 
 @Riverpod(keepAlive: true)

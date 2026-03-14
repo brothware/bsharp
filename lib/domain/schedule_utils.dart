@@ -13,6 +13,8 @@ class ScheduleEntry {
     this.changeType,
     this.originalSubjectName,
     this.originalTeacherName,
+    this.replacedLessonNumbers = const [],
+    this.isReplaced = false,
   });
 
   final Event event;
@@ -23,10 +25,25 @@ class ScheduleEntry {
   final ScheduleChangeType? changeType;
   final String? originalSubjectName;
   final String? originalTeacherName;
+  final List<int> replacedLessonNumbers;
+  final bool isReplaced;
 
   bool get isCancelled => event.status == 2;
   bool get isSubstitution => event.substitution != 0;
   bool get isLocked => event.locked != 0;
+
+  String get displayLessonNumber {
+    if (replacedLessonNumbers.isNotEmpty) {
+      final sorted = [...replacedLessonNumbers]..sort();
+      final isContiguous =
+          sorted.length > 1 && sorted.last - sorted.first == sorted.length - 1;
+      return isContiguous
+          ? '${sorted.first}-${sorted.last}'
+          : sorted.join(', ');
+    }
+    if (isReplaced) return '-';
+    return '${event.number}';
+  }
 
   String get timeRange =>
       '${_formatTime(event.startTime)} - '
