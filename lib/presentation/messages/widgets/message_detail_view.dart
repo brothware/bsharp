@@ -80,9 +80,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
     final message = widget.message;
     final rawContent = _fullContent ?? message.content;
     final displayTitle = _translatedTitle ?? message.title;
-    final displayContent =
-        _translatedContent ??
-        (rawContent != null ? stripHtml(rawContent) : null);
+    final hasContent = _translatedContent != null || rawContent != null;
 
     return Scaffold(
       appBar: AppBar(
@@ -170,8 +168,22 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
                 padding: EdgeInsets.symmetric(vertical: 16),
                 child: Center(child: CircularProgressIndicator()),
               )
-            else if (displayContent != null)
-              SelectableText(displayContent, style: theme.textTheme.bodyMedium),
+            else if (hasContent)
+              SelectableText.rich(
+                TextSpan(
+                  children: _translatedContent != null
+                      ? [
+                          TextSpan(
+                            text: _translatedContent,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ]
+                      : parseHtmlSpans(
+                          rawContent!,
+                          baseStyle: theme.textTheme.bodyMedium,
+                        ),
+                ),
+              ),
             if (_detailFiles ?? message.files case final files?
                 when files.isNotEmpty) ...[
               const SizedBox(height: 16),

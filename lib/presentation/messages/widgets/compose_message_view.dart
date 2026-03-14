@@ -5,6 +5,7 @@ import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/messages/widgets/rich_text_editing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,7 +21,7 @@ class ComposeMessageView extends ConsumerStatefulWidget {
 
 class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
   final _titleController = TextEditingController();
-  final _contentController = TextEditingController();
+  final _contentController = RichTextEditingController();
   final _searchController = TextEditingController();
   final _selectedRecipients = <PocztaReceiver>[];
   var _searchResults = <PocztaReceiver>[];
@@ -266,24 +267,10 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     );
   }
 
-  static final _allowedTags = RegExp('</?[biu]>');
-
   void _send(BuildContext context) {
-    final plainText = _contentController.text;
-    final htmlContent = plainText
-        .splitMapJoin(
-          _allowedTags,
-          onMatch: (m) => m[0]!,
-          onNonMatch: (s) => s
-              .replaceAll('&', '&amp;')
-              .replaceAll('<', '&lt;')
-              .replaceAll('>', '&gt;'),
-        )
-        .replaceAll('\n', '<br>');
-
     Navigator.of(context).pop({
       'title': _titleController.text,
-      'content': htmlContent,
+      'content': _contentController.toHtml(),
       'recipientIds': _selectedRecipients.map((r) => r.recipientId).toList(),
       if (widget.replyTo != null) 'previousMessageId': widget.replyTo!.id,
     });
@@ -296,75 +283,57 @@ class _FormattingToolbar extends StatelessWidget {
     this.onTranslateToPolish,
   });
 
-  final TextEditingController controller;
+  final RichTextEditingController controller;
   final VoidCallback? onTranslateToPolish;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: theme.colorScheme.outline.withValues(alpha: 0.2),
+    final active = controller.activeFormats;
+    return FocusScope(
+      canRequestFocus: false,
+      child: Container(
+        height: 44,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: theme.colorScheme.outline.withValues(alpha: 0.2),
+            ),
           ),
         ),
-      ),
-      child: Row(
-        children: [
-          _ToolbarButton(
-            icon: Icons.format_bold,
-            tooltip: t.messages.bold,
-            onPressed: () => _wrapSelection('<b>', '</b>'),
-          ),
-          _ToolbarButton(
-            icon: Icons.format_italic,
-            tooltip: t.messages.italic,
-            onPressed: () => _wrapSelection('<i>', '</i>'),
-          ),
-          _ToolbarButton(
-            icon: Icons.format_underlined,
-            tooltip: t.messages.underline,
-            onPressed: () => _wrapSelection('<u>', '</u>'),
-          ),
-          if (onTranslateToPolish != null) ...[
-            const Spacer(),
+        child: Row(
+          children: [
             _ToolbarButton(
-              icon: Icons.translate,
-              tooltip: t.translation.translateToPolish,
-              onPressed: onTranslateToPolish!,
+              icon: Icons.format_bold,
+              tooltip: t.messages.bold,
+              isActive: active.contains(FormatType.bold),
+              onPressed: () => controller.toggleFormat(FormatType.bold),
             ),
+            _ToolbarButton(
+              icon: Icons.format_italic,
+              tooltip: t.messages.italic,
+              isActive: active.contains(FormatType.italic),
+              onPressed: () => controller.toggleFormat(FormatType.italic),
+            ),
+            _ToolbarButton(
+              icon: Icons.format_underlined,
+              tooltip: t.messages.underline,
+              isActive: active.contains(FormatType.underline),
+              onPressed: () => controller.toggleFormat(FormatType.underline),
+            ),
+            if (onTranslateToPolish != null) ...[
+              const Spacer(),
+              _ToolbarButton(
+                icon: Icons.translate,
+                tooltip: t.translation.translateToPolish,
+                onPressed: onTranslateToPolish!,
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
-  }
-
-  void _wrapSelection(String before, String after) {
-    final text = controller.text;
-    final selection = controller.selection;
-
-    if (!selection.isValid || selection.isCollapsed) {
-      final offset = selection.baseOffset.clamp(0, text.length);
-      final newText =
-          '${text.substring(0, offset)}$before$after${text.substring(offset)}';
-      controller
-        ..text = newText
-        ..selection = TextSelection.collapsed(offset: offset + before.length);
-      return;
-    }
-
-    final selected = text.substring(selection.start, selection.end);
-    final newText =
-        '${text.substring(0, selection.start)}$before$selected$after${text.substring(selection.end)}';
-    controller
-      ..text = newText
-      ..selection = TextSelection(
-        baseOffset: selection.start + before.length,
-        extentOffset: selection.start + before.length + selected.length,
-      );
   }
 }
 
@@ -373,19 +342,28 @@ class _ToolbarButton extends StatelessWidget {
     required this.icon,
     required this.tooltip,
     required this.onPressed,
+    this.isActive = false,
   });
 
   final IconData icon;
   final VoidCallback onPressed;
   final String tooltip;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return IconButton(
       icon: Icon(icon, size: 20),
       tooltip: tooltip,
       onPressed: onPressed,
       visualDensity: VisualDensity.compact,
+      isSelected: isActive,
+      style: isActive
+          ? IconButton.styleFrom(
+              backgroundColor: theme.colorScheme.primaryContainer,
+            )
+          : null,
     );
   }
 }

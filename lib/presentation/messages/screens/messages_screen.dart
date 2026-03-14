@@ -338,14 +338,36 @@ class _MessageListState extends ConsumerState<_MessageList> {
     ];
   }
 
-  void _openCompose(BuildContext context, {PocztaMessage? replyTo}) {
-    unawaited(
-      Navigator.of(context).push(
-        MaterialPageRoute<Map<String, dynamic>>(
-          builder: (_) => ComposeMessageView(replyTo: replyTo),
-        ),
+  Future<void> _openCompose(
+    BuildContext context, {
+    PocztaMessage? replyTo,
+  }) async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute<Map<String, dynamic>>(
+        builder: (_) => ComposeMessageView(replyTo: replyTo),
       ),
     );
+    if (result == null || !mounted) return;
+
+    final dataProvider = ref.read(activeDataProviderProvider);
+    try {
+      await dataProvider.sendMessage(
+        recipientIds: (result['recipientIds'] as List).cast<String>(),
+        title: result['title'] as String,
+        content: result['content'] as String,
+        previousMessageId: result['previousMessageId'] as int?,
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(t.messages.messageSent)),
+      );
+      unawaited(ref.read(syncStatusProvider.notifier).syncMessages());
+    } on Exception {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(t.messages.sendFailed)),
+      );
+    }
   }
 }
 

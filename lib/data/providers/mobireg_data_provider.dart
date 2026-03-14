@@ -327,12 +327,15 @@ class MobiregDataProvider implements SchoolDataProvider {
     required String content,
     int? previousMessageId,
   }) async {
-    await _pocztaDs?.sendMessage(
+    final result = await _pocztaDs?.sendMessage(
       title: title,
       content: content,
       recipients: recipientIds,
       previousMessageId: previousMessageId,
     );
+    if (result case Failure(:final failure)) {
+      throw failure;
+    }
   }
 
   @override
