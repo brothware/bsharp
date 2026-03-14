@@ -50,7 +50,7 @@
     "schoolIdHint": "z. B. sp1warszawa",
     "loginAs": "Anmelden als ${name}",
     "switchAccount": "Konto wechseln",
-    "demoMode": "Demo mode"
+    "demoMode": "Demomodus"
   },
   "setup": {
     "title": "Einrichtung",
@@ -95,7 +95,7 @@
     "title": "Stundenplan",
     "today": "Heute",
     "noLessons": "Kein Unterricht",
-    "browseDays": "Browse days",
+    "browseDays": "Tage durchblättern",
     "noLessonsSubtitle": "Für diesen Tag ist kein Unterricht geplant",
     "cancelled": "Entfallen",
     "substitution": "Vertretung",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Ursprünglich",
+    "originalTeacher": "Ursprüngliche Lehrkraft",
+    "viewList": "Listenansicht",
+    "viewTimeline": "Zeitachsenansicht",
+    "noEvents": "Keine Termine",
+    "noEventsSubtitle": "Für diesen Tag sind keine Termine geplant",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Eigener Termin",
+      "create": "Neuer Termin",
+      "edit": "Termin bearbeiten",
+      "eventTitle": "Titel",
+      "place": "Ort",
+      "description": "Beschreibung",
+      "color": "Farbe",
+      "startTime": "Startzeit",
+      "endTime": "Endzeit",
+      "recurrence": "Wiederholung",
+      "specificDates": "Bestimmte Daten",
+      "weekly": "Wöchentlich",
+      "addDate": "Datum hinzufügen",
+      "dateRange": "Zeitraum",
+      "from": "Von",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Wochentage",
+      "deleteConfirmTitle": "Termin löschen",
+      "deleteConfirmBody": "Möchten Sie diesen Termin wirklich löschen?",
+      "saved": "Termin gespeichert",
+      "deleted": "Termin gelöscht",
+      "titleRequired": "Titel ist erforderlich",
+      "endBeforeStart": "Die Endzeit muss nach der Startzeit liegen",
+      "noDatesSelected": "Wählen Sie mindestens ein Datum aus"
+    },
+    "replacement": "Vertretung"
   },
   "grades": {
     "title": "Noten",
@@ -195,7 +196,7 @@
     "grade(context=other)": "Noten",
     "other": "Sonstige",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "g${weight}"
   },
   "attendance": {
     "title": "Anwesenheit",
@@ -276,7 +277,9 @@
     "message(context=one)": "Nachricht",
     "message(context=other)": "Nachrichten",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "Download fehlgeschlagen",
+    "messageSent": "Nachricht gesendet",
+    "sendFailed": "Nachricht konnte nicht gesendet werden"
   },
   "settings": {
     "title": "Einstellungen",
@@ -324,7 +327,11 @@
     "syncSection": "Synchronisierung",
     "sync": "Synchronisieren",
     "syncing": "Synchronisiere...",
-    "languageSystem": "System"
+    "languageSystem": "System",
+    "batteryOptimization": "Akkuoptimierung",
+    "batteryUnrestricted": "Uneingeschränkt",
+    "batteryRestricted": "Eingeschränkt",
+    "batteryOptimizationSubtitle": "Der uneingeschränkte Modus verbessert die Zuverlässigkeit der Hintergrundsynchronisierung"
   },
   "childMode": {
     "title": "Kindermodus",
@@ -375,12 +382,12 @@
     "praise": "Lob",
     "teacherLabel": "Lehrkraft: ${name}",
     "dateLabel": "Datum: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Vermerke",
+    "infoTab": "Informationen",
+    "noRemarks": "Keine Vermerke",
+    "noInfo": "Keine Informationen",
+    "remark": "Vermerk",
+    "info": "Informationen"
   },
   "tests": {
     "title": "Prüfungen",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Letzte Änderungen",
     "noChanges": "Keine Änderungen",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Noten",
+    "attendanceTab": "Anwesenheit",
+    "gradeAdded": "Note hinzugefügt",
+    "gradeUpdated": "Note aktualisiert",
+    "gradeDeleted": "Note gelöscht",
+    "attendanceAdded": "Anwesenheit hinzugefügt",
+    "attendanceUpdated": "Anwesenheit aktualisiert",
+    "attendanceDeleted": "Anwesenheit gelöscht"
   },
   "translation": {
     "translate": "Übersetzen",
@@ -459,7 +466,14 @@
     "homeworkName": "Hausaufgaben",
     "homeworkDescription": "Benachrichtigungen über neue Hausaufgaben",
     "notesName": "Vermerke",
-    "notesDescription": "Benachrichtigungen über Vermerke und Lob"
+    "notesDescription": "Benachrichtigungen über Vermerke und Lob",
+    "newGrade": "Neue Note",
+    "scheduleChange": "Stundenplanänderung",
+    "attendanceUpdate": "Anwesenheitsänderung",
+    "newHomework": "Neue Hausaufgabe",
+    "newTest": "Neuer Test",
+    "newAnnotation": "Neuer Vermerk",
+    "newMessage": "Neue Nachricht"
   },
   "gradeNames": {
     "celujacy": "Ausgezeichnet",
@@ -529,7 +543,7 @@
     "referat": "Vortrag",
     "pracaKlasowa": "Klassenarbeit",
     "zadanie": "Aufgabe",
-    "test": "Test",
+    "test": "Klassenarbeit",
     "cwiczenie": "Übung",
     "recytacja": "Rezitation",
     "czytanie": "Lesen",
@@ -684,7 +698,7 @@
     "egzaminMuzyczny": "Musikprüfung",
     "egzaminDyplomowy": "Diplomprüfung",
     "popis": "Vorspiel",
-    "warsztaty": "Workshop",
+    "warsztaty": "Werkstatt",
     "koncert": "Konzert",
     "probaOrkiestry": "Orchesterprobe",
     "probaChoru": "Chorprobe",
@@ -730,14 +744,14 @@
     "newChanges": "Neu: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Entwickler unterstützen",
+    "subtitle": "Helfen Sie, BSharp kostenlos und gepflegt zu halten",
+    "badge": "Mit Liebe gemacht",
+    "tipJar": "Trinkgeldkasse",
+    "tipCoffee": "Kaffee",
+    "tipMeal": "Mahlzeit",
+    "purchaseSuccess": "Vielen Dank für Ihre Unterstützung!",
+    "purchaseFailed": "Kauf fehlgeschlagen, bitte erneut versuchen",
+    "productsUnavailable": "Trinkgelder sind derzeit nicht verfügbar"
   }
 }

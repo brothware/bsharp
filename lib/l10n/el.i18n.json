@@ -50,7 +50,7 @@
     "schoolIdHint": "π.χ. sp1warszawa",
     "loginAs": "Σύνδεση ως ${name}",
     "switchAccount": "Αλλαγή λογαριασμού",
-    "demoMode": "Demo mode"
+    "demoMode": "Λειτουργία επίδειξης"
   },
   "setup": {
     "title": "Ρύθμιση",
@@ -95,7 +95,7 @@
     "title": "Πρόγραμμα",
     "today": "Σήμερα",
     "noLessons": "Δεν υπάρχουν μαθήματα",
-    "browseDays": "Browse days",
+    "browseDays": "Περιήγηση ημερών",
     "noLessonsSubtitle": "Δεν υπάρχουν προγραμματισμένα μαθήματα για αυτή τη μέρα",
     "cancelled": "Ακυρωμένο",
     "substitution": "Αντικατάσταση",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Αρχικά",
+    "originalTeacher": "Αρχικός καθηγητής",
+    "viewList": "Προβολή λίστας",
+    "viewTimeline": "Χρονολογική προβολή",
+    "noEvents": "Δεν υπάρχουν γεγονότα",
+    "noEventsSubtitle": "Δεν υπάρχουν γεγονότα για αυτή τη μέρα",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Προσαρμοσμένο γεγονός",
+      "create": "Νέο γεγονός",
+      "edit": "Επεξεργασία γεγονότος",
+      "eventTitle": "Τίτλος",
+      "place": "Τοποθεσία",
+      "description": "Περιγραφή",
+      "color": "Χρώμα",
+      "startTime": "Ώρα έναρξης",
+      "endTime": "Ώρα λήξης",
+      "recurrence": "Επανάληψη",
+      "specificDates": "Συγκεκριμένες ημερομηνίες",
+      "weekly": "Εβδομαδιαία",
+      "addDate": "Προσθήκη ημερομηνίας",
+      "dateRange": "Εύρος ημερομηνιών",
+      "from": "Από",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Καθημερινές",
+      "deleteConfirmTitle": "Διαγραφή γεγονότος",
+      "deleteConfirmBody": "Σίγουρα θέλετε να διαγράψετε αυτό το γεγονός;",
+      "saved": "Το γεγονός αποθηκεύτηκε",
+      "deleted": "Το γεγονός διαγράφηκε",
+      "titleRequired": "Ο τίτλος είναι υποχρεωτικός",
+      "endBeforeStart": "Η ώρα λήξης πρέπει να είναι μετά την ώρα έναρξης",
+      "noDatesSelected": "Επιλέξτε τουλάχιστον μία ημερομηνία"
+    },
+    "replacement": "Αντικατάσταση"
   },
   "grades": {
     "title": "Βαθμοί",
@@ -195,7 +196,7 @@
     "grade(context=other)": "βαθμοί",
     "other": "Άλλο",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "β${weight}"
   },
   "attendance": {
     "title": "Παρουσίες",
@@ -276,7 +277,9 @@
     "message(context=one)": "μήνυμα",
     "message(context=other)": "μηνύματα",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "Η λήψη απέτυχε",
+    "messageSent": "Το μήνυμα εστάλη",
+    "sendFailed": "Αποτυχία αποστολής μηνύματος"
   },
   "settings": {
     "title": "Ρυθμίσεις",
@@ -324,7 +327,11 @@
     "syncSection": "Συγχρονισμός",
     "sync": "Συγχρονισμός",
     "syncing": "Συγχρονισμός...",
-    "languageSystem": "Συστήματος"
+    "languageSystem": "Συστήματος",
+    "batteryOptimization": "Βελτιστοποίηση μπαταρίας",
+    "batteryUnrestricted": "Χωρίς περιορισμούς",
+    "batteryRestricted": "Περιορισμένη",
+    "batteryOptimizationSubtitle": "Η λειτουργία χωρίς περιορισμούς βελτιώνει την αξιοπιστία του συγχρονισμού στο παρασκήνιο"
   },
   "childMode": {
     "title": "Λειτουργία παιδιού",
@@ -375,12 +382,12 @@
     "praise": "Έπαινος",
     "teacherLabel": "Καθηγητής: ${name}",
     "dateLabel": "Ημερομηνία: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Παρατηρήσεις",
+    "infoTab": "Πληροφορίες",
+    "noRemarks": "Δεν υπάρχουν παρατηρήσεις",
+    "noInfo": "Δεν υπάρχουν πληροφορίες",
+    "remark": "Παρατήρηση",
+    "info": "Πληροφορία"
   },
   "tests": {
     "title": "Διαγωνίσματα",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Πρόσφατες αλλαγές",
     "noChanges": "Δεν υπάρχουν αλλαγές",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Βαθμοί",
+    "attendanceTab": "Παρουσίες",
+    "gradeAdded": "Βαθμός προστέθηκε",
+    "gradeUpdated": "Βαθμός ενημερώθηκε",
+    "gradeDeleted": "Βαθμός διαγράφηκε",
+    "attendanceAdded": "Παρουσία προστέθηκε",
+    "attendanceUpdated": "Παρουσία ενημερώθηκε",
+    "attendanceDeleted": "Παρουσία διαγράφηκε"
   },
   "translation": {
     "translate": "Μετάφραση",
@@ -459,7 +466,14 @@
     "homeworkName": "Εργασίες",
     "homeworkDescription": "Ειδοποιήσεις για νέες εργασίες",
     "notesName": "Σημειώσεις",
-    "notesDescription": "Ειδοποιήσεις για σημειώσεις και επαίνους"
+    "notesDescription": "Ειδοποιήσεις για σημειώσεις και επαίνους",
+    "newGrade": "Νέος βαθμός",
+    "scheduleChange": "Αλλαγή προγράμματος",
+    "attendanceUpdate": "Ενημέρωση παρουσιών",
+    "newHomework": "Νέα εργασία",
+    "newTest": "Νέο διαγώνισμα",
+    "newAnnotation": "Νέα σημείωση",
+    "newMessage": "Νέο μήνυμα"
   },
   "gradeNames": {
     "celujacy": "Άριστα",
@@ -730,14 +744,14 @@
     "newChanges": "Νέο: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Υποστηρίξτε τον προγραμματιστή",
+    "subtitle": "Βοηθήστε το BSharp να παραμείνει δωρεάν και ενημερωμένο",
+    "badge": "Φτιαγμένο με αγάπη",
+    "tipJar": "Κουτί φιλοδωρημάτων",
+    "tipCoffee": "Καφές",
+    "tipMeal": "Γεύμα",
+    "purchaseSuccess": "Σας ευχαριστούμε για την υποστήριξή σας!",
+    "purchaseFailed": "Η αγορά απέτυχε, δοκιμάστε ξανά",
+    "productsUnavailable": "Τα φιλοδωρήματα δεν είναι διαθέσιμα αυτή τη στιγμή"
   }
 }

@@ -50,12 +50,12 @@
     "schoolIdHint": "f.eks. sp1warszawa",
     "loginAs": "Log ind som ${name}",
     "switchAccount": "Skift konto",
-    "demoMode": "Demo mode"
+    "demoMode": "Demotilstand"
   },
   "setup": {
     "title": "Opsætning",
     "schoolStep": "Skole",
-    "credentialsStep": "Login",
+    "credentialsStep": "Log ind",
     "studentStep": "Elev",
     "enterSchoolUrl": "Indtast skoleadresse",
     "enterSchoolUrlSubtitle": "Indtast skoleidentifikationen fra mobireg.pl",
@@ -95,7 +95,7 @@
     "title": "Skema",
     "today": "I dag",
     "noLessons": "Ingen lektioner",
-    "browseDays": "Browse days",
+    "browseDays": "Gennemse dage",
     "noLessonsSubtitle": "Ingen lektioner planlagt denne dag",
     "cancelled": "Aflyst",
     "substitution": "Vikar",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Oprindeligt",
+    "originalTeacher": "Oprindelig lærer",
+    "viewList": "Listevisning",
+    "viewTimeline": "Tidslinjevisning",
+    "noEvents": "Ingen begivenheder",
+    "noEventsSubtitle": "Ingen begivenheder planlagt for denne dag",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Tilpasset begivenhed",
+      "create": "Ny begivenhed",
+      "edit": "Rediger begivenhed",
+      "eventTitle": "Titel",
+      "place": "Sted",
+      "description": "Beskrivelse",
+      "color": "Farve",
+      "startTime": "Starttidspunkt",
+      "endTime": "Sluttidspunkt",
+      "recurrence": "Gentagelse",
+      "specificDates": "Bestemte datoer",
+      "weekly": "Ugentligt",
+      "addDate": "Tilføj dato",
+      "dateRange": "Datointerval",
+      "from": "Fra",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Hverdage",
+      "deleteConfirmTitle": "Slet begivenhed",
+      "deleteConfirmBody": "Er du sikker på, at du vil slette denne begivenhed?",
+      "saved": "Begivenhed gemt",
+      "deleted": "Begivenhed slettet",
+      "titleRequired": "Titel er påkrævet",
+      "endBeforeStart": "Sluttidspunktet skal være efter starttidspunktet",
+      "noDatesSelected": "Vælg mindst én dato"
+    },
+    "replacement": "Erstatning"
   },
   "grades": {
     "title": "Karakterer",
@@ -195,7 +196,7 @@
     "grade(context=other)": "karakterer",
     "other": "Andet",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "v${weight}"
   },
   "attendance": {
     "title": "Fremmøde",
@@ -275,8 +276,10 @@
     "deleted": "Slettet: ${title}",
     "message(context=one)": "besked",
     "message(context=other)": "beskeder",
-    "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "replyPrefix": "Sv: ${title}",
+    "downloadFailed": "Download mislykkedes",
+    "messageSent": "Besked sendt",
+    "sendFailed": "Kunne ikke sende besked"
   },
   "settings": {
     "title": "Indstillinger",
@@ -324,7 +327,11 @@
     "syncSection": "Synkronisering",
     "sync": "Synkroniser",
     "syncing": "Synkroniserer...",
-    "languageSystem": "System"
+    "languageSystem": "System",
+    "batteryOptimization": "Batterioptimering",
+    "batteryUnrestricted": "Ubegrænset",
+    "batteryRestricted": "Begrænset",
+    "batteryOptimizationSubtitle": "Ubegrænset tilstand forbedrer pålideligheden af baggrundssynkronisering"
   },
   "childMode": {
     "title": "Børnetilstand",
@@ -375,11 +382,11 @@
     "praise": "Ros",
     "teacherLabel": "Lærer: ${name}",
     "dateLabel": "Dato: ${date}",
-    "remarksTab": "Remarks",
+    "remarksTab": "Bemærkninger",
     "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
+    "noRemarks": "Ingen bemærkninger",
+    "noInfo": "Ingen information",
+    "remark": "Bemærkning",
     "info": "Information"
   },
   "tests": {
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Seneste ændringer",
     "noChanges": "Ingen ændringer",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Karakterer",
+    "attendanceTab": "Fremmøde",
+    "gradeAdded": "Karakter tilføjet",
+    "gradeUpdated": "Karakter opdateret",
+    "gradeDeleted": "Karakter slettet",
+    "attendanceAdded": "Fremmøde tilføjet",
+    "attendanceUpdated": "Fremmøde opdateret",
+    "attendanceDeleted": "Fremmøde slettet"
   },
   "translation": {
     "translate": "Oversæt",
@@ -459,7 +466,14 @@
     "homeworkName": "Lektier",
     "homeworkDescription": "Notifikationer om nye lektier",
     "notesName": "Noter",
-    "notesDescription": "Notifikationer om noter og ros"
+    "notesDescription": "Notifikationer om noter og ros",
+    "newGrade": "Ny karakter",
+    "scheduleChange": "Skemaændring",
+    "attendanceUpdate": "Fremmødeændring",
+    "newHomework": "Nyt hjemmearbejde",
+    "newTest": "Ny prøve",
+    "newAnnotation": "Ny bemærkning",
+    "newMessage": "Ny besked"
   },
   "gradeNames": {
     "celujacy": "Fremragende",
@@ -529,7 +543,7 @@
     "referat": "Præsentation",
     "pracaKlasowa": "Klassearbejde",
     "zadanie": "Opgave",
-    "test": "Test",
+    "test": "Prøve",
     "cwiczenie": "Øvelse",
     "recytacja": "Recitation",
     "czytanie": "Læsning",
@@ -730,14 +744,14 @@
     "newChanges": "Nye: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Støt udvikleren",
+    "subtitle": "Hjælp med at holde BSharp gratis",
+    "badge": "Lavet med kærlighed",
+    "tipJar": "Drikkepenge",
+    "tipCoffee": "Kaffe",
+    "tipMeal": "Måltid",
+    "purchaseSuccess": "Tak for din støtte!",
+    "purchaseFailed": "Køb mislykkedes, prøv igen",
+    "productsUnavailable": "Tips er ikke tilgængelige"
   }
 }

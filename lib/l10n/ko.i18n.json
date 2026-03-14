@@ -50,7 +50,7 @@
     "schoolIdHint": "예: sp1warszawa",
     "loginAs": "${name}(으)로 로그인",
     "switchAccount": "계정 전환",
-    "demoMode": "Demo mode"
+    "demoMode": "데모 모드"
   },
   "setup": {
     "title": "설정",
@@ -95,7 +95,7 @@
     "title": "시간표",
     "today": "오늘",
     "noLessons": "수업 없음",
-    "browseDays": "Browse days",
+    "browseDays": "날짜 탐색",
     "noLessonsSubtitle": "이 날에는 수업이 없습니다",
     "cancelled": "취소됨",
     "substitution": "대체 수업",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "원래 과목",
+    "originalTeacher": "원래 교사",
+    "viewList": "목록 보기",
+    "viewTimeline": "타임라인 보기",
+    "noEvents": "일정 없음",
+    "noEventsSubtitle": "이 날에는 일정이 없습니다",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "사용자 정의 일정",
+      "create": "새 일정",
+      "edit": "일정 편집",
+      "eventTitle": "제목",
+      "place": "장소",
+      "description": "설명",
+      "color": "색상",
+      "startTime": "시작 시간",
+      "endTime": "종료 시간",
+      "recurrence": "반복",
+      "specificDates": "특정 날짜",
+      "weekly": "매주",
+      "addDate": "날짜 추가",
+      "dateRange": "날짜 범위",
+      "from": "시작",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "요일",
+      "deleteConfirmTitle": "일정 삭제",
+      "deleteConfirmBody": "이 일정을 삭제하시겠습니까?",
+      "saved": "일정이 저장되었습니다",
+      "deleted": "일정이 삭제되었습니다",
+      "titleRequired": "제목은 필수입니다",
+      "endBeforeStart": "종료 시간은 시작 시간 이후여야 합니다",
+      "noDatesSelected": "날짜를 하나 이상 선택하세요"
+    },
+    "replacement": "대체"
   },
   "grades": {
     "title": "성적",
@@ -276,7 +277,9 @@
     "message(context=one)": "메시지",
     "message(context=other)": "메시지",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "다운로드 실패",
+    "messageSent": "메시지 전송됨",
+    "sendFailed": "메시지 전송 실패"
   },
   "settings": {
     "title": "설정",
@@ -324,7 +327,11 @@
     "syncSection": "동기화",
     "sync": "동기화",
     "syncing": "동기화 중...",
-    "languageSystem": "시스템"
+    "languageSystem": "시스템",
+    "batteryOptimization": "배터리 최적화",
+    "batteryUnrestricted": "무제한",
+    "batteryRestricted": "제한됨",
+    "batteryOptimizationSubtitle": "무제한 모드는 백그라운드 동기화의 안정성을 향상시킵니다"
   },
   "childMode": {
     "title": "자녀 모드",
@@ -375,12 +382,12 @@
     "praise": "칭찬",
     "teacherLabel": "교사: ${name}",
     "dateLabel": "날짜: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "주의",
+    "infoTab": "정보",
+    "noRemarks": "주의 없음",
+    "noInfo": "정보 없음",
+    "remark": "주의",
+    "info": "정보"
   },
   "tests": {
     "title": "시험",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "최근 변경사항",
     "noChanges": "변경사항 없음",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "성적",
+    "attendanceTab": "출결",
+    "gradeAdded": "성적 추가",
+    "gradeUpdated": "성적 수정",
+    "gradeDeleted": "성적 삭제",
+    "attendanceAdded": "출결 추가",
+    "attendanceUpdated": "출결 수정",
+    "attendanceDeleted": "출결 삭제"
   },
   "translation": {
     "translate": "번역",
@@ -459,7 +466,14 @@
     "homeworkName": "숙제",
     "homeworkDescription": "새 숙제 알림",
     "notesName": "평가",
-    "notesDescription": "평가 및 칭찬 알림"
+    "notesDescription": "평가 및 칭찬 알림",
+    "newGrade": "새 성적",
+    "scheduleChange": "시간표 변경",
+    "attendanceUpdate": "출석 변경",
+    "newHomework": "새 숙제",
+    "newTest": "새 시험",
+    "newAnnotation": "새 메모",
+    "newMessage": "새 메시지"
   },
   "gradeNames": {
     "celujacy": "우수",
@@ -730,14 +744,14 @@
     "newChanges": "새 항목: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "개발자 후원",
+    "subtitle": "BSharp을 무료로 유지할 수 있도록 도와주세요",
+    "badge": "사랑을 담아",
+    "tipJar": "후원함",
+    "tipCoffee": "커피",
+    "tipMeal": "식사",
+    "purchaseSuccess": "후원해 주셔서 감사합니다!",
+    "purchaseFailed": "구매에 실패했습니다. 다시 시도하세요",
+    "productsUnavailable": "현재 후원을 이용할 수 없습니다"
   }
 }

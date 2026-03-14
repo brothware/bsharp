@@ -50,7 +50,7 @@
     "schoolIdHint": "m.sh. sp1warszawa",
     "loginAs": "Logail isteach mar ${name}",
     "switchAccount": "Athraigh cuntas",
-    "demoMode": "Demo mode"
+    "demoMode": "Mód taispeána"
   },
   "setup": {
     "title": "Socruithe",
@@ -95,7 +95,7 @@
     "title": "Amhclar",
     "today": "Inniu",
     "noLessons": "Gan ceachtanna",
-    "browseDays": "Browse days",
+    "browseDays": "Brabhsail laethanta",
     "noLessonsSubtitle": "Nil ceachtanna beartaithe don la seo",
     "cancelled": "Curtha ar ceal",
     "substitution": "Ionadaiocht",
@@ -144,38 +144,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "O thus",
+    "originalTeacher": "Muinteoir bunaidh",
+    "viewList": "Amharc liosta",
+    "viewTimeline": "Amharc amlaine",
+    "noEvents": "Gan imeachtai",
+    "noEventsSubtitle": "Nil aon imeacht beartaithe don la seo",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Imeacht saincheaptha",
+      "create": "Imeacht nua",
+      "edit": "Cuir imeacht in eagar",
+      "eventTitle": "Teideal",
+      "place": "Ait",
+      "description": "Cur sios",
+      "color": "Dath",
+      "startTime": "Am tosaigh",
+      "endTime": "Am deiridh",
+      "recurrence": "Atharluithe",
+      "specificDates": "Datai sainiula",
+      "weekly": "Go seachtainiuil",
+      "addDate": "Cuir data leis",
+      "dateRange": "Raon datai",
+      "from": "O",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Laethanta na seachtaine",
+      "deleteConfirmTitle": "Scrios imeacht",
+      "deleteConfirmBody": "An bhfuil tu cinnte gur mian leat an t-imeacht seo a scriosadh?",
+      "saved": "Imeacht sabhailte",
+      "deleted": "Imeacht scriosta",
+      "titleRequired": "Ta teideal riachtanach",
+      "endBeforeStart": "Caithfidh an t-am deiridh a bheith tar eis an ama tosaigh",
+      "noDatesSelected": "Roghnaigh data amhain ar a laghad"
+    },
+    "replacement": "Ionadaíocht"
   },
   "grades": {
     "title": "Gradaim",
@@ -201,7 +202,7 @@
     "grade(context=other)": "gradam",
     "other": "Eile",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "u${weight}"
   },
   "attendance": {
     "title": "Tinreamh",
@@ -284,8 +285,10 @@
     "message(context=few)": "theachtaireacht",
     "message(context=many)": "dteachtaireacht",
     "message(context=other)": "teachtaireacht",
-    "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "replyPrefix": "Ath: ${title}",
+    "downloadFailed": "Theip ar an íoslódáil",
+    "messageSent": "Teachtaireacht seolta",
+    "sendFailed": "Theip ar sheoladh na teachtaireachta"
   },
   "settings": {
     "title": "Socruithe",
@@ -333,7 +336,11 @@
     "syncSection": "Sioncronu",
     "sync": "Sioncronaigh",
     "syncing": "Ag sioncronu...",
-    "languageSystem": "Corais"
+    "languageSystem": "Corais",
+    "batteryOptimization": "Optamú ceallraí",
+    "batteryUnrestricted": "Neamhshrianta",
+    "batteryRestricted": "Srianta",
+    "batteryOptimizationSubtitle": "Feabhsaíonn an mód neamhshrianta iontaofacht na sioncrónaithe cúlra"
   },
   "childMode": {
     "title": "Mod paiste",
@@ -384,12 +391,12 @@
     "praise": "Moladh",
     "teacherLabel": "Muinteoir: ${name}",
     "dateLabel": "Data: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Notai trachta",
+    "infoTab": "Eolas",
+    "noRemarks": "Gan notai trachta",
+    "noInfo": "Gan eolas",
+    "remark": "Nota trachta",
+    "info": "Eolas"
   },
   "tests": {
     "title": "Scruduithe",
@@ -405,14 +412,14 @@
   "changelog": {
     "title": "Athruithne le deireanas",
     "noChanges": "Gan athruithne",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Gradaim",
+    "attendanceTab": "Tinreamh",
+    "gradeAdded": "Gradam curtha leis",
+    "gradeUpdated": "Gradam nuashonraithe",
+    "gradeDeleted": "Gradam scriosta",
+    "attendanceAdded": "Tinreamh curtha leis",
+    "attendanceUpdated": "Tinreamh nuashonraithe",
+    "attendanceDeleted": "Tinreamh scriosta"
   },
   "translation": {
     "translate": "Aistrigh",
@@ -468,7 +475,14 @@
     "homeworkName": "Obair bhaile",
     "homeworkDescription": "Folaiseachtai faoi obair bhaile nua",
     "notesName": "Notai",
-    "notesDescription": "Folaiseachtai faoi notai agus moladh"
+    "notesDescription": "Folaiseachtai faoi notai agus moladh",
+    "newGrade": "Grád nua",
+    "scheduleChange": "Athrú amchláir",
+    "attendanceUpdate": "Athrú tinrimh",
+    "newHomework": "Obair bhaile nua",
+    "newTest": "Scrúdú nua",
+    "newAnnotation": "Nóta nua",
+    "newMessage": "Teachtaireacht nua"
   },
   "gradeNames": {
     "celujacy": "Ar fheabhas",
@@ -585,7 +599,7 @@
     "jezyk": "Teanga",
     "fortepian": "Pianno",
     "skrzypce": "Fidil",
-    "altowka": "Viola",
+    "altowka": "Viol",
     "wiolonczela": "Dord-fhidil",
     "kontrabas": "Ollfhidil",
     "gitara": "Giotar",
@@ -739,14 +753,14 @@
     "newChanges": "Nua: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Tacaigh leis an bhforboir",
+    "subtitle": "Cabhraigh le BSharp a choinneail saor agus cothabailte",
+    "badge": "Deanta le gra",
+    "tipJar": "Sineadh laimhe",
+    "tipCoffee": "Caife",
+    "tipMeal": "Beia",
+    "purchaseSuccess": "Go raibh maith agat as do thacaiocht!",
+    "purchaseFailed": "Theip ar an gceannach, bain triail eile as",
+    "productsUnavailable": "Nil sineadh laimhe ar fail faoi lathair"
   }
 }

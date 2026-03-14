@@ -50,7 +50,7 @@
     "schoolIdHint": "örn. sp1warszawa",
     "loginAs": "${name} olarak giriş yap",
     "switchAccount": "Hesap değiştir",
-    "demoMode": "Demo mode"
+    "demoMode": "Demo modu"
   },
   "setup": {
     "title": "Kurulum",
@@ -95,7 +95,7 @@
     "title": "Ders Programı",
     "today": "Bugün",
     "noLessons": "Ders yok",
-    "browseDays": "Browse days",
+    "browseDays": "Günlere göz at",
     "noLessonsSubtitle": "Bu gün için planlanmış ders yok",
     "cancelled": "İptal edildi",
     "substitution": "Vekâlet",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Orijinal ders",
+    "originalTeacher": "Orijinal öğretmen",
+    "viewList": "Liste görünümü",
+    "viewTimeline": "Zaman çizelgesi",
+    "noEvents": "Etkinlik yok",
+    "noEventsSubtitle": "Bu gün için planlanmış etkinlik yok",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Özel etkinlik",
+      "create": "Yeni etkinlik",
+      "edit": "Etkinliği düzenle",
+      "eventTitle": "Başlık",
+      "place": "Yer",
+      "description": "Açıklama",
+      "color": "Renk",
+      "startTime": "Başlangıç saati",
+      "endTime": "Bitiş saati",
+      "recurrence": "Tekrarlama",
+      "specificDates": "Belirli tarihler",
+      "weekly": "Haftalık",
+      "addDate": "Tarih ekle",
+      "dateRange": "Tarih aralığı",
+      "from": "Başlangıç",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Hafta içi",
+      "deleteConfirmTitle": "Etkinliği sil",
+      "deleteConfirmBody": "Bu etkinliği silmek istediğinizden emin misiniz?",
+      "saved": "Etkinlik kaydedildi",
+      "deleted": "Etkinlik silindi",
+      "titleRequired": "Başlık gerekli",
+      "endBeforeStart": "Bitiş saati başlangıç saatinden sonra olmalıdır",
+      "noDatesSelected": "En az bir tarih seçin"
+    },
+    "replacement": "Değişiklik"
   },
   "grades": {
     "title": "Notlar",
@@ -195,7 +196,7 @@
     "grade(context=other)": "not",
     "other": "Diğer",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "a${weight}"
   },
   "attendance": {
     "title": "Devamsızlık",
@@ -275,8 +276,10 @@
     "deleted": "Silindi: ${title}",
     "message(context=one)": "mesaj",
     "message(context=other)": "mesaj",
-    "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "replyPrefix": "Ynt: ${title}",
+    "downloadFailed": "İndirme başarısız",
+    "messageSent": "Mesaj gönderildi",
+    "sendFailed": "Mesaj gönderilemedi"
   },
   "settings": {
     "title": "Ayarlar",
@@ -324,7 +327,11 @@
     "syncSection": "Senkronizasyon",
     "sync": "Senkronize et",
     "syncing": "Senkronize ediliyor...",
-    "languageSystem": "Sistem"
+    "languageSystem": "Sistem",
+    "batteryOptimization": "Pil optimizasyonu",
+    "batteryUnrestricted": "Kısıtlamasız",
+    "batteryRestricted": "Kısıtlı",
+    "batteryOptimizationSubtitle": "Kısıtlamasız mod arka plan senkronizasyonunun güvenilirliğini artırır"
   },
   "childMode": {
     "title": "Çocuk modu",
@@ -375,12 +382,12 @@
     "praise": "Övgü",
     "teacherLabel": "Öğretmen: ${name}",
     "dateLabel": "Tarih: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Uyarılar",
+    "infoTab": "Bilgi",
+    "noRemarks": "Uyarı yok",
+    "noInfo": "Bilgi yok",
+    "remark": "Uyarı",
+    "info": "Bilgi"
   },
   "tests": {
     "title": "Sınavlar",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Son değişiklikler",
     "noChanges": "Değişiklik yok",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Notlar",
+    "attendanceTab": "Devamsızlık",
+    "gradeAdded": "Not eklendi",
+    "gradeUpdated": "Not güncellendi",
+    "gradeDeleted": "Not silindi",
+    "attendanceAdded": "Devamsızlık eklendi",
+    "attendanceUpdated": "Devamsızlık güncellendi",
+    "attendanceDeleted": "Devamsızlık silindi"
   },
   "translation": {
     "translate": "Çevir",
@@ -459,7 +466,14 @@
     "homeworkName": "Ödevler",
     "homeworkDescription": "Yeni ödevler hakkında bildirimler",
     "notesName": "Uyarılar",
-    "notesDescription": "Uyarılar ve övgüler hakkında bildirimler"
+    "notesDescription": "Uyarılar ve övgüler hakkında bildirimler",
+    "newGrade": "Yeni not",
+    "scheduleChange": "Ders programı değişikliği",
+    "attendanceUpdate": "Devamsızlık değişikliği",
+    "newHomework": "Yeni ödev",
+    "newTest": "Yeni sınav",
+    "newAnnotation": "Yeni açıklama",
+    "newMessage": "Yeni mesaj"
   },
   "gradeNames": {
     "celujacy": "Mükemmel",
@@ -529,7 +543,7 @@
     "referat": "Sunum",
     "pracaKlasowa": "Sınıf çalışması",
     "zadanie": "Ödev",
-    "test": "Test",
+    "test": "Sınav",
     "cwiczenie": "Alıştırma",
     "recytacja": "Ezber okuma",
     "czytanie": "Okuma",
@@ -730,14 +744,14 @@
     "newChanges": "Yeni: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Geliştiriciye destek ol",
+    "subtitle": "BSharp'ın ücretsiz ve güncel kalmasına yardım edin",
+    "badge": "Sevgiyle yapıldı",
+    "tipJar": "Bahşiş kutusu",
+    "tipCoffee": "Kahve",
+    "tipMeal": "Yemek",
+    "purchaseSuccess": "Desteğiniz için teşekkürler!",
+    "purchaseFailed": "Satın alma başarısız oldu, lütfen tekrar deneyin",
+    "productsUnavailable": "Bahşişler şu anda mevcut değil"
   }
 }

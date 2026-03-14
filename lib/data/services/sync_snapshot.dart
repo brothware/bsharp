@@ -4,6 +4,7 @@ import 'package:bsharp/data/services/sync_data_parser.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SyncSnapshot {
@@ -64,7 +65,7 @@ class SyncSnapshot {
       changes.add(
         ChangeItem(
           category: ChangeCategory.grades,
-          title: 'New grade',
+          title: t.notification.newGrade,
           entityId: id,
         ),
       );
@@ -74,7 +75,7 @@ class SyncSnapshot {
       changes.add(
         ChangeItem(
           category: ChangeCategory.schedule,
-          title: 'Schedule change',
+          title: t.notification.scheduleChange,
           entityId: id,
         ),
       );
@@ -84,7 +85,7 @@ class SyncSnapshot {
       changes.add(
         ChangeItem(
           category: ChangeCategory.attendance,
-          title: 'Attendance update',
+          title: t.notification.attendanceUpdate,
           entityId: id,
         ),
       );
@@ -94,7 +95,7 @@ class SyncSnapshot {
       changes.add(
         ChangeItem(
           category: ChangeCategory.homework,
-          title: 'New homework',
+          title: t.notification.newHomework,
           entityId: id,
         ),
       );
@@ -104,7 +105,7 @@ class SyncSnapshot {
       changes.add(
         ChangeItem(
           category: ChangeCategory.homework,
-          title: 'New test',
+          title: t.notification.newTest,
           entityId: id,
         ),
       );
@@ -114,7 +115,7 @@ class SyncSnapshot {
       changes.add(
         ChangeItem(
           category: ChangeCategory.notes,
-          title: 'New note',
+          title: t.notification.newAnnotation,
           entityId: id,
         ),
       );
@@ -124,7 +125,7 @@ class SyncSnapshot {
       changes.add(
         ChangeItem(
           category: ChangeCategory.messages,
-          title: 'New message',
+          title: t.notification.newMessage,
           entityId: id,
         ),
       );

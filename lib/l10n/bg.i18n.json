@@ -50,7 +50,7 @@
     "schoolIdHint": "напр. sp1warszawa",
     "loginAs": "Влизане като ${name}",
     "switchAccount": "Смяна на акаунт",
-    "demoMode": "Demo mode"
+    "demoMode": "Демо режим"
   },
   "setup": {
     "title": "Настройка",
@@ -95,7 +95,7 @@
     "title": "Разписание",
     "today": "Днес",
     "noLessons": "Няма часове",
-    "browseDays": "Browse days",
+    "browseDays": "Преглед на дни",
     "noLessonsSubtitle": "Няма планирани часове за този ден",
     "cancelled": "Отменен",
     "substitution": "Заместване",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Първоначално",
+    "originalTeacher": "Първоначален учител",
+    "viewList": "Списък",
+    "viewTimeline": "Времева линия",
+    "noEvents": "Няма събития",
+    "noEventsSubtitle": "Няма планирани събития за този ден",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Потребителско събитие",
+      "create": "Ново събитие",
+      "edit": "Редактиране на събитие",
+      "eventTitle": "Заглавие",
+      "place": "Място",
+      "description": "Описание",
+      "color": "Цвят",
+      "startTime": "Начален час",
+      "endTime": "Краен час",
+      "recurrence": "Повторение",
+      "specificDates": "Конкретни дати",
+      "weekly": "Седмично",
+      "addDate": "Добави дата",
+      "dateRange": "Период",
+      "from": "От",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Делнични дни",
+      "deleteConfirmTitle": "Изтриване на събитие",
+      "deleteConfirmBody": "Сигурни ли сте, че искате да изтриете това събитие?",
+      "saved": "Събитието е запазено",
+      "deleted": "Събитието е изтрито",
+      "titleRequired": "Заглавието е задължително",
+      "endBeforeStart": "Крайният час трябва да е след началния",
+      "noDatesSelected": "Изберете поне една дата"
+    },
+    "replacement": "Замяна"
   },
   "grades": {
     "title": "Оценки",
@@ -195,7 +196,7 @@
     "grade(context=other)": "оценки",
     "other": "Други",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "т${weight}"
   },
   "attendance": {
     "title": "Присъствия",
@@ -276,7 +277,9 @@
     "message(context=one)": "съобщение",
     "message(context=other)": "съобщения",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "Изтеглянето не успя",
+    "messageSent": "Съобщението е изпратено",
+    "sendFailed": "Неуспешно изпращане на съобщение"
   },
   "settings": {
     "title": "Настройки",
@@ -324,7 +327,11 @@
     "syncSection": "Синхронизация",
     "sync": "Синхронизация",
     "syncing": "Синхронизация...",
-    "languageSystem": "Системен"
+    "languageSystem": "Системен",
+    "batteryOptimization": "Оптимизация на батерията",
+    "batteryUnrestricted": "Неограничен",
+    "batteryRestricted": "Ограничен",
+    "batteryOptimizationSubtitle": "Неограниченият режим подобрява надеждността на фоновата синхронизация"
   },
   "childMode": {
     "title": "Детски режим",
@@ -375,12 +382,12 @@
     "praise": "Похвала",
     "teacherLabel": "Учител: ${name}",
     "dateLabel": "Дата: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Забележки",
+    "infoTab": "Информация",
+    "noRemarks": "Няма забележки",
+    "noInfo": "Няма информация",
+    "remark": "Забележка",
+    "info": "Информация"
   },
   "tests": {
     "title": "Контролни",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Последни промени",
     "noChanges": "Няма промени",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Оценки",
+    "attendanceTab": "Присъствие",
+    "gradeAdded": "Оценка добавена",
+    "gradeUpdated": "Оценка обновена",
+    "gradeDeleted": "Оценка изтрита",
+    "attendanceAdded": "Присъствие добавено",
+    "attendanceUpdated": "Присъствие обновено",
+    "attendanceDeleted": "Присъствие изтрито"
   },
   "translation": {
     "translate": "Превод",
@@ -459,7 +466,14 @@
     "homeworkName": "Домашни работи",
     "homeworkDescription": "Известия за нови домашни работи",
     "notesName": "Бележки",
-    "notesDescription": "Известия за бележки и похвали"
+    "notesDescription": "Известия за бележки и похвали",
+    "newGrade": "Нова оценка",
+    "scheduleChange": "Промяна в разписанието",
+    "attendanceUpdate": "Промяна в присъствието",
+    "newHomework": "Ново домашно",
+    "newTest": "Нов тест",
+    "newAnnotation": "Нова анотация",
+    "newMessage": "Ново съобщение"
   },
   "gradeNames": {
     "celujacy": "Отличен",
@@ -615,7 +629,7 @@
     "biznesIZarzadzanie": "Бизнес и управление",
     "czytanieNutGlosem": "Четене на ноти с глас",
     "dyrygentura": "Дирижиране",
-    "earlyStage": "Early stage",
+    "earlyStage": "Начален етап",
     "edukacjaArtystyczna": "Художествено възпитание",
     "edukacjaMatematyczna": "Математическо образование",
     "edukacjaObywatelska": "Гражданско възпитание",
@@ -730,14 +744,14 @@
     "newChanges": "Нови: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Подкрепете разработчика",
+    "subtitle": "Помогнете BSharp да остане безплатен",
+    "badge": "Направено с любов",
+    "tipJar": "Бакшиш",
+    "tipCoffee": "Кафе",
+    "tipMeal": "Обяд",
+    "purchaseSuccess": "Благодарим за подкрепата!",
+    "purchaseFailed": "Покупката не успя, опитайте отново",
+    "productsUnavailable": "Бакшишите не са налични"
   }
 }

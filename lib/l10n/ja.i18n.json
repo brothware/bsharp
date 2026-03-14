@@ -50,7 +50,7 @@
     "schoolIdHint": "例: sp1warszawa",
     "loginAs": "${name}としてログイン",
     "switchAccount": "アカウント切替",
-    "demoMode": "Demo mode"
+    "demoMode": "デモモード"
   },
   "setup": {
     "title": "セットアップ",
@@ -95,7 +95,7 @@
     "title": "時間割",
     "today": "今日",
     "noLessons": "授業なし",
-    "browseDays": "Browse days",
+    "browseDays": "日付を選ぶ",
     "noLessonsSubtitle": "この日は授業の予定がありません",
     "cancelled": "休講",
     "substitution": "代替授業",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "元の科目",
+    "originalTeacher": "元の教師",
+    "viewList": "リスト表示",
+    "viewTimeline": "タイムライン表示",
+    "noEvents": "イベントなし",
+    "noEventsSubtitle": "この日に予定されているイベントはありません",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "カスタムイベント",
+      "create": "新規イベント",
+      "edit": "イベント編集",
+      "eventTitle": "タイトル",
+      "place": "場所",
+      "description": "説明",
+      "color": "色",
+      "startTime": "開始時間",
+      "endTime": "終了時間",
+      "recurrence": "繰り返し",
+      "specificDates": "特定の日付",
+      "weekly": "毎週",
+      "addDate": "日付を追加",
+      "dateRange": "日付範囲",
+      "from": "開始",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "曜日",
+      "deleteConfirmTitle": "イベント削除",
+      "deleteConfirmBody": "このイベントを削除してもよろしいですか？",
+      "saved": "イベントを保存しました",
+      "deleted": "イベントを削除しました",
+      "titleRequired": "タイトルは必須です",
+      "endBeforeStart": "終了時間は開始時間より後にしてください",
+      "noDatesSelected": "日付を1つ以上選択してください"
+    },
+    "replacement": "代替"
   },
   "grades": {
     "title": "成績",
@@ -276,7 +277,9 @@
     "message(context=one)": "件のメッセージ",
     "message(context=other)": "件のメッセージ",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "ダウンロードに失敗しました",
+    "messageSent": "メッセージを送信しました",
+    "sendFailed": "メッセージの送信に失敗しました"
   },
   "settings": {
     "title": "設定",
@@ -324,7 +327,11 @@
     "syncSection": "同期",
     "sync": "同期",
     "syncing": "同期中...",
-    "languageSystem": "システム"
+    "languageSystem": "システム",
+    "batteryOptimization": "バッテリー最適化",
+    "batteryUnrestricted": "無制限",
+    "batteryRestricted": "制限あり",
+    "batteryOptimizationSubtitle": "無制限モードはバックグラウンド同期の信頼性を向上させます"
   },
   "childMode": {
     "title": "子どもモード",
@@ -375,12 +382,12 @@
     "praise": "賞賛",
     "teacherLabel": "教師: ${name}",
     "dateLabel": "日付: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "注意",
+    "infoTab": "情報",
+    "noRemarks": "注意なし",
+    "noInfo": "情報なし",
+    "remark": "注意",
+    "info": "情報"
   },
   "tests": {
     "title": "テスト",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "最近の変更",
     "noChanges": "変更なし",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "成績",
+    "attendanceTab": "出欠",
+    "gradeAdded": "成績追加",
+    "gradeUpdated": "成績更新",
+    "gradeDeleted": "成績削除",
+    "attendanceAdded": "出欠追加",
+    "attendanceUpdated": "出欠更新",
+    "attendanceDeleted": "出欠削除"
   },
   "translation": {
     "translate": "翻訳",
@@ -459,7 +466,14 @@
     "homeworkName": "宿題",
     "homeworkDescription": "新しい宿題の通知",
     "notesName": "所見",
-    "notesDescription": "所見と賞賛の通知"
+    "notesDescription": "所見と賞賛の通知",
+    "newGrade": "新しい成績",
+    "scheduleChange": "時間割の変更",
+    "attendanceUpdate": "出席の変更",
+    "newHomework": "新しい宿題",
+    "newTest": "新しいテスト",
+    "newAnnotation": "新しい注釈",
+    "newMessage": "新しいメッセージ"
   },
   "gradeNames": {
     "celujacy": "秀",
@@ -730,14 +744,14 @@
     "newChanges": "新規: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "開発者を支援",
+    "subtitle": "BSharpを無料で維持するためにご協力ください",
+    "badge": "愛を込めて",
+    "tipJar": "チップ",
+    "tipCoffee": "コーヒー",
+    "tipMeal": "食事",
+    "purchaseSuccess": "ご支援ありがとうございます！",
+    "purchaseFailed": "購入に失敗しました。もう一度お試しください",
+    "productsUnavailable": "チップは現在利用できません"
   }
 }

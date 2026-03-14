@@ -50,7 +50,7 @@
     "schoolIdHint": "např. sp1warszawa",
     "loginAs": "Přihlásit se jako ${name}",
     "switchAccount": "Přepnout účet",
-    "demoMode": "Demo mode"
+    "demoMode": "Demo režim"
   },
   "setup": {
     "title": "Nastavení",
@@ -95,7 +95,7 @@
     "title": "Rozvrh",
     "today": "Dnes",
     "noLessons": "Žádné hodiny",
-    "browseDays": "Browse days",
+    "browseDays": "Procházet dny",
     "noLessonsSubtitle": "Na tento den nejsou naplánovány žádné hodiny",
     "cancelled": "Zrušeno",
     "substitution": "Suplování",
@@ -142,38 +142,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Původně",
+    "originalTeacher": "Původní učitel",
+    "viewList": "Seznam",
+    "viewTimeline": "Časová osa",
+    "noEvents": "Žádné události",
+    "noEventsSubtitle": "Na tento den nejsou plánovány žádné události",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Vlastní událost",
+      "create": "Nová událost",
+      "edit": "Upravit událost",
+      "eventTitle": "Název",
+      "place": "Místo",
+      "description": "Popis",
+      "color": "Barva",
+      "startTime": "Čas začátku",
+      "endTime": "Čas konce",
+      "recurrence": "Opakování",
+      "specificDates": "Konkrétní data",
+      "weekly": "Týdně",
+      "addDate": "Přidat datum",
+      "dateRange": "Rozsah dat",
+      "from": "Od",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Pracovní dny",
+      "deleteConfirmTitle": "Smazat událost",
+      "deleteConfirmBody": "Opravdu chcete smazat tuto událost?",
+      "saved": "Událost uložena",
+      "deleted": "Událost smazána",
+      "titleRequired": "Název je povinný",
+      "endBeforeStart": "Čas konce musí být po čase začátku",
+      "noDatesSelected": "Vyberte alespoň jedno datum"
+    },
+    "replacement": "Náhrada"
   },
   "grades": {
     "title": "Známky",
@@ -197,7 +198,7 @@
     "grade(context=other)": "známek",
     "other": "Ostatní",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "v${weight}"
   },
   "attendance": {
     "title": "Docházka",
@@ -279,7 +280,9 @@
     "message(context=few)": "zprávy",
     "message(context=other)": "zpráv",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "Stažení se nezdařilo",
+    "messageSent": "Zpráva odeslána",
+    "sendFailed": "Nepodařilo se odeslat zprávu"
   },
   "settings": {
     "title": "Nastavení",
@@ -327,7 +330,11 @@
     "syncSection": "Synchronizace",
     "sync": "Synchronizovat",
     "syncing": "Synchronizace...",
-    "languageSystem": "Systémový"
+    "languageSystem": "Systémový",
+    "batteryOptimization": "Optimalizace baterie",
+    "batteryUnrestricted": "Bez omezení",
+    "batteryRestricted": "Omezeno",
+    "batteryOptimizationSubtitle": "Režim bez omezení zlepšuje spolehlivost synchronizace na pozadí"
   },
   "childMode": {
     "title": "Dětský režim",
@@ -378,12 +385,12 @@
     "praise": "Pochvala",
     "teacherLabel": "Učitel: ${name}",
     "dateLabel": "Datum: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Poznámky",
+    "infoTab": "Informace",
+    "noRemarks": "Žádné poznámky",
+    "noInfo": "Žádné informace",
+    "remark": "Poznámka",
+    "info": "Informace"
   },
   "tests": {
     "title": "Testy",
@@ -399,14 +406,14 @@
   "changelog": {
     "title": "Poslední změny",
     "noChanges": "Žádné změny",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Známky",
+    "attendanceTab": "Docházka",
+    "gradeAdded": "Známka přidána",
+    "gradeUpdated": "Známka aktualizována",
+    "gradeDeleted": "Známka smazána",
+    "attendanceAdded": "Docházka přidána",
+    "attendanceUpdated": "Docházka aktualizována",
+    "attendanceDeleted": "Docházka smazána"
   },
   "translation": {
     "translate": "Přeložit",
@@ -462,7 +469,14 @@
     "homeworkName": "Domácí úkoly",
     "homeworkDescription": "Oznámení o nových domácích úkolech",
     "notesName": "Poznámky",
-    "notesDescription": "Oznámení o poznámkách a pochvalách"
+    "notesDescription": "Oznámení o poznámkách a pochvalách",
+    "newGrade": "Nová známka",
+    "scheduleChange": "Změna rozvrhu",
+    "attendanceUpdate": "Změna docházky",
+    "newHomework": "Nový domácí úkol",
+    "newTest": "Nový test",
+    "newAnnotation": "Nová poznámka",
+    "newMessage": "Nová zpráva"
   },
   "gradeNames": {
     "celujacy": "Výborný",
@@ -618,7 +632,7 @@
     "biznesIZarzadzanie": "Podnikání a management",
     "czytanieNutGlosem": "Čtení not hlasem",
     "dyrygentura": "Dirigování",
-    "earlyStage": "Early stage",
+    "earlyStage": "Počáteční stupeň",
     "edukacjaArtystyczna": "Umělecká výchova",
     "edukacjaMatematyczna": "Matematická výchova",
     "edukacjaObywatelska": "Občanská výchova",
@@ -733,14 +747,14 @@
     "newChanges": "Nové: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Podpořte vývojáře",
+    "subtitle": "Pomozte udržet BSharp zdarma",
+    "badge": "Vytvořeno s láskou",
+    "tipJar": "Příspěvek",
+    "tipCoffee": "Káva",
+    "tipMeal": "Oběd",
+    "purchaseSuccess": "Děkujeme za podporu!",
+    "purchaseFailed": "Nákup se nezdařil, zkuste to znovu",
+    "productsUnavailable": "Příspěvky nejsou dostupné"
   }
 }

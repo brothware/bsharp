@@ -50,7 +50,7 @@
     "schoolIdHint": "bijv. sp1warszawa",
     "loginAs": "Inloggen als ${name}",
     "switchAccount": "Account wisselen",
-    "demoMode": "Demo mode"
+    "demoMode": "Demomodus"
   },
   "setup": {
     "title": "Instellen",
@@ -95,7 +95,7 @@
     "title": "Rooster",
     "today": "Vandaag",
     "noLessons": "Geen lessen",
-    "browseDays": "Browse days",
+    "browseDays": "Dagen doorbladeren",
     "noLessonsSubtitle": "Geen lessen gepland voor deze dag",
     "cancelled": "Geannuleerd",
     "substitution": "Vervanging",
@@ -134,45 +134,46 @@
     },
     "dayLetter": {
       "mon": "M",
-      "tue": "T",
+      "tue": "D",
       "wed": "W",
-      "thu": "T",
-      "fri": "F",
-      "sat": "S",
-      "sun": "S"
+      "thu": "D",
+      "fri": "V",
+      "sat": "Z",
+      "sun": "Z"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Oorspronkelijk",
+    "originalTeacher": "Oorspronkelijke docent",
+    "viewList": "Lijstweergave",
+    "viewTimeline": "Tijdlijnweergave",
+    "noEvents": "Geen activiteiten",
+    "noEventsSubtitle": "Geen activiteiten gepland voor deze dag",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
-      "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "title": "Eigen activiteit",
+      "create": "Nieuwe activiteit",
+      "edit": "Activiteit bewerken",
+      "eventTitle": "Titel",
+      "place": "Plaats",
+      "description": "Beschrijving",
+      "color": "Kleur",
+      "startTime": "Starttijd",
+      "endTime": "Eindtijd",
+      "recurrence": "Herhaling",
+      "specificDates": "Specifieke datums",
+      "weekly": "Wekelijks",
+      "addDate": "Datum toevoegen",
+      "dateRange": "Datumperiode",
+      "from": "Van",
+      "to": "Tot",
+      "weekdays": "Werkdagen",
+      "deleteConfirmTitle": "Activiteit verwijderen",
+      "deleteConfirmBody": "Weet je zeker dat je deze activiteit wilt verwijderen?",
+      "saved": "Activiteit opgeslagen",
+      "deleted": "Activiteit verwijderd",
+      "titleRequired": "Titel is verplicht",
+      "endBeforeStart": "Eindtijd moet na starttijd zijn",
+      "noDatesSelected": "Selecteer minstens een datum"
+    },
+    "replacement": "Vervanging"
   },
   "grades": {
     "title": "Cijfers",
@@ -194,7 +195,7 @@
     "grade(context=one)": "cijfer",
     "grade(context=other)": "cijfers",
     "other": "Overig",
-    "newBadge": "NEW",
+    "newBadge": "NIEUW",
     "weightPrefix": "w${weight}"
   },
   "attendance": {
@@ -276,7 +277,9 @@
     "message(context=one)": "bericht",
     "message(context=other)": "berichten",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "Download mislukt",
+    "messageSent": "Bericht verzonden",
+    "sendFailed": "Bericht verzenden mislukt"
   },
   "settings": {
     "title": "Instellingen",
@@ -324,7 +327,11 @@
     "syncSection": "Synchronisatie",
     "sync": "Synchroniseren",
     "syncing": "Synchroniseren...",
-    "languageSystem": "Systeem"
+    "languageSystem": "Systeem",
+    "batteryOptimization": "Batterijoptimalisatie",
+    "batteryUnrestricted": "Onbeperkt",
+    "batteryRestricted": "Beperkt",
+    "batteryOptimizationSubtitle": "De onbeperkte modus verbetert de betrouwbaarheid van achtergrondsynchronisatie"
   },
   "childMode": {
     "title": "Kindmodus",
@@ -375,12 +382,12 @@
     "praise": "Compliment",
     "teacherLabel": "Docent: ${name}",
     "dateLabel": "Datum: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Opmerkingen",
+    "infoTab": "Informatie",
+    "noRemarks": "Geen opmerkingen",
+    "noInfo": "Geen informatie",
+    "remark": "Opmerking",
+    "info": "Informatie"
   },
   "tests": {
     "title": "Toetsen",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Recente wijzigingen",
     "noChanges": "Geen wijzigingen",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Cijfers",
+    "attendanceTab": "Aanwezigheid",
+    "gradeAdded": "Cijfer toegevoegd",
+    "gradeUpdated": "Cijfer bijgewerkt",
+    "gradeDeleted": "Cijfer verwijderd",
+    "attendanceAdded": "Aanwezigheid toegevoegd",
+    "attendanceUpdated": "Aanwezigheid bijgewerkt",
+    "attendanceDeleted": "Aanwezigheid verwijderd"
   },
   "translation": {
     "translate": "Vertalen",
@@ -459,7 +466,14 @@
     "homeworkName": "Huiswerk",
     "homeworkDescription": "Meldingen over nieuw huiswerk",
     "notesName": "Aantekeningen",
-    "notesDescription": "Meldingen over aantekeningen en complimenten"
+    "notesDescription": "Meldingen over aantekeningen en complimenten",
+    "newGrade": "Nieuw cijfer",
+    "scheduleChange": "Roosterwijziging",
+    "attendanceUpdate": "Aanwezigheidswijziging",
+    "newHomework": "Nieuw huiswerk",
+    "newTest": "Nieuwe toets",
+    "newAnnotation": "Nieuwe aantekening",
+    "newMessage": "Nieuw bericht"
   },
   "gradeNames": {
     "celujacy": "Uitmuntend",
@@ -557,7 +571,7 @@
     "plastyka": "Beeldende vorming",
     "wychowanieFizyczne": "Lichamelijke opvoeding",
     "edb": "Veiligheidsonderwijs",
-    "religia": "Godsdienst",
+    "religia": "Religie",
     "etyka": "Ethiek",
     "wdz": "Gezinsonderwijs",
     "godzinaWychowawcza": "Mentorles",
@@ -730,14 +744,14 @@
     "newChanges": "Nieuw: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Steun de ontwikkelaar",
+    "subtitle": "Help BSharp gratis en onderhouden te houden",
+    "badge": "Gemaakt met liefde",
+    "tipJar": "Fooienpot",
+    "tipCoffee": "Koffie",
+    "tipMeal": "Maaltijd",
+    "purchaseSuccess": "Bedankt voor je steun!",
+    "purchaseFailed": "Aankoop mislukt, probeer het opnieuw",
+    "productsUnavailable": "Fooien zijn momenteel niet beschikbaar"
   }
 }

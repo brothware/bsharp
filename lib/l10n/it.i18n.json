@@ -50,7 +50,7 @@
     "schoolIdHint": "es. sp1warszawa",
     "loginAs": "Accedi come ${name}",
     "switchAccount": "Cambia account",
-    "demoMode": "Demo mode"
+    "demoMode": "Modalità demo"
   },
   "setup": {
     "title": "Configurazione",
@@ -95,7 +95,7 @@
     "title": "Orario",
     "today": "Oggi",
     "noLessons": "Nessuna lezione",
-    "browseDays": "Browse days",
+    "browseDays": "Sfoglia giorni",
     "noLessonsSubtitle": "Nessuna lezione prevista per questo giorno",
     "cancelled": "Annullata",
     "substitution": "Supplenza",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Originariamente",
+    "originalTeacher": "Insegnante originale",
+    "viewList": "Vista elenco",
+    "viewTimeline": "Vista cronologia",
+    "noEvents": "Nessun evento",
+    "noEventsSubtitle": "Nessun evento previsto per questo giorno",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Evento personalizzato",
+      "create": "Nuovo evento",
+      "edit": "Modifica evento",
+      "eventTitle": "Titolo",
+      "place": "Luogo",
+      "description": "Descrizione",
+      "color": "Colore",
+      "startTime": "Ora di inizio",
+      "endTime": "Ora di fine",
+      "recurrence": "Ricorrenza",
+      "specificDates": "Date specifiche",
+      "weekly": "Settimanale",
+      "addDate": "Aggiungi data",
+      "dateRange": "Intervallo di date",
+      "from": "Da",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Giorni feriali",
+      "deleteConfirmTitle": "Elimina evento",
+      "deleteConfirmBody": "Sei sicuro di voler eliminare questo evento?",
+      "saved": "Evento salvato",
+      "deleted": "Evento eliminato",
+      "titleRequired": "Il titolo è obbligatorio",
+      "endBeforeStart": "L'ora di fine deve essere successiva all'ora di inizio",
+      "noDatesSelected": "Seleziona almeno una data"
+    },
+    "replacement": "Sostituzione"
   },
   "grades": {
     "title": "Voti",
@@ -195,7 +196,7 @@
     "grade(context=other)": "voti",
     "other": "Altro",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "p${weight}"
   },
   "attendance": {
     "title": "Presenze",
@@ -276,7 +277,9 @@
     "message(context=one)": "messaggio",
     "message(context=other)": "messaggi",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "Download non riuscito",
+    "messageSent": "Messaggio inviato",
+    "sendFailed": "Invio del messaggio non riuscito"
   },
   "settings": {
     "title": "Impostazioni",
@@ -324,7 +327,11 @@
     "syncSection": "Sincronizzazione",
     "sync": "Sincronizza",
     "syncing": "Sincronizzazione...",
-    "languageSystem": "Sistema"
+    "languageSystem": "Sistema",
+    "batteryOptimization": "Ottimizzazione batteria",
+    "batteryUnrestricted": "Senza restrizioni",
+    "batteryRestricted": "Limitato",
+    "batteryOptimizationSubtitle": "La modalità senza restrizioni migliora l'affidabilità della sincronizzazione in background"
   },
   "childMode": {
     "title": "Modalità bambino",
@@ -375,12 +382,12 @@
     "praise": "Lode",
     "teacherLabel": "Insegnante: ${name}",
     "dateLabel": "Data: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Annotazioni",
+    "infoTab": "Informazioni",
+    "noRemarks": "Nessuna annotazione",
+    "noInfo": "Nessuna informazione",
+    "remark": "Annotazione",
+    "info": "Informazione"
   },
   "tests": {
     "title": "Verifiche",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Modifiche recenti",
     "noChanges": "Nessuna modifica",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Voti",
+    "attendanceTab": "Presenze",
+    "gradeAdded": "Voto aggiunto",
+    "gradeUpdated": "Voto aggiornato",
+    "gradeDeleted": "Voto eliminato",
+    "attendanceAdded": "Presenza aggiunta",
+    "attendanceUpdated": "Presenza aggiornata",
+    "attendanceDeleted": "Presenza eliminata"
   },
   "translation": {
     "translate": "Traduci",
@@ -459,7 +466,14 @@
     "homeworkName": "Compiti",
     "homeworkDescription": "Notifiche per nuovi compiti",
     "notesName": "Note",
-    "notesDescription": "Notifiche per note e lodi"
+    "notesDescription": "Notifiche per note e lodi",
+    "newGrade": "Nuovo voto",
+    "scheduleChange": "Modifica dell'orario",
+    "attendanceUpdate": "Aggiornamento presenze",
+    "newHomework": "Nuovo compito",
+    "newTest": "Nuovo esame",
+    "newAnnotation": "Nuova annotazione",
+    "newMessage": "Nuovo messaggio"
   },
   "gradeNames": {
     "celujacy": "Eccellente",
@@ -730,14 +744,14 @@
     "newChanges": "Nuovo: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Supporta lo sviluppatore",
+    "subtitle": "Aiuta a mantenere BSharp gratuito e aggiornato",
+    "badge": "Fatto con amore",
+    "tipJar": "Barattolo delle mance",
+    "tipCoffee": "Caffè",
+    "tipMeal": "Pasto",
+    "purchaseSuccess": "Grazie per il tuo supporto!",
+    "purchaseFailed": "Acquisto non riuscito, riprova",
+    "productsUnavailable": "Le mance non sono al momento disponibili"
   }
 }

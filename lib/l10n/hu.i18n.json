@@ -50,7 +50,7 @@
     "schoolIdHint": "pl. sp1warszawa",
     "loginAs": "Bejelentkezés mint ${name}",
     "switchAccount": "Fiókváltás",
-    "demoMode": "Demo mode"
+    "demoMode": "Demó mód"
   },
   "setup": {
     "title": "Beállítás",
@@ -95,7 +95,7 @@
     "title": "Órarend",
     "today": "Ma",
     "noLessons": "Nincsenek órák",
-    "browseDays": "Browse days",
+    "browseDays": "Napok böngészése",
     "noLessonsSubtitle": "Erre a napra nincsenek órák",
     "cancelled": "Elmarad",
     "substitution": "Helyettesítés",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Eredetileg",
+    "originalTeacher": "Eredeti tanár",
+    "viewList": "Listanézet",
+    "viewTimeline": "Idővonal nézet",
+    "noEvents": "Nincsenek események",
+    "noEventsSubtitle": "Erre a napra nincsenek események",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Egyéni esemény",
+      "create": "Új esemény",
+      "edit": "Esemény szerkesztése",
+      "eventTitle": "Cím",
+      "place": "Helyszín",
+      "description": "Leírás",
+      "color": "Szín",
+      "startTime": "Kezdés ideje",
+      "endTime": "Befejezés ideje",
+      "recurrence": "Ismétlődés",
+      "specificDates": "Meghatározott dátumok",
+      "weekly": "Heti",
+      "addDate": "Dátum hozzáadása",
+      "dateRange": "Dátumtartomány",
+      "from": "Ettől",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Hétköznapok",
+      "deleteConfirmTitle": "Esemény törlése",
+      "deleteConfirmBody": "Biztosan törölni szeretné ezt az eseményt?",
+      "saved": "Esemény mentve",
+      "deleted": "Esemény törölve",
+      "titleRequired": "A cím megadása kötelező",
+      "endBeforeStart": "A befejezés időpontja a kezdés után kell legyen",
+      "noDatesSelected": "Válasszon legalább egy dátumot"
+    },
+    "replacement": "Helyettesítés"
   },
   "grades": {
     "title": "Jegyek",
@@ -195,7 +196,7 @@
     "grade(context=other)": "jegy",
     "other": "Egyéb",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "s${weight}"
   },
   "attendance": {
     "title": "Hiányzás",
@@ -275,8 +276,10 @@
     "deleted": "Törölve: ${title}",
     "message(context=one)": "üzenet",
     "message(context=other)": "üzenet",
-    "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "replyPrefix": "Vá: ${title}",
+    "downloadFailed": "Letöltés sikertelen",
+    "messageSent": "Üzenet elküldve",
+    "sendFailed": "Az üzenet küldése sikertelen"
   },
   "settings": {
     "title": "Beállítások",
@@ -324,7 +327,11 @@
     "syncSection": "Szinkronizálás",
     "sync": "Szinkronizálás",
     "syncing": "Szinkronizálás...",
-    "languageSystem": "Rendszer"
+    "languageSystem": "Rendszer",
+    "batteryOptimization": "Akkumulátor-optimalizálás",
+    "batteryUnrestricted": "Korlátlan",
+    "batteryRestricted": "Korlátozott",
+    "batteryOptimizationSubtitle": "A korlátlan mód javítja a háttérszinkronizálás megbízhatóságát"
   },
   "childMode": {
     "title": "Gyermekmód",
@@ -375,12 +382,12 @@
     "praise": "Dicséret",
     "teacherLabel": "Tanár: ${name}",
     "dateLabel": "Dátum: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Észrevételek",
+    "infoTab": "Tájékoztatás",
+    "noRemarks": "Nincsenek észrevételek",
+    "noInfo": "Nincs tájékoztatás",
+    "remark": "Észrevétel",
+    "info": "Tájékoztatás"
   },
   "tests": {
     "title": "Dolgozatok",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Legutóbbi változások",
     "noChanges": "Nincsenek változások",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Jegyek",
+    "attendanceTab": "Jelenlét",
+    "gradeAdded": "Jegy hozzáadva",
+    "gradeUpdated": "Jegy frissítve",
+    "gradeDeleted": "Jegy törölve",
+    "attendanceAdded": "Jelenlét hozzáadva",
+    "attendanceUpdated": "Jelenlét frissítve",
+    "attendanceDeleted": "Jelenlét törölve"
   },
   "translation": {
     "translate": "Fordítás",
@@ -459,7 +466,14 @@
     "homeworkName": "Házi feladatok",
     "homeworkDescription": "Értesítések új házi feladatokról",
     "notesName": "Megjegyzések",
-    "notesDescription": "Értesítések megjegyzésekről és dicséretekről"
+    "notesDescription": "Értesítések megjegyzésekről és dicséretekről",
+    "newGrade": "Új jegy",
+    "scheduleChange": "Órarend változás",
+    "attendanceUpdate": "Jelenléti változás",
+    "newHomework": "Új házi feladat",
+    "newTest": "Új dolgozat",
+    "newAnnotation": "Új bejegyzés",
+    "newMessage": "Új üzenet"
   },
   "gradeNames": {
     "celujacy": "Kitűnő",
@@ -615,7 +629,7 @@
     "biznesIZarzadzanie": "Üzlet és menedzsment",
     "czytanieNutGlosem": "Lapról olvasás",
     "dyrygentura": "Karmesteri ismeretek",
-    "earlyStage": "Early stage",
+    "earlyStage": "Előkészítő",
     "edukacjaArtystyczna": "Művészeti nevelés",
     "edukacjaMatematyczna": "Matematikai nevelés",
     "edukacjaObywatelska": "Állampolgári nevelés",
@@ -730,14 +744,14 @@
     "newChanges": "Új: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Támogassa a fejlesztőt",
+    "subtitle": "Segítsen a BSharp ingyenességének és karbantartásának fenntartásában",
+    "badge": "Szeretettel készítve",
+    "tipJar": "Borravaló",
+    "tipCoffee": "Kávé",
+    "tipMeal": "Étkezés",
+    "purchaseSuccess": "Köszönjük a támogatását!",
+    "purchaseFailed": "A vásárlás sikertelen, próbálja újra",
+    "productsUnavailable": "A borravalók jelenleg nem elérhetők"
   }
 }

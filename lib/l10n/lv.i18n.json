@@ -50,7 +50,7 @@
     "schoolIdHint": "piem. sp1warszawa",
     "loginAs": "Pieteikties kā ${name}",
     "switchAccount": "Mainīt kontu",
-    "demoMode": "Demo mode"
+    "demoMode": "Demonstrācijas režīms"
   },
   "setup": {
     "title": "Iestatīšana",
@@ -95,7 +95,7 @@
     "title": "Grafiks",
     "today": "Šodien",
     "noLessons": "Nav stundu",
-    "browseDays": "Browse days",
+    "browseDays": "Pārlūkot dienas",
     "noLessonsSubtitle": "Šajā dienā nav ieplānotu stundu",
     "cancelled": "Atcelta",
     "substitution": "Aizvietošana",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Sākotnēji",
+    "originalTeacher": "Sākotnējais skolotājs",
+    "viewList": "Saraksta skats",
+    "viewTimeline": "Laika joslas skats",
+    "noEvents": "Nav notikumu",
+    "noEventsSubtitle": "Šajā dienā nav ieplānotu notikumu",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Pielāgots notikums",
+      "create": "Jauns notikums",
+      "edit": "Rediģēt notikumu",
+      "eventTitle": "Nosaukums",
+      "place": "Vieta",
+      "description": "Apraksts",
+      "color": "Krāsa",
+      "startTime": "Sākuma laiks",
+      "endTime": "Beigu laiks",
+      "recurrence": "Atkārtošanās",
+      "specificDates": "Konkrēti datumi",
+      "weekly": "Katru nedēļu",
+      "addDate": "Pievienot datumu",
+      "dateRange": "Datumu diapazons",
+      "from": "No",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Darba dienas",
+      "deleteConfirmTitle": "Dzēst notikumu",
+      "deleteConfirmBody": "Vai tiešām vēlaties dzēst šo notikumu?",
+      "saved": "Notikums saglabāts",
+      "deleted": "Notikums dzēsts",
+      "titleRequired": "Nosaukums ir obligāts",
+      "endBeforeStart": "Beigu laikam jābūt pēc sākuma laika",
+      "noDatesSelected": "Izvēlieties vismaz vienu datumu"
+    },
+    "replacement": "Aizvietošana"
   },
   "grades": {
     "title": "Atzīmes",
@@ -195,7 +196,7 @@
     "grade(context=other)": "atzīmes",
     "other": "Cits",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "sv${weight}"
   },
   "attendance": {
     "title": "Apmeklējums",
@@ -276,7 +277,9 @@
     "message(context=one)": "ziņojums",
     "message(context=other)": "ziņojumi",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "Lejupielāde neizdevās",
+    "messageSent": "Ziņojums nosūtīts",
+    "sendFailed": "Neizdevās nosūtīt ziņojumu"
   },
   "settings": {
     "title": "Iestatījumi",
@@ -324,7 +327,11 @@
     "syncSection": "Sinhronizācija",
     "sync": "Sinhronizēt",
     "syncing": "Sinhronizē...",
-    "languageSystem": "Sistēmas"
+    "languageSystem": "Sistēmas",
+    "batteryOptimization": "Akumulatora optimizācija",
+    "batteryUnrestricted": "Neierobežots",
+    "batteryRestricted": "Ierobežots",
+    "batteryOptimizationSubtitle": "Neierobežotais režīms uzlabo fona sinhronizācijas uzticamību"
   },
   "childMode": {
     "title": "Bērna režīms",
@@ -375,12 +382,12 @@
     "praise": "Uzslava",
     "teacherLabel": "Skolotājs: ${name}",
     "dateLabel": "Datums: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Piezīmes",
+    "infoTab": "Informācija",
+    "noRemarks": "Nav piezīmju",
+    "noInfo": "Nav informācijas",
+    "remark": "Piezīme",
+    "info": "Informācija"
   },
   "tests": {
     "title": "Kontroldarbi",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Pēdējās izmaiņas",
     "noChanges": "Nav izmaiņu",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Atzīmes",
+    "attendanceTab": "Apmeklējums",
+    "gradeAdded": "Atzīme pievienota",
+    "gradeUpdated": "Atzīme atjaunināta",
+    "gradeDeleted": "Atzīme dzēsta",
+    "attendanceAdded": "Apmeklējums pievienots",
+    "attendanceUpdated": "Apmeklējums atjaunināts",
+    "attendanceDeleted": "Apmeklējums dzēsts"
   },
   "translation": {
     "translate": "Tulkot",
@@ -459,7 +466,14 @@
     "homeworkName": "Mājas darbi",
     "homeworkDescription": "Paziņojumi par jauniem mājas darbiem",
     "notesName": "Piezīmes",
-    "notesDescription": "Paziņojumi par piezīmēm un uzslavām"
+    "notesDescription": "Paziņojumi par piezīmēm un uzslavām",
+    "newGrade": "Jauns vērtējums",
+    "scheduleChange": "Stundu saraksta izmaiņas",
+    "attendanceUpdate": "Apmeklējuma izmaiņas",
+    "newHomework": "Jauns mājas darbs",
+    "newTest": "Jauns kontroldarbs",
+    "newAnnotation": "Jauna piezīme",
+    "newMessage": "Jauns ziņojums"
   },
   "gradeNames": {
     "celujacy": "Izcili",
@@ -730,14 +744,14 @@
     "newChanges": "Jauns: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Atbalstīt izstrādātāju",
+    "subtitle": "Palīdziet uzturēt BSharp bezmaksas un atjauninātu",
+    "badge": "Veidots ar mīlestību",
+    "tipJar": "Ziedojumu kārba",
+    "tipCoffee": "Kafija",
+    "tipMeal": "Maltīte",
+    "purchaseSuccess": "Paldies par jūsu atbalstu!",
+    "purchaseFailed": "Pirkums neizdevās, lūdzu mēģiniet vēlreiz",
+    "productsUnavailable": "Ziedojumi pašlaik nav pieejami"
   }
 }

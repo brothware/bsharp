@@ -95,7 +95,7 @@
     "title": "Plan lekcji",
     "today": "Dziś",
     "noLessons": "Brak lekcji",
-    "browseDays": "Browse days",
+    "browseDays": "Przeglądaj dni",
     "noLessonsSubtitle": "Brak zaplanowanych lekcji na ten dzień",
     "cancelled": "Odwołana",
     "substitution": "Zastępstwo",
@@ -466,7 +466,14 @@
     "homeworkName": "Zadania domowe",
     "homeworkDescription": "Powiadomienia o nowych zadaniach",
     "notesName": "Adnotacje",
-    "notesDescription": "Powiadomienia o adnotacjach i pochwałach"
+    "notesDescription": "Powiadomienia o adnotacjach i pochwałach",
+    "newGrade": "Nowa ocena",
+    "scheduleChange": "Zmiana w planie lekcji",
+    "attendanceUpdate": "Zmiana frekwencji",
+    "newHomework": "Nowe zadanie domowe",
+    "newTest": "Nowy sprawdzian",
+    "newAnnotation": "Nowa adnotacja",
+    "newMessage": "Nowa wiadomość"
   },
   "gradeNames": {
     "celujacy": "Celujący",
@@ -622,7 +629,7 @@
     "biznesIZarzadzanie": "Biznes i zarządzanie",
     "czytanieNutGlosem": "Czytanie nut głosem",
     "dyrygentura": "Dyrygentura",
-    "earlyStage": "Early stage",
+    "earlyStage": "Edukacja wczesnoszkolna",
     "edukacjaArtystyczna": "Edukacja artystyczna",
     "edukacjaMatematyczna": "Edukacja matematyczna",
     "edukacjaObywatelska": "Edukacja obywatelska",

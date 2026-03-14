@@ -50,7 +50,7 @@
     "schoolIdHint": "pvz. sp1warszawa",
     "loginAs": "Prisijungti kaip ${name}",
     "switchAccount": "Pakeisti paskyrą",
-    "demoMode": "Demo mode"
+    "demoMode": "Demonstracinis režimas"
   },
   "setup": {
     "title": "Nustatymai",
@@ -95,7 +95,7 @@
     "title": "Tvarkaraštis",
     "today": "Šiandien",
     "noLessons": "Nėra pamokų",
-    "browseDays": "Browse days",
+    "browseDays": "Naršyti dienas",
     "noLessonsSubtitle": "Šiai dienai pamokų nesuplanuota",
     "cancelled": "Atšaukta",
     "substitution": "Pavadavimas",
@@ -143,38 +143,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Iš pradžių",
+    "originalTeacher": "Pradinis mokytojas",
+    "viewList": "Sąrašo rodinys",
+    "viewTimeline": "Laiko juostos rodinys",
+    "noEvents": "Nėra įvykių",
+    "noEventsSubtitle": "Šiai dienai nėra suplanuotų įvykių",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Pasirinktinis įvykis",
+      "create": "Naujas įvykis",
+      "edit": "Redaguoti įvykį",
+      "eventTitle": "Pavadinimas",
+      "place": "Vieta",
+      "description": "Aprašymas",
+      "color": "Spalva",
+      "startTime": "Pradžios laikas",
+      "endTime": "Pabaigos laikas",
+      "recurrence": "Pasikartojimas",
+      "specificDates": "Konkrečios datos",
+      "weekly": "Kas savaitę",
+      "addDate": "Pridėti datą",
+      "dateRange": "Datų intervalas",
+      "from": "Nuo",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Savaitės dienos",
+      "deleteConfirmTitle": "Ištrinti įvykį",
+      "deleteConfirmBody": "Ar tikrai norite ištrinti šį įvykį?",
+      "saved": "Įvykis išsaugotas",
+      "deleted": "Įvykis ištrintas",
+      "titleRequired": "Pavadinimas privalomas",
+      "endBeforeStart": "Pabaigos laikas turi būti vėlesnis nei pradžios",
+      "noDatesSelected": "Pasirinkite bent vieną datą"
+    },
+    "replacement": "Pakeitimas"
   },
   "grades": {
     "title": "Pažymiai",
@@ -199,7 +200,7 @@
     "grade(context=other)": "pažymiai",
     "other": "Kita",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "s${weight}"
   },
   "attendance": {
     "title": "Lankomumas",
@@ -282,7 +283,9 @@
     "message(context=many)": "žinučių",
     "message(context=other)": "žinutės",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "Atsisiuntimas nepavyko",
+    "messageSent": "Žinutė išsiųsta",
+    "sendFailed": "Nepavyko išsiųsti žinutės"
   },
   "settings": {
     "title": "Nustatymai",
@@ -330,7 +333,11 @@
     "syncSection": "Sinchronizacija",
     "sync": "Sinchronizuoti",
     "syncing": "Sinchronizuojama...",
-    "languageSystem": "Sisteminė"
+    "languageSystem": "Sisteminė",
+    "batteryOptimization": "Baterijos optimizavimas",
+    "batteryUnrestricted": "Neribota",
+    "batteryRestricted": "Ribota",
+    "batteryOptimizationSubtitle": "Neribota veikla pagerina foninės sinchronizacijos patikimumą"
   },
   "childMode": {
     "title": "Vaiko režimas",
@@ -381,12 +388,12 @@
     "praise": "Pagyrimas",
     "teacherLabel": "Mokytojas: ${name}",
     "dateLabel": "Data: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Pastabos",
+    "infoTab": "Informacija",
+    "noRemarks": "Nėra pastabų",
+    "noInfo": "Nėra informacijos",
+    "remark": "Pastaba",
+    "info": "Informacija"
   },
   "tests": {
     "title": "Kontroliniai",
@@ -402,14 +409,14 @@
   "changelog": {
     "title": "Paskutiniai pakeitimai",
     "noChanges": "Nėra pakeitimų",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Pažymiai",
+    "attendanceTab": "Lankomumas",
+    "gradeAdded": "Pažymys pridėtas",
+    "gradeUpdated": "Pažymys atnaujintas",
+    "gradeDeleted": "Pažymys ištrintas",
+    "attendanceAdded": "Lankomumas pridėtas",
+    "attendanceUpdated": "Lankomumas atnaujintas",
+    "attendanceDeleted": "Lankomumas ištrintas"
   },
   "translation": {
     "translate": "Versti",
@@ -465,7 +472,14 @@
     "homeworkName": "Namų darbai",
     "homeworkDescription": "Pranešimai apie naujus namų darbus",
     "notesName": "Pastabos",
-    "notesDescription": "Pranešimai apie pastabas ir pagyrimą"
+    "notesDescription": "Pranešimai apie pastabas ir pagyrimą",
+    "newGrade": "Naujas pažymys",
+    "scheduleChange": "Tvarkaraščio pakeitimas",
+    "attendanceUpdate": "Lankomumo pakeitimas",
+    "newHomework": "Naujas namų darbas",
+    "newTest": "Naujas kontrolinis",
+    "newAnnotation": "Nauja pastaba",
+    "newMessage": "Nauja žinutė"
   },
   "gradeNames": {
     "celujacy": "Puikus",
@@ -736,14 +750,14 @@
     "newChanges": "Nauja: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Palaikyti kūrėją",
+    "subtitle": "Padėkite išlaikyti BSharp nemokamą ir prižiūrimą",
+    "badge": "Sukurta su meile",
+    "tipJar": "Arbatpinigiai",
+    "tipCoffee": "Kava",
+    "tipMeal": "Maistas",
+    "purchaseSuccess": "Ačiū už palaikymą!",
+    "purchaseFailed": "Pirkimas nepavyko, bandykite dar kartą",
+    "productsUnavailable": "Arbatpinigiai šiuo metu nepasiekiami"
   }
 }

@@ -50,7 +50,7 @@
     "schoolIdHint": "जैसे sp1warszawa",
     "loginAs": "${name} के रूप में लॉग इन करें",
     "switchAccount": "खाता बदलें",
-    "demoMode": "Demo mode"
+    "demoMode": "डेमो मोड"
   },
   "setup": {
     "title": "सेटअप",
@@ -95,7 +95,7 @@
     "title": "समय-सारणी",
     "today": "आज",
     "noLessons": "कोई कक्षा नहीं",
-    "browseDays": "Browse days",
+    "browseDays": "दिन देखें",
     "noLessonsSubtitle": "इस दिन कोई कक्षा निर्धारित नहीं है",
     "cancelled": "रद्द",
     "substitution": "प्रतिस्थापन",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "मूल विषय",
+    "originalTeacher": "मूल शिक्षक",
+    "viewList": "सूची दृश्य",
+    "viewTimeline": "समयरेखा दृश्य",
+    "noEvents": "कोई कार्यक्रम नहीं",
+    "noEventsSubtitle": "इस दिन कोई कार्यक्रम निर्धारित नहीं है",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "कस्टम कार्यक्रम",
+      "create": "नया कार्यक्रम",
+      "edit": "कार्यक्रम संपादित करें",
+      "eventTitle": "शीर्षक",
+      "place": "स्थान",
+      "description": "विवरण",
+      "color": "रंग",
+      "startTime": "आरंभ समय",
+      "endTime": "समाप्ति समय",
+      "recurrence": "पुनरावृत्ति",
+      "specificDates": "विशिष्ट तारीख़ें",
+      "weekly": "साप्ताहिक",
+      "addDate": "तारीख़ जोड़ें",
+      "dateRange": "तारीख़ सीमा",
+      "from": "से",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "कार्यदिवस",
+      "deleteConfirmTitle": "कार्यक्रम हटाएँ",
+      "deleteConfirmBody": "क्या आप इस कार्यक्रम को हटाना चाहते हैं?",
+      "saved": "कार्यक्रम सहेजा गया",
+      "deleted": "कार्यक्रम हटाया गया",
+      "titleRequired": "शीर्षक आवश्यक है",
+      "endBeforeStart": "समाप्ति समय आरंभ समय के बाद होना चाहिए",
+      "noDatesSelected": "कम से कम एक तारीख़ चुनें"
+    },
+    "replacement": "प्रतिस्थापन"
   },
   "grades": {
     "title": "अंक",
@@ -195,7 +196,7 @@
     "grade(context=other)": "अंक",
     "other": "अन्य",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "भा${weight}"
   },
   "attendance": {
     "title": "उपस्थिति",
@@ -275,8 +276,10 @@
     "deleted": "हटाया गया: ${title}",
     "message(context=one)": "संदेश",
     "message(context=other)": "संदेश",
-    "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "replyPrefix": "उ: ${title}",
+    "downloadFailed": "डाउनलोड विफल",
+    "messageSent": "संदेश भेजा गया",
+    "sendFailed": "संदेश भेजने में विफल"
   },
   "settings": {
     "title": "सेटिंग्स",
@@ -324,7 +327,11 @@
     "syncSection": "सिंक",
     "sync": "सिंक",
     "syncing": "सिंक हो रहा है...",
-    "languageSystem": "सिस्टम"
+    "languageSystem": "सिस्टम",
+    "batteryOptimization": "बैटरी अनुकूलन",
+    "batteryUnrestricted": "अप्रतिबंधित",
+    "batteryRestricted": "प्रतिबंधित",
+    "batteryOptimizationSubtitle": "अप्रतिबंधित मोड पृष्ठभूमि सिंक की विश्वसनीयता में सुधार करता है"
   },
   "childMode": {
     "title": "बाल मोड",
@@ -375,12 +382,12 @@
     "praise": "प्रशंसा",
     "teacherLabel": "शिक्षक: ${name}",
     "dateLabel": "तारीख़: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "टिप्पणियाँ",
+    "infoTab": "जानकारी",
+    "noRemarks": "कोई टिप्पणी नहीं",
+    "noInfo": "कोई जानकारी नहीं",
+    "remark": "टिप्पणी",
+    "info": "जानकारी"
   },
   "tests": {
     "title": "परीक्षाएँ",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "हाल के बदलाव",
     "noChanges": "कोई बदलाव नहीं",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "अंक",
+    "attendanceTab": "उपस्थिति",
+    "gradeAdded": "अंक जोड़ा गया",
+    "gradeUpdated": "अंक अपडेट हुआ",
+    "gradeDeleted": "अंक हटाया गया",
+    "attendanceAdded": "उपस्थिति जोड़ी गई",
+    "attendanceUpdated": "उपस्थिति अपडेट हुई",
+    "attendanceDeleted": "उपस्थिति हटाई गई"
   },
   "translation": {
     "translate": "अनुवाद करें",
@@ -459,7 +466,14 @@
     "homeworkName": "गृहकार्य",
     "homeworkDescription": "नए गृहकार्य की सूचनाएँ",
     "notesName": "टिप्पणियाँ",
-    "notesDescription": "टिप्पणियों और प्रशंसा की सूचनाएँ"
+    "notesDescription": "टिप्पणियों और प्रशंसा की सूचनाएँ",
+    "newGrade": "नया ग्रेड",
+    "scheduleChange": "समय सारणी में बदलाव",
+    "attendanceUpdate": "उपस्थिति अपडेट",
+    "newHomework": "नया गृहकार्य",
+    "newTest": "नई परीक्षा",
+    "newAnnotation": "नई टिप्पणी",
+    "newMessage": "नया संदेश"
   },
   "gradeNames": {
     "celujacy": "उत्कृष्ट",
@@ -730,14 +744,14 @@
     "newChanges": "नया: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "डेवलपर का समर्थन करें",
+    "subtitle": "BSharp को मुफ़्त और सक्रिय रखने में सहायता करें",
+    "badge": "प्यार से बनाया गया",
+    "tipJar": "टिप पेटी",
+    "tipCoffee": "कॉफ़ी",
+    "tipMeal": "भोजन",
+    "purchaseSuccess": "आपके समर्थन के लिए धन्यवाद!",
+    "purchaseFailed": "खरीद विफल, कृपया पुनः प्रयास करें",
+    "productsUnavailable": "टिप वर्तमान में अनुपलब्ध हैं"
   }
 }

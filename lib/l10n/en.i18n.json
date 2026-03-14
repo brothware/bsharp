@@ -463,7 +463,14 @@
     "homeworkName": "Homework",
     "homeworkDescription": "Notifications about new homework",
     "notesName": "Annotations",
-    "notesDescription": "Notifications about annotations and praise"
+    "notesDescription": "Notifications about annotations and praise",
+    "newGrade": "New grade",
+    "scheduleChange": "Schedule change",
+    "attendanceUpdate": "Attendance update",
+    "newHomework": "New homework",
+    "newTest": "New test",
+    "newAnnotation": "New annotation",
+    "newMessage": "New message"
   },
   "gradeNames": {
     "celujacy": "Excellent",

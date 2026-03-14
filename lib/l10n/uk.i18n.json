@@ -50,7 +50,7 @@
     "schoolIdHint": "напр. sp1warszawa",
     "loginAs": "Увійти як ${name}",
     "switchAccount": "Змінити обліковий запис",
-    "demoMode": "Demo mode"
+    "demoMode": "Демо-режим"
   },
   "setup": {
     "title": "Налаштування",
@@ -95,7 +95,7 @@
     "title": "Розклад",
     "today": "Сьогодні",
     "noLessons": "Немає уроків",
-    "browseDays": "Browse days",
+    "browseDays": "Переглянути дні",
     "noLessonsSubtitle": "На цей день уроків не заплановано",
     "cancelled": "Скасовано",
     "substitution": "Заміна",
@@ -142,38 +142,40 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Початковий предмет",
+    "originalTeacher": "Початковий вчитель",
+    "viewList": "Список",
+    "viewTimeline": "Часова шкала",
+    "noEvents": "Немає подій",
+    "noEventsSubtitle": "На цей день подій не заплановано",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Власна подія",
+      "create": "Нова подія",
+      "edit": "Редагувати подію",
+      "eventTitle": "Назва",
+      "place": "Місце",
+      "description": "Опис",
+      "color": "Колір",
+      "startTime": "Час початку",
+      "endTime": "Час закінчення",
+      "recurrence": "Повторення",
+      "specificDates": "Конкретні дати",
+      "weekly": "Щотижня",
+      "addDate": "Додати дату",
+      "dateRange": "Діапазон дат",
+      "from": "Від",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Дні тижня",
+      "deleteConfirmTitle": "Видалити подію",
+      "deleteConfirmBody": "Ви впевнені, що хочете видалити цю подію?",
+      "saved": "Подію збережено",
+      "deleted": "Подію видалено",
+      "titleRequired": "Назва обов'язкова",
+      "endBeforeStart": "Час закінчення повинен бути після часу початку",
+      "noDatesSelected": "Оберіть принаймні одну дату"
+    },
+    "replacement": "Заміна",
+    "lesson(context=other)": "уроків"
   },
   "grades": {
     "title": "Оцінки",
@@ -197,7 +199,8 @@
     "grade(context=many)": "оцінок",
     "other": "Інше",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "в${weight}",
+    "grade(context=other)": "оцінок"
   },
   "attendance": {
     "title": "Відвідуваність",
@@ -278,9 +281,11 @@
     "message(context=one)": "повідомлення",
     "message(context=few)": "повідомлення",
     "message(context=many)": "повідомлень",
-    "replyPrefix": "Re: ${title}",
-    "message(context=other)": "messages",
-    "downloadFailed": "Download failed"
+    "replyPrefix": "Ві: ${title}",
+    "message(context=other)": "повідомлень",
+    "downloadFailed": "Не вдалося завантажити",
+    "messageSent": "Повідомлення надіслано",
+    "sendFailed": "Не вдалося надіслати повідомлення"
   },
   "settings": {
     "title": "Налаштування",
@@ -328,7 +333,11 @@
     "syncSection": "Синхронізація",
     "sync": "Синхронізувати",
     "syncing": "Синхронізація...",
-    "languageSystem": "Системна"
+    "languageSystem": "Системна",
+    "batteryOptimization": "Оптимізація батареї",
+    "batteryUnrestricted": "Без обмежень",
+    "batteryRestricted": "Обмежено",
+    "batteryOptimizationSubtitle": "Режим без обмежень покращує надійність фонової синхронізації"
   },
   "childMode": {
     "title": "Дитячий режим",
@@ -379,12 +388,12 @@
     "praise": "Похвала",
     "teacherLabel": "Вчитель: ${name}",
     "dateLabel": "Дата: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Зауваження",
+    "infoTab": "Довідка",
+    "noRemarks": "Немає зауважень",
+    "noInfo": "Немає довідкової інформації",
+    "remark": "Зауваження",
+    "info": "Довідка"
   },
   "tests": {
     "title": "Контрольні",
@@ -400,14 +409,14 @@
   "changelog": {
     "title": "Останні зміни",
     "noChanges": "Немає змін",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Оцінки",
+    "attendanceTab": "Відвідуваність",
+    "gradeAdded": "Оцінку додано",
+    "gradeUpdated": "Оцінку оновлено",
+    "gradeDeleted": "Оцінку видалено",
+    "attendanceAdded": "Відвідуваність додано",
+    "attendanceUpdated": "Відвідуваність оновлено",
+    "attendanceDeleted": "Відвідуваність видалено"
   },
   "translation": {
     "translate": "Перекласти",
@@ -463,7 +472,14 @@
     "homeworkName": "Домашнє завдання",
     "homeworkDescription": "Сповіщення про нові домашні завдання",
     "notesName": "Зауваження",
-    "notesDescription": "Сповіщення про зауваження та похвали"
+    "notesDescription": "Сповіщення про зауваження та похвали",
+    "newGrade": "Нова оцінка",
+    "scheduleChange": "Зміна розкладу",
+    "attendanceUpdate": "Зміна відвідуваності",
+    "newHomework": "Нове домашнє завдання",
+    "newTest": "Нова контрольна",
+    "newAnnotation": "Нова примітка",
+    "newMessage": "Нове повідомлення"
   },
   "gradeNames": {
     "celujacy": "Відмінно",
@@ -734,14 +750,14 @@
     "newChanges": "Нове: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Підтримати розробника",
+    "subtitle": "Допоможіть підтримувати BSharp безплатним",
+    "badge": "Зроблено з любов'ю",
+    "tipJar": "Банка для чайових",
+    "tipCoffee": "Кава",
+    "tipMeal": "Обід",
+    "purchaseSuccess": "Дякуємо за підтримку!",
+    "purchaseFailed": "Покупка не вдалася, спробуйте ще раз",
+    "productsUnavailable": "Чайові наразі недоступні"
   }
 }

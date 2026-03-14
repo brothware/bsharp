@@ -50,7 +50,7 @@
     "schoolIdHint": "例如 sp1warszawa",
     "loginAs": "以${name}身分登入",
     "switchAccount": "切換帳號",
-    "demoMode": "Demo mode"
+    "demoMode": "示範模式"
   },
   "setup": {
     "title": "設定",
@@ -95,7 +95,7 @@
     "title": "課表",
     "today": "今天",
     "noLessons": "沒有課程",
-    "browseDays": "Browse days",
+    "browseDays": "瀏覽日期",
     "noLessonsSubtitle": "這一天沒有排定課程",
     "cancelled": "已取消",
     "substitution": "代課",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "原課程",
+    "originalTeacher": "原教師",
+    "viewList": "清單檢視",
+    "viewTimeline": "時間軸檢視",
+    "noEvents": "沒有事件",
+    "noEventsSubtitle": "這一天沒有安排事件",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "自訂事件",
+      "create": "新建事件",
+      "edit": "編輯事件",
+      "eventTitle": "標題",
+      "place": "地點",
+      "description": "描述",
+      "color": "顏色",
+      "startTime": "開始時間",
+      "endTime": "結束時間",
+      "recurrence": "重複",
+      "specificDates": "指定日期",
+      "weekly": "每週",
+      "addDate": "新增日期",
+      "dateRange": "日期範圍",
+      "from": "從",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "平日",
+      "deleteConfirmTitle": "刪除事件",
+      "deleteConfirmBody": "確定要刪除此事件嗎？",
+      "saved": "事件已儲存",
+      "deleted": "事件已刪除",
+      "titleRequired": "標題為必填欄位",
+      "endBeforeStart": "結束時間必須晚於開始時間",
+      "noDatesSelected": "請至少選擇一個日期"
+    },
+    "replacement": "替代"
   },
   "grades": {
     "title": "成績",
@@ -195,7 +196,7 @@
     "grade(context=other)": "筆成績",
     "other": "其他",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "權${weight}"
   },
   "attendance": {
     "title": "出勤",
@@ -275,8 +276,10 @@
     "deleted": "已刪除：${title}",
     "message(context=one)": "則訊息",
     "message(context=other)": "則訊息",
-    "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "replyPrefix": "回覆：${title}",
+    "downloadFailed": "下載失敗",
+    "messageSent": "訊息已傳送",
+    "sendFailed": "訊息傳送失敗"
   },
   "settings": {
     "title": "設定",
@@ -324,7 +327,11 @@
     "syncSection": "同步",
     "sync": "同步",
     "syncing": "同步中...",
-    "languageSystem": "跟隨系統"
+    "languageSystem": "跟隨系統",
+    "batteryOptimization": "電池最佳化",
+    "batteryUnrestricted": "不受限",
+    "batteryRestricted": "受限",
+    "batteryOptimizationSubtitle": "不受限模式可提升背景同步的可靠性"
   },
   "childMode": {
     "title": "兒童模式",
@@ -375,12 +382,12 @@
     "praise": "表揚",
     "teacherLabel": "教師：${name}",
     "dateLabel": "日期：${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "評語",
+    "infoTab": "通知",
+    "noRemarks": "沒有評語",
+    "noInfo": "沒有通知",
+    "remark": "評語",
+    "info": "通知"
   },
   "tests": {
     "title": "考試",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "最近變更",
     "noChanges": "沒有變更",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "成績",
+    "attendanceTab": "出勤",
+    "gradeAdded": "新增成績",
+    "gradeUpdated": "更新成績",
+    "gradeDeleted": "刪除成績",
+    "attendanceAdded": "新增出勤紀錄",
+    "attendanceUpdated": "更新出勤紀錄",
+    "attendanceDeleted": "刪除出勤紀錄"
   },
   "translation": {
     "translate": "翻譯",
@@ -459,7 +466,14 @@
     "homeworkName": "作業",
     "homeworkDescription": "新作業通知",
     "notesName": "評語",
-    "notesDescription": "評語與表揚通知"
+    "notesDescription": "評語與表揚通知",
+    "newGrade": "新成績",
+    "scheduleChange": "課表變更",
+    "attendanceUpdate": "出缺席變更",
+    "newHomework": "新作業",
+    "newTest": "新測驗",
+    "newAnnotation": "新註記",
+    "newMessage": "新訊息"
   },
   "gradeNames": {
     "celujacy": "優秀",
@@ -730,14 +744,14 @@
     "newChanges": "新增：${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "支持開發者",
+    "subtitle": "幫助BSharp保持免費並持續更新",
+    "badge": "用心製作",
+    "tipJar": "打賞",
+    "tipCoffee": "咖啡",
+    "tipMeal": "一頓飯",
+    "purchaseSuccess": "感謝您的支持！",
+    "purchaseFailed": "購買失敗，請重試",
+    "productsUnavailable": "打賞暫時不可用"
   }
 }

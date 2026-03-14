@@ -50,7 +50,7 @@
     "schoolIdHint": "esim. sp1warszawa",
     "loginAs": "Kirjaudu käyttäjänä ${name}",
     "switchAccount": "Vaihda tiliä",
-    "demoMode": "Demo mode"
+    "demoMode": "Demotila"
   },
   "setup": {
     "title": "Asennus",
@@ -95,7 +95,7 @@
     "title": "Lukujärjestys",
     "today": "Tänään",
     "noLessons": "Ei oppitunteja",
-    "browseDays": "Browse days",
+    "browseDays": "Selaa päiviä",
     "noLessonsSubtitle": "Tälle päivälle ei ole oppitunteja",
     "cancelled": "Peruttu",
     "substitution": "Sijaistus",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Alkuperäinen",
+    "originalTeacher": "Alkuperäinen opettaja",
+    "viewList": "Luettelonäkymä",
+    "viewTimeline": "Aikajananäkymä",
+    "noEvents": "Ei tapahtumia",
+    "noEventsSubtitle": "Tälle päivälle ei ole tapahtumia",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Oma tapahtuma",
+      "create": "Uusi tapahtuma",
+      "edit": "Muokkaa tapahtumaa",
+      "eventTitle": "Otsikko",
+      "place": "Paikka",
+      "description": "Kuvaus",
+      "color": "Väri",
+      "startTime": "Alkamisaika",
+      "endTime": "Päättymisaika",
+      "recurrence": "Toistuvuus",
+      "specificDates": "Tietyt päivämäärät",
+      "weekly": "Viikoittain",
+      "addDate": "Lisää päivämäärä",
+      "dateRange": "Päivämääräväli",
+      "from": "Alkaen",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Arkipäivät",
+      "deleteConfirmTitle": "Poista tapahtuma",
+      "deleteConfirmBody": "Haluatko varmasti poistaa tämän tapahtuman?",
+      "saved": "Tapahtuma tallennettu",
+      "deleted": "Tapahtuma poistettu",
+      "titleRequired": "Otsikko on pakollinen",
+      "endBeforeStart": "Päättymisajan on oltava alkamisajan jälkeen",
+      "noDatesSelected": "Valitse vähintään yksi päivämäärä"
+    },
+    "replacement": "Sijaistus"
   },
   "grades": {
     "title": "Arvosanat",
@@ -195,7 +196,7 @@
     "grade(context=other)": "arvosanaa",
     "other": "Muu",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "p${weight}"
   },
   "attendance": {
     "title": "Läsnäolo",
@@ -276,7 +277,9 @@
     "message(context=one)": "viesti",
     "message(context=other)": "viestiä",
     "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "downloadFailed": "Lataus epäonnistui",
+    "messageSent": "Viesti lähetetty",
+    "sendFailed": "Viestin lähetys epäonnistui"
   },
   "settings": {
     "title": "Asetukset",
@@ -324,7 +327,11 @@
     "syncSection": "Synkronointi",
     "sync": "Synkronoi",
     "syncing": "Synkronoidaan...",
-    "languageSystem": "Järjestelmä"
+    "languageSystem": "Järjestelmä",
+    "batteryOptimization": "Akun optimointi",
+    "batteryUnrestricted": "Rajoittamaton",
+    "batteryRestricted": "Rajoitettu",
+    "batteryOptimizationSubtitle": "Rajoittamaton tila parantaa taustasynkronoinnin luotettavuutta"
   },
   "childMode": {
     "title": "Lapsitila",
@@ -375,12 +382,12 @@
     "praise": "Kiitos",
     "teacherLabel": "Opettaja: ${name}",
     "dateLabel": "Päivämäärä: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Huomautukset",
+    "infoTab": "Tiedoksi",
+    "noRemarks": "Ei huomautuksia",
+    "noInfo": "Ei tietoja",
+    "remark": "Huomautus",
+    "info": "Tiedoksi"
   },
   "tests": {
     "title": "Kokeet",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Viimeisimmät muutokset",
     "noChanges": "Ei muutoksia",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Arvosanat",
+    "attendanceTab": "Läsnäolo",
+    "gradeAdded": "Arvosana lisätty",
+    "gradeUpdated": "Arvosana päivitetty",
+    "gradeDeleted": "Arvosana poistettu",
+    "attendanceAdded": "Läsnäolo lisätty",
+    "attendanceUpdated": "Läsnäolo päivitetty",
+    "attendanceDeleted": "Läsnäolo poistettu"
   },
   "translation": {
     "translate": "Käännä",
@@ -459,7 +466,14 @@
     "homeworkName": "Kotitehtävät",
     "homeworkDescription": "Ilmoitukset uusista kotitehtävistä",
     "notesName": "Merkinnät",
-    "notesDescription": "Ilmoitukset merkinnöistä ja kiitoksista"
+    "notesDescription": "Ilmoitukset merkinnöistä ja kiitoksista",
+    "newGrade": "Uusi arvosana",
+    "scheduleChange": "Lukujärjestysmuutos",
+    "attendanceUpdate": "Läsnäolomuutos",
+    "newHomework": "Uusi kotitehtävä",
+    "newTest": "Uusi koe",
+    "newAnnotation": "Uusi merkintä",
+    "newMessage": "Uusi viesti"
   },
   "gradeNames": {
     "celujacy": "Erinomainen",
@@ -730,14 +744,14 @@
     "newChanges": "Uutta: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Tue kehittäjää",
+    "subtitle": "Auta pitämään BSharp ilmaisena ja ylläpidettynä",
+    "badge": "Tehty rakkaudella",
+    "tipJar": "Tippipurkki",
+    "tipCoffee": "Kahvi",
+    "tipMeal": "Ateria",
+    "purchaseSuccess": "Kiitos tuestasi!",
+    "purchaseFailed": "Osto epäonnistui, yritä uudelleen",
+    "productsUnavailable": "Tipit eivät ole tällä hetkellä saatavilla"
   }
 }

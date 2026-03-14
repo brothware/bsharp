@@ -50,7 +50,7 @@
     "schoolIdHint": "npr. sp1warszawa",
     "loginAs": "Prijavi se kao ${name}",
     "switchAccount": "Promijeni račun",
-    "demoMode": "Demo mode"
+    "demoMode": "Demo način"
   },
   "setup": {
     "title": "Postavljanje",
@@ -95,7 +95,7 @@
     "title": "Raspored",
     "today": "Danas",
     "noLessons": "Nema nastave",
-    "browseDays": "Browse days",
+    "browseDays": "Pregledaj dane",
     "noLessonsSubtitle": "Nema zakazanih satova za ovaj dan",
     "cancelled": "Otkazano",
     "substitution": "Zamjena",
@@ -142,38 +142,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "Izvorno",
+    "originalTeacher": "Izvorni nastavnik",
+    "viewList": "Prikaz popisa",
+    "viewTimeline": "Vremenski prikaz",
+    "noEvents": "Nema događaja",
+    "noEventsSubtitle": "Nema zakazanih događaja za ovaj dan",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
-      "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "title": "Prilagođeni događaj",
+      "create": "Novi događaj",
+      "edit": "Uredi događaj",
+      "eventTitle": "Naslov",
+      "place": "Mjesto",
+      "description": "Opis",
+      "color": "Boja",
+      "startTime": "Vrijeme početka",
+      "endTime": "Vrijeme završetka",
+      "recurrence": "Ponavljanje",
+      "specificDates": "Određeni datumi",
+      "weekly": "Tjedno",
+      "addDate": "Dodaj datum",
+      "dateRange": "Raspon datuma",
+      "from": "Od",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Radni dani",
+      "deleteConfirmTitle": "Obriši događaj",
+      "deleteConfirmBody": "Jeste li sigurni da želite obrisati ovaj događaj?",
+      "saved": "Događaj spremljen",
+      "deleted": "Događaj obrisan",
+      "titleRequired": "Naslov je obavezan",
+      "endBeforeStart": "Vrijeme završetka mora biti nakon vremena početka",
+      "noDatesSelected": "Odaberite barem jedan datum"
+    },
+    "replacement": "Zamjena"
   },
   "grades": {
     "title": "Ocjene",
@@ -197,7 +198,7 @@
     "grade(context=other)": "ocjena",
     "other": "Ostalo",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "t${weight}"
   },
   "attendance": {
     "title": "Prisutnost",
@@ -278,8 +279,10 @@
     "message(context=one)": "poruka",
     "message(context=few)": "poruke",
     "message(context=other)": "poruka",
-    "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "replyPrefix": "Odg: ${title}",
+    "downloadFailed": "Preuzimanje nije uspjelo",
+    "messageSent": "Poruka poslana",
+    "sendFailed": "Slanje poruke nije uspjelo"
   },
   "settings": {
     "title": "Postavke",
@@ -327,7 +330,11 @@
     "syncSection": "Sinkronizacija",
     "sync": "Sinkroniziraj",
     "syncing": "Sinkronizacija...",
-    "languageSystem": "Sustavni"
+    "languageSystem": "Sustavni",
+    "batteryOptimization": "Optimizacija baterije",
+    "batteryUnrestricted": "Neograničeno",
+    "batteryRestricted": "Ograničeno",
+    "batteryOptimizationSubtitle": "Neograničeni način poboljšava pouzdanost pozadinske sinkronizacije"
   },
   "childMode": {
     "title": "Dječji način",
@@ -378,12 +385,12 @@
     "praise": "Pohvala",
     "teacherLabel": "Nastavnik: ${name}",
     "dateLabel": "Datum: ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Primjedbe",
+    "infoTab": "Informacije",
+    "noRemarks": "Nema primjedbi",
+    "noInfo": "Nema informacija",
+    "remark": "Primjedba",
+    "info": "Informacija"
   },
   "tests": {
     "title": "Ispiti",
@@ -399,14 +406,14 @@
   "changelog": {
     "title": "Nedavne promjene",
     "noChanges": "Nema promjena",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Ocjene",
+    "attendanceTab": "Prisutnost",
+    "gradeAdded": "Ocjena dodana",
+    "gradeUpdated": "Ocjena ažurirana",
+    "gradeDeleted": "Ocjena obrisana",
+    "attendanceAdded": "Prisutnost dodana",
+    "attendanceUpdated": "Prisutnost ažurirana",
+    "attendanceDeleted": "Prisutnost obrisana"
   },
   "translation": {
     "translate": "Prevedi",
@@ -462,7 +469,14 @@
     "homeworkName": "Domaća zadaća",
     "homeworkDescription": "Obavijesti o novoj domaćoj zadaći",
     "notesName": "Bilješke",
-    "notesDescription": "Obavijesti o bilješkama i pohvalama"
+    "notesDescription": "Obavijesti o bilješkama i pohvalama",
+    "newGrade": "Nova ocjena",
+    "scheduleChange": "Promjena rasporeda",
+    "attendanceUpdate": "Promjena prisutnosti",
+    "newHomework": "Nova domaća zadaća",
+    "newTest": "Novi ispit",
+    "newAnnotation": "Nova bilješka",
+    "newMessage": "Nova poruka"
   },
   "gradeNames": {
     "celujacy": "Izvrstan",
@@ -733,14 +747,14 @@
     "newChanges": "Novo: ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Podržite razvijatelja",
+    "subtitle": "Pomozite da BSharp ostane besplatan i održavan",
+    "badge": "Napravljeno s ljubavlju",
+    "tipJar": "Napojnica",
+    "tipCoffee": "Kava",
+    "tipMeal": "Obrok",
+    "purchaseSuccess": "Hvala na podršci!",
+    "purchaseFailed": "Kupnja nije uspjela, pokušajte ponovo",
+    "productsUnavailable": "Napojnice trenutno nisu dostupne"
   }
 }

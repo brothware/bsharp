@@ -50,7 +50,7 @@
     "schoolIdHint": "p. ex. sp1warszawa",
     "loginAs": "Se connecter en tant que ${name}",
     "switchAccount": "Changer de compte",
-    "demoMode": "Demo mode"
+    "demoMode": "Mode démo"
   },
   "setup": {
     "title": "Configuration",
@@ -95,7 +95,7 @@
     "title": "Emploi du temps",
     "today": "Aujourd'hui",
     "noLessons": "Pas de cours",
-    "browseDays": "Browse days",
+    "browseDays": "Parcourir les jours",
     "noLessonsSubtitle": "Aucun cours prévu pour cette journée",
     "cancelled": "Annulé",
     "substitution": "Remplacement",
@@ -141,38 +141,39 @@
       "sat": "S",
       "sun": "S"
     },
-    "originalSubject": "Originally",
-    "originalTeacher": "Original teacher",
-    "viewList": "List view",
-    "viewTimeline": "Timeline view",
-    "noEvents": "No events",
-    "noEventsSubtitle": "No events scheduled for this day",
+    "originalSubject": "À l'origine",
+    "originalTeacher": "Enseignant d'origine",
+    "viewList": "Vue liste",
+    "viewTimeline": "Vue chronologique",
+    "noEvents": "Aucun événement",
+    "noEventsSubtitle": "Aucun événement prévu pour cette journée",
     "customEvent": {
-      "title": "Custom event",
-      "create": "New event",
-      "edit": "Edit event",
-      "eventTitle": "Title",
-      "place": "Place",
+      "title": "Événement personnalisé",
+      "create": "Nouvel événement",
+      "edit": "Modifier l'événement",
+      "eventTitle": "Titre",
+      "place": "Lieu",
       "description": "Description",
-      "color": "Colour",
-      "startTime": "Start time",
-      "endTime": "End time",
-      "recurrence": "Recurrence",
-      "specificDates": "Specific dates",
-      "weekly": "Weekly",
-      "addDate": "Add date",
-      "dateRange": "Date range",
-      "from": "From",
+      "color": "Couleur",
+      "startTime": "Heure de début",
+      "endTime": "Heure de fin",
+      "recurrence": "Récurrence",
+      "specificDates": "Dates spécifiques",
+      "weekly": "Hebdomadaire",
+      "addDate": "Ajouter une date",
+      "dateRange": "Plage de dates",
+      "from": "De",
       "to": "To",
-      "weekdays": "Weekdays",
-      "deleteConfirmTitle": "Delete event",
-      "deleteConfirmBody": "Are you sure you want to delete this event?",
-      "saved": "Event saved",
-      "deleted": "Event deleted",
-      "titleRequired": "Title is required",
-      "endBeforeStart": "End time must be after start time",
-      "noDatesSelected": "Select at least one date"
-    }
+      "weekdays": "Jours de la semaine",
+      "deleteConfirmTitle": "Supprimer l'événement",
+      "deleteConfirmBody": "Voulez-vous vraiment supprimer cet événement ?",
+      "saved": "Événement enregistré",
+      "deleted": "Événement supprimé",
+      "titleRequired": "Le titre est requis",
+      "endBeforeStart": "L'heure de fin doit être après l'heure de début",
+      "noDatesSelected": "Sélectionnez au moins une date"
+    },
+    "replacement": "Remplacement"
   },
   "grades": {
     "title": "Notes",
@@ -195,12 +196,12 @@
     "grade(context=other)": "notes",
     "other": "Autre",
     "newBadge": "NEW",
-    "weightPrefix": "w${weight}"
+    "weightPrefix": "c${weight}"
   },
   "attendance": {
     "title": "Présence",
     "present": "Présent",
-    "absent": "Absent",
+    "absent": "Absent(e)",
     "late": "En retard",
     "excused": "Justifié",
     "percentage": "Taux de présence",
@@ -213,14 +214,14 @@
     "overall": "Présence globale",
     "total": "Total",
     "presentCount": "Présent",
-    "absentCount": "Absent",
+    "absentCount": "Absent(e)",
     "distribution": "Répartition",
     "byType": "Par type",
     "fullPresence": "Présence complète",
     "excusedLabel": "Absence justifiée",
     "unexcusedLabel": "Absence non justifiée",
     "lateLabel": "En retard",
-    "absentLabel": "Absent",
+    "absentLabel": "Absent(e)",
     "partialPresence": "Présence partielle",
     "noDataLabel": "Aucune donnée",
     "excusedLegend": "Justifié",
@@ -275,8 +276,10 @@
     "deleted": "Supprimé : ${title}",
     "message(context=one)": "message",
     "message(context=other)": "messages",
-    "replyPrefix": "Re: ${title}",
-    "downloadFailed": "Download failed"
+    "replyPrefix": "Re : ${title}",
+    "downloadFailed": "Échec du téléchargement",
+    "messageSent": "Message envoyé",
+    "sendFailed": "Échec de l'envoi du message"
   },
   "settings": {
     "title": "Paramètres",
@@ -324,7 +327,11 @@
     "syncSection": "Synchronisation",
     "sync": "Synchroniser",
     "syncing": "Synchronisation...",
-    "languageSystem": "Système"
+    "languageSystem": "Système",
+    "batteryOptimization": "Optimisation de la batterie",
+    "batteryUnrestricted": "Non restreint",
+    "batteryRestricted": "Restreint",
+    "batteryOptimizationSubtitle": "Le mode non restreint améliore la fiabilité de la synchronisation en arrière-plan"
   },
   "childMode": {
     "title": "Mode enfant",
@@ -375,12 +382,12 @@
     "praise": "Éloge",
     "teacherLabel": "Enseignant : ${name}",
     "dateLabel": "Date : ${date}",
-    "remarksTab": "Remarks",
-    "infoTab": "Information",
-    "noRemarks": "No remarks",
-    "noInfo": "No information",
-    "remark": "Remark",
-    "info": "Information"
+    "remarksTab": "Remarques",
+    "infoTab": "Informations",
+    "noRemarks": "Aucune remarque",
+    "noInfo": "Aucune information",
+    "remark": "Remarque",
+    "info": "Informations"
   },
   "tests": {
     "title": "Contrôles",
@@ -396,14 +403,14 @@
   "changelog": {
     "title": "Modifications récentes",
     "noChanges": "Aucune modification",
-    "gradesTab": "Grades",
-    "attendanceTab": "Attendance",
-    "gradeAdded": "Grade added",
-    "gradeUpdated": "Grade updated",
-    "gradeDeleted": "Grade deleted",
-    "attendanceAdded": "Attendance added",
-    "attendanceUpdated": "Attendance updated",
-    "attendanceDeleted": "Attendance deleted"
+    "gradesTab": "Notes",
+    "attendanceTab": "Présence",
+    "gradeAdded": "Note ajoutée",
+    "gradeUpdated": "Note mise à jour",
+    "gradeDeleted": "Note supprimée",
+    "attendanceAdded": "Présence ajoutée",
+    "attendanceUpdated": "Présence mise à jour",
+    "attendanceDeleted": "Présence supprimée"
   },
   "translation": {
     "translate": "Traduire",
@@ -459,10 +466,17 @@
     "homeworkName": "Devoirs",
     "homeworkDescription": "Notifications pour les nouveaux devoirs",
     "notesName": "Remarques",
-    "notesDescription": "Notifications pour les remarques et éloges"
+    "notesDescription": "Notifications pour les remarques et éloges",
+    "newGrade": "Nouvelle note",
+    "scheduleChange": "Changement d'emploi du temps",
+    "attendanceUpdate": "Changement de présence",
+    "newHomework": "Nouveau devoir",
+    "newTest": "Nouveau contrôle",
+    "newAnnotation": "Nouvelle annotation",
+    "newMessage": "Nouveau message"
   },
   "gradeNames": {
-    "celujacy": "Excellent",
+    "celujacy": "Excellent(e)",
     "celujacyMinus": "Excellent moins",
     "bardzoDobryPlus": "Très bien plus",
     "bardzoDobry": "Très bien",
@@ -513,7 +527,7 @@
     "poprawne": "Correct",
     "nieodpowiednie": "Inapproprié",
     "naganne": "Blâmable",
-    "nieobecny": "Absent",
+    "nieobecny": "Absent(e)",
     "brakZadania": "Devoir manquant",
     "nieprzygotowany": "Non préparé"
   },
@@ -521,7 +535,7 @@
     "sprawdzian": "Contrôle",
     "kartkowka": "Interrogation écrite",
     "odpowiedzUstna": "Interrogation orale",
-    "pracaDomowa": "Devoir maison",
+    "pracaDomowa": "Devoir",
     "aktywnosc": "Participation",
     "projekt": "Projet",
     "wypracowanie": "Rédaction",
@@ -664,7 +678,7 @@
   },
   "attendanceTypes": {
     "obecnosc": "Présent",
-    "nieobecnosc": "Absent",
+    "nieobecnosc": "Absent(e)",
     "nieobecnoscUsprawiedliwiona": "Absence justifiée",
     "nieobecnoscNieusprawiedliwiona": "Absence non justifiée",
     "nieobecnoscInna": "Autre absence",
@@ -730,14 +744,14 @@
     "newChanges": "Nouveau : ${summary}"
   },
   "support": {
-    "title": "Support the developer",
-    "subtitle": "Help keep BSharp free and maintained",
-    "badge": "Made with love",
-    "tipJar": "Tip jar",
-    "tipCoffee": "Coffee",
-    "tipMeal": "Meal",
-    "purchaseSuccess": "Thank you for your support!",
-    "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "title": "Soutenir le développeur",
+    "subtitle": "Aidez à garder BSharp gratuit et maintenu",
+    "badge": "Fait avec amour",
+    "tipJar": "Pourboire",
+    "tipCoffee": "Café",
+    "tipMeal": "Repas",
+    "purchaseSuccess": "Merci pour votre soutien !",
+    "purchaseFailed": "Achat échoué, veuillez réessayer",
+    "productsUnavailable": "Les pourboires sont actuellement indisponibles"
   }
 }
