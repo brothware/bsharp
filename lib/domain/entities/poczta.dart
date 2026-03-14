@@ -14,7 +14,17 @@ abstract class PocztaMessage with _$PocztaMessage {
     String? preview,
     String? content,
     List<PocztaAttachment>? files,
+    @Default([]) List<PocztaRecipient> recipients,
   }) = _PocztaMessage;
+}
+
+@freezed
+abstract class PocztaRecipient with _$PocztaRecipient {
+  const factory PocztaRecipient({
+    required String name,
+    String? role,
+    DateTime? readAt,
+  }) = _PocztaRecipient;
 }
 
 @freezed

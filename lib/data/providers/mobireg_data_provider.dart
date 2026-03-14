@@ -494,6 +494,22 @@ List<PocztaMessage> parsePocztaMessages(List<dynamic> data) {
       final dateStr = item['date'] as String?;
       if (dateStr == null) continue;
 
+      final recipientsRaw = item['recipients'] as List<dynamic>?;
+      final recipients = <PocztaRecipient>[];
+      if (recipientsRaw != null) {
+        for (final r in recipientsRaw) {
+          if (r is! Map<String, dynamic>) continue;
+          final readAtStr = r['read_at'] as String?;
+          recipients.add(
+            PocztaRecipient(
+              name: (r['name'] ?? '') as String,
+              role: r['roleName'] as String?,
+              readAt: readAtStr != null ? DateTime.tryParse(readAtStr) : null,
+            ),
+          );
+        }
+      }
+
       result.add(
         PocztaMessage(
           id: item['id'] as int,
@@ -504,6 +520,7 @@ List<PocztaMessage> parsePocztaMessages(List<dynamic> data) {
           isRead: item['read_at'] != null,
           isStarred: item['stared'] == true,
           content: item['content'] as String?,
+          recipients: recipients,
         ),
       );
     } on Object {
