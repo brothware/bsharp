@@ -15,6 +15,12 @@ import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
+class SendMessageException implements Exception {
+  SendMessageException(this.failure);
+
+  final AppFailure failure;
+}
+
 class MobiregDataProvider implements SchoolDataProvider {
   ApiClientFactory? _factory;
   String? _school;
@@ -334,7 +340,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       previousMessageId: previousMessageId,
     );
     if (result case Failure(:final failure)) {
-      throw failure;
+      throw SendMessageException(failure);
     }
   }
 

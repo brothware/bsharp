@@ -8,6 +8,7 @@ import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/support_badge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -136,6 +137,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _finishLogin(int studentId) async {
+    TextInput.finishAutofillContext();
     final storage = ref.read(credentialStorageProvider);
     await storage.saveCredentials(
       school: _schoolController.text.trim(),
@@ -211,64 +213,73 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  if (_hasStoredCredentials) ...[
-                    Text(
-                      t.auth.loginAs(name: _loginController.text),
-                      style: theme.textTheme.bodyLarge,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                  ] else ...[
-                    TextField(
-                      controller: _schoolController,
-                      decoration: InputDecoration(
-                        labelText: t.auth.schoolId,
-                        hintText: t.auth.schoolIdHint,
-                        prefixIcon: const Icon(Icons.domain),
-                        border: const OutlineInputBorder(),
-                      ),
-                      textInputAction: TextInputAction.next,
-                      enabled: !_isLoading,
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _loginController,
-                      decoration: InputDecoration(
-                        labelText: t.auth.username,
-                        prefixIcon: const Icon(Icons.person),
-                        border: const OutlineInputBorder(),
-                      ),
-                      textInputAction: TextInputAction.next,
-                      enabled: !_isLoading,
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                  if (_errorMessage != null)
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.errorContainer,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        _errorMessage!,
-                        style: TextStyle(
-                          color: theme.colorScheme.onErrorContainer,
+                  AutofillGroup(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (_hasStoredCredentials) ...[
+                          Text(
+                            t.auth.loginAs(name: _loginController.text),
+                            style: theme.textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                        ] else ...[
+                          TextField(
+                            controller: _schoolController,
+                            decoration: InputDecoration(
+                              labelText: t.auth.schoolId,
+                              hintText: t.auth.schoolIdHint,
+                              prefixIcon: const Icon(Icons.domain),
+                              border: const OutlineInputBorder(),
+                            ),
+                            textInputAction: TextInputAction.next,
+                            enabled: !_isLoading,
+                          ),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: _loginController,
+                            autofillHints: const [AutofillHints.username],
+                            decoration: InputDecoration(
+                              labelText: t.auth.username,
+                              prefixIcon: const Icon(Icons.person),
+                              border: const OutlineInputBorder(),
+                            ),
+                            textInputAction: TextInputAction.next,
+                            enabled: !_isLoading,
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                        if (_errorMessage != null)
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            margin: const EdgeInsets.only(bottom: 16),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.errorContainer,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              _errorMessage!,
+                              style: TextStyle(
+                                color: theme.colorScheme.onErrorContainer,
+                              ),
+                            ),
+                          ),
+                        TextField(
+                          controller: _passwordController,
+                          autofillHints: const [AutofillHints.password],
+                          decoration: InputDecoration(
+                            labelText: t.auth.password,
+                            prefixIcon: const Icon(Icons.lock),
+                            border: const OutlineInputBorder(),
+                          ),
+                          obscureText: true,
+                          textInputAction: TextInputAction.done,
+                          enabled: !_isLoading,
+                          onSubmitted: (_) => _handleLogin(),
                         ),
-                      ),
+                      ],
                     ),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: t.auth.password,
-                      prefixIcon: const Icon(Icons.lock),
-                      border: const OutlineInputBorder(),
-                    ),
-                    obscureText: true,
-                    textInputAction: TextInputAction.done,
-                    enabled: !_isLoading,
-                    onSubmitted: (_) => _handleLogin(),
                   ),
                   const SizedBox(height: 24),
                   FilledButton(

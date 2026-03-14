@@ -357,13 +357,13 @@ class _MessageListState extends ConsumerState<_MessageList> {
         content: result['content'] as String,
         previousMessageId: result['previousMessageId'] as int?,
       );
-      if (!mounted) return;
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(t.messages.messageSent)),
       );
       unawaited(ref.read(syncStatusProvider.notifier).syncMessages());
     } on Exception {
-      if (!mounted) return;
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(t.messages.sendFailed)),
       );

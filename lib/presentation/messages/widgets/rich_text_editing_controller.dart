@@ -116,8 +116,9 @@ class RichTextEditingController extends TextEditingController {
     final length = end - start;
     for (final f in _formats.toList()) {
       if (f.start >= end) {
-        f.start -= length;
-        f.end -= length;
+        f
+          ..start -= length
+          ..end -= length;
       } else if (f.start >= start) {
         f.start = start;
         if (f.end <= end) {
@@ -141,8 +142,9 @@ class RichTextEditingController extends TextEditingController {
 
     for (final f in _formats.toList()) {
       if (f.start > position) {
-        f.start += length;
-        f.end += length;
+        f
+          ..start += length
+          ..end += length;
       } else if (f.end > position) {
         if (_activeFormats.contains(f.type)) {
           f.end += length;
@@ -174,8 +176,8 @@ class RichTextEditingController extends TextEditingController {
   @override
   TextSpan buildTextSpan({
     required BuildContext context,
-    TextStyle? style,
     required bool withComposing,
+    TextStyle? style,
   }) {
     final composing = value.composing;
     final hasComposing =
@@ -187,12 +189,14 @@ class RichTextEditingController extends TextEditingController {
 
     final breakpoints = <int>{0, text.length};
     for (final f in _formats) {
-      breakpoints.add(f.start.clamp(0, text.length));
-      breakpoints.add(f.end.clamp(0, text.length));
+      breakpoints
+        ..add(f.start.clamp(0, text.length))
+        ..add(f.end.clamp(0, text.length));
     }
     if (hasComposing) {
-      breakpoints.add(composing.start.clamp(0, text.length));
-      breakpoints.add(composing.end.clamp(0, text.length));
+      breakpoints
+        ..add(composing.start.clamp(0, text.length))
+        ..add(composing.end.clamp(0, text.length));
     }
     final sorted = breakpoints.toList()..sort();
 
@@ -237,8 +241,9 @@ class RichTextEditingController extends TextEditingController {
 
     final breakpoints = <int>{0, text.length};
     for (final f in _formats) {
-      breakpoints.add(f.start.clamp(0, text.length));
-      breakpoints.add(f.end.clamp(0, text.length));
+      breakpoints
+        ..add(f.start.clamp(0, text.length))
+        ..add(f.end.clamp(0, text.length));
     }
     final sorted = breakpoints.toList()..sort();
 
