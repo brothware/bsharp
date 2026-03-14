@@ -28,7 +28,7 @@
     "attendance": "Frekwencja",
     "messages": "Wiadomości",
     "homework": "Zadania",
-    "notes": "Uwagi",
+    "notes": "Adnotacje",
     "tests": "Sprawdziany",
     "bulletins": "Ogłoszenia",
     "changelog": "Zmiany",
@@ -373,7 +373,7 @@
     "noHomework": "Brak zadań domowych"
   },
   "notes": {
-    "title": "Uwagi",
+    "title": "Adnotacje",
     "remarksTab": "Uwagi",
     "praisesTab": "Pochwały",
     "infoTab": "Informacje",

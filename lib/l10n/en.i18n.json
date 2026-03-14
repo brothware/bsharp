@@ -28,7 +28,7 @@
     "attendance": "Attendance",
     "messages": "Messages",
     "homework": "Homework",
-    "notes": "Notes",
+    "notes": "Annotations",
     "tests": "Tests",
     "bulletins": "Announcements",
     "changelog": "Changes",
@@ -370,7 +370,7 @@
     "noHomework": "No homework"
   },
   "notes": {
-    "title": "Remarks",
+    "title": "Annotations",
     "remarksTab": "Remarks",
     "praisesTab": "Praise",
     "infoTab": "Information",
