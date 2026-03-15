@@ -139,11 +139,29 @@ List<ScheduleEntry> scheduleEntriesForDate(Ref ref, DateTime date) {
 
   final replacedIds = <int>{};
   final replacementToOriginals = <int, List<int>>{};
+  final directSubstitutionOriginals = <int>{};
+  final directSubstitutionReplacements = <int>{};
+
   for (final ee in eventEvents) {
-    replacedIds.add(ee.events2Id);
-    replacementToOriginals
-        .putIfAbsent(ee.events1Id, () => [])
-        .add(ee.events2Id);
+    final e1 = allEventsMap[ee.events1Id];
+    final e2 = allEventsMap[ee.events2Id];
+    if (e1 == null || e2 == null) continue;
+
+    int originalId;
+    int replacementId;
+
+    if (e1.substitution == 1 && e2.substitution == 2) {
+      originalId = ee.events1Id;
+      replacementId = ee.events2Id;
+      directSubstitutionOriginals.add(originalId);
+      directSubstitutionReplacements.add(replacementId);
+    } else {
+      originalId = ee.events2Id;
+      replacementId = ee.events1Id;
+    }
+
+    replacedIds.add(originalId);
+    replacementToOriginals.putIfAbsent(replacementId, () => []).add(originalId);
   }
 
   String? resolveSubject(int eventTypesId) {
@@ -161,77 +179,87 @@ List<ScheduleEntry> scheduleEntriesForDate(Ref ref, DateTime date) {
     return t != null ? '${t.name} ${t.surname}' : null;
   }
 
-  return events.map((event) {
-    final subjectName = resolveSubject(event.eventTypesId);
-    final teacherName = resolveTeacher(event.eventTypesId);
+  return events
+      .map((event) {
+        final subjectName = resolveSubject(event.eventTypesId);
+        final teacherName = resolveTeacher(event.eventTypesId);
 
-    final roomName = event.roomsId != null
-        ? roomMap[event.roomsId]?.name
-        : null;
+        final roomName = event.roomsId != null
+            ? roomMap[event.roomsId]?.name
+            : null;
 
-    final topic = eventSubs
-        .where((es) => es.eventsId == event.id)
-        .map((es) => es.content)
-        .join(', ');
+        final topic = eventSubs
+            .where((es) => es.eventsId == event.id)
+            .map((es) => es.content)
+            .join(', ');
 
-    final isReplaced = replacedIds.contains(event.id);
+        final isReplaced = replacedIds.contains(event.id);
 
-    ScheduleChangeType? changeType;
-    if (isReplaced) {
-      changeType = ScheduleChangeType.cancelled;
-    } else if (event.status == 2) {
-      changeType = ScheduleChangeType.cancelled;
-    } else if (replacementToOriginals.containsKey(event.id) ||
-        event.substitution != 0) {
-      changeType = ScheduleChangeType.substitution;
-    }
+        ScheduleChangeType? changeType;
+        if (isReplaced) {
+          changeType = ScheduleChangeType.cancelled;
+        } else if (event.status == 2) {
+          changeType = ScheduleChangeType.cancelled;
+        } else if (replacementToOriginals.containsKey(event.id) ||
+            event.substitution == 2) {
+          changeType = ScheduleChangeType.substitution;
+        }
 
-    String? originalSubjectName;
-    String? originalTeacherName;
-    var replacedLessonNumbers = const <int>[];
+        String? originalSubjectName;
+        String? originalTeacherName;
+        var replacedLessonNumbers = const <int>[];
 
-    final originalIds = replacementToOriginals[event.id];
-    if (originalIds != null) {
-      replacedLessonNumbers =
-          originalIds
-              .map((id) => allEventsMap[id]?.number ?? 0)
-              .where((n) => n > 0)
-              .toList()
-            ..sort();
+        final originalIds = replacementToOriginals[event.id];
+        if (originalIds != null) {
+          replacedLessonNumbers =
+              originalIds
+                  .map((id) => allEventsMap[id]?.number ?? 0)
+                  .where((n) => n > 0)
+                  .toList()
+                ..sort();
 
-      final firstOrigId = originalIds.first;
-      final origEvent = allEventsMap[firstOrigId];
-      if (origEvent != null) {
-        originalSubjectName = resolveSubject(origEvent.eventTypesId);
-        originalTeacherName = resolveTeacher(origEvent.eventTypesId);
-      }
-    }
+          final firstOrigId = originalIds.first;
+          final origEvent = allEventsMap[firstOrigId];
+          if (origEvent != null) {
+            originalSubjectName = resolveSubject(origEvent.eventTypesId);
+            originalTeacherName = resolveTeacher(origEvent.eventTypesId);
+          }
+        }
 
-    final resolvedSubjectName = originalIds != null
-        ? (event.name ?? subjectName ?? originalSubjectName)
-        : subjectName;
+        final useEventName =
+            originalIds != null &&
+            !directSubstitutionReplacements.contains(event.id) &&
+            event.name?.isNotEmpty == true;
+        final resolvedSubjectName = originalIds != null
+            ? ((useEventName ? event.name : null) ??
+                  subjectName ??
+                  originalSubjectName)
+            : subjectName;
 
-    return ScheduleEntry(
-      event: event,
-      subjectName: resolvedSubjectName,
-      teacherName: teacherName,
-      roomName: roomName,
-      topic: topic.isNotEmpty ? topic : null,
-      changeType: changeType,
-      originalSubjectName: originalSubjectName,
-      originalTeacherName: originalTeacherName,
-      replacedLessonNumbers: replacedLessonNumbers,
-      isReplaced: isReplaced,
-    );
-  }).toList()..sort((a, b) {
-    final aKey = a.replacedLessonNumbers.isNotEmpty
-        ? a.replacedLessonNumbers.reduce((x, y) => x > y ? x : y) + 0.5
-        : a.event.number.toDouble();
-    final bKey = b.replacedLessonNumbers.isNotEmpty
-        ? b.replacedLessonNumbers.reduce((x, y) => x > y ? x : y) + 0.5
-        : b.event.number.toDouble();
-    return aKey.compareTo(bKey);
-  });
+        return ScheduleEntry(
+          event: event,
+          subjectName: resolvedSubjectName,
+          teacherName: teacherName,
+          roomName: roomName,
+          topic: topic.isNotEmpty ? topic : null,
+          changeType: changeType,
+          originalSubjectName: originalSubjectName,
+          originalTeacherName: originalTeacherName,
+          replacedLessonNumbers: replacedLessonNumbers,
+          isReplaced: isReplaced,
+        );
+      })
+      .where((entry) => !directSubstitutionOriginals.contains(entry.event.id))
+      .toList()
+    ..sort((a, b) {
+      final aKey = a.replacedLessonNumbers.isNotEmpty
+          ? a.replacedLessonNumbers.reduce((x, y) => x > y ? x : y) + 0.5
+          : a.event.number.toDouble();
+      final bKey = b.replacedLessonNumbers.isNotEmpty
+          ? b.replacedLessonNumbers.reduce((x, y) => x > y ? x : y) + 0.5
+          : b.event.number.toDouble();
+      return aKey.compareTo(bKey);
+    });
 }
 
 @Riverpod(keepAlive: true)
