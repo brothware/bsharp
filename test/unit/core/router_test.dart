@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Router redirect logic', () {
-    test('unauthenticated redirects to login', () {
+    test('unauthenticated redirects to account setup', () {
       final router = createRouter(authState: AuthState.unauthenticated);
       expect(router.configuration.routes, isNotEmpty);
     });
@@ -14,13 +14,14 @@ void main() {
     });
 
     test('AppRoutes constants are correct', () {
-      expect(AppRoutes.login, '/login');
+      expect(AppRoutes.accountSetup, '/account-setup');
       expect(AppRoutes.dashboard, '/dashboard');
       expect(AppRoutes.schedule, '/schedule');
       expect(AppRoutes.grades, '/grades');
       expect(AppRoutes.attendance, '/attendance');
       expect(AppRoutes.messages, '/messages');
       expect(AppRoutes.settings, '/settings');
+      expect(AppRoutes.accountsManage, '/accounts/manage');
       expect(AppRoutes.homework, '/homework');
       expect(AppRoutes.notes, '/notes');
       expect(AppRoutes.tests, '/tests');

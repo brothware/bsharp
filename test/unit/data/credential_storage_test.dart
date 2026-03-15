@@ -12,66 +12,36 @@ void main() {
   });
 
   group('CredentialStorage', () {
-    test('hasCredentials returns false when empty', () async {
-      expect(await credentialStorage.hasCredentials(), isFalse);
+    test('child mode pin round-trip', () async {
+      expect(await credentialStorage.getChildModePin(), isNull);
+      await credentialStorage.saveChildModePin('1234');
+      expect(await credentialStorage.getChildModePin(), '1234');
+      await credentialStorage.clearChildModePin();
+      expect(await credentialStorage.getChildModePin(), isNull);
     });
 
-    test('saveCredentials and read back', () async {
-      await credentialStorage.saveCredentials(
-        school: 'sp1',
-        login: 'user1',
-        passwordHash: 'abc123',
-      );
-
-      expect(await credentialStorage.getSchool(), 'sp1');
-      expect(await credentialStorage.getLogin(), 'user1');
-      expect(await credentialStorage.getPasswordHash(), 'abc123');
+    test('child mode active round-trip', () async {
+      expect(await credentialStorage.isChildModeActive(), isFalse);
+      await credentialStorage.saveChildModeActive(active: true);
+      expect(await credentialStorage.isChildModeActive(), isTrue);
     });
 
-    test('hasCredentials returns true after save', () async {
-      await credentialStorage.saveCredentials(
-        school: 'sp1',
-        login: 'user1',
-        passwordHash: 'abc123',
-      );
-
-      expect(await credentialStorage.hasCredentials(), isTrue);
-    });
-
-    test('hasSelectedStudent returns false when not set', () async {
-      expect(await credentialStorage.hasSelectedStudent(), isFalse);
-    });
-
-    test('saveSelectedStudentId and read back', () async {
-      await credentialStorage.saveSelectedStudentId(42);
-      expect(await credentialStorage.getSelectedStudentId(), 42);
-      expect(await credentialStorage.hasSelectedStudent(), isTrue);
-    });
-
-    test('saveMessagesToken and read back', () async {
-      await credentialStorage.saveMessagesToken('tok123');
-      expect(await credentialStorage.getMessagesToken(), 'tok123');
+    test('deepl api key round-trip', () async {
+      expect(await credentialStorage.getDeeplApiKey(), isNull);
+      await credentialStorage.saveDeeplApiKey('key123');
+      expect(await credentialStorage.getDeeplApiKey(), 'key123');
+      await credentialStorage.clearDeeplApiKey();
+      expect(await credentialStorage.getDeeplApiKey(), isNull);
     });
 
     test('clearAll removes everything', () async {
-      await credentialStorage.saveCredentials(
-        school: 'sp1',
-        login: 'user1',
-        passwordHash: 'abc123',
-      );
-      await credentialStorage.saveSelectedStudentId(42);
-      await credentialStorage.saveMessagesToken('tok');
+      await credentialStorage.saveChildModePin('1234');
+      await credentialStorage.saveDeeplApiKey('key');
 
       await credentialStorage.clearAll();
 
-      expect(await credentialStorage.hasCredentials(), isFalse);
-      expect(await credentialStorage.hasSelectedStudent(), isFalse);
-      expect(await credentialStorage.getMessagesToken(), isNull);
-    });
-
-    test('getSelectedStudentId returns null for invalid value', () async {
-      fakeStorage.data['selected_student_id'] = 'notanumber';
-      expect(await credentialStorage.getSelectedStudentId(), isNull);
+      expect(await credentialStorage.getChildModePin(), isNull);
+      expect(await credentialStorage.getDeeplApiKey(), isNull);
     });
   });
 }

@@ -121,7 +121,10 @@ void main() {
       await tester.pumpWidget(await _buildSettings());
       await tester.pump();
       await tester.scrollUntilVisible(find.text('Log out'), 200);
+      await tester.pump();
 
+      await tester.ensureVisible(find.text('Log out'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Log out'));
       await tester.pumpAndSettle();
 
@@ -153,8 +156,9 @@ void main() {
   group('Settings - About Section', () {
     testWidgets('shows app name and version', (tester) async {
       await tester.pumpWidget(await _buildSettings());
-      await tester.pump();
+      await tester.pumpAndSettle();
       await _scrollTo(tester, 'BSharp');
+      await tester.pumpAndSettle();
 
       expect(find.text('BSharp'), findsOneWidget);
       expect(find.text('Version 1.2.3'), findsOneWidget);
