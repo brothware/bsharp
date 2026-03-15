@@ -11,6 +11,7 @@ const _endHour = 20;
 const _hourHeight = 80.0;
 const double _totalHeight = (_endHour - _startHour) * _hourHeight;
 const _leftMargin = 52.0;
+const _verticalPadding = 12.0;
 
 class _LayoutSlot {
   _LayoutSlot({
@@ -152,7 +153,7 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
   }
 
   double _timeToY(double minutes) =>
-      (minutes - _startHour * 60) / 60 * _hourHeight;
+      (minutes - _startHour * 60) / 60 * _hourHeight + _verticalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -163,12 +164,12 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
       controller: _scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: SizedBox(
-        height: _totalHeight,
+        height: _totalHeight + _verticalPadding * 2,
         child: Stack(
           children: [
             for (var h = _startHour; h <= _endHour; h++) ...[
               Positioned(
-                top: (h - _startHour) * _hourHeight,
+                top: (h - _startHour) * _hourHeight + _verticalPadding,
                 left: 0,
                 right: 0,
                 child: FractionalTranslation(
