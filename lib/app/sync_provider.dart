@@ -258,7 +258,8 @@ class LastSyncTime extends _$LastSyncTime {
 
 @Riverpod(keepAlive: true)
 BackgroundSyncScheduler? backgroundSyncScheduler(Ref ref) {
-  final isMobile = defaultTargetPlatform == TargetPlatform.android ||
+  final isMobile =
+      defaultTargetPlatform == TargetPlatform.android ||
       defaultTargetPlatform == TargetPlatform.iOS;
   if (!isMobile) return null;
 

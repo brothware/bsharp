@@ -50,8 +50,8 @@ class LessonTimelineItem implements TimelineItem {
   @override
   Color displayColor({Brightness brightness = Brightness.light}) =>
       entry.subjectName != null
-          ? subjectColor(entry.subjectName!, brightness: brightness)
-          : const Color(0xFF607D8B);
+      ? subjectColor(entry.subjectName!, brightness: brightness)
+      : const Color(0xFF607D8B);
 }
 
 class CustomEventTimelineItem implements TimelineItem {

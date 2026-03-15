@@ -179,8 +179,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
                         ? _DayTimelineList(date: day)
                         : LinearDayView(
                             date: day,
-                            onItemTap: (item) =>
-                                _showItemDetail(context, item),
+                            onItemTap: (item) => _showItemDetail(context, item),
                           ),
                 ],
               ),
@@ -260,13 +259,11 @@ class _DayTimelineList extends ConsumerWidget {
           return switch (item) {
             LessonTimelineItem() => LessonCard(
               entry: item.entry,
-              onTap: () =>
-                  _ScheduleScreenState._showItemDetail(context, item),
+              onTap: () => _ScheduleScreenState._showItemDetail(context, item),
             ),
             CustomEventTimelineItem() => CustomEventCard(
               item: item,
-              onTap: () =>
-                  _ScheduleScreenState._showItemDetail(context, item),
+              onTap: () => _ScheduleScreenState._showItemDetail(context, item),
             ),
           };
         },

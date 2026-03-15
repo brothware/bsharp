@@ -24,7 +24,8 @@ void callbackDispatcher() {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final isMobile = defaultTargetPlatform == TargetPlatform.android ||
+  final isMobile =
+      defaultTargetPlatform == TargetPlatform.android ||
       defaultTargetPlatform == TargetPlatform.iOS;
   if (isMobile) {
     await Workmanager().initialize(callbackDispatcher);

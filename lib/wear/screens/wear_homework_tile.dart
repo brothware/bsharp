@@ -59,7 +59,10 @@ class WearHomeworkTile extends ConsumerWidget {
                 itemCount: homework.take(3).length,
                 itemBuilder: (context, index) {
                   final hw = homework[index];
-                  final sColor = subjectColor(hw.subjectName, brightness: theme.brightness);
+                  final sColor = subjectColor(
+                    hw.subjectName,
+                    brightness: theme.brightness,
+                  );
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 3),
                     padding: const EdgeInsets.symmetric(
