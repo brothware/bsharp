@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/room.dart';
+import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/domain/translation_utils.dart';
@@ -137,32 +138,11 @@ List<ScheduleEntry> scheduleEntriesForDate(Ref ref, DateTime date) {
   final roomMap = {for (final r in rooms) r.id: r};
   final allEventsMap = {for (final e in allEvents) e.id: e};
 
-  final replacedIds = <int>{};
-  final replacementToOriginals = <int, List<int>>{};
-  final directSubstitutionOriginals = <int>{};
-  final directSubstitutionReplacements = <int>{};
-
-  for (final ee in eventEvents) {
-    final e1 = allEventsMap[ee.events1Id];
-    final e2 = allEventsMap[ee.events2Id];
-    if (e1 == null || e2 == null) continue;
-
-    int originalId;
-    int replacementId;
-
-    if (e1.substitution == 1 && e2.substitution == 2) {
-      originalId = ee.events1Id;
-      replacementId = ee.events2Id;
-      directSubstitutionOriginals.add(originalId);
-      directSubstitutionReplacements.add(replacementId);
-    } else {
-      originalId = ee.events2Id;
-      replacementId = ee.events1Id;
-    }
-
-    replacedIds.add(originalId);
-    replacementToOriginals.putIfAbsent(replacementId, () => []).add(originalId);
-  }
+  final mapping = buildReplacementMapping(eventEvents, allEventsMap);
+  final replacedIds = mapping.replacedIds;
+  final replacementToOriginals = mapping.replacementToOriginals;
+  final directSubstitutionOriginals = mapping.directSubstitutionOriginals;
+  final directSubstitutionReplacements = mapping.directSubstitutionReplacements;
 
   String? resolveSubject(int eventTypesId) {
     final et = eventTypeMap[eventTypesId];
@@ -226,12 +206,15 @@ List<ScheduleEntry> scheduleEntriesForDate(Ref ref, DateTime date) {
           }
         }
 
+        final cleanEventName = event.name != null
+            ? stripHtml(event.name!).trim()
+            : null;
         final useEventName =
             originalIds != null &&
             !directSubstitutionReplacements.contains(event.id) &&
-            event.name?.isNotEmpty == true;
+            cleanEventName?.isNotEmpty == true;
         final resolvedSubjectName = originalIds != null
-            ? ((useEventName ? event.name : null) ??
+            ? ((useEventName ? cleanEventName : null) ??
                   subjectName ??
                   originalSubjectName)
             : subjectName;

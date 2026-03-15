@@ -4,6 +4,8 @@ import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/entities/subject.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
+import 'package:bsharp/domain/message_utils.dart';
+import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 
 class AttendanceDay {
@@ -174,17 +176,12 @@ Map<DateTime, AttendanceDay> groupByDay(
   final eventMap = {for (final e in events) e.id: e};
   final eventTypeMap = {for (final et in eventTypes) et.id: et};
   final subjectMap = {for (final s in subjects) s.id: s};
-  final replacedIds = {for (final ee in eventEvents) ee.events2Id};
-  final replacementIds = {for (final ee in eventEvents) ee.events1Id};
-  final replacedToReplacement = <int, int>{
-    for (final ee in eventEvents) ee.events2Id: ee.events1Id,
-  };
-  final replacementToOriginals = <int, List<int>>{};
-  for (final ee in eventEvents) {
-    replacementToOriginals
-        .putIfAbsent(ee.events1Id, () => [])
-        .add(ee.events2Id);
-  }
+
+  final mapping = buildReplacementMapping(eventEvents, eventMap);
+  final replacedIds = mapping.replacedIds;
+  final replacementIds = mapping.replacementIds;
+  final replacedToReplacement = mapping.replacedToReplacement;
+  final replacementToOriginals = mapping.replacementToOriginals;
   final emittedReplacements = <int>{};
   final days = <DateTime, List<AttendanceEntry>>{};
 
@@ -199,8 +196,40 @@ Map<DateTime, AttendanceDay> groupByDay(
     if (type == null) continue;
 
     final event = eventMap[a.eventsId];
-    if (event != null && replacementIds.contains(event.id)) continue;
     if (event != null && event.status == 2 && !replacedIds.contains(event.id)) {
+      continue;
+    }
+
+    if (event != null && replacementIds.contains(event.id)) {
+      if (emittedReplacements.contains(event.id)) continue;
+      emittedReplacements.add(event.id);
+
+      final originals = replacementToOriginals[event.id] ?? [];
+      final cleanName = event.name != null
+          ? stripHtml(event.name!).trim()
+          : null;
+      final isMultiLesson = originals.length > 1;
+      final subjectName =
+          (isMultiLesson && cleanName != null && cleanName.isNotEmpty
+              ? cleanName
+              : null) ??
+          resolveSubjectName(event) ??
+          (cleanName != null && cleanName.isNotEmpty ? cleanName : null) ??
+          _resolveOriginalSubject(originals, eventMap, resolveSubjectName);
+
+      final date = event.date;
+      final dayKey = DateTime(date.year, date.month, date.day);
+      days
+          .putIfAbsent(dayKey, () => [])
+          .add(
+            AttendanceEntry(
+              attendance: a,
+              type: type,
+              event: event,
+              subjectName: subjectName,
+              displayLessonNumber: _formatLessonNumbers(originals, eventMap),
+            ),
+          );
       continue;
     }
 
@@ -210,29 +239,23 @@ Map<DateTime, AttendanceDay> groupByDay(
       emittedReplacements.add(replacementId);
 
       final replacementEvent = eventMap[replacementId];
+      final originals = replacementToOriginals[replacementId] ?? [];
+      final replCleanName = replacementEvent?.name != null
+          ? stripHtml(replacementEvent!.name!).trim()
+          : null;
+      final isMulti = originals.length > 1;
       final subjectName =
-          replacementEvent?.name ??
+          (isMulti && replCleanName != null && replCleanName.isNotEmpty
+              ? replCleanName
+              : null) ??
           (replacementEvent != null
               ? resolveSubjectName(replacementEvent)
               : null) ??
+          (replCleanName != null && replCleanName.isNotEmpty
+              ? replCleanName
+              : null) ??
           resolveSubjectName(event) ??
-          event.name;
-
-      final origNumbers =
-          (replacementToOriginals[replacementId] ?? [])
-              .map((id) => eventMap[id]?.number ?? 0)
-              .where((n) => n > 0)
-              .toList()
-            ..sort();
-      String? lessonNumber;
-      if (origNumbers.isNotEmpty) {
-        final isContiguous =
-            origNumbers.length > 1 &&
-            origNumbers.last - origNumbers.first == origNumbers.length - 1;
-        lessonNumber = isContiguous
-            ? '${origNumbers.first}-${origNumbers.last}'
-            : origNumbers.join(', ');
-      }
+          _resolveOriginalSubject(originals, eventMap, resolveSubjectName);
 
       final date = event.date;
       final dayKey = DateTime(date.year, date.month, date.day);
@@ -244,7 +267,7 @@ Map<DateTime, AttendanceDay> groupByDay(
               type: type,
               event: replacementEvent ?? event,
               subjectName: subjectName,
-              displayLessonNumber: lessonNumber,
+              displayLessonNumber: _formatLessonNumbers(originals, eventMap),
             ),
           );
       continue;
@@ -270,6 +293,34 @@ Map<DateTime, AttendanceDay> groupByDay(
     for (final entry in days.entries)
       entry.key: AttendanceDay(date: entry.key, entries: entry.value),
   };
+}
+
+String? _resolveOriginalSubject(
+  List<int> originalIds,
+  Map<int, Event> eventMap,
+  String? Function(Event) resolve,
+) {
+  for (final id in originalIds) {
+    final origEvent = eventMap[id];
+    if (origEvent != null) {
+      final name = resolve(origEvent);
+      if (name != null) return name;
+    }
+  }
+  return null;
+}
+
+String? _formatLessonNumbers(List<int> originalIds, Map<int, Event> eventMap) {
+  final numbers =
+      originalIds
+          .map((id) => eventMap[id]?.number ?? 0)
+          .where((n) => n > 0)
+          .toList()
+        ..sort();
+  if (numbers.isEmpty) return null;
+  final isContiguous =
+      numbers.length > 1 && numbers.last - numbers.first == numbers.length - 1;
+  return isContiguous ? '${numbers.first}-${numbers.last}' : numbers.join(', ');
 }
 
 List<DateTime> calendarDays(int year, int month) {

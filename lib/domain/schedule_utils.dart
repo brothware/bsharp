@@ -138,6 +138,82 @@ Color subjectColor(int subjectId) {
   return palette[subjectId.abs() % palette.length];
 }
 
+class ReplacementMapping {
+  const ReplacementMapping({
+    required this.replacedIds,
+    required this.replacementIds,
+    required this.replacedToReplacement,
+    required this.replacementToOriginals,
+    this.directSubstitutionOriginals = const {},
+    this.directSubstitutionReplacements = const {},
+  });
+
+  final Set<int> replacedIds;
+  final Set<int> replacementIds;
+  final Map<int, int> replacedToReplacement;
+  final Map<int, List<int>> replacementToOriginals;
+  final Set<int> directSubstitutionOriginals;
+  final Set<int> directSubstitutionReplacements;
+}
+
+ReplacementMapping buildReplacementMapping(
+  List<EventEvent> eventEvents,
+  Map<int, Event> eventMap,
+) {
+  final replacedIds = <int>{};
+  final replacementIds = <int>{};
+  final replacedToReplacement = <int, int>{};
+  final replacementToOriginals = <int, List<int>>{};
+  final directSubstitutionOriginals = <int>{};
+  final directSubstitutionReplacements = <int>{};
+
+  for (final ee in eventEvents) {
+    final e1 = eventMap[ee.events1Id];
+    final e2 = eventMap[ee.events2Id];
+    if (e1 == null || e2 == null) continue;
+
+    int originalId;
+    int replacementId;
+
+    if (e1.substitution == 1 && e2.substitution == 2) {
+      originalId = ee.events1Id;
+      replacementId = ee.events2Id;
+    } else {
+      originalId = ee.events2Id;
+      replacementId = ee.events1Id;
+    }
+
+    replacedIds.add(originalId);
+    replacementIds.add(replacementId);
+    replacedToReplacement[originalId] = replacementId;
+    replacementToOriginals.putIfAbsent(replacementId, () => []).add(originalId);
+  }
+
+  for (final entry in replacementToOriginals.entries) {
+    if (entry.value.length != 1) continue;
+    final replacementId = entry.key;
+    final originalId = entry.value.first;
+    final replacement = eventMap[replacementId];
+    final original = eventMap[originalId];
+    if (replacement != null &&
+        original != null &&
+        original.substitution == 1 &&
+        replacement.substitution == 2) {
+      directSubstitutionOriginals.add(originalId);
+      directSubstitutionReplacements.add(replacementId);
+    }
+  }
+
+  return ReplacementMapping(
+    replacedIds: replacedIds,
+    replacementIds: replacementIds,
+    replacedToReplacement: replacedToReplacement,
+    replacementToOriginals: replacementToOriginals,
+    directSubstitutionOriginals: directSubstitutionOriginals,
+    directSubstitutionReplacements: directSubstitutionReplacements,
+  );
+}
+
 bool isSameDay(DateTime a, DateTime b) {
   return a.year == b.year && a.month == b.month && a.day == b.day;
 }
