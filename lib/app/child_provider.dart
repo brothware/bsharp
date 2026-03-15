@@ -1,4 +1,6 @@
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -30,9 +32,21 @@ class ActiveStudent extends _$ActiveStudent {
   }
 
   Future<void> switchTo(Student student) async {
-    final storage = ref.read(credentialStorageProvider);
-    await storage.saveSelectedStudentId(student.id);
-    ref.invalidate(selectedStudentIdProvider);
+    final allEntries = ref.read(allStudentsProvider);
+    final entry = allEntries.where(
+      (e) => e.student.id == student.id,
+    );
+
+    if (entry.isNotEmpty) {
+      await ref
+          .read(activeSelectionProvider.notifier)
+          .select(
+            ActiveSelection(
+              accountId: entry.first.account.id,
+              studentId: student.id,
+            ),
+          );
+    }
   }
 }
 

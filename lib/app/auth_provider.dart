@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
@@ -20,10 +21,8 @@ final authStateProvider = AsyncNotifierProvider<AuthNotifier, AuthState>(
 class AuthNotifier extends AsyncNotifier<AuthState> {
   @override
   Future<AuthState> build() async {
-    final storage = ref.read(credentialStorageProvider);
-    final hasCredentials = await storage.hasCredentials();
-    final hasStudent = await storage.hasSelectedStudent();
-    if (hasCredentials && hasStudent) {
+    final selection = await ref.watch(activeSelectionProvider.future);
+    if (selection != null) {
       return AuthState.authenticated;
     }
     return AuthState.unauthenticated;
@@ -34,17 +33,21 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   }
 
   Future<void> logout() async {
-    final storage = ref.read(credentialStorageProvider);
-    await storage.clearAll();
+    final accountStorage = ref.read(accountStorageProvider);
+    await accountStorage.clearAll();
+    final credStorage = ref.read(credentialStorageProvider);
+    await credStorage.clearAll();
     ref.read(syncCacheProvider).clear();
     ref.read(activeDataProviderProvider.notifier).value = MobiregDataProvider();
     ref.read(demoModeProvider.notifier).value = false;
+    ref.invalidate(providerAccountsProvider);
+    ref.invalidate(activeSelectionProvider);
     state = const AsyncData(AuthState.unauthenticated);
   }
 }
 
 @Riverpod(keepAlive: true)
 Future<int?> selectedStudentId(Ref ref) async {
-  final storage = ref.watch(credentialStorageProvider);
-  return storage.getSelectedStudentId();
+  final selectionAsync = await ref.watch(activeSelectionProvider.future);
+  return selectionAsync?.studentId;
 }

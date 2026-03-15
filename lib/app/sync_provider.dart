@@ -1,4 +1,4 @@
-import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/data/services/background_sync_scheduler.dart';
@@ -214,23 +214,18 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
   void reset() => state = SyncStatus.idle;
 
   Future<_Credentials?> _getCredentials() async {
-    final storage = ref.read(credentialStorageProvider);
-    final results = await Future.wait([
-      storage.getSchool(),
-      storage.getLogin(),
-      storage.getPasswordHash(),
-    ]);
-    final school = results[0];
-    final login = results[1];
-    final passHash = results[2];
-
-    if (school == null || login == null || passHash == null) return null;
-    return _Credentials(school: school, login: login, passHash: passHash);
+    final account = ref.read(activeAccountProvider);
+    if (account == null) return null;
+    return _Credentials(
+      school: account.slug,
+      login: account.login,
+      passHash: account.passwordHash,
+    );
   }
 
   Future<int?> _getStudentId() async {
-    final storage = ref.read(credentialStorageProvider);
-    return storage.getSelectedStudentId();
+    final selection = ref.read(activeSelectionProvider).value;
+    return selection?.studentId;
   }
 
   Future<void> syncMessages() async {
