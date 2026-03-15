@@ -61,7 +61,7 @@ abstract class SchoolDataProvider {
 
   String hashPassword(String password);
 
-  Future<Result<void>> validateCredentials({
+  Future<Result<String?>> validateCredentials({
     required String school,
     required String login,
     required String passwordHash,

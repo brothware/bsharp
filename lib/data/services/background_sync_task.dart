@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
-import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/remote/auth_service.dart';
 import 'package:bsharp/data/data_sources/remote/mobile_sync_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
@@ -23,26 +23,27 @@ class BackgroundSyncTask {
     try {
       debugPrint('BackgroundSync: task started');
 
-      final storage = CredentialStorage();
-      final results = await Future.wait([
-        storage.getSchool(),
-        storage.getLogin(),
-        storage.getPasswordHash(),
-        storage.getSelectedStudentId(),
-      ]);
-
-      final school = results[0] as String?;
-      final login = results[1] as String?;
-      final passwordHash = results[2] as String?;
-      final studentId = results[3] as int?;
-
-      if (school == null ||
-          login == null ||
-          passwordHash == null ||
-          studentId == null) {
-        debugPrint('BackgroundSync: missing credentials');
+      final accountStorage = AccountStorage();
+      final selection = await accountStorage.getActiveSelection();
+      if (selection == null) {
+        debugPrint('BackgroundSync: no active selection');
         return false;
       }
+
+      final accounts = await accountStorage.getAccounts();
+      final activeAccounts = accounts.where(
+        (a) => a.id == selection.accountId,
+      );
+      if (activeAccounts.isEmpty) {
+        debugPrint('BackgroundSync: active account not found');
+        return false;
+      }
+
+      final account = activeAccounts.first;
+      final school = account.slug;
+      final login = account.login;
+      final passwordHash = account.passwordHash;
+      final studentId = selection.studentId;
 
       debugPrint('BackgroundSync: credentials loaded');
 

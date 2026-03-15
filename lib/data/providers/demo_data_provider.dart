@@ -189,7 +189,7 @@ class DemoDataProvider implements SchoolDataProvider {
   String hashPassword(String password) => '';
 
   @override
-  Future<Result<void>> validateCredentials({
+  Future<Result<String?>> validateCredentials({
     required String school,
     required String login,
     required String passwordHash,

@@ -48,7 +48,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   String hashPassword(String password) => AuthService.hashPassword(password);
 
   @override
-  Future<Result<void>> validateCredentials({
+  Future<Result<String?>> validateCredentials({
     required String school,
     required String login,
     required String passwordHash,
@@ -63,7 +63,19 @@ class MobiregDataProvider implements SchoolDataProvider {
     );
     final result = await syncDs.getSettings();
     return result.when(
-      success: (_) => const Result.success(null),
+      success: (data) {
+        final settingsRaw = data['Settings'];
+        String? schoolName;
+        if (settingsRaw is List && settingsRaw.isNotEmpty) {
+          final first = settingsRaw.first;
+          if (first is Map<String, dynamic>) {
+            schoolName = first['schoolName'] as String?;
+          }
+        } else if (settingsRaw is Map<String, dynamic>) {
+          schoolName = settingsRaw['schoolName'] as String?;
+        }
+        return Result.success(schoolName);
+      },
       failure: Result.failure,
     );
   }
