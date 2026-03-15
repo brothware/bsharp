@@ -258,7 +258,9 @@ class LastSyncTime extends _$LastSyncTime {
 
 @Riverpod(keepAlive: true)
 BackgroundSyncScheduler? backgroundSyncScheduler(Ref ref) {
-  if (kIsWeb) return null;
+  final isMobile = defaultTargetPlatform == TargetPlatform.android ||
+      defaultTargetPlatform == TargetPlatform.iOS;
+  if (!isMobile) return null;
 
   final scheduler = WorkmanagerSyncScheduler();
   final interval = ref.watch(syncIntervalProvider);
