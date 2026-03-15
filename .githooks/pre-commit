@@ -14,8 +14,9 @@ echo "$changed_dart" | xargs dart format --set-exit-if-changed || {
   exit 1
 }
 
-dart analyze --fatal-warnings || {
-  echo "Fix: resolve analyzer warnings"
+staged_dirs=$(echo "$changed_dart" | xargs -I{} dirname {} | sort -u | tr '\n' ' ')
+dart analyze --fatal-infos $staged_dirs || {
+  echo "Fix: resolve analyzer issues"
   exit 1
 }
 
