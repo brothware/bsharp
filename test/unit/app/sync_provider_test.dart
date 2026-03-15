@@ -1,3 +1,4 @@
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
@@ -22,6 +23,8 @@ void main() {
         overrides: [
           credentialStorageProvider.overrideWithValue(_emptyStorage()),
           sharedPreferencesProvider.overrideWithValue(prefs),
+          providerAccountsProvider.overrideWith(ProviderAccounts.new),
+          activeSelectionProvider.overrideWith(ActiveSelectionNotifier.new),
         ],
       );
     });

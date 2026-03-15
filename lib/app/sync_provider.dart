@@ -214,6 +214,8 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
   void reset() => state = SyncStatus.idle;
 
   Future<_Credentials?> _getCredentials() async {
+    await ref.read(providerAccountsProvider.future);
+    await ref.read(activeSelectionProvider.future);
     final account = ref.read(activeAccountProvider);
     if (account == null) return null;
     return _Credentials(
@@ -224,7 +226,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
   }
 
   Future<int?> _getStudentId() async {
-    final selection = ref.read(activeSelectionProvider).value;
+    final selection = await ref.read(activeSelectionProvider.future);
     return selection?.studentId;
   }
 

@@ -59,7 +59,6 @@ void applySyncData(Ref ref, Map<String, dynamic> data) {
   );
   ref.read(resolvedEventsProvider.notifier).value = resolvedEvents;
 
-  final currentTerm = ref.read(currentTermProvider);
   final gradeResolver = MobiregGradeResolver();
   final resolvedGrades = gradeResolver.resolve(
     marks: syncData.marks,
@@ -72,7 +71,6 @@ void applySyncData(Ref ref, Map<String, dynamic> data) {
     subjects: syncData.subjects,
     teachers: syncData.teachers,
     terms: syncData.terms,
-    currentTerm: currentTerm,
   );
   ref.read(resolvedGradesProvider.notifier).value = resolvedGrades;
 }

@@ -110,7 +110,27 @@ Term? currentTerm(Ref ref) {
 
 @Riverpod(keepAlive: true)
 List<SubjectGrades> subjectGrades(Ref ref) {
-  final resolved = ref.watch(resolvedGradesProvider);
+  final allGrades = ref.watch(resolvedGradesProvider);
+  final term = ref.watch(currentTermProvider);
+  final terms = ref.watch(termsProvider);
+
+  final allowedTermIds = <int>{};
+  if (term != null) {
+    allowedTermIds.add(term.id);
+    if (term.type == TermType.year) {
+      for (final t in terms) {
+        if (t.parentId == term.id) allowedTermIds.add(t.id);
+      }
+    }
+  }
+
+  final resolved = allowedTermIds.isEmpty
+      ? allGrades
+      : allGrades
+            .where(
+              (g) => g.termId == null || allowedTermIds.contains(g.termId),
+            )
+            .toList();
 
   final bySubject = <String, List<ResolvedGrade>>{};
   final subjectIds = <String, int>{};
