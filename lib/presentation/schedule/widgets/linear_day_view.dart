@@ -219,9 +219,8 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
     final theme = Theme.of(context);
     final cancelled = item.isCancelled;
     final substitution = item.isSubstitution;
-    final sideColor = cancelled
-        ? theme.colorScheme.error
-        : item.displayColor;
+    final itemColor = item.displayColor(brightness: theme.brightness);
+    final sideColor = cancelled ? theme.colorScheme.error : itemColor;
 
     return Positioned(
       top: top,
@@ -248,7 +247,7 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
                 Container(width: 4, color: sideColor),
                 Expanded(
                   child: Container(
-                    color: item.displayColor.withValues(alpha: 0.15),
+                    color: itemColor.withValues(alpha: 0.15),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 4,

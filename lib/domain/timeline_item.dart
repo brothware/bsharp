@@ -9,7 +9,7 @@ sealed class TimelineItem {
   String get endTime;
   String get displayTitle;
   String? get displaySubtitle;
-  Color get displayColor;
+  Color displayColor({Brightness brightness = Brightness.light});
   bool get isCancelled => false;
   bool get isSubstitution => false;
 }
@@ -48,9 +48,10 @@ class LessonTimelineItem implements TimelineItem {
   }
 
   @override
-  Color get displayColor => entry.subjectName != null
-      ? subjectColor(entry.subjectName!)
-      : const Color(0xFF607D8B);
+  Color displayColor({Brightness brightness = Brightness.light}) =>
+      entry.subjectName != null
+          ? subjectColor(entry.subjectName!, brightness: brightness)
+          : const Color(0xFF607D8B);
 }
 
 class CustomEventTimelineItem implements TimelineItem {
@@ -81,5 +82,6 @@ class CustomEventTimelineItem implements TimelineItem {
   String? get displaySubtitle => event.place;
 
   @override
-  Color get displayColor => subjectColorByIndex(event.colorIndex);
+  Color displayColor({Brightness brightness = Brightness.light}) =>
+      subjectColorByIndex(event.colorIndex);
 }

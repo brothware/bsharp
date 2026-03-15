@@ -128,7 +128,7 @@ class _WearLessonItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final sColor = entry.subjectName != null
-        ? subjectColor(entry.subjectName!)
+        ? subjectColor(entry.subjectName!, brightness: theme.brightness)
         : theme.colorScheme.primary;
 
     return Container(

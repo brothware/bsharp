@@ -11,8 +11,8 @@ class LessonDetailSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = entry.subjectName != null
-        ? subjectColor(entry.subjectName!)
-        : subjectColor(entry.eventName ?? '');
+        ? subjectColor(entry.subjectName!, brightness: theme.brightness)
+        : subjectColor(entry.eventName ?? '', brightness: theme.brightness);
     final topPadding = MediaQuery.of(context).padding.top;
     final screenHeight = MediaQuery.of(context).size.height;
 

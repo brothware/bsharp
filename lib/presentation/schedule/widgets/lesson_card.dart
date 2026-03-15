@@ -13,7 +13,7 @@ class LessonCard extends StatelessWidget {
     final theme = Theme.of(context);
     final isCancelled = entry.isCancelled;
     final color = entry.subjectName != null
-        ? subjectColor(entry.subjectName!)
+        ? subjectColor(entry.subjectName!, brightness: theme.brightness)
         : theme.colorScheme.outline;
 
     return Card(

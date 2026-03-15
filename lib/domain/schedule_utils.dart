@@ -169,26 +169,47 @@ String dayLabelFull(int weekday) {
   };
 }
 
-Color subjectColor(String name) {
-  const palette = [
-    Color(0xFF4CAF50),
-    Color(0xFF2196F3),
-    Color(0xFF9C27B0),
-    Color(0xFF009688),
-    Color(0xFF3F51B5),
-    Color(0xFF00BCD4),
-    Color(0xFF795548),
-    Color(0xFF607D8B),
-    Color(0xFF5C6BC0),
-    Color(0xFF26A69A),
-    Color(0xFF66BB6A),
-    Color(0xFF42A5F5),
-  ];
+const _lightPalette = [
+  Color(0xFF2E7D32),
+  Color(0xFF1565C0),
+  Color(0xFF7B1FA2),
+  Color(0xFF00796B),
+  Color(0xFF283593),
+  Color(0xFF00838F),
+  Color(0xFF4E342E),
+  Color(0xFF455A64),
+  Color(0xFF3949AB),
+  Color(0xFF00897B),
+  Color(0xFF388E3C),
+  Color(0xFF1976D2),
+];
+
+const _darkPalette = [
+  Color(0xFF81C784),
+  Color(0xFF64B5F6),
+  Color(0xFFCE93D8),
+  Color(0xFF80CBC4),
+  Color(0xFF7986CB),
+  Color(0xFF4DD0E1),
+  Color(0xFFBCAAA4),
+  Color(0xFF90A4AE),
+  Color(0xFF9FA8DA),
+  Color(0xFF80CBC4),
+  Color(0xFFA5D6A7),
+  Color(0xFF90CAF9),
+];
+
+int _nameHash(String name) {
   var hash = 0;
   for (var i = 0; i < name.length; i++) {
     hash = (hash * 31 + name.codeUnitAt(i)) & 0x7FFFFFFF;
   }
-  return palette[hash % palette.length];
+  return hash;
+}
+
+Color subjectColor(String name, {Brightness brightness = Brightness.light}) {
+  final palette = brightness == Brightness.dark ? _darkPalette : _lightPalette;
+  return palette[_nameHash(name) % palette.length];
 }
 
 Color subjectColorByIndex(int index) {
