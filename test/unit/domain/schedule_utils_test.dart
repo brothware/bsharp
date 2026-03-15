@@ -38,8 +38,8 @@ void main() {
       expect(e.isCancelled, isFalse);
     });
 
-    test('is not cancelled when explicitly false', () {
-      final e = entry(isCancelled: false);
+    test('is not cancelled by default', () {
+      final e = entry();
       expect(e.isCancelled, isFalse);
     });
 

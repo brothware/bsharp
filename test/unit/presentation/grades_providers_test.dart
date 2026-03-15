@@ -129,13 +129,8 @@ void main() {
         overrides: [
           resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
-              grade(subjectName: 'Math', subjectId: 100),
-              grade(
-                id: 2,
-                subjectName: 'Math',
-                effectiveValue: 4,
-                subjectId: 100,
-              ),
+              grade(subjectId: 100),
+              grade(id: 2, effectiveValue: 4, subjectId: 100),
               grade(
                 id: 3,
                 subjectName: 'Polish',
@@ -231,15 +226,12 @@ void main() {
           resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
               grade(
-                subjectName: 'Math',
                 effectiveValue: 3,
                 date: DateTime(2026, 2, 27),
                 subjectId: 100,
               ),
               grade(
                 id: 2,
-                subjectName: 'Math',
-                effectiveValue: 5,
                 date: DateTime(2026, 3),
                 subjectId: 100,
               ),
