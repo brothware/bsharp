@@ -5,8 +5,6 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/common/responsive.dart';
-import 'package:bsharp/presentation/common/widgets/swipe_navigator.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:bsharp/presentation/schedule/widgets/custom_event_card.dart';
 import 'package:bsharp/presentation/schedule/widgets/custom_event_detail_sheet.dart';
@@ -18,16 +16,82 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ScheduleScreen extends ConsumerWidget {
+class ScheduleScreen extends ConsumerStatefulWidget {
   const ScheduleScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ScheduleScreen> createState() => _ScheduleScreenState();
+}
+
+class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
+    with TickerProviderStateMixin {
+  TabController? _tabController;
+  List<DateTime> _days = [];
+  bool _programmatic = false;
+  Offset? _pointerStart;
+  int? _tabAtPointerDown;
+  bool _changingWeek = false;
+
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
+  }
+
+  void _syncTabController(List<DateTime> days, int selectedIndex) {
+    _days = days;
+    if (days.length != (_tabController?.length ?? 0)) {
+      _tabController?.removeListener(_onTabScroll);
+      _tabController?.dispose();
+      _tabController = TabController(
+        length: days.length,
+        initialIndex: selectedIndex,
+        vsync: this,
+      );
+      _tabController!.addListener(_onTabScroll);
+    } else if (_tabController!.index != selectedIndex && !_programmatic) {
+      _programmatic = true;
+      _tabController!.animateTo(selectedIndex);
+    }
+  }
+
+  void _onTabScroll() {
+    final controller = _tabController;
+    if (controller == null || _programmatic) {
+      if (_programmatic && !_tabController!.indexIsChanging) {
+        _programmatic = false;
+      }
+      return;
+    }
+    if (!controller.indexIsChanging &&
+        controller.index != _indexForCurrentDate()) {
+      ref.read(selectedDateProvider.notifier).value = _days[controller.index];
+    }
+  }
+
+  int _indexForCurrentDate() {
+    final selectedDate = ref.read(selectedDateProvider);
+    final idx = _days.indexWhere((d) => isSameDay(d, selectedDate));
+    return idx >= 0 ? idx : 0;
+  }
+
+  void _onTabTapped(int index) {
+    ref.read(selectedDateProvider.notifier).value = _days[index];
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final selectedDate = ref.watch(selectedDateProvider);
     final weekStart = ref.watch(selectedWeekStartProvider);
     final hasWeekends = ref.watch(hasWeekendEventsProvider);
     final days = hasWeekends ? weekDaysFull(weekStart) : weekDays(weekStart);
     final viewMode = ref.watch(scheduleViewModeProvider);
+    final selectedIndex = days.indexWhere((d) => isSameDay(d, selectedDate));
+    final safeIndex = selectedIndex >= 0 ? selectedIndex : 0;
+
+    _syncTabController(days, safeIndex);
+
+    final theme = Theme.of(context);
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -43,8 +107,8 @@ class ScheduleScreen extends ConsumerWidget {
               weekStart: weekStart,
               selectedDate: selectedDate,
               viewMode: viewMode,
-              onPrevious: () => _changeWeek(ref, -1),
-              onNext: () => _changeWeek(ref, 1),
+              onPrevious: () => _changeWeek(-1),
+              onNext: () => _changeWeek(1),
               onToday: () => ref.read(selectedDateProvider.notifier).value =
                   DateTime.now(),
               onToggleView: () {
@@ -55,21 +119,20 @@ class ScheduleScreen extends ConsumerWidget {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Row(
-              children: [
-                for (final day in days)
-                  Expanded(
-                    child: WeekDayHeader(
-                      date: day,
-                      isSelected: isSameDay(day, selectedDate),
-                      onTap: () =>
-                          ref.read(selectedDateProvider.notifier).value = day,
-                    ),
-                  ),
-              ],
+          TabBar(
+            controller: _tabController,
+            onTap: _onTabTapped,
+            indicator: BoxDecoration(
+              color: theme.colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(12),
             ),
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelColor: theme.colorScheme.onPrimaryContainer,
+            unselectedLabelColor: theme.colorScheme.onSurfaceVariant,
+            dividerHeight: 0,
+            splashFactory: NoSplash.splashFactory,
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+            tabs: [for (final day in days) WeekDayTab(date: day)],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -78,44 +141,49 @@ class ScheduleScreen extends ConsumerWidget {
               child: Text(
                 '${dayLabelFull(selectedDate.weekday)}, '
                 '${formatDateFull(selectedDate)}',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
             ),
           ),
           const SizedBox(height: 8),
           Expanded(
-            child: SwipeNavigator(
-              enabled: screenSizeOf(context) == ScreenSize.phone,
-              onSwipeForward: () {
-                ref.read(selectedDateProvider.notifier).value = nextScheduleDay(
-                  selectedDate,
-                  includeWeekends: hasWeekends,
-                );
+            child: Listener(
+              onPointerDown: (e) {
+                _pointerStart = e.position;
+                _tabAtPointerDown = _tabController?.index;
               },
-              onSwipeBackward: () {
-                ref
-                    .read(selectedDateProvider.notifier)
-                    .value = previousScheduleDay(
-                  selectedDate,
-                  includeWeekends: hasWeekends,
-                );
-              },
-              contentBuilder: (offset) {
-                var date = selectedDate;
-                for (var i = 0; i < offset.abs(); i++) {
-                  date = offset > 0
-                      ? nextScheduleDay(date, includeWeekends: hasWeekends)
-                      : previousScheduleDay(date, includeWeekends: hasWeekends);
+              onPointerUp: (e) {
+                final start = _pointerStart;
+                final startTab = _tabAtPointerDown;
+                _pointerStart = null;
+                _tabAtPointerDown = null;
+                if (_changingWeek || start == null || startTab == null) return;
+                final dx = e.position.dx - start.dx;
+                final dy = (e.position.dy - start.dy).abs();
+                if (dx.abs() < 50 || dy > dx.abs()) return;
+                final endTab = _tabController?.index ?? 0;
+                if (startTab != endTab) return;
+                if (startTab == 0 && dx > 0) {
+                  _changeWeek(-1);
+                } else if (startTab == days.length - 1 && dx < 0) {
+                  _changeWeek(1);
                 }
-                return viewMode == ScheduleViewMode.list
-                    ? _DayTimelineList(date: date)
-                    : LinearDayView(
-                        date: date,
-                        onItemTap: (item) => _showItemDetail(context, item),
-                      );
               },
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  for (final day in days)
+                    viewMode == ScheduleViewMode.list
+                        ? _DayTimelineList(date: day)
+                        : LinearDayView(
+                            date: day,
+                            onItemTap: (item) =>
+                                _showItemDetail(context, item),
+                          ),
+                ],
+              ),
             ),
           ),
         ],
@@ -123,7 +191,8 @@ class ScheduleScreen extends ConsumerWidget {
     );
   }
 
-  void _changeWeek(WidgetRef ref, int direction) {
+  void _changeWeek(int direction) {
+    _changingWeek = true;
     final current = ref.read(selectedDateProvider);
     if (direction > 0) {
       final monday = startOfWeek(current);
@@ -136,6 +205,9 @@ class ScheduleScreen extends ConsumerWidget {
         const Duration(days: 7),
       );
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _changingWeek = false;
+    });
   }
 
   static void _showItemDetail(BuildContext context, TimelineItem item) {
@@ -188,11 +260,13 @@ class _DayTimelineList extends ConsumerWidget {
           return switch (item) {
             LessonTimelineItem() => LessonCard(
               entry: item.entry,
-              onTap: () => ScheduleScreen._showItemDetail(context, item),
+              onTap: () =>
+                  _ScheduleScreenState._showItemDetail(context, item),
             ),
             CustomEventTimelineItem() => CustomEventCard(
               item: item,
-              onTap: () => ScheduleScreen._showItemDetail(context, item),
+              onTap: () =>
+                  _ScheduleScreenState._showItemDetail(context, item),
             ),
           };
         },
