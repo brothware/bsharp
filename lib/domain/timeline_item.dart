@@ -11,6 +11,7 @@ sealed class TimelineItem {
   String? get displaySubtitle;
   Color get displayColor;
   bool get isCancelled => false;
+  bool get isSubstitution => false;
 }
 
 class LessonTimelineItem implements TimelineItem {
@@ -20,6 +21,10 @@ class LessonTimelineItem implements TimelineItem {
 
   @override
   bool get isCancelled => entry.isCancelled || entry.isReplaced;
+
+  @override
+  bool get isSubstitution =>
+      entry.changeType == ScheduleChangeType.substitution;
 
   @override
   DateTime get date => entry.event.date;
@@ -56,6 +61,9 @@ class CustomEventTimelineItem implements TimelineItem {
 
   @override
   bool get isCancelled => false;
+
+  @override
+  bool get isSubstitution => false;
 
   @override
   DateTime get date => occurrenceDate;

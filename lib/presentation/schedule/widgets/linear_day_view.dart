@@ -171,26 +171,29 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
                 top: (h - _startHour) * _hourHeight,
                 left: 0,
                 right: 0,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: _leftMargin,
-                      child: Text(
-                        '${h.toString().padLeft(2, '0')}:00',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
+                child: FractionalTranslation(
+                  translation: const Offset(0, -0.5),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: _leftMargin,
+                        child: Text(
+                          '${h.toString().padLeft(2, '0')}:00',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          textAlign: TextAlign.right,
                         ),
-                        textAlign: TextAlign.right,
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Divider(
-                        height: 1,
-                        color: theme.colorScheme.outlineVariant,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Divider(
+                          height: 1,
+                          color: theme.colorScheme.outlineVariant,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -214,7 +217,12 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
     );
     final theme = Theme.of(context);
     final cancelled = item.isCancelled;
-    final sideColor = cancelled ? theme.colorScheme.error : item.displayColor;
+    final substitution = item.isSubstitution;
+    final sideColor = cancelled
+        ? theme.colorScheme.error
+        : substitution
+        ? Colors.orange
+        : item.displayColor;
 
     return Positioned(
       top: top,
@@ -246,33 +254,48 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
                       horizontal: 8,
                       vertical: 4,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+                    child: Row(
                       children: [
-                        Flexible(
-                          child: Text(
-                            item.displayTitle,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              decoration: cancelled
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  item.displayTitle,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    decoration: cancelled
+                                        ? TextDecoration.lineThrough
+                                        : null,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              if (item.displaySubtitle != null && height > 40)
+                                Flexible(
+                                  child: Text(
+                                    item.displaySubtitle!,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                      fontSize: 11,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
-                        if (item.displaySubtitle != null && height > 40)
-                          Flexible(
-                            child: Text(
-                              item.displaySubtitle!,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                                fontSize: 11,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                        if (substitution)
+                          const Padding(
+                            padding: EdgeInsets.only(left: 4),
+                            child: Icon(
+                              Icons.swap_horiz,
+                              size: 14,
+                              color: Colors.orange,
                             ),
                           ),
                       ],
