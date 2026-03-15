@@ -137,9 +137,9 @@ class _GradeChip extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Container(
-              width: 36,
-              height: 36,
+              constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
               alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10),
@@ -150,6 +150,7 @@ class _GradeChip extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: color,
                 ),
+                maxLines: 1,
               ),
             ),
             if (isNew)
@@ -172,8 +173,8 @@ class _GradeChip extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        SizedBox(
-          width: 48,
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 56),
           child: Text(
             subjectName,
             style: theme.textTheme.labelSmall?.copyWith(
