@@ -761,5 +761,22 @@
     "purchaseSuccess": "Дзякуй за падтрымку!",
     "purchaseFailed": "Пакупка не ўдалася, паспрабуйце яшчэ",
     "productsUnavailable": "Падтрымка зараз недаступная"
+  },
+  "accounts": {
+    "addAccount": "Дадаць уліковы запіс",
+    "manageAccounts": "Кіраваць уліковымі запісамі",
+    "continueToApp": "Працягнуць",
+    "noAccountsYet": "Уліковых запісаў яшчэ няма",
+    "addFirstAccount": "Дадайце свой першы школьны ўліковы запіс, каб пачаць",
+    "removeAccount": "Выдаліць уліковы запіс",
+    "removeAccountConfirm": "Вы ўпэўнены, што хочаце выдаліць гэты ўліковы запіс? Усе дадзеныя гэтай школы будуць страчаны.",
+    "switchStudent": "Змяніць вучня",
+    "schoolName": "Назва школы",
+    "accountAddedSuccess": "Уліковы запіс паспяхова дададзены",
+    "credentialsInvalid": "Няправільныя дадзеныя для ўваходу",
+    "editAccount": "Рэдагаваць уліковы запіс",
+    "updateCredentials": "Абнавіць дадзеныя для ўваходу",
+    "studentsLabel": "${count} вучань/вучняў",
+    "selectProvider": "Абярыце пастаўшчыка электроннага дзённіка"
   }
 }

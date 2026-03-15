@@ -752,5 +752,22 @@
     "notesCount": "${count} notes",
     "noChanges": "No changes",
     "newChanges": "New: ${summary}"
+  },
+  "accounts": {
+    "addAccount": "Add account",
+    "manageAccounts": "Manage accounts",
+    "continueToApp": "Continue",
+    "noAccountsYet": "No accounts yet",
+    "addFirstAccount": "Add your first school account to get started",
+    "removeAccount": "Remove account",
+    "removeAccountConfirm": "Are you sure you want to remove this account? All data for this school will be lost.",
+    "switchStudent": "Switch student",
+    "schoolName": "School name",
+    "accountAddedSuccess": "Account added successfully",
+    "credentialsInvalid": "Invalid credentials",
+    "editAccount": "Edit account",
+    "updateCredentials": "Update credentials",
+    "studentsLabel": "${count} student(s)",
+    "selectProvider": "Choose your e-gradebook provider"
   }
 }

@@ -755,5 +755,22 @@
     "purchaseSuccess": "ご支援ありがとうございます！",
     "purchaseFailed": "購入に失敗しました。もう一度お試しください",
     "productsUnavailable": "チップは現在利用できません"
+  },
+  "accounts": {
+    "addAccount": "アカウントを追加",
+    "manageAccounts": "アカウントを管理",
+    "continueToApp": "続ける",
+    "noAccountsYet": "アカウントがありません",
+    "addFirstAccount": "最初の学校アカウントを追加して始めましょう",
+    "removeAccount": "アカウントを削除",
+    "removeAccountConfirm": "このアカウントを削除してもよろしいですか？この学校のすべてのデータが失われます。",
+    "switchStudent": "生徒を切り替え",
+    "schoolName": "学校名",
+    "accountAddedSuccess": "アカウントが追加されました",
+    "credentialsInvalid": "無効な認証情報",
+    "editAccount": "アカウントを編集",
+    "updateCredentials": "認証情報を更新",
+    "studentsLabel": "${count}人の生徒",
+    "selectProvider": "電子成績簿のプロバイダーを選択してください"
   }
 }

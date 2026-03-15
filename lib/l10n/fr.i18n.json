@@ -755,5 +755,22 @@
     "purchaseSuccess": "Merci pour votre soutien !",
     "purchaseFailed": "Achat échoué, veuillez réessayer",
     "productsUnavailable": "Les pourboires sont actuellement indisponibles"
+  },
+  "accounts": {
+    "addAccount": "Ajouter un compte",
+    "manageAccounts": "Gérer les comptes",
+    "continueToApp": "Continuer",
+    "noAccountsYet": "Aucun compte",
+    "addFirstAccount": "Ajoutez votre premier compte scolaire pour commencer",
+    "removeAccount": "Supprimer le compte",
+    "removeAccountConfirm": "Voulez-vous vraiment supprimer ce compte ? Toutes les données de cette école seront perdues.",
+    "switchStudent": "Changer d'élève",
+    "schoolName": "Nom de l'école",
+    "accountAddedSuccess": "Compte ajouté avec succès",
+    "credentialsInvalid": "Identifiants invalides",
+    "editAccount": "Modifier le compte",
+    "updateCredentials": "Mettre à jour les identifiants",
+    "studentsLabel": "${count} élève(s)",
+    "selectProvider": "Choisissez votre fournisseur de cahier de notes"
   }
 }

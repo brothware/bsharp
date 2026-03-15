@@ -755,5 +755,22 @@
     "purchaseSuccess": "Paldies par jūsu atbalstu!",
     "purchaseFailed": "Pirkums neizdevās, lūdzu mēģiniet vēlreiz",
     "productsUnavailable": "Ziedojumi pašlaik nav pieejami"
+  },
+  "accounts": {
+    "addAccount": "Pievienot kontu",
+    "manageAccounts": "Pārvaldīt kontus",
+    "continueToApp": "Turpināt",
+    "noAccountsYet": "Vēl nav kontu",
+    "addFirstAccount": "Pievienojiet savu pirmo skolas kontu, lai sāktu",
+    "removeAccount": "Noņemt kontu",
+    "removeAccountConfirm": "Vai tiešām vēlaties noņemt šo kontu? Visi šīs skolas dati tiks zaudēti.",
+    "switchStudent": "Mainīt skolēnu",
+    "schoolName": "Skolas nosaukums",
+    "accountAddedSuccess": "Konts veiksmīgi pievienots",
+    "credentialsInvalid": "Nederīgi pieteikšanās dati",
+    "editAccount": "Rediģēt kontu",
+    "updateCredentials": "Atjaunināt pieteikšanās datus",
+    "studentsLabel": "${count} skolēns(-ņi)",
+    "selectProvider": "Izvēlieties savu e-dienasgrāmatas pakalpojumu sniedzēju"
   }
 }

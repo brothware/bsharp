@@ -761,5 +761,22 @@
     "purchaseSuccess": "Дякуємо за підтримку!",
     "purchaseFailed": "Покупка не вдалася, спробуйте ще раз",
     "productsUnavailable": "Чайові наразі недоступні"
+  },
+  "accounts": {
+    "addAccount": "Додати обліковий запис",
+    "manageAccounts": "Керувати обліковими записами",
+    "continueToApp": "Продовжити",
+    "noAccountsYet": "Обліковмх записів ще немає",
+    "addFirstAccount": "Додайте свій перший шкільний обліковий запис, щоб розпочати",
+    "removeAccount": "Видалити обліковий запис",
+    "removeAccountConfirm": "Ви впевнені, що хочете видалити цей обліковий запис? Усі дані цієї школи будуть втрачені.",
+    "switchStudent": "Змінити учня",
+    "schoolName": "Назва школи",
+    "accountAddedSuccess": "Обліковий запис успішно додано",
+    "credentialsInvalid": "Недійсні облікові дані",
+    "editAccount": "Редагувати обліковий запис",
+    "updateCredentials": "Оновити облікові дані",
+    "studentsLabel": "${count} учень/учнів",
+    "selectProvider": "Оберіть постачальника електронного щоденника"
   }
 }

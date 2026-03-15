@@ -761,5 +761,22 @@
     "purchaseSuccess": "Hvala za vašo podporo!",
     "purchaseFailed": "Nakup ni uspel, poskusite znova",
     "productsUnavailable": "Prispevki trenutno niso na voljo"
+  },
+  "accounts": {
+    "addAccount": "Dodaj račun",
+    "manageAccounts": "Upravljanje računov",
+    "continueToApp": "Nadaljuj",
+    "noAccountsYet": "Še ni računov",
+    "addFirstAccount": "Dodajte prvi šolski račun za začetek",
+    "removeAccount": "Odstrani račun",
+    "removeAccountConfirm": "Ali ste prepričani, da želite odstraniti ta račun? Vsi podatki te šole bodo izgubljeni.",
+    "switchStudent": "Zamenjaj učenca",
+    "schoolName": "Ime šole",
+    "accountAddedSuccess": "Račun uspešno dodan",
+    "credentialsInvalid": "Neveljavni podatki za prijavo",
+    "editAccount": "Uredi račun",
+    "updateCredentials": "Posodobi podatke za prijavo",
+    "studentsLabel": "${count} učenec/ev",
+    "selectProvider": "Izberite svojega ponudnika e-redovalnice"
   }
 }

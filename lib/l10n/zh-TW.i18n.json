@@ -755,5 +755,22 @@
     "purchaseSuccess": "感謝您的支持！",
     "purchaseFailed": "購買失敗，請重試",
     "productsUnavailable": "打賞暫時不可用"
+  },
+  "accounts": {
+    "addAccount": "新增帳戶",
+    "manageAccounts": "管理帳戶",
+    "continueToApp": "繼續",
+    "noAccountsYet": "尚無帳戶",
+    "addFirstAccount": "新增您的第一個學校帳戶以開始",
+    "removeAccount": "移除帳戶",
+    "removeAccountConfirm": "確定要移除此帳戶嗎？該學校的所有資料將遺失。",
+    "switchStudent": "切換學生",
+    "schoolName": "學校名稱",
+    "accountAddedSuccess": "帳戶新增成功",
+    "credentialsInvalid": "憑證無效",
+    "editAccount": "編輯帳戶",
+    "updateCredentials": "更新憑證",
+    "studentsLabel": "${count}位學生",
+    "selectProvider": "選擇您的電子成績冊提供者"
   }
 }

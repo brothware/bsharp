@@ -758,5 +758,22 @@
     "purchaseSuccess": "Ďakujeme za vašu podporu!",
     "purchaseFailed": "Nákup zlyhal, skúste to znova",
     "productsUnavailable": "Príspevky sú momentálne nedostupné"
+  },
+  "accounts": {
+    "addAccount": "Pridať účet",
+    "manageAccounts": "Spravovať účty",
+    "continueToApp": "Pokračovať",
+    "noAccountsYet": "Zatiaľ žiadne účty",
+    "addFirstAccount": "Pridajte svoj prvý školský účet",
+    "removeAccount": "Odstrániť účet",
+    "removeAccountConfirm": "Naozaj chcete odstrániť tento účet? Všetky údaje tejto školy budú stratené.",
+    "switchStudent": "Prepnúť žiaka",
+    "schoolName": "Názov školy",
+    "accountAddedSuccess": "Účet úspešne pridaný",
+    "credentialsInvalid": "Neplatné prihlasovacie údaje",
+    "editAccount": "Upraviť účet",
+    "updateCredentials": "Aktualizovať prihlasovacie údaje",
+    "studentsLabel": "${count} žiak(ov)",
+    "selectProvider": "Vyberte poskytovateľa e-žiackej knižky"
   }
 }

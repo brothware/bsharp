@@ -755,5 +755,22 @@
     "purchaseSuccess": "Täname toetuse eest!",
     "purchaseFailed": "Ost ebaõnnestus, proovi uuesti",
     "productsUnavailable": "Jootrahaannetused pole hetkel saadaval"
+  },
+  "accounts": {
+    "addAccount": "Lisa konto",
+    "manageAccounts": "Halda kontosid",
+    "continueToApp": "Jätka",
+    "noAccountsYet": "Veel pole kontosid",
+    "addFirstAccount": "Alustamiseks lisage oma esimene koolikonto",
+    "removeAccount": "Eemalda konto",
+    "removeAccountConfirm": "Kas olete kindel, et soovite selle konto eemaldada? Kõik selle kooli andmed lähevad kaotsi.",
+    "switchStudent": "Vaheta õpilast",
+    "schoolName": "Kooli nimi",
+    "accountAddedSuccess": "Konto edukalt lisatud",
+    "credentialsInvalid": "Vigased sisselogimisandmed",
+    "editAccount": "Muuda kontot",
+    "updateCredentials": "Uuenda sisselogimisandmeid",
+    "studentsLabel": "${count} õpilane/õpilast",
+    "selectProvider": "Valige oma e-päeviku teenusepakkuja"
   }
 }

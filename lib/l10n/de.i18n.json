@@ -755,5 +755,22 @@
     "purchaseSuccess": "Vielen Dank für Ihre Unterstützung!",
     "purchaseFailed": "Kauf fehlgeschlagen, bitte erneut versuchen",
     "productsUnavailable": "Trinkgelder sind derzeit nicht verfügbar"
+  },
+  "accounts": {
+    "addAccount": "Konto hinzufügen",
+    "manageAccounts": "Konten verwalten",
+    "continueToApp": "Weiter",
+    "noAccountsYet": "Noch keine Konten",
+    "addFirstAccount": "Fügen Sie Ihr erstes Schulkonto hinzu, um zu beginnen",
+    "removeAccount": "Konto entfernen",
+    "removeAccountConfirm": "Möchten Sie dieses Konto wirklich entfernen? Alle Daten dieser Schule gehen verloren.",
+    "switchStudent": "Schüler wechseln",
+    "schoolName": "Schulname",
+    "accountAddedSuccess": "Konto erfolgreich hinzugefügt",
+    "credentialsInvalid": "Ungültige Anmeldedaten",
+    "editAccount": "Konto bearbeiten",
+    "updateCredentials": "Anmeldedaten aktualisieren",
+    "studentsLabel": "${count} Schüler",
+    "selectProvider": "Wählen Sie Ihren E-Klassenbuch-Anbieter"
   }
 }

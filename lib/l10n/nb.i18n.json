@@ -755,5 +755,22 @@
     "purchaseSuccess": "Takk for din støtte!",
     "purchaseFailed": "Kjøpet mislyktes, prøv igjen",
     "productsUnavailable": "Tips er for øyeblikket utilgjengelige"
+  },
+  "accounts": {
+    "addAccount": "Legg til konto",
+    "manageAccounts": "Administrer kontoer",
+    "continueToApp": "Fortsett",
+    "noAccountsYet": "Ingen kontoer ennå",
+    "addFirstAccount": "Legg til din første skolekonto for å komme i gang",
+    "removeAccount": "Fjern konto",
+    "removeAccountConfirm": "Er du sikker på at du vil fjerne denne kontoen? Alle data for denne skolen vil gå tapt.",
+    "switchStudent": "Bytt elev",
+    "schoolName": "Skolenavn",
+    "accountAddedSuccess": "Konto lagt til",
+    "credentialsInvalid": "Ugyldige påloggingsopplysninger",
+    "editAccount": "Rediger konto",
+    "updateCredentials": "Oppdater påloggingsopplysninger",
+    "studentsLabel": "${count} elev(er)",
+    "selectProvider": "Velg din leverandør av e-karakterbok"
   }
 }

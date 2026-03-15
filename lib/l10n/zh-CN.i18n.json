@@ -755,5 +755,22 @@
     "purchaseSuccess": "感谢您的支持！",
     "purchaseFailed": "购买失败，请重试",
     "productsUnavailable": "打赏暂时不可用"
+  },
+  "accounts": {
+    "addAccount": "添加账户",
+    "manageAccounts": "管理账户",
+    "continueToApp": "继续",
+    "noAccountsYet": "还没有账户",
+    "addFirstAccount": "添加您的第一个学校账户以开始",
+    "removeAccount": "删除账户",
+    "removeAccountConfirm": "确定要删除此账户吗？该学校的所有数据将丢失。",
+    "switchStudent": "切换学生",
+    "schoolName": "学校名称",
+    "accountAddedSuccess": "账户添加成功",
+    "credentialsInvalid": "凭据无效",
+    "editAccount": "编辑账户",
+    "updateCredentials": "更新凭据",
+    "studentsLabel": "${count}名学生",
+    "selectProvider": "选择您的电子成绩册提供商"
   }
 }

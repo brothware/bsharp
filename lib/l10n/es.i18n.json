@@ -755,5 +755,22 @@
     "purchaseSuccess": "¡Gracias por su apoyo!",
     "purchaseFailed": "Compra fallida, inténtelo de nuevo",
     "productsUnavailable": "Las propinas no están disponibles actualmente"
+  },
+  "accounts": {
+    "addAccount": "Añadir cuenta",
+    "manageAccounts": "Gestionar cuentas",
+    "continueToApp": "Continuar",
+    "noAccountsYet": "Sin cuentas aún",
+    "addFirstAccount": "Añade tu primera cuenta escolar para empezar",
+    "removeAccount": "Eliminar cuenta",
+    "removeAccountConfirm": "¿Seguro que quieres eliminar esta cuenta? Se perderán todos los datos de este colegio.",
+    "switchStudent": "Cambiar alumno",
+    "schoolName": "Nombre del colegio",
+    "accountAddedSuccess": "Cuenta añadida correctamente",
+    "credentialsInvalid": "Credenciales no válidas",
+    "editAccount": "Editar cuenta",
+    "updateCredentials": "Actualizar credenciales",
+    "studentsLabel": "${count} alumno(s)",
+    "selectProvider": "Elige tu proveedor de registro electrónico"
   }
 }

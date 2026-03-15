@@ -755,5 +755,22 @@
     "purchaseSuccess": "Tack för ditt stöd!",
     "purchaseFailed": "Köpet misslyckades, försök igen",
     "productsUnavailable": "Dricks är för närvarande inte tillgängligt"
+  },
+  "accounts": {
+    "addAccount": "Lägg till konto",
+    "manageAccounts": "Hantera konton",
+    "continueToApp": "Fortsätt",
+    "noAccountsYet": "Inga konton ännu",
+    "addFirstAccount": "Lägg till ditt första skolkonto för att börja",
+    "removeAccount": "Ta bort konto",
+    "removeAccountConfirm": "Är du säker på att du vill ta bort detta konto? All data för denna skola går förlorad.",
+    "switchStudent": "Byt elev",
+    "schoolName": "Skolnamn",
+    "accountAddedSuccess": "Konto tillagt",
+    "credentialsInvalid": "Ogiltiga inloggningsuppgifter",
+    "editAccount": "Redigera konto",
+    "updateCredentials": "Uppdatera inloggningsuppgifter",
+    "studentsLabel": "${count} elev(er)",
+    "selectProvider": "Välj din e-dagbok-leverantör"
   }
 }

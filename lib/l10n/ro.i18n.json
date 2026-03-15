@@ -758,5 +758,22 @@
     "purchaseSuccess": "Vă mulțumim pentru sprijin!",
     "purchaseFailed": "Achiziția a eșuat, încercați din nou",
     "productsUnavailable": "Contribuțiile sunt momentan indisponibile"
+  },
+  "accounts": {
+    "addAccount": "Adaugă cont",
+    "manageAccounts": "Gestionează conturile",
+    "continueToApp": "Continuă",
+    "noAccountsYet": "Niciun cont încă",
+    "addFirstAccount": "Adaugă primul cont școlar pentru a începe",
+    "removeAccount": "Elimină cont",
+    "removeAccountConfirm": "Sigur doriți să eliminați acest cont? Toate datele acestei școli vor fi pierdute.",
+    "switchStudent": "Schimbă elevul",
+    "schoolName": "Numele școlii",
+    "accountAddedSuccess": "Cont adăugat cu succes",
+    "credentialsInvalid": "Date de autentificare invalide",
+    "editAccount": "Editează cont",
+    "updateCredentials": "Actualizează datele de autentificare",
+    "studentsLabel": "${count} elev(i)",
+    "selectProvider": "Alegeți furnizorul de catalog electronic"
   }
 }

@@ -755,5 +755,22 @@
     "purchaseSuccess": "आपके समर्थन के लिए धन्यवाद!",
     "purchaseFailed": "खरीद विफल, कृपया पुनः प्रयास करें",
     "productsUnavailable": "टिप वर्तमान में अनुपलब्ध हैं"
+  },
+  "accounts": {
+    "addAccount": "खाता जोड़ें",
+    "manageAccounts": "खाते प्रबंधित करें",
+    "continueToApp": "जारी रखें",
+    "noAccountsYet": "अभी कोई खाता नहीं",
+    "addFirstAccount": "शुरू करने के लिए अपना पहला स्कूल खाता जोड़ें",
+    "removeAccount": "खाता हटाएँ",
+    "removeAccountConfirm": "क्या आप वाकई इस खाते को हटाना चाहते हैं? इस स्कूल का सारा डेटा खो जाएगा।",
+    "switchStudent": "छात्र बदलें",
+    "schoolName": "स्कूल का नाम",
+    "accountAddedSuccess": "खाता सफलतापूर्वक जोड़ा गया",
+    "credentialsInvalid": "अमान्य प्रमाण-पत्र",
+    "editAccount": "खाता संपादित करें",
+    "updateCredentials": "प्रमाण-पत्र अपडेट करें",
+    "studentsLabel": "${count} छात्र",
+    "selectProvider": "अपना ई-ग्रेडबुक प्रदाता चुनें"
   }
 }

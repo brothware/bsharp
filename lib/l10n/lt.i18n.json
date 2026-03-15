@@ -761,5 +761,22 @@
     "purchaseSuccess": "Ačiū už palaikymą!",
     "purchaseFailed": "Pirkimas nepavyko, bandykite dar kartą",
     "productsUnavailable": "Arbatpinigiai šiuo metu nepasiekiami"
+  },
+  "accounts": {
+    "addAccount": "Pridėti paskyrą",
+    "manageAccounts": "Tvarkyti paskyras",
+    "continueToApp": "Tęsti",
+    "noAccountsYet": "Dar nėra paskyrų",
+    "addFirstAccount": "Pridėkite savo pirmąją mokyklos paskyrą, kad pradėtumėte",
+    "removeAccount": "Pašalinti paskyrą",
+    "removeAccountConfirm": "Ar tikrai norite pašalinti šią paskyrą? Visi šios mokyklos duomenys bus prarasti.",
+    "switchStudent": "Perjungti mokinį",
+    "schoolName": "Mokyklos pavadinimas",
+    "accountAddedSuccess": "Paskyra sėkmingai pridėta",
+    "credentialsInvalid": "Neteisingi prisijungimo duomenys",
+    "editAccount": "Redaguoti paskyrą",
+    "updateCredentials": "Atnaujinti prisijungimo duomenis",
+    "studentsLabel": "${count} mokinys(-ių)",
+    "selectProvider": "Pasirinkite savo e-dienyno tiekėją"
   }
 }

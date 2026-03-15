@@ -755,5 +755,22 @@
     "purchaseSuccess": "Desteğiniz için teşekkürler!",
     "purchaseFailed": "Satın alma başarısız oldu, lütfen tekrar deneyin",
     "productsUnavailable": "Bahşişler şu anda mevcut değil"
+  },
+  "accounts": {
+    "addAccount": "Hesap ekle",
+    "manageAccounts": "Hesapları yönet",
+    "continueToApp": "Devam et",
+    "noAccountsYet": "Henüz hesap yok",
+    "addFirstAccount": "Başlamak için ilk okul hesabınızı ekleyin",
+    "removeAccount": "Hesabı kaldır",
+    "removeAccountConfirm": "Bu hesabı kaldırmak istediğinizden emin misiniz? Bu okulun tüm verileri kaybolacaktır.",
+    "switchStudent": "Öğrenci değiştir",
+    "schoolName": "Okul adı",
+    "accountAddedSuccess": "Hesap başarıyla eklendi",
+    "credentialsInvalid": "Geçersiz giriş bilgileri",
+    "editAccount": "Hesabı düzenle",
+    "updateCredentials": "Giriş bilgilerini güncelle",
+    "studentsLabel": "${count} öğrenci",
+    "selectProvider": "E-karne sağlayıcınızı seçin"
   }
 }

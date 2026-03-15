@@ -755,5 +755,22 @@
     "purchaseSuccess": "Ви благодариме за поддршката!",
     "purchaseFailed": "Купувањето не успеа, обидете се повторно",
     "productsUnavailable": "Бакшишите моментално не се достапни"
+  },
+  "accounts": {
+    "addAccount": "Додај сметка",
+    "manageAccounts": "Управувај со сметки",
+    "continueToApp": "Продолжи",
+    "noAccountsYet": "Сè уште нема сметки",
+    "addFirstAccount": "Додајте ја вашата прва училишна сметка за да започнете",
+    "removeAccount": "Отстрани сметка",
+    "removeAccountConfirm": "Дали сте сигурни дека сакате да ја отстраните оваа сметка? Сите податоци за ова училиште ќе бидат изгубени.",
+    "switchStudent": "Промени ученик",
+    "schoolName": "Име на училиштето",
+    "accountAddedSuccess": "Сметката е успешно додадена",
+    "credentialsInvalid": "Невалидни податоци за најава",
+    "editAccount": "Уреди сметка",
+    "updateCredentials": "Ажурирај податоци за најава",
+    "studentsLabel": "${count} ученик(ци)",
+    "selectProvider": "Изберете го вашиот провајдер за е-дневник"
   }
 }

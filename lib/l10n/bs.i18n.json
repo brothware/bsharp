@@ -758,5 +758,22 @@
     "purchaseSuccess": "Hvala na podršci!",
     "purchaseFailed": "Kupovina nije uspjela, pokušajte ponovo",
     "productsUnavailable": "Napojnice trenutno nedostupne"
+  },
+  "accounts": {
+    "addAccount": "Dodaj račun",
+    "manageAccounts": "Upravljanje računima",
+    "continueToApp": "Nastavi",
+    "noAccountsYet": "Još nema računa",
+    "addFirstAccount": "Dodajte prvi školski račun za početak",
+    "removeAccount": "Ukloni račun",
+    "removeAccountConfirm": "Jeste li sigurni da želite ukloniti ovaj račun? Svi podaci ove škole bit će izgubljeni.",
+    "switchStudent": "Promijeni učenika",
+    "schoolName": "Naziv škole",
+    "accountAddedSuccess": "Račun uspješno dodan",
+    "credentialsInvalid": "Neispravni podaci za prijavu",
+    "editAccount": "Uredi račun",
+    "updateCredentials": "Ažuriraj podatke za prijavu",
+    "studentsLabel": "${count} učenik(a)",
+    "selectProvider": "Odaberite svog pružatelja e-dnevnika"
   }
 }

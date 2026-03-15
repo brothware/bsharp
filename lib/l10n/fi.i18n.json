@@ -755,5 +755,22 @@
     "purchaseSuccess": "Kiitos tuestasi!",
     "purchaseFailed": "Osto epäonnistui, yritä uudelleen",
     "productsUnavailable": "Tipit eivät ole tällä hetkellä saatavilla"
+  },
+  "accounts": {
+    "addAccount": "Lisää tili",
+    "manageAccounts": "Hallitse tilejä",
+    "continueToApp": "Jatka",
+    "noAccountsYet": "Ei tilejä vielä",
+    "addFirstAccount": "Lisää ensimmäinen koulutili aloittaaksesi",
+    "removeAccount": "Poista tili",
+    "removeAccountConfirm": "Haluatko varmasti poistaa tämän tilin? Kaikki tämän koulun tiedot menetetään.",
+    "switchStudent": "Vaihda oppilasta",
+    "schoolName": "Koulun nimi",
+    "accountAddedSuccess": "Tili lisätty onnistuneesti",
+    "credentialsInvalid": "Virheelliset kirjautumistiedot",
+    "editAccount": "Muokkaa tiliä",
+    "updateCredentials": "Päivitä kirjautumistiedot",
+    "studentsLabel": "${count} oppilas(ta)",
+    "selectProvider": "Valitse sähköisen arvosanakirjan tarjoaja"
   }
 }

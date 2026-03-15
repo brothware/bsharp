@@ -755,5 +755,22 @@
     "purchaseSuccess": "Bedankt voor je steun!",
     "purchaseFailed": "Aankoop mislukt, probeer het opnieuw",
     "productsUnavailable": "Fooien zijn momenteel niet beschikbaar"
+  },
+  "accounts": {
+    "addAccount": "Account toevoegen",
+    "manageAccounts": "Accounts beheren",
+    "continueToApp": "Doorgaan",
+    "noAccountsYet": "Nog geen accounts",
+    "addFirstAccount": "Voeg uw eerste schoolaccount toe om te beginnen",
+    "removeAccount": "Account verwijderen",
+    "removeAccountConfirm": "Weet u zeker dat u dit account wilt verwijderen? Alle gegevens van deze school gaan verloren.",
+    "switchStudent": "Leerling wisselen",
+    "schoolName": "Schoolnaam",
+    "accountAddedSuccess": "Account succesvol toegevoegd",
+    "credentialsInvalid": "Ongeldige inloggegevens",
+    "editAccount": "Account bewerken",
+    "updateCredentials": "Inloggegevens bijwerken",
+    "studentsLabel": "${count} leerling(en)",
+    "selectProvider": "Kies uw e-cijferlijst aanbieder"
   }
 }

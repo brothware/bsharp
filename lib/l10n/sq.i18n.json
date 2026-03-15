@@ -755,5 +755,22 @@
     "purchaseSuccess": "Faleminderit për mbështetjen tuaj!",
     "purchaseFailed": "Blerja dështoi, provoni përsëri",
     "productsUnavailable": "Kontributet nuk janë të disponueshme aktualisht"
+  },
+  "accounts": {
+    "addAccount": "Shto llogari",
+    "manageAccounts": "Menaxho llogaritë",
+    "continueToApp": "Vazhdo",
+    "noAccountsYet": "Ende pa llogari",
+    "addFirstAccount": "Shto llogarinë e parë shkollore për të filluar",
+    "removeAccount": "Hiq llogarinë",
+    "removeAccountConfirm": "A jeni i sigurt që doni ta hiqni këtë llogari? Të gjitha të dhënat e kësaj shkolle do të humbasin.",
+    "switchStudent": "Ndrysho nxënësin",
+    "schoolName": "Emri i shkollës",
+    "accountAddedSuccess": "Llogaria u shtua me sukses",
+    "credentialsInvalid": "Kredencialet janë të pavlefshme",
+    "editAccount": "Ndrysho llogarinë",
+    "updateCredentials": "Përditëso kredencialet",
+    "studentsLabel": "${count} nxënës",
+    "selectProvider": "Zgjidhni ofruesin e dëftesës elektronike"
   }
 }

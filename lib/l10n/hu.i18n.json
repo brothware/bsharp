@@ -755,5 +755,22 @@
     "purchaseSuccess": "Köszönjük a támogatását!",
     "purchaseFailed": "A vásárlás sikertelen, próbálja újra",
     "productsUnavailable": "A borravalók jelenleg nem elérhetők"
+  },
+  "accounts": {
+    "addAccount": "Fiók hozzáadása",
+    "manageAccounts": "Fiókok kezelése",
+    "continueToApp": "Tovább",
+    "noAccountsYet": "Még nincsenek fiókok",
+    "addFirstAccount": "Adja hozzá első iskolai fiókját a kezdéshez",
+    "removeAccount": "Fiók eltávolítása",
+    "removeAccountConfirm": "Biztosan el szeretné távolítani ezt a fiókot? Az iskola összes adata elvész.",
+    "switchStudent": "Tanuló váltása",
+    "schoolName": "Iskola neve",
+    "accountAddedSuccess": "Fiók sikeresen hozzáadva",
+    "credentialsInvalid": "Érvénytelen bejelentkezési adatok",
+    "editAccount": "Fiók szerkesztése",
+    "updateCredentials": "Bejelentkezési adatok frissítése",
+    "studentsLabel": "${count} tanuló",
+    "selectProvider": "Válassza ki az e-napló szolgáltatóját"
   }
 }

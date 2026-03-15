@@ -761,5 +761,22 @@
     "purchaseSuccess": "Grazzi għall-appoġġ tiegħek!",
     "purchaseFailed": "Ix-xirja falliet, erġa' pprova",
     "productsUnavailable": "It-tips bħalissa mhumiex disponibbli"
+  },
+  "accounts": {
+    "addAccount": "Żid kont",
+    "manageAccounts": "Immaniġġja l-kontijiet",
+    "continueToApp": "Kompli",
+    "noAccountsYet": "Għad m'hemmx kontijiet",
+    "addFirstAccount": "Żid l-ewwel kont tal-iskola tiegħek biex tibda",
+    "removeAccount": "Neħħi l-kont",
+    "removeAccountConfirm": "Int żgur li trid tneħħi dan il-kont? Id-data kollha ta' din l-iskola se tintilef.",
+    "switchStudent": "Ibdel l-istudent",
+    "schoolName": "Isem tal-iskola",
+    "accountAddedSuccess": "Il-kont ġie miżjud b'suċċess",
+    "credentialsInvalid": "Kredenzjali invalidi",
+    "editAccount": "Editja l-kont",
+    "updateCredentials": "Aġġorna l-kredenzjali",
+    "studentsLabel": "${count} student(i)",
+    "selectProvider": "Agħżel il-fornitur tar-reġistru elettroniku tiegħek"
   }
 }

@@ -755,5 +755,22 @@
     "purchaseSuccess": "Grazie per il tuo supporto!",
     "purchaseFailed": "Acquisto non riuscito, riprova",
     "productsUnavailable": "Le mance non sono al momento disponibili"
+  },
+  "accounts": {
+    "addAccount": "Aggiungi account",
+    "manageAccounts": "Gestisci account",
+    "continueToApp": "Continua",
+    "noAccountsYet": "Nessun account",
+    "addFirstAccount": "Aggiungi il tuo primo account scolastico per iniziare",
+    "removeAccount": "Rimuovi account",
+    "removeAccountConfirm": "Sei sicuro di voler rimuovere questo account? Tutti i dati di questa scuola andranno persi.",
+    "switchStudent": "Cambia studente",
+    "schoolName": "Nome della scuola",
+    "accountAddedSuccess": "Account aggiunto con successo",
+    "credentialsInvalid": "Credenziali non valide",
+    "editAccount": "Modifica account",
+    "updateCredentials": "Aggiorna credenziali",
+    "studentsLabel": "${count} studente/i",
+    "selectProvider": "Scegli il tuo fornitore di registro elettronico"
   }
 }

@@ -755,5 +755,22 @@
     "purchaseSuccess": "Obrigado pelo seu apoio!",
     "purchaseFailed": "A compra falhou, tente novamente",
     "productsUnavailable": "As gorjetas não estão disponíveis de momento"
+  },
+  "accounts": {
+    "addAccount": "Adicionar conta",
+    "manageAccounts": "Gerir contas",
+    "continueToApp": "Continuar",
+    "noAccountsYet": "Sem contas ainda",
+    "addFirstAccount": "Adicione a sua primeira conta escolar para começar",
+    "removeAccount": "Remover conta",
+    "removeAccountConfirm": "Tem a certeza de que pretende remover esta conta? Todos os dados desta escola serão perdidos.",
+    "switchStudent": "Mudar aluno",
+    "schoolName": "Nome da escola",
+    "accountAddedSuccess": "Conta adicionada com sucesso",
+    "credentialsInvalid": "Credenciais inválidas",
+    "editAccount": "Editar conta",
+    "updateCredentials": "Atualizar credenciais",
+    "studentsLabel": "${count} aluno(s)",
+    "selectProvider": "Escolha o seu fornecedor de caderneta eletrónica"
   }
 }

@@ -755,5 +755,22 @@
     "notesCount": "${count} uwag",
     "noChanges": "Brak zmian",
     "newChanges": "Nowe: ${summary}"
+  },
+  "accounts": {
+    "addAccount": "Dodaj konto",
+    "manageAccounts": "Zarządzaj kontami",
+    "continueToApp": "Kontynuuj",
+    "noAccountsYet": "Brak kont",
+    "addFirstAccount": "Dodaj pierwsze konto szkolne, aby rozpocząć",
+    "removeAccount": "Usuń konto",
+    "removeAccountConfirm": "Czy na pewno chcesz usunąć to konto? Wszystkie dane tej szkoły zostaną utracone.",
+    "switchStudent": "Przełącz ucznia",
+    "schoolName": "Nazwa szkoły",
+    "accountAddedSuccess": "Konto dodane pomyślnie",
+    "credentialsInvalid": "Nieprawidłowe dane logowania",
+    "editAccount": "Edytuj konto",
+    "updateCredentials": "Aktualizuj dane logowania",
+    "studentsLabel": "${count} uczeń/uczniów",
+    "selectProvider": "Wybierz dostawcę e-dziennika"
   }
 }

@@ -764,5 +764,22 @@
     "purchaseSuccess": "Go raibh maith agat as do thacaiocht!",
     "purchaseFailed": "Theip ar an gceannach, bain triail eile as",
     "productsUnavailable": "Nil sineadh laimhe ar fail faoi lathair"
+  },
+  "accounts": {
+    "addAccount": "Cuir cuntas leis",
+    "manageAccounts": "Bainistigh cuntais",
+    "continueToApp": "Lean ar aghaidh",
+    "noAccountsYet": "Níl aon chuntais fós",
+    "addFirstAccount": "Cuir do chéad chuntas scoile leis chun tosú",
+    "removeAccount": "Bain cuntas",
+    "removeAccountConfirm": "An bhfuil tú cinnte gur mhaith leat an cuntas seo a bhaint? Caillfear sonraí uile na scoile seo.",
+    "switchStudent": "Athraigh dalta",
+    "schoolName": "Ainm na scoile",
+    "accountAddedSuccess": "Cuntas curtha leis go rathúil",
+    "credentialsInvalid": "Dintiúir neamhbhailí",
+    "editAccount": "Cuir cuntas in eagar",
+    "updateCredentials": "Nuashonraigh dintiúir",
+    "studentsLabel": "${count} dalta(í)",
+    "selectProvider": "Roghnaigh do sholáthraí ríomh-dhialainne"
   }
 }

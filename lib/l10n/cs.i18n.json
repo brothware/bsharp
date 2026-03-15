@@ -758,5 +758,22 @@
     "purchaseSuccess": "Děkujeme za podporu!",
     "purchaseFailed": "Nákup se nezdařil, zkuste to znovu",
     "productsUnavailable": "Příspěvky nejsou dostupné"
+  },
+  "accounts": {
+    "addAccount": "Přidat účet",
+    "manageAccounts": "Spravovat účty",
+    "continueToApp": "Pokračovat",
+    "noAccountsYet": "Zatím žádné účty",
+    "addFirstAccount": "Přidejte svůj první školní účet",
+    "removeAccount": "Odebrat účet",
+    "removeAccountConfirm": "Opravdu chcete odebrat tento účet? Všechna data této školy budou ztracena.",
+    "switchStudent": "Přepnout žáka",
+    "schoolName": "Název školy",
+    "accountAddedSuccess": "Účet úspěšně přidán",
+    "credentialsInvalid": "Neplatné přihlašovací údaje",
+    "editAccount": "Upravit účet",
+    "updateCredentials": "Aktualizovat přihlašovací údaje",
+    "studentsLabel": "${count} žák(ů)",
+    "selectProvider": "Vyberte poskytovatele e-žákovské knížky"
   }
 }

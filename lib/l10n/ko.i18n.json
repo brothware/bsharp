@@ -755,5 +755,22 @@
     "purchaseSuccess": "후원해 주셔서 감사합니다!",
     "purchaseFailed": "구매에 실패했습니다. 다시 시도하세요",
     "productsUnavailable": "현재 후원을 이용할 수 없습니다"
+  },
+  "accounts": {
+    "addAccount": "계정 추가",
+    "manageAccounts": "계정 관리",
+    "continueToApp": "계속",
+    "noAccountsYet": "아직 계정이 없습니다",
+    "addFirstAccount": "시작하려면 첫 번째 학교 계정을 추가하세요",
+    "removeAccount": "계정 삭제",
+    "removeAccountConfirm": "이 계정을 삭제하시겠습니까? 이 학교의 모든 데이터가 손실됩니다.",
+    "switchStudent": "학생 전환",
+    "schoolName": "학교 이름",
+    "accountAddedSuccess": "계정이 추가되었습니다",
+    "credentialsInvalid": "잘못된 자격 증명",
+    "editAccount": "계정 편집",
+    "updateCredentials": "자격 증명 업데이트",
+    "studentsLabel": "${count}명의 학생",
+    "selectProvider": "전자 성적부 제공업체를 선택하세요"
   }
 }
