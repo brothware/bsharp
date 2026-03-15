@@ -50,9 +50,19 @@ class ResolvedEvents extends _$ResolvedEvents {
 @Riverpod(keepAlive: true)
 class SelectedDate extends _$SelectedDate {
   @override
-  DateTime build() => DateTime.now();
+  DateTime build() => _snapToWeekday(DateTime.now());
   DateTime get value => state;
-  set value(DateTime v) => state = v;
+  set value(DateTime v) => state = _snapToWeekday(v);
+
+  static DateTime _snapToWeekday(DateTime date) {
+    if (date.weekday == DateTime.saturday) {
+      return date.subtract(const Duration(days: 1));
+    }
+    if (date.weekday == DateTime.sunday) {
+      return date.subtract(const Duration(days: 2));
+    }
+    return date;
+  }
 }
 
 @Riverpod(keepAlive: true)
