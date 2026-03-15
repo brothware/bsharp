@@ -173,16 +173,16 @@ Color subjectColor(String name) {
   const palette = [
     Color(0xFF4CAF50),
     Color(0xFF2196F3),
-    Color(0xFFFF9800),
     Color(0xFF9C27B0),
-    Color(0xFFE91E63),
     Color(0xFF009688),
+    Color(0xFF3F51B5),
+    Color(0xFF00BCD4),
     Color(0xFF795548),
     Color(0xFF607D8B),
-    Color(0xFFFF5722),
-    Color(0xFF3F51B5),
-    Color(0xFFCDDC39),
-    Color(0xFF00BCD4),
+    Color(0xFF5C6BC0),
+    Color(0xFF26A69A),
+    Color(0xFF66BB6A),
+    Color(0xFF42A5F5),
   ];
   var hash = 0;
   for (var i = 0; i < name.length; i++) {
