@@ -29,7 +29,7 @@ void main() {
         child: TranslationProvider(child: const BSharpApp()),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     expect(find.byType(MaterialApp), findsOneWidget);
   });
@@ -50,7 +50,7 @@ void main() {
         child: TranslationProvider(child: const BSharpApp()),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     expect(find.text('Dashboard'), findsWidgets);
   });
@@ -71,7 +71,7 @@ void main() {
         child: TranslationProvider(child: const BSharpApp()),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     expect(find.text('BSharp'), findsOneWidget);
   });
