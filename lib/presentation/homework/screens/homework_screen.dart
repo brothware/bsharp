@@ -13,51 +13,104 @@ class HomeworkScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final grouped = ref.watch(groupedHomeworksProvider);
-    final filter = ref.watch(homeworkFilterProvider);
-
-    return RefreshIndicator(
-      onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: SegmentedButton<HomeworkFilter>(
-              segments: [
-                ButtonSegment(
-                  value: HomeworkFilter.upcoming,
-                  label: Text(t.homework.upcoming),
-                ),
-                ButtonSegment(
-                  value: HomeworkFilter.past,
-                  label: Text(t.homework.past),
-                ),
-                ButtonSegment(
-                  value: HomeworkFilter.all,
-                  label: Text(t.homework.all),
-                ),
+    return DefaultTabController(
+      length: 3,
+      child: RefreshIndicator(
+        onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
+        child: Column(
+          children: [
+            TabBar(
+              tabs: [
+                Tab(text: t.homework.upcoming),
+                Tab(text: t.homework.past),
+                Tab(text: t.homework.all),
               ],
-              selected: {filter},
-              onSelectionChanged: (s) =>
-                  ref.read(homeworkFilterProvider.notifier).value = s.first,
+              labelColor: Theme.of(context).colorScheme.primary,
+              unselectedLabelColor: Theme.of(
+                context,
+              ).colorScheme.onSurfaceVariant,
+              indicatorSize: TabBarIndicatorSize.label,
             ),
-          ),
-          Expanded(
-            child: grouped.isEmpty
-                ? _EmptyState()
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: grouped.length,
-                    itemBuilder: (context, index) {
-                      final date = grouped.keys.elementAt(index);
-                      final items = grouped[date]!;
-                      return _DateGroup(date: date, homeworks: items);
-                    },
-                  ),
-          ),
-        ],
+            const Expanded(
+              child: TabBarView(
+                children: [
+                  _HomeworkList(filter: HomeworkFilter.upcoming),
+                  _HomeworkList(filter: HomeworkFilter.past),
+                  _HomeworkList(filter: HomeworkFilter.all),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class _HomeworkList extends ConsumerWidget {
+  const _HomeworkList({required this.filter});
+
+  final HomeworkFilter filter;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final all = ref.watch(homeworksProvider);
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    final filtered = switch (filter) {
+      HomeworkFilter.upcoming =>
+        all
+            .where(
+              (h) =>
+                  _parseDate(h.dueDate).isAfter(today) ||
+                  _parseDate(h.dueDate).isAtSameMomentAs(today),
+            )
+            .toList(),
+      HomeworkFilter.past =>
+        all.where((h) => _parseDate(h.dueDate).isBefore(today)).toList(),
+      HomeworkFilter.all => all,
+    };
+
+    final sorted = [...filtered]
+      ..sort(
+        (a, b) => _parseDate(a.dueDate).compareTo(_parseDate(b.dueDate)),
+      );
+
+    final grouped = <String, List<PortalHomework>>{};
+    for (final hw in sorted) {
+      grouped.putIfAbsent(hw.dueDate, () => []).add(hw);
+    }
+
+    if (grouped.isEmpty) {
+      return _EmptyState();
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: grouped.length,
+      itemBuilder: (context, index) {
+        final date = grouped.keys.elementAt(index);
+        final items = grouped[date]!;
+        return _DateGroup(date: date, homeworks: items);
+      },
+    );
+  }
+
+  DateTime _parseDate(String date) {
+    try {
+      return DateTime.parse(date);
+    } on FormatException {
+      final parts = date.split('.');
+      if (parts.length == 3) {
+        return DateTime(
+          int.parse(parts[2]),
+          int.parse(parts[1]),
+          int.parse(parts[0]),
+        );
+      }
+      return DateTime(2000);
+    }
   }
 }
 
