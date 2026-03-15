@@ -169,7 +169,7 @@ String dayLabelFull(int weekday) {
   };
 }
 
-Color subjectColor(int subjectId) {
+Color subjectColor(String name) {
   const palette = [
     Color(0xFF4CAF50),
     Color(0xFF2196F3),
@@ -184,7 +184,29 @@ Color subjectColor(int subjectId) {
     Color(0xFFCDDC39),
     Color(0xFF00BCD4),
   ];
-  return palette[subjectId.abs() % palette.length];
+  var hash = 0;
+  for (var i = 0; i < name.length; i++) {
+    hash = (hash * 31 + name.codeUnitAt(i)) & 0x7FFFFFFF;
+  }
+  return palette[hash % palette.length];
+}
+
+Color subjectColorByIndex(int index) {
+  const palette = [
+    Color(0xFF4CAF50),
+    Color(0xFF2196F3),
+    Color(0xFFFF9800),
+    Color(0xFF9C27B0),
+    Color(0xFFE91E63),
+    Color(0xFF009688),
+    Color(0xFF795548),
+    Color(0xFF607D8B),
+    Color(0xFFFF5722),
+    Color(0xFF3F51B5),
+    Color(0xFFCDDC39),
+    Color(0xFF00BCD4),
+  ];
+  return palette[index.abs() % palette.length];
 }
 
 bool isSameDay(DateTime a, DateTime b) {

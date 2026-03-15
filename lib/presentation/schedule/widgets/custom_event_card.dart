@@ -11,7 +11,7 @@ class CustomEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = subjectColor(item.event.colorIndex);
+    final color = subjectColorByIndex(item.event.colorIndex);
 
     return Card(
       clipBehavior: Clip.antiAlias,

@@ -22,7 +22,7 @@ class CustomEventDetailSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final color = subjectColor(event.colorIndex);
+    final color = subjectColorByIndex(event.colorIndex);
     final topPadding = MediaQuery.of(context).padding.top;
     final screenHeight = MediaQuery.of(context).size.height;
 

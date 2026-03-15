@@ -361,7 +361,7 @@ class _ColorPicker extends StatelessWidget {
       spacing: 8,
       runSpacing: 8,
       children: List.generate(12, (i) {
-        final color = subjectColor(i);
+        final color = subjectColorByIndex(i);
         final isSelected = i == selectedIndex;
         return GestureDetector(
           onTap: () => onChanged(i),

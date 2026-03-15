@@ -190,16 +190,16 @@ void main() {
   });
 
   group('subjectColor', () {
-    test('returns consistent color for same id', () {
-      expect(subjectColor(5), subjectColor(5));
+    test('returns consistent color for same name', () {
+      expect(subjectColor('Mathematics'), subjectColor('Mathematics'));
     });
 
-    test('wraps around palette', () {
-      expect(subjectColor(0), subjectColor(12));
+    test('returns different colors for different names', () {
+      expect(subjectColor('Mathematics'), isNot(subjectColor('Physics')));
     });
 
-    test('handles negative ids', () {
-      final color = subjectColor(-3);
+    test('handles empty string', () {
+      final color = subjectColor('');
       expect(color, isNotNull);
     });
   });

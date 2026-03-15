@@ -48,8 +48,8 @@ class LessonTimelineItem implements TimelineItem {
   }
 
   @override
-  Color get displayColor => entry.subjectName != null && entry.subjectId != null
-      ? subjectColor(entry.subjectId!)
+  Color get displayColor => entry.subjectName != null
+      ? subjectColor(entry.subjectName!)
       : const Color(0xFF607D8B);
 }
 
@@ -81,5 +81,5 @@ class CustomEventTimelineItem implements TimelineItem {
   String? get displaySubtitle => event.place;
 
   @override
-  Color get displayColor => subjectColor(event.colorIndex);
+  Color get displayColor => subjectColorByIndex(event.colorIndex);
 }
