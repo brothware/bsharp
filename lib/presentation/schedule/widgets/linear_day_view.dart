@@ -221,8 +221,6 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
     final substitution = item.isSubstitution;
     final sideColor = cancelled
         ? theme.colorScheme.error
-        : substitution
-        ? Colors.orange
         : item.displayColor;
 
     return Positioned(
@@ -291,12 +289,12 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
                           ),
                         ),
                         if (substitution)
-                          const Padding(
-                            padding: EdgeInsets.only(left: 4),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4),
                             child: Icon(
                               Icons.swap_horiz,
                               size: 14,
-                              color: Colors.orange,
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
                       ],
