@@ -78,8 +78,9 @@ class _DemoActivator {
       ActiveSelection(accountId: accountA.id, studentId: 1),
     );
 
-    _ref.invalidate(providerAccountsProvider);
-    _ref.invalidate(activeSelectionProvider);
+    _ref
+      ..invalidate(providerAccountsProvider)
+      ..invalidate(activeSelectionProvider);
 
     await provider.loadSchoolData(_ref, studentId: 1);
     await provider.loadMessages(_ref);

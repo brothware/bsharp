@@ -37,11 +37,12 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     await accountStorage.clearAll();
     final credStorage = ref.read(credentialStorageProvider);
     await credStorage.clearAll();
-    ref.read(syncCacheProvider).clear();
-    ref.read(activeDataProviderProvider.notifier).value = MobiregDataProvider();
-    ref.read(demoModeProvider.notifier).value = false;
-    ref.invalidate(providerAccountsProvider);
-    ref.invalidate(activeSelectionProvider);
+    ref
+      ..read(syncCacheProvider).clear()
+      ..read(activeDataProviderProvider.notifier).value = MobiregDataProvider()
+      ..read(demoModeProvider.notifier).value = false
+      ..invalidate(providerAccountsProvider)
+      ..invalidate(activeSelectionProvider);
     state = const AsyncData(AuthState.unauthenticated);
   }
 }
