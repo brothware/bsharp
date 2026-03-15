@@ -161,8 +161,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         studentId: _selectedStudentId!,
       ),
     );
-    ref.invalidate(providerAccountsProvider);
-    ref.invalidate(activeSelectionProvider);
+    ref
+      ..invalidate(providerAccountsProvider)
+      ..invalidate(activeSelectionProvider);
     await ref.read(authStateProvider.notifier).completeSetup();
   }
 
