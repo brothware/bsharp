@@ -59,7 +59,16 @@ class MainShell extends ConsumerWidget {
       ChildModeFeature.settings,
     );
 
-    return Scaffold(
+    final onDashboard = navigationShell.currentIndex == 0;
+
+    return PopScope(
+      canPop: onDashboard,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          navigationShell.goBranch(0);
+        }
+      },
+      child: Scaffold(
       appBar: AppBar(
         centerTitle: false,
         title: _buildTitle(context, ref),
@@ -141,6 +150,7 @@ class MainShell extends ConsumerWidget {
               onTap: (i) => _onTap(visible[i].branchIndex),
             )
           : null,
+      ),
     );
   }
 
