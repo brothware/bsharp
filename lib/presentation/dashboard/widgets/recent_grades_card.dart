@@ -66,11 +66,11 @@ class RecentGradesCard extends ConsumerWidget {
                     separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
                       final entry = recent[index];
-                      final isNew = newIds.contains(entry.mark.mark.id);
+                      final isNew = newIds.contains(entry.grade.id);
                       return _GradeChip(
-                        displayValue: entry.mark.displayValue,
+                        displayValue: entry.grade.displayValue,
                         subjectName: entry.subjectName,
-                        effectiveValue: entry.mark.effectiveValue,
+                        effectiveValue: entry.grade.effectiveValue,
                         isNew: isNew,
                       );
                     },

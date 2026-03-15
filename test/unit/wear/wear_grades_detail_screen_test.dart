@@ -1,6 +1,6 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
-import 'package:bsharp/domain/entities/mark.dart';
+import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
@@ -13,27 +13,21 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
-ResolvedMark _resolved({
+ResolvedGrade _grade({
   int id = 1,
-  double? markValue = 5.0,
+  double? effectiveValue = 5.0,
   String? displayValue,
 }) {
-  final mark = Mark(
+  return ResolvedGrade(
     id: id,
-    markGroupsId: 1,
-    pupilUsersId: 1,
-    teacherUsersId: 1,
-    markValue: markValue,
-    getDate: DateTime.now(),
-    modified: 0,
-  );
-  return ResolvedMark(
-    mark: mark,
+    subjectName: 'Test',
+    categoryName: '',
     displayValue:
         displayValue ??
-        (markValue != null ? markValue.toInt().toString() : '?'),
-    effectiveValue: markValue,
-    countsToAverage: markValue != null,
+        (effectiveValue != null ? effectiveValue.toInt().toString() : '?'),
+    date: DateTime.now(),
+    effectiveValue: effectiveValue,
+    countsToAverage: effectiveValue != null,
   );
 }
 
@@ -69,12 +63,12 @@ void main() {
             SubjectGrades(
               subjectName: 'Mathematics',
               subjectId: 1,
-              resolvedMarks: [_resolved()],
+              grades: [_grade()],
             ),
             SubjectGrades(
               subjectName: 'English',
               subjectId: 2,
-              resolvedMarks: [_resolved(id: 2, markValue: 4)],
+              grades: [_grade(id: 2, effectiveValue: 4)],
             ),
           ],
         ),
@@ -122,7 +116,7 @@ void main() {
             SubjectGrades(
               subjectName: 'Mathematics',
               subjectId: 1,
-              resolvedMarks: [_resolved(), _resolved(id: 2, markValue: 4)],
+              grades: [_grade(), _grade(id: 2, effectiveValue: 4)],
             ),
           ],
         ),

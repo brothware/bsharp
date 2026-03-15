@@ -135,8 +135,8 @@ class _WearDetailLessonItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sColor = entry.event.eventTypesId > 0
-        ? subjectColor(entry.event.eventTypesId)
+    final sColor = entry.subjectId != null
+        ? subjectColor(entry.subjectId!)
         : theme.colorScheme.primary;
 
     return Container(
@@ -167,7 +167,7 @@ class _WearDetailLessonItem extends StatelessWidget {
               children: [
                 Text(
                   entry.subjectName ??
-                      '${t.schedule.lessonFallback} ${entry.event.number}',
+                      '${t.schedule.lessonFallback} ${entry.number}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     decoration: entry.isCancelled

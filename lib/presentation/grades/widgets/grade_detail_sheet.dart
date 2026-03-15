@@ -1,20 +1,21 @@
 import 'package:bsharp/app/translation_provider.dart';
+import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GradeDetailSheet extends ConsumerStatefulWidget {
   const GradeDetailSheet({
-    required this.resolvedMark,
+    required this.grade,
     required this.subjectName,
     this.scrollController,
     super.key,
   });
 
-  final ResolvedMark resolvedMark;
+  final ResolvedGrade grade;
   final String subjectName;
   final ScrollController? scrollController;
 
@@ -25,33 +26,13 @@ class GradeDetailSheet extends ConsumerStatefulWidget {
 class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
   String? _translatedCategory;
   String? _translatedComment;
-  String? _translatedDescription;
 
   @override
   Widget build(BuildContext context) {
-    final mark = widget.resolvedMark.mark;
+    final grade = widget.grade;
     final theme = Theme.of(context);
-    final color = gradeColor(widget.resolvedMark.effectiveValue);
-    final scales = ref.watch(markScalesProvider);
-    final kinds = ref.watch(markKindsProvider);
-    final groups = ref.watch(markGroupsProvider);
-    final teachers = ref.watch(teachersProvider);
+    final color = gradeColor(grade.effectiveValue);
     final translationAvailable = ref.watch(isTranslationAvailableProvider);
-
-    final scale = mark.markScalesId != null
-        ? scales.where((s) => s.id == mark.markScalesId).firstOrNull
-        : null;
-
-    final group = groups.where((g) => g.id == mark.markGroupsId).firstOrNull;
-    final kind = group?.markKindsId != null
-        ? kinds.where((k) => k.id == group!.markKindsId).firstOrNull
-        : null;
-
-    final teacher = teachers
-        .where((t) => t.id == mark.teacherUsersId)
-        .firstOrNull;
-
-    final displayValue = widget.resolvedMark.displayValue;
 
     return Container(
       decoration: BoxDecoration(
@@ -107,7 +88,7 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
               ),
               alignment: Alignment.center,
               child: Text(
-                displayValue,
+                grade.displayValue,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: color,
                   fontWeight: FontWeight.bold,
@@ -122,73 +103,64 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
               style: theme.textTheme.titleMedium,
             ),
           ),
-          if (scale != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Center(
-                child: Text(
-                  translateGradeName(scale.name),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Center(
+              child: Text(
+                translateGradeName(grade.displayValue),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
             ),
+          ),
           const SizedBox(height: 24),
           _DetailRow(
             icon: Icons.calendar_today,
             label: t.grades.date,
-            value: _formatDate(mark.getDate),
+            value: _formatDate(grade.date),
           ),
           _DetailRow(
             icon: Icons.fitness_center,
             label: t.grades.weight,
-            value: mark.weight.toString(),
+            value: grade.weight.toString(),
           ),
-          if (kind != null)
-            _DetailRow(
-              icon: Icons.category,
-              label: t.grades.category,
-              value: _translatedCategory ?? translateGradeCategory(kind.name),
-            ),
-          if (group?.description != null && group!.description!.isNotEmpty)
-            _DetailRow(
-              icon: Icons.description,
-              label: t.grades.description,
-              value: _translatedDescription ?? group.description!,
-            ),
-          if (teacher != null)
+          _DetailRow(
+            icon: Icons.category,
+            label: t.grades.category,
+            value:
+                _translatedCategory ??
+                translateGradeCategory(grade.categoryName),
+          ),
+          if (grade.teacherName != null)
             _DetailRow(
               icon: Icons.person,
               label: t.grades.teacher,
-              value: '${teacher.name} ${teacher.surname}',
+              value: grade.teacherName!,
             ),
-          if (mark.comments != null && mark.comments!.isNotEmpty)
+          if (grade.comment != null && grade.comment!.isNotEmpty)
             _DetailRow(
               icon: Icons.comment,
               label: t.grades.comment,
-              value: _translatedComment ?? mark.comments!,
+              value: _translatedComment ?? grade.comment!,
             ),
           if (translationAvailable)
             _buildTranslateButton(
-              kind?.name,
-              group?.description,
-              mark.comments,
+              grade.categoryName,
+              grade.comment,
             ),
-          if (widget.resolvedMark.effectiveValue != null)
+          if (grade.effectiveValue != null)
             _DetailRow(
               icon: Icons.tag,
               label: t.grades.numericValue,
-              value: widget.resolvedMark.effectiveValue!.toStringAsFixed(
-                2,
-              ),
+              value: grade.effectiveValue!.toStringAsFixed(2),
             ),
-          if (widget.resolvedMark.isPointBased)
+          if (grade.markMax != null)
             _DetailRow(
               icon: Icons.score,
               label: t.grades.points,
               value:
-                  '${mark.markValue?.toInt() ?? "?"} / ${widget.resolvedMark.markMax!.toInt()}',
+                  '${grade.effectiveValue?.toInt() ?? "?"} / ${grade.markMax!.toInt()}',
             ),
           const SizedBox(height: 16),
         ],
@@ -197,35 +169,26 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
   }
 
   Widget _buildTranslateButton(
-    String? category,
-    String? description,
+    String category,
     String? comment,
   ) {
-    final hasCategory = category != null;
-    final hasDescription = description != null && description.isNotEmpty;
     final hasComment = comment != null && comment.isNotEmpty;
-    if (!hasCategory && !hasDescription && !hasComment) {
-      return const SizedBox.shrink();
-    }
 
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: MultiTranslateButton(
         fields: [
-          if (hasCategory) TranslationField(category),
-          if (hasDescription) TranslationField(description),
+          TranslationField(category),
           if (hasComment) TranslationField(comment),
         ],
         onTranslated: (translations) {
           setState(() {
             if (translations != null) {
               var i = 0;
-              if (hasCategory) _translatedCategory = translations[i++];
-              if (hasDescription) _translatedDescription = translations[i++];
+              _translatedCategory = translations[i++];
               if (hasComment) _translatedComment = translations[i];
             } else {
               _translatedCategory = null;
-              _translatedDescription = null;
               _translatedComment = null;
             }
           });

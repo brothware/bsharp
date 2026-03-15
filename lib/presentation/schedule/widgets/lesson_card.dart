@@ -12,8 +12,8 @@ class LessonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isCancelled = entry.isCancelled;
-    final color = entry.subjectName != null
-        ? subjectColor(entry.event.eventTypesId)
+    final color = entry.subjectName != null && entry.subjectId != null
+        ? subjectColor(entry.subjectId!)
         : theme.colorScheme.outline;
 
     return Card(
@@ -50,7 +50,7 @@ class LessonCard extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              _formatTimeShort(entry.event.startTime),
+                              _formatTimeShort(entry.startTime),
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: theme.colorScheme.onSurfaceVariant,
                               ),

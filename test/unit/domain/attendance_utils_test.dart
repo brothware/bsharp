@@ -1,13 +1,8 @@
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
-import 'package:bsharp/domain/entities/event.dart';
-import 'package:bsharp/domain/entities/subject.dart';
+import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-EventEvent eventEvent({int id = 1, int events1Id = 1, int events2Id = 2}) {
-  return EventEvent(id: id, events1Id: events1Id, events2Id: events2Id);
-}
 
 void main() {
   const presentType = AttendanceType(
@@ -43,25 +38,29 @@ void main() {
     );
   }
 
-  Event event({
+  ResolvedEvent resolvedEvent({
     int id = 1,
     DateTime? date,
     int number = 1,
-    int status = 1,
-    int eventTypesId = 1,
+    String? subjectName,
+    bool isCancelled = false,
+    bool isSubstitution = false,
+    bool isReplaced = false,
+    int? replacedByEventId,
+    List<int> replacedLessonNumbers = const [],
   }) {
-    return Event(
+    return ResolvedEvent(
       id: id,
       date: date ?? DateTime(2026, 2, 27),
       number: number,
       startTime: '08:00:00',
       endTime: '08:45:00',
-      eventTypesId: eventTypesId,
-      status: status,
-      substitution: 0,
-      type: 0,
-      attr: 0,
-      locked: 0,
+      subjectName: subjectName,
+      isCancelled: isCancelled,
+      isSubstitution: isSubstitution,
+      isReplaced: isReplaced,
+      replacedByEventId: replacedByEventId,
+      replacedLessonNumbers: replacedLessonNumbers,
     );
   }
 
@@ -220,9 +219,9 @@ void main() {
   group('groupByDay', () {
     test('groups attendances by event date', () {
       final events = [
-        event(date: DateTime(2026, 2, 27)),
-        event(id: 2, date: DateTime(2026, 2, 27), number: 2),
-        event(id: 3, date: DateTime(2026, 2, 28)),
+        resolvedEvent(date: DateTime(2026, 2, 27)),
+        resolvedEvent(id: 2, date: DateTime(2026, 2, 27), number: 2),
+        resolvedEvent(id: 3, date: DateTime(2026, 2, 28)),
       ];
 
       final result = groupByDay(
@@ -241,37 +240,30 @@ void main() {
     });
 
     test('skips attendances with unknown type', () {
-      final result = groupByDay([attendance(typesId: 999)], [presentType], [
-        event(),
-      ]);
+      final result = groupByDay(
+        [attendance(typesId: 999)],
+        [presentType],
+        [resolvedEvent()],
+      );
       expect(result, isEmpty);
     });
 
-    test('resolves subject name from event type', () {
+    test('resolves subject name from resolved event', () {
       final result = groupByDay(
         [attendance()],
         [presentType],
-        [event()],
-        eventTypes: [
-          const EventType(
-            id: 1,
-            teachingLevel: 0,
-            substitution: 0,
-            subjectsId: 10,
-          ),
-        ],
-        subjects: [const Subject(id: 10, name: 'Matematyka', abbr: 'Mat')],
+        [resolvedEvent(subjectName: 'Mathematics')],
       );
 
       final entries = result[DateTime(2026, 2, 27)]!.entries;
       expect(entries.first.subjectName, isNotNull);
     });
 
-    test('leaves subjectName null when no event type match', () {
+    test('leaves subjectName null when resolved event has no subject', () {
       final result = groupByDay(
         [attendance()],
         [presentType],
-        [event()],
+        [resolvedEvent()],
       );
 
       final entries = result[DateTime(2026, 2, 27)]!.entries;
@@ -287,39 +279,39 @@ void main() {
         ],
         [presentType],
         [
-          event(id: 10),
-          event(id: 11, number: 2),
-          event(id: 12, number: 3),
-          event(id: 20, number: 0, eventTypesId: 20),
-        ],
-        eventTypes: [
-          const EventType(
-            id: 1,
-            teachingLevel: 0,
-            substitution: 0,
-            subjectsId: 10,
+          resolvedEvent(
+            id: 10,
+            isCancelled: true,
+            isReplaced: true,
+            replacedByEventId: 20,
           ),
-          const EventType(
+          resolvedEvent(
+            id: 11,
+            number: 2,
+            isCancelled: true,
+            isReplaced: true,
+            replacedByEventId: 20,
+          ),
+          resolvedEvent(
+            id: 12,
+            number: 3,
+            isCancelled: true,
+            isReplaced: true,
+            replacedByEventId: 20,
+          ),
+          resolvedEvent(
             id: 20,
-            teachingLevel: 0,
-            substitution: 2,
-            subjectsId: 11,
+            number: 0,
+            subjectName: 'PE',
+            isSubstitution: true,
+            replacedLessonNumbers: [1, 2, 3],
           ),
-        ],
-        subjects: [
-          const Subject(id: 10, name: 'Math', abbr: 'M'),
-          const Subject(id: 11, name: 'PE', abbr: 'PE'),
-        ],
-        eventEvents: [
-          eventEvent(events1Id: 20, events2Id: 10),
-          eventEvent(id: 2, events1Id: 20, events2Id: 11),
-          eventEvent(id: 3, events1Id: 20, events2Id: 12),
         ],
       );
 
       final entries = result[DateTime(2026, 2, 27)]!.entries;
       expect(entries.length, 1);
-      expect(entries.first.event!.id, 20);
+      expect(entries.first.resolvedEvent!.id, 20);
       expect(entries.first.subjectName, contains('PE'));
     });
 
@@ -332,9 +324,9 @@ void main() {
         ],
         [presentType],
         [
-          event(status: 2),
-          event(id: 2),
-          event(id: 3, status: 2),
+          resolvedEvent(isCancelled: true),
+          resolvedEvent(id: 2),
+          resolvedEvent(id: 3, isCancelled: true),
         ],
       );
 

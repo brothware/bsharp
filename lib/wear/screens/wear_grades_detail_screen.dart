@@ -187,8 +187,8 @@ class _WearSubjectSection extends StatelessWidget {
           Wrap(
             spacing: 4,
             runSpacing: 4,
-            children: sg.resolvedMarks.map((rm) {
-              final color = gradeColor(rm.effectiveValue);
+            children: sg.grades.map((g) {
+              final color = gradeColor(g.effectiveValue);
               return Container(
                 constraints: const BoxConstraints(minWidth: 40, minHeight: 28),
                 alignment: Alignment.center,
@@ -198,7 +198,7 @@ class _WearSubjectSection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  rm.displayValue,
+                  g.displayValue,
                   style: theme.textTheme.titleSmall?.copyWith(
                     color: color,
                     fontWeight: FontWeight.bold,

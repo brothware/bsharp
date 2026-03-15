@@ -3,7 +3,7 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/data_sources/local/key_value_store.dart';
-import 'package:bsharp/data/providers/demo_data_provider.dart';
+import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/wear_app.dart';

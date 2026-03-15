@@ -1,48 +1,36 @@
-import 'package:bsharp/domain/entities/mark.dart';
-import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/presentation/grades/widgets/grade_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Mark _mark({double? markValue = 5, int weight = 1}) {
-  return Mark(
-    id: 1,
-    markGroupsId: 1,
-    pupilUsersId: 1,
-    teacherUsersId: 1,
-    markValue: markValue,
-    weight: weight,
-    getDate: DateTime(2026, 2, 27),
-    modified: 0,
-  );
-}
-
-ResolvedMark _resolved({
-  double? markValue = 5,
+ResolvedGrade _resolved({
+  double? effectiveValue = 5,
   String? displayValue,
-  double? effectiveValue,
   int weight = 1,
 }) {
-  final mark = _mark(markValue: markValue, weight: weight);
-  return ResolvedMark(
-    mark: mark,
+  return ResolvedGrade(
+    id: 1,
+    subjectName: 'Math',
+    categoryName: 'Exam',
     displayValue:
         displayValue ??
-        (markValue != null
-            ? (markValue == markValue.roundToDouble()
-                  ? markValue.toInt().toString()
-                  : markValue.toStringAsFixed(1))
+        (effectiveValue != null
+            ? (effectiveValue == effectiveValue.roundToDouble()
+                  ? effectiveValue.toInt().toString()
+                  : effectiveValue.toStringAsFixed(1))
             : '?'),
-    effectiveValue: effectiveValue ?? markValue,
+    date: DateTime(2026, 2, 27),
+    effectiveValue: effectiveValue,
+    weight: weight,
   );
 }
 
 void main() {
   group('GradeChip', () {
-    testWidgets('displays mark value', (tester) async {
+    testWidgets('displays grade value', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(body: GradeChip(resolvedMark: _resolved())),
+          home: Scaffold(body: GradeChip(grade: _resolved())),
         ),
       );
 
@@ -54,10 +42,9 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: GradeChip(
-              resolvedMark: _resolved(
-                markValue: null,
-                displayValue: '4+',
+              grade: _resolved(
                 effectiveValue: 4.5,
+                displayValue: '4+',
               ),
             ),
           ),
@@ -72,10 +59,9 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: GradeChip(
-              resolvedMark: _resolved(
-                markValue: 8,
-                displayValue: '8/10',
+              grade: _resolved(
                 effectiveValue: 8,
+                displayValue: '8/10',
               ),
             ),
           ),
@@ -89,7 +75,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: GradeChip(resolvedMark: _resolved(markValue: null)),
+            body: GradeChip(grade: _resolved(effectiveValue: null)),
           ),
         ),
       );
@@ -100,7 +86,7 @@ void main() {
     testWidgets('shows weight indicator when weight > 1', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(body: GradeChip(resolvedMark: _resolved(weight: 3))),
+          home: Scaffold(body: GradeChip(grade: _resolved(weight: 3))),
         ),
       );
 
@@ -110,7 +96,7 @@ void main() {
     testWidgets('hides weight indicator when weight is 1', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(body: GradeChip(resolvedMark: _resolved())),
+          home: Scaffold(body: GradeChip(grade: _resolved())),
         ),
       );
 
@@ -121,7 +107,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: GradeChip(resolvedMark: _resolved(), isNew: true),
+            body: GradeChip(grade: _resolved(), isNew: true),
           ),
         ),
       );
@@ -132,7 +118,7 @@ void main() {
     testWidgets('hides NEW badge when not new', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(body: GradeChip(resolvedMark: _resolved())),
+          home: Scaffold(body: GradeChip(grade: _resolved())),
         ),
       );
 
@@ -146,7 +132,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: GradeChip(
-              resolvedMark: _resolved(),
+              grade: _resolved(),
               onTap: () => tapped = true,
             ),
           ),

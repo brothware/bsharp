@@ -1,31 +1,37 @@
-import 'package:bsharp/domain/entities/event.dart';
-import 'package:bsharp/domain/entities/mark.dart';
-import 'package:bsharp/domain/entities/subject.dart';
+import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
-import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Mark mark({
+  ResolvedGrade grade({
     int id = 1,
-    int markGroupsId = 1,
-    double? markValue = 5,
+    String subjectName = 'Math',
+    double? effectiveValue = 5,
+    String? displayValue,
     int weight = 1,
-    int? markScalesId,
+    bool countsToAverage = true,
+    DateTime? date,
+    int? subjectId,
   }) {
-    return Mark(
+    return ResolvedGrade(
       id: id,
-      markGroupsId: markGroupsId,
-      pupilUsersId: 1,
-      teacherUsersId: 1,
-      markValue: markValue,
-      markScalesId: markScalesId,
+      subjectName: subjectName,
+      categoryName: 'Exam',
+      displayValue:
+          displayValue ??
+          (effectiveValue != null
+              ? (effectiveValue == effectiveValue.roundToDouble()
+                    ? effectiveValue.toInt().toString()
+                    : effectiveValue.toStringAsFixed(1))
+              : '?'),
+      date: date ?? DateTime(2026, 2, 27),
+      effectiveValue: effectiveValue,
       weight: weight,
-      getDate: DateTime(2026, 2, 27),
-      modified: 0,
+      countsToAverage: countsToAverage,
+      subjectId: subjectId,
     );
   }
 
@@ -112,77 +118,29 @@ void main() {
   });
 
   group('subjectGradesProvider', () {
-    test('returns empty list when no marks', () {
+    test('returns empty list when no grades', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       expect(container.read(subjectGradesProvider), isEmpty);
     });
 
-    test('groups marks by subject via mark groups', () {
+    test('groups grades by subject name', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWithBuild(
+          resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
-              mark(markGroupsId: 10),
-              mark(id: 2, markGroupsId: 10, markValue: 4),
-              mark(id: 3, markGroupsId: 20, markValue: 3),
-            ],
-          ),
-          markGroupsProvider.overrideWithBuild(
-            (ref, _) => [
-              const MarkGroup(
-                id: 10,
-                isPattern: 0,
-                markType: 1,
-                visibility: 1,
-                position: 0,
-                eventTypeTermsId: 500,
+              grade(subjectName: 'Math', subjectId: 100),
+              grade(
+                id: 2,
+                subjectName: 'Math',
+                effectiveValue: 4,
+                subjectId: 100,
               ),
-              const MarkGroup(
-                id: 20,
-                isPattern: 0,
-                markType: 1,
-                visibility: 1,
-                position: 0,
-                eventTypeTermsId: 501,
-              ),
-            ],
-          ),
-          eventTypeTermsProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
-              const EventTypeTerm(id: 501, termsId: 1, eventTypesId: 249),
-            ],
-          ),
-          eventTypesProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventType(
-                id: 248,
-                subjectsId: 100,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-              const EventType(
-                id: 249,
-                subjectsId: 200,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-            ],
-          ),
-          subjectsProvider.overrideWithBuild(
-            (ref, _) => [
-              const Subject(
-                id: 100,
-                subjectsEduId: 100,
-                name: 'Math',
-                abbr: 'MAT',
-              ),
-              const Subject(
-                id: 200,
-                subjectsEduId: 200,
-                name: 'Polish',
-                abbr: 'POL',
+              grade(
+                id: 3,
+                subjectName: 'Polish',
+                effectiveValue: 3,
+                subjectId: 200,
               ),
             ],
           ),
@@ -194,67 +152,24 @@ void main() {
       expect(result.length, 2);
 
       final math = result.firstWhere((sg) => sg.subjectName == 'Math');
-      expect(math.resolvedMarks.length, 2);
+      expect(math.grades.length, 2);
 
       final polish = result.firstWhere((sg) => sg.subjectName == 'Polish');
-      expect(polish.resolvedMarks.length, 1);
+      expect(polish.grades.length, 1);
     });
 
     test(
-      'resolves scale-based marks with abbreviation and effective value',
+      'resolves scale-based grades with abbreviation and effective value',
       () {
         final container = ProviderContainer(
           overrides: [
-            marksProvider.overrideWithBuild(
-              (ref, _) => [mark(markGroupsId: 10, markScalesId: 118)],
-            ),
-            markGroupsProvider.overrideWithBuild(
+            resolvedGradesProvider.overrideWithBuild(
               (ref, _) => [
-                const MarkGroup(
-                  id: 10,
-                  isPattern: 0,
-                  markType: 1,
-                  visibility: 1,
-                  position: 0,
-                  eventTypeTermsId: 500,
-                ),
-              ],
-            ),
-            markScalesProvider.overrideWithBuild(
-              (ref, _) => [
-                const MarkScale(
-                  id: 118,
-                  markScaleGroupsId: 10,
-                  abbreviation: '4+',
-                  name: 'B plus',
-                  markValue: 4.5,
-                  classified: 1,
-                  noCountToAverage: 0,
-                ),
-              ],
-            ),
-            eventTypeTermsProvider.overrideWithBuild(
-              (ref, _) => [
-                const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
-              ],
-            ),
-            eventTypesProvider.overrideWithBuild(
-              (ref, _) => [
-                const EventType(
-                  id: 248,
-                  subjectsId: 100,
-                  teachingLevel: 0,
-                  substitution: 0,
-                ),
-              ],
-            ),
-            subjectsProvider.overrideWithBuild(
-              (ref, _) => [
-                const Subject(
-                  id: 100,
-                  subjectsEduId: 100,
-                  name: 'Music',
-                  abbr: 'MUZ',
+                grade(
+                  subjectName: 'Music',
+                  displayValue: '4+',
+                  effectiveValue: 4.5,
+                  subjectId: 100,
                 ),
               ],
             ),
@@ -264,53 +179,22 @@ void main() {
 
         final result = container.read(subjectGradesProvider);
         expect(result.length, 1);
-        final rm = result.first.resolvedMarks.first;
-        expect(rm.displayValue, '4+');
-        expect(rm.effectiveValue, 4.5);
+        final g = result.first.grades.first;
+        expect(g.displayValue, '4+');
+        expect(g.effectiveValue, 4.5);
       },
     );
 
-    test('resolves point-based marks with value/max format', () {
+    test('resolves point-based grades with value/max format', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWithBuild(
-            (ref, _) => [mark(markGroupsId: 10, markValue: 8)],
-          ),
-          markGroupsProvider.overrideWithBuild(
+          resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
-              const MarkGroup(
-                id: 10,
-                isPattern: 0,
-                markType: 2,
-                visibility: 1,
-                position: 0,
-                eventTypeTermsId: 500,
-                markValueRangeMax: 10,
-              ),
-            ],
-          ),
-          eventTypeTermsProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
-            ],
-          ),
-          eventTypesProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventType(
-                id: 248,
-                subjectsId: 100,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-            ],
-          ),
-          subjectsProvider.overrideWithBuild(
-            (ref, _) => [
-              const Subject(
-                id: 100,
-                subjectsEduId: 100,
-                name: 'Education',
-                abbr: 'EDU',
+              grade(
+                subjectName: 'Education',
+                displayValue: '8/10',
+                effectiveValue: 8,
+                subjectId: 100,
               ),
             ],
           ),
@@ -319,73 +203,17 @@ void main() {
       addTearDown(container.dispose);
 
       final result = container.read(subjectGradesProvider);
-      final rm = result.first.resolvedMarks.first;
-      expect(rm.displayValue, '8/10');
-      expect(rm.isPointBased, true);
+      final g = result.first.grades.first;
+      expect(g.displayValue, '8/10');
     });
 
     test('sorts subjects alphabetically', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWithBuild(
-            (ref, _) => [mark(markGroupsId: 10), mark(id: 2, markGroupsId: 20)],
-          ),
-          markGroupsProvider.overrideWithBuild(
+          resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
-              const MarkGroup(
-                id: 10,
-                isPattern: 0,
-                markType: 1,
-                visibility: 1,
-                position: 0,
-                eventTypeTermsId: 500,
-              ),
-              const MarkGroup(
-                id: 20,
-                isPattern: 0,
-                markType: 1,
-                visibility: 1,
-                position: 0,
-                eventTypeTermsId: 501,
-              ),
-            ],
-          ),
-          eventTypeTermsProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
-              const EventTypeTerm(id: 501, termsId: 1, eventTypesId: 249),
-            ],
-          ),
-          eventTypesProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventType(
-                id: 248,
-                subjectsId: 200,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-              const EventType(
-                id: 249,
-                subjectsId: 100,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-            ],
-          ),
-          subjectsProvider.overrideWithBuild(
-            (ref, _) => [
-              const Subject(
-                id: 100,
-                subjectsEduId: 100,
-                name: 'English',
-                abbr: 'ANG',
-              ),
-              const Subject(
-                id: 200,
-                subjectsEduId: 200,
-                name: 'Biology',
-                abbr: 'BIO',
-              ),
+              grade(subjectName: 'Biology', subjectId: 200),
+              grade(id: 2, subjectName: 'English', subjectId: 100),
             ],
           ),
         ],
@@ -397,57 +225,23 @@ void main() {
       expect(result[1].subjectName, 'English');
     });
 
-    test('sorts marks by date ascending within subject', () {
+    test('sorts grades by date ascending within subject', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWithBuild(
+          resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
-              mark(markGroupsId: 10, markValue: 3),
-              Mark(
+              grade(
+                subjectName: 'Math',
+                effectiveValue: 3,
+                date: DateTime(2026, 2, 27),
+                subjectId: 100,
+              ),
+              grade(
                 id: 2,
-                markGroupsId: 10,
-                pupilUsersId: 1,
-                teacherUsersId: 1,
-                markValue: 5,
-                getDate: DateTime(2026, 3),
-                modified: 0,
-              ),
-            ],
-          ),
-          markGroupsProvider.overrideWithBuild(
-            (ref, _) => [
-              const MarkGroup(
-                id: 10,
-                isPattern: 0,
-                markType: 1,
-                visibility: 1,
-                position: 0,
-                eventTypeTermsId: 500,
-              ),
-            ],
-          ),
-          eventTypeTermsProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
-            ],
-          ),
-          eventTypesProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventType(
-                id: 248,
-                subjectsId: 100,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-            ],
-          ),
-          subjectsProvider.overrideWithBuild(
-            (ref, _) => [
-              const Subject(
-                id: 100,
-                subjectsEduId: 100,
-                name: 'Math',
-                abbr: 'MAT',
+                subjectName: 'Math',
+                effectiveValue: 5,
+                date: DateTime(2026, 3),
+                subjectId: 100,
               ),
             ],
           ),
@@ -456,8 +250,8 @@ void main() {
       addTearDown(container.dispose);
 
       final result = container.read(subjectGradesProvider);
-      expect(result.first.resolvedMarks.first.mark.id, 1);
-      expect(result.first.resolvedMarks.last.mark.id, 2);
+      expect(result.first.grades.first.id, 1);
+      expect(result.first.grades.last.id, 2);
     });
   });
 
@@ -471,58 +265,10 @@ void main() {
     test('calculates mean of subject weighted averages', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWithBuild(
+          resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
-              mark(markGroupsId: 10),
-              mark(id: 2, markGroupsId: 20, markValue: 3),
-            ],
-          ),
-          markGroupsProvider.overrideWithBuild(
-            (ref, _) => [
-              const MarkGroup(
-                id: 10,
-                isPattern: 0,
-                markType: 1,
-                visibility: 1,
-                position: 0,
-                eventTypeTermsId: 500,
-              ),
-              const MarkGroup(
-                id: 20,
-                isPattern: 0,
-                markType: 1,
-                visibility: 1,
-                position: 0,
-                eventTypeTermsId: 501,
-              ),
-            ],
-          ),
-          eventTypeTermsProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
-              const EventTypeTerm(id: 501, termsId: 1, eventTypesId: 249),
-            ],
-          ),
-          eventTypesProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventType(
-                id: 248,
-                subjectsId: 100,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-              const EventType(
-                id: 249,
-                subjectsId: 200,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-            ],
-          ),
-          subjectsProvider.overrideWithBuild(
-            (ref, _) => [
-              const Subject(id: 100, subjectsEduId: 100, name: 'A', abbr: 'A'),
-              const Subject(id: 200, subjectsEduId: 200, name: 'B', abbr: 'B'),
+              grade(subjectName: 'A', subjectId: 100),
+              grade(id: 2, subjectName: 'B', effectiveValue: 3, subjectId: 200),
             ],
           ),
         ],
@@ -542,7 +288,7 @@ void main() {
   });
 
   group('gradeDistributionProvider', () {
-    test('returns empty map for no marks', () {
+    test('returns empty map for no grades', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       expect(container.read(gradeDistributionProvider), isEmpty);
@@ -551,43 +297,11 @@ void main() {
     test('counts by rounded effective value', () {
       final container = ProviderContainer(
         overrides: [
-          marksProvider.overrideWithBuild(
+          resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
-              mark(markGroupsId: 10),
-              mark(id: 2, markGroupsId: 10),
-              mark(id: 3, markGroupsId: 10, markValue: 4),
-            ],
-          ),
-          markGroupsProvider.overrideWithBuild(
-            (ref, _) => [
-              const MarkGroup(
-                id: 10,
-                isPattern: 0,
-                markType: 1,
-                visibility: 1,
-                position: 0,
-                eventTypeTermsId: 500,
-              ),
-            ],
-          ),
-          eventTypeTermsProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventTypeTerm(id: 500, termsId: 1, eventTypesId: 248),
-            ],
-          ),
-          eventTypesProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventType(
-                id: 248,
-                subjectsId: 100,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-            ],
-          ),
-          subjectsProvider.overrideWithBuild(
-            (ref, _) => [
-              const Subject(id: 100, subjectsEduId: 100, name: 'A', abbr: 'A'),
+              grade(subjectName: 'A', subjectId: 100),
+              grade(id: 2, subjectName: 'A', subjectId: 100),
+              grade(id: 3, subjectName: 'A', effectiveValue: 4, subjectId: 100),
             ],
           ),
         ],

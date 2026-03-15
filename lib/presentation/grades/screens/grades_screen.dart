@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
@@ -182,11 +183,11 @@ class _SubjectSection extends ConsumerWidget {
               spacing: 6,
               runSpacing: 6,
               children: [
-                for (final rm in subjectGrades.resolvedMarks)
+                for (final g in subjectGrades.grades)
                   GradeChip(
-                    resolvedMark: rm,
-                    isNew: newGradeIds.contains(rm.mark.id),
-                    onTap: () => _showDetail(context, ref, rm),
+                    grade: g,
+                    isNew: newGradeIds.contains(g.id),
+                    onTap: () => _showDetail(context, ref, g),
                   ),
               ],
             ),
@@ -196,9 +197,9 @@ class _SubjectSection extends ConsumerWidget {
     );
   }
 
-  void _showDetail(BuildContext context, WidgetRef ref, ResolvedMark rm) {
+  void _showDetail(BuildContext context, WidgetRef ref, ResolvedGrade g) {
     unawaited(
-      ref.read(newGradeIdsProvider.notifier).markAsRead(rm.mark.id),
+      ref.read(newGradeIdsProvider.notifier).markAsRead(g.id),
     );
     unawaited(
       showModalBottomSheet<void>(
@@ -211,7 +212,7 @@ class _SubjectSection extends ConsumerWidget {
           maxChildSize: 0.9,
           expand: false,
           builder: (_, scrollController) => GradeDetailSheet(
-            resolvedMark: rm,
+            grade: g,
             subjectName: subjectGrades.subjectName,
             scrollController: scrollController,
           ),

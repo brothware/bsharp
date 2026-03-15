@@ -1,22 +1,23 @@
+import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter/material.dart';
 
 class GradeChip extends StatelessWidget {
   const GradeChip({
-    required this.resolvedMark,
+    required this.grade,
     this.isNew = false,
     this.onTap,
     super.key,
   });
 
-  final ResolvedMark resolvedMark;
+  final ResolvedGrade grade;
   final bool isNew;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final color = gradeColor(resolvedMark.effectiveValue);
+    final color = gradeColor(grade.effectiveValue);
     final theme = Theme.of(context);
 
     return Stack(
@@ -37,15 +38,15 @@ class GradeChip extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      resolvedMark.displayValue,
+                      grade.displayValue,
                       style: theme.textTheme.titleSmall?.copyWith(
                         color: color,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (resolvedMark.mark.weight > 1)
+                    if (grade.weight > 1)
                       Text(
-                        t.grades.weightPrefix(weight: resolvedMark.mark.weight),
+                        t.grades.weightPrefix(weight: grade.weight),
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                           fontSize: 9,

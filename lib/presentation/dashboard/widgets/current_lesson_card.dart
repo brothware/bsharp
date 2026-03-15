@@ -67,7 +67,7 @@ class _ActiveLesson extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${entry.event.number}',
+                '${entry.number}',
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: cs.onPrimary,
                   fontWeight: FontWeight.bold,

@@ -1,6 +1,6 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
-import 'package:bsharp/domain/entities/mark.dart';
+import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
@@ -13,48 +13,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
-Mark _mark({
+ResolvedGrade _grade({
   int id = 1,
-  double? markValue = 5.0,
-  String? comments,
-  DateTime? date,
-}) {
-  return Mark(
-    id: id,
-    markGroupsId: 1,
-    pupilUsersId: 1,
-    teacherUsersId: 1,
-    markValue: markValue,
-    comments: comments,
-    getDate: date ?? DateTime.now(),
-    modified: 0,
-  );
-}
-
-ResolvedMark _resolved({
-  int id = 1,
-  double? markValue = 5.0,
+  double? effectiveValue = 5.0,
   String? displayValue,
-  String? comments,
   DateTime? date,
 }) {
-  final mark = _mark(
+  return ResolvedGrade(
     id: id,
-    markValue: markValue,
-    comments: comments,
-    date: date,
-  );
-  return ResolvedMark(
-    mark: mark,
+    subjectName: 'Test',
+    categoryName: '',
     displayValue:
         displayValue ??
-        (markValue != null
-            ? (markValue == markValue.roundToDouble()
-                  ? markValue.toInt().toString()
-                  : markValue.toStringAsFixed(1))
+        (effectiveValue != null
+            ? (effectiveValue == effectiveValue.roundToDouble()
+                  ? effectiveValue.toInt().toString()
+                  : effectiveValue.toStringAsFixed(1))
             : '?'),
-    effectiveValue: markValue,
-    countsToAverage: markValue != null,
+    date: date ?? DateTime.now(),
+    effectiveValue: effectiveValue,
+    countsToAverage: effectiveValue != null,
   );
 }
 
@@ -79,11 +57,11 @@ Future<Widget> _buildTile({
   );
 }
 
-SubjectGrades _sg(List<ResolvedMark> resolvedMarks) {
+SubjectGrades _sg(List<ResolvedGrade> grades) {
   return SubjectGrades(
     subjectName: 'Test',
     subjectId: 1,
-    resolvedMarks: resolvedMarks,
+    grades: grades,
   );
 }
 
@@ -101,7 +79,7 @@ void main() {
       await tester.pumpWidget(
         await _buildTile(
           subjectGrades: [
-            _sg([_resolved(), _resolved(id: 2, markValue: 3)]),
+            _sg([_grade(), _grade(id: 2, effectiveValue: 3)]),
           ],
         ),
       );
@@ -113,17 +91,17 @@ void main() {
     });
 
     testWidgets('shows at most 5 recent grades', (tester) async {
-      final resolvedMarks = List.generate(
+      final grades = List.generate(
         8,
-        (i) => _resolved(
+        (i) => _grade(
           id: i + 1,
-          markValue: (i + 1).toDouble(),
+          effectiveValue: (i + 1).toDouble(),
           date: DateTime.now().subtract(Duration(days: i)),
         ),
       );
 
       await tester.pumpWidget(
-        await _buildTile(subjectGrades: [_sg(resolvedMarks)]),
+        await _buildTile(subjectGrades: [_sg(grades)]),
       );
       await tester.pump();
 
@@ -134,7 +112,7 @@ void main() {
       await tester.pumpWidget(
         await _buildTile(
           subjectGrades: [
-            _sg([_resolved()]),
+            _sg([_grade()]),
           ],
           newIds: {1},
         ),
@@ -148,7 +126,7 @@ void main() {
       await tester.pumpWidget(
         await _buildTile(
           subjectGrades: [
-            _sg([_resolved(), _resolved(id: 2), _resolved(id: 3)]),
+            _sg([_grade(), _grade(id: 2), _grade(id: 3)]),
           ],
         ),
       );
@@ -161,7 +139,7 @@ void main() {
       await tester.pumpWidget(
         await _buildTile(
           subjectGrades: [
-            _sg([_resolved(markValue: null)]),
+            _sg([_grade(effectiveValue: null)]),
           ],
         ),
       );

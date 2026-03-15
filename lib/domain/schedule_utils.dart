@@ -1,36 +1,85 @@
 import 'dart:ui';
 
-import 'package:bsharp/domain/entities/event.dart';
+import 'package:bsharp/domain/entities/resolved_event.dart';
+import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 
 class ScheduleEntry {
   ScheduleEntry({
-    required this.event,
+    required this.id,
+    required this.date,
+    required this.number,
+    required this.startTime,
+    required this.endTime,
     this.subjectName,
     this.teacherName,
     this.roomName,
     this.topic,
+    this.subjectId,
+    this.isCancelled = false,
+    this.isSubstitution = false,
+    this.isLocked = false,
     this.changeType,
     this.originalSubjectName,
     this.originalTeacherName,
     this.replacedLessonNumbers = const [],
     this.isReplaced = false,
+    this.eventName,
   });
 
-  final Event event;
+  factory ScheduleEntry.fromResolved(ResolvedEvent re) {
+    ScheduleChangeType? changeType;
+    if (re.isReplaced || re.isCancelled) {
+      changeType = ScheduleChangeType.cancelled;
+    } else if (re.isSubstitution) {
+      changeType = ScheduleChangeType.substitution;
+    }
+    return ScheduleEntry(
+      id: re.id,
+      date: re.date,
+      number: re.number,
+      startTime: re.startTime,
+      endTime: re.endTime,
+      subjectName: re.subjectName != null
+          ? translateSubjectName(re.subjectName!)
+          : null,
+      teacherName: re.teacherName,
+      roomName: re.roomName,
+      topic: re.topic,
+      subjectId: re.subjectId,
+      isCancelled: re.isCancelled,
+      isSubstitution: re.isSubstitution,
+      isLocked: re.isLocked,
+      changeType: changeType,
+      originalSubjectName: re.originalSubjectName != null
+          ? translateSubjectName(re.originalSubjectName!)
+          : null,
+      originalTeacherName: re.originalTeacherName,
+      replacedLessonNumbers: re.replacedLessonNumbers,
+      isReplaced: re.isReplaced,
+      eventName: re.eventName,
+    );
+  }
+
+  final int id;
+  final DateTime date;
+  final int number;
+  final String startTime;
+  final String endTime;
   final String? subjectName;
   final String? teacherName;
   final String? roomName;
   final String? topic;
+  final int? subjectId;
+  final bool isCancelled;
+  final bool isSubstitution;
+  final bool isLocked;
   final ScheduleChangeType? changeType;
   final String? originalSubjectName;
   final String? originalTeacherName;
   final List<int> replacedLessonNumbers;
   final bool isReplaced;
-
-  bool get isCancelled => event.status == 2;
-  bool get isSubstitution => event.substitution != 0;
-  bool get isLocked => event.locked != 0;
+  final String? eventName;
 
   String get displayLessonNumber {
     if (replacedLessonNumbers.isNotEmpty) {
@@ -42,12 +91,12 @@ class ScheduleEntry {
           : sorted.join(', ');
     }
     if (isReplaced) return '-';
-    return '${event.number}';
+    return '$number';
   }
 
   String get timeRange =>
-      '${_formatTime(event.startTime)} - '
-      '${_formatTime(event.endTime)}';
+      '${_formatTime(startTime)} - '
+      '${_formatTime(endTime)}';
 
   static String _formatTime(String time) {
     final parts = time.split(':');
@@ -136,82 +185,6 @@ Color subjectColor(int subjectId) {
     Color(0xFF00BCD4),
   ];
   return palette[subjectId.abs() % palette.length];
-}
-
-class ReplacementMapping {
-  const ReplacementMapping({
-    required this.replacedIds,
-    required this.replacementIds,
-    required this.replacedToReplacement,
-    required this.replacementToOriginals,
-    this.directSubstitutionOriginals = const {},
-    this.directSubstitutionReplacements = const {},
-  });
-
-  final Set<int> replacedIds;
-  final Set<int> replacementIds;
-  final Map<int, int> replacedToReplacement;
-  final Map<int, List<int>> replacementToOriginals;
-  final Set<int> directSubstitutionOriginals;
-  final Set<int> directSubstitutionReplacements;
-}
-
-ReplacementMapping buildReplacementMapping(
-  List<EventEvent> eventEvents,
-  Map<int, Event> eventMap,
-) {
-  final replacedIds = <int>{};
-  final replacementIds = <int>{};
-  final replacedToReplacement = <int, int>{};
-  final replacementToOriginals = <int, List<int>>{};
-  final directSubstitutionOriginals = <int>{};
-  final directSubstitutionReplacements = <int>{};
-
-  for (final ee in eventEvents) {
-    final e1 = eventMap[ee.events1Id];
-    final e2 = eventMap[ee.events2Id];
-    if (e1 == null || e2 == null) continue;
-
-    int originalId;
-    int replacementId;
-
-    if (e1.substitution == 1 && e2.substitution == 2) {
-      originalId = ee.events1Id;
-      replacementId = ee.events2Id;
-    } else {
-      originalId = ee.events2Id;
-      replacementId = ee.events1Id;
-    }
-
-    replacedIds.add(originalId);
-    replacementIds.add(replacementId);
-    replacedToReplacement[originalId] = replacementId;
-    replacementToOriginals.putIfAbsent(replacementId, () => []).add(originalId);
-  }
-
-  for (final entry in replacementToOriginals.entries) {
-    if (entry.value.length != 1) continue;
-    final replacementId = entry.key;
-    final originalId = entry.value.first;
-    final replacement = eventMap[replacementId];
-    final original = eventMap[originalId];
-    if (replacement != null &&
-        original != null &&
-        original.substitution == 1 &&
-        replacement.substitution == 2) {
-      directSubstitutionOriginals.add(originalId);
-      directSubstitutionReplacements.add(replacementId);
-    }
-  }
-
-  return ReplacementMapping(
-    replacedIds: replacedIds,
-    replacementIds: replacementIds,
-    replacedToReplacement: replacedToReplacement,
-    replacementToOriginals: replacementToOriginals,
-    directSubstitutionOriginals: directSubstitutionOriginals,
-    directSubstitutionReplacements: directSubstitutionReplacements,
-  );
 }
 
 bool isSameDay(DateTime a, DateTime b) {

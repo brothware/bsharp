@@ -1,5 +1,5 @@
 import 'package:bsharp/domain/entities/attendance.dart';
-import 'package:bsharp/domain/entities/event.dart';
+import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
@@ -34,19 +34,13 @@ void main() {
     );
   }
 
-  Event event({int id = 1, DateTime? date}) {
-    return Event(
+  ResolvedEvent resolvedEvent({int id = 1, DateTime? date}) {
+    return ResolvedEvent(
       id: id,
       date: date ?? DateTime(2026, 2, 27),
       number: 1,
       startTime: '08:00:00',
       endTime: '08:45:00',
-      eventTypesId: 1,
-      status: 1,
-      substitution: 0,
-      type: 0,
-      attr: 0,
-      locked: 0,
     );
   }
 
@@ -63,10 +57,10 @@ void main() {
           attendanceTypesProvider.overrideWithBuild(
             (ref, _) => [presentType, absentType],
           ),
-          eventsProvider.overrideWithBuild(
+          resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
-              event(date: DateTime(2026, 2, 27)),
-              event(id: 2, date: DateTime(2026, 2, 28)),
+              resolvedEvent(date: DateTime(2026, 2, 27)),
+              resolvedEvent(id: 2, date: DateTime(2026, 2, 28)),
             ],
           ),
         ],
@@ -84,7 +78,7 @@ void main() {
         overrides: [
           attendancesProvider.overrideWithBuild((ref, _) => []),
           attendanceTypesProvider.overrideWithBuild((ref, _) => []),
-          eventsProvider.overrideWithBuild((ref, _) => []),
+          resolvedEventsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
       addTearDown(container.dispose);
@@ -107,11 +101,11 @@ void main() {
           attendanceTypesProvider.overrideWithBuild(
             (ref, _) => [presentType, absentType],
           ),
-          eventsProvider.overrideWithBuild(
+          resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
-              event(date: DateTime(2025, 10)),
-              event(id: 2, date: DateTime(2026, 3)),
-              event(id: 3, date: DateTime(2026, 3, 15)),
+              resolvedEvent(date: DateTime(2025, 10)),
+              resolvedEvent(id: 2, date: DateTime(2026, 3)),
+              resolvedEvent(id: 3, date: DateTime(2026, 3, 15)),
             ],
           ),
           selectedStatsTermIdProvider.overrideWithBuild((ref, _) => 0),
@@ -138,11 +132,11 @@ void main() {
           attendanceTypesProvider.overrideWithBuild(
             (ref, _) => [presentType, absentType],
           ),
-          eventsProvider.overrideWithBuild(
+          resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
-              event(date: DateTime(2025, 10)),
-              event(id: 2, date: DateTime(2026, 3)),
-              event(id: 3, date: DateTime(2026, 3, 15)),
+              resolvedEvent(date: DateTime(2025, 10)),
+              resolvedEvent(id: 2, date: DateTime(2026, 3)),
+              resolvedEvent(id: 3, date: DateTime(2026, 3, 15)),
             ],
           ),
           termsProvider.overrideWithBuild(
@@ -183,8 +177,8 @@ void main() {
         overrides: [
           attendancesProvider.overrideWithBuild((ref, _) => [attendance()]),
           attendanceTypesProvider.overrideWithBuild((ref, _) => [presentType]),
-          eventsProvider.overrideWithBuild(
-            (ref, _) => [event(date: DateTime(2026, 2, 27))],
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [resolvedEvent(date: DateTime(2026, 2, 27))],
           ),
         ],
       );
@@ -202,7 +196,7 @@ void main() {
         overrides: [
           attendancesProvider.overrideWithBuild((ref, _) => []),
           attendanceTypesProvider.overrideWithBuild((ref, _) => []),
-          eventsProvider.overrideWithBuild((ref, _) => []),
+          resolvedEventsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
       addTearDown(container.dispose);

@@ -17,8 +17,8 @@ class AttendanceDayDetail extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final sorted = List<AttendanceEntry>.from(day.entries)
       ..sort((a, b) {
-        final aNum = a.event?.number ?? 0;
-        final bNum = b.event?.number ?? 0;
+        final aNum = a.resolvedEvent?.number ?? 0;
+        final bNum = b.resolvedEvent?.number ?? 0;
         return aNum.compareTo(bNum);
       });
 
@@ -130,7 +130,9 @@ class _EntryTile extends StatelessWidget {
             width: 32,
             child: Text(
               entry.displayLessonNumber ??
-                  (entry.event != null ? '${entry.event!.number}' : '-'),
+                  (entry.resolvedEvent != null
+                      ? '${entry.resolvedEvent!.number}'
+                      : '-'),
               textAlign: TextAlign.center,
               style: theme.textTheme.titleSmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
@@ -138,9 +140,9 @@ class _EntryTile extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          if (entry.event != null)
+          if (entry.resolvedEvent != null)
             Text(
-              entry.event!.startTime.substring(0, 5),
+              entry.resolvedEvent!.startTime.substring(0, 5),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -152,7 +154,7 @@ class _EntryTile extends StatelessWidget {
               children: [
                 Text(
                   entry.subjectName ??
-                      '${t.schedule.lessonFallback} ${entry.displayLessonNumber ?? entry.event?.number ?? ""}',
+                      '${t.schedule.lessonFallback} ${entry.displayLessonNumber ?? entry.resolvedEvent?.number ?? ""}',
                   style: theme.textTheme.bodyMedium,
                 ),
                 Text(

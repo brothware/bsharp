@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bsharp/domain/entities/poczta.dart';
-import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
@@ -49,8 +49,8 @@ DateTime minuteTick(Ref ref) {
   ScheduleEntry? next;
 
   for (final entry in lessons) {
-    final start = _parseTimeMinutes(entry.event.startTime);
-    final end = _parseTimeMinutes(entry.event.endTime);
+    final start = _parseTimeMinutes(entry.startTime);
+    final end = _parseTimeMinutes(entry.endTime);
     if (start == null || end == null) continue;
     if (entry.isCancelled) continue;
 
@@ -63,7 +63,7 @@ DateTime minuteTick(Ref ref) {
 
   final lastEnd = lessons
       .where((e) => !e.isCancelled)
-      .map((e) => _parseTimeMinutes(e.event.endTime))
+      .map((e) => _parseTimeMinutes(e.endTime))
       .whereType<int>()
       .fold<int>(0, (a, b) => a > b ? a : b);
 
@@ -74,21 +74,17 @@ DateTime minuteTick(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
-List<({ResolvedMark mark, String subjectName})> recentMarks(Ref ref) {
+List<({ResolvedGrade grade, String subjectName})> recentMarks(Ref ref) {
   final grades = ref.watch(subjectGradesProvider);
-  final all = <({ResolvedMark mark, String subjectName})>[];
+  final all = <({ResolvedGrade grade, String subjectName})>[];
 
   for (final sg in grades) {
-    for (final rm in sg.resolvedMarks) {
-      all.add((mark: rm, subjectName: sg.subjectName));
+    for (final g in sg.grades) {
+      all.add((grade: g, subjectName: sg.subjectName));
     }
   }
 
-  all.sort((a, b) {
-    final aTime = a.mark.mark.addTime ?? a.mark.mark.getDate;
-    final bTime = b.mark.mark.addTime ?? b.mark.mark.getDate;
-    return bTime.compareTo(aTime);
-  });
+  all.sort((a, b) => b.grade.date.compareTo(a.grade.date));
 
   return all.take(5).toList();
 }

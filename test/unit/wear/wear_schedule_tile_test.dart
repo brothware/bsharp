@@ -1,6 +1,6 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
-import 'package:bsharp/domain/entities/event.dart';
+import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:bsharp/wear/screens/wear_schedule_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
@@ -10,39 +10,36 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
-Event _event({
+ResolvedEvent _resolvedEvent({
   int id = 1,
   int number = 1,
   String startTime = '08:00:00',
   String endTime = '08:45:00',
-  int status = 1,
-  int substitution = 0,
-  int? roomsId,
+  bool isCancelled = false,
+  bool isSubstitution = false,
+  String? roomName,
 }) {
   final now = DateTime.now();
-  return Event(
+  return ResolvedEvent(
     id: id,
     date: DateTime(now.year, now.month, now.day),
     number: number,
     startTime: startTime,
     endTime: endTime,
-    eventTypesId: 10,
-    status: status,
-    substitution: substitution,
-    type: 0,
-    attr: 0,
-    locked: 0,
-    roomsId: roomsId,
+    subjectId: 10,
+    isCancelled: isCancelled,
+    isSubstitution: isSubstitution,
+    roomName: roomName,
   );
 }
 
-Widget _buildTile({List<Event> events = const []}) {
+Widget _buildTile({List<ResolvedEvent> resolvedEvents = const []}) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
-      eventsProvider.overrideWithBuild((ref, _) => events),
+      resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
     ],
     child: const MaterialApp(home: Scaffold(body: WearScheduleTile())),
   );
@@ -61,9 +58,9 @@ void main() {
     testWidgets('shows lesson items when events exist', (tester) async {
       await tester.pumpWidget(
         _buildTile(
-          events: [
-            _event(),
-            _event(
+          resolvedEvents: [
+            _resolvedEvent(),
+            _resolvedEvent(
               id: 2,
               number: 2,
               startTime: '08:55:00',
@@ -81,7 +78,9 @@ void main() {
     });
 
     testWidgets('shows strikethrough for cancelled lesson', (tester) async {
-      await tester.pumpWidget(_buildTile(events: [_event(status: 2)]));
+      await tester.pumpWidget(
+        _buildTile(resolvedEvents: [_resolvedEvent(isCancelled: true)]),
+      );
       await tester.pump();
 
       final textWidgets = tester.widgetList<Text>(find.byType(Text));

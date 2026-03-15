@@ -1,5 +1,8 @@
 import 'package:bsharp/app/child_provider.dart';
-import 'package:bsharp/data/providers/mobireg_data_provider.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_grade_resolver.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_schedule_resolver.dart';
+import 'package:bsharp/data/services/mobireg_translations.dart';
 import 'package:bsharp/data/services/sync_data_parser.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
@@ -23,51 +26,55 @@ void applySyncData(Ref ref, Map<String, dynamic> data) {
     ref.read(subjectsProvider.notifier).value = syncData.subjects;
   }
   if (syncData.terms.isNotEmpty) {
-    ref.read(termsProvider.notifier).value = syncData.terms;
-  }
-  if (syncData.rooms.isNotEmpty) {
-    ref.read(roomsProvider.notifier).value = syncData.rooms;
-  }
-  if (syncData.events.isNotEmpty) {
-    ref.read(eventsProvider.notifier).value = syncData.events;
-  }
-  if (syncData.eventTypes.isNotEmpty) {
-    ref.read(eventTypesProvider.notifier).value = syncData.eventTypes;
-  }
-  if (syncData.eventTypeTeachers.isNotEmpty) {
-    ref.read(eventTypeTeachersProvider.notifier).value =
-        syncData.eventTypeTeachers;
-  }
-  if (syncData.eventTypeTerms.isNotEmpty) {
-    ref.read(eventTypeTermsProvider.notifier).value = syncData.eventTypeTerms;
-  }
-  if (syncData.eventSubjects.isNotEmpty) {
-    ref.read(eventSubjectsProvider.notifier).value = syncData.eventSubjects;
-  }
-  if (syncData.eventEvents.isNotEmpty) {
-    ref.read(eventEventsProvider.notifier).value = syncData.eventEvents;
-  }
-  if (syncData.marks.isNotEmpty) {
-    ref.read(marksProvider.notifier).value = syncData.marks;
-  }
-  if (syncData.markGroups.isNotEmpty) {
-    ref.read(markGroupsProvider.notifier).value = syncData.markGroups;
-  }
-  if (syncData.markKinds.isNotEmpty) {
-    ref.read(markKindsProvider.notifier).value = syncData.markKinds;
-  }
-  if (syncData.markScales.isNotEmpty) {
-    ref.read(markScalesProvider.notifier).value = syncData.markScales;
-  }
-  if (syncData.markGroupGroups.isNotEmpty) {
-    ref.read(markGroupGroupsProvider.notifier).value = syncData.markGroupGroups;
+    ref.read(termsProvider.notifier).value = syncData.terms
+        .map(
+          (t) => t.copyWith(name: normalizeMobiregTermName(t.name)),
+        )
+        .toList();
   }
   if (syncData.attendances.isNotEmpty) {
     ref.read(attendancesProvider.notifier).value = syncData.attendances;
   }
   if (syncData.attendanceTypes.isNotEmpty) {
-    ref.read(attendanceTypesProvider.notifier).value = syncData.attendanceTypes;
+    ref.read(attendanceTypesProvider.notifier).value = syncData.attendanceTypes
+        .map(
+          (t) => t.copyWith(
+            name: normalizeMobiregAttendanceName(t.name),
+            abbr: normalizeMobiregAttendanceAbbr(t.abbr),
+          ),
+        )
+        .toList();
   }
+
+  final resolver = MobiregScheduleResolver();
+  final resolvedEvents = resolver.resolve(
+    events: syncData.events,
+    eventTypes: syncData.eventTypes,
+    eventTypeTeachers: syncData.eventTypeTeachers,
+    eventSubjects: syncData.eventSubjects,
+    eventEvents: syncData.eventEvents,
+    subjects: syncData.subjects,
+    teachers: syncData.teachers,
+    rooms: syncData.rooms,
+  );
+  ref.read(resolvedEventsProvider.notifier).value = resolvedEvents;
+
+  final currentTerm = ref.read(currentTermProvider);
+  final gradeResolver = MobiregGradeResolver();
+  final resolvedGrades = gradeResolver.resolve(
+    marks: syncData.marks,
+    markGroups: syncData.markGroups,
+    markScales: syncData.markScales,
+    markKinds: syncData.markKinds,
+    markGroupGroups: syncData.markGroupGroups,
+    eventTypeTerms: syncData.eventTypeTerms,
+    eventTypes: syncData.eventTypes,
+    subjects: syncData.subjects,
+    teachers: syncData.teachers,
+    terms: syncData.terms,
+    currentTerm: currentTerm,
+  );
+  ref.read(resolvedGradesProvider.notifier).value = resolvedGrades;
 }
 
 void applyPortalBulletins(Ref ref, List<dynamic> items) {

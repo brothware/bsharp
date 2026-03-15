@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bsharp/domain/entities/mark.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
@@ -19,23 +19,11 @@ class WearGradesTile extends ConsumerWidget {
     final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final subjectGrades = ref.watch(subjectGradesProvider);
     final newIds = ref.watch(newGradeIdsProvider);
-    final markGroups = ref.watch(markGroupsProvider);
-    final markKinds = ref.watch(markKindsProvider);
     final theme = Theme.of(context);
 
-    final allResolved = subjectGrades.expand((sg) => sg.resolvedMarks).toList()
-      ..sort((a, b) => b.mark.getDate.compareTo(a.mark.getDate));
-    final recent = allResolved.take(3).toList();
-
-    final markIdToSubject = <int, String>{};
-    for (final sg in subjectGrades) {
-      for (final rm in sg.resolvedMarks) {
-        markIdToSubject[rm.mark.id] = sg.subjectName;
-      }
-    }
-
-    final groupById = {for (final g in markGroups) g.id: g};
-    final kindById = {for (final k in markKinds) k.id: k};
+    final allGrades = subjectGrades.expand((sg) => sg.grades).toList()
+      ..sort((a, b) => b.date.compareTo(a.date));
+    final recent = allGrades.take(3).toList();
 
     return WearForwardSwipe(
       onTriggered: () => _openDetail(context),
@@ -44,9 +32,9 @@ class WearGradesTile extends ConsumerWidget {
           WearTileHeader(
             icon: Icons.grade,
             title: t.nav.grades,
-            trailing: allResolved.isNotEmpty
+            trailing: allGrades.isNotEmpty
                 ? Text(
-                    '${allResolved.length}',
+                    '${allGrades.length}',
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -87,15 +75,9 @@ class WearGradesTile extends ConsumerWidget {
                 ),
                 itemCount: recent.length,
                 itemBuilder: (context, index) {
-                  final rm = recent[index];
-                  final isNew = newIds.contains(rm.mark.id);
-                  final color = gradeColor(rm.effectiveValue);
-                  final subjectName = markIdToSubject[rm.mark.id];
-                  final category = _resolveCategory(
-                    rm.mark.markGroupsId,
-                    groupById,
-                    kindById,
-                  );
+                  final g = recent[index];
+                  final isNew = newIds.contains(g.id);
+                  final color = gradeColor(g.effectiveValue);
 
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 3),
@@ -125,7 +107,7 @@ class WearGradesTile extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            rm.displayValue,
+                            g.displayValue,
                             style: theme.textTheme.titleSmall?.copyWith(
                               color: color,
                               fontWeight: FontWeight.bold,
@@ -137,24 +119,22 @@ class WearGradesTile extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (subjectName != null)
-                                Text(
-                                  subjectName,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              if (category != null)
-                                Text(
-                                  category,
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    color: theme.colorScheme.onSurfaceVariant,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
                               Text(
-                                _formatDateShort(rm.mark.getDate),
+                                g.subjectName,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                translateGradeCategory(g.categoryName),
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                _formatDateShort(g.date),
                                 style: theme.textTheme.labelSmall?.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
@@ -176,7 +156,7 @@ class WearGradesTile extends ConsumerWidget {
                               t.grades.newBadge,
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: theme.colorScheme.onTertiary,
-                                fontSize: 8, // Intentionally small badge
+                                fontSize: 8,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -198,19 +178,6 @@ class WearGradesTile extends ConsumerWidget {
         MaterialPageRoute<void>(builder: (_) => const WearGradesDetailScreen()),
       ),
     );
-  }
-
-  String? _resolveCategory(
-    int markGroupsId,
-    Map<int, MarkGroup> groupById,
-    Map<int, MarkKind> kindById,
-  ) {
-    final group = groupById[markGroupsId];
-    if (group == null) return null;
-    if (group.markKindsId == null) return null;
-    final kind = kindById[group.markKindsId];
-    if (kind == null) return null;
-    return translateGradeCategory(kind.name);
   }
 }
 

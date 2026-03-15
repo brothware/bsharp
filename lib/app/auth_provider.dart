@@ -5,7 +5,7 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
-import 'package:bsharp/data/providers/mobireg_data_provider.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

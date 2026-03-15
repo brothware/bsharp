@@ -22,7 +22,7 @@ Widget _buildScreen({
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       attendancesProvider.overrideWithBuild((ref, _) => attendances),
       attendanceTypesProvider.overrideWithBuild((ref, _) => types),
-      eventsProvider.overrideWithBuild((ref, _) => []),
+      resolvedEventsProvider.overrideWithBuild((ref, _) => []),
     ],
     child: const MaterialApp(home: WearAttendanceDetailScreen()),
   );

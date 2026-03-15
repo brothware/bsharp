@@ -1,117 +1,106 @@
-import 'package:bsharp/domain/entities/event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Event event({
+  ScheduleEntry entry({
     int id = 1,
     int number = 1,
     String startTime = '08:00:00',
     String endTime = '08:45:00',
-    int status = 1,
-    int substitution = 0,
-    int locked = 0,
+    bool isCancelled = false,
+    bool isSubstitution = false,
+    bool isLocked = false,
+    bool isReplaced = false,
+    List<int> replacedLessonNumbers = const [],
   }) {
-    return Event(
+    return ScheduleEntry(
       id: id,
       date: DateTime(2026, 2, 27),
       number: number,
       startTime: startTime,
       endTime: endTime,
-      eventTypesId: 1,
-      status: status,
-      substitution: substitution,
-      type: 0,
-      attr: 0,
-      locked: locked,
+      isCancelled: isCancelled,
+      isSubstitution: isSubstitution,
+      isLocked: isLocked,
+      isReplaced: isReplaced,
+      replacedLessonNumbers: replacedLessonNumbers,
     );
   }
 
   group('ScheduleEntry', () {
-    test('isCancelled when status is 2', () {
-      final entry = ScheduleEntry(event: event(status: 2));
-      expect(entry.isCancelled, isTrue);
+    test('isCancelled when set to true', () {
+      final e = entry(isCancelled: true);
+      expect(e.isCancelled, isTrue);
     });
 
-    test('is not cancelled when status is 0 (scheduled)', () {
-      final entry = ScheduleEntry(event: event(status: 0));
-      expect(entry.isCancelled, isFalse);
+    test('is not cancelled by default', () {
+      final e = entry();
+      expect(e.isCancelled, isFalse);
     });
 
-    test('is not cancelled when status is 1 (completed)', () {
-      final entry = ScheduleEntry(event: event());
-      expect(entry.isCancelled, isFalse);
+    test('is not cancelled when explicitly false', () {
+      final e = entry(isCancelled: false);
+      expect(e.isCancelled, isFalse);
     });
 
-    test('isSubstitution when substitution is non-zero', () {
-      final entry = ScheduleEntry(event: event(substitution: 1));
-      expect(entry.isSubstitution, isTrue);
+    test('isSubstitution when set to true', () {
+      final e = entry(isSubstitution: true);
+      expect(e.isSubstitution, isTrue);
     });
 
-    test('is not substitution when substitution is 0', () {
-      final entry = ScheduleEntry(event: event());
-      expect(entry.isSubstitution, isFalse);
+    test('is not substitution by default', () {
+      final e = entry();
+      expect(e.isSubstitution, isFalse);
     });
 
-    test('isLocked when locked is non-zero', () {
-      final entry = ScheduleEntry(event: event(locked: 1));
-      expect(entry.isLocked, isTrue);
+    test('isLocked when set to true', () {
+      final e = entry(isLocked: true);
+      expect(e.isLocked, isTrue);
     });
 
     test('timeRange formats correctly', () {
-      final entry = ScheduleEntry(event: event());
-      expect(entry.timeRange, '08:00 - 08:45');
+      final e = entry();
+      expect(e.timeRange, '08:00 - 08:45');
     });
 
     test('timeRange handles short format', () {
-      final entry = ScheduleEntry(
-        event: event(startTime: '8:00', endTime: '8:45'),
-      );
-      expect(entry.timeRange, '8:00 - 8:45');
+      final e = entry(startTime: '8:00', endTime: '8:45');
+      expect(e.timeRange, '8:00 - 8:45');
     });
 
     test('displayLessonNumber shows event number by default', () {
-      final entry = ScheduleEntry(event: event(number: 3));
-      expect(entry.displayLessonNumber, '3');
+      final e = entry(number: 3);
+      expect(e.displayLessonNumber, '3');
     });
 
     test('displayLessonNumber shows dash for replaced entries', () {
-      final entry = ScheduleEntry(event: event(), isReplaced: true);
-      expect(entry.displayLessonNumber, '-');
+      final e = entry(isReplaced: true);
+      expect(e.displayLessonNumber, '-');
     });
 
     test('displayLessonNumber shows contiguous range', () {
-      final entry = ScheduleEntry(
-        event: event(),
-        replacedLessonNumbers: [5, 6, 7],
-      );
-      expect(entry.displayLessonNumber, '5-7');
+      final e = entry(replacedLessonNumbers: [5, 6, 7]);
+      expect(e.displayLessonNumber, '5-7');
     });
 
     test('displayLessonNumber shows comma-separated for non-contiguous', () {
-      final entry = ScheduleEntry(
-        event: event(),
-        replacedLessonNumbers: [2, 5, 7],
-      );
-      expect(entry.displayLessonNumber, '2, 5, 7');
+      final e = entry(replacedLessonNumbers: [2, 5, 7]);
+      expect(e.displayLessonNumber, '2, 5, 7');
     });
 
     test('displayLessonNumber shows single number in list', () {
-      final entry = ScheduleEntry(
-        event: event(),
-        replacedLessonNumbers: [4],
-      );
-      expect(entry.displayLessonNumber, '4');
+      final e = entry(replacedLessonNumbers: [4]);
+      expect(e.displayLessonNumber, '4');
     });
 
     test('isReplaced defaults to false', () {
-      final entry = ScheduleEntry(event: event());
-      expect(entry.isReplaced, isFalse);
+      final e = entry();
+      expect(e.isReplaced, isFalse);
     });
 
     test('replacedLessonNumbers defaults to empty', () {
-      final entry = ScheduleEntry(event: event());
-      expect(entry.replacedLessonNumbers, isEmpty);
+      final e = entry();
+      expect(e.replacedLessonNumbers, isEmpty);
     });
   });
 

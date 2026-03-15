@@ -1,52 +1,61 @@
-import 'package:bsharp/domain/entities/event.dart';
-import 'package:bsharp/domain/entities/room.dart';
-import 'package:bsharp/domain/entities/subject.dart';
-import 'package:bsharp/domain/entities/teacher.dart';
+import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Event event({
+  ResolvedEvent resolved({
     int id = 1,
     DateTime? date,
     int number = 1,
     String startTime = '08:00:00',
     String endTime = '08:45:00',
-    int eventTypesId = 10,
-    int status = 1,
-    int substitution = 0,
-    int? roomsId,
-    String? name,
+    String? subjectName,
+    String? teacherName,
+    String? roomName,
+    String? topic,
+    int? subjectId,
+    bool isCancelled = false,
+    bool isSubstitution = false,
+    bool isLocked = false,
+    String? originalSubjectName,
+    String? originalTeacherName,
+    List<int> replacedLessonNumbers = const [],
+    bool isReplaced = false,
+    String? eventName,
   }) {
-    return Event(
+    return ResolvedEvent(
       id: id,
       date: date ?? DateTime(2026, 2, 27),
       number: number,
       startTime: startTime,
       endTime: endTime,
-      eventTypesId: eventTypesId,
-      status: status,
-      substitution: substitution,
-      roomsId: roomsId,
-      name: name,
-      type: 0,
-      attr: 0,
-      locked: 0,
+      subjectName: subjectName,
+      teacherName: teacherName,
+      roomName: roomName,
+      topic: topic,
+      subjectId: subjectId,
+      isCancelled: isCancelled,
+      isSubstitution: isSubstitution,
+      isLocked: isLocked,
+      originalSubjectName: originalSubjectName,
+      originalTeacherName: originalTeacherName,
+      replacedLessonNumbers: replacedLessonNumbers,
+      isReplaced: isReplaced,
+      eventName: eventName,
     );
   }
 
-  group('eventsForDateProvider', () {
+  group('scheduleEntriesForDateProvider', () {
     test('filters events by date and sorts by number', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWithBuild(
+          resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
-              event(number: 3, date: DateTime(2026, 2, 27)),
-              event(id: 2, date: DateTime(2026, 2, 27)),
-              event(id: 3, number: 2, date: DateTime(2026, 2, 28)),
+              resolved(number: 3, date: DateTime(2026, 2, 27)),
+              resolved(id: 2, date: DateTime(2026, 2, 27)),
+              resolved(id: 3, number: 2, date: DateTime(2026, 2, 28)),
             ],
           ),
         ],
@@ -54,7 +63,7 @@ void main() {
       addTearDown(container.dispose);
 
       final result = container.read(
-        eventsForDateProvider(DateTime(2026, 2, 27)),
+        scheduleEntriesForDateProvider(DateTime(2026, 2, 27)),
       );
       expect(result.length, 2);
       expect(result[0].number, 1);
@@ -64,66 +73,32 @@ void main() {
     test('returns empty for date with no events', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWithBuild(
-            (ref, _) => [event(date: DateTime(2026, 2, 27))],
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [resolved(date: DateTime(2026, 2, 27))],
           ),
         ],
       );
       addTearDown(container.dispose);
 
-      final result = container.read(eventsForDateProvider(DateTime(2026, 3)));
+      final result = container.read(
+        scheduleEntriesForDateProvider(DateTime(2026, 3)),
+      );
       expect(result, isEmpty);
     });
-  });
 
-  group('scheduleEntriesForDateProvider', () {
     test('resolves subject, teacher, and room names', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWithBuild(
-            (ref, _) => [event(roomsId: 100, date: DateTime(2026, 2, 27))],
-          ),
-          eventTypesProvider.overrideWithBuild(
+          resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
-              const EventType(
-                id: 10,
-                subjectsId: 200,
-                teachingLevel: 0,
-                substitution: 0,
+              resolved(
+                date: DateTime(2026, 2, 27),
+                subjectName: 'Math',
+                teacherName: 'Jan Kowalski',
+                roomName: '201',
               ),
             ],
           ),
-          eventTypeTeachersProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventTypeTeacher(id: 1, teachersId: 300, eventTypesId: 10),
-            ],
-          ),
-          subjectsProvider.overrideWithBuild(
-            (ref, _) => [
-              const Subject(
-                id: 200,
-                subjectsEduId: 1,
-                name: 'Math',
-                abbr: 'MAT',
-              ),
-            ],
-          ),
-          teachersProvider.overrideWithBuild(
-            (ref, _) => [
-              const Teacher(
-                id: 300,
-                login: 'jkowalski',
-                usersEduId: 1,
-                name: 'Jan',
-                surname: 'Kowalski',
-                userType: 1,
-              ),
-            ],
-          ),
-          roomsProvider.overrideWithBuild(
-            (ref, _) => [const Room(id: 100, name: '201')],
-          ),
-          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
       addTearDown(container.dispose);
@@ -140,15 +115,14 @@ void main() {
     test('detects cancelled status', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWithBuild(
-            (ref, _) => [event(status: 2, date: DateTime(2026, 2, 27))],
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [
+              resolved(
+                date: DateTime(2026, 2, 27),
+                isCancelled: true,
+              ),
+            ],
           ),
-          eventTypesProvider.overrideWithBuild((ref, _) => []),
-          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
-          subjectsProvider.overrideWithBuild((ref, _) => []),
-          teachersProvider.overrideWithBuild((ref, _) => []),
-          roomsProvider.overrideWithBuild((ref, _) => []),
-          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
       addTearDown(container.dispose);
@@ -162,15 +136,14 @@ void main() {
     test('detects substitution', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWithBuild(
-            (ref, _) => [event(substitution: 2, date: DateTime(2026, 2, 27))],
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [
+              resolved(
+                date: DateTime(2026, 2, 27),
+                isSubstitution: true,
+              ),
+            ],
           ),
-          eventTypesProvider.overrideWithBuild((ref, _) => []),
-          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
-          subjectsProvider.overrideWithBuild((ref, _) => []),
-          teachersProvider.overrideWithBuild((ref, _) => []),
-          roomsProvider.overrideWithBuild((ref, _) => []),
-          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
       addTearDown(container.dispose);
@@ -184,20 +157,12 @@ void main() {
     test('resolves event topic', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWithBuild(
-            (ref, _) => [event(id: 42, date: DateTime(2026, 2, 27))],
-          ),
-          eventTypesProvider.overrideWithBuild((ref, _) => []),
-          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
-          subjectsProvider.overrideWithBuild((ref, _) => []),
-          teachersProvider.overrideWithBuild((ref, _) => []),
-          roomsProvider.overrideWithBuild((ref, _) => []),
-          eventSubjectsProvider.overrideWithBuild(
+          resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
-              const EventSubject(
-                id: 1,
-                eventsId: 42,
-                content: 'Quadratic equations',
+              resolved(
+                id: 42,
+                date: DateTime(2026, 2, 27),
+                topic: 'Quadratic equations',
               ),
             ],
           ),
@@ -214,34 +179,40 @@ void main() {
     test('marks replaced originals and enriches replacement entries', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWithBuild(
+          resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
-              event(id: 10, number: 5, date: DateTime(2026, 3, 5)),
-              event(id: 11, number: 6, date: DateTime(2026, 3, 5)),
-              event(id: 12, number: 7, date: DateTime(2026, 3, 5)),
-              event(
+              resolved(
+                id: 10,
+                number: 5,
+                date: DateTime(2026, 3, 5),
+                isReplaced: true,
+                isCancelled: true,
+              ),
+              resolved(
+                id: 11,
+                number: 6,
+                date: DateTime(2026, 3, 5),
+                isReplaced: true,
+                isCancelled: true,
+              ),
+              resolved(
+                id: 12,
+                number: 7,
+                date: DateTime(2026, 3, 5),
+                isReplaced: true,
+                isCancelled: true,
+              ),
+              resolved(
                 id: 20,
                 number: 0,
                 date: DateTime(2026, 3, 5),
-                substitution: 2,
+                isSubstitution: true,
                 startTime: '10:40:00',
                 endTime: '13:00:00',
+                replacedLessonNumbers: [5, 6, 7],
               ),
             ],
           ),
-          eventEventsProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventEvent(id: 1, events1Id: 20, events2Id: 10),
-              const EventEvent(id: 2, events1Id: 20, events2Id: 11),
-              const EventEvent(id: 3, events1Id: 20, events2Id: 12),
-            ],
-          ),
-          eventTypesProvider.overrideWithBuild((ref, _) => []),
-          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
-          subjectsProvider.overrideWithBuild((ref, _) => []),
-          teachersProvider.overrideWithBuild((ref, _) => []),
-          roomsProvider.overrideWithBuild((ref, _) => []),
-          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
       addTearDown(container.dispose);
@@ -260,7 +231,7 @@ void main() {
       }
 
       final replacement = entries
-          .where((e) => !e.isReplaced && e.event.substitution == 2)
+          .where((e) => !e.isReplaced && e.isSubstitution)
           .first;
       expect(replacement.replacedLessonNumbers, [5, 6, 7]);
       expect(replacement.displayLessonNumber, '5-7');
@@ -272,68 +243,18 @@ void main() {
       () {
         final container = ProviderContainer(
           overrides: [
-            eventsProvider.overrideWithBuild(
+            resolvedEventsProvider.overrideWithBuild(
               (ref, _) => [
-                event(
-                  id: 100,
-                  number: 3,
-                  date: DateTime(2026, 3, 10),
-                  substitution: 1,
-                  status: 0,
-                  eventTypesId: 10,
-                ),
-                event(
+                resolved(
                   id: 200,
                   number: 3,
                   date: DateTime(2026, 3, 10),
-                  substitution: 2,
-                  status: 1,
-                  eventTypesId: 20,
-                  name: '<b>Original Subject</b> 8:00-8:45 sala 12',
+                  isSubstitution: true,
+                  subjectName: 'Replacement Subject',
+                  originalSubjectName: 'Original Subject',
                 ),
               ],
             ),
-            eventEventsProvider.overrideWithBuild(
-              (ref, _) => [
-                const EventEvent(id: 1, events1Id: 100, events2Id: 200),
-              ],
-            ),
-            eventTypesProvider.overrideWithBuild(
-              (ref, _) => [
-                const EventType(
-                  id: 10,
-                  subjectsId: 300,
-                  teachingLevel: 0,
-                  substitution: 0,
-                ),
-                const EventType(
-                  id: 20,
-                  subjectsId: 400,
-                  teachingLevel: 0,
-                  substitution: 0,
-                ),
-              ],
-            ),
-            subjectsProvider.overrideWithBuild(
-              (ref, _) => [
-                const Subject(
-                  id: 300,
-                  subjectsEduId: 1,
-                  name: 'Original Subject',
-                  abbr: 'OS',
-                ),
-                const Subject(
-                  id: 400,
-                  subjectsEduId: 2,
-                  name: 'Replacement Subject',
-                  abbr: 'RS',
-                ),
-              ],
-            ),
-            eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
-            teachersProvider.overrideWithBuild((ref, _) => []),
-            roomsProvider.overrideWithBuild((ref, _) => []),
-            eventSubjectsProvider.overrideWithBuild((ref, _) => []),
           ],
         );
         addTearDown(container.dispose);
@@ -343,64 +264,37 @@ void main() {
         );
 
         expect(entries.length, 1);
-        expect(entries.first.event.id, 200);
+        expect(entries.first.id, 200);
         expect(entries.first.subjectName, 'Replacement Subject');
         expect(entries.first.changeType, ScheduleChangeType.substitution);
         expect(entries.first.originalSubjectName, 'Original Subject');
       },
     );
 
-    test('empty event.name falls back to subject name', () {
+    test('empty eventName falls back to subject name', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWithBuild(
+          resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
-              event(id: 10, number: 5, date: DateTime(2026, 3, 5)),
-              Event(
+              resolved(
+                id: 10,
+                number: 5,
+                date: DateTime(2026, 3, 5),
+                isReplaced: true,
+                isCancelled: true,
+              ),
+              resolved(
                 id: 20,
                 date: DateTime(2026, 3, 5),
                 number: 0,
                 startTime: '10:40:00',
                 endTime: '13:00:00',
-                eventTypesId: 20,
-                status: 1,
-                substitution: 0,
-                type: 0,
-                attr: 0,
-                locked: 0,
-                name: '',
+                subjectName: 'Spektakl',
+                eventName: '',
+                replacedLessonNumbers: [5],
               ),
             ],
           ),
-          eventEventsProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventEvent(id: 1, events1Id: 20, events2Id: 10),
-            ],
-          ),
-          eventTypesProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventType(
-                id: 20,
-                subjectsId: 400,
-                teachingLevel: 0,
-                substitution: 0,
-              ),
-            ],
-          ),
-          subjectsProvider.overrideWithBuild(
-            (ref, _) => [
-              const Subject(
-                id: 400,
-                subjectsEduId: 1,
-                name: 'Spektakl',
-                abbr: 'SP',
-              ),
-            ],
-          ),
-          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
-          teachersProvider.overrideWithBuild((ref, _) => []),
-          roomsProvider.overrideWithBuild((ref, _) => []),
-          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
       addTearDown(container.dispose);
@@ -409,37 +303,38 @@ void main() {
         scheduleEntriesForDateProvider(DateTime(2026, 3, 5)),
       );
 
-      final replacement = entries.firstWhere((e) => e.event.id == 20);
+      final replacement = entries.firstWhere((e) => e.id == 20);
       expect(replacement.subjectName, 'Spektakl');
     });
 
     test('sorts replaced originals before replacement', () {
       final container = ProviderContainer(
         overrides: [
-          eventsProvider.overrideWithBuild(
+          resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
-              event(id: 10, number: 5, date: DateTime(2026, 3, 5)),
-              event(id: 11, number: 6, date: DateTime(2026, 3, 5)),
-              event(
+              resolved(
+                id: 10,
+                number: 5,
+                date: DateTime(2026, 3, 5),
+                isReplaced: true,
+                isCancelled: true,
+              ),
+              resolved(
+                id: 11,
+                number: 6,
+                date: DateTime(2026, 3, 5),
+                isReplaced: true,
+                isCancelled: true,
+              ),
+              resolved(
                 id: 20,
                 number: 0,
                 date: DateTime(2026, 3, 5),
-                substitution: 2,
+                isSubstitution: true,
+                replacedLessonNumbers: [5, 6],
               ),
             ],
           ),
-          eventEventsProvider.overrideWithBuild(
-            (ref, _) => [
-              const EventEvent(id: 1, events1Id: 20, events2Id: 10),
-              const EventEvent(id: 2, events1Id: 20, events2Id: 11),
-            ],
-          ),
-          eventTypesProvider.overrideWithBuild((ref, _) => []),
-          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
-          subjectsProvider.overrideWithBuild((ref, _) => []),
-          teachersProvider.overrideWithBuild((ref, _) => []),
-          roomsProvider.overrideWithBuild((ref, _) => []),
-          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
       addTearDown(container.dispose);
@@ -448,7 +343,7 @@ void main() {
         scheduleEntriesForDateProvider(DateTime(2026, 3, 5)),
       );
 
-      final numbers = entries.map((e) => e.event.number).toList();
+      final numbers = entries.map((e) => e.number).toList();
       expect(numbers, [5, 6, 0]);
     });
   });
@@ -460,13 +355,7 @@ void main() {
           selectedDateProvider.overrideWithBuild(
             (ref, _) => DateTime(2026, 2, 27),
           ),
-          eventsProvider.overrideWithBuild((ref, _) => []),
-          eventTypesProvider.overrideWithBuild((ref, _) => []),
-          eventTypeTeachersProvider.overrideWithBuild((ref, _) => []),
-          subjectsProvider.overrideWithBuild((ref, _) => []),
-          teachersProvider.overrideWithBuild((ref, _) => []),
-          roomsProvider.overrideWithBuild((ref, _) => []),
-          eventSubjectsProvider.overrideWithBuild((ref, _) => []),
+          resolvedEventsProvider.overrideWithBuild((ref, _) => []),
         ],
       );
       addTearDown(container.dispose);

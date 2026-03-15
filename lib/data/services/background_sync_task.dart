@@ -7,7 +7,7 @@ import 'package:bsharp/data/data_sources/remote/auth_service.dart';
 import 'package:bsharp/data/data_sources/remote/mobile_sync_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/portal_data_source.dart';
-import 'package:bsharp/data/providers/mobireg_data_provider.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
 import 'package:bsharp/data/services/background_sync_scheduler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_data_parser.dart';

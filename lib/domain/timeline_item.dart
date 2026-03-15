@@ -27,16 +27,16 @@ class LessonTimelineItem implements TimelineItem {
       entry.changeType == ScheduleChangeType.substitution;
 
   @override
-  DateTime get date => entry.event.date;
+  DateTime get date => entry.date;
 
   @override
-  String get startTime => entry.event.startTime;
+  String get startTime => entry.startTime;
 
   @override
-  String get endTime => entry.event.endTime;
+  String get endTime => entry.endTime;
 
   @override
-  String get displayTitle => entry.subjectName ?? entry.event.name ?? '';
+  String get displayTitle => entry.subjectName ?? entry.eventName ?? '';
 
   @override
   String? get displaySubtitle {
@@ -48,8 +48,8 @@ class LessonTimelineItem implements TimelineItem {
   }
 
   @override
-  Color get displayColor => entry.subjectName != null
-      ? subjectColor(entry.event.eventTypesId)
+  Color get displayColor => entry.subjectName != null && entry.subjectId != null
+      ? subjectColor(entry.subjectId!)
       : const Color(0xFF607D8B);
 }
 

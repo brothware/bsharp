@@ -1,5 +1,5 @@
 import 'package:bsharp/domain/entities/attendance.dart';
-import 'package:bsharp/domain/entities/event.dart';
+import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:bsharp/presentation/attendance/screens/attendance_screen.dart';
@@ -21,13 +21,13 @@ void main() {
   Widget wrap({
     List<Attendance> attendances = const [],
     List<AttendanceType> types = const [],
-    List<Event> events = const [],
+    List<ResolvedEvent> resolvedEvents = const [],
   }) {
     return ProviderScope(
       overrides: [
         attendancesProvider.overrideWithBuild((ref, _) => attendances),
         attendanceTypesProvider.overrideWithBuild((ref, _) => types),
-        eventsProvider.overrideWithBuild((ref, _) => events),
+        resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
         selectedMonthProvider.overrideWithBuild((ref, _) => DateTime(2026, 2)),
       ],
       child: const MaterialApp(home: Scaffold(body: AttendanceScreen())),
@@ -54,19 +54,14 @@ void main() {
           const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
         ],
         types: [presentType],
-        events: [
-          Event(
+        resolvedEvents: [
+          ResolvedEvent(
             id: 1,
             date: DateTime(2026, 2, 27),
             number: 1,
             startTime: '08:00:00',
             endTime: '08:45:00',
-            eventTypesId: 1,
-            status: 1,
-            substitution: 0,
-            type: 0,
-            attr: 0,
-            locked: 0,
+            subjectId: 1,
           ),
         ],
       ),
@@ -93,19 +88,14 @@ void main() {
           const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
         ],
         types: [presentType],
-        events: [
-          Event(
+        resolvedEvents: [
+          ResolvedEvent(
             id: 1,
             date: DateTime(2026, 2, 15),
             number: 1,
             startTime: '08:00:00',
             endTime: '08:45:00',
-            eventTypesId: 1,
-            status: 1,
-            substitution: 0,
-            type: 0,
-            attr: 0,
-            locked: 0,
+            subjectId: 1,
           ),
         ],
       ),
@@ -121,19 +111,14 @@ void main() {
           const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
         ],
         types: [presentType],
-        events: [
-          Event(
+        resolvedEvents: [
+          ResolvedEvent(
             id: 1,
             date: DateTime(2026, 2, 15),
             number: 1,
             startTime: '08:00:00',
             endTime: '08:45:00',
-            eventTypesId: 1,
-            status: 1,
-            substitution: 0,
-            type: 0,
-            attr: 0,
-            locked: 0,
+            subjectId: 1,
           ),
         ],
       ),

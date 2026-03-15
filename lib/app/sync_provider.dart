@@ -166,13 +166,13 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       final prefs = ref.read(sharedPreferencesProvider);
       final previousSnapshot = await SyncSnapshot.load(prefs);
 
-      final marks = ref.read(marksProvider);
-      final events = ref.read(eventsProvider);
+      final grades = ref.read(resolvedGradesProvider);
+      final events = ref.read(resolvedEventsProvider);
       final attendances = ref.read(attendancesProvider);
       final inbox = ref.read(inboxProvider);
 
       final currentSnapshot = SyncSnapshot(
-        markIds: marks.map((m) => m.id).toSet(),
+        markIds: grades.map((m) => m.id).toSet(),
         eventIds: events.map((e) => e.id).toSet(),
         attendanceIds: attendances.map((a) => a.id).toSet(),
         inboxMessageIds: inbox.map((m) => m.id).toSet(),

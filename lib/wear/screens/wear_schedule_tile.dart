@@ -95,8 +95,8 @@ class WearScheduleTile extends ConsumerWidget {
   }
 
   bool _isCurrentLesson(ScheduleEntry entry, DateTime now) {
-    final timeParts = entry.event.startTime.split(':');
-    final endParts = entry.event.endTime.split(':');
+    final timeParts = entry.startTime.split(':');
+    final endParts = entry.endTime.split(':');
     if (timeParts.length < 2 || endParts.length < 2) return false;
 
     final start = DateTime(
@@ -127,8 +127,8 @@ class _WearLessonItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sColor = entry.event.eventTypesId > 0
-        ? subjectColor(entry.event.eventTypesId)
+    final sColor = entry.subjectId != null
+        ? subjectColor(entry.subjectId!)
         : theme.colorScheme.primary;
 
     return Container(
@@ -155,7 +155,7 @@ class _WearLessonItem extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Text(
-            '${entry.event.number}',
+            '${entry.number}',
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -167,7 +167,7 @@ class _WearLessonItem extends StatelessWidget {
               children: [
                 Text(
                   entry.subjectName ??
-                      '${t.schedule.lessonFallback} ${entry.event.number}',
+                      '${t.schedule.lessonFallback} ${entry.number}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     decoration: entry.isCancelled
@@ -186,7 +186,7 @@ class _WearLessonItem extends StatelessWidget {
             ),
           ),
           Text(
-            entry.event.startTime.substring(0, 5),
+            entry.startTime.substring(0, 5),
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),

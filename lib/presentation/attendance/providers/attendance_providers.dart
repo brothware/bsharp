@@ -42,18 +42,8 @@ class SelectedMonth extends _$SelectedMonth {
 Map<DateTime, AttendanceDay> attendanceDays(Ref ref) {
   final attendances = ref.watch(attendancesProvider);
   final types = ref.watch(attendanceTypesProvider);
-  final events = ref.watch(eventsProvider);
-  final eventTypes = ref.watch(eventTypesProvider);
-  final subjects = ref.watch(subjectsProvider);
-  final eventEvents = ref.watch(eventEventsProvider);
-  return groupByDay(
-    attendances,
-    types,
-    events,
-    eventTypes: eventTypes,
-    subjects: subjects,
-    eventEvents: eventEvents,
-  );
+  final resolvedEvents = ref.watch(resolvedEventsProvider);
+  return groupByDay(attendances, types, resolvedEvents);
 }
 
 @Riverpod(keepAlive: true)
@@ -89,14 +79,14 @@ Term? currentStatsTerm(Ref ref) {
 AttendanceStats attendanceStats(Ref ref) {
   final attendances = ref.watch(attendancesProvider);
   final types = ref.watch(attendanceTypesProvider);
-  final events = ref.watch(eventsProvider);
+  final resolvedEvents = ref.watch(resolvedEventsProvider);
   final term = ref.watch(currentStatsTermProvider);
 
   if (term == null) {
     return calculateStats(attendances, types);
   }
 
-  final eventMap = {for (final e in events) e.id: e};
+  final eventMap = {for (final e in resolvedEvents) e.id: e};
   final filtered = attendances.where((a) {
     final event = eventMap[a.eventsId];
     if (event == null) return false;
@@ -135,10 +125,10 @@ class UnexcusedAbsence {
 List<UnexcusedAbsence> staleUnexcusedAbsences(Ref ref) {
   final attendances = ref.watch(attendancesProvider);
   final types = ref.watch(attendanceTypesProvider);
-  final events = ref.watch(eventsProvider);
+  final resolvedEvents = ref.watch(resolvedEventsProvider);
 
   final typeMap = {for (final t in types) t.id: t};
-  final eventMap = {for (final e in events) e.id: e};
+  final eventMap = {for (final e in resolvedEvents) e.id: e};
   final cutoff = DateTime.now().subtract(const Duration(days: 7));
 
   final result = <UnexcusedAbsence>[];

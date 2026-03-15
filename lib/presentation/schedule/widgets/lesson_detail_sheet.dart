@@ -10,7 +10,9 @@ class LessonDetailSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = subjectColor(entry.event.eventTypesId);
+    final color = entry.subjectId != null
+        ? subjectColor(entry.subjectId!)
+        : subjectColor(entry.id);
     final topPadding = MediaQuery.of(context).padding.top;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -127,7 +129,7 @@ class LessonDetailSheet extends StatelessWidget {
                   icon: Icons.calendar_today_outlined,
                   label: t.schedule.date,
                   value:
-                      '${dayLabelFull(entry.event.date.weekday)}, ${formatDateFull(entry.event.date)}',
+                      '${dayLabelFull(entry.date.weekday)}, ${formatDateFull(entry.date)}',
                 ),
                 if (entry.topic != null) ...[
                   const SizedBox(height: 16),

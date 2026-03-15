@@ -1,8 +1,8 @@
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
-import 'package:bsharp/data/providers/demo_data_provider.dart';
-import 'package:bsharp/data/providers/mobireg_data_provider.dart';
+import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
