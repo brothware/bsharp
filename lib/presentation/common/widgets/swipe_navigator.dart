@@ -77,9 +77,7 @@ class _SwipeNavigatorState extends State<SwipeNavigator> {
       child: PageView.builder(
         controller: _controller,
         onPageChanged: _onPageChanged,
-        physics: widget.enabled
-            ? const ClampingScrollPhysics()
-            : const NeverScrollableScrollPhysics(),
+        physics: widget.enabled ? null : const NeverScrollableScrollPhysics(),
         itemCount: 3,
         itemBuilder: (_, index) => widget.contentBuilder(index - 1),
       ),

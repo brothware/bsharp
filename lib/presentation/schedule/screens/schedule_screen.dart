@@ -46,6 +46,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
       _tabController = TabController(
         length: days.length,
         initialIndex: selectedIndex,
+        animationDuration: Duration.zero,
         vsync: this,
       );
       _tabController!.addListener(_onTabScroll);
