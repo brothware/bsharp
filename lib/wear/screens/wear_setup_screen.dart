@@ -1,13 +1,17 @@
 import 'dart:async';
 
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/error/result.dart';
+import 'package:bsharp/data/data_sources/local/account_storage.dart';
+import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 enum _SetupStep { credentials, studentPicker }
 
@@ -37,17 +41,14 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   }
 
   Future<void> _checkNeedsSetup() async {
-    final storage = ref.read(credentialStorageProvider);
-    if (!await storage.hasCredentials()) return;
+    final accountStorage = ref.read(accountStorageProvider);
+    final accounts = await accountStorage.getAccounts();
+    if (accounts.isEmpty) return;
 
-    final school = await storage.getSchool();
-    final login = await storage.getLogin();
-    final hash = await storage.getPasswordHash();
-    if (school == null || login == null || hash == null) return;
-
-    _schoolController.text = school;
-    _loginController.text = login;
-    _passwordHash = hash;
+    final account = accounts.first;
+    _schoolController.text = account.slug;
+    _loginController.text = account.login;
+    _passwordHash = account.passwordHash;
 
     await _loadStudents();
   }
@@ -133,13 +134,35 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
     setState(() => _isLoading = true);
 
-    final storage = ref.read(credentialStorageProvider);
-    await storage.saveCredentials(
-      school: _schoolController.text.trim(),
-      login: _loginController.text.trim(),
+    final school = _schoolController.text.trim();
+    final login = _loginController.text.trim();
+    final student = _students.firstWhere((s) => s.id == _selectedStudentId);
+
+    final account = ProviderAccount(
+      id: const Uuid().v4(),
+      providerType: 'mobireg',
+      slug: school,
+      login: login,
       passwordHash: _passwordHash,
+      students: [
+        AccountStudent(
+          id: student.id,
+          name: student.name,
+          surname: student.surname,
+        ),
+      ],
     );
-    await storage.saveSelectedStudentId(_selectedStudentId!);
+
+    final accountStorage = ref.read(accountStorageProvider);
+    await accountStorage.saveAccounts([account]);
+    await accountStorage.saveActiveSelection(
+      ActiveSelection(
+        accountId: account.id,
+        studentId: _selectedStudentId!,
+      ),
+    );
+    ref.invalidate(providerAccountsProvider);
+    ref.invalidate(activeSelectionProvider);
     await ref.read(authStateProvider.notifier).completeSetup();
   }
 

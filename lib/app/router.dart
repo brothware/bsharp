@@ -1,7 +1,7 @@
 import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/presentation/attendance/screens/attendance_screen.dart';
-import 'package:bsharp/presentation/auth/screens/login_screen.dart';
+import 'package:bsharp/presentation/auth/screens/account_setup_screen.dart';
 import 'package:bsharp/presentation/bulletins/screens/bulletins_screen.dart';
 import 'package:bsharp/presentation/changelog/screens/changelog_screen.dart';
 import 'package:bsharp/presentation/common/widgets/main_shell.dart';
@@ -13,12 +13,13 @@ import 'package:bsharp/presentation/messages/widgets/message_detail_view.dart';
 import 'package:bsharp/presentation/notes/screens/notes_screen.dart';
 import 'package:bsharp/presentation/schedule/screens/custom_event_form_screen.dart';
 import 'package:bsharp/presentation/schedule/screens/schedule_screen.dart';
+import 'package:bsharp/presentation/settings/screens/account_management_screen.dart';
 import 'package:bsharp/presentation/settings/screens/settings_screen.dart';
 import 'package:bsharp/presentation/tests/screens/tests_screen.dart';
 import 'package:go_router/go_router.dart';
 
 abstract final class AppRoutes {
-  static const login = '/login';
+  static const accountSetup = '/account-setup';
   static const dashboard = '/dashboard';
   static const schedule = '/schedule';
   static const grades = '/grades';
@@ -26,6 +27,7 @@ abstract final class AppRoutes {
   static const messages = '/messages';
   static const messageView = '/messages/view';
   static const settings = '/settings';
+  static const accountsManage = '/accounts/manage';
   static const homework = '/homework';
   static const notes = '/notes';
   static const tests = '/tests';
@@ -41,18 +43,18 @@ GoRouter createRouter({required AuthState authState}) {
   return GoRouter(
     initialLocation: AppRoutes.dashboard,
     redirect: (context, state) {
-      final isOnLogin = state.uri.path == AppRoutes.login;
+      final isOnSetup = state.uri.path == AppRoutes.accountSetup;
 
       return switch (authState) {
-        AuthState.unauthenticated when !isOnLogin => AppRoutes.login,
-        AuthState.authenticated when isOnLogin => AppRoutes.dashboard,
+        AuthState.unauthenticated when !isOnSetup => AppRoutes.accountSetup,
+        AuthState.authenticated when isOnSetup => AppRoutes.dashboard,
         _ => null,
       };
     },
     routes: [
       GoRoute(
-        path: AppRoutes.login,
-        builder: (context, state) => const LoginScreen(),
+        path: AppRoutes.accountSetup,
+        builder: (context, state) => const AccountSetupScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
@@ -147,6 +149,10 @@ GoRouter createRouter({required AuthState authState}) {
       GoRoute(
         path: AppRoutes.settings,
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.accountsManage,
+        builder: (context, state) => const AccountManagementScreen(),
       ),
       GoRoute(
         path: AppRoutes.customEventCreate,

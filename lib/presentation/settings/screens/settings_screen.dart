@@ -14,6 +14,7 @@ import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:bsharp/presentation/settings/screens/account_management_screen.dart';
 import 'package:bsharp/presentation/support/tip_jar_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +76,15 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const Divider(),
           _SectionHeader(title: t.settings.account),
+          ListTile(
+            leading: const Icon(Icons.manage_accounts),
+            title: Text(t.accounts.manageAccounts),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const AccountManagementScreen(),
+              ),
+            ),
+          ),
           if (isCredentialBased)
             ListTile(
               leading: const Icon(Icons.password),
