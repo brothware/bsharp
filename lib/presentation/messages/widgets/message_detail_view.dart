@@ -79,8 +79,9 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
       MessageFolder.sent => ref.watch(sentProvider),
       MessageFolder.trash => ref.watch(trashProvider),
     };
-    final message = messages.where((m) => m.id == widget.message.id).firstOrNull
-        ?? widget.message;
+    final message =
+        messages.where((m) => m.id == widget.message.id).firstOrNull ??
+        widget.message;
     final rawContent = _fullContent ?? message.content;
     final displayTitle = _translatedTitle ?? message.title;
     final hasContent = _translatedContent != null || rawContent != null;

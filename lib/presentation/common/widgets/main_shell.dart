@@ -69,87 +69,87 @@ class MainShell extends ConsumerWidget {
         }
       },
       child: Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: _buildTitle(context, ref),
-        actions: [
-          if (provider.requiresCredentials) ...[
-            if (syncStatus.isBusy)
-              const Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+        appBar: AppBar(
+          centerTitle: false,
+          title: _buildTitle(context, ref),
+          actions: [
+            if (provider.requiresCredentials) ...[
+              if (syncStatus.isBusy)
+                const Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                )
+              else
+                IconButton(
+                  icon: const Icon(Icons.sync),
+                  tooltip: t.settings.sync,
+                  onPressed: () => ref.read(syncStatusProvider.notifier).sync(),
                 ),
-              )
-            else
+            ],
+            if (messagesVisible)
               IconButton(
-                icon: const Icon(Icons.sync),
-                tooltip: t.settings.sync,
-                onPressed: () => ref.read(syncStatusProvider.notifier).sync(),
+                icon: Badge(
+                  isLabelVisible: unreadCount > 0,
+                  label: Text('$unreadCount'),
+                  child: const Icon(Icons.mail_outline),
+                ),
+                onPressed: () => context.push(AppRoutes.messages),
+              ),
+            if (settingsVisible)
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () => context.push(AppRoutes.settings),
               ),
           ],
-          if (messagesVisible)
-            IconButton(
-              icon: Badge(
-                isLabelVisible: unreadCount > 0,
-                label: Text('$unreadCount'),
-                child: const Icon(Icons.mail_outline),
-              ),
-              onPressed: () => context.push(AppRoutes.messages),
-            ),
-          if (settingsVisible)
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () => context.push(AppRoutes.settings),
-            ),
-        ],
-      ),
-      body: size == ScreenSize.phone
-          ? navigationShell
-          : Row(
-              children: [
-                SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight:
-                          MediaQuery.of(context).size.height -
-                          MediaQuery.of(context).padding.top -
-                          kToolbarHeight,
-                    ),
-                    child: IntrinsicHeight(
-                      child: NavigationRail(
-                        selectedIndex: effectiveVisibleIndex,
-                        onDestinationSelected: (i) =>
-                            _onTap(visible[i].branchIndex),
-                        labelType: size == ScreenSize.desktop
-                            ? null
-                            : NavigationRailLabelType.all,
-                        extended: size == ScreenSize.desktop,
-                        destinations: [
-                          for (final entry in visible)
-                            NavigationRailDestination(
-                              icon: Icon(entry.item.icon),
-                              selectedIcon: Icon(entry.item.selectedIcon),
-                              label: Text(entry.item.label),
-                            ),
-                        ],
+        ),
+        body: size == ScreenSize.phone
+            ? navigationShell
+            : Row(
+                children: [
+                  SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight:
+                            MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top -
+                            kToolbarHeight,
+                      ),
+                      child: IntrinsicHeight(
+                        child: NavigationRail(
+                          selectedIndex: effectiveVisibleIndex,
+                          onDestinationSelected: (i) =>
+                              _onTap(visible[i].branchIndex),
+                          labelType: size == ScreenSize.desktop
+                              ? null
+                              : NavigationRailLabelType.all,
+                          extended: size == ScreenSize.desktop,
+                          destinations: [
+                            for (final entry in visible)
+                              NavigationRailDestination(
+                                icon: Icon(entry.item.icon),
+                                selectedIcon: Icon(entry.item.selectedIcon),
+                                label: Text(entry.item.label),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const VerticalDivider(thickness: 1, width: 1),
-                Expanded(child: navigationShell),
-              ],
-            ),
-      bottomNavigationBar: size == ScreenSize.phone
-          ? _PhoneBottomNav(
-              items: visible,
-              currentVisibleIndex: effectiveVisibleIndex,
-              onTap: (i) => _onTap(visible[i].branchIndex),
-            )
-          : null,
+                  const VerticalDivider(thickness: 1, width: 1),
+                  Expanded(child: navigationShell),
+                ],
+              ),
+        bottomNavigationBar: size == ScreenSize.phone
+            ? _PhoneBottomNav(
+                items: visible,
+                currentVisibleIndex: effectiveVisibleIndex,
+                onTap: (i) => _onTap(visible[i].branchIndex),
+              )
+            : null,
       ),
     );
   }
