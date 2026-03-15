@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
@@ -16,6 +18,22 @@ List<ScheduleEntry> todayLessons(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
+DateTime minuteTick(Ref ref) {
+  final now = DateTime.now();
+  final nextMinute = DateTime(
+    now.year,
+    now.month,
+    now.day,
+    now.hour,
+    now.minute + 1,
+  );
+  final delay = nextMinute.difference(now);
+  final timer = Timer(delay, () => ref.invalidateSelf());
+  ref.onDispose(timer.cancel);
+  return now;
+}
+
+@Riverpod(keepAlive: true)
 ({ScheduleEntry? current, ScheduleEntry? next, bool allEnded}) currentLesson(
   Ref ref,
 ) {
@@ -24,7 +42,7 @@ List<ScheduleEntry> todayLessons(Ref ref) {
     return (current: null, next: null, allEnded: false);
   }
 
-  final now = DateTime.now();
+  final now = ref.watch(minuteTickProvider);
   final nowMinutes = now.hour * 60 + now.minute;
 
   ScheduleEntry? current;
