@@ -1,29 +1,25 @@
 import 'dart:async';
 
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
+import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
+import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
 
 class MessageDetailView extends ConsumerStatefulWidget {
   const MessageDetailView({
     required this.message,
     super.key,
-    this.onReply,
-    this.onDelete,
-    this.onToggleStar,
-    this.onFilesLoaded,
   });
 
   final PocztaMessage message;
-  final VoidCallback? onReply;
-  final VoidCallback? onDelete;
-  final VoidCallback? onToggleStar;
-  final void Function(List<PocztaAttachment> files)? onFilesLoaded;
 
   @override
   ConsumerState<MessageDetailView> createState() => _MessageDetailViewState();
@@ -65,7 +61,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
         )
         .toList();
     if (files != null && files.isNotEmpty) {
-      widget.onFilesLoaded?.call(files);
+      _updateFilesInProvider(files);
     }
     setState(() {
       _fullContent = content;
@@ -86,21 +82,19 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
       appBar: AppBar(
         title: Text(t.messages.messageLabel),
         actions: [
-          if (widget.onToggleStar != null)
-            IconButton(
-              icon: Icon(
-                message.isStarred ? Icons.star : Icons.star_border,
-                color: message.isStarred ? Colors.orange : null,
-              ),
-              onPressed: widget.onToggleStar,
-              tooltip: message.isStarred ? t.messages.unstar : t.messages.star,
+          IconButton(
+            icon: Icon(
+              message.isStarred ? Icons.star : Icons.star_border,
+              color: message.isStarred ? Colors.orange : null,
             ),
-          if (widget.onDelete != null)
-            IconButton(
-              icon: const Icon(Icons.delete_outline),
-              onPressed: widget.onDelete,
-              tooltip: t.messages.deleteTooltip,
-            ),
+            onPressed: _toggleStar,
+            tooltip: message.isStarred ? t.messages.unstar : t.messages.star,
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete_outline),
+            onPressed: () => _deleteAndPop(context),
+            tooltip: t.messages.deleteTooltip,
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -194,14 +188,114 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
           ],
         ),
       ),
-      floatingActionButton: widget.onReply != null
+      floatingActionButton: _isInbox
           ? FloatingActionButton.extended(
-              onPressed: widget.onReply,
+              onPressed: () => _openReply(context),
               icon: const Icon(Icons.reply),
               label: Text(t.messages.reply),
             )
           : null,
     );
+  }
+
+  bool get _isInbox => ref.read(selectedFolderProvider) == MessageFolder.inbox;
+
+  List<PocztaMessage> _readFolder() {
+    final folder = ref.read(selectedFolderProvider);
+    return switch (folder) {
+      MessageFolder.inbox => ref.read(inboxProvider),
+      MessageFolder.sent => ref.read(sentProvider),
+      MessageFolder.trash => ref.read(trashProvider),
+    };
+  }
+
+  void _writeFolder(List<PocztaMessage> value) {
+    final folder = ref.read(selectedFolderProvider);
+    switch (folder) {
+      case MessageFolder.inbox:
+        ref.read(inboxProvider.notifier).value = value;
+      case MessageFolder.sent:
+        ref.read(sentProvider.notifier).value = value;
+      case MessageFolder.trash:
+        ref.read(trashProvider.notifier).value = value;
+    }
+  }
+
+  void _toggleStar() {
+    final message = widget.message;
+    final messages = _readFolder();
+    _writeFolder([
+      for (final m in messages)
+        if (m.id == message.id) m.copyWith(isStarred: !m.isStarred) else m,
+    ]);
+    unawaited(ref.read(activeDataProviderProvider).toggleStar(message.id));
+  }
+
+  void _deleteAndPop(BuildContext context) {
+    context.pop();
+    final message = widget.message;
+    final folder = ref.read(selectedFolderProvider);
+    final messages = _readFolder();
+    _writeFolder(messages.where((m) => m.id != message.id).toList());
+
+    final dataProvider = ref.read(activeDataProviderProvider);
+    final syncNotifier = ref.read(syncStatusProvider.notifier);
+
+    if (folder == MessageFolder.trash) {
+      unawaited(
+        dataProvider
+            .restoreMessage(message.id)
+            .then(
+              (_) => syncNotifier.syncMessages(),
+            ),
+      );
+    } else {
+      unawaited(
+        dataProvider
+            .deleteMessage(message.id)
+            .then(
+              (_) => syncNotifier.syncMessages(),
+            ),
+      );
+    }
+  }
+
+  void _updateFilesInProvider(List<PocztaAttachment> files) {
+    final message = widget.message;
+    final messages = _readFolder();
+    _writeFolder([
+      for (final m in messages)
+        if (m.id == message.id) m.copyWith(files: files) else m,
+    ]);
+  }
+
+  Future<void> _openReply(BuildContext context) async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute<Map<String, dynamic>>(
+        builder: (_) => ComposeMessageView(replyTo: widget.message),
+      ),
+    );
+    if (result == null || !mounted) return;
+
+    final dataProvider = ref.read(activeDataProviderProvider);
+    try {
+      await dataProvider.sendMessage(
+        recipientIds: (result['recipientIds'] as List).cast<String>(),
+        title: result['title'] as String,
+        content: result['content'] as String,
+        previousMessageId: result['previousMessageId'] as int?,
+      );
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(t.messages.messageSent)),
+      );
+      unawaited(ref.read(syncStatusProvider.notifier).syncMessages());
+    } on Exception {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(t.messages.sendFailed)),
+      );
+    }
   }
 }
 

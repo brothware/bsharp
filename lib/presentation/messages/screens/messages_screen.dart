@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
-import 'package:bsharp/presentation/messages/widgets/message_detail_view.dart';
 import 'package:bsharp/presentation/messages/widgets/message_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 const _loadMoreThreshold = 80.0;
 const _inboxPageSize = 25;
@@ -305,30 +306,7 @@ class _MessageListState extends ConsumerState<_MessageList> {
       _markAsRead(message);
     }
 
-    unawaited(
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => MessageDetailView(
-            message: message,
-            onReply: folder == MessageFolder.inbox
-                ? () => _openCompose(context, replyTo: message)
-                : null,
-            onDelete: () {
-              Navigator.of(context).pop();
-              _removeMessage(message);
-            },
-            onToggleStar: () => _toggleStar(message),
-            onFilesLoaded: (files) {
-              final messages = _readFolder();
-              _writeFolder([
-                for (final m in messages)
-                  if (m.id == message.id) m.copyWith(files: files) else m,
-              ]);
-            },
-          ),
-        ),
-      ),
-    );
+    unawaited(context.push(AppRoutes.messageView, extra: message));
   }
 
   void _markAsRead(PocztaMessage message) {

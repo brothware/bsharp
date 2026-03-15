@@ -1,4 +1,5 @@
 import 'package:bsharp/domain/entities/custom_event.dart';
+import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/presentation/attendance/screens/attendance_screen.dart';
 import 'package:bsharp/presentation/auth/screens/login_screen.dart';
 import 'package:bsharp/presentation/bulletins/screens/bulletins_screen.dart';
@@ -8,6 +9,7 @@ import 'package:bsharp/presentation/dashboard/screens/dashboard_screen.dart';
 import 'package:bsharp/presentation/grades/screens/grades_screen.dart';
 import 'package:bsharp/presentation/homework/screens/homework_screen.dart';
 import 'package:bsharp/presentation/messages/screens/messages_screen.dart';
+import 'package:bsharp/presentation/messages/widgets/message_detail_view.dart';
 import 'package:bsharp/presentation/notes/screens/notes_screen.dart';
 import 'package:bsharp/presentation/schedule/screens/custom_event_form_screen.dart';
 import 'package:bsharp/presentation/schedule/screens/schedule_screen.dart';
@@ -22,6 +24,7 @@ abstract final class AppRoutes {
   static const grades = '/grades';
   static const attendance = '/attendance';
   static const messages = '/messages';
+  static const messageView = '/messages/view';
   static const settings = '/settings';
   static const homework = '/homework';
   static const notes = '/notes';
@@ -132,6 +135,14 @@ GoRouter createRouter({required AuthState authState}) {
       GoRoute(
         path: AppRoutes.messages,
         builder: (context, state) => const MessagesScreen(),
+        routes: [
+          GoRoute(
+            path: 'view',
+            builder: (context, state) => MessageDetailView(
+              message: state.extra! as PocztaMessage,
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.settings,
