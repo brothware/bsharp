@@ -434,6 +434,7 @@
     "serverError": "Sunucu hatası",
     "licenseExpired": "Okul lisansı sona erdi",
     "rateLimited": "Çok fazla istek, lütfen daha sonra tekrar deneyin",
+    "schoolNotFound": "Okul bulunamadı. Okul kimliğini kontrol edin ve tekrar deneyin.",
     "unknownError": "Bilinmeyen bir hata oluştu",
     "missingCredentials": "Giriş bilgileri eksik. Lütfen tekrar giriş yapın.",
     "expiredSession": "Oturum sona erdi. Lütfen tekrar giriş yapın.",

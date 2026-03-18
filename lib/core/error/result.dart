@@ -335,6 +335,18 @@ final class TranslationQuotaExceeded extends AppFailure {
   int get hashCode => Object.hash(runtimeType, message);
 }
 
+final class SchoolNotFound extends AppFailure {
+  const SchoolNotFound({super.message});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SchoolNotFound && message == other.message;
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+}
+
 final class TranslationFailed extends AppFailure {
   const TranslationFailed({super.message});
 

@@ -82,7 +82,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   }
 
   @override
-  Future<List<Student>> fetchStudents({
+  Future<Result<List<Student>>> fetchStudents({
     required String school,
     required String login,
     required String passwordHash,
@@ -99,20 +99,22 @@ class MobiregDataProvider implements SchoolDataProvider {
     return result.when(
       success: (data) {
         final studentsJson = data['ParentStudents'] as List<dynamic>? ?? [];
-        return studentsJson
-            .whereType<Map<String, dynamic>>()
-            .map(
-              (json) => Student(
-                id: json['id'] as int,
-                usersEduId: json['users_edu_id'] as int,
-                name: json['name'] as String,
-                surname: json['surname'] as String,
-                sex: Sex.fromString(json['sex'] as String),
-              ),
-            )
-            .toList();
+        return Result.success(
+          studentsJson
+              .whereType<Map<String, dynamic>>()
+              .map(
+                (json) => Student(
+                  id: json['id'] as int,
+                  usersEduId: json['users_edu_id'] as int,
+                  name: json['name'] as String,
+                  surname: json['surname'] as String,
+                  sex: Sex.fromString(json['sex'] as String),
+                ),
+              )
+              .toList(),
+        );
       },
-      failure: (_) => throw Exception('Failed to fetch students'),
+      failure: Result.failure,
     );
   }
 

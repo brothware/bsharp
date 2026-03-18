@@ -434,6 +434,7 @@
     "serverError": "Serverfel",
     "licenseExpired": "Skollicensen har gått ut",
     "rateLimited": "För många förfrågningar, försök igen senare",
+    "schoolNotFound": "Skolan hittades inte. Kontrollera skol-ID och försök igen.",
     "unknownError": "Ett okänt fel uppstod",
     "missingCredentials": "Saknade inloggningsuppgifter. Logga in igen.",
     "expiredSession": "Sessionen har gått ut. Logga in igen.",

@@ -440,6 +440,7 @@
     "serverError": "Żball fis-server",
     "licenseExpired": "Il-liċenzja tal-iskola skadiet",
     "rateLimited": "Wisq talbiet, erġa' pprova aktar tard",
+    "schoolNotFound": "L-iskola ma nstabitx. Iċċekkja l-ID tal-iskola u erġa' pprova.",
     "unknownError": "Seħħ żball mhux magħruf",
     "missingCredentials": "Dejta tad-dħul nieqsa. Erġa' idħol.",
     "expiredSession": "Is-sessjoni skadiet. Erġa' idħol.",

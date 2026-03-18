@@ -434,6 +434,7 @@
     "serverError": "サーバーエラー",
     "licenseExpired": "学校ライセンスが期限切れです",
     "rateLimited": "リクエストが多すぎます。しばらく後に再試行してください",
+    "schoolNotFound": "学校が見つかりません。学校IDを確認して、もう一度お試しください。",
     "unknownError": "不明なエラーが発生しました",
     "missingCredentials": "ログイン情報がありません。再度ログインしてください。",
     "expiredSession": "セッションが期限切れです。再度ログインしてください。",

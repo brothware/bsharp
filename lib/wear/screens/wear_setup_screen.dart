@@ -103,29 +103,31 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     });
 
     final provider = ref.read(activeDataProviderProvider);
+    final result = await provider.fetchStudents(
+      school: _schoolController.text.trim(),
+      login: _loginController.text.trim(),
+      passwordHash: _passwordHash,
+    );
 
-    try {
-      final students = await provider.fetchStudents(
-        school: _schoolController.text.trim(),
-        login: _loginController.text.trim(),
-        passwordHash: _passwordHash,
-      );
+    if (!mounted) return;
 
-      setState(() {
-        _isLoading = false;
-        _students = students;
-        _step = _SetupStep.studentPicker;
-      });
+    switch (result) {
+      case Failure(:final failure):
+        setState(() {
+          _isLoading = false;
+          _errorMessage = _mapFailureMessage(failure);
+        });
+      case Success(:final value):
+        setState(() {
+          _isLoading = false;
+          _students = value;
+          _step = _SetupStep.studentPicker;
+        });
 
-      if (students.length == 1) {
-        _selectedStudentId = students.first.id;
-        await _finishSetup();
-      }
-    } on Exception catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = e.toString();
-      });
+        if (value.length == 1) {
+          _selectedStudentId = value.first.id;
+          await _finishSetup();
+        }
     }
   }
 
@@ -170,11 +172,12 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   String _mapFailureMessage(AppFailure failure) {
     return switch (failure) {
       InvalidCredentials() => t.auth.invalidCredentials,
+      SchoolNotFound() => t.errors.schoolNotFound,
       NoConnection() => t.errors.noConnection,
       ConnectionTimeout() => t.errors.timeout,
       LicenseExpired() => t.errors.licenseExpired,
       RateLimited() => t.errors.rateLimited,
-      _ => failure.message ?? t.errors.unknownError,
+      _ => t.errors.unknownError,
     };
   }
 

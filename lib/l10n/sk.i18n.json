@@ -437,6 +437,7 @@
     "serverError": "Chyba servera",
     "licenseExpired": "Licencia školy vypršala",
     "rateLimited": "Príliš veľa požiadaviek, skúste to neskôr",
+    "schoolNotFound": "Škola nebola nájdená. Skontrolujte identifikátor školy a skúste to znova.",
     "unknownError": "Vyskytla sa neznáma chyba",
     "missingCredentials": "Chýbajú prihlasovacie údaje. Prihláste sa znova.",
     "expiredSession": "Relácia vypršala. Prihláste sa znova.",

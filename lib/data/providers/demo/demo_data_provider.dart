@@ -157,19 +157,19 @@ class DemoDataProvider implements SchoolDataProvider {
   }) async => const Result.success(null);
 
   @override
-  Future<List<Student>> fetchStudents({
+  Future<Result<List<Student>>> fetchStudents({
     required String school,
     required String login,
     required String passwordHash,
-  }) async => [
-    const Student(
+  }) async => const Result.success([
+    Student(
       id: 1,
       usersEduId: 1,
       name: 'Jan',
       surname: 'Kowalski',
       sex: Sex.male,
     ),
-  ];
+  ]);
 
   List<Teacher> _buildTeachers() => const [
     Teacher(

@@ -434,6 +434,7 @@
     "serverError": "Serverfeil",
     "licenseExpired": "Skolelisens utløpt",
     "rateLimited": "For mange forespørsler, prøv igjen senere",
+    "schoolNotFound": "Skolen ble ikke funnet. Sjekk skole-ID og prøv igjen.",
     "unknownError": "En ukjent feil oppsto",
     "missingCredentials": "Manglende innloggingsdata. Logg inn igjen.",
     "expiredSession": "Økten har utløpt. Logg inn igjen.",

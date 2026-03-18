@@ -440,6 +440,7 @@
     "serverError": "Napaka strežnika",
     "licenseExpired": "Licenca šole je potekla",
     "rateLimited": "Preveč zahtev, poskusite znova pozneje",
+    "schoolNotFound": "Šola ni bila najdena. Preverite identifikator šole in poskusite znova.",
     "unknownError": "Prišlo je do neznane napake",
     "missingCredentials": "Manjkajo prijavni podatki. Prijavite se znova.",
     "expiredSession": "Seja je potekla. Prijavite se znova.",

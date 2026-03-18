@@ -440,6 +440,7 @@
     "serverError": "Serverio klaida",
     "licenseExpired": "Mokyklos licencija baigėsi",
     "rateLimited": "Per daug užklausų, bandykite vėliau",
+    "schoolNotFound": "Mokykla nerasta. Patikrinkite mokyklos identifikatorių ir bandykite dar kartą.",
     "unknownError": "Įvyko nežinoma klaida",
     "missingCredentials": "Trūksta prisijungimo duomenų. Prisijunkite iš naujo.",
     "expiredSession": "Sesija baigėsi. Prisijunkite iš naujo.",

@@ -434,6 +434,7 @@
     "serverError": "Error del servidor",
     "licenseExpired": "Licencia de la escuela expirada",
     "rateLimited": "Demasiadas solicitudes, por favor inténtelo más tarde",
+    "schoolNotFound": "Escuela no encontrada. Verifique el identificador de la escuela e intente de nuevo.",
     "unknownError": "Se ha producido un error desconocido",
     "missingCredentials": "Faltan datos de acceso. Por favor, inicie sesión de nuevo.",
     "expiredSession": "Sesión expirada. Por favor, inicie sesión de nuevo.",

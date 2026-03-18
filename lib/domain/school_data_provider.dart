@@ -67,7 +67,7 @@ abstract class SchoolDataProvider {
     required String passwordHash,
   });
 
-  Future<List<Student>> fetchStudents({
+  Future<Result<List<Student>>> fetchStudents({
     required String school,
     required String login,
     required String passwordHash,

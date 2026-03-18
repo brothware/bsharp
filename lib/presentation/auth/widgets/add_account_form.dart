@@ -101,7 +101,7 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
 
     await result.when(
       success: (schoolName) async {
-        final students = await provider.fetchStudents(
+        final studentsResult = await provider.fetchStudents(
           school: school,
           login: login,
           passwordHash: passwordHash,
@@ -109,40 +109,48 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
 
         if (!mounted) return;
 
-        final accountStudents = students
-            .map(
-              (s) => AccountStudent(
-                id: s.id,
-                name: s.name,
-                surname: s.surname,
-              ),
-            )
-            .toList();
+        switch (studentsResult) {
+          case Failure(:final failure):
+            setState(() {
+              _isLoading = false;
+              _errorMessage = _mapFailureMessage(failure);
+            });
+          case Success(:final value):
+            final accountStudents = value
+                .map(
+                  (s) => AccountStudent(
+                    id: s.id,
+                    name: s.name,
+                    surname: s.surname,
+                  ),
+                )
+                .toList();
 
-        final account = ProviderAccount(
-          id: _isEditing ? widget.existingAccount!.id : const Uuid().v4(),
-          providerType: _selectedProviderType!,
-          slug: school,
-          login: login,
-          passwordHash: passwordHash,
-          schoolName: schoolName ?? school,
-          students: accountStudents,
-        );
+            final account = ProviderAccount(
+              id: _isEditing ? widget.existingAccount!.id : const Uuid().v4(),
+              providerType: _selectedProviderType!,
+              slug: school,
+              login: login,
+              passwordHash: passwordHash,
+              schoolName: schoolName ?? school,
+              students: accountStudents,
+            );
 
-        final notifier = ref.read(providerAccountsProvider.notifier);
-        if (_isEditing) {
-          await notifier.updateAccount(account);
-        } else {
-          await notifier.addAccount(account);
+            final notifier = ref.read(providerAccountsProvider.notifier);
+            if (_isEditing) {
+              await notifier.updateAccount(account);
+            } else {
+              await notifier.addAccount(account);
+            }
+
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(t.accounts.accountAddedSuccess)),
+            );
+
+            widget.onComplete?.call();
         }
-
-        if (!mounted) return;
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(t.accounts.accountAddedSuccess)),
-        );
-
-        widget.onComplete?.call();
       },
       failure: (failure) {
         setState(() {
@@ -156,10 +164,11 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
   String _mapFailureMessage(AppFailure failure) {
     return switch (failure) {
       InvalidCredentials() => t.accounts.credentialsInvalid,
+      SchoolNotFound() => t.errors.schoolNotFound,
       NoConnection() => t.errors.noConnection,
       ConnectionTimeout() => t.errors.timeout,
       LicenseExpired() => t.errors.licenseExpired,
-      _ => failure.message ?? t.errors.unknownError,
+      _ => t.errors.unknownError,
     };
   }
 

@@ -434,6 +434,7 @@
     "serverError": "伺服器錯誤",
     "licenseExpired": "學校授權已過期",
     "rateLimited": "請求過於頻繁，請稍後再試",
+    "schoolNotFound": "找不到學校。請檢查學校ID並重試。",
     "unknownError": "發生未知錯誤",
     "missingCredentials": "缺少登入資訊，請重新登入。",
     "expiredSession": "工作階段已過期，請重新登入。",

@@ -434,6 +434,7 @@
     "serverError": "Palvelinvirhe",
     "licenseExpired": "Koulun lisenssi vanhentunut",
     "rateLimited": "Liian monta pyyntöä, yritä myöhemmin uudelleen",
+    "schoolNotFound": "Koulua ei löytynyt. Tarkista koulutunnus ja yritä uudelleen.",
     "unknownError": "Tuntematon virhe tapahtui",
     "missingCredentials": "Puuttuvat kirjautumistiedot. Kirjaudu sisään uudelleen.",
     "expiredSession": "Istunto päättynyt. Kirjaudu sisään uudelleen.",

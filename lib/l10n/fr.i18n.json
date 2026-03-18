@@ -434,6 +434,7 @@
     "serverError": "Erreur du serveur",
     "licenseExpired": "Licence de l'école expirée",
     "rateLimited": "Trop de requêtes, veuillez réessayer plus tard",
+    "schoolNotFound": "École introuvable. Vérifiez l'identifiant de l'école et réessayez.",
     "unknownError": "Une erreur inconnue s'est produite",
     "missingCredentials": "Identifiants manquants. Veuillez vous reconnecter.",
     "expiredSession": "Session expirée. Veuillez vous reconnecter.",

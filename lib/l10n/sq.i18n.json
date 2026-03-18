@@ -434,6 +434,7 @@
     "serverError": "Gabim i serverit",
     "licenseExpired": "Licenca e shkollës ka skaduar",
     "rateLimited": "Shumë kërkesa, provoni përsëri më vonë",
+    "schoolNotFound": "Shkolla nuk u gjet. Kontrolloni identifikuesin e shkollës dhe provoni përsëri.",
     "unknownError": "Ndodhi një gabim i panjohur",
     "missingCredentials": "Mungojnë të dhënat e hyrjes. Hyni përsëri.",
     "expiredSession": "Sesioni ka skaduar. Hyni përsëri.",

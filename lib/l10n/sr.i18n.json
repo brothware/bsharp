@@ -437,6 +437,7 @@
     "serverError": "Greška servera",
     "licenseExpired": "Licenca škole je istekla",
     "rateLimited": "Previše zahteva, pokušajte ponovo kasnije",
+    "schoolNotFound": "Школа није пронађена. Проверите идентификатор школе и покушајте поново.",
     "unknownError": "Došlo je do nepoznate greške",
     "missingCredentials": "Nedostaju podaci za prijavu. Prijavite se ponovo.",
     "expiredSession": "Sesija je istekla. Prijavite se ponovo.",

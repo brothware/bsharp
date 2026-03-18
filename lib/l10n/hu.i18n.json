@@ -434,6 +434,7 @@
     "serverError": "Szerverhiba",
     "licenseExpired": "Az iskola licence lejárt",
     "rateLimited": "Túl sok kérés, próbálja újra később",
+    "schoolNotFound": "Az iskola nem található. Ellenőrizze az iskola azonosítóját, és próbálja újra.",
     "unknownError": "Ismeretlen hiba történt",
     "missingCredentials": "Hiányzó bejelentkezési adatok. Jelentkezzen be újra.",
     "expiredSession": "A munkamenet lejárt. Jelentkezzen be újra.",

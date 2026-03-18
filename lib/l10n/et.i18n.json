@@ -434,6 +434,7 @@
     "serverError": "Serveri viga",
     "licenseExpired": "Kooli litsents on aegunud",
     "rateLimited": "Liiga palju päringuid, proovi hiljem uuesti",
+    "schoolNotFound": "Kooli ei leitud. Kontrollige kooli identifikaatorit ja proovige uuesti.",
     "unknownError": "Tekkis tundmatu viga",
     "missingCredentials": "Sisselogimisandmed puuduvad. Palun logi uuesti sisse.",
     "expiredSession": "Seanss aegus. Palun logi uuesti sisse.",

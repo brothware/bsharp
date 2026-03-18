@@ -431,6 +431,7 @@
     "serverError": "Server error",
     "licenseExpired": "School licence expired",
     "rateLimited": "Too many requests, please try again later",
+    "schoolNotFound": "School not found. Check the school ID and try again.",
     "unknownError": "An unknown error occurred",
     "missingCredentials": "Missing login data. Please log in again.",
     "expiredSession": "Session expired. Please log in again.",

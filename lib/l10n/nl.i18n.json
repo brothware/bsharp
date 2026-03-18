@@ -434,6 +434,7 @@
     "serverError": "Serverfout",
     "licenseExpired": "Schoollicentie verlopen",
     "rateLimited": "Te veel verzoeken, probeer het later opnieuw",
+    "schoolNotFound": "School niet gevonden. Controleer het school-ID en probeer het opnieuw.",
     "unknownError": "Er is een onbekende fout opgetreden",
     "missingCredentials": "Ontbrekende inloggegevens. Log opnieuw in.",
     "expiredSession": "Sessie verlopen. Log opnieuw in.",

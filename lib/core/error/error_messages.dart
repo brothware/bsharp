@@ -13,6 +13,7 @@ String errorMessage(AppFailure failure) {
     Informational() => failure.message ?? t.errors.informational,
     LicenseExpired() => t.errors.licenseExpiredLong,
     RateLimited() => t.errors.rateLimitedLong,
+    SchoolNotFound() => t.errors.schoolNotFound,
     NoConnection() => t.errors.noConnection,
     ConnectionTimeout() => t.errors.timeoutLong,
     SessionExpired() => t.errors.sessionExpired,

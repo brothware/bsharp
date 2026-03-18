@@ -434,6 +434,7 @@
     "serverError": "Servera kļūda",
     "licenseExpired": "Skolas licence beidzās",
     "rateLimited": "Pārāk daudz pieprasījumu, mēģiniet vēlāk",
+    "schoolNotFound": "Skola nav atrasta. Pārbaudiet skolas identifikatoru un mēģiniet vēlreiz.",
     "unknownError": "Radās nezināma kļūda",
     "missingCredentials": "Trūkst pieteikšanās datu. Lūdzu piesakieties vēlreiz.",
     "expiredSession": "Sesija beidzās. Lūdzu piesakieties vēlreiz.",

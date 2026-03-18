@@ -41,8 +41,10 @@ class ErrorMappingInterceptor extends Interceptor {
     } else if (err.error is SocketException ||
         err.type == DioExceptionType.connectionError) {
       failure = const NoConnection();
+    } else if (err.response?.statusCode == 404) {
+      failure = const SchoolNotFound();
     } else {
-      failure = UnknownFailure(message: err.message);
+      failure = const UnknownFailure();
     }
 
     handler.next(

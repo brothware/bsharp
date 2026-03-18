@@ -437,6 +437,7 @@
     "serverError": "Eroare de server",
     "licenseExpired": "Licența școlii a expirat",
     "rateLimited": "Prea multe cereri, încercați mai târziu",
+    "schoolNotFound": "Școala nu a fost găsită. Verificați identificatorul școlii și încercați din nou.",
     "unknownError": "A apărut o eroare necunoscută",
     "missingCredentials": "Date de autentificare lipsă. Conectați-vă din nou.",
     "expiredSession": "Sesiunea a expirat. Conectați-vă din nou.",

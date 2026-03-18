@@ -434,6 +434,7 @@
     "serverError": "Serverfehler",
     "licenseExpired": "Schullizenz abgelaufen",
     "rateLimited": "Zu viele Anfragen, bitte später erneut versuchen",
+    "schoolNotFound": "Schule nicht gefunden. Überprüfen Sie die Schulkennung und versuchen Sie es erneut.",
     "unknownError": "Ein unbekannter Fehler ist aufgetreten",
     "missingCredentials": "Fehlende Anmeldedaten. Bitte erneut anmelden.",
     "expiredSession": "Sitzung abgelaufen. Bitte erneut anmelden.",

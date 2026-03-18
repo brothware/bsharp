@@ -443,6 +443,7 @@
     "serverError": "Earraid freastalai",
     "licenseExpired": "Ceadunas na scoile imithe in eag",
     "rateLimited": "An iomarca iarratas, bain triail eile as nios deireanaige",
+    "schoolNotFound": "Níor aimsíodh an scoil. Seiceáil aitheantas na scoile agus bain triail eile as.",
     "unknownError": "Tharla earraid anaithnid",
     "missingCredentials": "Sonrai logala in easnamh. Logail isteach aris.",
     "expiredSession": "Seisiun imithe in eag. Logail isteach aris.",
