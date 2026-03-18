@@ -1,10 +1,10 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/locale_provider.dart';
-import 'package:bsharp/data/data_sources/local/connection/connection.dart';
 import 'package:bsharp/data/data_sources/local/database.dart';
 import 'package:bsharp/data/data_sources/local/mlkit_translation_source.dart';
 import 'package:bsharp/data/data_sources/remote/deepl_data_source.dart';
 import 'package:bsharp/data/services/translation_service.dart';
+import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,9 +19,7 @@ final _isMobileProvider = Provider<bool>((ref) {
 
 @Riverpod(keepAlive: true)
 AppDatabase? translationDatabase(Ref ref) {
-  final db = createTranslationDatabase();
-  if (db != null) ref.onDispose(db.close);
-  return db;
+  return ref.watch(localDatabaseProvider).value;
 }
 
 @Riverpod(keepAlive: true)

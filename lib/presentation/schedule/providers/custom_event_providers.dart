@@ -8,13 +8,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'custom_event_providers.g.dart';
 
-final _customEventDatabaseInitProvider = FutureProvider<AppDatabase?>((ref) {
+final localDatabaseProvider = FutureProvider<AppDatabase?>((ref) {
   return createCustomEventDatabase();
 });
 
 @Riverpod(keepAlive: true)
 CustomEventDao? customEventDao(Ref ref) {
-  final db = ref.watch(_customEventDatabaseInitProvider).value;
+  final db = ref.watch(localDatabaseProvider).value;
   if (db == null) return null;
   return CustomEventDao(db);
 }
