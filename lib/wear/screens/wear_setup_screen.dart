@@ -29,6 +29,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
   _SetupStep _step = _SetupStep.credentials;
   bool _isLoading = false;
+  bool _obscurePassword = true;
   String? _errorMessage;
   List<Student> _students = [];
   int? _selectedStudentId;
@@ -229,8 +230,20 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
             decoration: InputDecoration(
               labelText: t.auth.password,
               isDense: true,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  size: 16,
+                ),
+                onPressed: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
+              ),
+              suffixIconConstraints: const BoxConstraints(
+                minWidth: 32,
+                minHeight: 32,
+              ),
             ),
-            obscureText: true,
+            obscureText: _obscurePassword,
             textInputAction: TextInputAction.done,
             onSubmitted: (_) => _validateAndLogin(),
             style: theme.textTheme.bodySmall,

@@ -42,6 +42,7 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true;
   String? _errorMessage;
   String? _selectedProviderType;
 
@@ -271,8 +272,15 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
                 labelText: t.auth.password,
                 prefixIcon: const Icon(Icons.lock),
                 border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: () =>
+                      setState(() => _obscurePassword = !_obscurePassword),
+                ),
               ),
-              obscureText: true,
+              obscureText: _obscurePassword,
               textInputAction: TextInputAction.done,
               enabled: !_isLoading,
               onSubmitted: (_) => _submit(),
