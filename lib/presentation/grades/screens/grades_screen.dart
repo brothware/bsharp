@@ -176,7 +176,7 @@ class _SubjectSection extends ConsumerWidget {
       ),
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Wrap(

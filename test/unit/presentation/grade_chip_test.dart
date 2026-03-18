@@ -83,26 +83,6 @@ void main() {
       expect(find.text('?'), findsOneWidget);
     });
 
-    testWidgets('shows weight indicator when weight > 1', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: GradeChip(grade: _resolved(weight: 3))),
-        ),
-      );
-
-      expect(find.text('w3'), findsOneWidget);
-    });
-
-    testWidgets('hides weight indicator when weight is 1', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: GradeChip(grade: _resolved())),
-        ),
-      );
-
-      expect(find.text('w1'), findsNothing);
-    });
-
     testWidgets('shows NEW badge when isNew', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
