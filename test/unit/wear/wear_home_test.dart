@@ -135,9 +135,13 @@ void main() {
       );
       final storage = CredentialStorage(store: fakeSecure);
 
+      SharedPreferences.setMockInitialValues({});
+      final childPrefs = await SharedPreferences.getInstance();
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            sharedPreferencesProvider.overrideWithValue(childPrefs),
             credentialStorageProvider.overrideWithValue(storage),
             wearScreenShapeProvider.overrideWith(
               (_) => WearScreenShape.rectangular,
@@ -176,9 +180,13 @@ void main() {
         );
         final storage = CredentialStorage(store: fakeSecure);
 
+        SharedPreferences.setMockInitialValues({});
+        final childPrefs = await SharedPreferences.getInstance();
+
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              sharedPreferencesProvider.overrideWithValue(childPrefs),
               credentialStorageProvider.overrideWithValue(storage),
               wearScreenShapeProvider.overrideWith(
                 (_) => WearScreenShape.rectangular,

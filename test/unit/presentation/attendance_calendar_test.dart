@@ -4,12 +4,20 @@ import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:bsharp/presentation/attendance/screens/attendance_screen.dart';
 import 'package:bsharp/presentation/attendance/widgets/attendance_stats_view.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  late SharedPreferences prefs;
+
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    prefs = await SharedPreferences.getInstance();
+  });
   const presentType = AttendanceType(
     id: 1,
     name: 'Present',
@@ -25,6 +33,7 @@ void main() {
   }) {
     return ProviderScope(
       overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
         attendancesProvider.overrideWithBuild((ref, _) => attendances),
         attendanceTypesProvider.overrideWithBuild((ref, _) => types),
         resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
@@ -132,6 +141,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           attendancesProvider.overrideWithBuild(
             (ref, _) => [
               const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),

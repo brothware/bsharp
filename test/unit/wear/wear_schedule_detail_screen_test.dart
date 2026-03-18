@@ -1,12 +1,14 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
@@ -30,10 +32,14 @@ ResolvedEvent _resolvedEvent({
   );
 }
 
-Widget _buildScreen({List<ResolvedEvent> resolvedEvents = const []}) {
+Widget _buildScreen({
+  required SharedPreferences prefs,
+  List<ResolvedEvent> resolvedEvents = const [],
+}) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
@@ -43,9 +49,16 @@ Widget _buildScreen({List<ResolvedEvent> resolvedEvents = const []}) {
 }
 
 void main() {
+  late SharedPreferences prefs;
+
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    prefs = await SharedPreferences.getInstance();
+  });
+
   group('WearScheduleDetailScreen', () {
     testWidgets('shows day label with date', (tester) async {
-      await tester.pumpWidget(_buildScreen());
+      await tester.pumpWidget(_buildScreen(prefs: prefs));
       await tester.pump();
 
       final now = DateTime.now();
@@ -55,7 +68,7 @@ void main() {
     });
 
     testWidgets('shows no lessons text when empty', (tester) async {
-      await tester.pumpWidget(_buildScreen());
+      await tester.pumpWidget(_buildScreen(prefs: prefs));
       await tester.pump();
 
       expect(find.text('No lessons'), findsOneWidget);
@@ -64,6 +77,7 @@ void main() {
     testWidgets('shows lesson entries for today', (tester) async {
       await tester.pumpWidget(
         _buildScreen(
+          prefs: prefs,
           resolvedEvents: [
             _resolvedEvent(),
             _resolvedEvent(
@@ -82,7 +96,7 @@ void main() {
     });
 
     testWidgets('shows no chevron icons', (tester) async {
-      await tester.pumpWidget(_buildScreen());
+      await tester.pumpWidget(_buildScreen(prefs: prefs));
       await tester.pump();
 
       expect(find.byIcon(Icons.chevron_left), findsNothing);

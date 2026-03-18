@@ -1,3 +1,4 @@
+import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -40,6 +41,7 @@ class SelectedMonth extends _$SelectedMonth {
 
 @Riverpod(keepAlive: true)
 Map<DateTime, AttendanceDay> attendanceDays(Ref ref) {
+  ref.watch(localeProvider);
   final attendances = ref.watch(attendancesProvider);
   final types = ref.watch(attendanceTypesProvider);
   final resolvedEvents = ref.watch(resolvedEventsProvider);

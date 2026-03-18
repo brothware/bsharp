@@ -1,3 +1,4 @@
+import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/subject.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -113,6 +114,7 @@ List<SubjectGrades> subjectGrades(Ref ref) {
   final allGrades = ref.watch(resolvedGradesProvider);
   final term = ref.watch(currentTermProvider);
   final terms = ref.watch(termsProvider);
+  ref.watch(localeProvider);
 
   final allowedTermIds = <int>{};
   if (term != null) {

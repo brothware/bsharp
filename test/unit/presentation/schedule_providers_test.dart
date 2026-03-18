@@ -1,10 +1,19 @@
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  late SharedPreferences prefs;
+
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    prefs = await SharedPreferences.getInstance();
+  });
+
   ResolvedEvent resolved({
     int id = 1,
     DateTime? date,
@@ -51,6 +60,7 @@ void main() {
     test('filters events by date and sorts by number', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
               resolved(number: 3, date: DateTime(2026, 2, 27)),
@@ -73,6 +83,7 @@ void main() {
     test('returns empty for date with no events', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [resolved(date: DateTime(2026, 2, 27))],
           ),
@@ -89,6 +100,7 @@ void main() {
     test('resolves subject, teacher, and room names', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
               resolved(
@@ -115,6 +127,7 @@ void main() {
     test('detects cancelled status', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
               resolved(
@@ -136,6 +149,7 @@ void main() {
     test('detects substitution', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
               resolved(
@@ -157,6 +171,7 @@ void main() {
     test('resolves event topic', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
               resolved(
@@ -179,6 +194,7 @@ void main() {
     test('marks replaced originals and enriches replacement entries', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
               resolved(
@@ -243,6 +259,7 @@ void main() {
       () {
         final container = ProviderContainer(
           overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
             resolvedEventsProvider.overrideWithBuild(
               (ref, _) => [
                 resolved(
@@ -274,6 +291,7 @@ void main() {
     test('empty eventName falls back to subject name', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
               resolved(
@@ -310,6 +328,7 @@ void main() {
     test('sorts replaced originals before replacement', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedEventsProvider.overrideWithBuild(
             (ref, _) => [
               resolved(
@@ -352,6 +371,7 @@ void main() {
     test('returns map with 5 weekdays', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           selectedDateProvider.overrideWithBuild(
             (ref, _) => DateTime(2026, 2, 27),
           ),
@@ -369,6 +389,7 @@ void main() {
     test('derives Monday from selected date', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           selectedDateProvider.overrideWithBuild(
             (ref, _) => DateTime(2026, 2, 27),
           ),

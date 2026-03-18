@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
@@ -73,6 +74,7 @@ DateTime selectedWeekStart(Ref ref) {
 
 @Riverpod(keepAlive: true)
 List<ScheduleEntry> scheduleEntriesForDate(Ref ref, DateTime date) {
+  ref.watch(localeProvider);
   final resolved = ref.watch(resolvedEventsProvider);
   return resolved
       .where((e) => isSameDay(e.date, date))

@@ -1,9 +1,11 @@
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   ResolvedGrade grade({
@@ -35,10 +37,20 @@ void main() {
     );
   }
 
+  late SharedPreferences prefs;
+
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    prefs = await SharedPreferences.getInstance();
+  });
+
   group('currentTermProvider', () {
     test('returns null when no terms', () {
       final container = ProviderContainer(
-        overrides: [termsProvider.overrideWithBuild((ref, _) => [])],
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          termsProvider.overrideWithBuild((ref, _) => []),
+        ],
       );
       addTearDown(container.dispose);
       expect(container.read(currentTermProvider), isNull);
@@ -62,6 +74,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           termsProvider.overrideWithBuild((ref, _) => [term1, term2]),
           selectedTermIdProvider.overrideWithBuild((ref, _) => 2),
         ],
@@ -89,6 +102,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           termsProvider.overrideWithBuild((ref, _) => [past, current]),
         ],
       );
@@ -108,6 +122,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           termsProvider.overrideWithBuild((ref, _) => [term]),
         ],
       );
@@ -119,7 +134,9 @@ void main() {
 
   group('subjectGradesProvider', () {
     test('returns empty list when no grades', () {
-      final container = ProviderContainer();
+      final container = ProviderContainer(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      );
       addTearDown(container.dispose);
       expect(container.read(subjectGradesProvider), isEmpty);
     });
@@ -127,6 +144,7 @@ void main() {
     test('groups grades by subject name', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
               grade(subjectId: 100),
@@ -158,6 +176,7 @@ void main() {
       () {
         final container = ProviderContainer(
           overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
             resolvedGradesProvider.overrideWithBuild(
               (ref, _) => [
                 grade(
@@ -183,6 +202,7 @@ void main() {
     test('resolves point-based grades with value/max format', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
               grade(
@@ -205,6 +225,7 @@ void main() {
     test('sorts subjects alphabetically', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
               grade(subjectName: 'Biology', subjectId: 200),
@@ -223,6 +244,7 @@ void main() {
     test('sorts grades by date ascending within subject', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
               grade(
@@ -249,7 +271,9 @@ void main() {
 
   group('overallWeightedAverageProvider', () {
     test('returns null when no subjects', () {
-      final container = ProviderContainer();
+      final container = ProviderContainer(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      );
       addTearDown(container.dispose);
       expect(container.read(overallWeightedAverageProvider), isNull);
     });
@@ -257,10 +281,16 @@ void main() {
     test('calculates mean of subject weighted averages', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
               grade(subjectName: 'A', subjectId: 100),
-              grade(id: 2, subjectName: 'B', effectiveValue: 3, subjectId: 200),
+              grade(
+                id: 2,
+                subjectName: 'B',
+                effectiveValue: 3,
+                subjectId: 200,
+              ),
             ],
           ),
         ],
@@ -273,7 +303,9 @@ void main() {
 
   group('overallSimpleAverageProvider', () {
     test('returns null when no subjects', () {
-      final container = ProviderContainer();
+      final container = ProviderContainer(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      );
       addTearDown(container.dispose);
       expect(container.read(overallSimpleAverageProvider), isNull);
     });
@@ -281,7 +313,9 @@ void main() {
 
   group('gradeDistributionProvider', () {
     test('returns empty map for no grades', () {
-      final container = ProviderContainer();
+      final container = ProviderContainer(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      );
       addTearDown(container.dispose);
       expect(container.read(gradeDistributionProvider), isEmpty);
     });
@@ -289,11 +323,17 @@ void main() {
     test('counts by rounded effective value', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           resolvedGradesProvider.overrideWithBuild(
             (ref, _) => [
               grade(subjectName: 'A', subjectId: 100),
               grade(id: 2, subjectName: 'A', subjectId: 100),
-              grade(id: 3, subjectName: 'A', effectiveValue: 4, subjectId: 100),
+              grade(
+                id: 3,
+                subjectName: 'A',
+                effectiveValue: 4,
+                subjectId: 100,
+              ),
             ],
           ),
         ],

@@ -3,12 +3,20 @@ import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  late SharedPreferences prefs;
+
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    prefs = await SharedPreferences.getInstance();
+  });
   const presentType = AttendanceType(
     id: 1,
     name: 'Present',
@@ -48,6 +56,7 @@ void main() {
     test('groups by event date', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           attendancesProvider.overrideWithBuild(
             (ref, _) => [
               attendance(),
@@ -76,6 +85,7 @@ void main() {
     test('returns empty when no attendances', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           attendancesProvider.overrideWithBuild((ref, _) => []),
           attendanceTypesProvider.overrideWithBuild((ref, _) => []),
           resolvedEventsProvider.overrideWithBuild((ref, _) => []),
@@ -91,6 +101,7 @@ void main() {
     test('calculates stats from all attendances when no term selected', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           attendancesProvider.overrideWithBuild(
             (ref, _) => [
               attendance(),
@@ -122,6 +133,7 @@ void main() {
     test('filters stats by selected semester', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           attendancesProvider.overrideWithBuild(
             (ref, _) => [
               attendance(),
@@ -175,6 +187,7 @@ void main() {
     test('returns day data for matching date', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           attendancesProvider.overrideWithBuild((ref, _) => [attendance()]),
           attendanceTypesProvider.overrideWithBuild((ref, _) => [presentType]),
           resolvedEventsProvider.overrideWithBuild(
@@ -194,6 +207,7 @@ void main() {
     test('returns null for date with no data', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           attendancesProvider.overrideWithBuild((ref, _) => []),
           attendanceTypesProvider.overrideWithBuild((ref, _) => []),
           resolvedEventsProvider.overrideWithBuild((ref, _) => []),
@@ -212,6 +226,7 @@ void main() {
     test('returns days for selected month', () {
       final container = ProviderContainer(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           selectedMonthProvider.overrideWithBuild(
             (ref, _) => DateTime(2026, 2),
           ),

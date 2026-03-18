@@ -1,12 +1,14 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:bsharp/wear/screens/wear_schedule_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
@@ -33,10 +35,14 @@ ResolvedEvent _resolvedEvent({
   );
 }
 
-Widget _buildTile({List<ResolvedEvent> resolvedEvents = const []}) {
+Widget _buildTile({
+  required SharedPreferences prefs,
+  List<ResolvedEvent> resolvedEvents = const [],
+}) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
@@ -46,9 +52,16 @@ Widget _buildTile({List<ResolvedEvent> resolvedEvents = const []}) {
 }
 
 void main() {
+  late SharedPreferences prefs;
+
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    prefs = await SharedPreferences.getInstance();
+  });
+
   group('WearScheduleTile', () {
     testWidgets('shows empty state when no events', (tester) async {
-      await tester.pumpWidget(_buildTile());
+      await tester.pumpWidget(_buildTile(prefs: prefs));
       await tester.pump();
 
       expect(find.text('No lessons'), findsOneWidget);
@@ -58,6 +71,7 @@ void main() {
     testWidgets('shows lesson items when events exist', (tester) async {
       await tester.pumpWidget(
         _buildTile(
+          prefs: prefs,
           resolvedEvents: [
             _resolvedEvent(),
             _resolvedEvent(
@@ -79,7 +93,10 @@ void main() {
 
     testWidgets('shows strikethrough for cancelled lesson', (tester) async {
       await tester.pumpWidget(
-        _buildTile(resolvedEvents: [_resolvedEvent(isCancelled: true)]),
+        _buildTile(
+          prefs: prefs,
+          resolvedEvents: [_resolvedEvent(isCancelled: true)],
+        ),
       );
       await tester.pump();
 
@@ -91,7 +108,7 @@ void main() {
     });
 
     testWidgets('shows header with day name and date', (tester) async {
-      await tester.pumpWidget(_buildTile());
+      await tester.pumpWidget(_buildTile(prefs: prefs));
       await tester.pump();
 
       expect(find.byIcon(Icons.calendar_today), findsOneWidget);
