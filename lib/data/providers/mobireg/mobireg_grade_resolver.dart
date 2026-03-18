@@ -80,6 +80,12 @@ class MobiregGradeResolver {
         termId = ett?.termsId;
       }
 
+      final kind = group.markKindsId != null
+          ? kindById[group.markKindsId]
+          : null;
+      final effectiveWeight =
+          m.weight ?? group.weight ?? kind?.defaultWeight ?? 1;
+
       result.add(
         ResolvedGrade(
           id: m.id,
@@ -89,7 +95,7 @@ class MobiregGradeResolver {
           date: m.getDate,
           effectiveValue: resolved.effectiveValue,
           countsToAverage: resolved.countsToAverage,
-          weight: m.weight,
+          weight: effectiveWeight,
           teacherName: teacherName,
           comment: m.comments,
           markMax: resolved.markMax,

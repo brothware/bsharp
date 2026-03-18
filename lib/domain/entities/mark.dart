@@ -14,7 +14,7 @@ abstract class Mark with _$Mark {
     int? markScalesId,
     double? markValue,
     String? comments,
-    @Default(1) int weight,
+    int? weight,
     DateTime? addTime,
     int? eventsId,
   }) = _Mark;
@@ -39,7 +39,7 @@ abstract class MarkGroup with _$MarkGroup {
     int? markDivisionGroupsId,
     int? markScaleGroupsId,
     String? cssStyle,
-    @Default(1) int weight,
+    int? weight,
     double? markValueRangeMin,
     double? markValueRangeMax,
     double? precision,
