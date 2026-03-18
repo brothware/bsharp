@@ -36,17 +36,22 @@ class GradeChip extends StatelessWidget {
                   horizontal: 8,
                   vertical: 4,
                 ),
-                child: Text(
-                  grade.displayValue,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.bold,
+                child: Center(
+                  widthFactor: 1,
+                  heightFactor: 1,
+                  child: Text(
+                    grade.displayValue,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: color,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
         ),
+
         if (isNew)
           Positioned(
             top: -4,
