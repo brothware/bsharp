@@ -45,3 +45,7 @@ lib/l10n/_unused_translations.json
 /decompiled/
 /jadx/
 /examples/
+
+/linux/
+/android/build/
+devtools_options.yaml
