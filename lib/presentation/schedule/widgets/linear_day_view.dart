@@ -162,7 +162,7 @@ class _LinearDayViewState extends ConsumerState<LinearDayView> {
 
     return SingleChildScrollView(
       controller: _scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 80),
       child: SizedBox(
         height: _totalHeight + _verticalPadding * 2,
         child: Stack(

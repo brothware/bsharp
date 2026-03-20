@@ -31,6 +31,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
   Offset? _pointerStart;
   int? _tabAtPointerDown;
   bool _changingWeek = false;
+  bool _fabObscured = true;
 
   @override
   void dispose() {
@@ -95,11 +96,6 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
     final theme = Theme.of(context);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(AppRoutes.customEventCreate),
-        tooltip: t.schedule.customEvent.create,
-        child: const Icon(Icons.add),
-      ),
       body: Column(
         children: [
           Padding(
@@ -150,45 +146,92 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
           ),
           const SizedBox(height: 8),
           Expanded(
-            child: Listener(
-              onPointerDown: (e) {
-                _pointerStart = e.position;
-                _tabAtPointerDown = _tabController?.index;
-              },
-              onPointerUp: (e) {
-                final start = _pointerStart;
-                final startTab = _tabAtPointerDown;
-                _pointerStart = null;
-                _tabAtPointerDown = null;
-                if (_changingWeek || start == null || startTab == null) return;
-                final dx = e.position.dx - start.dx;
-                final dy = (e.position.dy - start.dy).abs();
-                if (dx.abs() < 50 || dy > dx.abs()) return;
-                final endTab = _tabController?.index ?? 0;
-                if (startTab != endTab) return;
-                if (startTab == 0 && dx > 0) {
-                  _changeWeek(-1);
-                } else if (startTab == days.length - 1 && dx < 0) {
-                  _changeWeek(1);
-                }
-              },
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  for (final day in days)
-                    viewMode == ScheduleViewMode.list
-                        ? _DayTimelineList(date: day)
-                        : LinearDayView(
-                            date: day,
-                            onItemTap: (item) => _showItemDetail(context, item),
-                          ),
-                ],
-              ),
+            child: Stack(
+              children: [
+                Listener(
+                  onPointerDown: (e) {
+                    _pointerStart = e.position;
+                    _tabAtPointerDown = _tabController?.index;
+                  },
+                  onPointerUp: (e) {
+                    final start = _pointerStart;
+                    final startTab = _tabAtPointerDown;
+                    _pointerStart = null;
+                    _tabAtPointerDown = null;
+                    if (_changingWeek || start == null || startTab == null) {
+                      return;
+                    }
+                    final dx = e.position.dx - start.dx;
+                    final dy = (e.position.dy - start.dy).abs();
+                    if (dx.abs() < 50 || dy > dx.abs()) return;
+                    final endTab = _tabController?.index ?? 0;
+                    if (startTab != endTab) return;
+                    if (startTab == 0 && dx > 0) {
+                      _changeWeek(-1);
+                    } else if (startTab == days.length - 1 && dx < 0) {
+                      _changeWeek(1);
+                    }
+                  },
+                  child: NotificationListener<ScrollMetricsNotification>(
+                    onNotification: (n) {
+                      if (n.metrics.axis == Axis.vertical) {
+                        _updateFabObscured(n.metrics);
+                      }
+                      return false;
+                    },
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: _onContentScroll,
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          for (final day in days)
+                            viewMode == ScheduleViewMode.list
+                                ? _DayTimelineList(date: day)
+                                : LinearDayView(
+                                    date: day,
+                                    onItemTap: (item) =>
+                                        _showItemDetail(context, item),
+                                  ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 16,
+                  bottom: 16,
+                  child: AnimatedOpacity(
+                    opacity: _fabObscured ? 0.4 : 1.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: FloatingActionButton(
+                      onPressed: () =>
+                          context.push(AppRoutes.customEventCreate),
+                      tooltip: t.schedule.customEvent.create,
+                      child: const Icon(Icons.add),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  bool _onContentScroll(ScrollNotification notification) {
+    if (notification.metrics.axis == Axis.vertical) {
+      _updateFabObscured(notification.metrics);
+    }
+    return false;
+  }
+
+  void _updateFabObscured(ScrollMetrics metrics) {
+    final obscured =
+        metrics.maxScrollExtent > 0 && metrics.pixels < metrics.maxScrollExtent;
+    if (obscured != _fabObscured) {
+      setState(() => _fabObscured = obscured);
+    }
   }
 
   void _changeWeek(int direction) {
@@ -253,7 +296,7 @@ class _DayTimelineList extends ConsumerWidget {
     return RefreshIndicator(
       onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.fromLTRB(12, 0, 12, 80),
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
