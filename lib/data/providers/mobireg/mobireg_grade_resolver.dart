@@ -96,6 +96,7 @@ class MobiregGradeResolver {
           effectiveValue: resolved.effectiveValue,
           countsToAverage: resolved.countsToAverage,
           weight: effectiveWeight,
+          description: group.description,
           teacherName: teacherName,
           comment: m.comments,
           markMax: resolved.markMax,
