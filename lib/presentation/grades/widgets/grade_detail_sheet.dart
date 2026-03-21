@@ -25,6 +25,7 @@ class GradeDetailSheet extends ConsumerStatefulWidget {
 
 class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
   String? _translatedCategory;
+  String? _translatedDescription;
   String? _translatedComment;
 
   @override
@@ -132,6 +133,12 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
                 _translatedCategory ??
                 translateGradeCategory(grade.categoryName),
           ),
+          if (grade.description != null && grade.description!.isNotEmpty)
+            _DetailRow(
+              icon: Icons.description,
+              label: t.grades.description,
+              value: _translatedDescription ?? grade.description!,
+            ),
           if (grade.teacherName != null)
             _DetailRow(
               icon: Icons.person,
@@ -147,6 +154,7 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
           if (translationAvailable)
             _buildTranslateButton(
               grade.categoryName,
+              grade.description,
               grade.comment,
             ),
           if (grade.effectiveValue != null)
@@ -170,8 +178,10 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
 
   Widget _buildTranslateButton(
     String category,
+    String? description,
     String? comment,
   ) {
+    final hasDescription = description != null && description.isNotEmpty;
     final hasComment = comment != null && comment.isNotEmpty;
 
     return Padding(
@@ -179,6 +189,7 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
       child: MultiTranslateButton(
         fields: [
           TranslationField(category),
+          if (hasDescription) TranslationField(description),
           if (hasComment) TranslationField(comment),
         ],
         onTranslated: (translations) {
@@ -186,9 +197,11 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
             if (translations != null) {
               var i = 0;
               _translatedCategory = translations[i++];
+              if (hasDescription) _translatedDescription = translations[i++];
               if (hasComment) _translatedComment = translations[i];
             } else {
               _translatedCategory = null;
+              _translatedDescription = null;
               _translatedComment = null;
             }
           });

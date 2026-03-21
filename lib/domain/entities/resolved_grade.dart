@@ -13,6 +13,7 @@ abstract class ResolvedGrade with _$ResolvedGrade {
     double? effectiveValue,
     @Default(true) bool countsToAverage,
     @Default(1) int weight,
+    String? description,
     String? teacherName,
     String? comment,
     double? markMax,
