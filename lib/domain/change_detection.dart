@@ -15,9 +15,17 @@ class ChangeItem {
 }
 
 class ChangeSet {
-  const ChangeSet({this.changes = const []});
+  const ChangeSet({this.changes = const [], this.accountId, this.studentId});
 
   final List<ChangeItem> changes;
+  final String? accountId;
+  final int? studentId;
+
+  ChangeSet copyWith({String? accountId, int? studentId}) => ChangeSet(
+    changes: changes,
+    accountId: accountId ?? this.accountId,
+    studentId: studentId ?? this.studentId,
+  );
 
   bool get isEmpty => changes.isEmpty;
   bool get isNotEmpty => changes.isNotEmpty;
@@ -29,8 +37,11 @@ class ChangeSet {
   int countByCategory(ChangeCategory category) =>
       changes.where((c) => c.category == category).length;
 
-  ChangeSet merge(ChangeSet other) =>
-      ChangeSet(changes: [...changes, ...other.changes]);
+  ChangeSet merge(ChangeSet other) => ChangeSet(
+    changes: [...changes, ...other.changes],
+    accountId: accountId,
+    studentId: studentId,
+  );
 
   Map<ChangeCategory, List<ChangeItem>> get grouped {
     final result = <ChangeCategory, List<ChangeItem>>{};

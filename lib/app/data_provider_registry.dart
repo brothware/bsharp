@@ -4,7 +4,6 @@ import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/background_account_cache.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
-import 'package:bsharp/data/providers/test_server/test_server_data_provider.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
@@ -34,7 +33,6 @@ SchoolDataProvider createProviderForType(String providerType) {
   return switch (providerType) {
     'mobireg' => MobiregDataProvider(),
     'demo' => DemoDataProvider(),
-    'test_server' => TestServerDataProvider(),
     _ => MobiregDataProvider(),
   };
 }

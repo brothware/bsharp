@@ -1,6 +1,7 @@
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/notification_preferences_provider.dart';
+import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/data/services/background_sync_scheduler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
@@ -106,10 +107,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       await _checkUnexcusedAbsences();
 
       if (changeSet.isNotEmpty) {
-        final service = ref.read(notificationServiceProvider);
-        final prefs = ref.read(notificationPreferencesProvider);
-        await service.initialize();
-        await service.showChanges(changeSet, prefs);
+        ref.read(lastSyncChangesProvider.notifier).value = changeSet;
       }
 
       return changeSet;
@@ -257,6 +255,14 @@ class LastSyncTime extends _$LastSyncTime {
 }
 
 @Riverpod(keepAlive: true)
+class LastSyncChanges extends _$LastSyncChanges {
+  @override
+  ChangeSet? build() => null;
+  ChangeSet? get value => state;
+  set value(ChangeSet? v) => state = v;
+}
+
+@Riverpod(keepAlive: true)
 BackgroundSyncScheduler? backgroundSyncScheduler(Ref ref) {
   final isMobile =
       defaultTargetPlatform == TargetPlatform.android ||
@@ -273,6 +279,8 @@ BackgroundSyncScheduler? backgroundSyncScheduler(Ref ref) {
 
 @Riverpod(keepAlive: true)
 Duration syncInterval(Ref ref) {
+  final overrideSecs = AppConstants.syncIntervalSecsOverride;
+  if (overrideSecs != null) return Duration(seconds: overrideSecs);
   final prefs = ref.watch(notificationPreferencesProvider);
   return Duration(minutes: prefs.syncIntervalMinutes);
 }
