@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:bsharp/app/notification_preferences_provider.dart';
+import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
-import 'package:bsharp/data/data_sources/local/account_storage.dart';
+import 'package:bsharp/data/data_sources/local/background_account_cache.dart';
 import 'package:bsharp/data/data_sources/remote/auth_service.dart';
 import 'package:bsharp/data/data_sources/remote/mobile_sync_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
@@ -19,23 +20,61 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BackgroundSyncTask {
+  BackgroundSyncTask({
+    NotificationService? notificationService,
+    Future<SharedPreferences> Function()? prefsFactory,
+    ApiClientFactory Function({
+      required String school,
+      required String parentLogin,
+      required String parentPassHash,
+    })?
+    apiClientFactory,
+    bool rescheduleOnComplete = true,
+  }) : _notificationService = notificationService ?? NotificationService(),
+       _prefsFactory = prefsFactory ?? SharedPreferences.getInstance,
+       _apiClientFactory = apiClientFactory ?? _defaultApiClientFactory,
+       _rescheduleOnComplete = rescheduleOnComplete;
+
+  final NotificationService _notificationService;
+  final Future<SharedPreferences> Function() _prefsFactory;
+  final ApiClientFactory Function({
+    required String school,
+    required String parentLogin,
+    required String parentPassHash,
+  })
+  _apiClientFactory;
+  final bool _rescheduleOnComplete;
+
+  static ApiClientFactory _defaultApiClientFactory({
+    required String school,
+    required String parentLogin,
+    required String parentPassHash,
+  }) => ApiClientFactory(
+    school: school,
+    parentLogin: parentLogin,
+    parentPassHash: parentPassHash,
+  );
+
   Future<bool> execute() async {
     try {
       debugPrint('BackgroundSync: task started');
 
-      final accountStorage = AccountStorage();
-      final selection = await accountStorage.getActiveSelection();
+      final prefs = await _prefsFactory();
+      await prefs.reload();
+      final cache = BackgroundAccountCache(prefs);
+
+      final selection = cache.getActiveSelection();
       if (selection == null) {
-        debugPrint('BackgroundSync: no active selection');
+        debugPrint('BackgroundSync: no active selection in cache');
         return false;
       }
 
-      final accounts = await accountStorage.getAccounts();
+      final accounts = cache.getAccounts();
       final activeAccounts = accounts.where(
         (a) => a.id == selection.accountId,
       );
       if (activeAccounts.isEmpty) {
-        debugPrint('BackgroundSync: active account not found');
+        debugPrint('BackgroundSync: active account not found in cache');
         return false;
       }
 
@@ -45,9 +84,7 @@ class BackgroundSyncTask {
       final passwordHash = account.passwordHash;
       final studentId = selection.studentId;
 
-      debugPrint('BackgroundSync: credentials loaded');
-
-      final prefs = await SharedPreferences.getInstance();
+      debugPrint('BackgroundSync: credentials loaded from cache');
 
       final storedLocale = prefs.getString('locale');
       if (storedLocale != null) {
@@ -57,7 +94,7 @@ class BackgroundSyncTask {
       final notifPrefs = NotificationPreferences.fromSharedPreferences(prefs);
       final previousSnapshot = await SyncSnapshot.load(prefs);
 
-      final factory = ApiClientFactory(
+      final factory = _apiClientFactory(
         school: school,
         parentLogin: login,
         parentPassHash: passwordHash,
@@ -101,24 +138,30 @@ class BackgroundSyncTask {
         inboxMessages: inboxMessages,
       );
 
-      final changeSet = currentSnapshot.diff(previousSnapshot);
+      final changeSet = currentSnapshot
+          .diff(previousSnapshot)
+          .copyWith(
+            accountId: account.id,
+            studentId: studentId,
+          );
       await currentSnapshot.save(prefs);
 
       if (changeSet.isNotEmpty) {
         debugPrint(
           'BackgroundSync: ${changeSet.changes.length} changes detected',
         );
-        final service = NotificationService();
-        await service.initialize();
-        await service.showChanges(changeSet, notifPrefs);
+        await _notificationService.initialize();
+        await _notificationService.showChanges(changeSet, notifPrefs);
       } else {
         debugPrint('BackgroundSync: no changes');
       }
 
-      if (Platform.isAndroid) {
-        WorkmanagerSyncScheduler.scheduleExpeditedSync(
-          delay: Duration(minutes: notifPrefs.syncIntervalMinutes),
-        );
+      if (_rescheduleOnComplete && Platform.isAndroid) {
+        final overrideSecs = AppConstants.syncIntervalSecsOverride;
+        final delay = overrideSecs != null
+            ? Duration(seconds: overrideSecs)
+            : Duration(minutes: notifPrefs.syncIntervalMinutes);
+        WorkmanagerSyncScheduler.scheduleDelayedSync(delay: delay);
       }
 
       return true;
