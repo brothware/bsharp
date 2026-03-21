@@ -26,7 +26,9 @@ class ApiClientFactory {
       : <String, dynamic>{};
 
   Dio createMobileSyncClient() {
-    final baseUrl = kIsWeb
+    final baseUrl = AppConstants.hasMobiregBaseUrlOverride
+        ? '${AppConstants.mobiregBaseUrl}/$_school/modules/api'
+        : kIsWeb
         ? '$_proxy/sync/$_school'
         : 'https://mobireg.pl/$_school/modules/api';
 
@@ -56,7 +58,11 @@ class ApiClientFactory {
   }
 
   Dio createPortalClient() {
-    const baseUrl = kIsWeb ? '$_proxy/portal' : 'https://rodzic.mobireg.pl';
+    final baseUrl = AppConstants.hasMobiregBaseUrlOverride
+        ? AppConstants.mobiregBaseUrl
+        : kIsWeb
+        ? '$_proxy/portal'
+        : 'https://rodzic.mobireg.pl';
 
     return Dio(
       BaseOptions(
@@ -73,7 +79,11 @@ class ApiClientFactory {
   }
 
   Dio createPocztaClient() {
-    const baseUrl = kIsWeb ? '$_proxy/poczta' : 'https://poczta.mobireg.pl';
+    final baseUrl = AppConstants.hasMobiregBaseUrlOverride
+        ? AppConstants.mobiregBaseUrl
+        : kIsWeb
+        ? '$_proxy/poczta'
+        : 'https://poczta.mobireg.pl';
 
     final dio = Dio(
       BaseOptions(
@@ -95,7 +105,9 @@ class ApiClientFactory {
   }
 
   Dio createWebLoginClient() {
-    final baseUrl = kIsWeb
+    final baseUrl = AppConstants.hasMobiregBaseUrlOverride
+        ? '${AppConstants.mobiregBaseUrl}/$_school'
+        : kIsWeb
         ? '$_proxy/login/$_school'
         : 'https://mobireg.pl/$_school';
 

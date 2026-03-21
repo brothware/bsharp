@@ -1,0 +1,8 @@
+services:
+  mobireg-mock:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./openapi.yaml:/app/openapi.yaml:ro
+    restart: unless-stopped

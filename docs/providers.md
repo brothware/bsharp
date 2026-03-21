@@ -49,7 +49,7 @@ Each capability gates a UI feature. If a provider doesn't declare a capability, 
 
 ### 1. Create the provider class
 
-Create `lib/data/providers/my_system_data_provider.dart`:
+Create `lib/data/providers/<my_system>/my_system_data_provider.dart`:
 
 ```dart
 import 'package:bsharp/core/error/result.dart';
@@ -150,16 +150,44 @@ Future<void> loadMessages(Ref ref) => throw UnimplementedError();
 
 ### 6. Register the provider
 
-Add your provider to `lib/app/data_provider_registry.dart` so it can be selected at runtime.
+Add your provider to `lib/app/data_provider_registry.dart`:
+
+1. Import the provider class
+2. Add a case to the `createProviderForType()` switch
+3. Add a `_ProviderOption` entry to `_availableProviders` in `lib/presentation/auth/widgets/add_account_form.dart`
 
 ## Existing Implementations
 
-| Provider | File | Capabilities | Credentials |
-|----------|------|-------------|-------------|
-| **Mobireg** | `lib/data/providers/mobireg_data_provider.dart` | All (grades, schedule, attendance, messages, sendMessages, homework, tests, notes, bulletins, changelog) | Yes (MD5 password hash) |
-| **Demo** | `lib/data/providers/demo_data_provider.dart` | All except `sendMessages` | No (synthetic data, no network) |
+| Provider | File | Capabilities | Credentials | Notes |
+|----------|------|-------------|-------------|-------|
+| **Mobireg** | `lib/data/providers/mobireg/mobireg_data_provider.dart` | All | Yes (MD5 password hash) | Production provider |
+| **Demo** | `lib/data/providers/demo/demo_data_provider.dart` | All except `sendMessages` | No (synthetic data) | |
+| **Test Server** | `lib/data/providers/test_server/test_server_data_provider.dart` | All | Yes (plaintext, server hashes) | Debug builds only |
 
 Mobireg provider documentation (API details, data model, error codes) is in [`docs/providers/mobireg/`](providers/mobireg/README.md).
+
+## Mobireg URL Override
+
+For E2E testing the mobireg code path against a mock server, use the `MOBIREG_BASE_URL` dart-define:
+
+```bash
+cd lib/data/providers/mobireg/test-mock && npm install && PORT=8090 npm start
+# In another terminal:
+flutter run --dart-define=MOBIREG_BASE_URL=http://localhost:8090
+```
+
+When set, all four mobireg API clients (MobileSync, Portal, Poczta, WebLogin) will use this base URL instead of the production mobireg.pl endpoints. When unset, behaviour is unchanged.
+
+## Test Server
+
+The Test Server provider connects to [bsharp-server](https://github.com/dawid/bsharp-server), a Rust backend with a modern REST API. It is only visible in debug builds (`kDebugMode`).
+
+To use:
+1. Start bsharp-server locally (see its README)
+2. Run the app in debug mode
+3. On the "Add Account" screen, select "Test Server"
+4. Enter the server URL (e.g., `http://localhost:3000`) as the "Server URL"
+5. Enter email/password credentials created on the server
 
 ## Domain Entities
 

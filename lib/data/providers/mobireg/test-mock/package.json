@@ -1,0 +1,15 @@
+{
+  "name": "mobireg-mock",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Mock server for mobireg.pl API — routes by request body parameters",
+  "scripts": {
+    "start": "node server.js",
+    "start:prism": "prism mock openapi.yaml -p 8080 --host 0.0.0.0",
+    "validate": "npx @redocly/cli lint openapi.yaml"
+  },
+  "dependencies": {
+    "@stoplight/prism-cli": "^5.14.0",
+    "express": "^5.1.0"
+  }
+}
