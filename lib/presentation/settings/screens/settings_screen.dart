@@ -8,6 +8,7 @@ import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/app/support_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
+import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/data/services/battery_optimization_service.dart';
 import 'package:bsharp/data/services/translation_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
@@ -374,9 +375,15 @@ class _SyncSection extends ConsumerWidget {
           leading: const Icon(Icons.timer_outlined),
           title: Text(t.settings.syncInterval),
           subtitle: Text(
-            t.settings.syncIntervalValue(minutes: prefs.syncIntervalMinutes),
+            AppConstants.syncIntervalSecsOverride != null
+                ? '${AppConstants.syncIntervalSecsOverride}s (override)'
+                : t.settings.syncIntervalValue(
+                    minutes: prefs.syncIntervalMinutes,
+                  ),
           ),
-          onTap: () => _showIntervalPicker(context, ref, prefs),
+          onTap: AppConstants.syncIntervalSecsOverride != null
+              ? null
+              : () => _showIntervalPicker(context, ref, prefs),
         ),
       ],
     );

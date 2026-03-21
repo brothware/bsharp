@@ -41,7 +41,7 @@ class WorkmanagerSyncScheduler implements BackgroundSyncScheduler {
     _scheduled = false;
   }
 
-  static void scheduleExpeditedSync({required Duration delay}) {
+  static void scheduleDelayedSync({required Duration delay}) {
     unawaited(
       Workmanager().registerOneOffTask(
         _expeditedSyncTaskName,
@@ -49,7 +49,6 @@ class WorkmanagerSyncScheduler implements BackgroundSyncScheduler {
         initialDelay: delay,
         existingWorkPolicy: ExistingWorkPolicy.replace,
         constraints: Constraints(networkType: NetworkType.connected),
-        outOfQuotaPolicy: OutOfQuotaPolicy.runAsNonExpeditedWorkRequest,
         backoffPolicy: BackoffPolicy.exponential,
         backoffPolicyDelay: const Duration(minutes: 15),
       ),
