@@ -1,9 +1,33 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+class NotificationPayload {
+  const NotificationPayload({this.accountId, this.studentId, this.route});
+
+  factory NotificationPayload.fromJson(String json) {
+    final map = jsonDecode(json) as Map<String, dynamic>;
+    return NotificationPayload(
+      accountId: map['accountId'] as String?,
+      studentId: map['studentId'] as int?,
+      route: map['route'] as String?,
+    );
+  }
+
+  final String? accountId;
+  final int? studentId;
+  final String? route;
+
+  String toJson() => jsonEncode({
+    'accountId': accountId,
+    'studentId': studentId,
+    'route': route,
+  });
+}
 
 class NotificationService {
   NotificationService({FlutterLocalNotificationsPlugin? plugin})
@@ -21,7 +45,7 @@ class NotificationService {
   static const _unexcusedChannelId = 'unexcused_absences';
   static const _unexcusedNotificationId = 100;
 
-  Future<void> initialize() async {
+  Future<void> initialize({void Function(NotificationPayload)? onTap}) async {
     if (_initialized) return;
 
     const androidSettings = AndroidInitializationSettings(
@@ -38,7 +62,17 @@ class NotificationService {
       linux: linuxSettings,
     );
 
-    await _plugin.initialize(settings: settings);
+    await _plugin.initialize(
+      settings: settings,
+      onDidReceiveNotificationResponse: onTap != null
+          ? (response) {
+              final payload = response.payload;
+              if (payload != null && payload.isNotEmpty) {
+                onTap(NotificationPayload.fromJson(payload));
+              }
+            }
+          : null,
+    );
     _initialized = true;
   }
 
@@ -77,14 +111,21 @@ class NotificationService {
       if (!prefs.isCategoryEnabled(entry.key)) continue;
       if (entry.value.isEmpty) continue;
 
-      await _showCategoryNotification(entry.key, entry.value);
+      await _showCategoryNotification(
+        entry.key,
+        entry.value,
+        accountId: changes.accountId,
+        studentId: changes.studentId,
+      );
     }
   }
 
   Future<void> _showCategoryNotification(
     ChangeCategory category,
-    List<ChangeItem> items,
-  ) async {
+    List<ChangeItem> items, {
+    String? accountId,
+    int? studentId,
+  }) async {
     final config = _channelConfig(category);
     final count = items.length;
 
@@ -108,13 +149,30 @@ class NotificationService {
         ? items.first.subtitle ?? ''
         : items.take(3).map((i) => i.title).join(', ');
 
+    final route = _categoryRoute(category);
+    final payload = NotificationPayload(
+      accountId: accountId,
+      studentId: studentId,
+      route: route,
+    ).toJson();
+
     await _plugin.show(
       id: category.index,
       title: title,
       body: body,
       notificationDetails: details,
+      payload: payload,
     );
   }
+
+  String _categoryRoute(ChangeCategory category) => switch (category) {
+    ChangeCategory.grades => '/grades',
+    ChangeCategory.messages => '/messages',
+    ChangeCategory.schedule => '/schedule',
+    ChangeCategory.attendance => '/attendance',
+    ChangeCategory.homework => '/homework',
+    ChangeCategory.notes => '/notes',
+  };
 
   _ChannelConfig _channelConfig(ChangeCategory category) {
     return switch (category) {

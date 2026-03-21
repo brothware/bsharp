@@ -47,7 +47,6 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
   String? _selectedProviderType;
 
   bool get _isEditing => widget.existingAccount != null;
-
   @override
   void initState() {
     super.initState();

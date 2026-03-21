@@ -4,6 +4,7 @@ import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
@@ -22,6 +23,24 @@ class MainShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<ChangeSet?>(lastSyncChangesProvider, (previous, next) {
+      if (next == null || next.isEmpty) return;
+      ref.read(lastSyncChangesProvider.notifier).value = null;
+      final message = next.summary(
+        gradesLabel: (n) => t.sync.gradesCount(count: n),
+        messagesLabel: (n) => t.sync.messagesCount(count: n),
+        scheduleLabel: (n) => t.sync.scheduleCount(count: n),
+        attendanceLabel: (n) => t.sync.attendanceCount(count: n),
+        homeworkLabel: (n) => t.sync.homeworkCount(count: n),
+        notesLabel: (n) => t.sync.notesCount(count: n),
+        noChanges: t.sync.noChanges,
+        newChanges: (s) => t.sync.newChanges(summary: s),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    });
+
     final size = screenSizeOf(context);
     final notifier = ref.read(childModeProvider.notifier);
     ref.watch(childModeProvider);
