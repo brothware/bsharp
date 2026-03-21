@@ -49,3 +49,4 @@ lib/l10n/_unused_translations.json
 /linux/
 /android/build/
 devtools_options.yaml
+integration_test/test_bundle.dart
