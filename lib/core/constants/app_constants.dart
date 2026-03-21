@@ -10,4 +10,15 @@ abstract final class AppConstants {
   static const portalTokenRefreshMs = 20000;
   static const maxRetryCount = 1;
   static const proxyBaseUrl = 'https://bsharp-proxy.dawid-sliwa.workers.dev';
+
+  static const mobiregBaseUrl = String.fromEnvironment('MOBIREG_BASE_URL');
+  static bool get hasMobiregBaseUrlOverride => mobiregBaseUrl.isNotEmpty;
+
+  static const _syncIntervalSecsRaw = String.fromEnvironment(
+    'SYNC_INTERVAL_SECS',
+  );
+  static int? get syncIntervalSecsOverride {
+    if (_syncIntervalSecsRaw.isEmpty) return null;
+    return int.tryParse(_syncIntervalSecsRaw);
+  }
 }
