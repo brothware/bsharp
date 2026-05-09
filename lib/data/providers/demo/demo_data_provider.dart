@@ -6,6 +6,7 @@ import 'package:bsharp/data/providers/demo/demo_grade_data.dart';
 import 'package:bsharp/data/providers/demo/demo_message_data.dart';
 import 'package:bsharp/data/providers/demo/demo_portal_data.dart';
 import 'package:bsharp/data/providers/demo/demo_schedule_data.dart';
+import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
@@ -20,6 +21,7 @@ import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DemoDataProvider implements SchoolDataProvider {
@@ -171,6 +173,9 @@ class DemoDataProvider implements SchoolDataProvider {
       sex: Sex.male,
     ),
   ]);
+
+  @override
+  LocalFcmNotification? parseFcmMessage(RemoteMessage message) => null;
 
   @override
   Future<bool> registerPushToken({
