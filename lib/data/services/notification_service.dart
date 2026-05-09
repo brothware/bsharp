@@ -60,9 +60,7 @@ class NotificationService {
   Future<void> initialize({void Function(NotificationPayload)? onTap}) async {
     if (_initialized) return;
 
-    const androidSettings = AndroidInitializationSettings(
-      '@drawable/ic_notification',
-    );
+    const androidSettings = AndroidInitializationSettings('ic_notification');
     const iosSettings = DarwinInitializationSettings();
     const linuxSettings = LinuxInitializationSettings(
       defaultActionName: 'Open',
