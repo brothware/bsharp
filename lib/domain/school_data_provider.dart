@@ -14,6 +14,7 @@ enum DataProviderCapability {
   notes,
   bulletins,
   changelog,
+  pushNotifications,
 }
 
 abstract class SchoolDataProvider {
@@ -71,5 +72,14 @@ abstract class SchoolDataProvider {
     required String school,
     required String login,
     required String passwordHash,
+  });
+
+  Future<bool> registerPushToken({
+    required String school,
+    required String login,
+    required String passwordHash,
+    required String token,
+    required String deviceId,
+    required int appVersionCode,
   });
 }

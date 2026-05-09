@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
@@ -8,8 +7,6 @@ import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/app/support_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
-import 'package:bsharp/core/constants/app_constants.dart';
-import 'package:bsharp/data/services/battery_optimization_service.dart';
 import 'package:bsharp/data/services/translation_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -17,7 +14,6 @@ import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/settings/screens/account_management_screen.dart';
 import 'package:bsharp/presentation/support/tip_jar_sheet.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -57,7 +53,6 @@ class SettingsScreen extends ConsumerWidget {
           const Divider(),
           _SectionHeader(title: t.settings.notifications),
           const _NotificationSection(),
-          if (!kIsWeb && Platform.isAndroid) const _BatteryOptimizationTile(),
           if (ref.watch(isTranslationAvailableProvider)) ...[
             const Divider(),
             _SectionHeader(title: t.translation.settingsTitle),
@@ -346,46 +341,27 @@ class _SyncSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final syncStatus = ref.watch(syncStatusProvider);
     final lastSync = ref.watch(lastSyncTimeProvider);
-    final prefs = ref.watch(notificationPreferencesProvider);
 
-    return Column(
-      children: [
-        ListTile(
-          leading: Icon(
-            syncStatus.isBusy ? Icons.sync : Icons.sync_outlined,
-          ),
-          title: Text(t.settings.syncNow),
-          subtitle: Text(
-            lastSync != null
-                ? t.settings.syncLast(time: _formatSyncTime(lastSync))
-                : t.settings.syncNever,
-          ),
-          trailing: syncStatus.isBusy
-              ? const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : null,
-          onTap: syncStatus.isBusy
-              ? null
-              : () => ref.read(syncStatusProvider.notifier).sync(),
-        ),
-        ListTile(
-          leading: const Icon(Icons.timer_outlined),
-          title: Text(t.settings.syncInterval),
-          subtitle: Text(
-            AppConstants.syncIntervalSecsOverride != null
-                ? '${AppConstants.syncIntervalSecsOverride}s (override)'
-                : t.settings.syncIntervalValue(
-                    minutes: prefs.syncIntervalMinutes,
-                  ),
-          ),
-          onTap: AppConstants.syncIntervalSecsOverride != null
-              ? null
-              : () => _showIntervalPicker(context, ref, prefs),
-        ),
-      ],
+    return ListTile(
+      leading: Icon(
+        syncStatus.isBusy ? Icons.sync : Icons.sync_outlined,
+      ),
+      title: Text(t.settings.syncNow),
+      subtitle: Text(
+        lastSync != null
+            ? t.settings.syncLast(time: _formatSyncTime(lastSync))
+            : t.settings.syncNever,
+      ),
+      trailing: syncStatus.isBusy
+          ? const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+          : null,
+      onTap: syncStatus.isBusy
+          ? null
+          : () => ref.read(syncStatusProvider.notifier).sync(),
     );
   }
 
@@ -399,56 +375,6 @@ class _SyncSection extends ConsumerWidget {
         '${time.month.toString().padLeft(2, '0')} '
         '${time.hour.toString().padLeft(2, '0')}:'
         '${time.minute.toString().padLeft(2, '0')}';
-  }
-
-  void _showIntervalPicker(
-    BuildContext context,
-    WidgetRef ref,
-    NotificationPreferences prefs,
-  ) {
-    unawaited(
-      showDialog<void>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(t.settings.syncIntervalTitle),
-            content: RadioGroup<int>(
-              groupValue: prefs.syncIntervalMinutes,
-              onChanged: (value) {
-                if (value != null) {
-                  unawaited(
-                    ref
-                        .read(notificationPreferencesProvider.notifier)
-                        .setSyncInterval(value),
-                  );
-                }
-                Navigator.of(context).pop();
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  for (final minutes in NotificationPreferences.validIntervals)
-                    ListTile(
-                      title: Text(
-                        t.settings.syncIntervalValue(minutes: minutes),
-                      ),
-                      leading: Radio<int>(value: minutes),
-                      onTap: () {
-                        unawaited(
-                          ref
-                              .read(notificationPreferencesProvider.notifier)
-                              .setSyncInterval(minutes),
-                        );
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
   }
 }
 
@@ -498,55 +424,6 @@ class _NotificationSection extends ConsumerWidget {
           category: ChangeCategory.notes,
         ),
       ],
-    );
-  }
-}
-
-class _BatteryOptimizationTile extends StatefulWidget {
-  const _BatteryOptimizationTile();
-
-  @override
-  State<_BatteryOptimizationTile> createState() =>
-      _BatteryOptimizationTileState();
-}
-
-class _BatteryOptimizationTileState extends State<_BatteryOptimizationTile>
-    with WidgetsBindingObserver {
-  final _service = BatteryOptimizationService();
-  bool _exempt = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    unawaited(_checkStatus());
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) unawaited(_checkStatus());
-  }
-
-  Future<void> _checkStatus() async {
-    final exempt = await _service.isExempt();
-    if (mounted) setState(() => _exempt = exempt);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(_exempt ? Icons.battery_std : Icons.battery_alert),
-      title: Text(t.settings.batteryOptimization),
-      subtitle: Text(
-        _exempt ? t.settings.batteryUnrestricted : t.settings.batteryRestricted,
-      ),
-      onTap: () => unawaited(_service.requestExemption()),
     );
   }
 }

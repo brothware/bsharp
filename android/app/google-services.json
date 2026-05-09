@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "556917230438",
+    "project_id": "fcmexample-24f65",
+    "storage_bucket": "fcmexample-24f65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556917230438:android:e0bb6cf352b5bc8ac796a7",
+        "android_client_info": {
+          "package_name": "pl.brothware.bsharp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZQ_i-ugpWR2HX8Jxf7WhIoqEUsPWcDCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

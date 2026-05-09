@@ -5,9 +5,12 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/app_theme.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +24,30 @@ class BSharpApp extends ConsumerStatefulWidget {
 
 class _BSharpAppState extends ConsumerState<BSharpApp> {
   bool _initialSyncTriggered = false;
+  StreamSubscription<RemoteMessage>? _fcmSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    final isMobile =
+        defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
+    if (isMobile) {
+      _fcmSubscription = FirebaseMessaging.onMessage.listen((message) async {
+        final shouldSync = await NotificationService()
+            .handleForegroundFcmMessage(message);
+        if (shouldSync && _initialSyncTriggered) {
+          await ref.read(syncStatusProvider.notifier).sync();
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    unawaited(_fcmSubscription?.cancel());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

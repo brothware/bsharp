@@ -1,7 +1,8 @@
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
-import 'package:bsharp/data/data_sources/local/background_account_cache.dart';
+import 'package:bsharp/data/services/fcm_token_manager.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_providers.g.dart';
@@ -21,14 +22,14 @@ class ProviderAccounts extends _$ProviderAccounts {
     final storage = ref.read(accountStorageProvider);
     await storage.addAccount(account);
     state = AsyncData(await storage.getAccounts());
-    await _syncBackgroundCache();
+    await _registerFcmToken();
   }
 
   Future<void> updateAccount(ProviderAccount account) async {
     final storage = ref.read(accountStorageProvider);
     await storage.updateAccount(account);
     state = AsyncData(await storage.getAccounts());
-    await _syncBackgroundCache();
+    await _registerFcmToken();
   }
 
   Future<void> removeAccount(String accountId) async {
@@ -42,7 +43,7 @@ class ProviderAccounts extends _$ProviderAccounts {
     state = AsyncData(remaining);
 
     if (!wasActive) {
-      await _syncBackgroundCache();
+      await _registerFcmToken();
       return;
     }
 
@@ -69,11 +70,18 @@ class ProviderAccounts extends _$ProviderAccounts {
     state = AsyncData(await storage.getAccounts());
   }
 
-  Future<void> _syncBackgroundCache() async {
-    final storage = ref.read(accountStorageProvider);
+  Future<void> _registerFcmToken() async {
+    final isMobile =
+        defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
+    if (!isMobile) return;
     final prefs = ref.read(sharedPreferencesProvider);
-    final cache = BackgroundAccountCache(prefs);
-    await cache.syncFrom(storage);
+    final storage = ref.read(accountStorageProvider);
+    final tokenManager = FcmTokenManager(
+      accountStorage: storage,
+      prefs: prefs,
+    );
+    await tokenManager.registerTokenForAllAccounts();
   }
 }
 
@@ -89,21 +97,12 @@ class ActiveSelectionNotifier extends _$ActiveSelectionNotifier {
     final storage = ref.read(accountStorageProvider);
     await storage.saveActiveSelection(selection);
     state = AsyncData(selection);
-    await _syncBackgroundCache();
   }
 
   Future<void> clear() async {
     final storage = ref.read(accountStorageProvider);
     await storage.clearActiveSelection();
     state = const AsyncData(null);
-    await _syncBackgroundCache();
-  }
-
-  Future<void> _syncBackgroundCache() async {
-    final storage = ref.read(accountStorageProvider);
-    final prefs = ref.read(sharedPreferencesProvider);
-    final cache = BackgroundAccountCache(prefs);
-    await cache.syncFrom(storage);
   }
 }
 

@@ -44,6 +44,19 @@ class MobileSyncDataSource {
     });
   }
 
+  Future<Result<Map<String, dynamic>>> registerFcmToken({
+    required String token,
+    required String deviceId,
+    required int appVersionCode,
+  }) async {
+    return _post({
+      'view': 'ParentStudents',
+      'token': token,
+      'device_id': deviceId,
+      'app_version': appVersionCode.toString(),
+    });
+  }
+
   Future<Result<Map<String, dynamic>>> _post(Map<String, dynamic> data) async {
     try {
       final response = await _client.post<Map<String, dynamic>>(

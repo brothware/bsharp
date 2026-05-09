@@ -1,8 +1,5 @@
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
-import 'package:bsharp/app/notification_preferences_provider.dart';
-import 'package:bsharp/core/constants/app_constants.dart';
-import 'package:bsharp/data/services/background_sync_scheduler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/data/services/sync_data_applier.dart';
@@ -14,7 +11,6 @@ import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -260,27 +256,4 @@ class LastSyncChanges extends _$LastSyncChanges {
   ChangeSet? build() => null;
   ChangeSet? get value => state;
   set value(ChangeSet? v) => state = v;
-}
-
-@Riverpod(keepAlive: true)
-BackgroundSyncScheduler? backgroundSyncScheduler(Ref ref) {
-  final isMobile =
-      defaultTargetPlatform == TargetPlatform.android ||
-      defaultTargetPlatform == TargetPlatform.iOS;
-  if (!isMobile) return null;
-
-  final scheduler = WorkmanagerSyncScheduler();
-  final interval = ref.watch(syncIntervalProvider);
-  scheduler.schedule(interval: interval);
-
-  ref.onDispose(scheduler.cancel);
-  return scheduler;
-}
-
-@Riverpod(keepAlive: true)
-Duration syncInterval(Ref ref) {
-  final overrideSecs = AppConstants.syncIntervalSecsOverride;
-  if (overrideSecs != null) return Duration(seconds: overrideSecs);
-  final prefs = ref.watch(notificationPreferencesProvider);
-  return Duration(minutes: prefs.syncIntervalMinutes);
 }

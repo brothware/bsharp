@@ -4,7 +4,59 @@ import 'dart:io';
 import 'package:bsharp/app/notification_preferences_provider.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+class FcmNotificationData {
+  const FcmNotificationData({
+    required this.title,
+    required this.body,
+    required this.kind,
+    this.schoolCode,
+    this.userId,
+    this.accountName,
+    this.noSync = false,
+  });
+
+  factory FcmNotificationData.fromMessage(RemoteMessage message) {
+    final data = message.data;
+    return FcmNotificationData(
+      title: data['title'] as String? ?? '',
+      body: data['body'] as String? ?? '',
+      kind: data['kind'] as String? ?? 'other',
+      schoolCode: data['schoolCode'] as String?,
+      userId: data['userId'] as String?,
+      accountName: data['accountName'] as String?,
+      noSync: data['noSync'] == 'true',
+    );
+  }
+
+  final String title;
+  final String body;
+  final String kind;
+  final String? schoolCode;
+  final String? userId;
+  final String? accountName;
+  final bool noSync;
+
+  ChangeCategory get category => switch (kind) {
+    'marks' => ChangeCategory.grades,
+    'messages' => ChangeCategory.messages,
+    'absences' => ChangeCategory.attendance,
+    'reprimands' => ChangeCategory.notes,
+    'timetables' => ChangeCategory.schedule,
+    _ => ChangeCategory.grades,
+  };
+
+  String get route => switch (kind) {
+    'marks' => '/grades',
+    'messages' => '/messages',
+    'absences' => '/attendance',
+    'reprimands' => '/notes',
+    'timetables' => '/schedule',
+    _ => '/grades',
+  };
+}
 
 class NotificationPayload {
   const NotificationPayload({this.accountId, this.studentId, this.route});
@@ -207,6 +259,43 @@ class NotificationService {
         channelDescription: t.notification.notesDescription,
       ),
     };
+  }
+
+  Future<bool> handleForegroundFcmMessage(RemoteMessage message) async {
+    final data = FcmNotificationData.fromMessage(message);
+    if (data.title.isEmpty) return false;
+    if (!_initialized) await initialize();
+    await showFcmNotification(data);
+    return !data.noSync;
+  }
+
+  Future<void> showFcmNotification(FcmNotificationData data) async {
+    if (!_initialized) return;
+
+    final config = _channelConfig(data.category);
+
+    final androidDetails = AndroidNotificationDetails(
+      config.channelId,
+      config.channelName,
+      channelDescription: config.channelDescription,
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    final details = NotificationDetails(
+      android: androidDetails,
+      iOS: const DarwinNotificationDetails(),
+    );
+
+    final payload = NotificationPayload(route: data.route).toJson();
+
+    await _plugin.show(
+      id: data.title.hashCode,
+      title: data.title,
+      body: data.body,
+      notificationDetails: details,
+      payload: payload,
+    );
   }
 
   Future<void> showUnexcusedAbsenceAlert(int count) async {
