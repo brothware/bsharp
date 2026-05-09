@@ -8,6 +8,7 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/services/fcm_message_handler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:bsharp/presentation/common/theme/app_theme.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -42,6 +43,16 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
           await ref.read(syncStatusProvider.notifier).sync();
         }
       });
+
+      ref.listenManual<List<UnexcusedAbsence>>(
+        staleUnexcusedAbsencesProvider,
+        (prev, next) async {
+          if (prev?.length == next.length) return;
+          final service = NotificationService();
+          await service.initialize();
+          await service.showUnexcusedAbsenceAlert(next.length);
+        },
+      );
     }
   }
 

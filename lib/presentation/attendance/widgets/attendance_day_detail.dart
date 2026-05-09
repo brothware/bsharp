@@ -1,17 +1,20 @@
 import 'package:bsharp/domain/attendance_utils.dart';
+import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AttendanceDayDetail extends StatelessWidget {
+class AttendanceDayDetail extends ConsumerWidget {
   const AttendanceDayDetail({required this.date, required this.day, super.key});
 
   final DateTime date;
   final AttendanceDay day;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final topPadding = MediaQuery.of(context).padding.top;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -21,6 +24,9 @@ class AttendanceDayDetail extends StatelessWidget {
         final bNum = b.resolvedEvent?.number ?? 0;
         return aNum.compareTo(bNum);
       });
+
+    final ignoredIds =
+        ref.watch(ignoredAttendanceIdsProvider).value ?? const <int>{};
 
     final title = '${dayLabelFull(date.weekday)}, ${formatDateFull(date)}';
 
@@ -89,7 +95,13 @@ class AttendanceDayDetail extends StatelessWidget {
             child: ListView.builder(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
               itemCount: sorted.length,
-              itemBuilder: (context, index) => _EntryTile(entry: sorted[index]),
+              itemBuilder: (context, index) {
+                final entry = sorted[index];
+                return _EntryTile(
+                  entry: entry,
+                  isIgnored: ignoredIds.contains(entry.attendance.id),
+                );
+              },
             ),
           ),
         ],
@@ -109,20 +121,25 @@ class AttendanceDayDetail extends StatelessWidget {
   }
 }
 
-class _EntryTile extends StatelessWidget {
-  const _EntryTile({required this.entry});
+class _EntryTile extends ConsumerWidget {
+  const _EntryTile({required this.entry, required this.isIgnored});
 
   final AttendanceEntry entry;
+  final bool isIgnored;
+
+  bool get _isUnexcusedAbsence =>
+      entry.type.countAs == AttendanceCountAs.absent &&
+      entry.type.excuseStatus == AttendanceExcuseStatus.unexcused;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final color = attendanceTypeColor(
       entry.type.countAs,
       entry.type.excuseStatus,
     );
 
-    return Padding(
+    final tile = Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
@@ -152,10 +169,27 @@ class _EntryTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  entry.subjectName ??
-                      '${t.schedule.lessonFallback} ${entry.displayLessonNumber ?? entry.resolvedEvent?.number ?? ""}',
-                  style: theme.textTheme.bodyMedium,
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        entry.subjectName ??
+                            '${t.schedule.lessonFallback} ${entry.displayLessonNumber ?? entry.resolvedEvent?.number ?? ""}',
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                    ),
+                    if (isIgnored) ...[
+                      const SizedBox(width: 6),
+                      Tooltip(
+                        message: t.attendance.ignoredLabel,
+                        child: Icon(
+                          Icons.visibility_off_outlined,
+                          size: 16,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
                 Text(
                   translateAttendanceName(entry.type.name),
@@ -181,5 +215,48 @@ class _EntryTile extends StatelessWidget {
         ],
       ),
     );
+
+    if (!_isUnexcusedAbsence) return tile;
+
+    return InkWell(onTap: () => _confirmToggle(context, ref), child: tile);
+  }
+
+  Future<void> _confirmToggle(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          isIgnored
+              ? t.attendance.unignoreAbsenceConfirmTitle
+              : t.attendance.ignoreAbsenceConfirmTitle,
+        ),
+        content: Text(
+          isIgnored
+              ? t.attendance.unignoreAbsenceConfirmBody
+              : t.attendance.ignoreAbsenceConfirmBody,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(t.attendance.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(
+              isIgnored ? t.attendance.unignore : t.attendance.ignore,
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    final dao = ref.read(ignoredAttendanceDaoProvider);
+    if (dao == null) return;
+    if (isIgnored) {
+      await dao.markUnignored(entry.attendance.id);
+    } else {
+      await dao.markIgnored(entry.attendance.id);
+    }
   }
 }

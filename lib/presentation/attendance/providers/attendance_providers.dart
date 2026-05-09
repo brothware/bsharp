@@ -1,9 +1,11 @@
 import 'package:bsharp/app/locale_provider.dart';
+import 'package:bsharp/data/data_sources/local/ignored_attendance_dao.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
+import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -116,11 +118,27 @@ class UnexcusedAbsence {
     required this.attendance,
     required this.type,
     required this.eventDate,
+    this.subjectName,
   });
 
   final Attendance attendance;
   final AttendanceType type;
   final DateTime eventDate;
+  final String? subjectName;
+}
+
+@Riverpod(keepAlive: true)
+IgnoredAttendanceDao? ignoredAttendanceDao(Ref ref) {
+  final db = ref.watch(localDatabaseProvider).value;
+  if (db == null) return null;
+  return IgnoredAttendanceDao(db);
+}
+
+@Riverpod(keepAlive: true)
+Stream<Set<int>> ignoredAttendanceIds(Ref ref) {
+  final dao = ref.watch(ignoredAttendanceDaoProvider);
+  if (dao == null) return Stream.value(const <int>{});
+  return dao.watchIgnoredIds();
 }
 
 @Riverpod(keepAlive: true)
@@ -128,6 +146,8 @@ List<UnexcusedAbsence> staleUnexcusedAbsences(Ref ref) {
   final attendances = ref.watch(attendancesProvider);
   final types = ref.watch(attendanceTypesProvider);
   final resolvedEvents = ref.watch(resolvedEventsProvider);
+  final ignored =
+      ref.watch(ignoredAttendanceIdsProvider).value ?? const <int>{};
 
   final typeMap = {for (final t in types) t.id: t};
   final eventMap = {for (final e in resolvedEvents) e.id: e};
@@ -135,6 +155,7 @@ List<UnexcusedAbsence> staleUnexcusedAbsences(Ref ref) {
 
   final result = <UnexcusedAbsence>[];
   for (final a in attendances) {
+    if (ignored.contains(a.id)) continue;
     final type = typeMap[a.typesId];
     if (type == null) continue;
     if (type.countAs != AttendanceCountAs.absent) continue;
@@ -145,7 +166,12 @@ List<UnexcusedAbsence> staleUnexcusedAbsences(Ref ref) {
     if (event.date.isAfter(cutoff)) continue;
 
     result.add(
-      UnexcusedAbsence(attendance: a, type: type, eventDate: event.date),
+      UnexcusedAbsence(
+        attendance: a,
+        type: type,
+        eventDate: event.date,
+        subjectName: event.subjectName,
+      ),
     );
   }
 
