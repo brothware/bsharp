@@ -5,6 +5,7 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/data/services/fcm_message_handler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/app_theme.dart';
@@ -34,8 +35,9 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
         defaultTargetPlatform == TargetPlatform.iOS;
     if (isMobile) {
       _fcmSubscription = FirebaseMessaging.onMessage.listen((message) async {
+        final spec = parseFcmMessageWithKnownProviders(message);
         final shouldSync = await NotificationService()
-            .handleForegroundFcmMessage(message);
+            .handleForegroundFcmMessage(spec);
         if (shouldSync && _initialSyncTriggered) {
           await ref.read(syncStatusProvider.notifier).sync();
         }

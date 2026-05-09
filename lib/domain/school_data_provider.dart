@@ -1,6 +1,8 @@
 import 'package:bsharp/core/error/result.dart';
+import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/student.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum DataProviderCapability {
@@ -82,4 +84,6 @@ abstract class SchoolDataProvider {
     required String deviceId,
     required int appVersionCode,
   });
+
+  LocalFcmNotification? parseFcmMessage(RemoteMessage message) => null;
 }

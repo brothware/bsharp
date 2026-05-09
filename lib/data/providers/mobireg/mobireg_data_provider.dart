@@ -6,13 +6,16 @@ import 'package:bsharp/data/data_sources/remote/mobile_sync_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/portal_data_source.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
+import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/data/services/sync_data_applier.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -131,6 +134,26 @@ class MobiregDataProvider implements SchoolDataProvider {
       school: school,
       parentLogin: login,
       parentPassHash: passwordHash,
+    );
+  }
+
+  @override
+  LocalFcmNotification? parseFcmMessage(RemoteMessage message) {
+    final data = message.data;
+    final kind = data['kind'] as String? ?? '';
+    if (kind != 'messages') return null;
+
+    final title = data['title'] as String? ?? '';
+    if (title.isEmpty) return null;
+
+    return LocalFcmNotification(
+      title: title,
+      body: data['body'] as String? ?? '',
+      channelId: 'messages',
+      channelName: t.notification.messagesName,
+      channelDescription: t.notification.messagesDescription,
+      route: '/messages',
+      triggersSync: data['noSync'] != 'true',
     );
   }
 

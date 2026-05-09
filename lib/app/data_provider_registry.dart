@@ -35,6 +35,11 @@ SchoolDataProvider createProviderForType(String providerType) {
   };
 }
 
+List<SchoolDataProvider> allKnownProviders() => [
+  MobiregDataProvider(),
+  DemoDataProvider(),
+];
+
 final _demoActivatorProvider = Provider<_DemoActivator>((ref) {
   return _DemoActivator(ref);
 });

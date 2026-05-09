@@ -1,61 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bsharp/app/notification_preferences_provider.dart';
-import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class FcmNotificationData {
-  const FcmNotificationData({
+class LocalFcmNotification {
+  const LocalFcmNotification({
     required this.title,
     required this.body,
-    required this.kind,
-    this.schoolCode,
-    this.userId,
-    this.accountName,
-    this.noSync = false,
+    required this.channelId,
+    required this.channelName,
+    required this.channelDescription,
+    required this.route,
+    this.triggersSync = true,
   });
-
-  factory FcmNotificationData.fromMessage(RemoteMessage message) {
-    final data = message.data;
-    return FcmNotificationData(
-      title: data['title'] as String? ?? '',
-      body: data['body'] as String? ?? '',
-      kind: data['kind'] as String? ?? 'other',
-      schoolCode: data['schoolCode'] as String?,
-      userId: data['userId'] as String?,
-      accountName: data['accountName'] as String?,
-      noSync: data['noSync'] == 'true',
-    );
-  }
 
   final String title;
   final String body;
-  final String kind;
-  final String? schoolCode;
-  final String? userId;
-  final String? accountName;
-  final bool noSync;
-
-  ChangeCategory get category => switch (kind) {
-    'marks' => ChangeCategory.grades,
-    'messages' => ChangeCategory.messages,
-    'absences' => ChangeCategory.attendance,
-    'reprimands' => ChangeCategory.notes,
-    'timetables' => ChangeCategory.schedule,
-    _ => ChangeCategory.grades,
-  };
-
-  String get route => switch (kind) {
-    'marks' => '/grades',
-    'messages' => '/messages',
-    'absences' => '/attendance',
-    'reprimands' => '/notes',
-    'timetables' => '/schedule',
-    _ => '/grades',
-  };
+  final String channelId;
+  final String channelName;
+  final String channelDescription;
+  final String route;
+  final bool triggersSync;
 }
 
 class NotificationPayload {
@@ -88,12 +54,6 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _plugin;
   bool _initialized = false;
 
-  static const _gradesChannelId = 'grades';
-  static const _messagesChannelId = 'messages';
-  static const _scheduleChannelId = 'schedule';
-  static const _attendanceChannelId = 'attendance';
-  static const _homeworkChannelId = 'homework';
-  static const _notesChannelId = 'notes';
   static const _unexcusedChannelId = 'unexcused_absences';
   static const _unexcusedNotificationId = 100;
 
@@ -151,133 +111,20 @@ class NotificationService {
     return true;
   }
 
-  Future<void> showChanges(
-    ChangeSet changes,
-    NotificationPreferences prefs,
-  ) async {
-    if (!_initialized || changes.isEmpty) return;
-
-    final grouped = changes.grouped;
-
-    for (final entry in grouped.entries) {
-      if (!prefs.isCategoryEnabled(entry.key)) continue;
-      if (entry.value.isEmpty) continue;
-
-      await _showCategoryNotification(
-        entry.key,
-        entry.value,
-        accountId: changes.accountId,
-        studentId: changes.studentId,
-      );
-    }
-  }
-
-  Future<void> _showCategoryNotification(
-    ChangeCategory category,
-    List<ChangeItem> items, {
-    String? accountId,
-    int? studentId,
-  }) async {
-    final config = _channelConfig(category);
-    final count = items.length;
-
-    final androidDetails = AndroidNotificationDetails(
-      config.channelId,
-      config.channelName,
-      channelDescription: config.channelDescription,
-      number: count,
-    );
-
-    final details = NotificationDetails(
-      android: androidDetails,
-      iOS: const DarwinNotificationDetails(),
-    );
-
-    final title = count == 1
-        ? items.first.title
-        : '${config.channelName}: $count';
-
-    final body = count == 1
-        ? items.first.subtitle ?? ''
-        : items.take(3).map((i) => i.title).join(', ');
-
-    final route = _categoryRoute(category);
-    final payload = NotificationPayload(
-      accountId: accountId,
-      studentId: studentId,
-      route: route,
-    ).toJson();
-
-    await _plugin.show(
-      id: category.index,
-      title: title,
-      body: body,
-      notificationDetails: details,
-      payload: payload,
-    );
-  }
-
-  String _categoryRoute(ChangeCategory category) => switch (category) {
-    ChangeCategory.grades => '/grades',
-    ChangeCategory.messages => '/messages',
-    ChangeCategory.schedule => '/schedule',
-    ChangeCategory.attendance => '/attendance',
-    ChangeCategory.homework => '/homework',
-    ChangeCategory.notes => '/notes',
-  };
-
-  _ChannelConfig _channelConfig(ChangeCategory category) {
-    return switch (category) {
-      ChangeCategory.grades => _ChannelConfig(
-        channelId: _gradesChannelId,
-        channelName: t.notification.gradesName,
-        channelDescription: t.notification.gradesDescription,
-      ),
-      ChangeCategory.messages => _ChannelConfig(
-        channelId: _messagesChannelId,
-        channelName: t.notification.messagesName,
-        channelDescription: t.notification.messagesDescription,
-      ),
-      ChangeCategory.schedule => _ChannelConfig(
-        channelId: _scheduleChannelId,
-        channelName: t.notification.scheduleName,
-        channelDescription: t.notification.scheduleDescription,
-      ),
-      ChangeCategory.attendance => _ChannelConfig(
-        channelId: _attendanceChannelId,
-        channelName: t.notification.attendanceName,
-        channelDescription: t.notification.attendanceDescription,
-      ),
-      ChangeCategory.homework => _ChannelConfig(
-        channelId: _homeworkChannelId,
-        channelName: t.notification.homeworkName,
-        channelDescription: t.notification.homeworkDescription,
-      ),
-      ChangeCategory.notes => _ChannelConfig(
-        channelId: _notesChannelId,
-        channelName: t.notification.notesName,
-        channelDescription: t.notification.notesDescription,
-      ),
-    };
-  }
-
-  Future<bool> handleForegroundFcmMessage(RemoteMessage message) async {
-    final data = FcmNotificationData.fromMessage(message);
-    if (data.title.isEmpty) return false;
+  Future<bool> handleForegroundFcmMessage(LocalFcmNotification? spec) async {
+    if (spec == null) return false;
     if (!_initialized) await initialize();
-    await showFcmNotification(data);
-    return !data.noSync;
+    await showFcmNotification(spec);
+    return spec.triggersSync;
   }
 
-  Future<void> showFcmNotification(FcmNotificationData data) async {
+  Future<void> showFcmNotification(LocalFcmNotification spec) async {
     if (!_initialized) return;
 
-    final config = _channelConfig(data.category);
-
     final androidDetails = AndroidNotificationDetails(
-      config.channelId,
-      config.channelName,
-      channelDescription: config.channelDescription,
+      spec.channelId,
+      spec.channelName,
+      channelDescription: spec.channelDescription,
       importance: Importance.high,
       priority: Priority.high,
     );
@@ -287,12 +134,12 @@ class NotificationService {
       iOS: const DarwinNotificationDetails(),
     );
 
-    final payload = NotificationPayload(route: data.route).toJson();
+    final payload = NotificationPayload(route: spec.route).toJson();
 
     await _plugin.show(
-      id: data.title.hashCode,
-      title: data.title,
-      body: data.body,
+      id: spec.title.hashCode,
+      title: spec.title,
+      body: spec.body,
       notificationDetails: details,
       payload: payload,
     );
@@ -330,16 +177,4 @@ class NotificationService {
   Future<void> cancelAll() async {
     await _plugin.cancelAll();
   }
-}
-
-class _ChannelConfig {
-  const _ChannelConfig({
-    required this.channelId,
-    required this.channelName,
-    required this.channelDescription,
-  });
-
-  final String channelId;
-  final String channelName;
-  final String channelDescription;
 }
