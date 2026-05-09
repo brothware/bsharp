@@ -47,12 +47,7 @@
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
-		<string>processing</string>
-	</array>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>com.bsharp.backgroundSync</string>
+		<string>remote-notification</string>
 	</array>
 </dict>
 </plist>
