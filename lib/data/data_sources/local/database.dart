@@ -491,6 +491,14 @@ class CustomEventOccurrences extends Table {
   DateTimeColumn get date => dateTime()();
 }
 
+class IgnoredAttendances extends Table {
+  IntColumn get attendanceId => integer()();
+  DateTimeColumn get ignoredAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {attendanceId};
+}
+
 @DriftDatabase(
   tables: [
     Accounts,
@@ -532,13 +540,14 @@ class CustomEventOccurrences extends Table {
     TranslationCacheEntries,
     CustomEvents,
     CustomEventOccurrences,
+    IgnoredAttendances,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -550,6 +559,9 @@ class AppDatabase extends _$AppDatabase {
       if (from < 3) {
         await m.createTable(customEvents);
         await m.createTable(customEventOccurrences);
+      }
+      if (from < 4) {
+        await m.createTable(ignoredAttendances);
       }
     },
   );

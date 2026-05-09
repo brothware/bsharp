@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -9,6 +11,11 @@ import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+Stream<Set<int>> _emit(Set<int> value) async* {
+  yield value;
+  await Completer<void>().future;
+}
 
 void main() {
   late SharedPreferences prefs;
@@ -219,6 +226,90 @@ void main() {
         attendanceForDayProvider(DateTime(2026, 2, 27)),
       );
       expect(day, isNull);
+    });
+  });
+
+  group('staleUnexcusedAbsencesProvider', () {
+    final oldDate = DateTime.now().subtract(const Duration(days: 30));
+
+    test('lists unexcused absences older than a week', () {
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          attendancesProvider.overrideWithBuild(
+            (ref, _) => [attendance(id: 10, eventsId: 100, typesId: 2)],
+          ),
+          attendanceTypesProvider.overrideWithBuild(
+            (ref, _) => [presentType, absentType],
+          ),
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [resolvedEvent(id: 100, date: oldDate)],
+          ),
+          ignoredAttendanceIdsProvider.overrideWith(
+            (ref) => _emit(const <int>{}),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final stale = container.read(staleUnexcusedAbsencesProvider);
+      expect(stale, hasLength(1));
+      expect(stale.first.attendance.id, 10);
+    });
+
+    test('filters out ignored attendance ids', () async {
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          attendancesProvider.overrideWithBuild(
+            (ref, _) => [
+              attendance(id: 10, eventsId: 100, typesId: 2),
+              attendance(id: 11, eventsId: 101, typesId: 2),
+            ],
+          ),
+          attendanceTypesProvider.overrideWithBuild(
+            (ref, _) => [presentType, absentType],
+          ),
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [
+              resolvedEvent(id: 100, date: oldDate),
+              resolvedEvent(id: 101, date: oldDate),
+            ],
+          ),
+          ignoredAttendanceIdsProvider.overrideWith(
+            (ref) => _emit(const {10}),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      container.listen(ignoredAttendanceIdsProvider, (_, _) {});
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      final stale = container.read(staleUnexcusedAbsencesProvider);
+      expect(stale.map((e) => e.attendance.id), [11]);
+    });
+
+    test('excludes recent unexcused absences', () {
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          attendancesProvider.overrideWithBuild(
+            (ref, _) => [attendance(id: 10, eventsId: 100, typesId: 2)],
+          ),
+          attendanceTypesProvider.overrideWithBuild(
+            (ref, _) => [presentType, absentType],
+          ),
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [resolvedEvent(id: 100, date: DateTime.now())],
+          ),
+          ignoredAttendanceIdsProvider.overrideWith(
+            (ref) => _emit(const <int>{}),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      expect(container.read(staleUnexcusedAbsencesProvider), isEmpty);
     });
   });
 
