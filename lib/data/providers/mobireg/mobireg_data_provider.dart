@@ -135,6 +135,31 @@ class MobiregDataProvider implements SchoolDataProvider {
   }
 
   @override
+  Future<bool> registerPushToken({
+    required String school,
+    required String login,
+    required String passwordHash,
+    required String token,
+    required String deviceId,
+    required int appVersionCode,
+  }) async {
+    final factory = ApiClientFactory(
+      school: school,
+      parentLogin: login,
+      parentPassHash: passwordHash,
+    );
+    final syncDs = MobileSyncDataSource(
+      client: factory.createMobileSyncClient(),
+    );
+    final result = await syncDs.registerFcmToken(
+      token: token,
+      deviceId: deviceId,
+      appVersionCode: appVersionCode,
+    );
+    return result.when(success: (_) => true, failure: (_) => false);
+  }
+
+  @override
   Future<void> loadSchoolData(Ref ref, {required int studentId}) async {
     final factory = _factory;
     if (factory == null) return;

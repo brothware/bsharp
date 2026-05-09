@@ -32,7 +32,8 @@ class DemoDataProvider implements SchoolDataProvider {
   @override
   Set<DataProviderCapability> get capabilities =>
       DataProviderCapability.values.toSet()
-        ..remove(DataProviderCapability.sendMessages);
+        ..remove(DataProviderCapability.sendMessages)
+        ..remove(DataProviderCapability.pushNotifications);
 
   @override
   bool get requiresCredentials => false;
@@ -170,6 +171,16 @@ class DemoDataProvider implements SchoolDataProvider {
       sex: Sex.male,
     ),
   ]);
+
+  @override
+  Future<bool> registerPushToken({
+    required String school,
+    required String login,
+    required String passwordHash,
+    required String token,
+    required String deviceId,
+    required int appVersionCode,
+  }) async => false;
 
   List<Teacher> _buildTeachers() => const [
     Teacher(

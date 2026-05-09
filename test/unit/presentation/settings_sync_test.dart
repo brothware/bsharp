@@ -39,12 +39,11 @@ void main() {
       expect(find.text('Sync now'), findsOneWidget);
     });
 
-    testWidgets('shows sync interval setting', (tester) async {
+    testWidgets('does not show sync interval setting', (tester) async {
       await tester.pumpWidget(await _buildSettings());
       await tester.pump();
 
-      expect(find.text('Sync interval'), findsOneWidget);
-      expect(find.text('Every 30 minutes'), findsOneWidget);
+      expect(find.text('Sync interval'), findsNothing);
     });
   });
 
