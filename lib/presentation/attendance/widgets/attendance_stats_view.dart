@@ -14,20 +14,23 @@ class AttendanceStatsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(attendanceStatsProvider);
 
-    if (stats.totalLessons == 0) {
-      return _EmptyStats();
-    }
-
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
         const _TermFilterChips(),
         const SizedBox(height: 12),
-        _OverallCard(stats: stats),
-        const SizedBox(height: 16),
-        _DistributionCard(stats: stats),
-        const SizedBox(height: 16),
-        _TypeBreakdownCard(stats: stats),
+        if (stats.totalLessons == 0)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 48),
+            child: _EmptyStats(),
+          )
+        else ...[
+          _OverallCard(stats: stats),
+          const SizedBox(height: 16),
+          _DistributionCard(stats: stats),
+          const SizedBox(height: 16),
+          _TypeBreakdownCard(stats: stats),
+        ],
       ],
     );
   }
@@ -71,6 +74,8 @@ class _TermFilterChips extends ConsumerWidget {
 }
 
 class _EmptyStats extends StatelessWidget {
+  const _EmptyStats();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
