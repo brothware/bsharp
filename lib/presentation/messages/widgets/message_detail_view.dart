@@ -5,6 +5,7 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/obscurable_fab.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
@@ -85,6 +86,99 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
     final rawContent = _fullContent ?? message.content;
     final displayTitle = _translatedTitle ?? message.title;
     final hasContent = _translatedContent != null || rawContent != null;
+    final isInbox = _isInbox;
+
+    final scrollable = SingleChildScrollView(
+      padding: EdgeInsets.fromLTRB(16, 16, 16, isInbox ? 96 : 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(displayTitle, style: theme.textTheme.titleLarge),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: theme.colorScheme.primaryContainer,
+                child: Text(
+                  message.senderName.isNotEmpty
+                      ? message.senderName[0].toUpperCase()
+                      : '?',
+                  style: TextStyle(
+                    color: theme.colorScheme.onPrimaryContainer,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      message.senderName,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    Text(
+                      formatMessageDateFull(message.sendTime),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (rawContent != null)
+            MultiTranslateButton(
+              fields: [
+                TranslationField(message.title),
+                TranslationField(stripHtml(rawContent)),
+              ],
+              onTranslated: (translations) {
+                setState(() {
+                  if (translations != null) {
+                    _translatedTitle = translations[0];
+                    _translatedContent = translations[1];
+                  } else {
+                    _translatedTitle = null;
+                    _translatedContent = null;
+                  }
+                });
+              },
+            ),
+          const Divider(height: 24),
+          if (_loadingContent)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (hasContent)
+            SelectableText.rich(
+              TextSpan(
+                children: _translatedContent != null
+                    ? [
+                        TextSpan(
+                          text: _translatedContent,
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                      ]
+                    : parseHtmlSpans(
+                        rawContent!,
+                        baseStyle: theme.textTheme.bodyMedium,
+                      ),
+              ),
+            ),
+          if (_detailFiles ?? message.files case final files?
+              when files.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text(t.messages.attachments, style: theme.textTheme.titleSmall),
+            const SizedBox(height: 8),
+            for (final file in files) _AttachmentTile(attachment: file),
+          ],
+        ],
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -105,104 +199,16 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(displayTitle, style: theme.textTheme.titleLarge),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  child: Text(
-                    message.senderName.isNotEmpty
-                        ? message.senderName[0].toUpperCase()
-                        : '?',
-                    style: TextStyle(
-                      color: theme.colorScheme.onPrimaryContainer,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        message.senderName,
-                        style: theme.textTheme.titleSmall,
-                      ),
-                      Text(
-                        formatMessageDateFull(message.sendTime),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            if (rawContent != null)
-              MultiTranslateButton(
-                fields: [
-                  TranslationField(message.title),
-                  TranslationField(stripHtml(rawContent)),
-                ],
-                onTranslated: (translations) {
-                  setState(() {
-                    if (translations != null) {
-                      _translatedTitle = translations[0];
-                      _translatedContent = translations[1];
-                    } else {
-                      _translatedTitle = null;
-                      _translatedContent = null;
-                    }
-                  });
-                },
+      body: isInbox
+          ? ObscurableFab(
+              scrollable: scrollable,
+              fab: FloatingActionButton.extended(
+                onPressed: () => _openReply(context),
+                icon: const Icon(Icons.reply),
+                label: Text(t.messages.reply),
               ),
-            const Divider(height: 24),
-            if (_loadingContent)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else if (hasContent)
-              SelectableText.rich(
-                TextSpan(
-                  children: _translatedContent != null
-                      ? [
-                          TextSpan(
-                            text: _translatedContent,
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                        ]
-                      : parseHtmlSpans(
-                          rawContent!,
-                          baseStyle: theme.textTheme.bodyMedium,
-                        ),
-                ),
-              ),
-            if (_detailFiles ?? message.files case final files?
-                when files.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              Text(t.messages.attachments, style: theme.textTheme.titleSmall),
-              const SizedBox(height: 8),
-              for (final file in files) _AttachmentTile(attachment: file),
-            ],
-          ],
-        ),
-      ),
-      floatingActionButton: _isInbox
-          ? FloatingActionButton.extended(
-              onPressed: () => _openReply(context),
-              icon: const Icon(Icons.reply),
-              label: Text(t.messages.reply),
             )
-          : null,
+          : scrollable,
     );
   }
 
