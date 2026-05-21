@@ -1,3 +1,4 @@
+import 'package:bsharp/domain/portal_date_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
@@ -13,11 +14,12 @@ class UpcomingTestsCard extends ConsumerWidget {
     final tests = ref.watch(upcomingTestsProvider);
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final urgent = tests.any((t) => isPortalDateWithinDays(t.date, 7));
 
     return Card(
       clipBehavior: Clip.antiAlias,
       elevation: 0,
-      color: cs.surfaceContainerLow,
+      color: urgent ? cs.tertiaryContainer : cs.surfaceContainerLow,
       child: InkWell(
         onTap: () => StatefulNavigationShell.of(context).goBranch(6),
         child: Padding(
