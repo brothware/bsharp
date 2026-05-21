@@ -89,6 +89,8 @@
     "noHomework": "Nessun compito in arrivo",
     "upcomingTests": "Verifiche in arrivo",
     "noTests": "Nessuna verifica in arrivo",
+    "newAnnotations": "Nuove annotazioni",
+    "newAnnotationsCount": "${count} nuove",
     "viewAll": "Vedi tutto"
   },
   "schedule": {

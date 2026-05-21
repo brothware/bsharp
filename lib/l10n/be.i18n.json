@@ -89,6 +89,8 @@
     "noHomework": "Няма найбліжэйшых хатніх заданняў",
     "upcomingTests": "Найбліжэйшыя кантрольныя",
     "noTests": "Няма найбліжэйшых кантрольных",
+    "newAnnotations": "Новыя заўвагі",
+    "newAnnotationsCount": "${count} новых",
     "viewAll": "Прагледзець усё"
   },
   "schedule": {

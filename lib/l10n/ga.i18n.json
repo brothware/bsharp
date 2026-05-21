@@ -89,6 +89,8 @@
     "noHomework": "Gan obair bhaile le teacht",
     "upcomingTests": "Scruduithe le teacht",
     "noTests": "Gan scruduithe le teacht",
+    "newAnnotations": "Nótaí nua",
+    "newAnnotationsCount": "${count} nua",
     "viewAll": "Feach ar fad"
   },
   "schedule": {

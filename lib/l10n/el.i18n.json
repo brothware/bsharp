@@ -89,6 +89,8 @@
     "noHomework": "Δεν υπάρχουν επερχόμενες εργασίες",
     "upcomingTests": "Επερχόμενα διαγωνίσματα",
     "noTests": "Δεν υπάρχουν επερχόμενα διαγωνίσματα",
+    "newAnnotations": "Νέες σημειώσεις",
+    "newAnnotationsCount": "${count} νέες",
     "viewAll": "Προβολή όλων"
   },
   "schedule": {

@@ -89,6 +89,8 @@
     "noHomework": "Brak nadchodzących zadań",
     "upcomingTests": "Nadchodzące sprawdziany",
     "noTests": "Brak nadchodzących sprawdzianów",
+    "newAnnotations": "Nowe adnotacje",
+    "newAnnotationsCount": "${count} nowych",
     "viewAll": "Zobacz wszystko"
   },
   "schedule": {

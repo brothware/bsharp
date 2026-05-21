@@ -89,6 +89,8 @@
     "noHomework": "Geen komend huiswerk",
     "upcomingTests": "Komende toetsen",
     "noTests": "Geen komende toetsen",
+    "newAnnotations": "Nieuwe aantekeningen",
+    "newAnnotationsCount": "${count} nieuw",
     "viewAll": "Alles bekijken"
   },
   "schedule": {

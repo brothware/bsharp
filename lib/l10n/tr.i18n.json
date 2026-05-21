@@ -89,6 +89,8 @@
     "noHomework": "Yaklaşan ödev yok",
     "upcomingTests": "Yaklaşan sınavlar",
     "noTests": "Yaklaşan sınav yok",
+    "newAnnotations": "Yeni notlar",
+    "newAnnotationsCount": "${count} yeni",
     "viewAll": "Tümünü gör"
   },
   "schedule": {

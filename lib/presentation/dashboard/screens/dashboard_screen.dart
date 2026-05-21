@@ -4,6 +4,7 @@ import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
 import 'package:bsharp/presentation/dashboard/widgets/current_lesson_card.dart';
+import 'package:bsharp/presentation/dashboard/widgets/new_annotations_card.dart';
 import 'package:bsharp/presentation/dashboard/widgets/recent_grades_card.dart';
 import 'package:bsharp/presentation/dashboard/widgets/unexcused_absences_card.dart';
 import 'package:bsharp/presentation/dashboard/widgets/unread_messages_card.dart';
@@ -84,12 +85,14 @@ class DashboardScreen extends ConsumerWidget {
     final hasGrades = provider.supports(DataProviderCapability.grades);
     final hasHomework = provider.supports(DataProviderCapability.homework);
     final hasTests = provider.supports(DataProviderCapability.tests);
+    final hasNotes = provider.supports(DataProviderCapability.notes);
 
     return [
       if (hasSchedule) const CurrentLessonCard(),
       if (hasSchedule) const SizedBox(height: 8),
       if (hasMessages) const UnreadMessagesCard(),
       if (hasAttendance) const UnexcusedAbsencesCard(),
+      if (hasNotes) const NewAnnotationsCard(),
       if (hasGrades) const RecentGradesCard(),
       if (hasHomework || hasTests) const SizedBox(height: 8),
       if (hasHomework && hasTests)

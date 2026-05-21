@@ -89,6 +89,8 @@
     "noHomework": "Nėra artėjančių namų darbų",
     "upcomingTests": "Artėjantys kontroliniai",
     "noTests": "Nėra artėjančių kontrolinių",
+    "newAnnotations": "Nauji pastebėjimai",
+    "newAnnotationsCount": "${count} nauji",
     "viewAll": "Žiūrėti viską"
   },
   "schedule": {

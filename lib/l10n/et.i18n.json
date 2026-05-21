@@ -89,6 +89,8 @@
     "noHomework": "Eelseisvaid kodutöid pole",
     "upcomingTests": "Eelseisvad kontrolltööd",
     "noTests": "Eelseisvaid kontrolltöid pole",
+    "newAnnotations": "Uued märkused",
+    "newAnnotationsCount": "${count} uut",
     "viewAll": "Vaata kõiki"
   },
   "schedule": {

@@ -89,6 +89,8 @@
     "noHomework": "Nincs közelgő házi feladat",
     "upcomingTests": "Közelgő dolgozatok",
     "noTests": "Nincs közelgő dolgozat",
+    "newAnnotations": "Új megjegyzések",
+    "newAnnotationsCount": "${count} új",
     "viewAll": "Összes megtekintése"
   },
   "schedule": {

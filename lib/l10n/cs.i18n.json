@@ -89,6 +89,8 @@
     "noHomework": "Žádné nadcházející úkoly",
     "upcomingTests": "Nadcházející testy",
     "noTests": "Žádné nadcházející testy",
+    "newAnnotations": "Nové poznámky",
+    "newAnnotationsCount": "${count} nových",
     "viewAll": "Zobrazit vše"
   },
   "schedule": {
