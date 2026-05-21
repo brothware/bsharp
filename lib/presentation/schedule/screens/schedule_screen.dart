@@ -5,6 +5,7 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/obscurable_fab.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:bsharp/presentation/schedule/widgets/custom_event_card.dart';
 import 'package:bsharp/presentation/schedule/widgets/custom_event_detail_sheet.dart';
@@ -31,7 +32,6 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
   Offset? _pointerStart;
   int? _tabAtPointerDown;
   bool _changingWeek = false;
-  bool _fabObscured = true;
 
   @override
   void dispose() {
@@ -146,92 +146,55 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
           ),
           const SizedBox(height: 8),
           Expanded(
-            child: Stack(
-              children: [
-                Listener(
-                  onPointerDown: (e) {
-                    _pointerStart = e.position;
-                    _tabAtPointerDown = _tabController?.index;
-                  },
-                  onPointerUp: (e) {
-                    final start = _pointerStart;
-                    final startTab = _tabAtPointerDown;
-                    _pointerStart = null;
-                    _tabAtPointerDown = null;
-                    if (_changingWeek || start == null || startTab == null) {
-                      return;
-                    }
-                    final dx = e.position.dx - start.dx;
-                    final dy = (e.position.dy - start.dy).abs();
-                    if (dx.abs() < 50 || dy > dx.abs()) return;
-                    final endTab = _tabController?.index ?? 0;
-                    if (startTab != endTab) return;
-                    if (startTab == 0 && dx > 0) {
-                      _changeWeek(-1);
-                    } else if (startTab == days.length - 1 && dx < 0) {
-                      _changeWeek(1);
-                    }
-                  },
-                  child: NotificationListener<ScrollMetricsNotification>(
-                    onNotification: (n) {
-                      if (n.metrics.axis == Axis.vertical) {
-                        _updateFabObscured(n.metrics);
-                      }
-                      return false;
-                    },
-                    child: NotificationListener<ScrollNotification>(
-                      onNotification: _onContentScroll,
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          for (final day in days)
-                            viewMode == ScheduleViewMode.list
-                                ? _DayTimelineList(date: day)
-                                : LinearDayView(
-                                    date: day,
-                                    onItemTap: (item) =>
-                                        _showItemDetail(context, item),
-                                  ),
-                        ],
-                      ),
-                    ),
-                  ),
+            child: Listener(
+              onPointerDown: (e) {
+                _pointerStart = e.position;
+                _tabAtPointerDown = _tabController?.index;
+              },
+              onPointerUp: (e) {
+                final start = _pointerStart;
+                final startTab = _tabAtPointerDown;
+                _pointerStart = null;
+                _tabAtPointerDown = null;
+                if (_changingWeek || start == null || startTab == null) {
+                  return;
+                }
+                final dx = e.position.dx - start.dx;
+                final dy = (e.position.dy - start.dy).abs();
+                if (dx.abs() < 50 || dy > dx.abs()) return;
+                final endTab = _tabController?.index ?? 0;
+                if (startTab != endTab) return;
+                if (startTab == 0 && dx > 0) {
+                  _changeWeek(-1);
+                } else if (startTab == days.length - 1 && dx < 0) {
+                  _changeWeek(1);
+                }
+              },
+              child: ObscurableFab(
+                scrollable: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    for (final day in days)
+                      viewMode == ScheduleViewMode.list
+                          ? _DayTimelineList(date: day)
+                          : LinearDayView(
+                              date: day,
+                              onItemTap: (item) =>
+                                  _showItemDetail(context, item),
+                            ),
+                  ],
                 ),
-                Positioned(
-                  right: 16,
-                  bottom: 16,
-                  child: AnimatedOpacity(
-                    opacity: _fabObscured ? 0.4 : 1.0,
-                    duration: const Duration(milliseconds: 200),
-                    child: FloatingActionButton(
-                      onPressed: () =>
-                          context.push(AppRoutes.customEventCreate),
-                      tooltip: t.schedule.customEvent.create,
-                      child: const Icon(Icons.add),
-                    ),
-                  ),
+                fab: FloatingActionButton(
+                  onPressed: () => context.push(AppRoutes.customEventCreate),
+                  tooltip: t.schedule.customEvent.create,
+                  child: const Icon(Icons.add),
                 ),
-              ],
+              ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  bool _onContentScroll(ScrollNotification notification) {
-    if (notification.metrics.axis == Axis.vertical) {
-      _updateFabObscured(notification.metrics);
-    }
-    return false;
-  }
-
-  void _updateFabObscured(ScrollMetrics metrics) {
-    final obscured =
-        metrics.maxScrollExtent > 0 && metrics.pixels < metrics.maxScrollExtent;
-    if (obscured != _fabObscured) {
-      setState(() => _fabObscured = obscured);
-    }
   }
 
   void _changeWeek(int direction) {
