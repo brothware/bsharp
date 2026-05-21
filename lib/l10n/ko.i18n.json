@@ -89,6 +89,8 @@
     "noHomework": "다가오는 숙제 없음",
     "upcomingTests": "다가오는 시험",
     "noTests": "다가오는 시험 없음",
+    "newAnnotations": "새 주석",
+    "newAnnotationsCount": "${count}개의 새 항목",
     "viewAll": "전체 보기"
   },
   "schedule": {

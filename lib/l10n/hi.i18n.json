@@ -89,6 +89,8 @@
     "noHomework": "कोई आगामी गृहकार्य नहीं",
     "upcomingTests": "आगामी परीक्षाएँ",
     "noTests": "कोई आगामी परीक्षा नहीं",
+    "newAnnotations": "नई टिप्पणियाँ",
+    "newAnnotationsCount": "${count} नई",
     "viewAll": "सभी देखें"
   },
   "schedule": {

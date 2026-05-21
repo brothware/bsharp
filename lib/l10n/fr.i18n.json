@@ -89,6 +89,8 @@
     "noHomework": "Aucun devoir à venir",
     "upcomingTests": "Contrôles à venir",
     "noTests": "Aucun contrôle à venir",
+    "newAnnotations": "Nouvelles annotations",
+    "newAnnotationsCount": "${count} nouvelles",
     "viewAll": "Tout afficher"
   },
   "schedule": {

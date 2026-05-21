@@ -89,6 +89,8 @@
     "noHomework": "Ei tulevia kotitehtäviä",
     "upcomingTests": "Tulevat kokeet",
     "noTests": "Ei tulevia kokeita",
+    "newAnnotations": "Uudet huomautukset",
+    "newAnnotationsCount": "${count} uutta",
     "viewAll": "Näytä kaikki"
   },
   "schedule": {

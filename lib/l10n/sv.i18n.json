@@ -89,6 +89,8 @@
     "noHomework": "Inga kommande läxor",
     "upcomingTests": "Kommande prov",
     "noTests": "Inga kommande prov",
+    "newAnnotations": "Nya anteckningar",
+    "newAnnotationsCount": "${count} nya",
     "viewAll": "Visa alla"
   },
   "schedule": {

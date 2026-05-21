@@ -89,6 +89,8 @@
     "noHomework": "提出期限が近い宿題なし",
     "upcomingTests": "近日中のテスト",
     "noTests": "近日中のテストなし",
+    "newAnnotations": "新しい注釈",
+    "newAnnotationsCount": "${count} 件の新着",
     "viewAll": "すべて表示"
   },
   "schedule": {

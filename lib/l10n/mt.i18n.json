@@ -89,6 +89,8 @@
     "noHomework": "M'hemmx homework li ġej",
     "upcomingTests": "Testijiet li ġejjin",
     "noTests": "M'hemmx testijiet li ġejjin",
+    "newAnnotations": "Annotazzjonijiet ġodda",
+    "newAnnotationsCount": "${count} ġodda",
     "viewAll": "Ara kollox"
   },
   "schedule": {

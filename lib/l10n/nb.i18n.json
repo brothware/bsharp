@@ -89,6 +89,8 @@
     "noHomework": "Ingen kommende lekser",
     "upcomingTests": "Kommende prøver",
     "noTests": "Ingen kommende prøver",
+    "newAnnotations": "Nye merknader",
+    "newAnnotationsCount": "${count} nye",
     "viewAll": "Vis alle"
   },
   "schedule": {

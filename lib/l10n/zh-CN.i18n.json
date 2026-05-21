@@ -89,6 +89,8 @@
     "noHomework": "没有待完成的作业",
     "upcomingTests": "即将到来的考试",
     "noTests": "没有即将到来的考试",
+    "newAnnotations": "新批注",
+    "newAnnotationsCount": "新增 ${count} 条",
     "viewAll": "查看全部"
   },
   "schedule": {

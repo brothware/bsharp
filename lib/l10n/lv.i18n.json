@@ -89,6 +89,8 @@
     "noHomework": "Nav gaidāmu mājas darbu",
     "upcomingTests": "Gaidāmie kontroldarbi",
     "noTests": "Nav gaidāmu kontroldarbu",
+    "newAnnotations": "Jauni komentāri",
+    "newAnnotationsCount": "${count} jauni",
     "viewAll": "Skatīt visu"
   },
   "schedule": {

@@ -89,6 +89,8 @@
     "noHomework": "Nema predstojećih domaćih zadataka",
     "upcomingTests": "Predstojeći kontrolni",
     "noTests": "Nema predstojećih kontrolnih",
+    "newAnnotations": "Нове напомене",
+    "newAnnotationsCount": "${count} нових",
     "viewAll": "Prikaži sve"
   },
   "schedule": {

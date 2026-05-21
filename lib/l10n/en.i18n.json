@@ -89,6 +89,8 @@
     "noHomework": "No upcoming homework",
     "upcomingTests": "Upcoming tests",
     "noTests": "No upcoming tests",
+    "newAnnotations": "New annotations",
+    "newAnnotationsCount": "${count} new",
     "viewAll": "View all"
   },
   "schedule": {

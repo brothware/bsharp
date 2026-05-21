@@ -89,6 +89,8 @@
     "noHomework": "Nuk ka detyra të ardhshme",
     "upcomingTests": "Teste të ardhshme",
     "noTests": "Nuk ka teste të ardhshme",
+    "newAnnotations": "Shënime të reja",
+    "newAnnotationsCount": "${count} të reja",
     "viewAll": "Shiko të gjitha"
   },
   "schedule": {

@@ -89,6 +89,8 @@
     "noHomework": "Sem trabalhos pendentes",
     "upcomingTests": "Próximos testes",
     "noTests": "Sem próximos testes",
+    "newAnnotations": "Novas anotações",
+    "newAnnotationsCount": "${count} novas",
     "viewAll": "Ver tudo"
   },
   "schedule": {

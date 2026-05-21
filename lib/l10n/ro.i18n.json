@@ -89,6 +89,8 @@
     "noHomework": "Fără teme viitoare",
     "upcomingTests": "Lucrări viitoare",
     "noTests": "Fără lucrări viitoare",
+    "newAnnotations": "Adnotări noi",
+    "newAnnotationsCount": "${count} noi",
     "viewAll": "Vezi tot"
   },
   "schedule": {

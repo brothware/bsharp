@@ -89,6 +89,8 @@
     "noHomework": "沒有待完成的作業",
     "upcomingTests": "即將到來的考試",
     "noTests": "沒有即將到來的考試",
+    "newAnnotations": "新批註",
+    "newAnnotationsCount": "新增 ${count} 則",
     "viewAll": "檢視全部"
   },
   "schedule": {
