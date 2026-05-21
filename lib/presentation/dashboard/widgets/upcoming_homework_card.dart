@@ -1,9 +1,13 @@
+import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/portal_date_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+bool _isWithinWeek(PortalHomework hw) => isPortalDateWithinDays(hw.dueDate, 7);
 
 class UpcomingHomeworkCard extends ConsumerWidget {
   const UpcomingHomeworkCard({super.key});
@@ -13,11 +17,12 @@ class UpcomingHomeworkCard extends ConsumerWidget {
     final homeworks = ref.watch(upcomingHomeworkProvider);
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final urgent = homeworks.any(_isWithinWeek);
 
     return Card(
       clipBehavior: Clip.antiAlias,
       elevation: 0,
-      color: cs.surfaceContainerLow,
+      color: urgent ? cs.tertiaryContainer : cs.surfaceContainerLow,
       child: InkWell(
         onTap: () => StatefulNavigationShell.of(context).goBranch(4),
         child: Padding(
