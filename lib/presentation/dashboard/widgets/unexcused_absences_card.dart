@@ -1,4 +1,5 @@
 import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +123,9 @@ class _AbsenceRow extends ConsumerWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                absence.subjectName ?? t.attendance.unexcusedLabel,
+                absence.subjectName != null
+                    ? translateSubjectName(absence.subjectName!)
+                    : t.attendance.unexcusedLabel,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: cs.onErrorContainer,
                 ),
