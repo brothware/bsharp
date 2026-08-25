@@ -770,7 +770,8 @@
     "tipMeal": "Jedlo",
     "purchaseSuccess": "Ďakujeme za vašu podporu!",
     "purchaseFailed": "Nákup zlyhal, skúste to znova",
-    "productsUnavailable": "Príspevky sú momentálne nedostupné"
+    "productsUnavailable": "Príspevky sú momentálne nedostupné",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Pridať účet",

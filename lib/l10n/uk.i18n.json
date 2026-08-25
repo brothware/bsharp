@@ -773,7 +773,8 @@
     "tipMeal": "Обід",
     "purchaseSuccess": "Дякуємо за підтримку!",
     "purchaseFailed": "Покупка не вдалася, спробуйте ще раз",
-    "productsUnavailable": "Чайові наразі недоступні"
+    "productsUnavailable": "Чайові наразі недоступні",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Додати обліковий запис",

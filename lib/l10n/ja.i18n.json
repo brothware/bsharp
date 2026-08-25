@@ -767,7 +767,8 @@
     "tipMeal": "食事",
     "purchaseSuccess": "ご支援ありがとうございます！",
     "purchaseFailed": "購入に失敗しました。もう一度お試しください",
-    "productsUnavailable": "チップは現在利用できません"
+    "productsUnavailable": "チップは現在利用できません",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "アカウントを追加",

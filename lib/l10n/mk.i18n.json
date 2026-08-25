@@ -767,7 +767,8 @@
     "tipMeal": "Оброк",
     "purchaseSuccess": "Ви благодариме за поддршката!",
     "purchaseFailed": "Купувањето не успеа, обидете се повторно",
-    "productsUnavailable": "Бакшишите моментално не се достапни"
+    "productsUnavailable": "Бакшишите моментално не се достапни",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Додај сметка",

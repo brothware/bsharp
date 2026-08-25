@@ -773,7 +773,8 @@
     "tipMeal": "Абед",
     "purchaseSuccess": "Дзякуй за падтрымку!",
     "purchaseFailed": "Пакупка не ўдалася, паспрабуйце яшчэ",
-    "productsUnavailable": "Падтрымка зараз недаступная"
+    "productsUnavailable": "Падтрымка зараз недаступная",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Дадаць уліковы запіс",

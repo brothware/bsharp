@@ -767,7 +767,8 @@
     "tipMeal": "Mahlzeit",
     "purchaseSuccess": "Vielen Dank für Ihre Unterstützung!",
     "purchaseFailed": "Kauf fehlgeschlagen, bitte erneut versuchen",
-    "productsUnavailable": "Trinkgelder sind derzeit nicht verfügbar"
+    "productsUnavailable": "Trinkgelder sind derzeit nicht verfügbar",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Konto hinzufügen",

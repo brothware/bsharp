@@ -773,7 +773,8 @@
     "tipMeal": "Maistas",
     "purchaseSuccess": "Ačiū už palaikymą!",
     "purchaseFailed": "Pirkimas nepavyko, bandykite dar kartą",
-    "productsUnavailable": "Arbatpinigiai šiuo metu nepasiekiami"
+    "productsUnavailable": "Arbatpinigiai šiuo metu nepasiekiami",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Pridėti paskyrą",

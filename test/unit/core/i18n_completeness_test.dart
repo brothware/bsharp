@@ -132,6 +132,7 @@ void main() {
       'subjectNames.skrzypce',
       'gradeCategories.recytacja',
       'gradeCategories.pracaDomowa',
+      'support.buyMeACoffee',
     };
 
     final untranslated = <String, List<String>>{};

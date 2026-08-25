@@ -767,7 +767,8 @@
     "tipMeal": "Ateria",
     "purchaseSuccess": "Kiitos tuestasi!",
     "purchaseFailed": "Osto epäonnistui, yritä uudelleen",
-    "productsUnavailable": "Tipit eivät ole tällä hetkellä saatavilla"
+    "productsUnavailable": "Tipit eivät ole tällä hetkellä saatavilla",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Lisää tili",

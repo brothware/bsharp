@@ -17,9 +17,15 @@ bool isIos(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
+bool supportsStoreTips(Ref ref) {
+  if (kIsWeb) return false;
+  return defaultTargetPlatform == TargetPlatform.iOS ||
+      defaultTargetPlatform == TargetPlatform.android;
+}
+
+@Riverpod(keepAlive: true)
 TipJarService? tipJarService(Ref ref) {
-  final ios = ref.watch(isIosProvider);
-  if (!ios) return null;
+  if (!ref.watch(supportsStoreTipsProvider)) return null;
 
   final service = TipJarService();
   ref.onDispose(service.dispose);
@@ -29,6 +35,6 @@ TipJarService? tipJarService(Ref ref) {
 @Riverpod(keepAlive: true)
 Stream<TipJarState> tipJarState(Ref ref) {
   final service = ref.watch(tipJarServiceProvider);
-  if (service == null) return const Stream.empty();
+  if (service == null) return Stream.value(const TipJarUnavailable());
   return service.stateStream;
 }

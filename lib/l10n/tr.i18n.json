@@ -767,7 +767,8 @@
     "tipMeal": "Yemek",
     "purchaseSuccess": "Desteğiniz için teşekkürler!",
     "purchaseFailed": "Satın alma başarısız oldu, lütfen tekrar deneyin",
-    "productsUnavailable": "Bahşişler şu anda mevcut değil"
+    "productsUnavailable": "Bahşişler şu anda mevcut değil",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Hesap ekle",

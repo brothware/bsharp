@@ -752,7 +752,8 @@
     "tipMeal": "Posiłek",
     "purchaseSuccess": "Dziękuję za wsparcie!",
     "purchaseFailed": "Zakup nie powiódł się, spróbuj ponownie",
-    "productsUnavailable": "Napiwki są obecnie niedostępne"
+    "productsUnavailable": "Napiwki są obecnie niedostępne",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "sync": {
     "syncing": "Synchronizacja...",

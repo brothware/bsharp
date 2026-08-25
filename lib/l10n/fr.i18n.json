@@ -767,7 +767,8 @@
     "tipMeal": "Repas",
     "purchaseSuccess": "Merci pour votre soutien !",
     "purchaseFailed": "Achat échoué, veuillez réessayer",
-    "productsUnavailable": "Les pourboires sont actuellement indisponibles"
+    "productsUnavailable": "Les pourboires sont actuellement indisponibles",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Ajouter un compte",

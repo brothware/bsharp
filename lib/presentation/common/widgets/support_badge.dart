@@ -1,21 +1,16 @@
-import 'package:bsharp/app/support_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/support/tip_jar_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class SupportBadge extends ConsumerWidget {
+class SupportBadge extends StatelessWidget {
   const SupportBadge({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isIos = ref.watch(isIosProvider);
 
     return GestureDetector(
-      onTap: () =>
-          isIos ? showTipJarSheet(context) : launchUrl(Uri.parse(supportUrl)),
+      onTap: () => showTipJarSheet(context),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Opacity(

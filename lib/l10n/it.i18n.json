@@ -767,7 +767,8 @@
     "tipMeal": "Pasto",
     "purchaseSuccess": "Grazie per il tuo supporto!",
     "purchaseFailed": "Acquisto non riuscito, riprova",
-    "productsUnavailable": "Le mance non sono al momento disponibili"
+    "productsUnavailable": "Le mance non sono al momento disponibili",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Aggiungi account",

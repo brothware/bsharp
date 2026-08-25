@@ -767,7 +767,8 @@
     "tipMeal": "Refeição",
     "purchaseSuccess": "Obrigado pelo seu apoio!",
     "purchaseFailed": "A compra falhou, tente novamente",
-    "productsUnavailable": "As gorjetas não estão disponíveis de momento"
+    "productsUnavailable": "As gorjetas não estão disponíveis de momento",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Adicionar conta",

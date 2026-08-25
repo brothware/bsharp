@@ -770,7 +770,8 @@
     "tipMeal": "Masă",
     "purchaseSuccess": "Vă mulțumim pentru sprijin!",
     "purchaseFailed": "Achiziția a eșuat, încercați din nou",
-    "productsUnavailable": "Contribuțiile sunt momentan indisponibile"
+    "productsUnavailable": "Contribuțiile sunt momentan indisponibile",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Adaugă cont",

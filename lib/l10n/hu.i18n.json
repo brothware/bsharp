@@ -767,7 +767,8 @@
     "tipMeal": "Étkezés",
     "purchaseSuccess": "Köszönjük a támogatását!",
     "purchaseFailed": "A vásárlás sikertelen, próbálja újra",
-    "productsUnavailable": "A borravalók jelenleg nem elérhetők"
+    "productsUnavailable": "A borravalók jelenleg nem elérhetők",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Fiók hozzáadása",

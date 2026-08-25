@@ -767,7 +767,8 @@
     "tipMeal": "भोजन",
     "purchaseSuccess": "आपके समर्थन के लिए धन्यवाद!",
     "purchaseFailed": "खरीद विफल, कृपया पुनः प्रयास करें",
-    "productsUnavailable": "टिप वर्तमान में अनुपलब्ध हैं"
+    "productsUnavailable": "टिप वर्तमान में अनुपलब्ध हैं",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "खाता जोड़ें",
