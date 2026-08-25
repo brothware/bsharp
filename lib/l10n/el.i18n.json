@@ -767,7 +767,8 @@
     "tipMeal": "Γεύμα",
     "purchaseSuccess": "Σας ευχαριστούμε για την υποστήριξή σας!",
     "purchaseFailed": "Η αγορά απέτυχε, δοκιμάστε ξανά",
-    "productsUnavailable": "Τα φιλοδωρήματα δεν είναι διαθέσιμα αυτή τη στιγμή"
+    "productsUnavailable": "Τα φιλοδωρήματα δεν είναι διαθέσιμα αυτή τη στιγμή",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Προσθήκη λογαριασμού",

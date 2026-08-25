@@ -767,7 +767,8 @@
     "tipMeal": "一頓飯",
     "purchaseSuccess": "感謝您的支持！",
     "purchaseFailed": "購買失敗，請重試",
-    "productsUnavailable": "打賞暫時不可用"
+    "productsUnavailable": "打賞暫時不可用",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "新增帳戶",

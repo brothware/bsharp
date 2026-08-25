@@ -770,7 +770,8 @@
     "tipMeal": "Obrok",
     "purchaseSuccess": "Hvala na podršci!",
     "purchaseFailed": "Kupnja nije uspjela, pokušajte ponovo",
-    "productsUnavailable": "Napojnice trenutno nisu dostupne"
+    "productsUnavailable": "Napojnice trenutno nisu dostupne",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Dodaj račun",

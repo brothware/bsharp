@@ -767,7 +767,8 @@
     "tipMeal": "Toidukord",
     "purchaseSuccess": "Täname toetuse eest!",
     "purchaseFailed": "Ost ebaõnnestus, proovi uuesti",
-    "productsUnavailable": "Jootrahaannetused pole hetkel saadaval"
+    "productsUnavailable": "Jootrahaannetused pole hetkel saadaval",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Lisa konto",

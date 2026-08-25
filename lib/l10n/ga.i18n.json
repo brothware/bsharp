@@ -776,7 +776,8 @@
     "tipMeal": "Beia",
     "purchaseSuccess": "Go raibh maith agat as do thacaiocht!",
     "purchaseFailed": "Theip ar an gceannach, bain triail eile as",
-    "productsUnavailable": "Nil sineadh laimhe ar fail faoi lathair"
+    "productsUnavailable": "Nil sineadh laimhe ar fail faoi lathair",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Cuir cuntas leis",

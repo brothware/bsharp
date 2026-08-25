@@ -5,6 +5,7 @@ import 'package:bsharp/data/services/tip_jar_service.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void showTipJarSheet(BuildContext context) {
   unawaited(
@@ -72,8 +73,12 @@ class _TipJarSheetState extends ConsumerState<TipJarSheet> {
                 padding: EdgeInsets.all(24),
                 child: CircularProgressIndicator(),
               ),
-              error: (_, _) => Text(t.support.productsUnavailable),
+              error: (_, _) => _buildUnavailable(),
             ),
+            if (!ref.watch(isIosProvider))
+              _buildExternalTip(
+                showDivider: stateAsync.value is TipJarAvailable,
+              ),
           ],
         ),
       ),
@@ -108,7 +113,7 @@ class _TipJarSheetState extends ConsumerState<TipJarSheet> {
             ),
         ],
       ),
-      TipJarUnavailable() => Text(t.support.productsUnavailable),
+      TipJarUnavailable() => _buildUnavailable(),
       TipJarPurchasing() => const Padding(
         padding: EdgeInsets.all(24),
         child: CircularProgressIndicator(),
@@ -116,6 +121,27 @@ class _TipJarSheetState extends ConsumerState<TipJarSheet> {
       TipJarPurchased() => Text(t.support.purchaseSuccess),
       TipJarFailed() => Text(t.support.purchaseFailed),
     };
+  }
+
+  Widget _buildUnavailable() {
+    if (!ref.read(isIosProvider)) return const SizedBox.shrink();
+    return Text(t.support.productsUnavailable);
+  }
+
+  Widget _buildExternalTip({required bool showDivider}) {
+    return Column(
+      children: [
+        if (showDivider) const Divider(height: 24),
+        OutlinedButton.icon(
+          onPressed: () => unawaited(launchUrl(Uri.parse(supportUrl))),
+          icon: const Icon(Icons.favorite_outline),
+          label: Text(t.support.buyMeACoffee),
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 56),
+          ),
+        ),
+      ],
+    );
   }
 
   String _productLabel(String productId) {

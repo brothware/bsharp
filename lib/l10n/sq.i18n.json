@@ -767,7 +767,8 @@
     "tipMeal": "Vakt",
     "purchaseSuccess": "Faleminderit për mbështetjen tuaj!",
     "purchaseFailed": "Blerja dështoi, provoni përsëri",
-    "productsUnavailable": "Kontributet nuk janë të disponueshme aktualisht"
+    "productsUnavailable": "Kontributet nuk janë të disponueshme aktualisht",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Shto llogari",

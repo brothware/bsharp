@@ -459,8 +459,6 @@ class _AboutSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isIos = ref.watch(isIosProvider);
-
     return Column(
       children: [
         ListTile(
@@ -479,9 +477,7 @@ class _AboutSection extends ConsumerWidget {
           leading: const Icon(Icons.coffee_outlined),
           title: Text(t.support.title),
           subtitle: Text(t.support.subtitle),
-          onTap: () => isIos
-              ? showTipJarSheet(context)
-              : launchUrl(Uri.parse(supportUrl)),
+          onTap: () => showTipJarSheet(context),
         ),
         ListTile(
           leading: const Icon(Icons.description_outlined),

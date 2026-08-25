@@ -773,7 +773,8 @@
     "tipMeal": "Ikla",
     "purchaseSuccess": "Grazzi għall-appoġġ tiegħek!",
     "purchaseFailed": "Ix-xirja falliet, erġa' pprova",
-    "productsUnavailable": "It-tips bħalissa mhumiex disponibbli"
+    "productsUnavailable": "It-tips bħalissa mhumiex disponibbli",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Żid kont",

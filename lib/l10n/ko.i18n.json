@@ -767,7 +767,8 @@
     "tipMeal": "식사",
     "purchaseSuccess": "후원해 주셔서 감사합니다!",
     "purchaseFailed": "구매에 실패했습니다. 다시 시도하세요",
-    "productsUnavailable": "현재 후원을 이용할 수 없습니다"
+    "productsUnavailable": "현재 후원을 이용할 수 없습니다",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "계정 추가",

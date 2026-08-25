@@ -767,7 +767,8 @@
     "tipMeal": "Måltid",
     "purchaseSuccess": "Tack för ditt stöd!",
     "purchaseFailed": "Köpet misslyckades, försök igen",
-    "productsUnavailable": "Dricks är för närvarande inte tillgängligt"
+    "productsUnavailable": "Dricks är för närvarande inte tillgängligt",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Lägg till konto",

@@ -767,7 +767,8 @@
     "tipMeal": "Comida",
     "purchaseSuccess": "¡Gracias por su apoyo!",
     "purchaseFailed": "Compra fallida, inténtelo de nuevo",
-    "productsUnavailable": "Las propinas no están disponibles actualmente"
+    "productsUnavailable": "Las propinas no están disponibles actualmente",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Añadir cuenta",

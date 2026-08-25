@@ -767,7 +767,8 @@
     "tipMeal": "Maltīte",
     "purchaseSuccess": "Paldies par jūsu atbalstu!",
     "purchaseFailed": "Pirkums neizdevās, lūdzu mēģiniet vēlreiz",
-    "productsUnavailable": "Ziedojumi pašlaik nav pieejami"
+    "productsUnavailable": "Ziedojumi pašlaik nav pieejami",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "accounts": {
     "addAccount": "Pievienot kontu",

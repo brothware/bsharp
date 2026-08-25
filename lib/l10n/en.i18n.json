@@ -749,7 +749,8 @@
     "tipMeal": "Meal",
     "purchaseSuccess": "Thank you for your support!",
     "purchaseFailed": "Purchase failed, please try again",
-    "productsUnavailable": "Tips are currently unavailable"
+    "productsUnavailable": "Tips are currently unavailable",
+    "buyMeACoffee": "Buy Me a Coffee"
   },
   "sync": {
     "syncing": "Syncing...",
