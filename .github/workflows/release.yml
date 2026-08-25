@@ -305,6 +305,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [version, build-android]
     if: vars.GOOGLE_PLAY_ENABLED == 'true'
+    concurrency:
+      group: play-edit-${{ github.ref }}
+      cancel-in-progress: false
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -323,6 +326,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [version, build-wearos]
     if: vars.GOOGLE_PLAY_WEAR_ENABLED == 'true'
+    concurrency:
+      group: play-edit-${{ github.ref }}
+      cancel-in-progress: false
     steps:
       - uses: actions/download-artifact@v4
         with:
