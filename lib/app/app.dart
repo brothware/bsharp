@@ -34,7 +34,8 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
     final isMobile =
         defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS;
-    if (isMobile) {
+    final isPushSupported = defaultTargetPlatform == TargetPlatform.android;
+    if (isPushSupported) {
       _fcmSubscription = FirebaseMessaging.onMessage.listen((message) async {
         final spec = parseFcmMessageWithKnownProviders(message);
         final shouldSync = await NotificationService()
@@ -43,7 +44,9 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
           await ref.read(syncStatusProvider.notifier).sync();
         }
       });
+    }
 
+    if (isMobile) {
       ref.listenManual<List<UnexcusedAbsence>>(
         staleUnexcusedAbsencesProvider,
         (prev, next) async {
