@@ -172,6 +172,19 @@ jobs:
           name: ios-build
           path: build/ios/iphoneos/Runner.app
 
+      - run: flutter build ios --simulator --debug
+
+      - name: Zip simulator app
+        run: |
+          cd build/ios/iphonesimulator
+          zip -ry Runner-simulator.zip Runner.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-app
+          path: build/ios/iphonesimulator/Runner-simulator.zip
+          retention-days: 14
+
   build-wearos:
     runs-on: ubuntu-latest
     needs: quality
