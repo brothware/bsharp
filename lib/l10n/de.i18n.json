@@ -50,7 +50,9 @@
     "schoolIdHint": "z. B. sp1warszawa",
     "loginAs": "Anmelden als ${name}",
     "switchAccount": "Konto wechseln",
-    "demoMode": "Demomodus"
+    "demoMode": "Demomodus",
+    "reauthTitle": "Erneut anmelden",
+    "reauthMessage": "Ihr Passwort wird benötigt, um Nachrichten und andere Portaldaten zu laden. Bitte geben Sie es erneut ein."
   },
   "setup": {
     "title": "Einrichtung",

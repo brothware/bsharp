@@ -50,7 +50,9 @@
     "schoolIdHint": "m.sh. sp1warszawa",
     "loginAs": "Logail isteach mar ${name}",
     "switchAccount": "Athraigh cuntas",
-    "demoMode": "Mód taispeána"
+    "demoMode": "Mód taispeána",
+    "reauthTitle": "Logáil isteach arís",
+    "reauthMessage": "Tá do phasfhocal ag teastáil chun teachtaireachtaí agus sonraí eile tairsí a lódáil. Cuir isteach arís é, le do thoil."
   },
   "setup": {
     "title": "Socruithe",

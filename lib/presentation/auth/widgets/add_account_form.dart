@@ -131,7 +131,7 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
               providerType: _selectedProviderType!,
               slug: school,
               login: login,
-              passwordHash: passwordHash,
+              password: password,
               schoolName: schoolName ?? school,
               students: accountStudents,
             );

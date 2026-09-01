@@ -50,7 +50,9 @@
     "schoolIdHint": "e.g. sp1warszawa",
     "loginAs": "Log in as ${name}",
     "switchAccount": "Switch account",
-    "demoMode": "Demo mode"
+    "demoMode": "Demo mode",
+    "reauthTitle": "Sign in again",
+    "reauthMessage": "Your password is needed to load messages and other portal data. Please enter it again."
   },
   "setup": {
     "title": "Setup",

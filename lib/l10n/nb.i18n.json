@@ -50,7 +50,9 @@
     "schoolIdHint": "f.eks. sp1warszawa",
     "loginAs": "Logg inn som ${name}",
     "switchAccount": "Bytt konto",
-    "demoMode": "Demomodus"
+    "demoMode": "Demomodus",
+    "reauthTitle": "Logg inn på nytt",
+    "reauthMessage": "Passordet ditt trengs for å laste inn meldinger og andre portaldata. Vennligst skriv det inn på nytt."
   },
   "setup": {
     "title": "Oppsett",

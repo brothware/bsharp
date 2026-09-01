@@ -50,7 +50,9 @@
     "schoolIdHint": "जैसे sp1warszawa",
     "loginAs": "${name} के रूप में लॉग इन करें",
     "switchAccount": "खाता बदलें",
-    "demoMode": "डेमो मोड"
+    "demoMode": "डेमो मोड",
+    "reauthTitle": "फिर से साइन इन करें",
+    "reauthMessage": "संदेश और अन्य पोर्टल डेटा लोड करने के लिए आपका पासवर्ड आवश्यक है। कृपया इसे फिर से दर्ज करें।"
   },
   "setup": {
     "title": "सेटअप",

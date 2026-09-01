@@ -50,7 +50,9 @@
     "schoolIdHint": "nt sp1warszawa",
     "loginAs": "Logi sisse kui ${name}",
     "switchAccount": "Vaheta kontot",
-    "demoMode": "Demorežiim"
+    "demoMode": "Demorežiim",
+    "reauthTitle": "Logi uuesti sisse",
+    "reauthMessage": "Sõnumite ja muude portaali andmete laadimiseks on vaja teie parooli. Palun sisestage see uuesti."
   },
   "setup": {
     "title": "Seadistamine",

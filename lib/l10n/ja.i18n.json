@@ -50,7 +50,9 @@
     "schoolIdHint": "例: sp1warszawa",
     "loginAs": "${name}としてログイン",
     "switchAccount": "アカウント切替",
-    "demoMode": "デモモード"
+    "demoMode": "デモモード",
+    "reauthTitle": "再度ログイン",
+    "reauthMessage": "メッセージやその他のポータルデータを読み込むにはパスワードが必要です。もう一度入力してください。"
   },
   "setup": {
     "title": "セットアップ",

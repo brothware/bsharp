@@ -50,7 +50,9 @@
     "schoolIdHint": "例如 sp1warszawa",
     "loginAs": "以${name}身分登入",
     "switchAccount": "切換帳號",
-    "demoMode": "示範模式"
+    "demoMode": "示範模式",
+    "reauthTitle": "重新登入",
+    "reauthMessage": "載入訊息和其他入口網站資料需要您的密碼。請重新輸入。"
   },
   "setup": {
     "title": "設定",

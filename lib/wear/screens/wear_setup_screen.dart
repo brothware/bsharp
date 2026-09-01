@@ -33,6 +33,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   String? _errorMessage;
   List<Student> _students = [];
   int? _selectedStudentId;
+  String _password = '';
   String _passwordHash = '';
 
   @override
@@ -49,7 +50,10 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     final account = accounts.first;
     _schoolController.text = account.slug;
     _loginController.text = account.login;
-    _passwordHash = account.passwordHash;
+    _password = account.password;
+    _passwordHash = account.password.isNotEmpty
+        ? ref.read(activeDataProviderProvider).hashPassword(account.password)
+        : account.legacyPasswordHash ?? '';
 
     await _loadStudents();
   }
@@ -78,6 +82,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     });
 
     final provider = ref.read(activeDataProviderProvider);
+    _password = password;
     _passwordHash = provider.hashPassword(password);
 
     final result = await provider.validateCredentials(
@@ -146,7 +151,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       providerType: 'mobireg',
       slug: school,
       login: login,
-      passwordHash: _passwordHash,
+      password: _password,
       students: [
         AccountStudent(
           id: student.id,

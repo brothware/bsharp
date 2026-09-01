@@ -50,7 +50,9 @@
     "schoolIdHint": "f.eks. sp1warszawa",
     "loginAs": "Log ind som ${name}",
     "switchAccount": "Skift konto",
-    "demoMode": "Demotilstand"
+    "demoMode": "Demotilstand",
+    "reauthTitle": "Log ind igen",
+    "reauthMessage": "Din adgangskode er nødvendig for at indlæse beskeder og andre portaldata. Indtast den venligst igen."
   },
   "setup": {
     "title": "Opsætning",

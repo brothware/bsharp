@@ -1,3 +1,4 @@
+import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
@@ -16,6 +17,7 @@ import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -29,8 +31,14 @@ class MobiregDataProvider implements SchoolDataProvider {
   ApiClientFactory? _factory;
   String? _school;
   String? _login;
-  String? _passwordHash;
+  String _password = '';
+  String? _legacyPasswordHash;
   PocztaDataSource? _pocztaDs;
+
+  String? get _njsonPassHash =>
+      _password.isNotEmpty ? hashPassword(_password) : _legacyPasswordHash;
+
+  bool get _needsReauth => _password.isEmpty && _legacyPasswordHash != null;
 
   @override
   String get id => 'mobireg';
@@ -125,15 +133,17 @@ class MobiregDataProvider implements SchoolDataProvider {
   Future<void> authenticate({
     required String school,
     required String login,
-    required String passwordHash,
+    required String password,
+    String? legacyPasswordHash,
   }) async {
     _school = school;
     _login = login;
-    _passwordHash = passwordHash;
+    _password = password;
+    _legacyPasswordHash = legacyPasswordHash;
     _factory = ApiClientFactory(
       school: school,
       parentLogin: login,
-      parentPassHash: passwordHash,
+      parentPassHash: _njsonPassHash ?? '',
     );
   }
 
@@ -226,10 +236,13 @@ class MobiregDataProvider implements SchoolDataProvider {
   @override
   Future<void> loadMessages(Ref ref) async {
     final factory = _factory;
-    if (factory == null ||
-        _login == null ||
-        _passwordHash == null ||
-        _school == null) {
+    if (factory == null || _login == null || _school == null) {
+      return;
+    }
+
+    if (_needsReauth) {
+      debugPrint('MobiregDataProvider: portal reauth required, skip messages');
+      ref.read(portalReauthRequiredProvider.notifier).value = true;
       return;
     }
 
@@ -238,11 +251,18 @@ class MobiregDataProvider implements SchoolDataProvider {
     );
     final tokenResult = await authService.obtainPortalToken(
       login: _login!,
-      passwordHash: _passwordHash!,
+      password: _password,
     );
 
-    final token = tokenResult.when(success: (t) => t, failure: (_) => null);
+    final token = tokenResult.when(
+      success: (t) => t,
+      failure: (failure) {
+        debugPrint('MobiregDataProvider: portal login failed: $failure');
+        return null;
+      },
+    );
     if (token == null) return;
+    ref.read(portalReauthRequiredProvider.notifier).value = false;
 
     final portalDs = PortalDataSource(client: factory.createPortalClient());
     final userResult = await portalDs.getView(
@@ -254,10 +274,16 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     final messagesToken = userResult.when(
       success: (data) => data['messagesToken'] as String?,
-      failure: (_) => null,
+      failure: (failure) {
+        debugPrint('MobiregDataProvider: users view failed: $failure');
+        return null;
+      },
     );
 
-    if (messagesToken == null) return;
+    if (messagesToken == null) {
+      debugPrint('MobiregDataProvider: no messagesToken in users view');
+      return;
+    }
 
     final pocztaDs = PocztaDataSource(client: factory.createPocztaClient());
     final sessionResult = await pocztaDs.establishSession(
@@ -267,7 +293,10 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     final sessionOk = sessionResult.when(
       success: (_) => true,
-      failure: (_) => false,
+      failure: (failure) {
+        debugPrint('MobiregDataProvider: poczta session failed: $failure');
+        return false;
+      },
     );
     if (!sessionOk) return;
 
@@ -286,21 +315,24 @@ class MobiregDataProvider implements SchoolDataProvider {
         ref.read(inboxProvider.notifier).value = parsePocztaMessages(data);
         cache.saveMessages('inbox', data);
       },
-      failure: (_) {},
+      failure: (failure) =>
+          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
     );
     results[1].when(
       success: (data) {
         ref.read(sentProvider.notifier).value = parsePocztaMessages(data);
         cache.saveMessages('sent', data);
       },
-      failure: (_) {},
+      failure: (failure) =>
+          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
     );
     results[2].when(
       success: (data) {
         ref.read(trashProvider.notifier).value = parsePocztaMessages(data);
         cache.saveMessages('trash', data);
       },
-      failure: (_) {},
+      failure: (failure) =>
+          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
     );
   }
 
@@ -322,21 +354,24 @@ class MobiregDataProvider implements SchoolDataProvider {
         ref.read(inboxProvider.notifier).value = parsePocztaMessages(data);
         cache.saveMessages('inbox', data);
       },
-      failure: (_) {},
+      failure: (failure) =>
+          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
     );
     results[1].when(
       success: (data) {
         ref.read(sentProvider.notifier).value = parsePocztaMessages(data);
         cache.saveMessages('sent', data);
       },
-      failure: (_) {},
+      failure: (failure) =>
+          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
     );
     results[2].when(
       success: (data) {
         ref.read(trashProvider.notifier).value = parsePocztaMessages(data);
         cache.saveMessages('trash', data);
       },
-      failure: (_) {},
+      failure: (failure) =>
+          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
     );
   }
 
@@ -433,6 +468,11 @@ class MobiregDataProvider implements SchoolDataProvider {
     int pupilId,
     SyncCache cache,
   ) async {
+    if (_needsReauth) {
+      debugPrint('MobiregDataProvider: portal reauth required, skip portal');
+      ref.read(portalReauthRequiredProvider.notifier).value = true;
+      return;
+    }
     final portalDs = PortalDataSource(client: factory.createPortalClient());
     final now = DateTime.now();
     final schoolYearStart = now.month >= 9
@@ -456,10 +496,19 @@ class MobiregDataProvider implements SchoolDataProvider {
         webLoginClient: ApiClientFactory(
           school: _school!,
           parentLogin: _login!,
-          parentPassHash: _passwordHash!,
+          parentPassHash: _njsonPassHash ?? '',
         ).createWebLoginClient(),
-      ).obtainPortalToken(login: _login!, passwordHash: _passwordHash!);
-      return result.when(success: (t) => t, failure: (_) => null);
+      ).obtainPortalToken(login: _login!, password: _password);
+      return result.when(
+        success: (t) {
+          ref.read(portalReauthRequiredProvider.notifier).value = false;
+          return t;
+        },
+        failure: (failure) {
+          debugPrint('MobiregDataProvider: portal token failed: $failure');
+          return null;
+        },
+      );
     }
 
     Future<void> fetchWithFreshToken(
@@ -541,7 +590,8 @@ class MobiregDataProvider implements SchoolDataProvider {
         onSuccess(items);
         cache.savePortalView(cacheKey ?? view, items);
       },
-      failure: (_) {},
+      failure: (failure) =>
+          debugPrint('MobiregDataProvider: portal view $view failed: $failure'),
     );
   }
 }

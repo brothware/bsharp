@@ -50,7 +50,9 @@
     "schoolIdHint": "např. sp1warszawa",
     "loginAs": "Přihlásit se jako ${name}",
     "switchAccount": "Přepnout účet",
-    "demoMode": "Demo režim"
+    "demoMode": "Demo režim",
+    "reauthTitle": "Přihlaste se znovu",
+    "reauthMessage": "Vaše heslo je potřebné k načtení zpráv a dalších dat portálu. Zadejte ho prosím znovu."
   },
   "setup": {
     "title": "Nastavení",

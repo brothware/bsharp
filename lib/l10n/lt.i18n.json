@@ -50,7 +50,9 @@
     "schoolIdHint": "pvz. sp1warszawa",
     "loginAs": "Prisijungti kaip ${name}",
     "switchAccount": "Pakeisti paskyrą",
-    "demoMode": "Demonstracinis režimas"
+    "demoMode": "Demonstracinis režimas",
+    "reauthTitle": "Prisijunkite iš naujo",
+    "reauthMessage": "Jūsų slaptažodis reikalingas žinutėms ir kitiems portalo duomenims įkelti. Įveskite jį dar kartą."
   },
   "setup": {
     "title": "Nustatymai",

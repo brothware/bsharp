@@ -50,7 +50,9 @@
     "schoolIdHint": "ex. sp1warszawa",
     "loginAs": "Entrar como ${name}",
     "switchAccount": "Mudar de conta",
-    "demoMode": "Modo de demonstração"
+    "demoMode": "Modo de demonstração",
+    "reauthTitle": "Iniciar sessão novamente",
+    "reauthMessage": "A sua palavra-passe é necessária para carregar mensagens e outros dados do portal. Introduza-a novamente."
   },
   "setup": {
     "title": "Configuração",

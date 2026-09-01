@@ -50,7 +50,9 @@
     "schoolIdHint": "npr. sp1warszawa",
     "loginAs": "Prijavi se kao ${name}",
     "switchAccount": "Promijeni račun",
-    "demoMode": "Demo način"
+    "demoMode": "Demo način",
+    "reauthTitle": "Ponovno se prijavite",
+    "reauthMessage": "Vaša lozinka potrebna je za učitavanje poruka i drugih podataka portala. Molimo unesite je ponovno."
   },
   "setup": {
     "title": "Postavljanje",

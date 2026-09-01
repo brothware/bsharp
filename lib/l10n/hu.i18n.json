@@ -50,7 +50,9 @@
     "schoolIdHint": "pl. sp1warszawa",
     "loginAs": "Bejelentkezés mint ${name}",
     "switchAccount": "Fiókváltás",
-    "demoMode": "Demó mód"
+    "demoMode": "Demó mód",
+    "reauthTitle": "Jelentkezzen be újra",
+    "reauthMessage": "A jelszavára szükség van az üzenetek és egyéb portáladatok betöltéséhez. Kérjük, adja meg újra."
   },
   "setup": {
     "title": "Beállítás",

@@ -26,7 +26,7 @@ class AuthService {
 
   Future<Result<String>> obtainPortalToken({
     required String login,
-    required String passwordHash,
+    required String password,
   }) async {
     try {
       final response = await _client.post<dynamic>(
@@ -34,7 +34,7 @@ class AuthService {
         data: {
           'queryString': '',
           'edlogin': login,
-          'edpass': passwordHash,
+          'edpass': password,
           'resolutions': '1920',
         },
         options: Options(contentType: Headers.formUrlEncodedContentType),
@@ -69,12 +69,12 @@ class AuthService {
 
   Future<Result<String>> ensureValidToken({
     required String login,
-    required String passwordHash,
+    required String password,
   }) async {
     if (isTokenValid) {
       return Result.success(_portalToken);
     }
-    return obtainPortalToken(login: login, passwordHash: passwordHash);
+    return obtainPortalToken(login: login, password: password);
   }
 
   void clearToken() {
