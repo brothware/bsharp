@@ -5,6 +5,7 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/core/platform_capabilities.dart';
 import 'package:bsharp/data/services/fcm_message_handler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -34,7 +35,6 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
     final isMobile =
         defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS;
-    final isPushSupported = defaultTargetPlatform == TargetPlatform.android;
     if (isPushSupported) {
       _fcmSubscription = FirebaseMessaging.onMessage.listen((message) async {
         final spec = parseFcmMessageWithKnownProviders(message);

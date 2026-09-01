@@ -1,8 +1,8 @@
+import 'package:bsharp/core/platform_capabilities.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/services/fcm_token_manager.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_providers.g.dart';
@@ -71,10 +71,7 @@ class ProviderAccounts extends _$ProviderAccounts {
   }
 
   Future<void> _registerFcmToken() async {
-    final isMobile =
-        defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS;
-    if (!isMobile) return;
+    if (!isPushSupported) return;
     final prefs = ref.read(sharedPreferencesProvider);
     final storage = ref.read(accountStorageProvider);
     final tokenManager = FcmTokenManager(
