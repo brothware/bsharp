@@ -29,7 +29,7 @@ jobs:
       - name: Archive generated files
         run: find lib -name '*.g.dart' -o -name '*.freezed.dart' | tar -czf generated-sources.tar.gz -T -
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: generated-sources
           path: generated-sources.tar.gz
@@ -56,7 +56,7 @@ jobs:
 
       - name: Upload coverage
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage
           path: coverage/lcov.info
@@ -74,7 +74,7 @@ jobs:
 
       - run: flutter pub get
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: generated-sources
 
@@ -82,7 +82,7 @@ jobs:
 
       - run: flutter build web --base-href /bsharp/
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: web-build
           path: build/web
@@ -106,7 +106,7 @@ jobs:
 
       - run: flutter pub get
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: generated-sources
 
@@ -131,12 +131,12 @@ jobs:
       - run: flutter build apk --flavor phone --release
       - run: flutter build appbundle --flavor phone --release
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: android-apk
           path: build/app/outputs/flutter-apk/app-phone-release.apk
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: android-aab
           path: build/app/outputs/bundle/phoneRelease/app-phone-release.aab
@@ -159,7 +159,7 @@ jobs:
 
       - run: flutter pub get
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: generated-sources
 
@@ -167,7 +167,7 @@ jobs:
 
       - run: flutter build ios --release --no-codesign
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ios-build
           path: build/ios/iphoneos/Runner.app
@@ -179,7 +179,7 @@ jobs:
           cd build/ios/iphonesimulator
           zip -ry Runner-simulator.zip Runner.app
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ios-simulator-app
           path: build/ios/iphonesimulator/Runner-simulator.zip
@@ -204,7 +204,7 @@ jobs:
 
       - run: flutter pub get
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: generated-sources
 
@@ -242,7 +242,7 @@ jobs:
 
       - run: flutter build apk --flavor wear --release --target=lib/main_wear.dart
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: wearos-apk
           path: build/app/outputs/flutter-apk/app-wear-release.apk

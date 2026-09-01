@@ -44,7 +44,7 @@ jobs:
       - name: Archive generated files
         run: find lib -name '*.g.dart' -o -name '*.freezed.dart' | tar -czf generated-sources.tar.gz -T -
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: generated-sources
           path: generated-sources.tar.gz
@@ -67,7 +67,7 @@ jobs:
 
       - run: flutter pub get
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: generated-sources
 
@@ -75,7 +75,7 @@ jobs:
 
       - run: flutter build web --base-href /bsharp/ --build-name=${{ needs.version.outputs.version }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-web
           path: build/web
@@ -99,7 +99,7 @@ jobs:
 
       - run: flutter pub get
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: generated-sources
 
@@ -127,12 +127,12 @@ jobs:
       - name: Build AAB
         run: flutter build appbundle --flavor phone --release --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-android-apk
           path: build/app/outputs/flutter-apk/app-phone-release.apk
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-android-aab
           path: build/app/outputs/bundle/phoneRelease/app-phone-release.aab
@@ -155,7 +155,7 @@ jobs:
 
       - run: flutter pub get
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: generated-sources
 
@@ -163,7 +163,7 @@ jobs:
 
       - run: flutter build ios --release --no-codesign --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-ios
           path: build/ios/iphoneos/Runner.app
@@ -187,7 +187,7 @@ jobs:
 
       - run: flutter pub get
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: generated-sources
 
@@ -229,12 +229,12 @@ jobs:
       - name: Build WearOS AAB
         run: flutter build appbundle --flavor wear --release --target=lib/main_wear.dart --build-name=${{ needs.version.outputs.version }} --build-number=${{ needs.version.outputs.build_number }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-wearos-apk
           path: build/app/outputs/flutter-apk/app-wear-release.apk
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-wearos-aab
           path: build/app/outputs/bundle/wearRelease/app-wear-release.aab
@@ -247,7 +247,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: artifacts
 
@@ -309,7 +309,7 @@ jobs:
       group: play-edit-${{ github.ref }}
       cancel-in-progress: false
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-android-aab
 
@@ -330,7 +330,7 @@ jobs:
       group: play-edit-${{ github.ref }}
       cancel-in-progress: false
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-wearos-aab
 
@@ -362,17 +362,17 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-web
           path: web-build
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: web-build
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
