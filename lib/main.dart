@@ -21,8 +21,9 @@ void main() async {
   final isMobile =
       defaultTargetPlatform == TargetPlatform.android ||
       defaultTargetPlatform == TargetPlatform.iOS;
+  final isPushSupported = defaultTargetPlatform == TargetPlatform.android;
 
-  if (isMobile) {
+  if (isPushSupported) {
     await Firebase.initializeApp();
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
   }
@@ -33,7 +34,9 @@ void main() async {
     final notificationService = NotificationService();
     await notificationService.initialize();
     await notificationService.requestPermission();
+  }
 
+  if (isPushSupported) {
     FcmTokenManager(accountStorage: AccountStorage(), prefs: prefs)
       ..listenForTokenRefresh()
       ..registerTokenForAllAccounts().ignore();
