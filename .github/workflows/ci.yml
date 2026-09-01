@@ -172,17 +172,41 @@ jobs:
           name: ios-build
           path: build/ios/iphoneos/Runner.app
 
-      - run: flutter build ios --simulator --debug
+      - run: flutter build ios --simulator --debug --config-only
+
+      - name: Build universal simulator app
+        working-directory: ios
+        run: |
+          xcodebuild \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -derivedDataPath ../build/ios/simulator-dd \
+            ARCHS="arm64 x86_64" \
+            ONLY_ACTIVE_ARCH=NO \
+            EXCLUDED_ARCHS="" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Verify both slices are present
+        run: |
+          APP=build/ios/simulator-dd/Build/Products/Debug-iphonesimulator/Runner.app
+          for binary in "$APP/Runner" "$APP/Frameworks/App.framework/App"; do
+            echo "== $binary"
+            lipo -archs "$binary"
+            lipo -archs "$binary" | grep -q arm64 || { echo "missing arm64 in $binary"; exit 1; }
+            lipo -archs "$binary" | grep -q x86_64 || { echo "missing x86_64 in $binary"; exit 1; }
+          done
 
       - name: Zip simulator app
-        run: |
-          cd build/ios/iphonesimulator
-          zip -ry Runner-simulator.zip Runner.app
+        working-directory: build/ios/simulator-dd/Build/Products/Debug-iphonesimulator
+        run: zip -ry Runner-simulator.zip Runner.app
 
       - uses: actions/upload-artifact@v4
         with:
           name: ios-simulator-app
-          path: build/ios/iphonesimulator/Runner-simulator.zip
+          path: build/ios/simulator-dd/Build/Products/Debug-iphonesimulator/Runner-simulator.zip
           retention-days: 14
 
   build-wearos:
