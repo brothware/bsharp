@@ -78,7 +78,8 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
         await provider.authenticate(
           school: creds.school,
           login: creds.login,
-          passwordHash: creds.passHash,
+          password: creds.password,
+          legacyPasswordHash: creds.legacyPasswordHash,
         );
 
         await Future.wait([
@@ -215,7 +216,8 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     return _Credentials(
       school: account.slug,
       login: account.login,
-      passHash: account.passwordHash,
+      password: account.password,
+      legacyPasswordHash: account.legacyPasswordHash,
     );
   }
 
@@ -234,12 +236,14 @@ class _Credentials {
   const _Credentials({
     required this.school,
     required this.login,
-    required this.passHash,
+    required this.password,
+    this.legacyPasswordHash,
   });
 
   final String school;
   final String login;
-  final String passHash;
+  final String password;
+  final String? legacyPasswordHash;
 }
 
 @Riverpod(keepAlive: true)

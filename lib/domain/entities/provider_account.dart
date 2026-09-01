@@ -10,13 +10,27 @@ abstract class ProviderAccount with _$ProviderAccount {
     required String providerType,
     required String slug,
     required String login,
-    required String passwordHash,
+    @Default('') String password,
+    String? legacyPasswordHash,
     String? schoolName,
     @Default([]) List<AccountStudent> students,
   }) = _ProviderAccount;
 
   factory ProviderAccount.fromJson(Map<String, dynamic> json) =>
-      _$ProviderAccountFromJson(json);
+      _$ProviderAccountFromJson(migrateLegacyJson(json));
+
+  static Map<String, dynamic> migrateLegacyJson(Map<String, dynamic> json) {
+    if (!json.containsKey('password') && json.containsKey('passwordHash')) {
+      return Map<String, dynamic>.of(json)
+        ..['legacyPasswordHash'] = json['passwordHash']
+        ..['password'] = '';
+    }
+    return json;
+  }
+}
+
+extension ProviderAccountReauth on ProviderAccount {
+  bool get needsReauth => password.isEmpty && legacyPasswordHash != null;
 }
 
 @freezed

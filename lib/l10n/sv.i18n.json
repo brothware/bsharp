@@ -50,7 +50,9 @@
     "schoolIdHint": "t.ex. sp1warszawa",
     "loginAs": "Logga in som ${name}",
     "switchAccount": "Byt konto",
-    "demoMode": "Demoläge"
+    "demoMode": "Demoläge",
+    "reauthTitle": "Logga in igen",
+    "reauthMessage": "Ditt lösenord behövs för att läsa in meddelanden och andra portaldata. Ange det igen."
   },
   "setup": {
     "title": "Inställning",

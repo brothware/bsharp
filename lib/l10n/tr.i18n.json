@@ -50,7 +50,9 @@
     "schoolIdHint": "örn. sp1warszawa",
     "loginAs": "${name} olarak giriş yap",
     "switchAccount": "Hesap değiştir",
-    "demoMode": "Demo modu"
+    "demoMode": "Demo modu",
+    "reauthTitle": "Tekrar giriş yapın",
+    "reauthMessage": "Mesajları ve diğer portal verilerini yüklemek için parolanız gerekli. Lütfen tekrar girin."
   },
   "setup": {
     "title": "Kurulum",

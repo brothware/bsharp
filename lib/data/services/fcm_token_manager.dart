@@ -106,11 +106,19 @@ class FcmTokenManager {
       return true;
     }
 
+    final passHash = account.password.isNotEmpty
+        ? provider.hashPassword(account.password)
+        : account.legacyPasswordHash;
+    if (passHash == null) {
+      debugPrint('FcmTokenManager: no credential for ${account.slug}');
+      return false;
+    }
+
     try {
       final ok = await provider.registerPushToken(
         school: account.slug,
         login: account.login,
-        passwordHash: account.passwordHash,
+        passwordHash: passHash,
         token: token,
         deviceId: deviceId,
         appVersionCode: versionCode,

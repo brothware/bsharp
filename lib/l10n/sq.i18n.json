@@ -50,7 +50,9 @@
     "schoolIdHint": "p.sh. sp1warszawa",
     "loginAs": "Hyr si ${name}",
     "switchAccount": "Ndrysho llogarinë",
-    "demoMode": "Modaliteti demo"
+    "demoMode": "Modaliteti demo",
+    "reauthTitle": "Hyni përsëri",
+    "reauthMessage": "Fjalëkalimi juaj nevojitet për të ngarkuar mesazhet dhe të dhëna të tjera të portalit. Ju lutemi shkruajeni përsëri."
   },
   "setup": {
     "title": "Konfigurimi",

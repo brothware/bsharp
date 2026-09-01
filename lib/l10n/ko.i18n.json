@@ -50,7 +50,9 @@
     "schoolIdHint": "예: sp1warszawa",
     "loginAs": "${name}(으)로 로그인",
     "switchAccount": "계정 전환",
-    "demoMode": "데모 모드"
+    "demoMode": "데모 모드",
+    "reauthTitle": "다시 로그인",
+    "reauthMessage": "메시지 및 기타 포털 데이터를 불러오려면 비밀번호가 필요합니다. 다시 입력해 주세요."
   },
   "setup": {
     "title": "설정",

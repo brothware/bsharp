@@ -50,7 +50,9 @@
     "schoolIdHint": "np. sp1warszawa",
     "loginAs": "Zaloguj się jako ${name}",
     "switchAccount": "Zmień konto",
-    "demoMode": "Tryb demo"
+    "demoMode": "Tryb demo",
+    "reauthTitle": "Zaloguj się ponownie",
+    "reauthMessage": "Twoje hasło jest potrzebne do pobrania wiadomości i innych danych portalu. Wprowadź je ponownie."
   },
   "setup": {
     "title": "Konfiguracja",

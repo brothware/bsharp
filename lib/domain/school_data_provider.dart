@@ -32,7 +32,8 @@ abstract class SchoolDataProvider {
   Future<void> authenticate({
     required String school,
     required String login,
-    required String passwordHash,
+    required String password,
+    String? legacyPasswordHash,
   });
 
   Future<void> loadSchoolData(Ref ref, {required int studentId});

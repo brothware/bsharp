@@ -47,7 +47,8 @@ class DemoDataProvider implements SchoolDataProvider {
   Future<void> authenticate({
     required String school,
     required String login,
-    required String passwordHash,
+    required String password,
+    String? legacyPasswordHash,
   }) async {}
 
   @override

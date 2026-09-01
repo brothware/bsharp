@@ -50,7 +50,9 @@
     "schoolIdHint": "esim. sp1warszawa",
     "loginAs": "Kirjaudu käyttäjänä ${name}",
     "switchAccount": "Vaihda tiliä",
-    "demoMode": "Demotila"
+    "demoMode": "Demotila",
+    "reauthTitle": "Kirjaudu uudelleen",
+    "reauthMessage": "Salasanaasi tarvitaan viestien ja muiden portaalin tietojen lataamiseen. Anna se uudelleen."
   },
   "setup": {
     "title": "Asennus",

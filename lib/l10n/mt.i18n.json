@@ -50,7 +50,9 @@
     "schoolIdHint": "eż. sp1warszawa",
     "loginAs": "Idħol bħala ${name}",
     "switchAccount": "Ibdel il-kont",
-    "demoMode": "Modalita' demo"
+    "demoMode": "Modalita' demo",
+    "reauthTitle": "Idħol mill-ġdid",
+    "reauthMessage": "Il-password tiegħek hija meħtieġa biex jitniżżlu messaġġi u dejta oħra tal-portal. Jekk jogħġbok daħħalha mill-ġdid."
   },
   "setup": {
     "title": "Konfigurazzjoni",

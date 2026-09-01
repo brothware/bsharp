@@ -50,7 +50,9 @@
     "schoolIdHint": "de ex. sp1warszawa",
     "loginAs": "Conectare ca ${name}",
     "switchAccount": "Schimbă contul",
-    "demoMode": "Mod demonstrativ"
+    "demoMode": "Mod demonstrativ",
+    "reauthTitle": "Conectați-vă din nou",
+    "reauthMessage": "Parola dvs. este necesară pentru a încărca mesajele și alte date ale portalului. Vă rugăm să o introduceți din nou."
   },
   "setup": {
     "title": "Configurare",

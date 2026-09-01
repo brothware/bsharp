@@ -49,7 +49,7 @@ void main() {
           providerType: 'mobireg',
           slug: 'sp1',
           login: 'user1',
-          passwordHash: 'hash',
+          password: 'secret',
           students: [AccountStudent(id: 1, name: 'Jan', surname: 'K')],
         ),
       );
@@ -79,7 +79,7 @@ void main() {
           providerType: 'mobireg',
           slug: 'sp1',
           login: 'user1',
-          passwordHash: 'hash',
+          password: 'secret',
           students: [AccountStudent(id: 1, name: 'Jan', surname: 'K')],
         ),
       );

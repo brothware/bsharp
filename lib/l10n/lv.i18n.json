@@ -50,7 +50,9 @@
     "schoolIdHint": "piem. sp1warszawa",
     "loginAs": "Pieteikties kā ${name}",
     "switchAccount": "Mainīt kontu",
-    "demoMode": "Demonstrācijas režīms"
+    "demoMode": "Demonstrācijas režīms",
+    "reauthTitle": "Piesakieties vēlreiz",
+    "reauthMessage": "Jūsu parole ir nepieciešama ziņojumu un citu portāla datu ielādei. Lūdzu, ievadiet to vēlreiz."
   },
   "setup": {
     "title": "Iestatīšana",

@@ -50,7 +50,9 @@
     "schoolIdHint": "npr. sp1warszawa",
     "loginAs": "Prijava kot ${name}",
     "switchAccount": "Zamenjaj račun",
-    "demoMode": "Predstavitveni način"
+    "demoMode": "Predstavitveni način",
+    "reauthTitle": "Znova se prijavite",
+    "reauthMessage": "Vaše geslo je potrebno za nalaganje sporočil in drugih podatkov portala. Prosimo, vnesite ga znova."
   },
   "setup": {
     "title": "Nastavitev",

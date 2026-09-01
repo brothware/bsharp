@@ -50,7 +50,9 @@
     "schoolIdHint": "bijv. sp1warszawa",
     "loginAs": "Inloggen als ${name}",
     "switchAccount": "Account wisselen",
-    "demoMode": "Demomodus"
+    "demoMode": "Demomodus",
+    "reauthTitle": "Opnieuw inloggen",
+    "reauthMessage": "Uw wachtwoord is nodig om berichten en andere portalgegevens te laden. Voer het opnieuw in."
   },
   "setup": {
     "title": "Instellen",

@@ -59,7 +59,6 @@ class _DemoActivator {
       providerType: 'demo',
       slug: 'demo-school-a',
       login: 'demo',
-      passwordHash: '',
       schoolName: 'Demo School A',
       students: const [
         AccountStudent(id: 1, name: 'Jan', surname: 'Kowalski'),
@@ -70,7 +69,6 @@ class _DemoActivator {
       providerType: 'demo',
       slug: 'demo-school-b',
       login: 'demo',
-      passwordHash: '',
       schoolName: 'Demo School B',
       students: const [
         AccountStudent(id: 2, name: 'Anna', surname: 'Nowak'),
