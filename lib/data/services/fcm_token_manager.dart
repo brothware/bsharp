@@ -1,4 +1,5 @@
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/core/platform_capabilities.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
@@ -31,6 +32,7 @@ class FcmTokenManager {
   }
 
   Future<void> registerTokenForAllAccounts() async {
+    if (!isPushSupported) return;
     final token = await FirebaseMessaging.instance.getToken();
     if (token == null) {
       debugPrint('FcmTokenManager: no FCM token available');
@@ -72,6 +74,7 @@ class FcmTokenManager {
   }
 
   Future<void> registerTokenForAccount(ProviderAccount account) async {
+    if (!isPushSupported) return;
     final token = await FirebaseMessaging.instance.getToken();
     if (token == null) return;
 
@@ -86,6 +89,7 @@ class FcmTokenManager {
   }
 
   void listenForTokenRefresh() {
+    if (!isPushSupported) return;
     FirebaseMessaging.instance.onTokenRefresh.listen((_) async {
       await registerTokenForAllAccounts();
     });

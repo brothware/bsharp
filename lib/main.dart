@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/app/app.dart';
 import 'package:bsharp/app/locale_provider.dart';
+import 'package:bsharp/core/platform_capabilities.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/services/fcm_message_handler.dart';
 import 'package:bsharp/data/services/fcm_token_manager.dart';
@@ -21,7 +22,6 @@ void main() async {
   final isMobile =
       defaultTargetPlatform == TargetPlatform.android ||
       defaultTargetPlatform == TargetPlatform.iOS;
-  final isPushSupported = defaultTargetPlatform == TargetPlatform.android;
 
   if (isPushSupported) {
     await Firebase.initializeApp();
