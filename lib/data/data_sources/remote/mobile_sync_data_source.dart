@@ -20,10 +20,10 @@ class MobileSyncDataSource {
     required String endDate,
   }) async {
     return _post({
-      'student_id': studentId.toString(),
       'start_date': startDate,
       'end_date': endDate,
       'get_all_mark_groups': '1',
+      'student_id': studentId.toString(),
     });
   }
 
@@ -35,26 +35,19 @@ class MobileSyncDataSource {
     required String lastEndDate,
   }) async {
     return _post({
-      'student_id': studentId.toString(),
       'start_date': startDate,
       'end_date': endDate,
-      'lmt': lastModificationTime,
       'last_end_date': lastEndDate,
+      'lmt': lastModificationTime,
       'get_all_mark_groups': '1',
+      'student_id': studentId.toString(),
     });
   }
 
   Future<Result<Map<String, dynamic>>> registerFcmToken({
     required String token,
-    required String deviceId,
-    required int appVersionCode,
   }) async {
-    return _post({
-      'view': 'ParentStudents',
-      'token': token,
-      'device_id': deviceId,
-      'app_version': appVersionCode.toString(),
-    });
+    return _post({'view': 'ParentStudents', 'token': token});
   }
 
   Future<Result<Map<String, dynamic>>> _post(Map<String, dynamic> data) async {
@@ -62,7 +55,6 @@ class MobileSyncDataSource {
       final response = await _client.post<Map<String, dynamic>>(
         '/njson.php',
         data: data,
-        options: Options(contentType: Headers.formUrlEncodedContentType),
       );
 
       if (response.data == null) {

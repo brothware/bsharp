@@ -184,8 +184,6 @@ class DemoDataProvider implements SchoolDataProvider {
     required String login,
     required String passwordHash,
     required String token,
-    required String deviceId,
-    required int appVersionCode,
   }) async => false;
 
   List<Teacher> _buildTeachers() => const [
