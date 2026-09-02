@@ -25,8 +25,6 @@ void main() {
 
       final result = await ds.registerFcmToken(
         token: 'test-fcm-token-dart-${DateTime.now().millisecondsSinceEpoch}',
-        deviceId: 'test-device-dart-001',
-        appVersionCode: 1,
       );
 
       result.when(
@@ -49,8 +47,6 @@ void main() {
 
       final result = await ds.registerFcmToken(
         token: 'bsharp-fcm-integration-test',
-        deviceId: 'bsharp-device-integration',
-        appVersionCode: 95,
       );
 
       final data = result.when(

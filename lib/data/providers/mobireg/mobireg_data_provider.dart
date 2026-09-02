@@ -173,8 +173,6 @@ class MobiregDataProvider implements SchoolDataProvider {
     required String login,
     required String passwordHash,
     required String token,
-    required String deviceId,
-    required int appVersionCode,
   }) async {
     final factory = ApiClientFactory(
       school: school,
@@ -182,13 +180,9 @@ class MobiregDataProvider implements SchoolDataProvider {
       parentPassHash: passwordHash,
     );
     final syncDs = MobileSyncDataSource(
-      client: factory.createMobileSyncClient(),
+      client: factory.createTokenUploadClient(),
     );
-    final result = await syncDs.registerFcmToken(
-      token: token,
-      deviceId: deviceId,
-      appVersionCode: appVersionCode,
-    );
+    final result = await syncDs.registerFcmToken(token: token);
     return result.when(success: (_) => true, failure: (_) => false);
   }
 

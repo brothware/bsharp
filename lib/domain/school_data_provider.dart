@@ -82,8 +82,6 @@ abstract class SchoolDataProvider {
     required String login,
     required String passwordHash,
     required String token,
-    required String deviceId,
-    required int appVersionCode,
   });
 
   LocalFcmNotification? parseFcmMessage(RemoteMessage message) => null;

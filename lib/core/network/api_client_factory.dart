@@ -23,7 +23,23 @@ class ApiClientFactory {
       ? {'withCredentials': true}
       : <String, dynamic>{};
 
-  Dio createMobileSyncClient() {
+  Dio createMobileSyncClient() => _createNjsonClient(
+    userAgent: AppConstants.userAgent,
+    acceptEncoding: AppConstants.syncAcceptEncoding,
+    contentType: AppConstants.syncContentType,
+  );
+
+  Dio createTokenUploadClient() => _createNjsonClient(
+    userAgent: AppConstants.tokenUploadUserAgent,
+    acceptEncoding: AppConstants.tokenUploadAcceptEncoding,
+    contentType: AppConstants.tokenUploadContentType,
+  );
+
+  Dio _createNjsonClient({
+    required String userAgent,
+    required String acceptEncoding,
+    required String contentType,
+  }) {
     final baseUrl = AppConstants.hasMobiregBaseUrlOverride
         ? '${AppConstants.mobiregBaseUrl}/$_school/modules/api'
         : kIsWeb
@@ -39,7 +55,13 @@ class ApiClientFactory {
         receiveTimeout: const Duration(
           milliseconds: AppConstants.receiveTimeoutMs,
         ),
-        headers: kIsWeb ? null : {'User-Agent': AppConstants.userAgent},
+        contentType: contentType,
+        headers: kIsWeb
+            ? null
+            : {
+                'User-Agent': userAgent,
+                'Accept-Encoding': acceptEncoding,
+              },
         extra: _webExtra,
       ),
     );
