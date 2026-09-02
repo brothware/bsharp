@@ -11,12 +11,10 @@ enum TranslationEngine { mlKit, deepL }
 
 class TranslationService {
   TranslationService({
-    AppDatabase? database,
-    MlKitTranslationSource? mlKit,
-    DeepLDataSource? deepL,
-  }) : _database = database,
-       _mlKit = mlKit,
-       _deepL = deepL;
+    this._database,
+    this._mlKit,
+    this._deepL,
+  });
 
   final AppDatabase? _database;
   final MlKitTranslationSource? _mlKit;

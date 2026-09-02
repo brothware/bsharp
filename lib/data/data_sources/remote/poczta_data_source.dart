@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 class PocztaDataSource {
-  PocztaDataSource({required Dio client}) : _client = client;
+  PocztaDataSource({required this._client});
 
   final Dio _client;
   String _csrfToken = '';

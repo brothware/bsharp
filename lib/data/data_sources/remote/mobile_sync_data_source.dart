@@ -2,7 +2,7 @@ import 'package:bsharp/core/error/result.dart';
 import 'package:dio/dio.dart';
 
 class MobileSyncDataSource {
-  MobileSyncDataSource({required Dio client}) : _client = client;
+  MobileSyncDataSource({required this._client});
 
   final Dio _client;
 

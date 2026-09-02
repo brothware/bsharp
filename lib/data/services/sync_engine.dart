@@ -5,7 +5,7 @@ import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/repositories/sync_repository.dart';
 
 class SyncEngine {
-  SyncEngine({required SyncRepository repository}) : _repository = repository;
+  SyncEngine({required this._repository});
 
   final SyncRepository _repository;
   final _stateController = StreamController<SyncEngineState>.broadcast();
