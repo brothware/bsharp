@@ -11,10 +11,9 @@ import 'package:uuid/uuid.dart';
 
 class FcmTokenManager {
   FcmTokenManager({
-    required AccountStorage accountStorage,
-    required SharedPreferences prefs,
-  }) : _accountStorage = accountStorage,
-       _prefs = prefs;
+    required this._accountStorage,
+    required this._prefs,
+  });
 
   final AccountStorage _accountStorage;
   final SharedPreferences _prefs;

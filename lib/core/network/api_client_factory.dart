@@ -9,12 +9,10 @@ import 'package:flutter/foundation.dart';
 
 class ApiClientFactory {
   ApiClientFactory({
-    required String school,
-    required String parentLogin,
-    required String parentPassHash,
-  }) : _school = school,
-       _parentLogin = parentLogin,
-       _parentPassHash = parentPassHash;
+    required this._school,
+    required this._parentLogin,
+    required this._parentPassHash,
+  });
 
   final String _school;
   final String _parentLogin;

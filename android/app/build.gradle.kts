@@ -1,8 +1,8 @@
 import java.util.Properties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
     id("com.google.gms.google-services")
 }
@@ -15,17 +15,13 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "pl.brothware.bsharp"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = maxOf(flutter.compileSdkVersion, 37)
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
@@ -76,9 +72,15 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
+}
+
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
-    androidTestUtil("androidx.test:orchestrator:1.5.1")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+    androidTestUtil("androidx.test:orchestrator:1.6.1")
 }
 
 flutter {
