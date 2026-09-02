@@ -47,6 +47,10 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
     }
 
     if (isMobile) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_requestNotificationPermission());
+      });
+
       ref.listenManual<List<UnexcusedAbsence>>(
         staleUnexcusedAbsencesProvider,
         (prev, next) async {
@@ -57,6 +61,12 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
         },
       );
     }
+  }
+
+  Future<void> _requestNotificationPermission() async {
+    final service = ref.read(notificationServiceProvider);
+    await service.initialize();
+    await service.requestPermission();
   }
 
   @override
