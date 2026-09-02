@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:bsharp/wear/screens/wear_tests_detail_screen.dart';
@@ -105,10 +103,8 @@ class WearTestsTile extends ConsumerWidget {
   }
 
   void _openDetail(BuildContext context) {
-    unawaited(
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => const WearTestsDetailScreen()),
-      ),
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const WearTestsDetailScreen()),
     );
   }
 }

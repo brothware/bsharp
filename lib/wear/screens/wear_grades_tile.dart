@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -173,10 +171,8 @@ class WearGradesTile extends ConsumerWidget {
   }
 
   void _openDetail(BuildContext context) {
-    unawaited(
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => const WearGradesDetailScreen()),
-      ),
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const WearGradesDetailScreen()),
     );
   }
 }

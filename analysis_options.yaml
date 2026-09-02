@@ -6,6 +6,11 @@ analyzer:
     - '**/*.freezed.dart'
     - 'lib/l10n/**'
     - 'test/.test_coverage.dart'
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - linux/**
 
   errors:
     invalid_annotation_target: ignore
@@ -15,4 +20,3 @@ linter:
     public_member_api_docs: false
     lines_longer_than_80_chars: false
     flutter_style_todos: false
-    one_member_abstracts: false

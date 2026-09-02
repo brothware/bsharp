@@ -175,13 +175,13 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
                   controller: _tabController,
                   children: [
                     for (final day in days)
-                      viewMode == ScheduleViewMode.list
-                          ? _DayTimelineList(date: day)
-                          : LinearDayView(
-                              date: day,
-                              onItemTap: (item) =>
-                                  _showItemDetail(context, item),
-                            ),
+                      if (viewMode == ScheduleViewMode.list)
+                        _DayTimelineList(date: day)
+                      else
+                        LinearDayView(
+                          date: day,
+                          onItemTap: (item) => _showItemDetail(context, item),
+                        ),
                   ],
                 ),
                 fab: FloatingActionButton(

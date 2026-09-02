@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -54,7 +52,7 @@ class _AnimatedMessageRemovalState extends State<AnimatedMessageRemoval>
   void didUpdateWidget(AnimatedMessageRemoval oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isRemoving && !oldWidget.isRemoving) {
-      unawaited(_controller.forward());
+      _controller.forward();
     }
   }
 
@@ -68,7 +66,7 @@ class _AnimatedMessageRemovalState extends State<AnimatedMessageRemoval>
   Widget build(BuildContext context) {
     return SizeTransition(
       sizeFactor: _sizeFactor,
-      axisAlignment: -1,
+      alignment: AlignmentDirectional.topStart,
       child: FadeTransition(opacity: _opacity, child: widget.child),
     );
   }

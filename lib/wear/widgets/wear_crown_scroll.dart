@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bsharp/wear/wear_crown_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,18 +45,14 @@ class _WearCrownScrollState extends ConsumerState<WearCrownScroll> {
 
   void _handlePageScroll(PageController controller, double delta) {
     if (delta > 0) {
-      unawaited(
-        controller.nextPage(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-        ),
+      controller.nextPage(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
       );
     } else if (delta < 0) {
-      unawaited(
-        controller.previousPage(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-        ),
+      controller.previousPage(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
       );
     }
   }
@@ -77,12 +71,10 @@ class _WearCrownScrollState extends ConsumerState<WearCrownScroll> {
       pos.minScrollExtent,
       pos.maxScrollExtent,
     );
-    unawaited(
-      controller.animateTo(
-        target,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeOut,
-      ),
+    controller.animateTo(
+      target,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeOut,
     );
   }
 

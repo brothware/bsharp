@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/brothware/bsharp/actions/workflows/ci.yml/badge.svg)](https://github.com/brothware/bsharp/actions/workflows/ci.yml)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
-[![Flutter](https://img.shields.io/badge/Flutter-3.38-02569B.svg?logo=flutter)](https://flutter.dev/)
+[![Flutter](https://img.shields.io/badge/Flutter-3.47-02569B.svg?logo=flutter)](https://flutter.dev/)
 [![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Wear%20OS-green.svg)](#platforms)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-dawidsliwas-FFDD00?logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/dawidsliwas)
 
@@ -49,7 +49,7 @@ A universal e-Grade system aggregator for Polish schools. BSharp connects to mul
 
 ### Prerequisites
 
-- [Flutter](https://docs.flutter.dev/get-started/install) 3.38+
+- [Flutter](https://docs.flutter.dev/get-started/install) 3.47+
 - Android Studio / Xcode (for mobile builds)
 - Chrome (for web builds)
 
@@ -59,7 +59,7 @@ A universal e-Grade system aggregator for Polish schools. BSharp connects to mul
 git clone https://github.com/brothware/bsharp.git
 cd bsharp
 flutter pub get
-flutter pub run build_runner build --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 

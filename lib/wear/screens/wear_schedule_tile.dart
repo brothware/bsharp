@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
@@ -85,11 +83,9 @@ class WearScheduleTile extends ConsumerWidget {
   }
 
   void _openDetail(BuildContext context) {
-    unawaited(
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => const WearScheduleDetailScreen(),
-        ),
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const WearScheduleDetailScreen(),
       ),
     );
   }

@@ -45,7 +45,7 @@ class PinPadState extends State<PinPad> with SingleTickerProviderStateMixin {
   }
 
   void shake() {
-    unawaited(_shakeController.forward(from: 0));
+    _shakeController.forward(from: 0);
     setState(() => _pin = '');
   }
 
