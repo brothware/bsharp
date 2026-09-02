@@ -135,19 +135,15 @@ class ChildModeConfigScreen extends ConsumerWidget {
   }
 
   void _navigateToPinSetup(BuildContext context) {
-    unawaited(
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute<bool>(builder: (_) => const PinSetupScreen())),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<bool>(builder: (_) => const PinSetupScreen()));
   }
 
   void _navigateToPinEntry(BuildContext context) {
-    unawaited(
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute<bool>(builder: (_) => const PinEntryScreen())),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<bool>(builder: (_) => const PinEntryScreen()));
   }
 
   void _confirmRemovePin(BuildContext context, WidgetRef ref) {

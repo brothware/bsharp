@@ -159,12 +159,10 @@ class WearChildModeScreen extends ConsumerWidget {
   }
 
   void _navigateToPinSetup(BuildContext context) {
-    unawaited(
-      Navigator.of(
-        context,
-      ).push(
-        MaterialPageRoute<bool>(builder: (_) => const WearPinSetupScreen()),
-      ),
+    Navigator.of(
+      context,
+    ).push(
+      MaterialPageRoute<bool>(builder: (_) => const WearPinSetupScreen()),
     );
   }
 

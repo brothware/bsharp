@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class ShimmerBox extends StatefulWidget {
@@ -30,7 +28,7 @@ class _ShimmerBoxState extends State<ShimmerBox>
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     );
-    unawaited(_controller.repeat());
+    _controller.repeat();
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
   }
 

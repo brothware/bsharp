@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -68,11 +66,9 @@ class _BulletinTile extends StatelessWidget {
   }
 
   void _showDetail(BuildContext context, PortalBulletin bulletin) {
-    unawaited(
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => _BulletinDetailScreen(bulletin: bulletin),
-        ),
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => _BulletinDetailScreen(bulletin: bulletin),
       ),
     );
   }

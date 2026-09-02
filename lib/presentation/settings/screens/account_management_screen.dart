@@ -38,15 +38,13 @@ class AccountManagementScreen extends ConsumerWidget {
   }
 
   void _navigateToAddAccount(BuildContext context) {
-    unawaited(
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => Scaffold(
-            appBar: AppBar(title: Text(t.accounts.addAccount)),
-            body: Center(
-              child: AddAccountForm(
-                onComplete: () => Navigator.of(context).pop(),
-              ),
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => Scaffold(
+          appBar: AppBar(title: Text(t.accounts.addAccount)),
+          body: Center(
+            child: AddAccountForm(
+              onComplete: () => Navigator.of(context).pop(),
             ),
           ),
         ),
@@ -101,16 +99,14 @@ class _AccountTile extends ConsumerWidget {
   }
 
   void _navigateToEdit(BuildContext context) {
-    unawaited(
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => Scaffold(
-            appBar: AppBar(title: Text(t.accounts.editAccount)),
-            body: Center(
-              child: AddAccountForm(
-                existingAccount: account,
-                onComplete: () => Navigator.of(context).pop(),
-              ),
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => Scaffold(
+          appBar: AppBar(title: Text(t.accounts.editAccount)),
+          body: Center(
+            child: AddAccountForm(
+              existingAccount: account,
+              onComplete: () => Navigator.of(context).pop(),
             ),
           ),
         ),

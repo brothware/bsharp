@@ -89,8 +89,7 @@ void main() {
     test('Full sync response parses through SyncDataParser', () async {
       final response = await dio.post<Map<String, dynamic>>(
         '/osm-wroclaw/modules/api/njson.php',
-        data:
-            'login=eparent&pass=test&student_id=6541&start_date=2025-09-01&end_date=2026-06-30',
+        data: 'login=eparent&pass=test&student_id=6541&start_date=2025-09-01&end_date=2026-06-30',
         options: Options(contentType: 'application/x-www-form-urlencoded'),
       );
 
@@ -150,8 +149,7 @@ void main() {
     test('timetable-events view parses correctly', () async {
       final response = await dio.post<Map<String, dynamic>>(
         '/api.php',
-        data:
-            'school=osm-wroclaw&token=abc&view=timetable-events&pupilId=6541&dateFrom=2026-03-01&dateTo=2026-03-31',
+        data: 'school=osm-wroclaw&token=abc&view=timetable-events&pupilId=6541&dateFrom=2026-03-01&dateTo=2026-03-31',
         options: Options(contentType: 'application/x-www-form-urlencoded'),
       );
 

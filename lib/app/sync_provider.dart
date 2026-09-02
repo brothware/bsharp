@@ -21,8 +21,7 @@ enum SyncStatus {
   hydrated,
   syncing,
   completed,
-  failed
-  ;
+  failed;
 
   bool get isBusy => this == syncing;
 }
