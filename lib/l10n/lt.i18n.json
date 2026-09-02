@@ -478,6 +478,8 @@
     "gradesDescription": "Pranešimai apie naujus pažymius",
     "messagesName": "Žinutės",
     "messagesDescription": "Pranešimai apie naujas žinutes",
+    "generalName": "Bendra",
+    "generalDescription": "Kiti pranešimai",
     "scheduleName": "Tvarkaraštis",
     "scheduleDescription": "Pranešimai apie tvarkaraščio pakeitimus",
     "attendanceName": "Lankomumas",

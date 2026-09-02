@@ -472,6 +472,8 @@
     "gradesDescription": "Notifications pour les nouvelles notes",
     "messagesName": "Messages",
     "messagesDescription": "Notifications pour les nouveaux messages",
+    "generalName": "Général",
+    "generalDescription": "Autres notifications",
     "scheduleName": "Emploi du temps",
     "scheduleDescription": "Notifications pour les changements d'emploi du temps",
     "attendanceName": "Présence",

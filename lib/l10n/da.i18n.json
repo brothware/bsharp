@@ -472,6 +472,8 @@
     "gradesDescription": "Notifikationer om nye karakterer",
     "messagesName": "Beskeder",
     "messagesDescription": "Notifikationer om nye beskeder",
+    "generalName": "Generelt",
+    "generalDescription": "Andre notifikationer",
     "scheduleName": "Skema",
     "scheduleDescription": "Notifikationer om skemaændringer",
     "attendanceName": "Fremmøde",

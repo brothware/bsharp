@@ -472,6 +472,8 @@
     "gradesDescription": "Ειδοποιήσεις για νέους βαθμούς",
     "messagesName": "Μηνύματα",
     "messagesDescription": "Ειδοποιήσεις για νέα μηνύματα",
+    "generalName": "Γενικά",
+    "generalDescription": "Άλλες ειδοποιήσεις",
     "scheduleName": "Πρόγραμμα",
     "scheduleDescription": "Ειδοποιήσεις για αλλαγές προγράμματος",
     "attendanceName": "Παρουσίες",

@@ -472,6 +472,8 @@
     "gradesDescription": "Ilmoitukset uusista arvosanoista",
     "messagesName": "Viestit",
     "messagesDescription": "Ilmoitukset uusista viesteistä",
+    "generalName": "Yleinen",
+    "generalDescription": "Muut ilmoitukset",
     "scheduleName": "Lukujärjestys",
     "scheduleDescription": "Ilmoitukset lukujärjestysmuutoksista",
     "attendanceName": "Läsnäolo",

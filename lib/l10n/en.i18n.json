@@ -469,6 +469,8 @@
     "gradesDescription": "Notifications about new grades",
     "messagesName": "Messages",
     "messagesDescription": "Notifications about new messages",
+    "generalName": "General",
+    "generalDescription": "Other notifications",
     "scheduleName": "Schedule",
     "scheduleDescription": "Notifications about schedule changes",
     "attendanceName": "Attendance",

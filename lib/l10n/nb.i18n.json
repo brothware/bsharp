@@ -472,6 +472,8 @@
     "gradesDescription": "Varsler om nye karakterer",
     "messagesName": "Meldinger",
     "messagesDescription": "Varsler om nye meldinger",
+    "generalName": "Generelt",
+    "generalDescription": "Andre varsler",
     "scheduleName": "Timeplan",
     "scheduleDescription": "Varsler om timeplanendringer",
     "attendanceName": "Fremmøte",

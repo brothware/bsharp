@@ -472,6 +472,8 @@
     "gradesDescription": "Értesítések új jegyekről",
     "messagesName": "Üzenetek",
     "messagesDescription": "Értesítések új üzenetekről",
+    "generalName": "Általános",
+    "generalDescription": "Egyéb értesítések",
     "scheduleName": "Órarend",
     "scheduleDescription": "Értesítések órarend-változásokról",
     "attendanceName": "Hiányzás",

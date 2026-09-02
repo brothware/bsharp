@@ -472,6 +472,8 @@
     "gradesDescription": "Teavitused uutest hinnetest",
     "messagesName": "Sõnumid",
     "messagesDescription": "Teavitused uutest sõnumitest",
+    "generalName": "Üldine",
+    "generalDescription": "Muud teatised",
     "scheduleName": "Tunniplaan",
     "scheduleDescription": "Teavitused tunniplaani muudatustest",
     "attendanceName": "Kohalviibimine",

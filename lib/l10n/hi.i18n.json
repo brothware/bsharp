@@ -472,6 +472,8 @@
     "gradesDescription": "नए अंकों की सूचनाएँ",
     "messagesName": "संदेश",
     "messagesDescription": "नए संदेशों की सूचनाएँ",
+    "generalName": "सामान्य",
+    "generalDescription": "अन्य सूचनाएँ",
     "scheduleName": "समय-सारणी",
     "scheduleDescription": "समय-सारणी बदलावों की सूचनाएँ",
     "attendanceName": "उपस्थिति",

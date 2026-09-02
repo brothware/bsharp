@@ -472,6 +472,8 @@
     "gradesDescription": "Meldingen over nieuwe cijfers",
     "messagesName": "Berichten",
     "messagesDescription": "Meldingen over nieuwe berichten",
+    "generalName": "Algemeen",
+    "generalDescription": "Overige meldingen",
     "scheduleName": "Rooster",
     "scheduleDescription": "Meldingen over roosterwijzigingen",
     "attendanceName": "Aanwezigheid",

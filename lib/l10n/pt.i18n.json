@@ -472,6 +472,8 @@
     "gradesDescription": "Notificações sobre novas notas",
     "messagesName": "Mensagens",
     "messagesDescription": "Notificações sobre novas mensagens",
+    "generalName": "Geral",
+    "generalDescription": "Outras notificações",
     "scheduleName": "Horário",
     "scheduleDescription": "Notificações sobre alterações no horário",
     "attendanceName": "Presenças",

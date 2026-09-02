@@ -472,6 +472,8 @@
     "gradesDescription": "Benachrichtigungen über neue Noten",
     "messagesName": "Nachrichten",
     "messagesDescription": "Benachrichtigungen über neue Nachrichten",
+    "generalName": "Allgemein",
+    "generalDescription": "Sonstige Benachrichtigungen",
     "scheduleName": "Stundenplan",
     "scheduleDescription": "Benachrichtigungen über Stundenplanänderungen",
     "attendanceName": "Anwesenheit",

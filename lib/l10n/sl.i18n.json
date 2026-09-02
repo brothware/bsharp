@@ -478,6 +478,8 @@
     "gradesDescription": "Obvestila o novih ocenah",
     "messagesName": "Sporočila",
     "messagesDescription": "Obvestila o novih sporočilih",
+    "generalName": "Splošno",
+    "generalDescription": "Druga obvestila",
     "scheduleName": "Urnik",
     "scheduleDescription": "Obvestila o spremembah urnika",
     "attendanceName": "Prisotnost",

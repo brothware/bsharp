@@ -475,6 +475,8 @@
     "gradesDescription": "Obaveštenja o novim ocenama",
     "messagesName": "Poruke",
     "messagesDescription": "Obaveštenja o novim porukama",
+    "generalName": "Опште",
+    "generalDescription": "Друга обавештења",
     "scheduleName": "Raspored",
     "scheduleDescription": "Obaveštenja o promenama u rasporedu",
     "attendanceName": "Prisustvo",

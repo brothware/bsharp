@@ -472,6 +472,8 @@
     "gradesDescription": "Paziņojumi par jaunām atzīmēm",
     "messagesName": "Ziņojumi",
     "messagesDescription": "Paziņojumi par jauniem ziņojumiem",
+    "generalName": "Vispārīgi",
+    "generalDescription": "Citi paziņojumi",
     "scheduleName": "Grafiks",
     "scheduleDescription": "Paziņojumi par grafika izmaiņām",
     "attendanceName": "Apmeklējums",
