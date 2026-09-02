@@ -472,6 +472,8 @@
     "gradesDescription": "새 성적 알림",
     "messagesName": "메시지",
     "messagesDescription": "새 메시지 알림",
+    "generalName": "일반",
+    "generalDescription": "기타 알림",
     "scheduleName": "시간표",
     "scheduleDescription": "시간표 변경 알림",
     "attendanceName": "출결",

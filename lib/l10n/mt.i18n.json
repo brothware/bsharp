@@ -478,6 +478,8 @@
     "gradesDescription": "Notifiki dwar marki ġodda",
     "messagesName": "Messaġġi",
     "messagesDescription": "Notifiki dwar messaġġi ġodda",
+    "generalName": "Ġenerali",
+    "generalDescription": "Notifiki oħra",
     "scheduleName": "Skeda",
     "scheduleDescription": "Notifiki dwar bidliet fl-iskeda",
     "attendanceName": "Attendenza",

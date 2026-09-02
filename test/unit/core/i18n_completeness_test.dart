@@ -128,6 +128,7 @@ void main() {
       'settings.title',
       'notification.homeworkName',
       'notification.messagesName',
+      'notification.generalName',
       'subjectNames.gitara',
       'subjectNames.skrzypce',
       'gradeCategories.recytacja',

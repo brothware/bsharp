@@ -1,4 +1,5 @@
 import 'package:bsharp/app/reauth_provider.dart';
+import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
@@ -150,19 +151,18 @@ class MobiregDataProvider implements SchoolDataProvider {
   @override
   LocalFcmNotification? parseFcmMessage(RemoteMessage message) {
     final data = message.data;
-    final kind = data['kind'] as String? ?? '';
-    if (kind != 'messages') return null;
-
     final title = data['title'] as String? ?? '';
     if (title.isEmpty) return null;
+
+    final kind = _MobiregNotificationKind.forKey(data['kind'] as String? ?? '');
 
     return LocalFcmNotification(
       title: title,
       body: data['body'] as String? ?? '',
-      channelId: 'messages',
-      channelName: t.notification.messagesName,
-      channelDescription: t.notification.messagesDescription,
-      route: '/messages',
+      channelId: kind.channelId,
+      channelName: kind.channelName,
+      channelDescription: kind.channelDescription,
+      route: kind.route,
       triggersSync: data['noSync'] != 'true',
     );
   }
@@ -594,4 +594,41 @@ class MobiregDataProvider implements SchoolDataProvider {
           debugPrint('MobiregDataProvider: portal view $view failed: $failure'),
     );
   }
+}
+
+enum _MobiregNotificationKind {
+  messages('messages', 'messages', AppRoutes.messages),
+  marks('marks', 'grades', AppRoutes.grades),
+  absences('absences', 'attendance', AppRoutes.attendance),
+  reprimands('reprimands', 'notes', AppRoutes.notes),
+  timetables('timetables', 'schedule', AppRoutes.schedule),
+  other('other', 'general', AppRoutes.dashboard);
+
+  const _MobiregNotificationKind(this.key, this.channelId, this.route);
+
+  final String key;
+  final String channelId;
+  final String route;
+
+  static _MobiregNotificationKind forKey(String key) {
+    return values.firstWhere((kind) => kind.key == key, orElse: () => other);
+  }
+
+  String get channelName => switch (this) {
+    messages => t.notification.messagesName,
+    marks => t.notification.gradesName,
+    absences => t.notification.attendanceName,
+    reprimands => t.notification.notesName,
+    timetables => t.notification.scheduleName,
+    other => t.notification.generalName,
+  };
+
+  String get channelDescription => switch (this) {
+    messages => t.notification.messagesDescription,
+    marks => t.notification.gradesDescription,
+    absences => t.notification.attendanceDescription,
+    reprimands => t.notification.notesDescription,
+    timetables => t.notification.scheduleDescription,
+    other => t.notification.generalDescription,
+  };
 }

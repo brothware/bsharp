@@ -472,6 +472,8 @@
     "gradesDescription": "Powiadomienia o nowych ocenach",
     "messagesName": "Wiadomości",
     "messagesDescription": "Powiadomienia o nowych wiadomościach",
+    "generalName": "Ogólne",
+    "generalDescription": "Pozostałe powiadomienia",
     "scheduleName": "Plan lekcji",
     "scheduleDescription": "Powiadomienia o zmianach w planie",
     "attendanceName": "Frekwencja",

@@ -472,6 +472,8 @@
     "gradesDescription": "Aviseringar om nya betyg",
     "messagesName": "Meddelanden",
     "messagesDescription": "Aviseringar om nya meddelanden",
+    "generalName": "Allmänt",
+    "generalDescription": "Övriga aviseringar",
     "scheduleName": "Schema",
     "scheduleDescription": "Aviseringar om schemaändringar",
     "attendanceName": "Närvaro",

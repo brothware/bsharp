@@ -472,6 +472,8 @@
     "gradesDescription": "Yeni notlar hakkında bildirimler",
     "messagesName": "Mesajlar",
     "messagesDescription": "Yeni mesajlar hakkında bildirimler",
+    "generalName": "Genel",
+    "generalDescription": "Diğer bildirimler",
     "scheduleName": "Ders programı",
     "scheduleDescription": "Ders programı değişiklikleri hakkında bildirimler",
     "attendanceName": "Devamsızlık",

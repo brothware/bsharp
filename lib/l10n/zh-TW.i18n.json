@@ -472,6 +472,8 @@
     "gradesDescription": "新成績通知",
     "messagesName": "訊息",
     "messagesDescription": "新訊息通知",
+    "generalName": "一般",
+    "generalDescription": "其他通知",
     "scheduleName": "課表",
     "scheduleDescription": "課表變更通知",
     "attendanceName": "出勤",

@@ -472,6 +472,8 @@
     "gradesDescription": "Известувања за нови оценки",
     "messagesName": "Пораки",
     "messagesDescription": "Известувања за нови пораки",
+    "generalName": "Општо",
+    "generalDescription": "Други известувања",
     "scheduleName": "Распоред",
     "scheduleDescription": "Известувања за промени во распоредот",
     "attendanceName": "Присуство",

@@ -475,6 +475,8 @@
     "gradesDescription": "Oznámenia o nových známkach",
     "messagesName": "Správy",
     "messagesDescription": "Oznámenia o nových správach",
+    "generalName": "Všeobecné",
+    "generalDescription": "Ostatné upozornenia",
     "scheduleName": "Rozvrh",
     "scheduleDescription": "Oznámenia o zmenách rozvrhu",
     "attendanceName": "Dochádzka",

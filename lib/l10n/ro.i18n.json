@@ -475,6 +475,8 @@
     "gradesDescription": "Notificări despre note noi",
     "messagesName": "Mesaje",
     "messagesDescription": "Notificări despre mesaje noi",
+    "generalName": "General",
+    "generalDescription": "Alte notificări",
     "scheduleName": "Orar",
     "scheduleDescription": "Notificări despre modificări ale orarului",
     "attendanceName": "Prezență",

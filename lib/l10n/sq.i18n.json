@@ -472,6 +472,8 @@
     "gradesDescription": "Njoftimet për nota të reja",
     "messagesName": "Mesazhet",
     "messagesDescription": "Njoftimet për mesazhe të reja",
+    "generalName": "Të përgjithshme",
+    "generalDescription": "Njoftime të tjera",
     "scheduleName": "Orari",
     "scheduleDescription": "Njoftimet për ndryshime në orar",
     "attendanceName": "Frekuentimi",

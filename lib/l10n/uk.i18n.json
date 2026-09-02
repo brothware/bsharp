@@ -478,6 +478,8 @@
     "gradesDescription": "Сповіщення про нові оцінки",
     "messagesName": "Повідомлення",
     "messagesDescription": "Сповіщення про нові повідомлення",
+    "generalName": "Загальні",
+    "generalDescription": "Інші повідомлення",
     "scheduleName": "Розклад",
     "scheduleDescription": "Сповіщення про зміни в розкладі",
     "attendanceName": "Відвідуваність",

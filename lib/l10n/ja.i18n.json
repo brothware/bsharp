@@ -472,6 +472,8 @@
     "gradesDescription": "新しい成績の通知",
     "messagesName": "メッセージ",
     "messagesDescription": "新しいメッセージの通知",
+    "generalName": "一般",
+    "generalDescription": "その他の通知",
     "scheduleName": "時間割",
     "scheduleDescription": "時間割変更の通知",
     "attendanceName": "出欠",

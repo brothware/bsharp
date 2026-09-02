@@ -472,6 +472,8 @@
     "gradesDescription": "Notifiche per nuovi voti",
     "messagesName": "Messaggi",
     "messagesDescription": "Notifiche per nuovi messaggi",
+    "generalName": "Generale",
+    "generalDescription": "Altre notifiche",
     "scheduleName": "Orario",
     "scheduleDescription": "Notifiche per cambiamenti nell'orario",
     "attendanceName": "Presenze",

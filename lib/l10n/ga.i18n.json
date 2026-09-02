@@ -481,6 +481,8 @@
     "gradesDescription": "Folaiseachtai faoi ghradaim nua",
     "messagesName": "Teachtaireachtai",
     "messagesDescription": "Folaiseachtai faoi theachtaireachtai nua",
+    "generalName": "Ginearálta",
+    "generalDescription": "Fógraí eile",
     "scheduleName": "Amhclar",
     "scheduleDescription": "Folaiseachtai faoi athruithne ar an amhclar",
     "attendanceName": "Tinreamh",
