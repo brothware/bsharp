@@ -106,7 +106,10 @@ class _AverageChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: average != null
-            ? gradeColor(average).withValues(alpha: 0.15)
+            ? gradeColor(
+                average,
+                brightness: Theme.of(context).brightness,
+              ).withValues(alpha: 0.15)
             : Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(20),
       ),
@@ -118,7 +121,12 @@ class _AverageChip extends StatelessWidget {
             formatAverage(average),
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: average != null ? gradeColor(average) : null,
+              color: average != null
+                  ? gradeColor(
+                      average,
+                      brightness: Theme.of(context).brightness,
+                    )
+                  : null,
             ),
           ),
         ],
@@ -158,14 +166,14 @@ class _SubjectSection extends ConsumerWidget {
                     '${t.grades.weightedAverageLabel}${formatAverage(weighted)}',
                     style: theme.textTheme.labelSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: gradeColor(weighted),
+                      color: gradeColor(weighted, brightness: theme.brightness),
                     ),
                   ),
                 if (simple != null)
                   Text(
                     '${t.grades.simpleAverageLabel}${formatAverage(simple)}',
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: gradeColor(simple),
+                      color: gradeColor(simple, brightness: theme.brightness),
                     ),
                   ),
               ],

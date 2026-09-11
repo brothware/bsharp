@@ -91,8 +91,8 @@ class _AveragePill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = gradeColor(average);
     final theme = Theme.of(context);
+    final color = gradeColor(average, brightness: theme.brightness);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -128,7 +128,7 @@ class _GradeChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final color = gradeColor(effectiveValue);
+    final color = gradeColor(effectiveValue, brightness: theme.brightness);
 
     return Column(
       mainAxisSize: MainAxisSize.min,

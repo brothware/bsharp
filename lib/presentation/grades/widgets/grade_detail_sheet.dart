@@ -32,7 +32,10 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
   Widget build(BuildContext context) {
     final grade = widget.grade;
     final theme = Theme.of(context);
-    final color = gradeColor(grade.effectiveValue);
+    final color = gradeColor(
+      grade.effectiveValue,
+      brightness: theme.brightness,
+    );
     final translationAvailable = ref.watch(isTranslationAvailableProvider);
 
     return Container(
