@@ -1,13 +1,14 @@
-import 'package:bsharp/core/constants/app_colors.dart';
+import 'package:bsharp/core/constants/semantic_color.dart';
+import 'package:bsharp/core/constants/semantic_palette.dart';
 import 'package:flutter/material.dart';
 
 abstract final class AppTheme {
   static ThemeData light() {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.seaGreen,
-      primary: AppColors.seaGreen,
-      secondary: AppColors.primaryBlue,
-      tertiary: AppColors.accentOrange,
+      seedColor: SemanticPalette.light[SemanticColor.brandPrimary]!,
+      primary: SemanticPalette.light[SemanticColor.brandPrimary],
+      secondary: SemanticPalette.light[SemanticColor.brandSecondary],
+      tertiary: SemanticPalette.light[SemanticColor.brandTertiary],
     );
 
     return ThemeData(
@@ -44,10 +45,10 @@ abstract final class AppTheme {
 
   static ThemeData dark() {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.seaGreen,
-      primary: AppColors.seaGreen,
-      secondary: AppColors.primaryBlue,
-      tertiary: AppColors.accentOrange,
+      seedColor: SemanticPalette.dark[SemanticColor.brandPrimary]!,
+      primary: SemanticPalette.dark[SemanticColor.brandPrimary],
+      secondary: SemanticPalette.dark[SemanticColor.brandSecondary],
+      tertiary: SemanticPalette.dark[SemanticColor.brandTertiary],
       brightness: Brightness.dark,
     );
 
