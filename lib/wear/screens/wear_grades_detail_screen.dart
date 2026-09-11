@@ -188,7 +188,10 @@ class _WearSubjectSection extends StatelessWidget {
             spacing: 4,
             runSpacing: 4,
             children: sg.grades.map((g) {
-              final color = gradeColor(g.effectiveValue);
+              final color = gradeColor(
+                g.effectiveValue,
+                brightness: theme.brightness,
+              );
               return Container(
                 constraints: const BoxConstraints(minWidth: 40, minHeight: 28),
                 alignment: Alignment.center,

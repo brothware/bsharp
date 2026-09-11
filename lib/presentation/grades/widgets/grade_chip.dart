@@ -17,7 +17,10 @@ class GradeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = gradeColor(grade.effectiveValue);
+    final color = gradeColor(
+      grade.effectiveValue,
+      brightness: Theme.of(context).brightness,
+    );
     final theme = Theme.of(context);
 
     return Stack(

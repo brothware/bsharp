@@ -1,6 +1,7 @@
 import 'dart:ui';
 
-import 'package:bsharp/core/constants/app_colors.dart';
+import 'package:bsharp/core/constants/semantic_color.dart';
+import 'package:bsharp/core/constants/semantic_palette.dart';
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 
 class SubjectGrades {
@@ -40,14 +41,17 @@ class SubjectGrades {
   }
 }
 
-Color gradeColor(double? value) {
-  if (value == null) return AppColors.gradeSatisfactory;
-  if (value >= 5.5) return AppColors.gradeExcellent;
-  if (value >= 4.5) return AppColors.gradeVeryGood;
-  if (value >= 3.5) return AppColors.gradeGood;
-  if (value >= 2.5) return AppColors.gradeSatisfactory;
-  if (value >= 1.5) return AppColors.gradeAcceptable;
-  return AppColors.gradeFailing;
+Color gradeColor(double? value, {required Brightness brightness}) {
+  final token = switch (value) {
+    null => SemanticColor.gradeSatisfactory,
+    >= 5.5 => SemanticColor.gradeExcellent,
+    >= 4.5 => SemanticColor.gradeVeryGood,
+    >= 3.5 => SemanticColor.gradeGood,
+    >= 2.5 => SemanticColor.gradeSatisfactory,
+    >= 1.5 => SemanticColor.gradeAcceptable,
+    _ => SemanticColor.gradeFailing,
+  };
+  return SemanticPalette.resolve(token, brightness);
 }
 
 String formatAverage(double? avg) {

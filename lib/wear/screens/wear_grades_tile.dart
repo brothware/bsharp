@@ -75,7 +75,10 @@ class WearGradesTile extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final g = recent[index];
                   final isNew = newIds.contains(g.id);
-                  final color = gradeColor(g.effectiveValue);
+                  final color = gradeColor(
+                    g.effectiveValue,
+                    brightness: theme.brightness,
+                  );
 
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 3),

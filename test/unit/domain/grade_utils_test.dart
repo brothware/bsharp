@@ -1,7 +1,9 @@
-import 'package:bsharp/core/constants/app_colors.dart';
+import 'package:bsharp/core/constants/semantic_color.dart';
+import 'package:bsharp/core/constants/semantic_palette.dart';
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 ResolvedGrade _resolved({
@@ -102,38 +104,75 @@ void main() {
   });
 
   group('gradeColor', () {
-    test('returns excellent for >= 5.5', () {
-      expect(gradeColor(6), AppColors.gradeExcellent);
-      expect(gradeColor(5.5), AppColors.gradeExcellent);
+    test('maps bands to the dark palette', () {
+      const b = Brightness.dark;
+      expect(
+        gradeColor(6, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeExcellent],
+      );
+      expect(
+        gradeColor(5.5, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeExcellent],
+      );
+      expect(
+        gradeColor(5, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeVeryGood],
+      );
+      expect(
+        gradeColor(4.5, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeVeryGood],
+      );
+      expect(
+        gradeColor(4, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeGood],
+      );
+      expect(
+        gradeColor(3.5, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeGood],
+      );
+      expect(
+        gradeColor(3, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeSatisfactory],
+      );
+      expect(
+        gradeColor(2.5, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeSatisfactory],
+      );
+      expect(
+        gradeColor(2, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeAcceptable],
+      );
+      expect(
+        gradeColor(1.5, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeAcceptable],
+      );
+      expect(
+        gradeColor(1, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeFailing],
+      );
+      expect(
+        gradeColor(null, brightness: b),
+        SemanticPalette.dark[SemanticColor.gradeSatisfactory],
+      );
     });
 
-    test('returns veryGood for >= 4.5', () {
-      expect(gradeColor(5), AppColors.gradeVeryGood);
-      expect(gradeColor(4.5), AppColors.gradeVeryGood);
+    test('maps the same bands to the light palette', () {
+      const b = Brightness.light;
+      expect(
+        gradeColor(6, brightness: b),
+        SemanticPalette.light[SemanticColor.gradeExcellent],
+      );
+      expect(
+        gradeColor(1, brightness: b),
+        SemanticPalette.light[SemanticColor.gradeFailing],
+      );
     });
 
-    test('returns good for >= 3.5', () {
-      expect(gradeColor(4), AppColors.gradeGood);
-      expect(gradeColor(3.5), AppColors.gradeGood);
-    });
-
-    test('returns satisfactory for >= 2.5', () {
-      expect(gradeColor(3), AppColors.gradeSatisfactory);
-      expect(gradeColor(2.5), AppColors.gradeSatisfactory);
-    });
-
-    test('returns acceptable for >= 1.5', () {
-      expect(gradeColor(2), AppColors.gradeAcceptable);
-      expect(gradeColor(1.5), AppColors.gradeAcceptable);
-    });
-
-    test('returns failing for < 1.5', () {
-      expect(gradeColor(1), AppColors.gradeFailing);
-      expect(gradeColor(0.5), AppColors.gradeFailing);
-    });
-
-    test('returns satisfactory for null', () {
-      expect(gradeColor(null), AppColors.gradeSatisfactory);
+    test('light and dark differ', () {
+      expect(
+        gradeColor(4, brightness: Brightness.light),
+        isNot(gradeColor(4, brightness: Brightness.dark)),
+      );
     });
   });
 
