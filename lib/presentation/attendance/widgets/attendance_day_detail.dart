@@ -79,7 +79,10 @@ class AttendanceDayDetail extends ConsumerWidget {
                   width: 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: attendanceStatusColor(day.status),
+                    color: attendanceStatusColor(
+                      day.status,
+                      brightness: theme.brightness,
+                    ),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -87,7 +90,10 @@ class AttendanceDayDetail extends ConsumerWidget {
                 Text(
                   _statusLabel(day.status),
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: attendanceStatusColor(day.status),
+                    color: attendanceStatusColor(
+                      day.status,
+                      brightness: theme.brightness,
+                    ),
                   ),
                 ),
                 const Spacer(),
@@ -243,7 +249,8 @@ class _EntryTile extends ConsumerWidget {
     final theme = Theme.of(context);
     final color = attendanceTypeColor(
       entry.type.countAs,
-      entry.type.excuseStatus,
+      excuseStatus: entry.type.excuseStatus,
+      brightness: theme.brightness,
     );
 
     final tile = Padding(

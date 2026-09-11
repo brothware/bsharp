@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:bsharp/core/constants/semantic_color.dart';
+import 'package:bsharp/core/constants/semantic_palette.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -95,32 +97,38 @@ class AttendanceStats {
       totalLessons > 0 ? (absentCount / totalLessons) * 100 : 0;
 }
 
-Color attendanceStatusColor(AttendanceDayStatus status) {
-  return switch (status) {
-    AttendanceDayStatus.present => const Color(0xFF4CAF50),
-    AttendanceDayStatus.excused => const Color(0xFF42A5F5),
-    AttendanceDayStatus.unexcused => const Color(0xFFF44336),
-    AttendanceDayStatus.late => const Color(0xFFFFA726),
-    AttendanceDayStatus.mixed => const Color(0xFFFFA726),
-    AttendanceDayStatus.noData => const Color(0xFFBDBDBD),
+Color attendanceStatusColor(
+  AttendanceDayStatus status, {
+  required Brightness brightness,
+}) {
+  final token = switch (status) {
+    AttendanceDayStatus.present => SemanticColor.statusPresent,
+    AttendanceDayStatus.excused => SemanticColor.statusExcused,
+    AttendanceDayStatus.unexcused => SemanticColor.statusUnexcused,
+    AttendanceDayStatus.late => SemanticColor.statusLate,
+    AttendanceDayStatus.mixed => SemanticColor.statusMixed,
+    AttendanceDayStatus.noData => SemanticColor.statusNoData,
   };
+  return SemanticPalette.resolve(token, brightness);
 }
 
 Color attendanceTypeColor(
-  AttendanceCountAs countAs, [
+  AttendanceCountAs countAs, {
+  required Brightness brightness,
   AttendanceExcuseStatus? excuseStatus,
-]) {
+}) {
   if ((countAs == AttendanceCountAs.absent ||
           countAs == AttendanceCountAs.late) &&
       excuseStatus == AttendanceExcuseStatus.excused) {
-    return const Color(0xFF42A5F5);
+    return SemanticPalette.resolve(SemanticColor.statusExcused, brightness);
   }
-  return switch (countAs) {
-    AttendanceCountAs.present => const Color(0xFF4CAF50),
-    AttendanceCountAs.absent => const Color(0xFFF44336),
-    AttendanceCountAs.late => const Color(0xFFFFA726),
-    AttendanceCountAs.other => const Color(0xFFBDBDBD),
+  final token = switch (countAs) {
+    AttendanceCountAs.present => SemanticColor.statusPresent,
+    AttendanceCountAs.absent => SemanticColor.statusUnexcused,
+    AttendanceCountAs.late => SemanticColor.statusLate,
+    AttendanceCountAs.other => SemanticColor.statusNoData,
   };
+  return SemanticPalette.resolve(token, brightness);
 }
 
 String attendancePercentLabel(double percent) {

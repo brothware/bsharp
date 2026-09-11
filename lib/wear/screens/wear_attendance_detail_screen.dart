@@ -192,7 +192,10 @@ class _WearCalendarDay extends StatelessWidget {
               height: 4,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: attendanceStatusColor(status),
+                color: attendanceStatusColor(
+                  status,
+                  brightness: theme.brightness,
+                ),
               ),
             ),
         ],
