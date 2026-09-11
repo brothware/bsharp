@@ -1,7 +1,10 @@
+import 'package:bsharp/core/constants/semantic_color.dart';
+import 'package:bsharp/core/constants/semantic_palette.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -157,9 +160,44 @@ void main() {
   group('attendanceStatusColor', () {
     test('returns different colors for each status', () {
       final colors = AttendanceDayStatus.values
-          .map(attendanceStatusColor)
+          .map(
+            (status) =>
+                attendanceStatusColor(status, brightness: Brightness.light),
+          )
           .toSet();
       expect(colors.length, 5);
+    });
+
+    test('resolves per brightness', () {
+      expect(
+        attendanceStatusColor(
+          AttendanceDayStatus.present,
+          brightness: Brightness.dark,
+        ),
+        SemanticPalette.dark[SemanticColor.statusPresent],
+      );
+      expect(
+        attendanceStatusColor(
+          AttendanceDayStatus.present,
+          brightness: Brightness.light,
+        ),
+        SemanticPalette.light[SemanticColor.statusPresent],
+      );
+    });
+
+    test('noData differs between themes', () {
+      expect(
+        attendanceStatusColor(
+          AttendanceDayStatus.noData,
+          brightness: Brightness.light,
+        ),
+        isNot(
+          attendanceStatusColor(
+            AttendanceDayStatus.noData,
+            brightness: Brightness.dark,
+          ),
+        ),
+      );
     });
   });
 

@@ -196,7 +196,10 @@ class _CalendarDay extends StatelessWidget {
     final status = attendanceDay?.status ?? AttendanceDayStatus.noData;
     final hasData =
         attendanceDay != null && status != AttendanceDayStatus.noData;
-    final color = attendanceStatusColor(status);
+    final color = attendanceStatusColor(
+      status,
+      brightness: theme.brightness,
+    );
 
     return GestureDetector(
       onTap: hasData ? onTap : null,
@@ -247,25 +250,38 @@ class _Legend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 12,
       runSpacing: 4,
       children: [
         _LegendItem(
-          color: attendanceStatusColor(AttendanceDayStatus.present),
+          color: attendanceStatusColor(
+            AttendanceDayStatus.present,
+            brightness: brightness,
+          ),
           label: t.attendance.present,
         ),
         _LegendItem(
-          color: attendanceStatusColor(AttendanceDayStatus.excused),
+          color: attendanceStatusColor(
+            AttendanceDayStatus.excused,
+            brightness: brightness,
+          ),
           label: t.attendance.excusedLegend,
         ),
         _LegendItem(
-          color: attendanceStatusColor(AttendanceDayStatus.unexcused),
+          color: attendanceStatusColor(
+            AttendanceDayStatus.unexcused,
+            brightness: brightness,
+          ),
           label: t.attendance.unexcusedLegend,
         ),
         _LegendItem(
-          color: attendanceStatusColor(AttendanceDayStatus.late),
+          color: attendanceStatusColor(
+            AttendanceDayStatus.late,
+            brightness: brightness,
+          ),
           label: t.attendance.lateLegend,
         ),
       ],
