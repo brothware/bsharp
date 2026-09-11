@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
-import 'package:bsharp/core/constants/app_colors.dart';
+import 'package:bsharp/core/constants/semantic_color.dart';
+import 'package:bsharp/core/constants/semantic_palette.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -85,10 +86,13 @@ class _AccountSetupScreenState extends ConsumerState<AccountSetupScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.school,
                     size: 64,
-                    color: AppColors.seaGreen,
+                    color: SemanticPalette.resolve(
+                      SemanticColor.brandPrimary,
+                      theme.brightness,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Text(

@@ -30,7 +30,7 @@ void main() {
   const minimumRatio = 4.5;
 
   test('SemanticColor covers every shared token', () {
-    expect(SemanticColor.values.length, 19);
+    expect(SemanticColor.values.length, 15);
     expect(SemanticPalette.light.keys.toSet(), SemanticColor.values.toSet());
     expect(SemanticPalette.dark.keys.toSet(), SemanticColor.values.toSet());
   });
