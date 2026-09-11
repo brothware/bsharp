@@ -30,7 +30,7 @@
 |---|---|
 | `lib/core/constants/semantic_color.dart` (create) | The `SemanticColor` enum: the canonical token list |
 | `lib/core/constants/semantic_palette.dart` (create) | Light and dark maps plus `resolve(token, brightness)` |
-| `lib/core/constants/app_colors.dart` (modify) | Keeps brand constants; grade/attendance constants become the dark map's source |
+| `lib/core/constants/app_colors.dart` (modify) | Keeps only the gradient constants; grade, attendance and brand colours move to the palette |
 | `lib/domain/grade_utils.dart` (modify) | `gradeColor` gains `{required Brightness brightness}` |
 | `lib/domain/attendance_utils.dart` (modify) | `attendanceStatusColor`, `attendanceTypeColor` gain the same |
 | `lib/presentation/common/theme/app_theme.dart` (modify) | Stops pinning `primary` identically across brightnesses |
@@ -50,7 +50,7 @@
 **Interfaces:**
 - Consumes: nothing
 - Produces:
-  - `enum SemanticColor { brandPrimary, brandSecondary, brandTertiary, brandAccent, gradeExcellent, gradeVeryGood, gradeGood, gradeSatisfactory, gradeAcceptable, gradeFailing, attendancePresent, attendanceAbsent, attendanceLate, attendanceExcused, statusPresent, statusExcused, statusUnexcused, statusLate, statusMixed, statusNoData }`
+  - `enum SemanticColor { brandPrimary, brandSecondary, brandTertiary, gradeExcellent, gradeVeryGood, gradeGood, gradeSatisfactory, gradeAcceptable, gradeFailing, attendancePresent, attendanceAbsent, attendanceLate, attendanceExcused, statusPresent, statusExcused, statusUnexcused, statusLate, statusMixed, statusNoData }`
   - `abstract final class SemanticPalette { static Color resolve(SemanticColor token, Brightness brightness); static Map<SemanticColor, Color> light; static Map<SemanticColor, Color> dark; }`
 
 - [ ] **Step 1: Write the failing test**
@@ -63,7 +63,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('SemanticColor covers every shared token', () {
-    expect(SemanticColor.values.length, 20);
+    expect(SemanticColor.values.length, 19);
   });
 }
 ```
@@ -84,7 +84,6 @@ enum SemanticColor {
   brandPrimary,
   brandSecondary,
   brandTertiary,
-  brandAccent,
   gradeExcellent,
   gradeVeryGood,
   gradeGood,
@@ -116,7 +115,6 @@ abstract final class SemanticPalette {
     SemanticColor.brandPrimary: Color(0xFF2A7F4F),
     SemanticColor.brandSecondary: Color(0xFF1565C0),
     SemanticColor.brandTertiary: Color(0xFFA85F00),
-    SemanticColor.brandAccent: Color(0xFF4A7D1E),
     SemanticColor.gradeExcellent: Color(0xFF2E7D32),
     SemanticColor.gradeVeryGood: Color(0xFF4B7C1F),
     SemanticColor.gradeGood: Color(0xFF8D6E00),
@@ -139,7 +137,6 @@ abstract final class SemanticPalette {
     SemanticColor.brandPrimary: Color(0xFF3FBE7A),
     SemanticColor.brandSecondary: Color(0xFF2196F3),
     SemanticColor.brandTertiary: Color(0xFFFFA726),
-    SemanticColor.brandAccent: Color(0xFF6AAF35),
     SemanticColor.gradeExcellent: Color(0xFF4CAF50),
     SemanticColor.gradeVeryGood: Color(0xFF8BC34A),
     SemanticColor.gradeGood: Color(0xFFFFC107),
@@ -232,7 +229,7 @@ void main() {
   const minimumRatio = 4.5;
 
   test('SemanticColor covers every shared token', () {
-    expect(SemanticColor.values.length, 20);
+    expect(SemanticColor.values.length, 19);
     expect(SemanticPalette.light.keys.toSet(), SemanticColor.values.toSet());
     expect(SemanticPalette.dark.keys.toSet(), SemanticColor.values.toSet());
   });
@@ -697,6 +694,21 @@ Expected: only the gradient constants and any brand usage outside `AppTheme` rem
 - [ ] **Step 2: Delete the superseded constants**
 
 Remove `gradeExcellent` through `gradeFailing` and `attendancePresent` through `attendanceExcused` from `AppColors`. Keep `primaryGreen`, `seaGreen`, `primaryBlue`, `accentOrange` if the gradient list still uses them, and keep `gradientStart`, `gradientEnd`, `gradientColors`.
+
+- [ ] **Step 2b: Remove the four dead palette tokens**
+
+`AppColors.attendancePresent`, `attendanceAbsent`, `attendanceLate` and
+`attendanceExcused` have zero references anywhere in `lib` or `test`, so the
+matching `SemanticColor.attendancePresent`, `attendanceAbsent`, `attendanceLate`
+and `attendanceExcused` tokens are dead too. Remove those four from
+`SemanticColor` and from both maps in `SemanticPalette`. The enum drops from 19
+values to 15.
+
+Update the two count assertions in `test/unit/core/semantic_palette_test.dart`
+from `19` to `15`.
+
+Nothing consumes these tokens: `attendanceTypeColor` maps to the `status*`
+tokens (see Task 4), not these.
 
 If any grep hit remains outside the gradient, migrate it to `SemanticPalette.resolve` before deleting.
 
