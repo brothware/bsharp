@@ -201,6 +201,91 @@ void main() {
     });
   });
 
+  group('attendanceTypeColor', () {
+    test('absent with excused status resolves to statusExcused', () {
+      expect(
+        attendanceTypeColor(
+          AttendanceCountAs.absent,
+          brightness: Brightness.light,
+          excuseStatus: AttendanceExcuseStatus.excused,
+        ),
+        SemanticPalette.light[SemanticColor.statusExcused],
+      );
+    });
+
+    test('late with excused status resolves to statusExcused', () {
+      expect(
+        attendanceTypeColor(
+          AttendanceCountAs.late,
+          brightness: Brightness.light,
+          excuseStatus: AttendanceExcuseStatus.excused,
+        ),
+        SemanticPalette.light[SemanticColor.statusExcused],
+      );
+    });
+
+    test('present without excuse status resolves to statusPresent', () {
+      expect(
+        attendanceTypeColor(
+          AttendanceCountAs.present,
+          brightness: Brightness.light,
+        ),
+        SemanticPalette.light[SemanticColor.statusPresent],
+      );
+    });
+
+    test('absent without excuse status resolves to statusUnexcused', () {
+      expect(
+        attendanceTypeColor(
+          AttendanceCountAs.absent,
+          brightness: Brightness.light,
+        ),
+        SemanticPalette.light[SemanticColor.statusUnexcused],
+      );
+    });
+
+    test('late without excuse status resolves to statusLate', () {
+      expect(
+        attendanceTypeColor(
+          AttendanceCountAs.late,
+          brightness: Brightness.light,
+        ),
+        SemanticPalette.light[SemanticColor.statusLate],
+      );
+    });
+
+    test('other resolves to statusNoData', () {
+      expect(
+        attendanceTypeColor(
+          AttendanceCountAs.other,
+          brightness: Brightness.light,
+        ),
+        SemanticPalette.light[SemanticColor.statusNoData],
+      );
+    });
+
+    test('absent without excused status does not return excused color', () {
+      final color = attendanceTypeColor(
+        AttendanceCountAs.absent,
+        brightness: Brightness.light,
+        excuseStatus: AttendanceExcuseStatus.unexcused,
+      );
+      expect(color, isNot(SemanticPalette.light[SemanticColor.statusExcused]));
+    });
+
+    test('resolves per brightness', () {
+      final light = attendanceTypeColor(
+        AttendanceCountAs.absent,
+        brightness: Brightness.light,
+      );
+      final dark = attendanceTypeColor(
+        AttendanceCountAs.absent,
+        brightness: Brightness.dark,
+      );
+      expect(light, isNot(dark));
+    });
+  });
+
   group('attendancePercentLabel', () {
     test('formats 100 without decimal', () {
       expect(attendancePercentLabel(100), '100%');

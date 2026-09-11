@@ -26,8 +26,18 @@ double contrastRatio(Color a, Color b) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
+Color alphaComposite(Color fg, Color bg, double alpha) {
+  return Color.from(
+    alpha: 1,
+    red: fg.r * alpha + bg.r * (1 - alpha),
+    green: fg.g * alpha + bg.g * (1 - alpha),
+    blue: fg.b * alpha + bg.b * (1 - alpha),
+  );
+}
+
 void main() {
   const minimumRatio = 4.5;
+  const tintMinimumRatio = 3.0;
 
   test('SemanticColor covers every shared token', () {
     expect(SemanticColor.values.length, 15);
@@ -70,6 +80,33 @@ void main() {
         ratio,
         greaterThanOrEqualTo(minimumRatio),
         reason: '$token scores ${ratio.toStringAsFixed(2)} on black',
+      );
+    }
+  });
+
+  test('every token stays legible on its own 15 percent tint (3:1)', () {
+    final lightSurface = AppTheme.light().colorScheme.surface;
+    final darkSurface = AppTheme.dark().colorScheme.surface;
+
+    for (final token in SemanticColor.values) {
+      final lightColor = SemanticPalette.light[token]!;
+      final lightTint = alphaComposite(lightColor, lightSurface, 0.15);
+      final lightRatio = contrastRatio(lightColor, lightTint);
+      expect(
+        lightRatio,
+        greaterThanOrEqualTo(tintMinimumRatio),
+        reason:
+            '$token scores ${lightRatio.toStringAsFixed(2)} on its light tint',
+      );
+
+      final darkColor = SemanticPalette.dark[token]!;
+      final darkTint = alphaComposite(darkColor, darkSurface, 0.15);
+      final darkRatio = contrastRatio(darkColor, darkTint);
+      expect(
+        darkRatio,
+        greaterThanOrEqualTo(tintMinimumRatio),
+        reason:
+            '$token scores ${darkRatio.toStringAsFixed(2)} on its dark tint',
       );
     }
   });

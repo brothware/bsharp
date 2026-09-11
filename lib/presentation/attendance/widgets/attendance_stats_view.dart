@@ -1,3 +1,5 @@
+import 'package:bsharp/core/constants/semantic_color.dart';
+import 'package:bsharp/core/constants/semantic_palette.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/translation_utils.dart';
@@ -111,11 +113,12 @@ class _OverallCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final brightness = theme.brightness;
     final percentColor = stats.presentPercent >= 90
-        ? const Color(0xFF4CAF50)
+        ? SemanticPalette.resolve(SemanticColor.statusPresent, brightness)
         : stats.presentPercent >= 75
-        ? const Color(0xFFFFA726)
-        : const Color(0xFFF44336);
+        ? SemanticPalette.resolve(SemanticColor.statusLate, brightness)
+        : SemanticPalette.resolve(SemanticColor.statusUnexcused, brightness);
 
     return Card(
       child: Padding(
@@ -155,12 +158,18 @@ class _OverallCard extends StatelessWidget {
                 _StatItem(
                   label: t.attendance.presentCount,
                   value: '${stats.presentCount}',
-                  color: const Color(0xFF4CAF50),
+                  color: SemanticPalette.resolve(
+                    SemanticColor.statusPresent,
+                    brightness,
+                  ),
                 ),
                 _StatItem(
                   label: t.attendance.absentCount,
                   value: '${stats.absentCount}',
-                  color: const Color(0xFFF44336),
+                  color: SemanticPalette.resolve(
+                    SemanticColor.statusUnexcused,
+                    brightness,
+                  ),
                 ),
               ],
             ),
@@ -209,6 +218,7 @@ class _DistributionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final brightness = theme.brightness;
     final presentFraction = stats.totalLessons > 0
         ? stats.presentCount / stats.totalLessons
         : 0.0;
@@ -231,7 +241,10 @@ class _DistributionCard extends StatelessWidget {
                       Expanded(
                         flex: stats.presentCount,
                         child: Container(
-                          color: const Color(0xFF4CAF50),
+                          color: SemanticPalette.resolve(
+                            SemanticColor.statusPresent,
+                            brightness,
+                          ),
                           alignment: Alignment.center,
                           child: stats.presentCount > 0
                               ? Text(
@@ -247,7 +260,10 @@ class _DistributionCard extends StatelessWidget {
                       Expanded(
                         flex: stats.absentCount,
                         child: Container(
-                          color: const Color(0xFFF44336),
+                          color: SemanticPalette.resolve(
+                            SemanticColor.statusUnexcused,
+                            brightness,
+                          ),
                           alignment: Alignment.center,
                           child: Text(
                             '${stats.absentCount}',
