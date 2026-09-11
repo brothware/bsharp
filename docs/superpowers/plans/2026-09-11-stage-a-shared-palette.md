@@ -564,7 +564,7 @@ Expected: PASS
 
 ```bash
 git add lib/domain/attendance_utils.dart lib/presentation lib/wear test/unit/domain/attendance_utils_test.dart
-git commit -m "refactor(attendance): resolve status colour by brightness
+git commit -m "refactor(attendance): resolve colour by brightness
 
 Calendar dots and type chips used dark-surface tones on the light
 theme, where four of six fell below even the 3:1 graphical floor.
@@ -666,7 +666,7 @@ Expected: PASS. Widget tests asserting the old primary need their expected value
 
 ```bash
 git add lib/presentation/common/theme/app_theme.dart test/unit/presentation/app_theme_test.dart
-git commit -m "fix(theme): stop pinning one accent across both themes
+git commit -m "fix(theme): stop pinning one accent to both themes
 
 Both AppTheme.light and AppTheme.dark passed the raw brand green as
 primary, so the light theme scored 4.05:1 on its own surface. Use the
@@ -724,7 +724,7 @@ Expected: PASS
 
 ```bash
 git add lib/core/constants/app_colors.dart
-git commit -m "refactor(theme): drop constants superseded by the palette
+git commit -m "refactor(theme): drop superseded colour constants
 
 Grade and attendance constants now live in SemanticPalette with a
 light and a dark value each. Keeping duplicates invites the two
