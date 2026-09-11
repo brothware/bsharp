@@ -554,8 +554,40 @@ the setup flow rebuild.
 | Removing our rotary channel breaks scrolling if the plugin misbehaves | The spike verifies rotary on both emulators before `MainActivity` is touched |
 | The 14.64% round inset costs usable width versus today's 10% | Offset by removing per-list 8dp padding, the centre-scaling list, and content that no longer needs to avoid clipped corners |
 | Moving the view-model providers touches many phone imports | Mechanical rename with no logic change, covered by the existing suite; isolated in Stage 0 and deferrable without blocking later stages |
-| The palette fix changes phone, tablet and web light themes | Deliberate and approved. Isolated in Stage A so it can be reviewed and reverted independently; dark themes are byte-identical, so only light-theme users see a change; hues are preserved, only depth changes |
+| The palette fix changes phone, tablet and web light themes | Deliberate and approved. Isolated in Stage A so it can be reviewed and reverted independently; hues are preserved, only depth changes. Note the dark theme's accent changes too (see Measured outcome), so this is not a light-only change |
 | A required `brightness` parameter is a breaking change to three shared helpers | Intentional - the compiler enumerates every call site, which is safer than a default that silently picks the wrong palette on one surface |
+
+## Measured outcome (Stage A, after implementation)
+
+An earlier draft of this spec claimed dark themes would be byte-identical.
+That is wrong, and the measurement below is the correction. The grade, status
+and attendance dark values are indeed unchanged, but the brand accent's dark
+value changes by design: a brightness-matched pair means each brightness gets
+its own accent, and the dark one was only marginal before.
+
+Light theme, surface `#F6FBF3`:
+
+| Role | Before | After |
+|---|---|---|
+| primary | `#2E8B57` 4.05:1 | `#2A7F4F` 4.71:1 |
+| secondary | `#2196F3` 2.98:1 | `#1565C0` 5.48:1 |
+| tertiary | `#FFA726` 1.85:1 | `#A85F00` 4.65:1 |
+
+Dark theme, surface `#0F1511`:
+
+| Role | Before | After |
+|---|---|---|
+| primary | `#2E8B57` 4.36:1 | `#3FBE7A` 7.80:1 |
+| secondary, tertiary, surface, onSurface, error | unchanged | unchanged |
+| onPrimary, primaryContainer | `#00391D`, `#0F512F` | `#00391E`, `#0D5130` |
+
+The last row is Material regenerating two derived tones from the new seed; the
+shifts are one and two units respectively and are imperceptible.
+
+So dark-theme users do see one change: the green accent gets lighter and
+noticeably more legible. That is an improvement and within the approved scope of
+"fix it everywhere", but it is a visible change and should not have been
+described as byte-identical.
 
 ## Open questions
 
