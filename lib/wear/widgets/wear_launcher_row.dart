@@ -9,6 +9,7 @@ class WearLauncherRow extends StatelessWidget {
     required this.summary,
     required this.onTap,
     this.scrollController,
+    this.measureKey,
     super.key,
   });
 
@@ -17,6 +18,7 @@ class WearLauncherRow extends StatelessWidget {
   final String summary;
   final VoidCallback onTap;
   final ScrollController? scrollController;
+  final Key? measureKey;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class WearLauncherRow extends StatelessWidget {
     final isRound = WearDisplayScope.of(context).isRound;
 
     final row = Material(
+      key: measureKey,
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
