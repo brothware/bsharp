@@ -1,8 +1,7 @@
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WearTileHeader extends ConsumerWidget {
+class WearTileHeader extends StatelessWidget {
   const WearTileHeader({
     required this.icon,
     required this.title,
@@ -15,10 +14,10 @@ class WearTileHeader extends ConsumerWidget {
   final Widget? trailing;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
+  Widget build(BuildContext context) {
+    final display = WearDisplayScope.of(context);
 
-    if (shape == WearScreenShape.round) {
+    if (display.isRound) {
       return _buildRound(context);
     }
     return _buildFlat(context);

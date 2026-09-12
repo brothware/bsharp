@@ -1,6 +1,5 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -27,7 +26,6 @@ class _WearHomeworkDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final homework = ref.watch(filteredHomeworksProvider);
     final filter = ref.watch(homeworkFilterProvider);
     final theme = Theme.of(context);
@@ -61,12 +59,7 @@ class _WearHomeworkDetailScreenState
                           controller: _scrollController,
                           child: ListView.builder(
                             controller: _scrollController,
-                            padding: EdgeInsets.fromLTRB(
-                              4,
-                              0,
-                              4,
-                              wearListBottomInset(shape),
-                            ),
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                             itemCount: homework.length,
                             itemBuilder: (context, index) {
                               final hw = homework[index];

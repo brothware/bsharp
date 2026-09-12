@@ -1,7 +1,6 @@
 import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
@@ -13,7 +12,6 @@ class WearAttendanceDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final month = ref.watch(selectedMonthProvider);
     final calDays = ref.watch(calendarDaysProvider);
     final attDays = ref.watch(attendanceDaysProvider);
@@ -56,9 +54,7 @@ class WearAttendanceDetailScreen extends ConsumerWidget {
                     );
                   },
                   child: GridView.builder(
-                    padding: EdgeInsets.only(
-                      bottom: wearListBottomInset(shape),
-                    ),
+                    padding: EdgeInsets.zero,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 7,

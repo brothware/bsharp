@@ -4,7 +4,6 @@ import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
 import 'package:bsharp/wear/screens/wear_pin_setup_screen.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_confirmation.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -16,7 +15,6 @@ class WearChildModeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final state = ref.watch(childModeProvider);
     final theme = Theme.of(context);
 
@@ -40,7 +38,7 @@ class WearChildModeScreen extends ConsumerWidget {
               const SizedBox(height: 4),
               Expanded(
                 child: ListView(
-                  padding: EdgeInsets.only(bottom: wearListBottomInset(shape)),
+                  padding: EdgeInsets.zero,
                   children: [
                     _WearSectionLabel(label: t.childMode.pin),
                     if (!state.isPinSet)

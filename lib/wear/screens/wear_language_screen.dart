@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ class WearLanguageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final currentLocale = ref.watch(localeProvider);
     final isSystem = ref.read(localeProvider.notifier).isSystemLocale;
     final theme = Theme.of(context);
@@ -35,7 +33,7 @@ class WearLanguageScreen extends ConsumerWidget {
               const SizedBox(height: 4),
               Expanded(
                 child: ListView.builder(
-                  padding: EdgeInsets.only(bottom: wearListBottomInset(shape)),
+                  padding: EdgeInsets.zero,
                   itemCount: AppLocale.values.length + 1,
                   itemBuilder: (context, index) {
                     if (index == 0) {

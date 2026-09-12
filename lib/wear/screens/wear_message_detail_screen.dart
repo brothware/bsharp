@@ -6,7 +6,6 @@ import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -63,7 +62,6 @@ class _WearMessageDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final theme = Theme.of(context);
     final message = widget.message;
     final rawContent = _fullContent ?? message.content;
@@ -115,9 +113,7 @@ class _WearMessageDetailScreenState
                       controller: _scrollController,
                       child: ListView(
                         controller: _scrollController,
-                        padding: EdgeInsets.only(
-                          bottom: wearListBottomInset(shape),
-                        ),
+                        padding: EdgeInsets.zero,
                         children: [
                           if (_loadingContent)
                             const Padding(

@@ -2,7 +2,6 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_notes_detail_screen.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_forward_swipe.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ class WearNotesTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final remarks = ref.watch(remarksProvider);
     final praises = ref.watch(praisesProvider);
     final info = ref.watch(infoProvider);
@@ -56,12 +54,7 @@ class WearNotesTile extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.fromLTRB(
-                  8,
-                  0,
-                  8,
-                  wearListBottomInset(shape),
-                ),
+                padding: EdgeInsets.zero,
                 itemCount: combined.take(3).length,
                 itemBuilder: (context, index) {
                   return _WearNoteItem(item: combined[index]);

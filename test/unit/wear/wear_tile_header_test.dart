@@ -1,15 +1,15 @@
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Widget _buildHeader({required WearScreenShape shape, Widget? trailing}) {
-  return ProviderScope(
-    overrides: [wearScreenShapeProvider.overrideWith((_) => shape)],
-    child: MaterialApp(
-      home: Scaffold(
-        body: WearTileHeader(
+  return MaterialApp(
+    home: Scaffold(
+      body: WearDisplayScope(
+        display: WearDisplay(shape: shape, sizeDp: const Size(400, 400)),
+        child: WearTileHeader(
           icon: Icons.grade,
           title: 'Grades',
           trailing: trailing,

@@ -3,6 +3,7 @@ import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_settings_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,7 +22,17 @@ Future<Widget> _buildApp({List<Object> extraOverrides = const []}) async {
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       ...extraOverrides.cast(),
     ],
-    child: const MaterialApp(home: Scaffold(body: WearSettingsTile())),
+    child: const MaterialApp(
+      home: Scaffold(
+        body: WearDisplayScope(
+          display: WearDisplay(
+            shape: WearScreenShape.rectangular,
+            sizeDp: Size(400, 400),
+          ),
+          child: WearSettingsTile(),
+        ),
+      ),
+    ),
   );
 }
 
@@ -96,7 +107,17 @@ void main() {
                 (_) => WearScreenShape.rectangular,
               ),
             ],
-            child: const MaterialApp(home: Scaffold(body: WearSettingsTile())),
+            child: const MaterialApp(
+              home: Scaffold(
+                body: WearDisplayScope(
+                  display: WearDisplay(
+                    shape: WearScreenShape.rectangular,
+                    sizeDp: Size(400, 400),
+                  ),
+                  child: WearSettingsTile(),
+                ),
+              ),
+            ),
           ),
         );
         await tester.pump();

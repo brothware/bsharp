@@ -3,7 +3,6 @@ import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_forward_swipe.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ class WearGradesTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final subjectGrades = ref.watch(subjectGradesProvider);
     final newIds = ref.watch(newGradeIdsProvider);
     final theme = Theme.of(context);
@@ -65,12 +63,7 @@ class WearGradesTile extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.fromLTRB(
-                  8,
-                  0,
-                  8,
-                  wearListBottomInset(shape),
-                ),
+                padding: EdgeInsets.zero,
                 itemCount: recent.length,
                 itemBuilder: (context, index) {
                   final g = recent[index];
