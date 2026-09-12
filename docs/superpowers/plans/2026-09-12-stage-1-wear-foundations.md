@@ -267,16 +267,20 @@ Stage 0 extracted these to `lib/domain`. Delete each private copy and call the s
 
 | Delete | Call instead |
 |---|---|
-| `_parseDate` in `wear_notes_tile.dart`, `wear_tests_detail_screen.dart` | `parseFlexibleDate` |
+| `_parseDate` in `wear_notes_tile.dart`, `wear_tests_detail_screen.dart` | `parsePortalDate` from `lib/domain/portal_date_utils.dart` |
 | `_monthName` in `wear_attendance_detail_screen.dart` | `monthName` |
 | `_iconForType` in `wear_notes_tile.dart`, `wear_notes_detail_screen.dart` | `annotationStyle` |
-| `_mapFailureMessage` in `wear_setup_screen.dart` | `failureMessage` |
+| `_mapFailureMessage` in `wear_setup_screen.dart` | `failureMessage` (see caveat below) |
 | `_themeIcon` / `_themeLabel` in `wear_settings_tile.dart` | `themeModeIcon` / `themeModeLabel` |
 | `_changeLabel` in `wear_schedule_detail_screen.dart` | `scheduleChangeLabel` |
 | `_formatDateShort` in `wear_grades_tile.dart` | `formatDateShort` from `schedule_utils.dart` |
 | `_isCurrentLesson` in `wear_schedule_tile.dart` | `currentLessonProvider` from `lib/app/providers/dashboard_providers.dart` |
 
-The last one is a behaviour fix, not just deduplication. `_isCurrentLesson` does not skip cancelled lessons, and because it reads `DateTime.now()` during build without watching `minuteTickProvider`, the current lesson highlight goes stale until some unrelated rebuild refreshes it. `currentLessonProvider` returns `({ScheduleEntry? current, ScheduleEntry? next, bool allEnded})` and is already correct.
+**Caveat on `_mapFailureMessage`.** The wear copy and the shared helper are not identical: wear maps `InvalidCredentials` to `t.auth.invalidCredentials`, the shared helper to `t.accounts.credentialsInvalid`. Both strings say the same thing but they are different i18n keys. Adopting the shared helper therefore changes the string the watch shows on a bad login. Make that swap deliberately and say so in your report; if you judge the wear string better, keep wear's and instead say why in the report rather than leaving two copies silently.
+
+**Caveat on `_iconForType`.** `annotationStyle` returns the OUTLINED icon variants (`Icons.emoji_events_outlined`, `Icons.warning_amber_outlined`, `Icons.info_outlined`), matching the phone. The wear screens currently use the plain variants, so adopting the shared helper restyles the watch icons slightly. That is intended: one icon language across both surfaces.
+
+The `_isCurrentLesson` replacement is a behaviour fix, not just deduplication. `_isCurrentLesson` does not skip cancelled lessons, and because it reads `DateTime.now()` during build without watching `minuteTickProvider`, the current lesson highlight goes stale until some unrelated rebuild refreshes it. `currentLessonProvider` returns `({ScheduleEntry? current, ScheduleEntry? next, bool allEnded})` and is already correct.
 
 Steps:
 - [ ] Write a test that the schedule tile highlights the lesson `currentLessonProvider` reports as current, and highlights nothing when that is null.
