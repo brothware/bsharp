@@ -196,16 +196,28 @@ class _WearSettingsItem extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 48),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 18,
-                color: iconColor ?? theme.colorScheme.onSurface,
+              Row(
+                children: [
+                  Icon(
+                    icon,
+                    size: 18,
+                    color: iconColor ?? theme.colorScheme.onSurface,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(label, style: theme.textTheme.bodySmall),
+                  ),
+                ],
               ),
-              const SizedBox(width: 8),
-              Expanded(child: Text(label, style: theme.textTheme.bodySmall)),
-              ?trailing,
+              if (trailing case final trailing?)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4, left: 26),
+                  child: trailing,
+                ),
             ],
           ),
         ),

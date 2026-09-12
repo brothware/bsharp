@@ -1,4 +1,5 @@
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_settings_tile.dart';
@@ -10,6 +11,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
+
+class _FakeSyncStatusNotifier extends SyncStatusNotifier {
+  _FakeSyncStatusNotifier(this._initial);
+
+  final SyncStatus _initial;
+
+  @override
+  SyncStatus build() => _initial;
+}
 
 Future<Widget> _buildApp({List<Object> extraOverrides = const []}) async {
   SharedPreferences.setMockInitialValues({});
@@ -171,5 +181,61 @@ void main() {
       expect(find.text('System'), findsNothing);
       expect(find.byIcon(Icons.settings), findsOneWidget);
     });
+
+    testWidgets(
+      'syncing status stays under the sync row and inside the round '
+      'safe area at 227dp',
+      (tester) async {
+        tester.view.physicalSize = const Size(227, 227);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
+        final storage = CredentialStorage(store: FakeKeyValueStore());
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              credentialStorageProvider.overrideWithValue(storage),
+              sharedPreferencesProvider.overrideWithValue(prefs),
+              wearScreenShapeProvider.overrideWith(
+                (_) => WearScreenShape.round,
+              ),
+              syncStatusProvider.overrideWith(
+                () => _FakeSyncStatusNotifier(SyncStatus.syncing),
+              ),
+            ],
+            child: const MaterialApp(
+              home: Scaffold(
+                body: WearDisplayScope(
+                  display: WearDisplay(
+                    shape: WearScreenShape.round,
+                    sizeDp: Size(227, 227),
+                  ),
+                  child: WearSettingsTile(),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+
+        final syncLabelRect = tester.getRect(find.byIcon(Icons.sync));
+        final statusRect = tester.getRect(
+          find.byType(CircularProgressIndicator),
+        );
+
+        expect(
+          statusRect.top,
+          greaterThanOrEqualTo(syncLabelRect.bottom),
+          reason:
+              'status indicator should sit below the Sync row, not '
+              'beside it',
+        );
+        expect(statusRect.right, lessThanOrEqualTo(227));
+        expect(statusRect.left, greaterThanOrEqualTo(0));
+      },
+    );
   });
 }
