@@ -20,7 +20,7 @@
 - Conventional Commits: imperative, no capital first letter, no trailing period, subject MAXIMUM 50 characters, body hard-wrapped at 72.
 - Every commit ends with: `Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>`
 - Never `git commit --no-verify`. This repo has no git hooks.
-- **Do not change any `import` of `package:bsharp/presentation/*/providers/...`.** Stage 0 is moving those in a parallel worktree; touching them here guarantees a merge conflict. Leave every import line exactly as you find it.
+- Stage 0 has already landed on this branch's history. The shared helpers in `lib/domain` (`parseFlexibleDate`, `monthName`, `annotationStyle`, `failureMessage`, `themeModeIcon`, `themeModeLabel`, `scheduleChangeLabel`, `formatDateShort`) and the providers at `lib/app/providers/` exist. Use them.
 - **Do not touch navigation.** The vertical `PageView` carousel, `WearForwardSwipe` and the top-level exit gesture are Stage 2's. This stage must not change how screens are reached.
 - The shared palette from the previous stage is available: `SemanticColor` and `SemanticPalette` in `lib/core/constants/`, with `resolve(token, brightness)`. Use it rather than any raw colour literal.
 - 15 wear tests exist under `test/unit/wear/`. They must keep passing. Where a test asserts the old layout's structure, update it to assert the new one and say so in the report.
@@ -259,8 +259,33 @@ Steps:
 
 ---
 
+### Task 8: Adopt the shared helpers and delete the wear duplicates
+
+**Files:** the wear screens carrying private duplicates.
+
+Stage 0 extracted these to `lib/domain`. Delete each private copy and call the shared one:
+
+| Delete | Call instead |
+|---|---|
+| `_parseDate` in `wear_notes_tile.dart`, `wear_tests_detail_screen.dart` | `parseFlexibleDate` |
+| `_monthName` in `wear_attendance_detail_screen.dart` | `monthName` |
+| `_iconForType` in `wear_notes_tile.dart`, `wear_notes_detail_screen.dart` | `annotationStyle` |
+| `_mapFailureMessage` in `wear_setup_screen.dart` | `failureMessage` |
+| `_themeIcon` / `_themeLabel` in `wear_settings_tile.dart` | `themeModeIcon` / `themeModeLabel` |
+| `_changeLabel` in `wear_schedule_detail_screen.dart` | `scheduleChangeLabel` |
+| `_formatDateShort` in `wear_grades_tile.dart` | `formatDateShort` from `schedule_utils.dart` |
+| `_isCurrentLesson` in `wear_schedule_tile.dart` | `currentLessonProvider` from `lib/app/providers/dashboard_providers.dart` |
+
+The last one is a behaviour fix, not just deduplication. `_isCurrentLesson` does not skip cancelled lessons, and because it reads `DateTime.now()` during build without watching `minuteTickProvider`, the current lesson highlight goes stale until some unrelated rebuild refreshes it. `currentLessonProvider` returns `({ScheduleEntry? current, ScheduleEntry? next, bool allEnded})` and is already correct.
+
+Steps:
+- [ ] Write a test that the schedule tile highlights the lesson `currentLessonProvider` reports as current, and highlights nothing when that is null.
+- [ ] Run, confirm failure.
+- [ ] Delete each private copy and wire up the shared helper.
+- [ ] Verify none remain: `grep -rn '_parseDate\|_monthName\|_iconForType\|_mapFailureMessage\|_themeIcon\|_themeLabel\|_changeLabel\|_formatDateShort\|_isCurrentLesson' lib/wear`
+- [ ] Analyze and test clean.
+- [ ] Commit: `refactor(wear): use the shared domain helpers`
+
 ## Notes for the implementer
 
-Stage 0 is running in a parallel worktree and is moving provider files. Do not touch any import line pointing at `package:bsharp/presentation/*/providers/`. If you find yourself editing one, stop: you are about to create a conflict.
-
-Private duplicate helpers in `lib/wear` (`_parseDate`, `_monthName`, `_iconForType`, `_mapFailureMessage`, `_themeIcon`, `_themeLabel`, `_changeLabel`, `_formatDateShort`, `_isCurrentLesson`) are NOT yours to delete in this stage either, because the shared replacements land in Stage 0's branch. They are removed during integration.
+This stage runs on top of Stage 0, so the shared helpers and the moved providers are already in place. Import them from `package:bsharp/domain/...` and `package:bsharp/app/providers/...`.
