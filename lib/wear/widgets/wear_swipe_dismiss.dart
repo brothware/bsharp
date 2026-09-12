@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class WearSwipeDismiss extends StatefulWidget {
-  const WearSwipeDismiss({required this.child, super.key});
+  const WearSwipeDismiss({required this.child, this.onDismiss, super.key});
 
   final Widget child;
+  final VoidCallback? onDismiss;
 
   @override
   State<WearSwipeDismiss> createState() => _WearSwipeDismissState();
@@ -47,7 +48,11 @@ class _WearSwipeDismissState extends State<WearSwipeDismiss>
   void _onHorizontalDragEnd(DragEndDetails details) {
     if (_dragOffset.abs() >= _dismissThreshold) {
       unawaited(HapticFeedback.lightImpact());
-      Navigator.of(context).pop();
+      if (widget.onDismiss case final onDismiss?) {
+        onDismiss();
+      } else {
+        Navigator.of(context).pop();
+      }
     } else {
       setState(() => _dragOffset = 0);
     }

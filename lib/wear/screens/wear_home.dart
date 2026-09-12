@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/app/providers/dashboard_providers.dart';
@@ -21,7 +23,9 @@ import 'package:bsharp/wear/wear_summary_utils.dart';
 import 'package:bsharp/wear/widgets/wear_launcher_row.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_section_route.dart';
+import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
@@ -148,28 +152,31 @@ class _WearHomeState extends ConsumerState<WearHome> {
       ),
     ];
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: WearScaffold(
-        child: WearOsScrollbar(
-          controller: _controller,
-          child: CustomScrollView(
+    return WearSwipeDismiss(
+      onDismiss: () => unawaited(SystemNavigator.pop()),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        body: WearScaffold(
+          child: WearOsScrollbar(
             controller: _controller,
-            slivers: [
-              const SliverToBoxAdapter(child: WearDashboard()),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final section = sections[index];
-                  return WearLauncherRow(
-                    icon: section.icon,
-                    title: section.title,
-                    summary: section.summary,
-                    scrollController: _controller,
-                    onTap: () => pushWearSection(context, section.builder),
-                  );
-                }, childCount: sections.length),
-              ),
-            ],
+            child: CustomScrollView(
+              controller: _controller,
+              slivers: [
+                const SliverToBoxAdapter(child: WearDashboard()),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final section = sections[index];
+                    return WearLauncherRow(
+                      icon: section.icon,
+                      title: section.title,
+                      summary: section.summary,
+                      scrollController: _controller,
+                      onTap: () => pushWearSection(context, section.builder),
+                    );
+                  }, childCount: sections.length),
+                ),
+              ],
+            ),
           ),
         ),
       ),
