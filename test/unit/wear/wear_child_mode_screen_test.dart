@@ -87,7 +87,7 @@ void main() {
       expect(find.text('Enable child mode'), findsOneWidget);
     });
 
-    testWidgets('remove PIN shows confirmation dialog', (tester) async {
+    testWidgets('remove PIN shows a confirmation screen', (tester) async {
       await tester.pumpWidget(await _buildAppWithPin());
       await tester.pump();
       await tester.pump();
@@ -95,7 +95,6 @@ void main() {
       await tester.tap(find.text('Remove PIN').first);
       await tester.pumpAndSettle();
 
-      expect(find.byType(AlertDialog), findsOneWidget);
       expect(find.text('Remove PIN'), findsAtLeast(1));
       expect(find.text('Cancel'), findsOneWidget);
     });
@@ -108,11 +107,7 @@ void main() {
       await tester.tap(find.text('Remove PIN').first);
       await tester.pumpAndSettle();
 
-      final dialogRemoveButtons = find.descendant(
-        of: find.byType(AlertDialog),
-        matching: find.text('Remove PIN'),
-      );
-      await tester.tap(dialogRemoveButtons.last);
+      await tester.tap(find.text('Remove PIN').last);
       await tester.pumpAndSettle();
 
       final element = tester.element(find.byType(WearChildModeScreen));

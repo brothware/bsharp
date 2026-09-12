@@ -9,6 +9,9 @@ import 'package:bsharp/wear/screens/wear_child_mode_screen.dart';
 import 'package:bsharp/wear/screens/wear_language_screen.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_confirmation.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_status_line.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,7 +56,11 @@ class WearSettingsTile extends ConsumerWidget {
                 _WearSettingsItem(
                   icon: Icons.brightness_6,
                   label: t.settings.theme,
-                  onTap: () => _showThemeDialog(context, ref),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const _WearThemeScreen(),
+                    ),
+                  ),
                 ),
                 _WearSettingsItem(
                   icon: Icons.language,
@@ -67,21 +74,15 @@ class WearSettingsTile extends ConsumerWidget {
                 _WearSettingsItem(
                   icon: Icons.sync,
                   label: t.settings.sync,
-                  onTap: () {
-                    unawaited(ref.read(syncStatusProvider.notifier).sync());
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(t.settings.syncing),
-                        duration: const Duration(seconds: 1),
-                      ),
-                    );
-                  },
+                  trailing: const WearStatusLine(),
+                  onTap: () =>
+                      unawaited(ref.read(syncStatusProvider.notifier).sync()),
                 ),
                 _WearSettingsItem(
                   icon: Icons.logout,
                   label: t.settings.logoutButton,
                   iconColor: Theme.of(context).colorScheme.error,
-                  onTap: () => _showLogoutDialog(context, ref),
+                  onTap: () => _confirmLogout(context, ref),
                 ),
               ],
             ],
@@ -91,70 +92,80 @@ class WearSettingsTile extends ConsumerWidget {
     );
   }
 
-  void _showThemeDialog(BuildContext context, WidgetRef ref) {
-    final current = ref.read(themeModeProvider);
+  Future<void> _confirmLogout(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showWearConfirmation(
+      context,
+      icon: Icons.logout,
+      question: t.settings.logoutConfirmBody,
+      confirmLabel: t.settings.logoutButton,
+      isDestructive: true,
+    );
+    if (confirmed) {
+      await ref.read(authStateProvider.notifier).logout();
+    }
+  }
+}
+
+class _WearThemeScreen extends ConsumerWidget {
+  const _WearThemeScreen();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final current = ref.watch(themeModeProvider);
     final theme = Theme.of(context);
 
-    unawaited(
-      showDialog<void>(
-        context: context,
-        builder: (dialogContext) => Dialog(
-          insetPadding: const EdgeInsets.all(20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final mode in ThemeMode.values)
-                  InkWell(
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: () {
-                      unawaited(
-                        ref.read(themeModeProvider.notifier).setThemeMode(mode),
-                      );
-                      Navigator.of(dialogContext).pop();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        children: [
+    return Scaffold(
+      body: WearScaffold(
+        child: ListView(
+          children: [
+            for (final mode in ThemeMode.values)
+              InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () {
+                  unawaited(
+                    ref.read(themeModeProvider.notifier).setThemeMode(mode),
+                  );
+                  Navigator.of(context).pop();
+                },
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 48),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 10,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _themeIcon(mode),
+                          size: 18,
+                          color: mode == current
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _themeLabel(mode),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: mode == current
+                                  ? FontWeight.bold
+                                  : null,
+                            ),
+                          ),
+                        ),
+                        if (mode == current)
                           Icon(
-                            _themeIcon(mode),
-                            size: 18,
-                            color: mode == current
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurfaceVariant,
+                            Icons.check,
+                            size: 16,
+                            color: theme.colorScheme.primary,
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              _themeLabel(mode),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                fontWeight: mode == current
-                                    ? FontWeight.bold
-                                    : null,
-                              ),
-                            ),
-                          ),
-                          if (mode == current)
-                            Icon(
-                              Icons.check,
-                              size: 16,
-                              color: theme.colorScheme.primary,
-                            ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
-              ],
-            ),
-          ),
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -175,31 +186,6 @@ class WearSettingsTile extends ConsumerWidget {
       ThemeMode.dark => t.settings.themeDark,
     };
   }
-
-  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
-    unawaited(
-      showDialog<void>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          title: Text(t.settings.logoutConfirmTitle),
-          content: Text(t.settings.logoutConfirmBody),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(t.common.cancel),
-            ),
-            FilledButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                unawaited(ref.read(authStateProvider.notifier).logout());
-              },
-              child: Text(t.settings.logoutButton),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class _WearSettingsItem extends StatelessWidget {
@@ -207,12 +193,14 @@ class _WearSettingsItem extends StatelessWidget {
     required this.icon,
     required this.label,
     this.iconColor,
+    this.trailing,
     this.onTap,
   });
 
   final IconData icon;
   final String label;
   final Color? iconColor;
+  final Widget? trailing;
   final VoidCallback? onTap;
 
   @override
@@ -234,6 +222,7 @@ class _WearSettingsItem extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Expanded(child: Text(label, style: theme.textTheme.bodySmall)),
+              ?trailing,
             ],
           ),
         ),
