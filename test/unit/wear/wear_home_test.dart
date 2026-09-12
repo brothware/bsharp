@@ -18,7 +18,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
-Future<Widget> _buildApp({List<Object> extraOverrides = const []}) async {
+Future<Widget> _buildApp({
+  List<Object> extraOverrides = const [],
+  WearScreenShape shape = WearScreenShape.rectangular,
+}) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
   final storage = CredentialStorage(store: FakeKeyValueStore());
@@ -26,7 +29,7 @@ Future<Widget> _buildApp({List<Object> extraOverrides = const []}) async {
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => shape),
       ...extraOverrides.cast(),
     ],
     child: const MaterialApp(home: WearHome()),
@@ -195,6 +198,50 @@ void main() {
               'the first launcher row is at y=$firstRowTop, below the '
               '${screenSize.height}dp viewport, so the hero pushed it out '
               'of view',
+        );
+      },
+    );
+
+    testWidgets(
+      'the last launcher row can reach the viewport centre when scrolled',
+      (tester) async {
+        tester.view.physicalSize = const Size(454, 454);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.reset);
+
+        await tester.pumpWidget(
+          await _buildApp(shape: WearScreenShape.round),
+        );
+        await tester.pump();
+        await tester.pump();
+
+        final scrollableFinder = find.byType(Scrollable);
+        final scrollable = tester
+            .widgetList<Scrollable>(scrollableFinder)
+            .first;
+        final controller = scrollable.controller!;
+        for (var i = 0; i < 10; i++) {
+          controller.jumpTo(controller.position.maxScrollExtent);
+          await tester.pump();
+        }
+        await tester.pump();
+
+        final viewportTop = tester.getTopLeft(find.byType(CustomScrollView)).dy;
+        final viewportHeight = tester
+            .getSize(find.byType(CustomScrollView))
+            .height;
+        final lastRowCenter = tester
+            .getCenter(find.byType(WearLauncherRow).last)
+            .dy;
+        final viewportCenter = viewportTop + viewportHeight / 2;
+
+        expect(
+          (lastRowCenter - viewportCenter).abs(),
+          lessThan(6),
+          reason:
+              'the last launcher row centre is at y=$lastRowCenter, the '
+              'viewport centre is at y=$viewportCenter, they should '
+              'nearly coincide once the list is fully scrolled',
         );
       },
     );

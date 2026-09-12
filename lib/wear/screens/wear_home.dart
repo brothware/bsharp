@@ -25,6 +25,7 @@ import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
@@ -56,6 +57,8 @@ class WearHome extends ConsumerStatefulWidget {
 
 class _WearHomeState extends ConsumerState<WearHome> {
   late final ScrollController _controller;
+  final GlobalKey _lastRowKey = GlobalKey();
+  double _lastRowBottomPadding = 0;
 
   @override
   void initState() {
@@ -67,6 +70,17 @@ class _WearHomeState extends ConsumerState<WearHome> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _measureLastRowBottomPadding(double viewportHeight) {
+    final renderObject = _lastRowKey.currentContext?.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) return;
+    final lastRowHeight = renderObject.size.height;
+    final halfRowGap = viewportHeight / 2 - lastRowHeight / 2;
+    final target = halfRowGap.isNegative ? 0.0 : halfRowGap;
+    if ((target - _lastRowBottomPadding).abs() > 0.5) {
+      setState(() => _lastRowBottomPadding = target);
+    }
   }
 
   @override
@@ -161,28 +175,41 @@ class _WearHomeState extends ConsumerState<WearHome> {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: WearScaffold(
-          child: WearOsScrollbar(
-            controller: _controller,
-            child: CustomScrollView(
-              controller: _controller,
-              slivers: [
-                const SliverToBoxAdapter(child: WearDashboard()),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final section = sections[index];
-                    return WearLauncherRow(
-                      icon: section.icon,
-                      title: section.title,
-                      summary: section.summary,
-                      scrollController: _controller,
-                      onTap: () => section.isFullScreen
-                          ? pushWearScreen(context, section.builder)
-                          : pushWearSection(context, section.builder),
-                    );
-                  }, childCount: sections.length),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => _measureLastRowBottomPadding(constraints.maxHeight),
+              );
+              return WearOsScrollbar(
+                controller: _controller,
+                child: CustomScrollView(
+                  controller: _controller,
+                  scrollCacheExtent: const ScrollCacheExtent.pixels(2000),
+                  slivers: [
+                    const SliverToBoxAdapter(child: WearDashboard()),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final section = sections[index];
+                        final isLastRow = index == sections.length - 1;
+                        return WearLauncherRow(
+                          measureKey: isLastRow ? _lastRowKey : null,
+                          icon: section.icon,
+                          title: section.title,
+                          summary: section.summary,
+                          scrollController: _controller,
+                          onTap: () => section.isFullScreen
+                              ? pushWearScreen(context, section.builder)
+                              : pushWearSection(context, section.builder),
+                        );
+                      }, childCount: sections.length),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: _lastRowBottomPadding),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
