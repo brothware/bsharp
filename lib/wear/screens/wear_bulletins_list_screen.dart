@@ -5,12 +5,28 @@ import 'package:bsharp/wear/screens/wear_bulletin_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
-class WearBulletinsListScreen extends ConsumerWidget {
+class WearBulletinsListScreen extends ConsumerStatefulWidget {
   const WearBulletinsListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<WearBulletinsListScreen> createState() =>
+      _WearBulletinsListScreenState();
+}
+
+class _WearBulletinsListScreenState
+    extends ConsumerState<WearBulletinsListScreen> {
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final bulletins = ref.watch(bulletinsProvider);
     final unread = ref.watch(unreadBulletinsCountProvider);
     final theme = Theme.of(context);
@@ -64,18 +80,23 @@ class WearBulletinsListScreen extends ConsumerWidget {
           )
         else
           Expanded(
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.zero,
-              itemCount: bulletins.take(4).length,
-              itemBuilder: (context, index) {
-                final item = bulletins[index];
-                return InkWell(
-                  onTap: () => _openDetail(context, item),
-                  borderRadius: BorderRadius.circular(8),
-                  child: _WearBulletinItem(item: item),
-                );
-              },
+            child: WearOsScrollbar(
+              controller: _scrollController,
+              indicatorColor: theme.colorScheme.primary,
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: EdgeInsets.zero,
+                itemCount: bulletins.length,
+                itemBuilder: (context, index) {
+                  final item = bulletins[index];
+                  return InkWell(
+                    onTap: () => _openDetail(context, item),
+                    borderRadius: BorderRadius.circular(8),
+                    child: _WearBulletinItem(item: item),
+                  );
+                },
+              ),
             ),
           ),
       ],
