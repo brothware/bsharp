@@ -13,6 +13,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+const _wearDarkSurface = Color(0xFF000000);
+const _wearLightSurface = Color(0xFFFAFAFA);
+
+ThemeData wearTheme(ThemeData base) {
+  final wearText = base.textTheme.copyWith(
+    titleMedium: base.textTheme.titleMedium?.copyWith(fontSize: 15),
+    titleSmall: base.textTheme.titleSmall?.copyWith(fontSize: 13),
+    bodyMedium: base.textTheme.bodyMedium?.copyWith(fontSize: 13),
+    bodySmall: base.textTheme.bodySmall?.copyWith(fontSize: 12),
+    labelMedium: base.textTheme.labelMedium?.copyWith(fontSize: 11),
+    labelSmall: base.textTheme.labelSmall?.copyWith(fontSize: 10),
+  );
+  final wearColorScheme = base.brightness == Brightness.dark
+      ? base.colorScheme.copyWith(
+          surface: _wearDarkSurface,
+          surfaceContainerLowest: _wearDarkSurface,
+          surfaceContainerLow: _wearDarkSurface,
+          surfaceContainer: _wearDarkSurface,
+          surfaceContainerHigh: _wearDarkSurface,
+          surfaceContainerHighest: _wearDarkSurface,
+        )
+      : base.colorScheme.copyWith(surface: _wearLightSurface);
+  return base.copyWith(
+    colorScheme: wearColorScheme,
+    textTheme: wearText,
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        minimumSize: const Size(48, 36),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      ),
+    ),
+    scrollbarTheme: const ScrollbarThemeData(
+      thickness: WidgetStatePropertyAll(3),
+      radius: Radius.circular(2),
+      thumbVisibility: WidgetStatePropertyAll(true),
+      minThumbLength: 24,
+    ),
+  );
+}
+
 class BSharpWearApp extends ConsumerStatefulWidget {
   const BSharpWearApp({super.key});
 
@@ -22,32 +62,6 @@ class BSharpWearApp extends ConsumerStatefulWidget {
 
 class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
   bool _initialSyncTriggered = false;
-
-  static ThemeData _wearTheme(ThemeData base) {
-    final wearText = base.textTheme.copyWith(
-      titleMedium: base.textTheme.titleMedium?.copyWith(fontSize: 15),
-      titleSmall: base.textTheme.titleSmall?.copyWith(fontSize: 13),
-      bodyMedium: base.textTheme.bodyMedium?.copyWith(fontSize: 13),
-      bodySmall: base.textTheme.bodySmall?.copyWith(fontSize: 12),
-      labelMedium: base.textTheme.labelMedium?.copyWith(fontSize: 11),
-      labelSmall: base.textTheme.labelSmall?.copyWith(fontSize: 10),
-    );
-    return base.copyWith(
-      textTheme: wearText,
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          minimumSize: const Size(48, 36),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        ),
-      ),
-      scrollbarTheme: const ScrollbarThemeData(
-        thickness: WidgetStatePropertyAll(3),
-        radius: Radius.circular(2),
-        thumbVisibility: WidgetStatePropertyAll(true),
-        minThumbLength: 24,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,16 +93,12 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
           const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
 
-    final effectiveThemeMode = themeMode == ThemeMode.system
-        ? ThemeMode.dark
-        : themeMode;
-
     return MaterialApp(
       title: 'BSharp',
       debugShowCheckedModeBanner: false,
-      theme: _wearTheme(AppTheme.light()),
-      darkTheme: _wearTheme(AppTheme.dark()),
-      themeMode: effectiveThemeMode,
+      theme: wearTheme(AppTheme.light()),
+      darkTheme: wearTheme(AppTheme.dark()),
+      themeMode: themeMode,
       locale: TranslationProvider.of(context).flutterLocale,
       supportedLocales: AppLocaleUtils.supportedLocales,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
