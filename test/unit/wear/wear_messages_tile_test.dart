@@ -107,5 +107,33 @@ void main() {
       final textWidget = tester.widget<Text>(find.text('Unread'));
       expect(textWidget.style?.fontWeight, FontWeight.bold);
     });
+
+    testWidgets('shows a see-all affordance beyond four messages', (
+      tester,
+    ) async {
+      final messages = List.generate(
+        5,
+        (i) => _msg(id: i + 1, title: 'Msg $i', isRead: true),
+      );
+
+      await tester.pumpWidget(_buildTile(inbox: messages));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.more_horiz), findsOneWidget);
+    });
+
+    testWidgets('hides the see-all affordance at four or fewer', (
+      tester,
+    ) async {
+      final messages = List.generate(
+        4,
+        (i) => _msg(id: i + 1, title: 'Msg $i', isRead: true),
+      );
+
+      await tester.pumpWidget(_buildTile(inbox: messages));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.more_horiz), findsNothing);
+    });
   });
 }
