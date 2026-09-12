@@ -57,5 +57,91 @@ void main() {
 
       expect(find.text('42'), findsOneWidget);
     });
+
+    testWidgets('paints an opaque surface background in rectangular mode', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_buildHeader(shape: WearScreenShape.rectangular));
+
+      final theme = Theme.of(tester.element(find.byType(WearTileHeader)));
+      final coloredBox = tester.widget<ColoredBox>(
+        find
+            .descendant(
+              of: find.byType(WearTileHeader),
+              matching: find.byType(ColoredBox),
+            )
+            .first,
+      );
+      expect(coloredBox.color, theme.colorScheme.surface);
+    });
+
+    testWidgets('paints an opaque surface background in round mode', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_buildHeader(shape: WearScreenShape.round));
+
+      final theme = Theme.of(tester.element(find.byType(WearTileHeader)));
+      final coloredBox = tester.widget<ColoredBox>(
+        find
+            .descendant(
+              of: find.byType(WearTileHeader),
+              matching: find.byType(ColoredBox),
+            )
+            .first,
+      );
+      expect(coloredBox.color, theme.colorScheme.surface);
+    });
+
+    testWidgets(
+      'a scrolled list never paints above the header, at either shape',
+      (tester) async {
+        Future<void> expectNoOverlap(WearScreenShape shape) async {
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: WearDisplayScope(
+                  display: WearDisplay(
+                    shape: shape,
+                    sizeDp: const Size(400, 400),
+                  ),
+                  child: Column(
+                    children: [
+                      const WearTileHeader(icon: Icons.grade, title: 'Grades'),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: 30,
+                          itemBuilder: (context, index) => SizedBox(
+                            key: Key('row-$index'),
+                            height: 48,
+                            child: Text('Row $index'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+
+          await tester.drag(find.byType(ListView), const Offset(0, -2000));
+          await tester.pumpAndSettle();
+
+          final headerRect = tester.getRect(find.byType(WearTileHeader));
+          final rowFinder = find.byKey(const Key('row-20'));
+          if (rowFinder.evaluate().isEmpty) return;
+          final rowRect = tester.getRect(rowFinder);
+
+          expect(
+            rowRect.top,
+            greaterThanOrEqualTo(headerRect.bottom),
+            reason: 'row-20 painted above the header bottom edge',
+          );
+        }
+
+        await expectNoOverlap(WearScreenShape.rectangular);
+        await expectNoOverlap(WearScreenShape.round);
+      },
+    );
   });
 }
