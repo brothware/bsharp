@@ -801,5 +801,16 @@
     "updateCredentials": "Opdater loginoplysninger",
     "studentsLabel": "${count} elev(er)",
     "selectProvider": "Vælg din e-karakterbog-udbyder"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} timer",
+    "gradesNewCount": "${count} nye",
+    "homeworkDueCount": "${count} afleveres",
+    "testsWeekCount": "${count} denne uge",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} ulæste",
+    "announcementsNewCount": "${count} nye",
+    "settingsSyncedAt": "Synkroniseret ${time}",
+    "settingsNeverSynced": "Aldrig synkroniseret"
   }
 }

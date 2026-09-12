@@ -801,5 +801,16 @@
     "updateCredentials": "Aggiorna credenziali",
     "studentsLabel": "${count} studente/i",
     "selectProvider": "Scegli il tuo fornitore di registro elettronico"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} lezioni",
+    "gradesNewCount": "${count} nuovi",
+    "homeworkDueCount": "${count} in scadenza",
+    "testsWeekCount": "${count} questa settimana",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} non letti",
+    "announcementsNewCount": "${count} nuovi",
+    "settingsSyncedAt": "Sincronizzato ${time}",
+    "settingsNeverSynced": "Mai sincronizzato"
   }
 }

@@ -798,5 +798,16 @@
     "updateCredentials": "Update credentials",
     "studentsLabel": "${count} student(s)",
     "selectProvider": "Choose your e-gradebook provider"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} lessons",
+    "gradesNewCount": "${count} new",
+    "homeworkDueCount": "${count} due",
+    "testsWeekCount": "${count} this week",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} unread",
+    "announcementsNewCount": "${count} new",
+    "settingsSyncedAt": "Synced ${time}",
+    "settingsNeverSynced": "Never synced"
   }
 }

@@ -801,5 +801,16 @@
     "updateCredentials": "Ажурирај податоци за најава",
     "studentsLabel": "${count} ученик(ци)",
     "selectProvider": "Изберете го вашиот провајдер за е-дневник"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} часови",
+    "gradesNewCount": "${count} нови",
+    "homeworkDueCount": "${count} за предавање",
+    "testsWeekCount": "${count} оваа недела",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} непрочитани",
+    "announcementsNewCount": "${count} нови",
+    "settingsSyncedAt": "Синхронизирано ${time}",
+    "settingsNeverSynced": "Никогаш синхронизирано"
   }
 }

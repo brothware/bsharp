@@ -807,5 +807,16 @@
     "updateCredentials": "Абнавіць дадзеныя для ўваходу",
     "studentsLabel": "${count} вучань/вучняў",
     "selectProvider": "Абярыце пастаўшчыка электроннага дзённіка"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} урокаў",
+    "gradesNewCount": "${count} новых",
+    "homeworkDueCount": "${count} да здачы",
+    "testsWeekCount": "${count} на гэтым тыдні",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} непрачытаных",
+    "announcementsNewCount": "${count} новых",
+    "settingsSyncedAt": "Сінхранізавана ${time}",
+    "settingsNeverSynced": "Ніколі не сінхранізавана"
   }
 }

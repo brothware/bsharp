@@ -801,5 +801,16 @@
     "updateCredentials": "Përditëso kredencialet",
     "studentsLabel": "${count} nxënës",
     "selectProvider": "Zgjidhni ofruesin e dëftesës elektronike"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} orë",
+    "gradesNewCount": "${count} të reja",
+    "homeworkDueCount": "${count} për dorëzim",
+    "testsWeekCount": "${count} këtë javë",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} të palexuara",
+    "announcementsNewCount": "${count} të reja",
+    "settingsSyncedAt": "Sinkronizuar ${time}",
+    "settingsNeverSynced": "Kurrë e sinkronizuar"
   }
 }

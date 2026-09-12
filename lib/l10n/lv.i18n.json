@@ -801,5 +801,16 @@
     "updateCredentials": "Atjaunināt pieteikšanās datus",
     "studentsLabel": "${count} skolēns(-ņi)",
     "selectProvider": "Izvēlieties savu e-dienasgrāmatas pakalpojumu sniedzēju"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} stundas",
+    "gradesNewCount": "${count} jaunas",
+    "homeworkDueCount": "${count} iesniedzamas",
+    "testsWeekCount": "${count} šonedēļ",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} nelasītas",
+    "announcementsNewCount": "${count} jaunas",
+    "settingsSyncedAt": "Sinhronizēts ${time}",
+    "settingsNeverSynced": "Nekad nav sinhronizēts"
   }
 }

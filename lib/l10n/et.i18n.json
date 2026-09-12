@@ -801,5 +801,16 @@
     "updateCredentials": "Uuenda sisselogimisandmeid",
     "studentsLabel": "${count} õpilane/õpilast",
     "selectProvider": "Valige oma e-päeviku teenusepakkuja"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} tundi",
+    "gradesNewCount": "${count} uut",
+    "homeworkDueCount": "${count} tähtajaga",
+    "testsWeekCount": "${count} sel nädalal",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} lugemata",
+    "announcementsNewCount": "${count} uut",
+    "settingsSyncedAt": "Sünkroonitud ${time}",
+    "settingsNeverSynced": "Pole kunagi sünkroonitud"
   }
 }

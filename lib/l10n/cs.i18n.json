@@ -804,5 +804,16 @@
     "updateCredentials": "Aktualizovat přihlašovací údaje",
     "studentsLabel": "${count} žák(ů)",
     "selectProvider": "Vyberte poskytovatele e-žákovské knížky"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} hodin",
+    "gradesNewCount": "${count} nových",
+    "homeworkDueCount": "${count} k odevzdání",
+    "testsWeekCount": "${count} tento týden",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} nepřečtených",
+    "announcementsNewCount": "${count} nových",
+    "settingsSyncedAt": "Synchronizováno ${time}",
+    "settingsNeverSynced": "Nikdy nesynchronizováno"
   }
 }

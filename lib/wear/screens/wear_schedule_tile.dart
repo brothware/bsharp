@@ -2,8 +2,6 @@ import 'package:bsharp/app/providers/dashboard_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
-import 'package:bsharp/wear/widgets/wear_forward_swipe.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,69 +17,48 @@ class WearScheduleTile extends ConsumerWidget {
     final currentLesson = ref.watch(currentLessonProvider);
     final theme = Theme.of(context);
 
-    return WearForwardSwipe(
-      onTriggered: () => _openDetail(context),
-      child: Column(
-        children: [
-          WearTileHeader(
-            icon: Icons.calendar_today,
-            title: '${dayLabelFull(today.weekday)}, ${formatDateShort(today)}',
-          ),
-          if (entries.isEmpty)
-            Expanded(
-              child: Center(
-                child: GestureDetector(
-                  onTap: () => _openDetail(context),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.wb_sunny_outlined,
-                        size: 28,
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        t.schedule.noLessons,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        t.schedule.browseDays,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                    ],
+    return Column(
+      children: [
+        WearTileHeader(
+          icon: Icons.calendar_today,
+          title: '${dayLabelFull(today.weekday)}, ${formatDateShort(today)}',
+        ),
+        if (entries.isEmpty)
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.wb_sunny_outlined,
+                    size: 28,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
-                ),
-              ),
-            )
-          else
-            Expanded(
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
-                itemCount: entries.take(3).length,
-                itemBuilder: (context, index) {
-                  final entry = entries[index];
-                  final isCurrent = currentLesson.current == entry;
-                  return _WearLessonItem(entry: entry, isCurrent: isCurrent);
-                },
+                  const SizedBox(height: 6),
+                  Text(
+                    t.schedule.noLessons,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
               ),
             ),
-        ],
-      ),
-    );
-  }
-
-  void _openDetail(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const WearScheduleDetailScreen(),
-      ),
+          )
+        else
+          Expanded(
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              itemCount: entries.take(3).length,
+              itemBuilder: (context, index) {
+                final entry = entries[index];
+                final isCurrent = currentLesson.current == entry;
+                return _WearLessonItem(entry: entry, isCurrent: isCurrent);
+              },
+            ),
+          ),
+      ],
     );
   }
 }

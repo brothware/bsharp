@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:bsharp/wear/screens/wear_dashboard.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
+import 'package:bsharp/wear/screens/wear_schedule_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
-import 'package:bsharp/wear/widgets/wear_page_indicator.dart';
+import 'package:bsharp/wear/widgets/wear_launcher_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -28,103 +30,69 @@ Future<Widget> _buildApp({List<Object> extraOverrides = const []}) async {
   );
 }
 
+Future<Widget> _buildChildModeApp(Map<String, bool> config) async {
+  final fakeSecure = FakeKeyValueStore();
+  await fakeSecure.write(key: 'child_mode_pin', value: '1234');
+  await fakeSecure.write(key: 'child_mode_active', value: 'true');
+  await fakeSecure.write(key: 'child_mode_config', value: jsonEncode(config));
+  final storage = CredentialStorage(store: fakeSecure);
+
+  SharedPreferences.setMockInitialValues({});
+  final prefs = await SharedPreferences.getInstance();
+
+  return ProviderScope(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      credentialStorageProvider.overrideWithValue(storage),
+      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
+    ],
+    child: const MaterialApp(home: WearHome()),
+  );
+}
+
 void main() {
   group('WearHome', () {
-    testWidgets('renders PageView with page indicator', (tester) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
-
-      expect(find.byType(PageView), findsOneWidget);
-      expect(find.byType(WearPageIndicator), findsOneWidget);
-    });
-
-    testWidgets('first page is schedule tile', (tester) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
-
-      expect(find.byIcon(Icons.calendar_today), findsOneWidget);
-    });
-
-    testWidgets('can swipe to grades tile', (tester) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
-
-      await tester.drag(find.byType(PageView), const Offset(0, -500));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Grades'), findsOneWidget);
-    });
-
-    testWidgets('can swipe to attendance tile', (tester) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
-
-      await tester.drag(find.byType(PageView), const Offset(0, -500));
-      await tester.pumpAndSettle();
-      await tester.drag(find.byType(PageView), const Offset(0, -500));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Attendance'), findsOneWidget);
-    });
-
-    testWidgets('can swipe to homework tile', (tester) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
-
-      for (var i = 0; i < 3; i++) {
-        await tester.drag(find.byType(PageView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-      }
-
-      expect(find.text('Homework'), findsOneWidget);
-    });
-
-    testWidgets('can swipe to tests tile', (tester) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
-
-      for (var i = 0; i < 4; i++) {
-        await tester.drag(find.byType(PageView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-      }
-
-      expect(find.text('Tests'), findsOneWidget);
-    });
-
-    testWidgets('can swipe to notes tile', (tester) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
-
-      for (var i = 0; i < 5; i++) {
-        await tester.drag(find.byType(PageView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-      }
-
-      expect(find.text('Annotations'), findsOneWidget);
-    });
-
-    testWidgets('settings tile shows child mode toggle when PIN set', (
+    testWidgets('shows the dashboard above one row per visible section', (
       tester,
     ) async {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
-      for (var i = 0; i < 8; i++) {
-        await tester.drag(find.byType(PageView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-      }
+      expect(find.byType(WearDashboard), findsOneWidget);
+      expect(find.byType(WearLauncherRow), findsNWidgets(9));
 
-      expect(find.text('Settings'), findsOneWidget);
-      expect(find.text('Sync'), findsOneWidget);
+      final dashboardTop = tester.getTopLeft(find.byType(WearDashboard)).dy;
+      final firstRowTop = tester
+          .getTopLeft(find.byType(WearLauncherRow).first)
+          .dy;
+      expect(dashboardTop, lessThan(firstRowTop));
     });
 
-    testWidgets('child mode hides filtered tiles', (tester) async {
-      final fakeSecure = FakeKeyValueStore();
-      await fakeSecure.write(key: 'child_mode_pin', value: '1234');
-      await fakeSecure.write(key: 'child_mode_active', value: 'true');
-      await fakeSecure.write(
-        key: 'child_mode_config',
-        value: jsonEncode({
+    testWidgets('tapping a row opens its section', (tester) async {
+      await tester.pumpWidget(await _buildApp());
+      await tester.pump();
+
+      await tester.tap(find.text('Schedule'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(WearScheduleTile), findsOneWidget);
+    });
+
+    testWidgets('every row is at least 48dp tall', (tester) async {
+      await tester.pumpWidget(await _buildApp());
+      await tester.pump();
+
+      for (final element in tester.widgetList<WearLauncherRow>(
+        find.byType(WearLauncherRow),
+      )) {
+        final size = tester.getSize(find.byWidget(element));
+        expect(size.height, greaterThanOrEqualTo(48));
+      }
+    });
+
+    testWidgets('child mode hides filtered sections', (tester) async {
+      await tester.pumpWidget(
+        await _buildChildModeApp({
           'scheduleVisible': true,
           'gradesVisible': false,
           'attendanceVisible': false,
@@ -133,86 +101,43 @@ void main() {
           'notesVisible': true,
         }),
       );
-      final storage = CredentialStorage(store: fakeSecure);
+      await tester.pump();
+      await tester.pump();
 
-      SharedPreferences.setMockInitialValues({});
-      final childPrefs = await SharedPreferences.getInstance();
+      expect(find.text('Schedule'), findsOneWidget);
+      expect(find.text('Grades'), findsNothing);
+      expect(find.text('Attendance'), findsNothing);
+      expect(find.text('Messages'), findsNothing);
+    });
 
+    testWidgets('child mode with everything hidden still shows fixed rows', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(childPrefs),
-            credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider.overrideWith(
-              (_) => WearScreenShape.rectangular,
-            ),
-          ],
-          child: const MaterialApp(home: WearHome()),
-        ),
+        await _buildChildModeApp({
+          'scheduleVisible': false,
+          'gradesVisible': false,
+          'attendanceVisible': false,
+          'messagesVisible': false,
+          'settingsVisible': false,
+          'notesVisible': false,
+        }),
       );
       await tester.pump();
       await tester.pump();
 
-      expect(find.byIcon(Icons.calendar_today), findsOneWidget);
-
-      await tester.drag(find.byType(PageView), const Offset(0, -500));
-      await tester.pumpAndSettle();
-
+      expect(find.byType(WearLauncherRow), findsNWidgets(4));
       expect(find.text('Homework'), findsOneWidget);
+      expect(find.text('Tests'), findsOneWidget);
+      expect(find.text('Announcements'), findsOneWidget);
+      expect(find.text('Settings'), findsOneWidget);
     });
 
-    testWidgets(
-      'child mode with all features hidden shows new tiles + settings',
-      (tester) async {
-        final fakeSecure = FakeKeyValueStore();
-        await fakeSecure.write(key: 'child_mode_pin', value: '1234');
-        await fakeSecure.write(key: 'child_mode_active', value: 'true');
-        await fakeSecure.write(
-          key: 'child_mode_config',
-          value: jsonEncode({
-            'scheduleVisible': false,
-            'gradesVisible': false,
-            'attendanceVisible': false,
-            'messagesVisible': false,
-            'settingsVisible': false,
-            'notesVisible': false,
-          }),
-        );
-        final storage = CredentialStorage(store: fakeSecure);
-
-        SharedPreferences.setMockInitialValues({});
-        final childPrefs = await SharedPreferences.getInstance();
-
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              sharedPreferencesProvider.overrideWithValue(childPrefs),
-              credentialStorageProvider.overrideWithValue(storage),
-              wearScreenShapeProvider.overrideWith(
-                (_) => WearScreenShape.rectangular,
-              ),
-            ],
-            child: const MaterialApp(home: WearHome()),
-          ),
-        );
-        await tester.pump();
-        await tester.pump();
-
-        final indicator = tester.widget<WearPageIndicator>(
-          find.byType(WearPageIndicator),
-        );
-        expect(indicator.count, 4);
-      },
-    );
-
-    testWidgets('parent mode shows all tiles', (tester) async {
+    testWidgets('parent mode shows all sections', (tester) async {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
-      final indicator = tester.widget<WearPageIndicator>(
-        find.byType(WearPageIndicator),
-      );
-      expect(indicator.count, 9);
+      expect(find.byType(WearLauncherRow), findsNWidgets(9));
     });
   });
 }

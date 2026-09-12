@@ -801,5 +801,16 @@
     "updateCredentials": "Giriş bilgilerini güncelle",
     "studentsLabel": "${count} öğrenci",
     "selectProvider": "E-karne sağlayıcınızı seçin"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} ders",
+    "gradesNewCount": "${count} yeni",
+    "homeworkDueCount": "${count} teslim",
+    "testsWeekCount": "bu hafta ${count}",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} okunmamış",
+    "announcementsNewCount": "${count} yeni",
+    "settingsSyncedAt": "${time} senkronize edildi",
+    "settingsNeverSynced": "Hiç senkronize edilmedi"
   }
 }

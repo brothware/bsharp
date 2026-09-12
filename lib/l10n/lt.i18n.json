@@ -807,5 +807,16 @@
     "updateCredentials": "Atnaujinti prisijungimo duomenis",
     "studentsLabel": "${count} mokinys(-ių)",
     "selectProvider": "Pasirinkite savo e-dienyno tiekėją"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} pamokų",
+    "gradesNewCount": "${count} naujų",
+    "homeworkDueCount": "${count} atiduoti",
+    "testsWeekCount": "${count} šią savaitę",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} neskaitytų",
+    "announcementsNewCount": "${count} naujų",
+    "settingsSyncedAt": "Sinchronizuota ${time}",
+    "settingsNeverSynced": "Niekada nesinchronizuota"
   }
 }

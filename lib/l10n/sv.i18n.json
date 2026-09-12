@@ -801,5 +801,16 @@
     "updateCredentials": "Uppdatera inloggningsuppgifter",
     "studentsLabel": "${count} elev(er)",
     "selectProvider": "Välj din e-dagbok-leverantör"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} lektioner",
+    "gradesNewCount": "${count} nya",
+    "homeworkDueCount": "${count} att lämna in",
+    "testsWeekCount": "${count} denna vecka",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} olästa",
+    "announcementsNewCount": "${count} nya",
+    "settingsSyncedAt": "Synkroniserad ${time}",
+    "settingsNeverSynced": "Aldrig synkroniserad"
   }
 }

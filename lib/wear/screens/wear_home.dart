@@ -1,8 +1,15 @@
-import 'dart:async';
-
 import 'package:bsharp/app/child_mode_provider.dart';
+import 'package:bsharp/app/providers/attendance_providers.dart';
+import 'package:bsharp/app/providers/dashboard_providers.dart';
+import 'package:bsharp/app/providers/grades_providers.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/app/providers/more_providers.dart';
+import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/domain/attendance_utils.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_attendance_tile.dart';
 import 'package:bsharp/wear/screens/wear_bulletins_tile.dart';
+import 'package:bsharp/wear/screens/wear_dashboard.dart';
 import 'package:bsharp/wear/screens/wear_grades_tile.dart';
 import 'package:bsharp/wear/screens/wear_homework_tile.dart';
 import 'package:bsharp/wear/screens/wear_messages_tile.dart';
@@ -10,22 +17,28 @@ import 'package:bsharp/wear/screens/wear_notes_tile.dart';
 import 'package:bsharp/wear/screens/wear_schedule_tile.dart';
 import 'package:bsharp/wear/screens/wear_settings_tile.dart';
 import 'package:bsharp/wear/screens/wear_tests_tile.dart';
-import 'package:bsharp/wear/widgets/wear_page_indicator.dart';
+import 'package:bsharp/wear/wear_summary_utils.dart';
+import 'package:bsharp/wear/widgets/wear_launcher_row.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
-part 'wear_home.g.dart';
+const _testsWindowDays = 7;
 
-@Riverpod(keepAlive: true)
-class WearPageIndex extends _$WearPageIndex {
-  @override
-  int build() => 0;
-  int get value => state;
-  set value(int v) => state = v;
+class _WearSection {
+  const _WearSection({
+    required this.icon,
+    required this.title,
+    required this.summary,
+    required this.builder,
+  });
+
+  final IconData icon;
+  final String title;
+  final String summary;
+  final WidgetBuilder builder;
 }
 
 class WearHome extends ConsumerStatefulWidget {
@@ -36,15 +49,12 @@ class WearHome extends ConsumerStatefulWidget {
 }
 
 class _WearHomeState extends ConsumerState<WearHome> {
-  late final PageController _controller;
-  double _topOverscroll = 0;
-
-  static const _dismissThreshold = 60.0;
+  late final ScrollController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = PageController();
+    _controller = ScrollController();
   }
 
   @override
@@ -53,85 +63,122 @@ class _WearHomeState extends ConsumerState<WearHome> {
     super.dispose();
   }
 
-  bool _handleScrollNotification(ScrollNotification notification) {
-    switch (notification) {
-      case OverscrollNotification(:final overscroll, :final metrics)
-          when overscroll < 0 && metrics is PageMetrics:
-        _topOverscroll += overscroll.abs();
-      case ScrollEndNotification():
-        if (_topOverscroll >= _dismissThreshold) {
-          unawaited(SystemNavigator.pop());
-        }
-        _topOverscroll = 0;
-      default:
-        break;
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     ref.watch(childModeProvider);
     final notifier = ref.read(childModeProvider.notifier);
 
-    ref.listen(childModeProvider.select((s) => s.mode), (_, _) {
-      if (_controller.hasClients) {
-        _controller.jumpToPage(0);
-        ref.read(wearPageIndexProvider.notifier).value = 0;
-      }
-    });
+    final todayLessons = ref.watch(todayLessonsProvider);
+    final newGrades = ref.watch(newGradeIdsProvider).length;
+    final attendanceStats = ref.watch(attendanceStatsProvider);
+    final homeworkDue = ref.watch(upcomingHomeworkProvider).length;
+    final testsThisWeek = testsWithinDays(
+      ref.watch(upcomingTestsProvider),
+      _testsWindowDays,
+    );
+    final unreadMessages = ref.watch(unreadCountProvider);
+    final unreadAnnouncements = ref.watch(unreadBulletinsCountProvider);
+    final lastSync = ref.watch(lastSyncTimeProvider);
 
-    final tiles = <Widget>[
+    final sections = <_WearSection>[
       if (notifier.isFeatureVisible(ChildModeFeature.schedule))
-        const WearScheduleTile(),
+        _WearSection(
+          icon: Icons.calendar_today,
+          title: t.nav.schedule,
+          summary: t.wearLauncher.lessonsCount(count: todayLessons.length),
+          builder: (_) => const WearScheduleTile(),
+        ),
       if (notifier.isFeatureVisible(ChildModeFeature.grades))
-        const WearGradesTile(),
+        _WearSection(
+          icon: Icons.grade,
+          title: t.nav.grades,
+          summary: t.wearLauncher.gradesNewCount(count: newGrades),
+          builder: (_) => const WearGradesTile(),
+        ),
       if (notifier.isFeatureVisible(ChildModeFeature.attendance))
-        const WearAttendanceTile(),
-      const WearHomeworkTile(),
-      const WearTestsTile(),
+        _WearSection(
+          icon: Icons.event_available,
+          title: t.nav.attendance,
+          summary: attendanceStats.totalLessons == 0
+              ? t.common.noData
+              : attendancePercentLabel(attendanceStats.presentPercent),
+          builder: (_) => const WearAttendanceTile(),
+        ),
+      _WearSection(
+        icon: Icons.assignment,
+        title: t.homework.title,
+        summary: t.wearLauncher.homeworkDueCount(count: homeworkDue),
+        builder: (_) => const WearHomeworkTile(),
+      ),
+      _WearSection(
+        icon: Icons.quiz_outlined,
+        title: t.tests.title,
+        summary: t.wearLauncher.testsWeekCount(count: testsThisWeek),
+        builder: (_) => const WearTestsTile(),
+      ),
       if (notifier.isFeatureVisible(ChildModeFeature.notes))
-        const WearNotesTile(),
+        _WearSection(
+          icon: Icons.sticky_note_2_outlined,
+          title: t.nav.notes,
+          summary: t.wearLauncher.annotationsSummary,
+          builder: (_) => const WearNotesTile(),
+        ),
       if (notifier.isFeatureVisible(ChildModeFeature.messages))
-        const WearMessagesTile(),
-      const WearBulletinsTile(),
-      const WearSettingsTile(),
+        _WearSection(
+          icon: Icons.mail_outline,
+          title: t.nav.messages,
+          summary: t.wearLauncher.messagesUnreadCount(count: unreadMessages),
+          builder: (_) => const WearMessagesTile(),
+        ),
+      _WearSection(
+        icon: Icons.campaign_outlined,
+        title: t.nav.bulletins,
+        summary: t.wearLauncher.announcementsNewCount(
+          count: unreadAnnouncements,
+        ),
+        builder: (_) => const WearBulletinsTile(),
+      ),
+      _WearSection(
+        icon: Icons.settings,
+        title: t.settings.title,
+        summary: lastSync == null
+            ? t.wearLauncher.settingsNeverSynced
+            : t.wearLauncher.settingsSyncedAt(time: _formatTime(lastSync)),
+        builder: (_) => const WearSettingsTile(),
+      ),
     ];
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: WearScaffold(
-        edgeContent: Positioned(
-          right: 4,
-          top: 0,
-          bottom: 0,
-          child: Center(
-            child: Consumer(
-              builder: (context, ref, _) {
-                final index = ref.watch(wearPageIndexProvider);
-                return WearPageIndicator(
-                  count: tiles.length,
-                  currentIndex: index,
-                );
-              },
-            ),
-          ),
-        ),
         child: WearOsScrollbar(
           controller: _controller,
-          hideIndicator: true,
-          child: NotificationListener<ScrollNotification>(
-            onNotification: _handleScrollNotification,
-            child: PageView(
-              scrollDirection: Axis.vertical,
-              controller: _controller,
-              onPageChanged: (i) =>
-                  ref.read(wearPageIndexProvider.notifier).value = i,
-              children: tiles,
-            ),
+          child: CustomScrollView(
+            controller: _controller,
+            slivers: [
+              const SliverToBoxAdapter(child: WearDashboard()),
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final section = sections[index];
+                  return WearLauncherRow(
+                    icon: section.icon,
+                    title: section.title,
+                    summary: section.summary,
+                    scrollController: _controller,
+                    onTap: () => pushWearSection(context, section.builder),
+                  );
+                }, childCount: sections.length),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  String _formatTime(DateTime time) {
+    final hour = time.hour.toString().padLeft(2, '0');
+    final minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
   }
 }

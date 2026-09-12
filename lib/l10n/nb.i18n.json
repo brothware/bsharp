@@ -801,5 +801,16 @@
     "updateCredentials": "Oppdater påloggingsopplysninger",
     "studentsLabel": "${count} elev(er)",
     "selectProvider": "Velg din leverandør av e-karakterbok"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} timer",
+    "gradesNewCount": "${count} nye",
+    "homeworkDueCount": "${count} forfaller",
+    "testsWeekCount": "${count} denne uken",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} uleste",
+    "announcementsNewCount": "${count} nye",
+    "settingsSyncedAt": "Synkronisert ${time}",
+    "settingsNeverSynced": "Aldri synkronisert"
   }
 }

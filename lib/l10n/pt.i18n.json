@@ -801,5 +801,16 @@
     "updateCredentials": "Atualizar credenciais",
     "studentsLabel": "${count} aluno(s)",
     "selectProvider": "Escolha o seu fornecedor de caderneta eletrónica"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} aulas",
+    "gradesNewCount": "${count} novas",
+    "homeworkDueCount": "${count} a entregar",
+    "testsWeekCount": "${count} esta semana",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} não lidas",
+    "announcementsNewCount": "${count} novos",
+    "settingsSyncedAt": "Sincronizado ${time}",
+    "settingsNeverSynced": "Nunca sincronizado"
   }
 }

@@ -801,5 +801,16 @@
     "updateCredentials": "Aktualizuj dane logowania",
     "studentsLabel": "${count} uczeń/uczniów",
     "selectProvider": "Wybierz dostawcę e-dziennika"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} lekcji",
+    "gradesNewCount": "${count} nowych",
+    "homeworkDueCount": "${count} do zrobienia",
+    "testsWeekCount": "${count} w tym tygodniu",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} nieprzeczytanych",
+    "announcementsNewCount": "${count} nowych",
+    "settingsSyncedAt": "Zsynchronizowano ${time}",
+    "settingsNeverSynced": "Nigdy nie synchronizowano"
   }
 }

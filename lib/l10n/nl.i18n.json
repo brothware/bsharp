@@ -801,5 +801,16 @@
     "updateCredentials": "Inloggegevens bijwerken",
     "studentsLabel": "${count} leerling(en)",
     "selectProvider": "Kies uw e-cijferlijst aanbieder"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} lessen",
+    "gradesNewCount": "${count} nieuw",
+    "homeworkDueCount": "${count} in te leveren",
+    "testsWeekCount": "${count} deze week",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} ongelezen",
+    "announcementsNewCount": "${count} nieuw",
+    "settingsSyncedAt": "Gesynchroniseerd ${time}",
+    "settingsNeverSynced": "Nooit gesynchroniseerd"
   }
 }

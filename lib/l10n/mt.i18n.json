@@ -807,5 +807,16 @@
     "updateCredentials": "Aġġorna l-kredenzjali",
     "studentsLabel": "${count} student(i)",
     "selectProvider": "Agħżel il-fornitur tar-reġistru elettroniku tiegħek"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} lezzjonijiet",
+    "gradesNewCount": "${count} ġodda",
+    "homeworkDueCount": "${count} dovuti",
+    "testsWeekCount": "${count} din il-ġimgħa",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} mhux moqrija",
+    "announcementsNewCount": "${count} ġodda",
+    "settingsSyncedAt": "Issinkronizzat ${time}",
+    "settingsNeverSynced": "Qatt sinkronizzat"
   }
 }

@@ -804,5 +804,16 @@
     "updateCredentials": "Actualizează datele de autentificare",
     "studentsLabel": "${count} elev(i)",
     "selectProvider": "Alegeți furnizorul de catalog electronic"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} ore",
+    "gradesNewCount": "${count} noi",
+    "homeworkDueCount": "${count} de predat",
+    "testsWeekCount": "${count} săptămâna aceasta",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} necitite",
+    "announcementsNewCount": "${count} noi",
+    "settingsSyncedAt": "Sincronizat ${time}",
+    "settingsNeverSynced": "Niciodată sincronizat"
   }
 }
