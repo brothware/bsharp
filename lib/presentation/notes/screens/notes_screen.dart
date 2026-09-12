@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
+import 'package:bsharp/domain/annotation_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
@@ -147,11 +148,14 @@ class _ReprimandTile extends ConsumerWidget {
     final theme = Theme.of(context);
     final readIds = ref.watch(readNoteIdsProvider);
     final isRead = readIds.contains(item.id);
-    final (icon, color) = _iconForType(item.type);
+    final style = annotationStyle(
+      item.type,
+      brightness: theme.brightness,
+    );
 
     return Card(
       child: ListTile(
-        leading: Icon(icon, color: color),
+        leading: Icon(style.icon, color: style.color),
         title: Text(
           item.content,
           maxLines: 2,
@@ -168,12 +172,6 @@ class _ReprimandTile extends ConsumerWidget {
       ),
     );
   }
-
-  static (IconData, Color) _iconForType(int type) => switch (type) {
-    1 => (Icons.emoji_events_outlined, Colors.green),
-    2 => (Icons.warning_amber_outlined, Colors.orange),
-    _ => (Icons.info_outlined, Colors.blue),
-  };
 
   void _showDetail(BuildContext context, WidgetRef ref, PortalReprimand item) {
     unawaited(ref.read(readNoteIdsProvider.notifier).markAsRead(item.id));
@@ -209,6 +207,10 @@ class _ReprimandDetailSheetState extends ConsumerState<_ReprimandDetailSheet> {
   Widget build(BuildContext context) {
     final item = widget.item;
     final translationAvailable = ref.watch(isTranslationAvailableProvider);
+    final style = annotationStyle(
+      item.type,
+      brightness: Theme.of(context).brightness,
+    );
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -218,10 +220,7 @@ class _ReprimandDetailSheetState extends ConsumerState<_ReprimandDetailSheet> {
         children: [
           Row(
             children: [
-              Icon(
-                _ReprimandTile._iconForType(item.type).$1,
-                color: _ReprimandTile._iconForType(item.type).$2,
-              ),
+              Icon(style.icon, color: style.color),
               const SizedBox(width: 8),
               Text(
                 _labelForType(item.type),
