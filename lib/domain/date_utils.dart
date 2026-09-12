@@ -1,21 +1,5 @@
 import 'package:bsharp/l10n/strings.g.dart';
 
-DateTime parseFlexibleDate(String value) {
-  try {
-    return DateTime.parse(value);
-  } on FormatException {
-    final parts = value.split('.');
-    if (parts.length == 3) {
-      return DateTime(
-        int.parse(parts[2]),
-        int.parse(parts[1]),
-        int.parse(parts[0]),
-      );
-    }
-    return DateTime(2000);
-  }
-}
-
 String monthName(int month) {
   final monthNames = [
     t.attendance.month.jan,
