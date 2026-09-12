@@ -5,6 +5,7 @@ import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
 import 'package:bsharp/wear/screens/wear_pin_setup_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_confirmation.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
@@ -166,29 +167,17 @@ class WearChildModeScreen extends ConsumerWidget {
     );
   }
 
-  void _showRemovePinDialog(BuildContext context, WidgetRef ref) {
-    unawaited(
-      showDialog<void>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          title: Text(t.childMode.removePinTitle),
-          content: Text(t.childMode.removePinBody),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(t.common.cancel),
-            ),
-            FilledButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                unawaited(ref.read(childModeProvider.notifier).removePin());
-              },
-              child: Text(t.childMode.removePin),
-            ),
-          ],
-        ),
-      ),
+  Future<void> _showRemovePinDialog(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showWearConfirmation(
+      context,
+      icon: Icons.delete,
+      question: t.childMode.removePinBody,
+      confirmLabel: t.childMode.removePin,
+      isDestructive: true,
     );
+    if (confirmed) {
+      await ref.read(childModeProvider.notifier).removePin();
+    }
   }
 }
 

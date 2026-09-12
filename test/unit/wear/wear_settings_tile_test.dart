@@ -43,14 +43,13 @@ void main() {
       expect(find.byIcon(Icons.child_care), findsOneWidget);
     });
 
-    testWidgets('tapping logout shows confirmation dialog', (tester) async {
+    testWidgets('tapping logout shows a confirmation screen', (tester) async {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       await tester.tap(find.byIcon(Icons.logout));
       await tester.pumpAndSettle();
 
-      expect(find.byType(AlertDialog), findsOneWidget);
       expect(
         find.text(
           'Are you sure you want to log out? Saved data will be deleted.',
@@ -60,7 +59,9 @@ void main() {
       expect(find.text('Cancel'), findsOneWidget);
     });
 
-    testWidgets('cancel dismisses logout dialog', (tester) async {
+    testWidgets('cancel dismisses the logout confirmation screen', (
+      tester,
+    ) async {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
@@ -70,7 +71,13 @@ void main() {
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
 
-      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.byType(WearSettingsTile), findsOneWidget);
+      expect(
+        find.text(
+          'Are you sure you want to log out? Saved data will be deleted.',
+        ),
+        findsNothing,
+      );
     });
 
     testWidgets(
@@ -111,14 +118,15 @@ void main() {
       expect(find.byIcon(Icons.logout), findsOneWidget);
     });
 
-    testWidgets('tapping theme opens theme dialog', (tester) async {
+    testWidgets('tapping theme opens a theme selection screen', (
+      tester,
+    ) async {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
       await tester.tap(find.byIcon(Icons.brightness_6));
       await tester.pumpAndSettle();
 
-      expect(find.byType(Dialog), findsOneWidget);
       expect(find.text('System'), findsOneWidget);
       expect(find.text('Light'), findsOneWidget);
       expect(find.text('Dark'), findsOneWidget);
@@ -127,7 +135,9 @@ void main() {
       expect(find.byIcon(Icons.dark_mode), findsOneWidget);
     });
 
-    testWidgets('selecting theme mode dismisses dialog', (tester) async {
+    testWidgets('selecting a theme mode pops the selection screen', (
+      tester,
+    ) async {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
@@ -137,7 +147,8 @@ void main() {
       await tester.tap(find.text('Dark'));
       await tester.pumpAndSettle();
 
-      expect(find.byType(Dialog), findsNothing);
+      expect(find.text('System'), findsNothing);
+      expect(find.byIcon(Icons.settings), findsOneWidget);
     });
   });
 }
