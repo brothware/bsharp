@@ -19,7 +19,7 @@
 - `flutter test` must pass in full after every commit.
 - Conventional Commits: imperative, no capital first letter, no trailing period, subject MAXIMUM 50 characters, body hard-wrapped at 72.
 - Every commit ends with: `Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>`
-- Never `git commit --no-verify`. This repo has no git hooks.
+- Never `git commit --no-verify`. This repo DOES have a pre-commit hook, wired via `core.hooksPath = .githooks`, which runs `dart format`, `dart analyze --fatal-infos` and tests on staged files. Let it run.
 - Stage 0 has already landed on this branch's history. The shared helpers in `lib/domain` (`parseFlexibleDate`, `monthName`, `annotationStyle`, `failureMessage`, `themeModeIcon`, `themeModeLabel`, `scheduleChangeLabel`, `formatDateShort`) and the providers at `lib/app/providers/` exist. Use them.
 - **Do not touch navigation.** The vertical `PageView` carousel, `WearForwardSwipe` and the top-level exit gesture are Stage 2's. This stage must not change how screens are reached.
 - The shared palette from the previous stage is available: `SemanticColor` and `SemanticPalette` in `lib/core/constants/`, with `resolve(token, brightness)`. Use it rather than any raw colour literal.
