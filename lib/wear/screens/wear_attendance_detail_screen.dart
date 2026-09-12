@@ -1,6 +1,6 @@
+import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';

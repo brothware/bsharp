@@ -1,7 +1,7 @@
+import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_screen_layout.dart';

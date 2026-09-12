@@ -1,7 +1,7 @@
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/portal.dart';
-import 'package:bsharp/presentation/more/providers/more_providers.dart';
 import 'package:bsharp/wear/screens/wear_homework_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';

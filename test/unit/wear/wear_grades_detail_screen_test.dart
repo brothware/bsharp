@@ -1,10 +1,10 @@
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
