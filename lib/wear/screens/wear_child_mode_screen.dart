@@ -203,9 +203,8 @@ class _WearSectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(top: 4, bottom: 2),
       child: Text(
         label,
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
           color: Theme.of(context).colorScheme.primary,
-          fontSize: 10,
         ),
       ),
     );
@@ -244,7 +243,7 @@ class _WearChildModeItem extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: theme.textTheme.bodySmall?.copyWith(fontSize: 11),
+                style: theme.textTheme.labelMedium,
               ),
             ),
           ],
@@ -275,7 +274,7 @@ class _WearFeatureToggle extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: theme.textTheme.bodySmall?.copyWith(fontSize: 11),
+              style: theme.textTheme.labelMedium,
             ),
           ),
           SizedBox(

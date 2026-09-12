@@ -42,7 +42,6 @@ class _WearTranslateButtonState extends ConsumerState<WearTranslateButton> {
             Text(
               t.translation.translate,
               style: theme.textTheme.labelSmall?.copyWith(
-                fontSize: 9,
                 color: theme.colorScheme.primary,
               ),
             ),
@@ -64,7 +63,6 @@ class _WearTranslateButtonState extends ConsumerState<WearTranslateButton> {
           Text(
             t.translation.translating,
             style: theme.textTheme.labelSmall?.copyWith(
-              fontSize: 9,
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
@@ -80,7 +78,6 @@ class _WearTranslateButtonState extends ConsumerState<WearTranslateButton> {
             Text(
               t.translation.showOriginal,
               style: theme.textTheme.labelSmall?.copyWith(
-                fontSize: 9,
                 color: theme.colorScheme.primary,
               ),
             ),
@@ -97,7 +94,6 @@ class _WearTranslateButtonState extends ConsumerState<WearTranslateButton> {
             Text(
               t.translation.translationFailed,
               style: theme.textTheme.labelSmall?.copyWith(
-                fontSize: 9,
                 color: theme.colorScheme.error,
               ),
             ),

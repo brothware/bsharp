@@ -228,8 +228,7 @@ class _WearDetailLessonItem extends StatelessWidget {
                       ),
                       child: Text(
                         _changeLabel(entry.changeType!),
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          fontSize: 8, // Intentionally small badge
+                        style: theme.textTheme.labelMedium?.copyWith(
                           color: theme.colorScheme.error,
                           fontWeight: FontWeight.bold,
                         ),
