@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+unset GIT_DIR GIT_WORK_TREE
+
 changed_dart=$(git diff --cached --name-only --diff-filter=ACMR -- '*.dart' || true)
 
 if [ -z "$changed_dart" ]; then
