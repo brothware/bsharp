@@ -1,9 +1,9 @@
 import 'package:bsharp/domain/entities/portal.dart';
-import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearBulletinDetailScreen extends ConsumerStatefulWidget {
   const WearBulletinDetailScreen({required this.bulletin, super.key});
@@ -66,7 +66,7 @@ class _WearBulletinDetailScreenState
               ),
               Divider(height: 8, color: theme.colorScheme.outlineVariant),
               Expanded(
-                child: WearCrownScroll(
+                child: WearOsScrollbar(
                   controller: _scrollController,
                   child: Scrollbar(
                     controller: _scrollController,
