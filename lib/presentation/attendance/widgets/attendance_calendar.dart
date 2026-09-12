@@ -1,4 +1,5 @@
 import 'package:bsharp/domain/attendance_utils.dart';
+import 'package:bsharp/domain/date_utils.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
@@ -97,21 +98,6 @@ class _MonthNavigator extends StatelessWidget {
   final VoidCallback onNext;
   final VoidCallback onToday;
 
-  static List<String> get _monthNames => [
-    t.attendance.month.jan,
-    t.attendance.month.feb,
-    t.attendance.month.mar,
-    t.attendance.month.apr,
-    t.attendance.month.may,
-    t.attendance.month.jun,
-    t.attendance.month.jul,
-    t.attendance.month.aug,
-    t.attendance.month.sep,
-    t.attendance.month.oct,
-    t.attendance.month.nov,
-    t.attendance.month.dec,
-  ];
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -127,7 +113,7 @@ class _MonthNavigator extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            '${_monthNames[month.month - 1]} ${month.year}',
+            '${monthName(month.month)} ${month.year}',
             textAlign: TextAlign.center,
             style: theme.textTheme.titleMedium,
           ),
