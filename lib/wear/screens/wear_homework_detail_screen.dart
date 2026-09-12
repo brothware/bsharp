@@ -1,10 +1,10 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearHomeworkDetailScreen extends ConsumerStatefulWidget {
   const WearHomeworkDetailScreen({super.key});
@@ -53,7 +53,7 @@ class _WearHomeworkDetailScreenState
                           ),
                         ),
                       )
-                    : WearCrownScroll(
+                    : WearOsScrollbar(
                         controller: _scrollController,
                         child: Scrollbar(
                           controller: _scrollController,

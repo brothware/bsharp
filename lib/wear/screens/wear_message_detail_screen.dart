@@ -6,12 +6,12 @@ import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_translate_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearMessageDetailScreen extends ConsumerStatefulWidget {
   const WearMessageDetailScreen({required this.message, super.key});
@@ -107,7 +107,7 @@ class _WearMessageDetailScreenState
                 ),
                 Divider(height: 8, color: theme.colorScheme.outlineVariant),
                 Expanded(
-                  child: WearCrownScroll(
+                  child: WearOsScrollbar(
                     controller: _scrollController,
                     child: Scrollbar(
                       controller: _scrollController,

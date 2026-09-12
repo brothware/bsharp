@@ -10,13 +10,13 @@ import 'package:bsharp/wear/screens/wear_notes_tile.dart';
 import 'package:bsharp/wear/screens/wear_schedule_tile.dart';
 import 'package:bsharp/wear/screens/wear_settings_tile.dart';
 import 'package:bsharp/wear/screens/wear_tests_tile.dart';
-import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_page_indicator.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 part 'wear_home.g.dart';
 
@@ -117,8 +117,9 @@ class _WearHomeState extends ConsumerState<WearHome> {
             ),
           ),
         ),
-        child: WearCrownScroll(
+        child: WearOsScrollbar(
           controller: _controller,
+          hideIndicator: true,
           child: NotificationListener<ScrollNotification>(
             onNotification: _handleScrollNotification,
             child: PageView(

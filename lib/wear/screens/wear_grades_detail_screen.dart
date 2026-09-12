@@ -2,11 +2,11 @@ import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearGradesDetailScreen extends ConsumerStatefulWidget {
   const WearGradesDetailScreen({super.key});
@@ -57,7 +57,7 @@ class _WearGradesDetailScreenState
                           ),
                         ),
                       )
-                    : WearCrownScroll(
+                    : WearOsScrollbar(
                         controller: _scrollController,
                         child: Scrollbar(
                           controller: _scrollController,

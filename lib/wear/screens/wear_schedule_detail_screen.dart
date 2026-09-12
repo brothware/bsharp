@@ -1,12 +1,12 @@
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearScheduleDetailScreen extends ConsumerStatefulWidget {
   const WearScheduleDetailScreen({super.key});
@@ -72,10 +72,8 @@ class _WearScheduleDetailScreenState
               ),
               const SizedBox(height: 4),
               Expanded(
-                child: WearCrownScroll(
+                child: WearOsScrollbar(
                   controller: _scrollController,
-                  onBoundaryUp: _previousDay,
-                  onBoundaryDown: _nextDay,
                   child: WearVerticalOverscrollPager(
                     onPrevious: _previousDay,
                     onNext: _nextDay,
