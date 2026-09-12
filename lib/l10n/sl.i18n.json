@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} novih",
     "viewAll": "Prikaži vse"
   },
+  "wearDashboard": {
+    "now": "ZDAJ",
+    "next": "NASLEDNJA",
+    "tomorrow": "JUTRI",
+    "noLessons": "NI UR",
+    "noData": "NI PODATKOV",
+    "endsIn": "Konec čez ${n} min",
+    "startsIn": "Začetek čez ${n} min",
+    "syncPrompt": "Sinhronizirajte, da vidite urnik",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Urnik",
     "today": "Danes",

@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} ġodda",
     "viewAll": "Ara kollox"
   },
+  "wearDashboard": {
+    "now": "ISSA",
+    "next": "LI JMISS",
+    "tomorrow": "GĦADA",
+    "noLessons": "L-EBDA LEZZJONI",
+    "noData": "L-EBDA DATA",
+    "endsIn": "Tispiċċa fi ${n} min",
+    "startsIn": "Tibda fi ${n} min",
+    "syncPrompt": "Issinkronizza biex tara l-iskeda tiegħek",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Skeda",
     "today": "Illum",

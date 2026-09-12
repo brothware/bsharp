@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count}개의 새 항목",
     "viewAll": "전체 보기"
   },
+  "wearDashboard": {
+    "now": "지금",
+    "next": "다음 수업",
+    "tomorrow": "내일",
+    "noLessons": "수업 없음",
+    "noData": "데이터 없음",
+    "endsIn": "${n}분 후 종료",
+    "startsIn": "${n}분 후 시작",
+    "syncPrompt": "동기화하여 시간표 보기",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "시간표",
     "today": "오늘",

@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nye",
     "viewAll": "Vis alle"
   },
+  "wearDashboard": {
+    "now": "NÅ",
+    "next": "NESTE",
+    "tomorrow": "I MORGEN",
+    "noLessons": "INGEN TIMER",
+    "noData": "INGEN DATA",
+    "endsIn": "Slutter om ${n} min",
+    "startsIn": "Starter om ${n} min",
+    "syncPrompt": "Synkroniser for å se timeplanen",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Timeplan",
     "today": "I dag",

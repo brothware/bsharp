@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} jauni",
     "viewAll": "Skatīt visu"
   },
+  "wearDashboard": {
+    "now": "TAGAD",
+    "next": "NĀKAMĀ",
+    "tomorrow": "RĪT",
+    "noLessons": "NAV STUNDU",
+    "noData": "NAV DATU",
+    "endsIn": "Beidzas pēc ${n} min",
+    "startsIn": "Sākas pēc ${n} min",
+    "syncPrompt": "Sinhronizējiet, lai redzētu sarakstu",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Grafiks",
     "today": "Šodien",

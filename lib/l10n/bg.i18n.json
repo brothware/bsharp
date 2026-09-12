@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} нови",
     "viewAll": "Виж всички"
   },
+  "wearDashboard": {
+    "now": "СЕГА",
+    "next": "СЛЕДВАЩ",
+    "tomorrow": "УТРЕ",
+    "noLessons": "БЕЗ ЧАСОВЕ",
+    "noData": "НЯМА ДАННИ",
+    "endsIn": "Приключва след ${n} мин",
+    "startsIn": "Започва след ${n} мин",
+    "syncPrompt": "Синхронизирайте, за да видите разписанието",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Разписание",
     "today": "Днес",

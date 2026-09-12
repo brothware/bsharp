@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nua",
     "viewAll": "Feach ar fad"
   },
+  "wearDashboard": {
+    "now": "ANOIS",
+    "next": "AR AGHAIDH",
+    "tomorrow": "AMÁRACH",
+    "noLessons": "GAN RANGANNA",
+    "noData": "GAN SONRAÍ",
+    "endsIn": "Críochnaíonn i ${n} nóim",
+    "startsIn": "Tosaíonn i ${n} nóim",
+    "syncPrompt": "Sioncrónaigh chun d'amchlár a fheiceáil",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Amhclar",
     "today": "Inniu",

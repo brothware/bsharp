@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} të reja",
     "viewAll": "Shiko të gjitha"
   },
+  "wearDashboard": {
+    "now": "TANI",
+    "next": "TJETRA",
+    "tomorrow": "NESËR",
+    "noLessons": "PA ORË",
+    "noData": "PA TË DHËNA",
+    "endsIn": "Përfundon për ${n} min",
+    "startsIn": "Fillon për ${n} min",
+    "syncPrompt": "Sinkronizo për të parë orarin",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Orari",
     "today": "Sot",

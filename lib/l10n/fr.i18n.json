@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nouvelles",
     "viewAll": "Tout afficher"
   },
+  "wearDashboard": {
+    "now": "MAINTENANT",
+    "next": "SUIVANT",
+    "tomorrow": "DEMAIN",
+    "noLessons": "AUCUN COURS",
+    "noData": "AUCUNE DONNÉE",
+    "endsIn": "Se termine dans ${n} min",
+    "startsIn": "Commence dans ${n} min",
+    "syncPrompt": "Synchronisez pour voir votre emploi du temps",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Emploi du temps",
     "today": "Aujourd'hui",

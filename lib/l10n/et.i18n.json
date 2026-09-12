@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} uut",
     "viewAll": "Vaata kõiki"
   },
+  "wearDashboard": {
+    "now": "PRAEGU",
+    "next": "JÄRGMINE",
+    "tomorrow": "HOMME",
+    "noLessons": "TUNDE POLE",
+    "noData": "ANDMED PUUDUVAD",
+    "endsIn": "Lõpeb ${n} min pärast",
+    "startsIn": "Algab ${n} min pärast",
+    "syncPrompt": "Sünkroonige, et näha tunniplaani",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Tunniplaan",
     "today": "Täna",

@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} új",
     "viewAll": "Összes megtekintése"
   },
+  "wearDashboard": {
+    "now": "MOST",
+    "next": "KÖVETKEZŐ",
+    "tomorrow": "HOLNAP",
+    "noLessons": "NINCS ÓRA",
+    "noData": "NINCS ADAT",
+    "endsIn": "${n} perc múlva véget ér",
+    "startsIn": "${n} perc múlva kezdődik",
+    "syncPrompt": "Szinkronizálj az órarended megtekintéséhez",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Órarend",
     "today": "Ma",

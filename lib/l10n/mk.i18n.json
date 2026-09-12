@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} нови",
     "viewAll": "Прикажи ги сите"
   },
+  "wearDashboard": {
+    "now": "СЕГА",
+    "next": "СЛЕДЕН",
+    "tomorrow": "УТРЕ",
+    "noLessons": "НЕМА ЧАСОВИ",
+    "noData": "НЕМА ПОДАТОЦИ",
+    "endsIn": "Завршува за ${n} мин",
+    "startsIn": "Започнува за ${n} мин",
+    "syncPrompt": "Синхронизирајте за да го видите распоредот",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Распоред",
     "today": "Денес",
