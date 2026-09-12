@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
@@ -9,6 +10,7 @@ import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_child_mode_screen.dart';
 import 'package:bsharp/wear/screens/wear_language_screen.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
+import 'package:bsharp/wear/screens/wear_student_picker.dart';
 import 'package:bsharp/wear/widgets/wear_confirmation.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_status_line.dart';
@@ -22,6 +24,7 @@ class WearSettingsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final childState = ref.watch(childModeProvider);
+    final allEntries = ref.watch(allStudentsProvider);
 
     return Column(
       children: [
@@ -43,6 +46,16 @@ class WearSettingsTile extends ConsumerWidget {
                   ),
                 )
               else ...[
+                if (allEntries.length > 1)
+                  _WearSettingsItem(
+                    icon: Icons.people,
+                    label: t.accounts.switchStudent,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const WearStudentPicker(),
+                      ),
+                    ),
+                  ),
                 _WearSettingsItem(
                   icon: Icons.child_care,
                   label: t.childMode.title,
