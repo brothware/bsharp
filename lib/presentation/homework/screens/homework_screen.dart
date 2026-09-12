@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
-import 'package:bsharp/domain/date_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/portal_date_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter/material.dart';
@@ -64,20 +64,20 @@ class _HomeworkList extends ConsumerWidget {
         all
             .where(
               (h) =>
-                  parseFlexibleDate(h.dueDate).isAfter(today) ||
-                  parseFlexibleDate(h.dueDate).isAtSameMomentAs(today),
+                  parsePortalDate(h.dueDate).isAfter(today) ||
+                  parsePortalDate(h.dueDate).isAtSameMomentAs(today),
             )
             .toList(),
       HomeworkFilter.past =>
-        all.where((h) => parseFlexibleDate(h.dueDate).isBefore(today)).toList(),
+        all.where((h) => parsePortalDate(h.dueDate).isBefore(today)).toList(),
       HomeworkFilter.all => all,
     };
 
     final sorted = [...filtered]
       ..sort(
-        (a, b) => parseFlexibleDate(
+        (a, b) => parsePortalDate(
           a.dueDate,
-        ).compareTo(parseFlexibleDate(b.dueDate)),
+        ).compareTo(parsePortalDate(b.dueDate)),
       );
 
     final grouped = <String, List<PortalHomework>>{};
