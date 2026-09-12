@@ -1,9 +1,9 @@
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/providers/attendance_providers.dart';
+import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
-import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
-import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';

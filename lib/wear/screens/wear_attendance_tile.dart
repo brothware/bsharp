@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_forward_swipe.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
