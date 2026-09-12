@@ -33,57 +33,50 @@ class _WearBulletinDetailScreenState
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.bulletin.title,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 2),
-              Row(
+          child: WearOsScrollbar(
+            controller: _scrollController,
+            child: Scrollbar(
+              controller: _scrollController,
+              child: ListView(
+                controller: _scrollController,
+                padding: EdgeInsets.zero,
                 children: [
-                  Expanded(
-                    child: Text(
-                      widget.bulletin.author,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
                   Text(
-                    widget.bulletin.date,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                    widget.bulletin.title,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          widget.bulletin.author,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        widget.bulletin.date,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(height: 8, color: theme.colorScheme.outlineVariant),
+                  SelectableText(
+                    widget.bulletin.content,
+                    style: theme.textTheme.bodySmall,
                   ),
                 ],
               ),
-              Divider(height: 8, color: theme.colorScheme.outlineVariant),
-              Expanded(
-                child: WearOsScrollbar(
-                  controller: _scrollController,
-                  child: Scrollbar(
-                    controller: _scrollController,
-                    child: ListView(
-                      controller: _scrollController,
-                      padding: EdgeInsets.zero,
-                      children: [
-                        SelectableText(
-                          widget.bulletin.content,
-                          style: theme.textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
