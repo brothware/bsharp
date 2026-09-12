@@ -15,6 +15,10 @@ class WearNotesTile extends ConsumerWidget {
     final remarks = ref.watch(remarksProvider);
     final praises = ref.watch(praisesProvider);
     final info = ref.watch(infoProvider);
+    final unreadCount =
+        ref.watch(unreadRemarksCountProvider) +
+        ref.watch(unreadPraisesCountProvider) +
+        ref.watch(unreadInfoCountProvider);
     final theme = Theme.of(context);
 
     final combined = [...remarks, ...praises, ...info]
@@ -27,6 +31,25 @@ class WearNotesTile extends ConsumerWidget {
         WearTileHeader(
           icon: Icons.sticky_note_2_outlined,
           title: t.notes.title,
+          trailing: unreadCount > 0
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 1,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.tertiary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '$unreadCount',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onTertiary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              : null,
         ),
         if (combined.isEmpty)
           Expanded(
