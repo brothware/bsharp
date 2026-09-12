@@ -1,5 +1,6 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _WearHomeworkDetailScreenState
         body: WearScaffold(
           child: Column(
             children: [
-              _WearHomeworkFilter(
+              _WearHomeworkFilterSelector(
                 filter: filter,
                 onChanged: (f) {
                   ref.read(homeworkFilterProvider.notifier).value = f;
@@ -122,53 +123,30 @@ class _WearHomeworkDetailScreenState
   }
 }
 
-class _WearHomeworkFilter extends StatelessWidget {
-  const _WearHomeworkFilter({required this.filter, required this.onChanged});
+class _WearHomeworkFilterSelector extends StatelessWidget {
+  const _WearHomeworkFilterSelector({
+    required this.filter,
+    required this.onChanged,
+  });
 
   final HomeworkFilter filter;
   final ValueChanged<HomeworkFilter> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     const filters = HomeworkFilter.values;
     final current = filters.indexOf(filter);
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            final prev = (current - 1) % filters.length;
-            onChanged(filters[prev]);
-          },
-          child: Icon(
-            Icons.chevron_left,
-            size: 18,
-            color: theme.colorScheme.primary,
-          ),
-        ),
-        const SizedBox(width: 4),
-        Text(
-          _filterLabel(filter),
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.primary,
-          ),
-        ),
-        const SizedBox(width: 4),
-        GestureDetector(
-          onTap: () {
-            final next = (current + 1) % filters.length;
-            onChanged(filters[next]);
-          },
-          child: Icon(
-            Icons.chevron_right,
-            size: 18,
-            color: theme.colorScheme.primary,
-          ),
-        ),
-      ],
+    return WearPeriodSelector(
+      label: _filterLabel(filter),
+      onPrevious: () {
+        final prev = (current - 1) % filters.length;
+        onChanged(filters[prev]);
+      },
+      onNext: () {
+        final next = (current + 1) % filters.length;
+        onChanged(filters[next]);
+      },
     );
   }
 

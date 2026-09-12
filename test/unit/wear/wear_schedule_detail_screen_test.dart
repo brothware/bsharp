@@ -121,12 +121,58 @@ void main() {
       expect(find.text('09:00 - 09:45'), findsOneWidget);
     });
 
-    testWidgets('shows no chevron icons', (tester) async {
+    testWidgets('shows period selector chevrons', (tester) async {
       await tester.pumpWidget(_buildScreen(prefs: prefs));
       await tester.pump();
 
-      expect(find.byIcon(Icons.chevron_left), findsNothing);
-      expect(find.byIcon(Icons.chevron_right), findsNothing);
+      expect(find.byIcon(Icons.chevron_left), findsOneWidget);
+      expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+    });
+
+    testWidgets('tapping forward shows next day items, back returns', (
+      tester,
+    ) async {
+      final today = DateTime.now();
+      final todayDate = DateTime(today.year, today.month, today.day);
+      final tomorrowDate = todayDate.add(const Duration(days: 1));
+
+      await tester.pumpWidget(
+        _buildScreen(
+          prefs: prefs,
+          resolvedEvents: [
+            _resolvedEvent(),
+            _resolvedEvent(
+              id: 2,
+              startTime: '09:00:00',
+              endTime: '09:45:00',
+              date: tomorrowDate,
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+
+      final element = tester.element(find.byType(WearScheduleDetailScreen));
+      final container = ProviderScope.containerOf(element);
+      expect(
+        container.read(timelineItemsForDateProvider(tomorrowDate)),
+        isNotEmpty,
+      );
+
+      expect(find.text('08:00 - 08:45'), findsOneWidget);
+      expect(find.text('09:00 - 09:45'), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.chevron_right));
+      await tester.pump();
+
+      expect(find.text('09:00 - 09:45'), findsOneWidget);
+      expect(find.text('08:00 - 08:45'), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.chevron_left));
+      await tester.pump();
+
+      expect(find.text('08:00 - 08:45'), findsOneWidget);
+      expect(find.text('09:00 - 09:45'), findsNothing);
     });
 
     testWidgets(

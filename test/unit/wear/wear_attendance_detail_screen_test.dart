@@ -2,6 +2,7 @@ import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/domain/date_utils.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
@@ -41,12 +42,29 @@ void main() {
   });
 
   group('WearAttendanceDetailScreen', () {
-    testWidgets('shows month label without chevrons', (tester) async {
+    testWidgets('shows month label with period selector chevrons', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildScreen(prefs: prefs));
       await tester.pump();
 
-      expect(find.byIcon(Icons.chevron_left), findsNothing);
-      expect(find.byIcon(Icons.chevron_right), findsNothing);
+      expect(find.byIcon(Icons.chevron_left), findsOneWidget);
+      expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+    });
+
+    testWidgets('tapping forward changes the month label', (tester) async {
+      await tester.pumpWidget(_buildScreen(prefs: prefs));
+      await tester.pump();
+
+      final now = DateTime.now();
+      final nextMonth = DateTime(now.year, now.month + 1);
+
+      expect(find.text(monthName(now.month)), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.chevron_right));
+      await tester.pump();
+
+      expect(find.text(monthName(nextMonth.month)), findsOneWidget);
     });
 
     testWidgets('shows weekday headers', (tester) async {
