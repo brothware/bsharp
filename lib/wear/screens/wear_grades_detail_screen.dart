@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
@@ -19,6 +21,27 @@ class WearGradesDetailScreen extends ConsumerStatefulWidget {
 class _WearGradesDetailScreenState
     extends ConsumerState<WearGradesDetailScreen> {
   final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _markVisibleGradesAsRead(),
+    );
+  }
+
+  void _markVisibleGradesAsRead() {
+    final subjectGrades = ref.read(subjectGradesProvider);
+    final newIds = ref.read(newGradeIdsProvider);
+    final notifier = ref.read(newGradeIdsProvider.notifier);
+    for (final sg in subjectGrades) {
+      for (final g in sg.grades) {
+        if (newIds.contains(g.id)) {
+          unawaited(notifier.markAsRead(g.id));
+        }
+      }
+    }
+  }
 
   @override
   void dispose() {
