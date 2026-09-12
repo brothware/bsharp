@@ -8,6 +8,7 @@ import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearPinEntry extends ConsumerStatefulWidget {
   const WearPinEntry({super.key});
@@ -17,9 +18,16 @@ class WearPinEntry extends ConsumerStatefulWidget {
 }
 
 class _WearPinEntryState extends ConsumerState<WearPinEntry> {
+  final _scrollController = ScrollController();
   String _pin = '';
   String? _error;
   static const _pinLength = 4;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,44 +67,60 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
     return Scaffold(
       body: WearSwipeDismiss(
         child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 4),
-              Text(
-                t.childMode.enterParentPin,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(_pinLength, (i) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: i < _pin.length
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.surfaceContainerHighest,
-                    ),
-                  );
-                }),
-              ),
-              if (_error != null) ...[
-                const SizedBox(height: 4),
-                Text(
-                  _error!,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.error,
+          child: LayoutBuilder(
+            builder: (context, constraints) => WearOsScrollbar(
+              controller: _scrollController,
+              indicatorColor: theme.colorScheme.primary,
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 4),
+                      Text(
+                        t.childMode.enterParentPin,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(_pinLength, (i) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: i < _pin.length
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.surfaceContainerHighest,
+                            ),
+                          );
+                        }),
+                      ),
+                      if (_error != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          _error!,
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: theme.colorScheme.error,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 8),
+                      WearCompactKeypad(onKeyTap: _onKeyTap),
+                    ],
                   ),
                 ),
-              ],
-              const SizedBox(height: 8),
-              Expanded(child: WearCompactKeypad(onKeyTap: _onKeyTap)),
-            ],
+              ),
+            ),
           ),
         ),
       ),

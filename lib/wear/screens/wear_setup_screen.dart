@@ -13,6 +13,7 @@ import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 enum _SetupStep { school, username, password, studentPicker }
 
@@ -33,6 +34,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   final _schoolController = TextEditingController();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _fieldStepScrollController = ScrollController();
+  final _studentPickerScrollController = ScrollController();
 
   _SetupStep _step = _SetupStep.school;
   bool _isLoading = false;
@@ -70,6 +73,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     _schoolController.dispose();
     _loginController.dispose();
     _passwordController.dispose();
+    _fieldStepScrollController.dispose();
+    _studentPickerScrollController.dispose();
     super.dispose();
   }
 
@@ -275,21 +280,36 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         _buildStepHeader(label: label),
         const SizedBox(height: 8),
         Expanded(
-          child: Center(
-            child: TextField(
-              controller: controller,
-              autofocus: true,
-              obscureText: obscureText,
-              textAlign: TextAlign.center,
-              autocorrect: false,
-              textInputAction: TextInputAction.done,
-              onSubmitted: (_) => onSubmit(),
-              decoration: InputDecoration(
-                labelText: label,
-                isDense: true,
-                suffixIcon: suffixIcon,
+          child: LayoutBuilder(
+            builder: (context, constraints) => WearOsScrollbar(
+              controller: _fieldStepScrollController,
+              indicatorColor: theme.colorScheme.primary,
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              child: SingleChildScrollView(
+                controller: _fieldStepScrollController,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: Center(
+                    child: TextField(
+                      controller: controller,
+                      autofocus: true,
+                      obscureText: obscureText,
+                      textAlign: TextAlign.center,
+                      autocorrect: false,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (_) => onSubmit(),
+                      decoration: InputDecoration(
+                        labelText: label,
+                        isDense: true,
+                        suffixIcon: suffixIcon,
+                      ),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ),
+                ),
               ),
-              style: theme.textTheme.bodyMedium,
             ),
           ),
         ),
@@ -388,42 +408,48 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         ),
         const SizedBox(height: 4),
         Expanded(
-          child: ListView.builder(
-            itemCount: _students.length,
-            itemBuilder: (context, index) {
-              final student = _students[index];
-              final isSelected = student.id == _selectedStudentId;
-              return InkWell(
-                onTap: () => setState(() => _selectedStudentId = student.id),
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  constraints: const BoxConstraints(minHeight: 48),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 6,
-                  ),
-                  child: Row(
-                    children: [
-                      if (isSelected)
-                        Icon(
-                          Icons.check,
-                          size: 16,
-                          color: theme.colorScheme.primary,
-                        )
-                      else
-                        const SizedBox(width: 16),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          '${student.name} ${student.surname}',
-                          style: theme.textTheme.bodySmall,
+          child: WearOsScrollbar(
+            controller: _studentPickerScrollController,
+            indicatorColor: theme.colorScheme.primary,
+            backgroundColor: theme.colorScheme.surfaceContainerHighest,
+            child: ListView.builder(
+              controller: _studentPickerScrollController,
+              itemCount: _students.length,
+              itemBuilder: (context, index) {
+                final student = _students[index];
+                final isSelected = student.id == _selectedStudentId;
+                return InkWell(
+                  onTap: () => setState(() => _selectedStudentId = student.id),
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    constraints: const BoxConstraints(minHeight: 48),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 6,
+                    ),
+                    child: Row(
+                      children: [
+                        if (isSelected)
+                          Icon(
+                            Icons.check,
+                            size: 16,
+                            color: theme.colorScheme.primary,
+                          )
+                        else
+                          const SizedBox(width: 16),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            '${student.name} ${student.surname}',
+                            style: theme.textTheme.bodySmall,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
         SizedBox(
