@@ -15,12 +15,12 @@ final themeModeProvider = NotifierProvider<ThemeModeNotifier, ThemeMode>(
 );
 
 class ThemeModeNotifier extends Notifier<ThemeMode> {
-  static const _key = 'theme_mode';
+  static const preferenceKey = 'theme_mode';
 
   @override
   ThemeMode build() {
     final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(_key);
+    final stored = prefs.getString(preferenceKey);
     return switch (stored) {
       'light' => ThemeMode.light,
       'dark' => ThemeMode.dark,
@@ -35,7 +35,7 @@ class ThemeModeNotifier extends Notifier<ThemeMode> {
       ThemeMode.dark => 'dark',
       ThemeMode.system => 'system',
     };
-    await prefs.setString(_key, value);
+    await prefs.setString(preferenceKey, value);
     state = mode;
   }
 

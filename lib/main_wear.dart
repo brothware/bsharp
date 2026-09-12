@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+Future<void> seedDefaultWearThemeMode(SharedPreferences prefs) async {
+  if (prefs.getString(ThemeModeNotifier.preferenceKey) == null) {
+    await prefs.setString(ThemeModeNotifier.preferenceKey, 'dark');
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -15,6 +21,8 @@ void main() async {
   container.dispose();
 
   final prefs = await SharedPreferences.getInstance();
+
+  await seedDefaultWearThemeMode(prefs);
 
   final stored = prefs.getString('locale');
   final initialLocale =
