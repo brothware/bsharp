@@ -5,11 +5,13 @@ import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
@@ -31,13 +33,20 @@ ResolvedGrade _grade({
   );
 }
 
-Widget _buildScreen({
+Future<Widget> _buildScreen({
   List<SubjectGrades> subjectGrades = const [],
   List<Term> terms = const [],
-}) {
+  Set<int> newIds = const {},
+}) async {
+  SharedPreferences.setMockInitialValues({
+    if (newIds.isNotEmpty)
+      'new_grade_ids': newIds.map((e) => e.toString()).toList(),
+  });
+  final prefs = await SharedPreferences.getInstance();
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       subjectGradesProvider.overrideWith((ref) => subjectGrades),
@@ -50,7 +59,7 @@ Widget _buildScreen({
 void main() {
   group('WearGradesDetailScreen', () {
     testWidgets('shows no grades when empty', (tester) async {
-      await tester.pumpWidget(_buildScreen());
+      await tester.pumpWidget(await _buildScreen());
       await tester.pump();
 
       expect(find.text('No grades'), findsOneWidget);
@@ -58,7 +67,7 @@ void main() {
 
     testWidgets('shows subject sections with grades', (tester) async {
       await tester.pumpWidget(
-        _buildScreen(
+        await _buildScreen(
           subjectGrades: [
             SubjectGrades(
               subjectName: 'Mathematics',
@@ -84,7 +93,7 @@ void main() {
     testWidgets('shows term selector when multiple terms', (tester) async {
       final now = DateTime.now();
       await tester.pumpWidget(
-        _buildScreen(
+        await _buildScreen(
           terms: [
             Term(
               id: 1,
@@ -111,7 +120,7 @@ void main() {
 
     testWidgets('shows average for subject', (tester) async {
       await tester.pumpWidget(
-        _buildScreen(
+        await _buildScreen(
           subjectGrades: [
             SubjectGrades(
               subjectName: 'Mathematics',
@@ -124,6 +133,29 @@ void main() {
       await tester.pump();
 
       expect(find.text('4.50'), findsOneWidget);
+    });
+
+    testWidgets('opening the screen clears the new-grade ids it displayed', (
+      tester,
+    ) async {
+      final widget = await _buildScreen(
+        subjectGrades: [
+          SubjectGrades(
+            subjectName: 'Mathematics',
+            subjectId: 1,
+            grades: [_grade()],
+          ),
+        ],
+        newIds: {1},
+      );
+      await tester.pumpWidget(widget);
+      await tester.pump();
+      await tester.pump();
+
+      final element = tester.element(find.byType(WearGradesDetailScreen));
+      final container = ProviderScope.containerOf(element);
+
+      expect(container.read(newGradeIdsProvider), isEmpty);
     });
   });
 }
