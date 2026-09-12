@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/domain/date_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -63,18 +64,20 @@ class _HomeworkList extends ConsumerWidget {
         all
             .where(
               (h) =>
-                  _parseDate(h.dueDate).isAfter(today) ||
-                  _parseDate(h.dueDate).isAtSameMomentAs(today),
+                  parseFlexibleDate(h.dueDate).isAfter(today) ||
+                  parseFlexibleDate(h.dueDate).isAtSameMomentAs(today),
             )
             .toList(),
       HomeworkFilter.past =>
-        all.where((h) => _parseDate(h.dueDate).isBefore(today)).toList(),
+        all.where((h) => parseFlexibleDate(h.dueDate).isBefore(today)).toList(),
       HomeworkFilter.all => all,
     };
 
     final sorted = [...filtered]
       ..sort(
-        (a, b) => _parseDate(a.dueDate).compareTo(_parseDate(b.dueDate)),
+        (a, b) => parseFlexibleDate(
+          a.dueDate,
+        ).compareTo(parseFlexibleDate(b.dueDate)),
       );
 
     final grouped = <String, List<PortalHomework>>{};
@@ -95,22 +98,6 @@ class _HomeworkList extends ConsumerWidget {
         return _DateGroup(date: date, homeworks: items);
       },
     );
-  }
-
-  DateTime _parseDate(String date) {
-    try {
-      return DateTime.parse(date);
-    } on FormatException {
-      final parts = date.split('.');
-      if (parts.length == 3) {
-        return DateTime(
-          int.parse(parts[2]),
-          int.parse(parts[1]),
-          int.parse(parts[0]),
-        );
-      }
-      return DateTime(2000);
-    }
   }
 }
 
