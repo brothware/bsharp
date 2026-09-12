@@ -9,6 +9,7 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/data/services/translation_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/theme_labels.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
@@ -36,7 +37,7 @@ class SettingsScreen extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.brightness_6),
             title: Text(t.settings.theme),
-            subtitle: Text(_themeLabel(themeMode)),
+            subtitle: Text(themeModeLabel(themeMode)),
             onTap: () => _showThemeDialog(context, ref),
           ),
           ListTile(
@@ -101,14 +102,6 @@ class SettingsScreen extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  String _themeLabel(ThemeMode mode) {
-    return switch (mode) {
-      ThemeMode.system => t.settings.themeSystem,
-      ThemeMode.light => t.settings.themeLight,
-      ThemeMode.dark => t.settings.themeDark,
-    };
   }
 
   String _languageSubtitle(WidgetRef ref) {
@@ -216,7 +209,7 @@ class SettingsScreen extends ConsumerWidget {
                 children: [
                   for (final mode in ThemeMode.values)
                     ListTile(
-                      title: Text(_themeLabel(mode)),
+                      title: Text(themeModeLabel(mode)),
                       leading: Radio<ThemeMode>(value: mode),
                       onTap: () {
                         unawaited(
