@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/domain/theme_labels.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_child_mode_screen.dart';
@@ -135,7 +136,7 @@ class _WearThemeScreen extends ConsumerWidget {
                     child: Row(
                       children: [
                         Icon(
-                          _themeIcon(mode),
+                          themeModeIcon(mode),
                           size: 18,
                           color: mode == current
                               ? theme.colorScheme.primary
@@ -144,7 +145,7 @@ class _WearThemeScreen extends ConsumerWidget {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            _themeLabel(mode),
+                            themeModeLabel(mode),
                             style: theme.textTheme.bodySmall?.copyWith(
                               fontWeight: mode == current
                                   ? FontWeight.bold
@@ -167,22 +168,6 @@ class _WearThemeScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  IconData _themeIcon(ThemeMode mode) {
-    return switch (mode) {
-      ThemeMode.system => Icons.brightness_auto,
-      ThemeMode.light => Icons.light_mode,
-      ThemeMode.dark => Icons.dark_mode,
-    };
-  }
-
-  String _themeLabel(ThemeMode mode) {
-    return switch (mode) {
-      ThemeMode.system => t.settings.themeSystem,
-      ThemeMode.light => t.settings.themeLight,
-      ThemeMode.dark => t.settings.themeDark,
-    };
   }
 }
 

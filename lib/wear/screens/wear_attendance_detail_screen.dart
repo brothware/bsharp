@@ -1,5 +1,6 @@
 import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
+import 'package:bsharp/domain/date_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -28,7 +29,7 @@ class WearAttendanceDetailScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                  _monthName(month.month),
+                  monthName(month.month),
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 11,
@@ -86,24 +87,6 @@ class WearAttendanceDetailScreen extends ConsumerWidget {
       ),
     );
   }
-}
-
-String _monthName(int month) {
-  return switch (month) {
-    1 => t.attendance.month.jan,
-    2 => t.attendance.month.feb,
-    3 => t.attendance.month.mar,
-    4 => t.attendance.month.apr,
-    5 => t.attendance.month.may,
-    6 => t.attendance.month.jun,
-    7 => t.attendance.month.jul,
-    8 => t.attendance.month.aug,
-    9 => t.attendance.month.sep,
-    10 => t.attendance.month.oct,
-    11 => t.attendance.month.nov,
-    12 => t.attendance.month.dec,
-    _ => '',
-  };
 }
 
 class _WearWeekdayHeaders extends StatelessWidget {

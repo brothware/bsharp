@@ -68,7 +68,7 @@ void main() {
 
       expect(find.text('Forgot homework'), findsOneWidget);
       expect(find.text('Jan Kowalski'), findsOneWidget);
-      expect(find.byIcon(Icons.warning_amber), findsOneWidget);
+      expect(find.byIcon(Icons.warning_amber_outlined), findsOneWidget);
     });
 
     testWidgets('shows praise items with trophy icon', (tester) async {
@@ -88,7 +88,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('Excellent presentation'), findsOneWidget);
-      expect(find.byIcon(Icons.emoji_events), findsOneWidget);
+      expect(find.byIcon(Icons.emoji_events_outlined), findsOneWidget);
     });
 
     testWidgets('uses NeverScrollableScrollPhysics on list', (tester) async {

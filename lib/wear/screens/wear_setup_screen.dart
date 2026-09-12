@@ -7,6 +7,7 @@ import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
+import 'package:bsharp/domain/failure_messages.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -176,15 +177,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   }
 
   String _mapFailureMessage(AppFailure failure) {
-    return switch (failure) {
-      InvalidCredentials() => t.auth.invalidCredentials,
-      SchoolNotFound() => t.errors.schoolNotFound,
-      NoConnection() => t.errors.noConnection,
-      ConnectionTimeout() => t.errors.timeout,
-      LicenseExpired() => t.errors.licenseExpired,
-      RateLimited() => t.errors.rateLimited,
-      _ => t.errors.unknownError,
-    };
+    if (failure is InvalidCredentials) return t.auth.invalidCredentials;
+    return failureMessage(failure);
   }
 
   @override

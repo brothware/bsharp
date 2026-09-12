@@ -1,4 +1,5 @@
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/providers/dashboard_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
@@ -39,6 +40,7 @@ ResolvedEvent _resolvedEvent({
 Widget _buildTile({
   required SharedPreferences prefs,
   List<ResolvedEvent> resolvedEvents = const [],
+  bool highlightFirstAsCurrent = false,
 }) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
@@ -47,6 +49,13 @@ Widget _buildTile({
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
+      if (highlightFirstAsCurrent)
+        currentLessonProvider.overrideWith((ref) {
+          final now = DateTime.now();
+          final today = DateTime(now.year, now.month, now.day);
+          final entries = ref.watch(scheduleEntriesForDateProvider(today));
+          return (current: entries.first, next: null, allEnded: false);
+        }),
     ],
     child: const MaterialApp(
       home: Scaffold(
@@ -123,6 +132,51 @@ void main() {
       await tester.pump();
 
       expect(find.byIcon(Icons.calendar_today), findsOneWidget);
+    });
+
+    testWidgets('highlights the lesson currentLessonProvider reports', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _buildTile(
+          prefs: prefs,
+          resolvedEvents: [
+            _resolvedEvent(),
+            _resolvedEvent(
+              id: 2,
+              number: 2,
+              startTime: '08:55:00',
+              endTime: '09:40:00',
+            ),
+          ],
+          highlightFirstAsCurrent: true,
+        ),
+      );
+      await tester.pump();
+
+      final container = tester.widget<Container>(
+        find.byKey(const Key('lesson-item')).first,
+      );
+      final decoration = container.decoration! as BoxDecoration;
+      expect(decoration.border, isNotNull);
+    });
+
+    testWidgets('highlights nothing when currentLessonProvider is null', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _buildTile(
+          prefs: prefs,
+          resolvedEvents: [_resolvedEvent()],
+        ),
+      );
+      await tester.pump();
+
+      final container = tester.widget<Container>(
+        find.byKey(const Key('lesson-item')).first,
+      );
+      final decoration = container.decoration! as BoxDecoration;
+      expect(decoration.border, isNull);
     });
   });
 }

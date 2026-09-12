@@ -1,4 +1,5 @@
 import 'package:bsharp/app/providers/more_providers.dart';
+import 'package:bsharp/domain/annotation_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
@@ -198,16 +199,10 @@ class _WearNoteDetailItem extends StatelessWidget {
   final String? translatedContent;
   final ValueChanged<String?> onTranslated;
 
-  static (IconData, Color) _iconForType(int type) => switch (type) {
-    1 => (Icons.emoji_events, Colors.green),
-    2 => (Icons.warning_amber, Colors.orange),
-    _ => (Icons.info_outline, Colors.blue),
-  };
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final (icon, color) = _iconForType(item.type);
+    final style = annotationStyle(item.type, brightness: theme.brightness);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2),
@@ -217,7 +212,7 @@ class _WearNoteDetailItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, size: 14, color: color),
+              Icon(style.icon, size: 14, color: style.color),
               const SizedBox(width: 4),
               Expanded(
                 child: Text(
