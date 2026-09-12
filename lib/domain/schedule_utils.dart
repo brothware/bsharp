@@ -132,6 +132,15 @@ List<DateTime> weekDaysFull(DateTime date) {
   return List.generate(7, (i) => monday.add(Duration(days: i)));
 }
 
+String scheduleChangeLabel(ScheduleChangeType type) {
+  return switch (type) {
+    ScheduleChangeType.cancelled => t.schedule.cancelled,
+    ScheduleChangeType.substitution => t.schedule.substitution,
+    ScheduleChangeType.roomChanged => t.schedule.roomChanged,
+    ScheduleChangeType.added => t.schedule.added,
+  };
+}
+
 String formatDateShort(DateTime dt) {
   return '${dt.day.toString().padLeft(2, '0')}.'
       '${dt.month.toString().padLeft(2, '0')}';
