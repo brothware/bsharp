@@ -3,7 +3,7 @@ import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
-import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +42,7 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
     return WearSwipeDismiss(
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
-        body: WearScreenLayout(
+        body: WearScaffold(
           child: Column(
             children: [
               WearTileHeader(icon: Icons.quiz_outlined, title: t.tests.title),

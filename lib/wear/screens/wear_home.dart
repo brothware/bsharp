@@ -12,7 +12,7 @@ import 'package:bsharp/wear/screens/wear_settings_tile.dart';
 import 'package:bsharp/wear/screens/wear_tests_tile.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_page_indicator.dart';
-import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -100,40 +100,35 @@ class _WearHomeState extends ConsumerState<WearHome> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: WearScreenLayout(
-        topFactor: 0.04,
-        child: Stack(
-          children: [
-            WearCrownScroll(
+      body: WearScaffold(
+        edgeContent: Positioned(
+          right: 4,
+          top: 0,
+          bottom: 0,
+          child: Center(
+            child: Consumer(
+              builder: (context, ref, _) {
+                final index = ref.watch(wearPageIndexProvider);
+                return WearPageIndicator(
+                  count: tiles.length,
+                  currentIndex: index,
+                );
+              },
+            ),
+          ),
+        ),
+        child: WearCrownScroll(
+          controller: _controller,
+          child: NotificationListener<ScrollNotification>(
+            onNotification: _handleScrollNotification,
+            child: PageView(
+              scrollDirection: Axis.vertical,
               controller: _controller,
-              child: NotificationListener<ScrollNotification>(
-                onNotification: _handleScrollNotification,
-                child: PageView(
-                  scrollDirection: Axis.vertical,
-                  controller: _controller,
-                  onPageChanged: (i) =>
-                      ref.read(wearPageIndexProvider.notifier).value = i,
-                  children: tiles,
-                ),
-              ),
+              onPageChanged: (i) =>
+                  ref.read(wearPageIndexProvider.notifier).value = i,
+              children: tiles,
             ),
-            Positioned(
-              right: 4,
-              top: 0,
-              bottom: 0,
-              child: Center(
-                child: Consumer(
-                  builder: (context, ref, _) {
-                    final index = ref.watch(wearPageIndexProvider);
-                    return WearPageIndicator(
-                      count: tiles.length,
-                      currentIndex: index,
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

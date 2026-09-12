@@ -8,7 +8,7 @@ import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -191,7 +191,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: WearScreenLayout(
+      body: WearScaffold(
         child: switch (_step) {
           _SetupStep.credentials => _buildCredentialsStep(),
           _SetupStep.studentPicker => _buildStudentPicker(),

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_compact_keypad.dart';
-import 'package:bsharp/wear/widgets/wear_screen_layout.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,7 +29,7 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
     if (state.isLocked) {
       return Scaffold(
         body: WearSwipeDismiss(
-          child: WearScreenLayout(
+          child: WearScaffold(
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

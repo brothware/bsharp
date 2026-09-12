@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,8 +14,23 @@ Future<WearScreenShape> wearScreenShape(Ref ref) async {
     final isRound = await _channel.invokeMethod<bool>('isScreenRound') ?? false;
     return isRound ? WearScreenShape.round : WearScreenShape.rectangular;
   } on MissingPluginException {
+    const message =
+        'wearScreenShapeProvider: MissingPluginException, '
+        'falling back to rectangular';
+    assert(false, message);
+    debugPrint(message);
     return WearScreenShape.rectangular;
   }
+}
+
+class WearDisplay {
+  const WearDisplay({required this.shape, required this.sizeDp});
+
+  final WearScreenShape shape;
+  final Size sizeDp;
+
+  bool get isRound => shape == WearScreenShape.round;
+  bool get isSmall => sizeDp.shortestSide < 225;
 }
 
 double wearListBottomInset(WearScreenShape shape) =>
