@@ -3,7 +3,6 @@ import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +12,6 @@ class WearMessagesTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final inbox = ref.watch(inboxProvider);
     final unread = ref.watch(unreadCountProvider);
     final theme = Theme.of(context);
@@ -69,7 +67,7 @@ class WearMessagesTile extends ConsumerWidget {
           Expanded(
             child: ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.fromLTRB(8, 0, 8, wearListBottomInset(shape)),
+              padding: EdgeInsets.zero,
               itemCount: inbox.take(4).length,
               itemBuilder: (context, index) {
                 final msg = inbox[index];

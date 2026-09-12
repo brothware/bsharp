@@ -8,7 +8,6 @@ import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_child_mode_screen.dart';
 import 'package:bsharp/wear/screens/wear_language_screen.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_confirmation.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_status_line.dart';
@@ -21,7 +20,6 @@ class WearSettingsTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final childState = ref.watch(childModeProvider);
 
     return Column(
@@ -30,7 +28,7 @@ class WearSettingsTile extends ConsumerWidget {
         Expanded(
           child: ListView(
             physics: const ClampingScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(8, 0, 8, wearListBottomInset(shape)),
+            padding: EdgeInsets.zero,
             children: [
               if (childState.isChildMode)
                 _WearSettingsItem(

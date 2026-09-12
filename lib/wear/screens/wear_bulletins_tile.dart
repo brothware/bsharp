@@ -2,7 +2,6 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_bulletin_detail_screen.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +11,6 @@ class WearBulletinsTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final bulletins = ref.watch(bulletinsProvider);
     final unread = ref.watch(unreadBulletinsCountProvider);
     final theme = Theme.of(context);
@@ -68,7 +66,7 @@ class WearBulletinsTile extends ConsumerWidget {
           Expanded(
             child: ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.fromLTRB(8, 0, 8, wearListBottomInset(shape)),
+              padding: EdgeInsets.zero,
               itemCount: bulletins.take(4).length,
               itemBuilder: (context, index) {
                 final item = bulletins[index];

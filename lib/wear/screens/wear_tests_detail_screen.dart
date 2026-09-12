@@ -1,7 +1,6 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -28,7 +27,6 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final allTests = ref.watch(testsProvider);
     final upcomingIds = ref
         .watch(upcomingTestsProvider)
@@ -63,12 +61,7 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
                           controller: _scrollController,
                           child: ListView.builder(
                             controller: _scrollController,
-                            padding: EdgeInsets.fromLTRB(
-                              4,
-                              0,
-                              4,
-                              wearListBottomInset(shape),
-                            ),
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                             itemCount: sorted.length,
                             itemBuilder: (context, index) {
                               final test = sorted[index];

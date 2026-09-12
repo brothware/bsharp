@@ -2,7 +2,6 @@ import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -29,7 +28,6 @@ class _WearGradesDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final subjectGrades = ref.watch(subjectGradesProvider);
     final terms = ref.watch(termsProvider);
     final currentTerm = ref.watch(currentTermProvider);
@@ -65,12 +63,7 @@ class _WearGradesDetailScreenState
                           controller: _scrollController,
                           child: ListView.builder(
                             controller: _scrollController,
-                            padding: EdgeInsets.fromLTRB(
-                              4,
-                              0,
-                              4,
-                              wearListBottomInset(shape),
-                            ),
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                             itemCount: subjectGrades.length,
                             itemBuilder: (context, index) =>
                                 _WearSubjectSection(sg: subjectGrades[index]),

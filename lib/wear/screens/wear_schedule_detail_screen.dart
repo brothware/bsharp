@@ -1,7 +1,6 @@
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -49,7 +48,6 @@ class _WearScheduleDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final entries = ref.watch(scheduleEntriesForDateProvider(_selectedDate));
     final theme = Theme.of(context);
 
@@ -104,12 +102,7 @@ class _WearScheduleDetailScreenState
                             child: ListView.builder(
                               controller: _scrollController,
                               physics: const BouncingScrollPhysics(),
-                              padding: EdgeInsets.fromLTRB(
-                                4,
-                                0,
-                                4,
-                                wearListBottomInset(shape),
-                              ),
+                              padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                               itemCount: entries.length,
                               itemBuilder: (context, index) =>
                                   _WearDetailLessonItem(entry: entries[index]),

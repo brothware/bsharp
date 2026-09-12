@@ -32,6 +32,3 @@ class WearDisplay {
   bool get isRound => shape == WearScreenShape.round;
   bool get isSmall => sizeDp.shortestSide < 225;
 }
-
-double wearListBottomInset(WearScreenShape shape) =>
-    shape == WearScreenShape.round ? 32.0 : 0.0;

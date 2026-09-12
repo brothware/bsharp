@@ -1,5 +1,4 @@
 import 'package:bsharp/domain/entities/portal.dart';
-import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -28,7 +27,6 @@ class _WearBulletinDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final shape = ref.watch(wearScreenShapeProvider).requireValue;
     final theme = Theme.of(context);
 
     return WearSwipeDismiss(
@@ -74,9 +72,7 @@ class _WearBulletinDetailScreenState
                     controller: _scrollController,
                     child: ListView(
                       controller: _scrollController,
-                      padding: EdgeInsets.only(
-                        bottom: wearListBottomInset(shape),
-                      ),
+                      padding: EdgeInsets.zero,
                       children: [
                         SelectableText(
                           widget.bulletin.content,
