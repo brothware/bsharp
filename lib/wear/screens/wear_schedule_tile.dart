@@ -1,6 +1,7 @@
 import 'package:bsharp/app/providers/dashboard_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class WearScheduleTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final entries = ref.watch(scheduleEntriesForDateProvider(today));
+    final items = ref.watch(timelineItemsForDateProvider(today));
     final currentLesson = ref.watch(currentLessonProvider);
     final theme = Theme.of(context);
 
@@ -23,7 +24,7 @@ class WearScheduleTile extends ConsumerWidget {
           icon: Icons.calendar_today,
           title: '${dayLabelFull(today.weekday)}, ${formatDateShort(today)}',
         ),
-        if (entries.isEmpty)
+        if (items.isEmpty)
           Expanded(
             child: Center(
               child: Column(
@@ -50,11 +51,13 @@ class WearScheduleTile extends ConsumerWidget {
             child: ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               padding: EdgeInsets.zero,
-              itemCount: entries.take(3).length,
+              itemCount: items.take(3).length,
               itemBuilder: (context, index) {
-                final entry = entries[index];
-                final isCurrent = currentLesson.current == entry;
-                return _WearLessonItem(entry: entry, isCurrent: isCurrent);
+                final item = items[index];
+                final isCurrent =
+                    item is LessonTimelineItem &&
+                    currentLesson.current == item.entry;
+                return _WearTimelineRow(item: item, isCurrent: isCurrent);
               },
             ),
           ),
@@ -63,18 +66,19 @@ class WearScheduleTile extends ConsumerWidget {
   }
 }
 
-class _WearLessonItem extends StatelessWidget {
-  const _WearLessonItem({required this.entry, required this.isCurrent});
+class _WearTimelineRow extends StatelessWidget {
+  const _WearTimelineRow({required this.item, required this.isCurrent});
 
-  final ScheduleEntry entry;
+  final TimelineItem item;
   final bool isCurrent;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sColor = entry.subjectName != null
-        ? subjectColor(entry.subjectName!, brightness: theme.brightness)
-        : theme.colorScheme.primary;
+    final color = item.displayColor(brightness: theme.brightness);
+    final lessonEntry = item is LessonTimelineItem
+        ? (item as LessonTimelineItem).entry
+        : null;
 
     return Container(
       key: const Key('lesson-item'),
@@ -95,35 +99,41 @@ class _WearLessonItem extends StatelessWidget {
             width: 3,
             height: 28,
             decoration: BoxDecoration(
-              color: entry.isCancelled ? theme.colorScheme.error : sColor,
+              color: item.isCancelled ? theme.colorScheme.error : color,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
           const SizedBox(width: 6),
-          Text(
-            '${entry.number}',
-            style: theme.textTheme.labelSmall?.copyWith(
+          if (lessonEntry != null)
+            Text(
+              '${lessonEntry.number}',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            )
+          else
+            Icon(
+              Icons.event,
+              size: 14,
               color: theme.colorScheme.onSurfaceVariant,
             ),
-          ),
           const SizedBox(width: 4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  entry.subjectName ??
-                      '${t.schedule.lessonFallback} ${entry.number}',
+                  item.displayTitle,
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
-                    decoration: entry.isCancelled
+                    decoration: item.isCancelled
                         ? TextDecoration.lineThrough
                         : null,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  entry.roomName ?? '',
+                  item.displaySubtitle ?? '',
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -132,7 +142,7 @@ class _WearLessonItem extends StatelessWidget {
             ),
           ),
           Text(
-            entry.startTime.substring(0, 5),
+            item.startTime.substring(0, 5),
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),

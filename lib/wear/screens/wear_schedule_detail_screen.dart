@@ -1,5 +1,6 @@
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -48,7 +49,7 @@ class _WearScheduleDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final entries = ref.watch(scheduleEntriesForDateProvider(_selectedDate));
+    final items = ref.watch(timelineItemsForDateProvider(_selectedDate));
     final theme = Theme.of(context);
 
     return WearSwipeDismiss(
@@ -77,7 +78,7 @@ class _WearScheduleDetailScreenState
                   child: WearVerticalOverscrollPager(
                     onPrevious: _previousDay,
                     onNext: _nextDay,
-                    child: entries.isEmpty
+                    child: items.isEmpty
                         ? ListView(
                             controller: _scrollController,
                             physics: const BouncingScrollPhysics(),
@@ -101,9 +102,9 @@ class _WearScheduleDetailScreenState
                               controller: _scrollController,
                               physics: const BouncingScrollPhysics(),
                               padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                              itemCount: entries.length,
+                              itemCount: items.length,
                               itemBuilder: (context, index) =>
-                                  _WearDetailLessonItem(entry: entries[index]),
+                                  _WearDetailTimelineItem(item: items[index]),
                             ),
                           ),
                   ),
@@ -117,24 +118,28 @@ class _WearScheduleDetailScreenState
   }
 }
 
-class _WearDetailLessonItem extends StatelessWidget {
-  const _WearDetailLessonItem({required this.entry});
+class _WearDetailTimelineItem extends StatelessWidget {
+  const _WearDetailTimelineItem({required this.item});
 
-  final ScheduleEntry entry;
+  final TimelineItem item;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sColor = entry.subjectName != null
-        ? subjectColor(entry.subjectName!, brightness: theme.brightness)
-        : theme.colorScheme.primary;
+    final color = item.displayColor(brightness: theme.brightness);
+    final lessonEntry = item is LessonTimelineItem
+        ? (item as LessonTimelineItem).entry
+        : null;
+    final timeRange =
+        '${item.startTime.substring(0, 5)} - '
+        '${item.endTime.substring(0, 5)}';
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: entry.changeType != null
+        color: lessonEntry?.changeType != null
             ? theme.colorScheme.errorContainer.withValues(alpha: 0.2)
             : null,
       ),
@@ -146,57 +151,53 @@ class _WearDetailLessonItem extends StatelessWidget {
             height: 28,
             margin: const EdgeInsets.only(top: 2),
             decoration: BoxDecoration(
-              color: entry.isCancelled ? theme.colorScheme.error : sColor,
+              color: item.isCancelled ? theme.colorScheme.error : color,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
           const SizedBox(width: 6),
+          if (lessonEntry == null)
+            Padding(
+              padding: const EdgeInsets.only(top: 2, right: 4),
+              child: Icon(
+                Icons.event,
+                size: 14,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  entry.subjectName ??
-                      '${t.schedule.lessonFallback} ${entry.number}',
+                  item.displayTitle,
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    decoration: entry.isCancelled
+                    decoration: item.isCancelled
                         ? TextDecoration.lineThrough
                         : null,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
-                if (entry.teacherName != null)
+                if (item.displaySubtitle != null)
                   Text(
-                    entry.teacherName!,
+                    item.displaySubtitle!,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                Row(
-                  children: [
-                    if (entry.roomName != null)
-                      Text(
-                        entry.roomName!,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    if (entry.roomName != null) const SizedBox(width: 4),
-                    Text(
-                      entry.timeRange,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+                Text(
+                  timeRange,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
-                if (entry.topic != null)
+                if (lessonEntry?.topic != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
                     child: Text(
-                      entry.topic!,
+                      lessonEntry!.topic!,
                       style: theme.textTheme.labelSmall?.copyWith(
                         fontStyle: FontStyle.italic,
                         color: theme.colorScheme.onSurfaceVariant,
@@ -205,7 +206,7 @@ class _WearDetailLessonItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                if (entry.changeType != null)
+                if (lessonEntry?.changeType != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
                     child: Container(
@@ -218,7 +219,7 @@ class _WearDetailLessonItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        scheduleChangeLabel(entry.changeType!),
+                        scheduleChangeLabel(lessonEntry!.changeType!),
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: theme.colorScheme.error,
                           fontWeight: FontWeight.bold,
