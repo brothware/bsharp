@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/providers/dashboard_providers.dart';
+import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_dashboard.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
-import 'package:bsharp/wear/screens/wear_schedule_tile.dart';
+import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_launcher_row.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +78,7 @@ void main() {
       await tester.tap(find.text('Schedule'));
       await tester.pumpAndSettle();
 
-      expect(find.byType(WearScheduleTile), findsOneWidget);
+      expect(find.byType(WearScheduleDetailScreen), findsOneWidget);
     });
 
     testWidgets('every row is at least 48dp tall', (tester) async {
@@ -139,5 +142,69 @@ void main() {
 
       expect(find.byType(WearLauncherRow), findsNWidgets(9));
     });
+
+    testWidgets(
+      'a long Polish hero does not push the first row off screen',
+      (tester) async {
+        const screenSize = Size(227, 227);
+        tester.view.physicalSize = const Size(454, 454);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.reset);
+
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
+        final storage = CredentialStorage(store: FakeKeyValueStore());
+        final monday = _nextMonday();
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedPreferencesProvider.overrideWithValue(prefs),
+              credentialStorageProvider.overrideWithValue(storage),
+              wearScreenShapeProvider.overrideWith(
+                (_) => WearScreenShape.round,
+              ),
+              minuteTickProvider.overrideWith((ref) => monday),
+              resolvedEventsProvider.overrideWithBuild(
+                (ref, _) => [
+                  ResolvedEvent(
+                    id: 1,
+                    date: monday,
+                    number: 1,
+                    startTime: '08:50:00',
+                    endTime: '09:35:00',
+                    subjectName: 'Bardzo długa nazwa lekcji wychowawczej',
+                  ),
+                ],
+              ),
+            ],
+            child: const MaterialApp(home: WearHome()),
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+
+        final firstRowTop = tester
+            .getTopLeft(find.byType(WearLauncherRow).first)
+            .dy;
+
+        expect(
+          firstRowTop,
+          lessThan(screenSize.height),
+          reason:
+              'the first launcher row is at y=$firstRowTop, below the '
+              '${screenSize.height}dp viewport, so the hero pushed it out '
+              'of view',
+        );
+      },
+    );
   });
+}
+
+DateTime _nextMonday() {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final daysUntilMonday = (8 - today.weekday) % 7;
+  final offset = daysUntilMonday == 0 ? 7 : daysUntilMonday;
+  return today.add(Duration(days: offset));
 }

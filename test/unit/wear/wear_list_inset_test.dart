@@ -3,9 +3,8 @@ import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
-import 'package:bsharp/wear/screens/wear_schedule_tile.dart';
+import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
-import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -48,11 +47,7 @@ void main() {
               ],
             ),
           ],
-          child: const MaterialApp(
-            home: Scaffold(
-              body: WearScaffold(child: WearScheduleTile()),
-            ),
-          ),
+          child: const MaterialApp(home: WearScheduleDetailScreen()),
         ),
       );
       await tester.pump();

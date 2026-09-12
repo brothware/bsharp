@@ -2,7 +2,7 @@ import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/portal.dart';
-import 'package:bsharp/wear/screens/wear_bulletins_tile.dart';
+import 'package:bsharp/wear/screens/wear_bulletins_list_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ Widget _buildTile({List<PortalBulletin> bulletins = const []}) {
             shape: WearScreenShape.rectangular,
             sizeDp: Size(400, 400),
           ),
-          child: WearBulletinsTile(),
+          child: WearBulletinsListScreen(),
         ),
       ),
     ),
@@ -34,7 +34,7 @@ Widget _buildTile({List<PortalBulletin> bulletins = const []}) {
 }
 
 void main() {
-  group('WearBulletinsTile', () {
+  group('WearBulletinsListScreen', () {
     testWidgets('shows empty state when no bulletins', (tester) async {
       await tester.pumpWidget(_buildTile());
       await tester.pump();

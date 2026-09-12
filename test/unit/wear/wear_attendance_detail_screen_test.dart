@@ -4,6 +4,7 @@ import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/date_utils.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
+import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
@@ -88,6 +89,54 @@ void main() {
 
       expect(find.byType(Text), findsWidgets);
       expect(find.byType(GridView), findsOneWidget);
+    });
+
+    testWidgets('hides the donut summary when there is no data', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_buildScreen(prefs: prefs));
+      await tester.pump();
+
+      expect(find.textContaining('%'), findsNothing);
+    });
+
+    testWidgets('shows a donut summary above the calendar when data exists', (
+      tester,
+    ) async {
+      final types = [
+        const AttendanceType(
+          id: 1,
+          name: 'Present',
+          abbr: 'ob',
+          countAs: AttendanceCountAs.present,
+          excuseStatus: AttendanceExcuseStatus.auto,
+        ),
+        const AttendanceType(
+          id: 2,
+          name: 'Absent',
+          abbr: 'nb',
+          countAs: AttendanceCountAs.absent,
+          excuseStatus: AttendanceExcuseStatus.unexcused,
+        ),
+      ];
+      final attendances = [
+        const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+        const Attendance(id: 2, eventsId: 2, studentsId: 1, typesId: 2),
+      ];
+
+      await tester.pumpWidget(
+        _buildScreen(prefs: prefs, attendances: attendances, types: types),
+      );
+      await tester.pump();
+
+      expect(find.byKey(const Key('attendanceDonut')), findsOneWidget);
+      expect(find.textContaining('%'), findsOneWidget);
+
+      final donutBottom = tester
+          .getBottomLeft(find.byKey(const Key('attendanceDonut')))
+          .dy;
+      final gridTop = tester.getTopLeft(find.byType(GridView)).dy;
+      expect(donutBottom, lessThanOrEqualTo(gridTop));
     });
   });
 }

@@ -9,13 +9,13 @@ import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
-import 'package:bsharp/wear/screens/wear_attendance_tile.dart';
-import 'package:bsharp/wear/screens/wear_grades_tile.dart';
+import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
-import 'package:bsharp/wear/screens/wear_homework_tile.dart';
-import 'package:bsharp/wear/screens/wear_messages_tile.dart';
-import 'package:bsharp/wear/screens/wear_notes_tile.dart';
-import 'package:bsharp/wear/screens/wear_schedule_tile.dart';
+import 'package:bsharp/wear/screens/wear_homework_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_messages_list_screen.dart';
+import 'package:bsharp/wear/screens/wear_notes_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
 import 'package:bsharp/wear/wear_app.dart';
 import 'package:bsharp/wear/wear_notification_router.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
@@ -106,25 +106,28 @@ void main() {
     test('maps every known notification kind to its screen', () {
       expect(
         wearScreenBuilderForRoute('/grades')!(_ctx),
-        isA<WearGradesTile>(),
+        isA<WearGradesDetailScreen>(),
       );
       expect(
         wearScreenBuilderForRoute('/messages')!(_ctx),
-        isA<WearMessagesTile>(),
+        isA<WearMessagesListScreen>(),
       );
       expect(
         wearScreenBuilderForRoute('/schedule')!(_ctx),
-        isA<WearScheduleTile>(),
+        isA<WearScheduleDetailScreen>(),
       );
       expect(
         wearScreenBuilderForRoute('/attendance')!(_ctx),
-        isA<WearAttendanceTile>(),
+        isA<WearAttendanceDetailScreen>(),
       );
       expect(
         wearScreenBuilderForRoute('/homework')!(_ctx),
-        isA<WearHomeworkTile>(),
+        isA<WearHomeworkDetailScreen>(),
       );
-      expect(wearScreenBuilderForRoute('/notes')!(_ctx), isA<WearNotesTile>());
+      expect(
+        wearScreenBuilderForRoute('/notes')!(_ctx),
+        isA<WearNotesDetailScreen>(),
+      );
     });
 
     test('an unknown kind falls back to the top level', () {
@@ -146,7 +149,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.byType(WearGradesTile), findsOneWidget);
+      expect(find.byType(WearGradesDetailScreen), findsOneWidget);
     });
 
     testWidgets('a cold start launch payload opens messages', (tester) async {
@@ -157,7 +160,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.byType(WearMessagesTile), findsOneWidget);
+      expect(find.byType(WearMessagesListScreen), findsOneWidget);
     });
 
     testWidgets('an unknown kind opens the app at the top level', (

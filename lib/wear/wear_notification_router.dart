@@ -3,23 +3,23 @@ import 'dart:async';
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/services/notification_service.dart';
-import 'package:bsharp/wear/screens/wear_attendance_tile.dart';
-import 'package:bsharp/wear/screens/wear_grades_tile.dart';
-import 'package:bsharp/wear/screens/wear_homework_tile.dart';
-import 'package:bsharp/wear/screens/wear_messages_tile.dart';
-import 'package:bsharp/wear/screens/wear_notes_tile.dart';
-import 'package:bsharp/wear/screens/wear_schedule_tile.dart';
+import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_homework_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_messages_list_screen.dart';
+import 'package:bsharp/wear/screens/wear_notes_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 WidgetBuilder? wearScreenBuilderForRoute(String? route) => switch (route) {
-  '/grades' => (_) => const WearGradesTile(),
-  '/messages' => (_) => const WearMessagesTile(),
-  '/schedule' => (_) => const WearScheduleTile(),
-  '/attendance' => (_) => const WearAttendanceTile(),
-  '/homework' => (_) => const WearHomeworkTile(),
-  '/notes' => (_) => const WearNotesTile(),
+  '/grades' => (_) => const WearGradesDetailScreen(),
+  '/messages' => (_) => const WearMessagesListScreen(),
+  '/schedule' => (_) => const WearScheduleDetailScreen(),
+  '/attendance' => (_) => const WearAttendanceDetailScreen(),
+  '/homework' => (_) => const WearHomeworkDetailScreen(),
+  '/notes' => (_) => const WearNotesDetailScreen(),
   _ => null,
 };
 
@@ -53,6 +53,6 @@ class WearNotificationRouter {
     if (context == null) return;
 
     navigatorKey.currentState?.popUntil((route) => route.isFirst);
-    pushWearSection(context, builder);
+    pushWearScreen(context, builder);
   }
 }
