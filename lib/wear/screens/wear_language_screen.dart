@@ -97,22 +97,25 @@ class _LanguageItem extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: isSelected ? FontWeight.bold : null,
-                  color: isSelected ? theme.colorScheme.primary : null,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 48),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: isSelected ? FontWeight.bold : null,
+                    color: isSelected ? theme.colorScheme.primary : null,
+                  ),
                 ),
               ),
-            ),
-            if (isSelected)
-              Icon(Icons.check, size: 16, color: theme.colorScheme.primary),
-          ],
+              if (isSelected)
+                Icon(Icons.check, size: 16, color: theme.colorScheme.primary),
+            ],
+          ),
         ),
       ),
     );

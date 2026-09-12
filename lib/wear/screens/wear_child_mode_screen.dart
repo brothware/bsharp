@@ -230,23 +230,23 @@ class _WearChildModeItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 16,
-              color: iconColor ?? theme.colorScheme.onSurface,
-            ),
-            const SizedBox(width: 6),
-            Expanded(
-              child: Text(
-                label,
-                style: theme.textTheme.labelMedium,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 48),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: iconColor ?? theme.colorScheme.onSurface,
               ),
-            ),
-          ],
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(label, style: theme.textTheme.labelMedium),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -267,22 +267,14 @@ class _WearFeatureToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SizedBox(
-      height: 28,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 48),
       child: Row(
         children: [
           Expanded(
-            child: Text(
-              label,
-              style: theme.textTheme.labelMedium,
-            ),
+            child: Text(label, style: theme.textTheme.labelMedium),
           ),
-          SizedBox(
-            height: 24,
-            child: FittedBox(
-              child: Switch(value: value, onChanged: onChanged),
-            ),
-          ),
+          Switch(value: value, onChanged: onChanged),
         ],
       ),
     );

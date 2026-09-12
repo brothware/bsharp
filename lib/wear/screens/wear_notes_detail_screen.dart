@@ -165,22 +165,28 @@ class _TabButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: isSelected ? theme.colorScheme.primary : null,
-          border: isSelected
-              ? null
-              : Border.all(color: theme.colorScheme.outline),
-        ),
-        child: Text(
-          label,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: isSelected
-                ? theme.colorScheme.onPrimary
-                : theme.colorScheme.onSurface,
-            fontWeight: isSelected ? FontWeight.bold : null,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        height: 48,
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: isSelected ? theme.colorScheme.primary : null,
+              border: isSelected
+                  ? null
+                  : Border.all(color: theme.colorScheme.outline),
+            ),
+            child: Text(
+              label,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: isSelected
+                    ? theme.colorScheme.onPrimary
+                    : theme.colorScheme.onSurface,
+                fontWeight: isSelected ? FontWeight.bold : null,
+              ),
+            ),
           ),
         ),
       ),
