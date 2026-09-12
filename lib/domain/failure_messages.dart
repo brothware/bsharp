@@ -8,6 +8,7 @@ String failureMessage(AppFailure failure) {
     NoConnection() => t.errors.noConnection,
     ConnectionTimeout() => t.errors.timeout,
     LicenseExpired() => t.errors.licenseExpired,
+    RateLimited() => t.errors.rateLimited,
     _ => t.errors.unknownError,
   };
 }
