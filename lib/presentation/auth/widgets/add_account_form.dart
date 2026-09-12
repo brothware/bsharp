@@ -2,6 +2,7 @@ import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
+import 'package:bsharp/domain/failure_messages.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -113,7 +114,7 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
           case Failure(:final failure):
             setState(() {
               _isLoading = false;
-              _errorMessage = _mapFailureMessage(failure);
+              _errorMessage = failureMessage(failure);
             });
           case Success(:final value):
             final accountStudents = value
@@ -155,21 +156,10 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
       failure: (failure) {
         setState(() {
           _isLoading = false;
-          _errorMessage = _mapFailureMessage(failure);
+          _errorMessage = failureMessage(failure);
         });
       },
     );
-  }
-
-  String _mapFailureMessage(AppFailure failure) {
-    return switch (failure) {
-      InvalidCredentials() => t.accounts.credentialsInvalid,
-      SchoolNotFound() => t.errors.schoolNotFound,
-      NoConnection() => t.errors.noConnection,
-      ConnectionTimeout() => t.errors.timeout,
-      LicenseExpired() => t.errors.licenseExpired,
-      _ => t.errors.unknownError,
-    };
   }
 
   @override
