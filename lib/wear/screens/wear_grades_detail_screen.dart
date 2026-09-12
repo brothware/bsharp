@@ -7,6 +7,7 @@ import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -67,7 +68,7 @@ class _WearGradesDetailScreenState
           child: Column(
             children: [
               if (terms.length > 1)
-                _WearTermSelector(
+                _WearTermPeriodSelector(
                   terms: terms,
                   currentTerm: currentTerm,
                   onChanged: (id) {
@@ -106,8 +107,8 @@ class _WearGradesDetailScreenState
   }
 }
 
-class _WearTermSelector extends ConsumerWidget {
-  const _WearTermSelector({
+class _WearTermPeriodSelector extends StatelessWidget {
+  const _WearTermPeriodSelector({
     required this.terms,
     required this.currentTerm,
     required this.onChanged,
@@ -118,51 +119,22 @@ class _WearTermSelector extends ConsumerWidget {
   final ValueChanged<int?> onChanged;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
+  Widget build(BuildContext context) {
     final ct = currentTerm;
     final currentIndex = ct != null
         ? terms.indexWhere((t) => t.id == ct.id)
         : 0;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            final prev = (currentIndex - 1) % terms.length;
-            onChanged(terms[prev].id);
-          },
-          child: Icon(
-            Icons.chevron_left,
-            size: 18,
-            color: theme.colorScheme.primary,
-          ),
-        ),
-        const SizedBox(width: 4),
-        Flexible(
-          child: Text(
-            currentTerm?.name ?? '',
-            style: theme.textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.primary,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        const SizedBox(width: 4),
-        GestureDetector(
-          onTap: () {
-            final next = (currentIndex + 1) % terms.length;
-            onChanged(terms[next].id);
-          },
-          child: Icon(
-            Icons.chevron_right,
-            size: 18,
-            color: theme.colorScheme.primary,
-          ),
-        ),
-      ],
+    return WearPeriodSelector(
+      label: currentTerm?.name ?? '',
+      onPrevious: () {
+        final prev = (currentIndex - 1) % terms.length;
+        onChanged(terms[prev].id);
+      },
+      onNext: () {
+        final next = (currentIndex + 1) % terms.length;
+        onChanged(terms[next].id);
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/date_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
@@ -20,6 +21,20 @@ class WearAttendanceDetailScreen extends ConsumerWidget {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
+    void previousMonth() {
+      ref.read(selectedMonthProvider.notifier).value = DateTime(
+        month.year,
+        month.month - 1,
+      );
+    }
+
+    void nextMonth() {
+      ref.read(selectedMonthProvider.notifier).value = DateTime(
+        month.year,
+        month.month + 1,
+      );
+    }
+
     return WearSwipeDismiss(
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
@@ -28,13 +43,10 @@ class WearAttendanceDetailScreen extends ConsumerWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  monthName(month.month),
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 11,
-                    color: theme.colorScheme.primary,
-                  ),
+                child: WearPeriodSelector(
+                  label: monthName(month.month),
+                  onPrevious: previousMonth,
+                  onNext: nextMonth,
                 ),
               ),
               const SizedBox(height: 4),
@@ -42,18 +54,8 @@ class WearAttendanceDetailScreen extends ConsumerWidget {
               const SizedBox(height: 2),
               Expanded(
                 child: WearVerticalOverscrollPager(
-                  onPrevious: () {
-                    ref.read(selectedMonthProvider.notifier).value = DateTime(
-                      month.year,
-                      month.month - 1,
-                    );
-                  },
-                  onNext: () {
-                    ref.read(selectedMonthProvider.notifier).value = DateTime(
-                      month.year,
-                      month.month + 1,
-                    );
-                  },
+                  onPrevious: previousMonth,
+                  onNext: nextMonth,
                   child: GridView.builder(
                     padding: EdgeInsets.zero,
                     gridDelegate:
