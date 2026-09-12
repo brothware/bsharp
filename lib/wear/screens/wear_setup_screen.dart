@@ -172,7 +172,6 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
     final school = _schoolController.text.trim();
     final login = _loginController.text.trim();
-    final student = _students.firstWhere((s) => s.id == _selectedStudentId);
 
     final account = ProviderAccount(
       id: const Uuid().v4(),
@@ -181,11 +180,12 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       login: login,
       password: _password,
       students: [
-        AccountStudent(
-          id: student.id,
-          name: student.name,
-          surname: student.surname,
-        ),
+        for (final student in _students)
+          AccountStudent(
+            id: student.id,
+            name: student.name,
+            surname: student.surname,
+          ),
       ],
     );
 
