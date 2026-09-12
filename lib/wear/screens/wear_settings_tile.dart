@@ -221,18 +221,21 @@ class _WearSettingsItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 18,
-              color: iconColor ?? theme.colorScheme.onSurface,
-            ),
-            const SizedBox(width: 8),
-            Expanded(child: Text(label, style: theme.textTheme.bodySmall)),
-          ],
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 48),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 18,
+                color: iconColor ?? theme.colorScheme.onSurface,
+              ),
+              const SizedBox(width: 8),
+              Expanded(child: Text(label, style: theme.textTheme.bodySmall)),
+            ],
+          ),
         ),
       ),
     );

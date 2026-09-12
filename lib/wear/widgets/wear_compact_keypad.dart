@@ -25,14 +25,14 @@ class WearCompactKeypad extends StatelessWidget {
             children: [
               for (final key in row)
                 if (key.isEmpty)
-                  const SizedBox(width: 40, height: 36)
+                  const SizedBox(width: 52, height: 52)
                 else
                   InkWell(
                     onTap: () => onKeyTap(key),
                     customBorder: const CircleBorder(),
                     child: SizedBox(
-                      width: 40,
-                      height: 36,
+                      width: 52,
+                      height: 52,
                       child: Center(
                         child: key == 'del'
                             ? Icon(
