@@ -58,6 +58,7 @@ class _WearSwipeDismissState extends State<WearSwipeDismiss>
     final progress = (_dragOffset.abs() / _dismissThreshold).clamp(0.0, 1.0);
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onHorizontalDragUpdate: _onHorizontalDragUpdate,
       onHorizontalDragEnd: _onHorizontalDragEnd,
       child: Stack(
