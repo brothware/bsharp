@@ -14,7 +14,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-enum _SetupStep { credentials, studentPicker }
+enum _SetupStep { school, username, password, studentPicker }
+
+const List<_SetupStep> _credentialSteps = [
+  _SetupStep.school,
+  _SetupStep.username,
+  _SetupStep.password,
+];
 
 class WearSetupScreen extends ConsumerStatefulWidget {
   const WearSetupScreen({super.key});
@@ -28,7 +34,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  _SetupStep _step = _SetupStep.credentials;
+  _SetupStep _step = _SetupStep.school;
   bool _isLoading = false;
   bool _obscurePassword = true;
   String? _errorMessage;
@@ -67,6 +73,27 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     super.dispose();
   }
 
+  void _goBack() {
+    final index = _credentialSteps.indexOf(_step);
+    if (index <= 0) return;
+    setState(() {
+      _errorMessage = null;
+      _step = _credentialSteps[index - 1];
+    });
+  }
+
+  void _goNext(String value) {
+    if (value.trim().isEmpty) {
+      setState(() => _errorMessage = t.setup.fillAllFields);
+      return;
+    }
+    final index = _credentialSteps.indexOf(_step);
+    setState(() {
+      _errorMessage = null;
+      _step = _credentialSteps[index + 1];
+    });
+  }
+
   Future<void> _validateAndLogin() async {
     final school = _schoolController.text.trim();
     final login = _loginController.text.trim();
@@ -97,7 +124,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       failure: (failure) {
         setState(() {
           _isLoading = false;
-          _errorMessage = _mapFailureMessage(failure);
+          _errorMessage = failureMessage(failure);
         });
       },
     );
@@ -122,7 +149,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       case Failure(:final failure):
         setState(() {
           _isLoading = false;
-          _errorMessage = _mapFailureMessage(failure);
+          _errorMessage = failureMessage(failure);
         });
       case Success(:final value):
         setState(() {
@@ -176,100 +203,155 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     await ref.read(authStateProvider.notifier).completeSetup();
   }
 
-  String _mapFailureMessage(AppFailure failure) {
-    if (failure is InvalidCredentials) return t.auth.invalidCredentials;
-    return failureMessage(failure);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: WearScaffold(
         child: switch (_step) {
-          _SetupStep.credentials => _buildCredentialsStep(),
+          _SetupStep.school => _buildSchoolStep(),
+          _SetupStep.username => _buildUsernameStep(),
+          _SetupStep.password => _buildPasswordStep(),
           _SetupStep.studentPicker => _buildStudentPicker(),
         },
       ),
     );
   }
 
-  Widget _buildCredentialsStep() {
+  Widget _buildStepHeader({required String label}) {
+    final theme = Theme.of(context);
+    final stepIndex = _credentialSteps.indexOf(_step);
+    final canGoBack = stepIndex > 0;
+
+    return Row(
+      children: [
+        SizedBox(
+          width: 48,
+          height: 48,
+          child: canGoBack
+              ? IconButton(
+                  onPressed: _goBack,
+                  icon: const Icon(Icons.arrow_back),
+                )
+              : null,
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              Text(
+                label,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (stepIndex >= 0)
+                Text(
+                  '${stepIndex + 1}/${_credentialSteps.length}',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 48, height: 48),
+      ],
+    );
+  }
+
+  Widget _buildFieldStep({
+    required String label,
+    required TextEditingController controller,
+    required String buttonLabel,
+    required VoidCallback onSubmit,
+    bool obscureText = false,
+    Widget? suffixIcon,
+  }) {
     final theme = Theme.of(context);
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Icon(Icons.school, size: 24, color: theme.colorScheme.primary),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _schoolController,
-            decoration: InputDecoration(
-              labelText: t.auth.schoolId,
-              isDense: true,
-            ),
-            textInputAction: TextInputAction.next,
-            autocorrect: false,
-            style: theme.textTheme.bodySmall,
-          ),
-          const SizedBox(height: 4),
-          TextField(
-            controller: _loginController,
-            decoration: InputDecoration(
-              labelText: t.auth.username,
-              isDense: true,
-            ),
-            textInputAction: TextInputAction.next,
-            autocorrect: false,
-            style: theme.textTheme.bodySmall,
-          ),
-          const SizedBox(height: 4),
-          TextField(
-            controller: _passwordController,
-            decoration: InputDecoration(
-              labelText: t.auth.password,
-              isDense: true,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                  size: 16,
-                ),
-                onPressed: () =>
-                    setState(() => _obscurePassword = !_obscurePassword),
+    return Column(
+      children: [
+        _buildStepHeader(label: label),
+        const SizedBox(height: 8),
+        Expanded(
+          child: Center(
+            child: TextField(
+              controller: controller,
+              autofocus: true,
+              obscureText: obscureText,
+              textAlign: TextAlign.center,
+              autocorrect: false,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) => onSubmit(),
+              decoration: InputDecoration(
+                labelText: label,
+                isDense: true,
+                suffixIcon: suffixIcon,
               ),
-              suffixIconConstraints: const BoxConstraints(
-                minWidth: 32,
-                minHeight: 32,
-              ),
+              style: theme.textTheme.bodyMedium,
             ),
-            obscureText: _obscurePassword,
-            textInputAction: TextInputAction.done,
-            onSubmitted: (_) => _validateAndLogin(),
-            style: theme.textTheme.bodySmall,
           ),
-          const SizedBox(height: 8),
-          if (_errorMessage != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Text(
-                _errorMessage!,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.error,
-                ),
-                textAlign: TextAlign.center,
+        ),
+        if (_errorMessage != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              _errorMessage!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.error,
               ),
+              textAlign: TextAlign.center,
             ),
-          FilledButton(
-            onPressed: _isLoading ? null : _validateAndLogin,
+          ),
+        SizedBox(
+          height: 48,
+          child: FilledButton(
+            onPressed: _isLoading ? null : onSubmit,
             child: _isLoading
                 ? const SizedBox(
                     width: 16,
                     height: 16,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : Text(t.setup.loginButton),
+                : Text(buttonLabel),
           ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSchoolStep() {
+    return _buildFieldStep(
+      label: t.setup.schoolStep,
+      controller: _schoolController,
+      buttonLabel: t.setup.next,
+      onSubmit: () => _goNext(_schoolController.text),
+    );
+  }
+
+  Widget _buildUsernameStep() {
+    return _buildFieldStep(
+      label: t.auth.username,
+      controller: _loginController,
+      buttonLabel: t.setup.next,
+      onSubmit: () => _goNext(_loginController.text),
+    );
+  }
+
+  Widget _buildPasswordStep() {
+    return _buildFieldStep(
+      label: t.auth.password,
+      controller: _passwordController,
+      buttonLabel: t.setup.loginButton,
+      onSubmit: _validateAndLogin,
+      obscureText: _obscurePassword,
+      suffixIcon: IconButton(
+        icon: Icon(
+          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+          size: 16,
+        ),
+        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
       ),
     );
   }
@@ -279,11 +361,30 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
     return Column(
       children: [
-        Text(
-          t.setup.selectStudent,
-          style: theme.textTheme.bodySmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          children: [
+            SizedBox(
+              width: 48,
+              height: 48,
+              child: IconButton(
+                onPressed: () => setState(() {
+                  _errorMessage = null;
+                  _step = _SetupStep.password;
+                }),
+                icon: const Icon(Icons.arrow_back),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                t.setup.selectStudent,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(width: 48, height: 48),
+          ],
         ),
         const SizedBox(height: 4),
         Expanded(
@@ -295,7 +396,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
               return InkWell(
                 onTap: () => setState(() => _selectedStudentId = student.id),
                 borderRadius: BorderRadius.circular(8),
-                child: Padding(
+                child: Container(
+                  constraints: const BoxConstraints(minHeight: 48),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 4,
                     vertical: 6,
@@ -324,17 +426,20 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
             },
           ),
         ),
-        FilledButton(
-          onPressed: _selectedStudentId != null && !_isLoading
-              ? _finishSetup
-              : null,
-          child: _isLoading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : Text(t.setup.finish),
+        SizedBox(
+          height: 48,
+          child: FilledButton(
+            onPressed: _selectedStudentId != null && !_isLoading
+                ? _finishSetup
+                : null,
+            child: _isLoading
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Text(t.setup.finish),
+          ),
         ),
       ],
     );
