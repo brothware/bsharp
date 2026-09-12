@@ -1,8 +1,8 @@
+import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';

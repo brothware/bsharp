@@ -1,15 +1,15 @@
 import 'package:bsharp/app/child_provider.dart';
+import 'package:bsharp/app/providers/attendance_providers.dart';
+import 'package:bsharp/app/providers/grades_providers.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/app/providers/more_providers.dart';
+import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_grade_resolver.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_schedule_resolver.dart';
 import 'package:bsharp/data/services/mobireg_translations.dart';
 import 'package:bsharp/data/services/sync_data_parser.dart';
 import 'package:bsharp/domain/entities/portal.dart';
-import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
-import 'package:bsharp/presentation/more/providers/more_providers.dart';
-import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void applySyncData(Ref ref, Map<String, dynamic> data) {

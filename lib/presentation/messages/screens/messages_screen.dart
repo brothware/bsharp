@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
@@ -8,7 +9,6 @@ import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/auth/widgets/portal_reauth_dialog.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
 import 'package:bsharp/presentation/messages/widgets/message_tile.dart';
 import 'package:flutter/material.dart';

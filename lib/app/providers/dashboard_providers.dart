@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:bsharp/app/providers/grades_providers.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
-import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dashboard_providers.g.dart';

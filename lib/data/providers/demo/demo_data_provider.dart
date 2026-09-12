@@ -1,6 +1,11 @@
 import 'dart:math';
 
 import 'package:bsharp/app/child_provider.dart';
+import 'package:bsharp/app/providers/attendance_providers.dart';
+import 'package:bsharp/app/providers/grades_providers.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/app/providers/more_providers.dart';
+import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/providers/demo/demo_grade_data.dart';
 import 'package:bsharp/data/providers/demo/demo_message_data.dart';
@@ -16,11 +21,6 @@ import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/teacher.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
-import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
-import 'package:bsharp/presentation/more/providers/more_providers.dart';
-import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

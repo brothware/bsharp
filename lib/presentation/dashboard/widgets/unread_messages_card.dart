@@ -1,7 +1,7 @@
+import 'package:bsharp/app/providers/dashboard_providers.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/dashboard/providers/dashboard_providers.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

@@ -1,10 +1,10 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/locale_provider.dart';
+import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/data/data_sources/local/database.dart';
 import 'package:bsharp/data/data_sources/local/mlkit_translation_source.dart';
 import 'package:bsharp/data/data_sources/remote/deepl_data_source.dart';
 import 'package:bsharp/data/services/translation_service.dart';
-import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
