@@ -1,3 +1,4 @@
+import 'package:bsharp/app/providers/dashboard_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -15,6 +16,7 @@ class WearScheduleTile extends ConsumerWidget {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final entries = ref.watch(scheduleEntriesForDateProvider(today));
+    final currentLesson = ref.watch(currentLessonProvider);
     final theme = Theme.of(context);
 
     return WearForwardSwipe(
@@ -65,7 +67,7 @@ class WearScheduleTile extends ConsumerWidget {
                 itemCount: entries.take(3).length,
                 itemBuilder: (context, index) {
                   final entry = entries[index];
-                  final isCurrent = _isCurrentLesson(entry, now);
+                  final isCurrent = currentLesson.current == entry;
                   return _WearLessonItem(entry: entry, isCurrent: isCurrent);
                 },
               ),
@@ -81,29 +83,6 @@ class WearScheduleTile extends ConsumerWidget {
         builder: (_) => const WearScheduleDetailScreen(),
       ),
     );
-  }
-
-  bool _isCurrentLesson(ScheduleEntry entry, DateTime now) {
-    final timeParts = entry.startTime.split(':');
-    final endParts = entry.endTime.split(':');
-    if (timeParts.length < 2 || endParts.length < 2) return false;
-
-    final start = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      int.tryParse(timeParts[0]) ?? 0,
-      int.tryParse(timeParts[1]) ?? 0,
-    );
-    final end = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      int.tryParse(endParts[0]) ?? 0,
-      int.tryParse(endParts[1]) ?? 0,
-    );
-
-    return now.isAfter(start) && now.isBefore(end);
   }
 }
 

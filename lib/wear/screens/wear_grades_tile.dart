@@ -1,5 +1,6 @@
 import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
@@ -128,7 +129,7 @@ class WearGradesTile extends ConsumerWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                _formatDateShort(g.date),
+                                formatDateShort(g.date),
                                 style: theme.textTheme.labelSmall?.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
@@ -170,9 +171,4 @@ class WearGradesTile extends ConsumerWidget {
       MaterialPageRoute<void>(builder: (_) => const WearGradesDetailScreen()),
     );
   }
-}
-
-String _formatDateShort(DateTime date) {
-  return '${date.day.toString().padLeft(2, '0')}.'
-      '${date.month.toString().padLeft(2, '0')}';
 }

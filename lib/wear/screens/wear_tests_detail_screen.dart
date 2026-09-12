@@ -1,5 +1,6 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/portal_date_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_crown_scroll.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -35,7 +36,9 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
     final theme = Theme.of(context);
 
     final sorted = List<PortalTest>.from(allTests)
-      ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
+      ..sort(
+        (a, b) => parsePortalDate(b.date).compareTo(parsePortalDate(a.date)),
+      );
 
     return WearSwipeDismiss(
       child: Scaffold(
@@ -126,21 +129,5 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
         ),
       ),
     );
-  }
-
-  DateTime _parseDate(String date) {
-    try {
-      return DateTime.parse(date);
-    } on FormatException catch (_) {
-      final parts = date.split('.');
-      if (parts.length == 3) {
-        return DateTime(
-          int.parse(parts[2]),
-          int.parse(parts[1]),
-          int.parse(parts[0]),
-        );
-      }
-      return DateTime(2000);
-    }
   }
 }

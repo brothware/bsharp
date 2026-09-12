@@ -1,5 +1,7 @@
 import 'package:bsharp/app/providers/more_providers.dart';
+import 'package:bsharp/domain/annotation_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/portal_date_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_notes_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_forward_swipe.dart';
@@ -18,7 +20,9 @@ class WearNotesTile extends ConsumerWidget {
     final theme = Theme.of(context);
 
     final combined = [...remarks, ...praises, ...info]
-      ..sort((a, b) => _parseDate(b.date).compareTo(_parseDate(a.date)));
+      ..sort(
+        (a, b) => parsePortalDate(b.date).compareTo(parsePortalDate(a.date)),
+      );
 
     return WearForwardSwipe(
       onTriggered: () => _openDetail(context),
@@ -71,22 +75,6 @@ class WearNotesTile extends ConsumerWidget {
       MaterialPageRoute<void>(builder: (_) => const WearNotesDetailScreen()),
     );
   }
-
-  DateTime _parseDate(String date) {
-    try {
-      return DateTime.parse(date);
-    } on FormatException catch (_) {
-      final parts = date.split('.');
-      if (parts.length == 3) {
-        return DateTime(
-          int.parse(parts[2]),
-          int.parse(parts[1]),
-          int.parse(parts[0]),
-        );
-      }
-      return DateTime(2000);
-    }
-  }
 }
 
 class _WearNoteItem extends StatelessWidget {
@@ -94,16 +82,10 @@ class _WearNoteItem extends StatelessWidget {
 
   final PortalReprimand item;
 
-  static (IconData, Color) _iconForType(int type) => switch (type) {
-    1 => (Icons.emoji_events, Colors.green),
-    2 => (Icons.warning_amber, Colors.orange),
-    _ => (Icons.info_outline, Colors.blue),
-  };
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final (icon, color) = _iconForType(item.type);
+    final style = annotationStyle(item.type, brightness: theme.brightness);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 3),
@@ -111,7 +93,7 @@ class _WearNoteItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 14, color: color),
+          Icon(style.icon, size: 14, color: style.color),
           const SizedBox(width: 6),
           Expanded(
             child: Column(

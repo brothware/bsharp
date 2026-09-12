@@ -220,7 +220,7 @@ class _WearDetailLessonItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        _changeLabel(entry.changeType!),
+                        scheduleChangeLabel(entry.changeType!),
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: theme.colorScheme.error,
                           fontWeight: FontWeight.bold,
@@ -234,14 +234,5 @@ class _WearDetailLessonItem extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _changeLabel(ScheduleChangeType type) {
-    return switch (type) {
-      ScheduleChangeType.cancelled => t.schedule.cancelled,
-      ScheduleChangeType.substitution => t.schedule.substitution,
-      ScheduleChangeType.roomChanged => t.schedule.roomChanged,
-      ScheduleChangeType.added => t.schedule.added,
-    };
   }
 }
