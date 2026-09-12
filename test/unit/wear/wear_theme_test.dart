@@ -1,5 +1,7 @@
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/wear_app.dart';
@@ -10,6 +12,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
+class _SilentNotificationService extends NotificationService {
+  @override
+  Future<void> initialize({void Function(NotificationPayload)? onTap}) async {}
+
+  @override
+  Future<NotificationPayload?> getLaunchPayload() async => null;
+}
+
 Future<Widget> _buildApp() async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
@@ -18,6 +28,9 @@ Future<Widget> _buildApp() async {
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
+      notificationServiceProvider.overrideWithValue(
+        _SilentNotificationService(),
+      ),
     ],
     child: TranslationProvider(child: const BSharpWearApp()),
   );
