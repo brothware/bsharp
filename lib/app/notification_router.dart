@@ -9,10 +9,13 @@ import 'package:go_router/go_router.dart';
 class NotificationRouter {
   NotificationRouter({required this.ref, required this.routerProvider});
 
-  final Ref ref;
-  final GoRouter Function() routerProvider;
+  final WidgetRef ref;
+  final GoRouter? Function() routerProvider;
 
   void handleNotificationTap(NotificationPayload payload) {
+    final router = routerProvider();
+    if (router == null) return;
+
     final route = payload.route;
     if (route == null) return;
 
@@ -33,6 +36,6 @@ class NotificationRouter {
       }
     }
 
-    routerProvider().go(route);
+    router.go(route);
   }
 }

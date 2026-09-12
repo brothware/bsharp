@@ -30,6 +30,9 @@ class _RecordingNotificationService extends NotificationService {
     treeWasMountedAtPrompt = WidgetsBinding.instance.rootElement != null;
     return permissionGate.future;
   }
+
+  @override
+  Future<NotificationPayload?> getLaunchPayload() async => null;
 }
 
 void main() {
