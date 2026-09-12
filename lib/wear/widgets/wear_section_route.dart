@@ -14,3 +14,7 @@ void pushWearSection(BuildContext context, WidgetBuilder builder) {
     ),
   );
 }
+
+void pushWearScreen(BuildContext context, WidgetBuilder builder) {
+  Navigator.of(context).push(MaterialPageRoute<void>(builder: builder));
+}

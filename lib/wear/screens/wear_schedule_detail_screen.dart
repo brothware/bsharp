@@ -129,6 +129,7 @@ class _WearDetailTimelineItem extends StatelessWidget {
         '${item.endTime.substring(0, 5)}';
 
     return Container(
+      key: const Key('lesson-item'),
       margin: const EdgeInsets.symmetric(vertical: 2),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
       decoration: BoxDecoration(

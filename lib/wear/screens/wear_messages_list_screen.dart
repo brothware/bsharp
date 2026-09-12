@@ -1,6 +1,7 @@
 import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/domain/entities/poczta.dart';
+import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
-import 'package:bsharp/wear/screens/wear_messages_tile.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,80 @@ class _WearMessagesListScreenState
               },
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class WearMessageItem extends StatelessWidget {
+  const WearMessageItem({
+    required this.message,
+    required this.onTap,
+    super.key,
+  });
+
+  final PocztaMessage message;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: !message.isRead
+              ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
+              : null,
+        ),
+        child: Row(
+          children: [
+            if (!message.isRead)
+              Container(
+                width: 6,
+                height: 6,
+                margin: const EdgeInsets.only(right: 4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    message.senderName,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: message.isRead
+                          ? FontWeight.normal
+                          : FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    message.title,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              formatMessageDate(message.sendTime),
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
         ),
       ),
     );
