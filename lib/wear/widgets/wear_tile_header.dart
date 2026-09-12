@@ -25,24 +25,27 @@ class WearTileHeader extends StatelessWidget {
 
   Widget _buildFlat(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: theme.colorScheme.primary),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.bold,
+    return ColoredBox(
+      color: theme.colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: theme.colorScheme.primary),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                title,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
-              overflow: TextOverflow.ellipsis,
             ),
-          ),
-          ?trailing,
-        ],
+            ?trailing,
+          ],
+        ),
       ),
     );
   }
@@ -54,14 +57,20 @@ class WearTileHeader extends StatelessWidget {
       fontWeight: FontWeight.bold,
     );
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 20, color: theme.colorScheme.primary),
-        const SizedBox(height: 2),
-        Text(title, style: titleStyle, overflow: TextOverflow.ellipsis),
-        if (trailing case final trailing?) Center(child: trailing),
-      ],
+    return ColoredBox(
+      color: theme.colorScheme.surface,
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 20, color: theme.colorScheme.primary),
+            const SizedBox(height: 2),
+            Text(title, style: titleStyle, overflow: TextOverflow.ellipsis),
+            if (trailing case final trailing?) Center(child: trailing),
+          ],
+        ),
+      ),
     );
   }
 }
