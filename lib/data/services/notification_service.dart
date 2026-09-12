@@ -86,6 +86,14 @@ class NotificationService {
     _initialized = true;
   }
 
+  Future<NotificationPayload?> getLaunchPayload() async {
+    final details = await _plugin.getNotificationAppLaunchDetails();
+    if (details?.didNotificationLaunchApp != true) return null;
+    final payload = details?.notificationResponse?.payload;
+    if (payload == null || payload.isEmpty) return null;
+    return NotificationPayload.fromJson(payload);
+  }
+
   Future<bool> requestPermission() async {
     if (Platform.isAndroid) {
       final android = _plugin

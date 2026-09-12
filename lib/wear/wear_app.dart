@@ -9,6 +9,7 @@ import 'package:bsharp/presentation/common/theme/app_theme.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
+import 'package:bsharp/wear/wear_notification_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,12 +57,31 @@ ThemeData wearTheme(ThemeData base) {
 class BSharpWearApp extends ConsumerStatefulWidget {
   const BSharpWearApp({super.key});
 
+  static final navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   ConsumerState<BSharpWearApp> createState() => _BSharpWearAppState();
 }
 
 class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
   bool _initialSyncTriggered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_initNotifications());
+  }
+
+  Future<void> _initNotifications() async {
+    final router = WearNotificationRouter(
+      ref: ref,
+      navigatorKey: BSharpWearApp.navigatorKey,
+    );
+    final service = ref.read(notificationServiceProvider);
+    await service.initialize(onTap: router.handleNotificationTap);
+    final launchPayload = await service.getLaunchPayload();
+    if (launchPayload != null) router.handleNotificationTap(launchPayload);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +114,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
     );
 
     return MaterialApp(
+      navigatorKey: BSharpWearApp.navigatorKey,
       title: 'BSharp',
       debugShowCheckedModeBanner: false,
       theme: wearTheme(AppTheme.light()),
