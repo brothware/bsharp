@@ -18,11 +18,11 @@ const _wearLightSurface = Color(0xFFFAFAFA);
 
 ThemeData wearTheme(ThemeData base) {
   final wearText = base.textTheme.copyWith(
-    titleMedium: base.textTheme.titleMedium?.copyWith(fontSize: 15),
-    titleSmall: base.textTheme.titleSmall?.copyWith(fontSize: 13),
+    displaySmall: base.textTheme.displaySmall?.copyWith(fontSize: 22),
+    titleMedium: base.textTheme.titleMedium?.copyWith(fontSize: 16),
+    bodyLarge: base.textTheme.bodyLarge?.copyWith(fontSize: 14),
     bodyMedium: base.textTheme.bodyMedium?.copyWith(fontSize: 13),
-    bodySmall: base.textTheme.bodySmall?.copyWith(fontSize: 12),
-    labelMedium: base.textTheme.labelMedium?.copyWith(fontSize: 11),
+    labelMedium: base.textTheme.labelMedium?.copyWith(fontSize: 12),
     labelSmall: base.textTheme.labelSmall?.copyWith(fontSize: 10),
   );
   final wearColorScheme = base.brightness == Brightness.dark

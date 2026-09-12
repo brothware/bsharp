@@ -46,7 +46,6 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
                     t.childMode.tryAgainLater,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
-                      fontSize: 9,
                     ),
                   ),
                 ],
@@ -90,9 +89,8 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
                 const SizedBox(height: 4),
                 Text(
                   _error!,
-                  style: theme.textTheme.labelSmall?.copyWith(
+                  style: theme.textTheme.labelMedium?.copyWith(
                     color: theme.colorScheme.error,
-                    fontSize: 9,
                   ),
                 ),
               ],

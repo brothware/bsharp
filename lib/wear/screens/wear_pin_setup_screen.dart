@@ -63,9 +63,8 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
                 const SizedBox(height: 4),
                 Text(
                   _error!,
-                  style: theme.textTheme.labelSmall?.copyWith(
+                  style: theme.textTheme.labelMedium?.copyWith(
                     color: theme.colorScheme.error,
-                    fontSize: 9,
                   ),
                 ),
               ],

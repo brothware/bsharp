@@ -136,7 +136,6 @@ class _WearWeekdayHeaders extends StatelessWidget {
                 child: Text(
                   l,
                   style: theme.textTheme.labelSmall?.copyWith(
-                    fontSize: 8,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
@@ -181,10 +180,7 @@ class _WearCalendarDay extends StatelessWidget {
         children: [
           Text(
             '${day.day}',
-            style: theme.textTheme.labelSmall?.copyWith(
-              fontSize: 8,
-              color: dayColor,
-            ),
+            style: theme.textTheme.labelMedium?.copyWith(color: dayColor),
           ),
           if (isCurrentMonth && status != AttendanceDayStatus.noData)
             Container(

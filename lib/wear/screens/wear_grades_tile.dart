@@ -155,9 +155,8 @@ class WearGradesTile extends ConsumerWidget {
                             ),
                             child: Text(
                               t.grades.newBadge,
-                              style: theme.textTheme.labelSmall?.copyWith(
+                              style: theme.textTheme.labelMedium?.copyWith(
                                 color: theme.colorScheme.onTertiary,
-                                fontSize: 8,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
