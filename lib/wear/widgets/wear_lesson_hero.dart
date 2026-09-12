@@ -87,7 +87,7 @@ class WearLessonHero extends ConsumerWidget {
         room: firstLesson?.roomName,
         countdown: firstLesson == null
             ? null
-            : '${dayLabelFull(nextDay!.weekday)} ${firstLesson.timeRange}',
+            : '${dayLabel(nextDay!.weekday)} ${firstLesson.timeRange}',
         progress: null,
         isRound: isRound,
       );
@@ -165,7 +165,7 @@ class _WearHeroBody extends StatelessWidget {
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
-          maxLines: 2,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         if (room case final room?) ...[
@@ -181,6 +181,9 @@ class _WearHeroBody extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             countdown,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
