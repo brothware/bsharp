@@ -3,9 +3,12 @@ import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_messages_list_screen.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+const _wearMessagesTileLimit = 4;
 
 class WearMessagesTile extends ConsumerWidget {
   const WearMessagesTile({super.key});
@@ -68,10 +71,21 @@ class WearMessagesTile extends ConsumerWidget {
             child: ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               padding: EdgeInsets.zero,
-              itemCount: inbox.take(4).length,
+              itemCount:
+                  inbox.take(_wearMessagesTileLimit).length +
+                  (inbox.length > _wearMessagesTileLimit ? 1 : 0),
               itemBuilder: (context, index) {
+                if (index >= inbox.take(_wearMessagesTileLimit).length) {
+                  return _WearSeeAllRow(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const WearMessagesListScreen(),
+                      ),
+                    ),
+                  );
+                }
                 final msg = inbox[index];
-                return _WearMessageItem(
+                return WearMessageItem(
                   message: msg,
                   onTap: () => _openDetail(context, msg),
                 );
@@ -91,8 +105,36 @@ class WearMessagesTile extends ConsumerWidget {
   }
 }
 
-class _WearMessageItem extends StatelessWidget {
-  const _WearMessageItem({required this.message, required this.onTap});
+class _WearSeeAllRow extends StatelessWidget {
+  const _WearSeeAllRow({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 32),
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Icon(
+          Icons.more_horiz,
+          color: theme.colorScheme.primary,
+        ),
+      ),
+    );
+  }
+}
+
+class WearMessageItem extends StatelessWidget {
+  const WearMessageItem({
+    required this.message,
+    required this.onTap,
+    super.key,
+  });
 
   final PocztaMessage message;
   final VoidCallback onTap;
