@@ -17,6 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class BSharpApp extends ConsumerStatefulWidget {
   const BSharpApp({super.key});
@@ -28,6 +29,8 @@ class BSharpApp extends ConsumerStatefulWidget {
 class _BSharpAppState extends ConsumerState<BSharpApp> {
   bool _initialSyncTriggered = false;
   StreamSubscription<RemoteMessage>? _fcmSubscription;
+  GoRouter? _router;
+  AuthState? _routerAuthState;
 
   @override
   void initState() {
@@ -69,9 +72,19 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
     await service.requestPermission();
   }
 
+  GoRouter _routerFor(AuthState authState) {
+    if (_router == null || _routerAuthState != authState) {
+      _router?.dispose();
+      _router = createRouter(authState: authState);
+      _routerAuthState = authState;
+    }
+    return _router!;
+  }
+
   @override
   void dispose() {
     unawaited(_fcmSubscription?.cancel());
+    _router?.dispose();
     super.dispose();
   }
 
@@ -95,7 +108,7 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
       ),
       error: (_, _) {
         _initialSyncTriggered = false;
-        final router = createRouter(authState: AuthState.unauthenticated);
+        final router = _routerFor(AuthState.unauthenticated);
         return MaterialApp.router(
           title: 'BSharp',
           debugShowCheckedModeBanner: false,
@@ -129,7 +142,7 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
         if (authState != AuthState.authenticated) {
           _initialSyncTriggered = false;
         }
-        final router = createRouter(authState: authState);
+        final router = _routerFor(authState);
         return MaterialApp.router(
           title: 'BSharp',
           debugShowCheckedModeBanner: false,
