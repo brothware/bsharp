@@ -5,6 +5,7 @@ import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
@@ -19,17 +20,22 @@ ResolvedGrade _grade({
   int id = 1,
   double? effectiveValue = 5.0,
   String? displayValue,
+  String categoryName = '',
+  int weight = 1,
+  String? description,
 }) {
   return ResolvedGrade(
     id: id,
     subjectName: 'Test',
-    categoryName: '',
+    categoryName: categoryName,
     displayValue:
         displayValue ??
         (effectiveValue != null ? effectiveValue.toInt().toString() : '?'),
     date: DateTime.now(),
     effectiveValue: effectiveValue,
     countsToAverage: effectiveValue != null,
+    weight: weight,
+    description: description,
   );
 }
 
@@ -156,6 +162,91 @@ void main() {
       final container = ProviderScope.containerOf(element);
 
       expect(container.read(newGradeIdsProvider), isEmpty);
+    });
+
+    testWidgets('tapping a grade chip shows category, weight and description', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        await _buildScreen(
+          subjectGrades: [
+            SubjectGrades(
+              subjectName: 'Mathematics',
+              subjectId: 1,
+              grades: [
+                _grade(
+                  categoryName: 'Written test',
+                  weight: 3,
+                  description: 'Chapter 4 quiz',
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.text('5'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Written test'), findsOneWidget);
+      expect(find.text('3'), findsOneWidget);
+      expect(find.text('Chapter 4 quiz'), findsOneWidget);
+    });
+
+    testWidgets(
+      'a grade with no description renders without an empty gap',
+      (tester) async {
+        await tester.pumpWidget(
+          await _buildScreen(
+            subjectGrades: [
+              SubjectGrades(
+                subjectName: 'Mathematics',
+                subjectId: 1,
+                grades: [_grade()],
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+
+        await tester.tap(find.text('5'));
+        await tester.pumpAndSettle();
+
+        expect(find.text(t.grades.description), findsNothing);
+      },
+    );
+
+    testWidgets('the grade detail dismisses on right swipe', (tester) async {
+      await tester.pumpWidget(
+        await _buildScreen(
+          subjectGrades: [
+            SubjectGrades(
+              subjectName: 'Mathematics',
+              subjectId: 1,
+              grades: [_grade()],
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.text('5'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(WearGradeDetailScreen), findsOneWidget);
+
+      await tester.fling(
+        find.byType(WearGradeDetailScreen),
+        const Offset(300, 0),
+        800,
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(WearGradeDetailScreen), findsNothing);
     });
   });
 }
