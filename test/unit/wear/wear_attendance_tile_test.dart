@@ -16,6 +16,7 @@ import '../data/credential_storage_test.dart';
 Widget _buildTile({
   List<Attendance> attendances = const [],
   List<AttendanceType> types = const [],
+  List<Object> extraOverrides = const [],
 }) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
@@ -25,6 +26,7 @@ Widget _buildTile({
       attendancesProvider.overrideWithBuild((ref, _) => attendances),
       attendanceTypesProvider.overrideWithBuild((ref, _) => types),
       resolvedEventsProvider.overrideWithBuild((ref, _) => []),
+      ...extraOverrides.cast(),
     ],
     child: const MaterialApp(
       home: Scaffold(
@@ -111,5 +113,61 @@ void main() {
       expect(find.text('Attendance'), findsOneWidget);
       expect(find.byIcon(Icons.event_available), findsOneWidget);
     });
+
+    for (final ignoredIds in [
+      <int>{},
+      {2},
+    ]) {
+      testWidgets(
+        'attendance total matches attendanceStatsProvider '
+        '(stale-absence ignoring ${ignoredIds.isEmpty ? "off" : "on"})',
+        (tester) async {
+          final types = [
+            const AttendanceType(
+              id: 1,
+              name: 'Present',
+              abbr: 'p',
+              countAs: AttendanceCountAs.present,
+              excuseStatus: AttendanceExcuseStatus.unset,
+            ),
+            const AttendanceType(
+              id: 2,
+              name: 'Absent',
+              abbr: 'a',
+              countAs: AttendanceCountAs.absent,
+              excuseStatus: AttendanceExcuseStatus.unexcused,
+            ),
+          ];
+          final attendances = [
+            const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+            const Attendance(id: 2, eventsId: 2, studentsId: 1, typesId: 2),
+          ];
+
+          await tester.pumpWidget(
+            _buildTile(
+              attendances: attendances,
+              types: types,
+              extraOverrides: [
+                ignoredAttendanceIdsProvider.overrideWith(
+                  (ref) => Stream.value(ignoredIds),
+                ),
+              ],
+            ),
+          );
+          await tester.pump();
+
+          final element = tester.element(find.byType(WearAttendanceTile));
+          final container = ProviderScope.containerOf(element);
+          final stats = container.read(attendanceStatsProvider);
+
+          expect(
+            find.textContaining(
+              '${stats.presentPercent.toStringAsFixed(1)}%',
+            ),
+            findsOneWidget,
+          );
+        },
+      );
+    }
   });
 }
