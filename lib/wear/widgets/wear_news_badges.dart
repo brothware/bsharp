@@ -2,11 +2,11 @@ import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/screens/wear_bulletins_tile.dart';
-import 'package:bsharp/wear/screens/wear_grades_tile.dart';
-import 'package:bsharp/wear/screens/wear_messages_tile.dart';
-import 'package:bsharp/wear/screens/wear_notes_tile.dart';
-import 'package:bsharp/wear/screens/wear_tests_tile.dart';
+import 'package:bsharp/wear/screens/wear_bulletins_list_screen.dart';
+import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_messages_list_screen.dart';
+import 'package:bsharp/wear/screens/wear_notes_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_tests_detail_screen.dart';
 import 'package:bsharp/wear/wear_summary_utils.dart';
 import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +20,13 @@ class _Badge {
     required this.icon,
     required this.count,
     required this.openSection,
+    this.isFullScreen = true,
   });
 
   final IconData icon;
   final int count;
   final WidgetBuilder openSection;
+  final bool isFullScreen;
 }
 
 class WearNewsBadges extends ConsumerWidget {
@@ -49,31 +51,32 @@ class WearNewsBadges extends ConsumerWidget {
         _Badge(
           icon: Icons.mail_outline,
           count: unreadMessages,
-          openSection: (_) => const WearMessagesTile(),
+          openSection: (_) => const WearMessagesListScreen(),
         ),
       if (newGrades > 0)
         _Badge(
           icon: Icons.grade,
           count: newGrades,
-          openSection: (_) => const WearGradesTile(),
+          openSection: (_) => const WearGradesDetailScreen(),
         ),
       if (upcomingTests > 0)
         _Badge(
           icon: Icons.quiz_outlined,
           count: upcomingTests,
-          openSection: (_) => const WearTestsTile(),
+          openSection: (_) => const WearTestsDetailScreen(),
         ),
       if (unreadAnnotations > 0)
         _Badge(
           icon: Icons.sticky_note_2_outlined,
           count: unreadAnnotations,
-          openSection: (_) => const WearNotesTile(),
+          openSection: (_) => const WearNotesDetailScreen(),
         ),
       if (unreadAnnouncements > 0)
         _Badge(
           icon: Icons.campaign_outlined,
           count: unreadAnnouncements,
-          openSection: (_) => const WearBulletinsTile(),
+          openSection: (_) => const WearBulletinsListScreen(),
+          isFullScreen: false,
         ),
     ];
 
@@ -93,7 +96,9 @@ class WearNewsBadges extends ConsumerWidget {
           _WearBadgeChip(
             icon: badge.icon,
             label: '${badge.count}',
-            onTap: () => pushWearSection(context, badge.openSection),
+            onTap: () => badge.isFullScreen
+                ? pushWearScreen(context, badge.openSection)
+                : pushWearSection(context, badge.openSection),
           ),
         if (overflowCount > 0)
           _WearBadgeChip(
