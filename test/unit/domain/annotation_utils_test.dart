@@ -8,7 +8,7 @@ void main() {
   group('annotationStyle', () {
     test('maps type 1 to the praise icon and status present colour', () {
       final style = annotationStyle(1, brightness: Brightness.light);
-      expect(style.icon, Icons.emoji_events);
+      expect(style.icon, Icons.emoji_events_outlined);
       expect(
         style.color,
         SemanticPalette.resolve(SemanticColor.statusPresent, Brightness.light),
@@ -17,7 +17,7 @@ void main() {
 
     test('maps type 2 to the remark icon and status late colour', () {
       final style = annotationStyle(2, brightness: Brightness.light);
-      expect(style.icon, Icons.warning_amber);
+      expect(style.icon, Icons.warning_amber_outlined);
       expect(
         style.color,
         SemanticPalette.resolve(SemanticColor.statusLate, Brightness.light),
@@ -26,7 +26,7 @@ void main() {
 
     test('maps any other type to the info icon and status excused colour', () {
       final style = annotationStyle(3, brightness: Brightness.light);
-      expect(style.icon, Icons.info_outline);
+      expect(style.icon, Icons.info_outlined);
       expect(
         style.color,
         SemanticPalette.resolve(SemanticColor.statusExcused, Brightness.light),

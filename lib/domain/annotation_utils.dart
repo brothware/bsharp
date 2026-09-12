@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
   required Brightness brightness,
 }) {
   final (icon, token) = switch (type) {
-    1 => (Icons.emoji_events, SemanticColor.statusPresent),
-    2 => (Icons.warning_amber, SemanticColor.statusLate),
-    _ => (Icons.info_outline, SemanticColor.statusExcused),
+    1 => (Icons.emoji_events_outlined, SemanticColor.statusPresent),
+    2 => (Icons.warning_amber_outlined, SemanticColor.statusLate),
+    _ => (Icons.info_outlined, SemanticColor.statusExcused),
   };
   return (icon: icon, color: SemanticPalette.resolve(token, brightness));
 }
