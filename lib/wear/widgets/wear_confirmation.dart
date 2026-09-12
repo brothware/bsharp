@@ -50,46 +50,46 @@ class _WearConfirmationScreen extends StatelessWidget {
     return Scaffold(
       body: WearSwipeDismiss(
         child: WearScaffold(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, size: 28, color: accentColor),
-                const SizedBox(height: 8),
-                Text(
-                  question,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      minimumSize: const Size.fromHeight(48),
-                      backgroundColor: isDestructive ? accentColor : null,
-                      foregroundColor: isDestructive
-                          ? theme.colorScheme.onError
-                          : null,
-                    ),
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: Text(confirmLabel),
+          child: Column(
+            children: [
+              Icon(icon, size: 20, color: accentColor),
+              const SizedBox(height: 4),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Text(
+                    question,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyLarge,
                   ),
                 ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(48),
-                    ),
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: Text(cancelLabel ?? t.common.cancel),
+              ),
+              const SizedBox(height: 6),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size.fromHeight(48),
+                    backgroundColor: isDestructive ? accentColor : null,
+                    foregroundColor: isDestructive
+                        ? theme.colorScheme.onError
+                        : null,
                   ),
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(confirmLabel),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 6),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(48),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(cancelLabel ?? t.common.cancel),
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -13,7 +13,14 @@ Future<bool?> _pumpAndOpen(
   WidgetTester tester,
   WearScreenShape shape, {
   bool isDestructive = false,
+  Size? viewSize,
 }) async {
+  if (viewSize != null) {
+    tester.view.physicalSize = viewSize;
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+  }
+
   bool? result;
   await tester.pumpWidget(
     ProviderScope(
@@ -85,6 +92,74 @@ void main() {
 
       expect(tester.takeException(), isNull);
     });
+
+    testWidgets(
+      'both buttons are fully visible without scrolling on a 227dp round '
+      'watch',
+      (tester) async {
+        await _pumpAndOpen(
+          tester,
+          WearScreenShape.round,
+          isDestructive: true,
+          viewSize: const Size(227, 227),
+        );
+
+        final viewport = Offset.zero & const Size(227, 227);
+        final confirmRect = tester.getRect(
+          find.ancestor(
+            of: find.text('Log out').last,
+            matching: find.byType(FilledButton),
+          ),
+        );
+        final cancelRect = tester.getRect(
+          find.ancestor(
+            of: find.text('Cancel'),
+            matching: find.byType(OutlinedButton),
+          ),
+        );
+
+        expect(viewport.contains(confirmRect.topLeft), isTrue);
+        expect(viewport.contains(confirmRect.bottomRight), isTrue);
+        expect(viewport.contains(cancelRect.topLeft), isTrue);
+        expect(viewport.contains(cancelRect.bottomRight), isTrue);
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets(
+      'both buttons are fully visible without scrolling on a 201x238dp '
+      'rectangular watch',
+      (tester) async {
+        await _pumpAndOpen(
+          tester,
+          WearScreenShape.rectangular,
+          isDestructive: true,
+          viewSize: const Size(201, 238),
+        );
+
+        final viewport = Offset.zero & const Size(201, 238);
+        final confirmRect = tester.getRect(
+          find.ancestor(
+            of: find.text('Log out').last,
+            matching: find.byType(FilledButton),
+          ),
+        );
+        final cancelRect = tester.getRect(
+          find.ancestor(
+            of: find.text('Cancel'),
+            matching: find.byType(OutlinedButton),
+          ),
+        );
+
+        expect(viewport.contains(confirmRect.topLeft), isTrue);
+        expect(viewport.contains(confirmRect.bottomRight), isTrue);
+        expect(viewport.contains(cancelRect.topLeft), isTrue);
+        expect(viewport.contains(cancelRect.bottomRight), isTrue);
+        expect(confirmRect.height, greaterThanOrEqualTo(48));
+        expect(cancelRect.height, greaterThanOrEqualTo(48));
+        expect(tester.takeException(), isNull);
+      },
+    );
 
     testWidgets('returns true on confirm', (tester) async {
       bool? result;
