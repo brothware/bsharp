@@ -801,5 +801,16 @@
     "updateCredentials": "Ενημέρωση διαπιστευτηρίων",
     "studentsLabel": "${count} μαθητής/ές",
     "selectProvider": "Επιλέξτε τον πάροχο ηλεκτρονικού βαθμολογίου"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} μαθήματα",
+    "gradesNewCount": "${count} νέοι",
+    "homeworkDueCount": "${count} προς παράδοση",
+    "testsWeekCount": "${count} αυτή την εβδομάδα",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} μη αναγνωσμένα",
+    "announcementsNewCount": "${count} νέες",
+    "settingsSyncedAt": "Συγχρονίστηκε ${time}",
+    "settingsNeverSynced": "Ποτέ δεν συγχρονίστηκε"
   }
 }

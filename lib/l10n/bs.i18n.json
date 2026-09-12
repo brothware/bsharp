@@ -804,5 +804,16 @@
     "updateCredentials": "Ažuriraj podatke za prijavu",
     "studentsLabel": "${count} učenik(a)",
     "selectProvider": "Odaberite svog pružatelja e-dnevnika"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} časova",
+    "gradesNewCount": "${count} novih",
+    "homeworkDueCount": "${count} za predaju",
+    "testsWeekCount": "${count} ove sedmice",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} nepročitanih",
+    "announcementsNewCount": "${count} novih",
+    "settingsSyncedAt": "Sinhronizirano ${time}",
+    "settingsNeverSynced": "Nikad sinhronizirano"
   }
 }

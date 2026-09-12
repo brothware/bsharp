@@ -801,5 +801,16 @@
     "updateCredentials": "Bejelentkezési adatok frissítése",
     "studentsLabel": "${count} tanuló",
     "selectProvider": "Válassza ki az e-napló szolgáltatóját"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} óra",
+    "gradesNewCount": "${count} új",
+    "homeworkDueCount": "${count} határidős",
+    "testsWeekCount": "${count} a héten",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} olvasatlan",
+    "announcementsNewCount": "${count} új",
+    "settingsSyncedAt": "Szinkronizálva ${time}",
+    "settingsNeverSynced": "Soha nem szinkronizált"
   }
 }

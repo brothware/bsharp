@@ -801,5 +801,16 @@
     "updateCredentials": "प्रमाण-पत्र अपडेट करें",
     "studentsLabel": "${count} छात्र",
     "selectProvider": "अपना ई-ग्रेडबुक प्रदाता चुनें"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} कक्षाएं",
+    "gradesNewCount": "${count} नई",
+    "homeworkDueCount": "${count} देय",
+    "testsWeekCount": "${count} इस सप्ताह",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} अपठित",
+    "announcementsNewCount": "${count} नई",
+    "settingsSyncedAt": "${time} को समन्वयित",
+    "settingsNeverSynced": "कभी सिंक नहीं हुआ"
   }
 }

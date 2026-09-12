@@ -807,5 +807,16 @@
     "updateCredentials": "Оновити облікові дані",
     "studentsLabel": "${count} учень/учнів",
     "selectProvider": "Оберіть постачальника електронного щоденника"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} уроків",
+    "gradesNewCount": "${count} нових",
+    "homeworkDueCount": "${count} до здачі",
+    "testsWeekCount": "${count} цього тижня",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} непрочитаних",
+    "announcementsNewCount": "${count} нових",
+    "settingsSyncedAt": "Синхронізовано ${time}",
+    "settingsNeverSynced": "Ніколи не синхронізовано"
   }
 }

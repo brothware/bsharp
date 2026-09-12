@@ -810,5 +810,16 @@
     "updateCredentials": "Nuashonraigh dintiúir",
     "studentsLabel": "${count} dalta(í)",
     "selectProvider": "Roghnaigh do sholáthraí ríomh-dhialainne"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} ranganna",
+    "gradesNewCount": "${count} nua",
+    "homeworkDueCount": "${count} le déanamh",
+    "testsWeekCount": "${count} an tseachtain seo",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} gan léamh",
+    "announcementsNewCount": "${count} nua",
+    "settingsSyncedAt": "Sioncrónaithe ${time}",
+    "settingsNeverSynced": "Riamh sioncrónaithe"
   }
 }

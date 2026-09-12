@@ -801,5 +801,16 @@
     "updateCredentials": "認証情報を更新",
     "studentsLabel": "${count}人の生徒",
     "selectProvider": "電子成績簿のプロバイダーを選択してください"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count}コマ",
+    "gradesNewCount": "新着${count}件",
+    "homeworkDueCount": "${count}件提出予定",
+    "testsWeekCount": "今週${count}件",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "未読${count}件",
+    "announcementsNewCount": "新着${count}件",
+    "settingsSyncedAt": "${time}に同期済み",
+    "settingsNeverSynced": "未同期"
   }
 }

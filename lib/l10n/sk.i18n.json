@@ -804,5 +804,16 @@
     "updateCredentials": "Aktualizovať prihlasovacie údaje",
     "studentsLabel": "${count} žiak(ov)",
     "selectProvider": "Vyberte poskytovateľa e-žiackej knižky"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} hodín",
+    "gradesNewCount": "${count} nových",
+    "homeworkDueCount": "${count} na odovzdanie",
+    "testsWeekCount": "${count} tento týždeň",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} neprečítaných",
+    "announcementsNewCount": "${count} nových",
+    "settingsSyncedAt": "Synchronizované ${time}",
+    "settingsNeverSynced": "Nikdy nesynchronizované"
   }
 }

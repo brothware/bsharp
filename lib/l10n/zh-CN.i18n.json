@@ -801,5 +801,16 @@
     "updateCredentials": "更新凭据",
     "studentsLabel": "${count}名学生",
     "selectProvider": "选择您的电子成绩册提供商"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count}节课",
+    "gradesNewCount": "${count}条新成绩",
+    "homeworkDueCount": "${count}项待交",
+    "testsWeekCount": "本周${count}项",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count}条未读",
+    "announcementsNewCount": "${count}条新公告",
+    "settingsSyncedAt": "已同步 ${time}",
+    "settingsNeverSynced": "从未同步"
   }
 }

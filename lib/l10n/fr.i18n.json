@@ -801,5 +801,16 @@
     "updateCredentials": "Mettre à jour les identifiants",
     "studentsLabel": "${count} élève(s)",
     "selectProvider": "Choisissez votre fournisseur de cahier de notes"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} cours",
+    "gradesNewCount": "${count} nouvelles",
+    "homeworkDueCount": "${count} à rendre",
+    "testsWeekCount": "${count} cette semaine",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} non lus",
+    "announcementsNewCount": "${count} nouvelles",
+    "settingsSyncedAt": "Synchronisé ${time}",
+    "settingsNeverSynced": "Jamais synchronisé"
   }
 }

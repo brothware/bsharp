@@ -801,5 +801,16 @@
     "updateCredentials": "Anmeldedaten aktualisieren",
     "studentsLabel": "${count} Schüler",
     "selectProvider": "Wählen Sie Ihren E-Klassenbuch-Anbieter"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} Stunden",
+    "gradesNewCount": "${count} neu",
+    "homeworkDueCount": "${count} fällig",
+    "testsWeekCount": "${count} diese Woche",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} ungelesen",
+    "announcementsNewCount": "${count} neu",
+    "settingsSyncedAt": "Synchronisiert ${time}",
+    "settingsNeverSynced": "Nie synchronisiert"
   }
 }

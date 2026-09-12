@@ -801,5 +801,16 @@
     "updateCredentials": "Päivitä kirjautumistiedot",
     "studentsLabel": "${count} oppilas(ta)",
     "selectProvider": "Valitse sähköisen arvosanakirjan tarjoaja"
+  },
+  "wearLauncher": {
+    "lessonsCount": "${count} tuntia",
+    "gradesNewCount": "${count} uutta",
+    "homeworkDueCount": "${count} määräpäivänä",
+    "testsWeekCount": "${count} tällä viikolla",
+    "annotationsSummary": "-",
+    "messagesUnreadCount": "${count} lukematonta",
+    "announcementsNewCount": "${count} uutta",
+    "settingsSyncedAt": "Synkronoitu ${time}",
+    "settingsNeverSynced": "Ei koskaan synkronoitu"
   }
 }

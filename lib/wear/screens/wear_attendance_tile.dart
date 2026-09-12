@@ -3,8 +3,6 @@ import 'dart:math' as math;
 import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
-import 'package:bsharp/wear/widgets/wear_forward_swipe.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,87 +15,76 @@ class WearAttendanceTile extends ConsumerWidget {
     final stats = ref.watch(attendanceStatsProvider);
     final theme = Theme.of(context);
 
-    return WearForwardSwipe(
-      onTriggered: () => _openDetail(context),
-      child: Column(
-        children: [
-          WearTileHeader(icon: Icons.event_available, title: t.nav.attendance),
-          Expanded(
-            child: stats.totalLessons == 0
-                ? Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.event_available_outlined,
-                          size: 28,
+    return Column(
+      children: [
+        WearTileHeader(icon: Icons.event_available, title: t.nav.attendance),
+        Expanded(
+          child: stats.totalLessons == 0
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.event_available_outlined,
+                        size: 28,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        t.common.noData,
+                        style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
-                        const SizedBox(height: 6),
-                        Text(
-                          t.common.noData,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
+                      ),
+                    ],
+                  ),
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: CustomPaint(
+                        painter: _DonutPainter(
+                          percent: stats.presentPercent,
+                          color: theme.colorScheme.primary,
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerHighest,
                         ),
-                      ],
-                    ),
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: CustomPaint(
-                          painter: _DonutPainter(
-                            percent: stats.presentPercent,
-                            color: theme.colorScheme.primary,
-                            backgroundColor:
-                                theme.colorScheme.surfaceContainerHighest,
-                          ),
-                          child: Center(
-                            child: Text(
-                              attendancePercentLabel(stats.presentPercent),
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                        child: Center(
+                          child: Text(
+                            attendancePercentLabel(stats.presentPercent),
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _StatChip(
-                            label: t.attendance.presentAbbr,
-                            value: '${stats.presentCount}',
-                            color: theme.colorScheme.primary,
-                            theme: theme,
-                          ),
-                          const SizedBox(width: 8),
-                          _StatChip(
-                            label: t.attendance.absentAbbr,
-                            value: '${stats.absentCount}',
-                            color: theme.colorScheme.error,
-                            theme: theme,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _openDetail(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const WearAttendanceDetailScreen(),
-      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _StatChip(
+                          label: t.attendance.presentAbbr,
+                          value: '${stats.presentCount}',
+                          color: theme.colorScheme.primary,
+                          theme: theme,
+                        ),
+                        const SizedBox(width: 8),
+                        _StatChip(
+                          label: t.attendance.absentAbbr,
+                          value: '${stats.absentCount}',
+                          color: theme.colorScheme.error,
+                          theme: theme,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+        ),
+      ],
     );
   }
 }
