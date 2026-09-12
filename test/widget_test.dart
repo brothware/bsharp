@@ -22,6 +22,9 @@ class _SilentNotificationService extends NotificationService {
 
   @override
   Future<bool> requestPermission() async => true;
+
+  @override
+  Future<NotificationPayload?> getLaunchPayload() async => null;
 }
 
 void main() {

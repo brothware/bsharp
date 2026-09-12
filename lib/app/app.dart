@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
+import 'package:bsharp/app/notification_router.dart';
 import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
@@ -31,6 +32,8 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
   StreamSubscription<RemoteMessage>? _fcmSubscription;
   GoRouter? _router;
   AuthState? _routerAuthState;
+  NotificationRouter? _notificationRouter;
+  NotificationPayload? _pendingNotificationPayload;
 
   @override
   void initState() {
@@ -41,7 +44,8 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
     if (isPushSupported) {
       _fcmSubscription = FirebaseMessaging.onMessage.listen((message) async {
         final spec = parseFcmMessageWithKnownProviders(message);
-        final shouldSync = await NotificationService()
+        final shouldSync = await ref
+            .read(notificationServiceProvider)
             .handleForegroundFcmMessage(spec);
         if (shouldSync && _initialSyncTriggered) {
           await ref.read(syncStatusProvider.notifier).sync();
@@ -51,14 +55,14 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
 
     if (isMobile) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        unawaited(_requestNotificationPermission());
+        unawaited(_setUpNotifications());
       });
 
       ref.listenManual<List<UnexcusedAbsence>>(
         staleUnexcusedAbsencesProvider,
         (prev, next) async {
           if (prev?.length == next.length) return;
-          final service = NotificationService();
+          final service = ref.read(notificationServiceProvider);
           await service.initialize();
           await service.showUnexcusedAbsenceAlert(next.length);
         },
@@ -66,10 +70,31 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
     }
   }
 
-  Future<void> _requestNotificationPermission() async {
+  Future<void> _setUpNotifications() async {
     final service = ref.read(notificationServiceProvider);
-    await service.initialize();
+    _notificationRouter = NotificationRouter(
+      ref: ref,
+      routerProvider: () => _router,
+    );
+    await service.initialize(onTap: _handleNotificationTap);
     await service.requestPermission();
+    final launchPayload = await service.getLaunchPayload();
+    if (launchPayload != null) _handleNotificationTap(launchPayload);
+  }
+
+  void _handleNotificationTap(NotificationPayload payload) {
+    if (_router == null) {
+      _pendingNotificationPayload = payload;
+      return;
+    }
+    _notificationRouter?.handleNotificationTap(payload);
+  }
+
+  void _flushPendingNotificationPayload() {
+    final payload = _pendingNotificationPayload;
+    if (payload == null) return;
+    _pendingNotificationPayload = null;
+    _notificationRouter?.handleNotificationTap(payload);
   }
 
   GoRouter _routerFor(AuthState authState) {
@@ -77,6 +102,9 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
       _router?.dispose();
       _router = createRouter(authState: authState);
       _routerAuthState = authState;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _flushPendingNotificationPayload();
+      });
     }
     return _router!;
   }
