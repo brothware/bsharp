@@ -1,4 +1,5 @@
 import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -314,6 +315,36 @@ void main() {
 
     test('returns false for different dates', () {
       expect(isSameDay(DateTime(2026, 2, 27), DateTime(2026, 2, 28)), isFalse);
+    });
+  });
+
+  group('scheduleChangeLabel', () {
+    test('maps cancelled', () {
+      expect(
+        scheduleChangeLabel(ScheduleChangeType.cancelled),
+        t.schedule.cancelled,
+      );
+    });
+
+    test('maps substitution', () {
+      expect(
+        scheduleChangeLabel(ScheduleChangeType.substitution),
+        t.schedule.substitution,
+      );
+    });
+
+    test('maps roomChanged', () {
+      expect(
+        scheduleChangeLabel(ScheduleChangeType.roomChanged),
+        t.schedule.roomChanged,
+      );
+    });
+
+    test('maps added', () {
+      expect(
+        scheduleChangeLabel(ScheduleChangeType.added),
+        t.schedule.added,
+      );
     });
   });
 }
