@@ -1,6 +1,8 @@
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
@@ -11,6 +13,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
+
+class _FakeCustomEvents extends CustomEvents {
+  _FakeCustomEvents(this._initial);
+
+  final List<CustomEvent> _initial;
+
+  @override
+  List<CustomEvent> build() => _initial;
+}
+
+class _FakeCustomEventOccurrences extends CustomEventOccurrences {
+  _FakeCustomEventOccurrences(this._initial);
+
+  final List<({int customEventId, DateTime date})> _initial;
+
+  @override
+  List<({int customEventId, DateTime date})> build() => _initial;
+}
 
 ResolvedEvent _resolvedEvent({
   int id = 1,
@@ -35,6 +55,8 @@ ResolvedEvent _resolvedEvent({
 Widget _buildScreen({
   required SharedPreferences prefs,
   List<ResolvedEvent> resolvedEvents = const [],
+  List<CustomEvent> customEvents = const [],
+  List<({int customEventId, DateTime date})> customEventOccurrences = const [],
 }) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
@@ -43,6 +65,10 @@ Widget _buildScreen({
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
+      customEventsProvider.overrideWith(() => _FakeCustomEvents(customEvents)),
+      customEventOccurrencesProvider.overrideWith(
+        () => _FakeCustomEventOccurrences(customEventOccurrences),
+      ),
     ],
     child: const MaterialApp(home: WearScheduleDetailScreen()),
   );
@@ -102,5 +128,43 @@ void main() {
       expect(find.byIcon(Icons.chevron_left), findsNothing);
       expect(find.byIcon(Icons.chevron_right), findsNothing);
     });
+
+    testWidgets(
+      'shows a custom event in time order with the lessons, marked apart',
+      (tester) async {
+        final today = DateTime.now();
+        final todayDate = DateTime(today.year, today.month, today.day);
+
+        await tester.pumpWidget(
+          _buildScreen(
+            prefs: prefs,
+            resolvedEvents: [
+              _resolvedEvent(startTime: '09:00:00', endTime: '09:45:00'),
+            ],
+            customEvents: [
+              const CustomEvent(
+                id: 1,
+                accountId: 1,
+                title: 'Piano lesson',
+                startTime: '08:00:00',
+                endTime: '08:30:00',
+              ),
+            ],
+            customEventOccurrences: [
+              (customEventId: 1, date: todayDate),
+            ],
+          ),
+        );
+        await tester.pump();
+
+        expect(find.text('Piano lesson'), findsOneWidget);
+        expect(find.text('08:00 - 08:30'), findsOneWidget);
+        expect(find.byIcon(Icons.event), findsOneWidget);
+
+        final eventTop = tester.getTopLeft(find.text('Piano lesson')).dy;
+        final lessonTop = tester.getTopLeft(find.text('09:00 - 09:45')).dy;
+        expect(eventTop, lessThan(lessonTop));
+      },
+    );
   });
 }
