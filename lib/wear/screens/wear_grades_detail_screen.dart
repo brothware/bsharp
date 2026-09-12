@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:bsharp/app/providers/grades_providers.dart';
+import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -208,24 +212,135 @@ class _WearSubjectSection extends StatelessWidget {
                 g.effectiveValue,
                 brightness: theme.brightness,
               );
-              return Container(
-                constraints: const BoxConstraints(minWidth: 40, minHeight: 28),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(6),
+              return InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: () => pushWearSection(
+                  context,
+                  (_) => WearGradeDetailScreen(
+                    grade: g,
+                    subjectName: sg.subjectName,
+                  ),
                 ),
-                child: Text(
-                  g.displayValue,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.bold,
+                child: Container(
+                  constraints: const BoxConstraints(
+                    minWidth: 40,
+                    minHeight: 28,
+                  ),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(horizontal: 2),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    g.displayValue,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: color,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               );
             }).toList(),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class WearGradeDetailScreen extends StatelessWidget {
+  const WearGradeDetailScreen({
+    required this.grade,
+    required this.subjectName,
+    super.key,
+  });
+
+  final ResolvedGrade grade;
+  final String subjectName;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = gradeColor(
+      grade.effectiveValue,
+      brightness: theme.brightness,
+    );
+    final description = grade.description;
+
+    return ListView(
+      padding: const EdgeInsets.all(8),
+      children: [
+        Center(
+          child: Container(
+            constraints: const BoxConstraints(minWidth: 56, minHeight: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              grade.displayValue,
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: color,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Center(
+          child: Text(
+            subjectName,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        _WearGradeDetailRow(
+          label: t.grades.category,
+          value: translateGradeCategory(grade.categoryName),
+        ),
+        _WearGradeDetailRow(
+          label: t.grades.weight,
+          value: grade.weight.toString(),
+        ),
+        _WearGradeDetailRow(
+          label: t.grades.date,
+          value: formatDateShort(grade.date),
+        ),
+        if (description != null && description.isNotEmpty)
+          _WearGradeDetailRow(
+            label: t.grades.description,
+            value: description,
+          ),
+      ],
+    );
+  }
+}
+
+class _WearGradeDetailRow extends StatelessWidget {
+  const _WearGradeDetailRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          Text(value, style: theme.textTheme.bodySmall),
         ],
       ),
     );
