@@ -19,7 +19,7 @@
 - `flutter test` must pass in full after every commit. Every commit leaves the tree working.
 - Conventional Commits: imperative, no capital first letter, no trailing period, subject MAXIMUM 50 characters, body hard-wrapped at 72.
 - Every commit ends with: `Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>`
-- Never `git commit --no-verify`. This repo has no git hooks.
+- Never `git commit --no-verify`. This repo DOES have a pre-commit hook, wired via `core.hooksPath = .githooks`, which runs `dart format`, `dart analyze --fatal-infos` and tests on staged files. Let it run.
 - **This stage makes no behaviour change.** If a test's expectations need editing, that is a signal you changed behaviour. Stop and report rather than editing the test to match.
 - **Do not touch `lib/wear` in Tasks 1-7.** Wear consumes these in Stage 1, which runs in parallel in another worktree. Task 8 is the only wear-facing task and it is import-only.
 - Generated files (`*.g.dart`, `*.freezed.dart`) are regenerated, never hand-edited: `dart run build_runner build --delete-conflicting-outputs`.
