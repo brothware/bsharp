@@ -10,3 +10,10 @@ int testsWithinDays(List<PortalTest> tests, int days) {
       )
       .length;
 }
+
+bool isDateWithinDays(String date, int days) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final diff = parsePortalDate(date).difference(today).inDays;
+  return diff >= 0 && diff <= days;
+}

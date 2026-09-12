@@ -96,5 +96,61 @@ void main() {
       final listView = tester.widget<ListView>(find.byType(ListView));
       expect(listView.physics, isA<NeverScrollableScrollPhysics>());
     });
+
+    testWidgets('homework due within seven days is highlighted', (
+      tester,
+    ) async {
+      final soon = DateTime.now().add(const Duration(days: 2));
+      final soonDate =
+          '${soon.year}-${soon.month.toString().padLeft(2, '0')}-${soon.day.toString().padLeft(2, '0')}';
+      final later = DateTime.now().add(const Duration(days: 20));
+      final laterDate =
+          '${later.year}-${later.month.toString().padLeft(2, '0')}-${later.day.toString().padLeft(2, '0')}';
+
+      await tester.pumpWidget(
+        _buildTile(
+          homework: [
+            PortalHomework(
+              id: 1,
+              subjectName: 'Mathematics',
+              date: '2025-01-01',
+              dueDate: soonDate,
+              content: 'Due soon',
+            ),
+            PortalHomework(
+              id: 2,
+              subjectName: 'English',
+              date: '2025-01-01',
+              dueDate: laterDate,
+              content: 'Due later',
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+
+      final soonContainer = tester.widget<Container>(
+        find
+            .ancestor(
+              of: find.text('Mathematics'),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      final laterContainer = tester.widget<Container>(
+        find
+            .ancestor(
+              of: find.text('English'),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+
+      final soonDecoration = soonContainer.decoration! as BoxDecoration;
+      final laterDecoration = laterContainer.decoration! as BoxDecoration;
+
+      expect(soonDecoration.color, isNotNull);
+      expect(laterDecoration.color, isNull);
+    });
   });
 }

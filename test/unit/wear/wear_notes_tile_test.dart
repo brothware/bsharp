@@ -2,19 +2,30 @@ import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_notes_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
-Widget _buildTile({List<PortalReprimand> reprimands = const []}) {
+Future<Widget> _buildTile({
+  List<PortalReprimand> reprimands = const [],
+  Set<int> readIds = const {},
+}) async {
+  SharedPreferences.setMockInitialValues({
+    if (readIds.isNotEmpty)
+      'read_note_ids': readIds.map((e) => e.toString()).toList(),
+  });
+  final prefs = await SharedPreferences.getInstance();
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       reprimandsProvider.overrideWithBuild((ref, _) => reprimands),
@@ -36,7 +47,7 @@ Widget _buildTile({List<PortalReprimand> reprimands = const []}) {
 void main() {
   group('WearNotesTile', () {
     testWidgets('shows empty state when no data', (tester) async {
-      await tester.pumpWidget(_buildTile());
+      await tester.pumpWidget(await _buildTile());
       await tester.pump();
 
       expect(find.text('No remarks'), findsOneWidget);
@@ -44,7 +55,7 @@ void main() {
     });
 
     testWidgets('shows header', (tester) async {
-      await tester.pumpWidget(_buildTile());
+      await tester.pumpWidget(await _buildTile());
       await tester.pump();
 
       expect(find.text('Annotations'), findsOneWidget);
@@ -52,7 +63,7 @@ void main() {
 
     testWidgets('shows remark items with warning icon', (tester) async {
       await tester.pumpWidget(
-        _buildTile(
+        await _buildTile(
           reprimands: [
             const PortalReprimand(
               id: 1,
@@ -73,7 +84,7 @@ void main() {
 
     testWidgets('shows praise items with trophy icon', (tester) async {
       await tester.pumpWidget(
-        _buildTile(
+        await _buildTile(
           reprimands: [
             const PortalReprimand(
               id: 1,
@@ -93,7 +104,7 @@ void main() {
 
     testWidgets('uses NeverScrollableScrollPhysics on list', (tester) async {
       await tester.pumpWidget(
-        _buildTile(
+        await _buildTile(
           reprimands: [
             const PortalReprimand(
               id: 1,
@@ -109,6 +120,63 @@ void main() {
 
       final listView = tester.widget<ListView>(find.byType(ListView));
       expect(listView.physics, isA<NeverScrollableScrollPhysics>());
+    });
+
+    testWidgets('shows the summed unread count across all kinds', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        await _buildTile(
+          reprimands: [
+            const PortalReprimand(
+              id: 1,
+              date: '2025-01-15',
+              teacherName: 'T',
+              content: 'Remark',
+              type: 2,
+            ),
+            const PortalReprimand(
+              id: 2,
+              date: '2025-01-15',
+              teacherName: 'T',
+              content: 'Praise',
+              type: 1,
+            ),
+            const PortalReprimand(
+              id: 3,
+              date: '2025-01-15',
+              teacherName: 'T',
+              content: 'Info',
+              type: 0,
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('3'), findsOneWidget);
+    });
+
+    testWidgets('hides the unread badge when everything is read', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        await _buildTile(
+          reprimands: [
+            const PortalReprimand(
+              id: 1,
+              date: '2025-01-15',
+              teacherName: 'T',
+              content: 'Remark',
+              type: 2,
+            ),
+          ],
+          readIds: {1},
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('1'), findsNothing);
     });
   });
 }

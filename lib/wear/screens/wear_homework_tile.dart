@@ -1,9 +1,12 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/wear_summary_utils.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+const _dueSoonWindowDays = 7;
 
 class WearHomeworkTile extends ConsumerWidget {
   const WearHomeworkTile({super.key});
@@ -50,6 +53,10 @@ class WearHomeworkTile extends ConsumerWidget {
                   hw.subjectName,
                   brightness: theme.brightness,
                 );
+                final isDueSoon = isDateWithinDays(
+                  hw.dueDate,
+                  _dueSoonWindowDays,
+                );
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 3),
                   padding: const EdgeInsets.symmetric(
@@ -58,6 +65,11 @@ class WearHomeworkTile extends ConsumerWidget {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
+                    color: isDueSoon
+                        ? theme.colorScheme.primaryContainer.withValues(
+                            alpha: 0.2,
+                          )
+                        : null,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
