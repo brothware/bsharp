@@ -1,6 +1,8 @@
 import 'package:bsharp/app/auth_provider.dart';
-import 'package:bsharp/app/router.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +11,24 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
-Widget _buildApp({List<Object> extraOverrides = const []}) {
+class _RejectingDataProvider extends DemoDataProvider {
+  @override
+  Future<Result<String?>> validateCredentials({
+    required String school,
+    required String login,
+    required String passwordHash,
+  }) async => const Result.failure(InvalidCredentials());
+}
+
+Widget _buildApp({
+  List<Object> extraOverrides = const [],
+  WearScreenShape shape = WearScreenShape.rectangular,
+}) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => shape),
       ...extraOverrides.cast(),
     ],
     child: const MaterialApp(home: WearSetupScreen()),
@@ -22,74 +36,105 @@ Widget _buildApp({List<Object> extraOverrides = const []}) {
 }
 
 void main() {
-  group('WearSetupScreen', () {
-    testWidgets('renders credential fields when unauthenticated', (
-      tester,
-    ) async {
-      await tester.pumpWidget(_buildApp());
-      await tester.pump();
+  for (final shape in WearScreenShape.values) {
+    group('WearSetupScreen (${shape.name})', () {
+      testWidgets('the school step shows exactly one input', (tester) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
 
-      expect(find.byIcon(Icons.school), findsOneWidget);
-      expect(find.byType(TextField), findsNWidgets(3));
-      expect(find.byType(FilledButton), findsOneWidget);
-    });
+        expect(find.byType(TextField), findsOneWidget);
+        expect(find.text('School'), findsWidgets);
+      });
 
-    testWidgets('shows error when fields are empty and login tapped', (
-      tester,
-    ) async {
-      await tester.pumpWidget(_buildApp());
-      await tester.pump();
+      testWidgets(
+        'advancing from school to username carries the school value',
+        (tester) async {
+          await tester.pumpWidget(_buildApp(shape: shape));
+          await tester.pump();
 
-      await tester.tap(find.byType(FilledButton));
-      await tester.pump();
+          await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+          await tester.tap(find.byType(FilledButton));
+          await tester.pump();
 
-      expect(find.text('Fill in all fields'), findsOneWidget);
-    });
+          expect(find.byType(TextField), findsOneWidget);
+          expect(find.text('Username'), findsWidgets);
 
-    testWidgets('shows error when only some fields filled', (tester) async {
-      await tester.pumpWidget(_buildApp());
-      await tester.pump();
+          await tester.tap(find.byIcon(Icons.arrow_back));
+          await tester.pump();
 
-      await tester.enterText(find.byType(TextField).first, 'school1');
-      await tester.tap(find.byType(FilledButton));
-      await tester.pump();
-
-      expect(find.text('Fill in all fields'), findsOneWidget);
-    });
-
-    testWidgets('unauthenticated state shows credential fields', (
-      tester,
-    ) async {
-      final fakeSecure = FakeKeyValueStore();
-      final storage = CredentialStorage(store: fakeSecure);
-
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            credentialStorageProvider.overrideWithValue(storage),
-            wearScreenShapeProvider.overrideWith(
-              (_) => WearScreenShape.rectangular,
-            ),
-            authStateProvider.overrideWith(
-              () => _FakeAuthNotifier(AuthState.unauthenticated),
-            ),
-          ],
-          child: const MaterialApp(home: WearSetupScreen()),
-        ),
+          expect(find.text('osm-wroclaw'), findsOneWidget);
+        },
       );
-      await tester.pump();
 
-      expect(find.byIcon(Icons.school), findsOneWidget);
-      expect(find.byType(TextField), findsNWidgets(3));
+      testWidgets('an empty field shows the fill-in-fields error', (
+        tester,
+      ) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        await tester.tap(find.byType(FilledButton));
+        await tester.pump();
+
+        expect(find.text('Fill in all fields'), findsOneWidget);
+        expect(find.byType(TextField), findsOneWidget);
+      });
+
+      testWidgets('back from username returns to school without loss', (
+        tester,
+      ) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), 'my-school');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), 'my-login');
+        await tester.tap(find.byIcon(Icons.arrow_back));
+        await tester.pump();
+
+        expect(find.text('my-school'), findsOneWidget);
+      });
+
+      testWidgets('the primary action is visible and at least 48dp', (
+        tester,
+      ) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        final size = tester.getSize(find.byType(FilledButton));
+        expect(size.height, greaterThanOrEqualTo(48));
+      });
+
+      testWidgets('a login failure renders the mapped credentials message', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          _buildApp(
+            shape: shape,
+            extraOverrides: [
+              activeDataProviderProvider.overrideWithBuild(
+                (ref, _) => _RejectingDataProvider(),
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), 'baduser');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), 'badpass');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Invalid credentials'), findsOneWidget);
+      });
     });
-  });
-}
-
-class _FakeAuthNotifier extends AuthNotifier {
-  _FakeAuthNotifier(this._initial);
-
-  final AuthState _initial;
-
-  @override
-  Future<AuthState> build() async => _initial;
+  }
 }
