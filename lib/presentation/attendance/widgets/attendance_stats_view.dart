@@ -1,11 +1,11 @@
+import 'package:bsharp/app/providers/attendance_providers.dart';
+import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/core/constants/semantic_color.dart';
 import 'package:bsharp/core/constants/semantic_palette.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

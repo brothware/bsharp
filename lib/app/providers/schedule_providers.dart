@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:bsharp/app/locale_provider.dart';
+import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
-import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

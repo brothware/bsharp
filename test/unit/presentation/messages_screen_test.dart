@@ -1,5 +1,5 @@
+import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
 import 'package:bsharp/presentation/messages/screens/messages_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

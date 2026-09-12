@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/domain/custom_event_utils.dart';
 import 'package:bsharp/domain/entities/custom_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

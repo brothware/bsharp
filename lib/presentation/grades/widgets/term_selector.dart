@@ -1,5 +1,5 @@
+import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/domain/translation_utils.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,16 +1,16 @@
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/providers/attendance_providers.dart';
+import 'package:bsharp/app/providers/custom_event_providers.dart';
+import 'package:bsharp/app/providers/grades_providers.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/data/services/sync_data_applier.dart';
 import 'package:bsharp/data/services/sync_snapshot.dart';
 import 'package:bsharp/domain/change_detection.dart';
-import 'package:bsharp/presentation/attendance/providers/attendance_providers.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
-import 'package:bsharp/presentation/messages/providers/messages_providers.dart';
-import 'package:bsharp/presentation/schedule/providers/custom_event_providers.dart';
-import 'package:bsharp/presentation/schedule/providers/schedule_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

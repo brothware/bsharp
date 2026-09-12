@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/grades/providers/grades_providers.dart';
 import 'package:bsharp/presentation/grades/widgets/grade_chip.dart';
 import 'package:bsharp/presentation/grades/widgets/grade_detail_sheet.dart';
 import 'package:bsharp/presentation/grades/widgets/term_selector.dart';
