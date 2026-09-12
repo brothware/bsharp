@@ -59,6 +59,35 @@ void main() {
       expect(find.text('2025-06-15'), findsOneWidget);
     });
 
+    testWidgets('title scrolls out of view with the content', (tester) async {
+      await tester.pumpWidget(
+        _buildScreen(
+          bulletin: PortalBulletin(
+            id: 1,
+            title: 'Important Announcement',
+            content: List.filled(1000, 'Long bulletin line.').join(' '),
+            date: '2025-06-15',
+            author: 'School Director',
+            isRead: true,
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('Important Announcement'), findsOneWidget);
+
+      await tester.drag(
+        find.byType(ListView).first,
+        const Offset(0, -2000),
+      );
+      await tester.pump();
+
+      expect(
+        find.text('Important Announcement').hitTestable(),
+        findsNothing,
+      );
+    });
+
     testWidgets('shows content text', (tester) async {
       await tester.pumpWidget(
         _buildScreen(

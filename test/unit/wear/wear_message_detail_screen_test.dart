@@ -77,6 +77,31 @@ void main() {
       expect(find.text('Hello world'), findsOneWidget);
     });
 
+    testWidgets('sender scrolls out of view with the content', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _buildScreen(
+          message: _msg(
+            sender: 'Anna Nowak',
+            content: List.filled(1000, 'Long message line.').join(' '),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.text('Anna Nowak'), findsOneWidget);
+
+      await tester.drag(
+        find.byType(ListView).first,
+        const Offset(0, -2000),
+      );
+      await tester.pump();
+
+      expect(find.text('Anna Nowak').hitTestable(), findsNothing);
+    });
+
     testWidgets('shows attachment count when files present', (tester) async {
       await tester.pumpWidget(
         _buildScreen(
