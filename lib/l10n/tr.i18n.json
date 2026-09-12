@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} yeni",
     "viewAll": "Tümünü gör"
   },
+  "wearDashboard": {
+    "now": "ŞİMDİ",
+    "next": "SONRAKİ",
+    "tomorrow": "YARIN",
+    "noLessons": "DERS YOK",
+    "noData": "VERİ YOK",
+    "endsIn": "${n} dakika içinde bitiyor",
+    "startsIn": "${n} dakika içinde başlıyor",
+    "syncPrompt": "Programını görmek için senkronize et",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Ders Programı",
     "today": "Bugün",

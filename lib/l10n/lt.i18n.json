@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nauji",
     "viewAll": "Žiūrėti viską"
   },
+  "wearDashboard": {
+    "now": "DABAR",
+    "next": "KITA",
+    "tomorrow": "RYTOJ",
+    "noLessons": "NĖRA PAMOKŲ",
+    "noData": "NĖRA DUOMENŲ",
+    "endsIn": "Baigiasi po ${n} min",
+    "startsIn": "Prasideda po ${n} min",
+    "syncPrompt": "Sinchronizuokite, kad pamatytumėte tvarkaraštį",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Tvarkaraštis",
     "today": "Šiandien",

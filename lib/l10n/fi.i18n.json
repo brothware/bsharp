@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} uutta",
     "viewAll": "Näytä kaikki"
   },
+  "wearDashboard": {
+    "now": "NYT",
+    "next": "SEURAAVA",
+    "tomorrow": "HUOMENNA",
+    "noLessons": "EI OPPITUNTEJA",
+    "noData": "EI TIETOJA",
+    "endsIn": "Päättyy ${n} min kuluttua",
+    "startsIn": "Alkaa ${n} min kuluttua",
+    "syncPrompt": "Synkronoi nähdäksesi lukujärjestyksen",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Lukujärjestys",
     "today": "Tänään",

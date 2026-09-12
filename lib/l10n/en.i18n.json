@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} new",
     "viewAll": "View all"
   },
+  "wearDashboard": {
+    "now": "NOW",
+    "next": "NEXT",
+    "tomorrow": "TOMORROW",
+    "noLessons": "NO LESSONS",
+    "noData": "NO DATA",
+    "endsIn": "Ends in ${n} min",
+    "startsIn": "Starts in ${n} min",
+    "syncPrompt": "Sync to see your schedule",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Schedule",
     "today": "Today",

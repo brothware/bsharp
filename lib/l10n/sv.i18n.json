@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nya",
     "viewAll": "Visa alla"
   },
+  "wearDashboard": {
+    "now": "NU",
+    "next": "NÄSTA",
+    "tomorrow": "IMORGON",
+    "noLessons": "INGA LEKTIONER",
+    "noData": "INGEN DATA",
+    "endsIn": "Slutar om ${n} min",
+    "startsIn": "Börjar om ${n} min",
+    "syncPrompt": "Synkronisera för att se ditt schema",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Schema",
     "today": "Idag",

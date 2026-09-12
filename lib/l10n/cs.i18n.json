@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nových",
     "viewAll": "Zobrazit vše"
   },
+  "wearDashboard": {
+    "now": "TEĎ",
+    "next": "DALŠÍ",
+    "tomorrow": "ZÍTRA",
+    "noLessons": "ŽÁDNÉ HODINY",
+    "noData": "ŽÁDNÁ DATA",
+    "endsIn": "Končí za ${n} min",
+    "startsIn": "Začíná za ${n} min",
+    "syncPrompt": "Synchronizujte a zobrazte rozvrh",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Rozvrh",
     "today": "Dnes",

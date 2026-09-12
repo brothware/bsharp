@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} νέες",
     "viewAll": "Προβολή όλων"
   },
+  "wearDashboard": {
+    "now": "ΤΩΡΑ",
+    "next": "ΕΠΟΜΕΝΟ",
+    "tomorrow": "ΑΥΡΙΟ",
+    "noLessons": "ΧΩΡΙΣ ΜΑΘΗΜΑΤΑ",
+    "noData": "ΧΩΡΙΣ ΔΕΔΟΜΕΝΑ",
+    "endsIn": "Λήγει σε ${n} λεπτά",
+    "startsIn": "Ξεκινά σε ${n} λεπτά",
+    "syncPrompt": "Συγχρονίστε για να δείτε το πρόγραμμα",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Πρόγραμμα",
     "today": "Σήμερα",

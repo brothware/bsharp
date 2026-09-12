@@ -49,8 +49,8 @@ DateTime minuteTick(Ref ref) {
   ScheduleEntry? next;
 
   for (final entry in lessons) {
-    final start = _parseTimeMinutes(entry.startTime);
-    final end = _parseTimeMinutes(entry.endTime);
+    final start = parseTimeMinutes(entry.startTime);
+    final end = parseTimeMinutes(entry.endTime);
     if (start == null || end == null) continue;
     if (entry.isCancelled) continue;
 
@@ -63,7 +63,7 @@ DateTime minuteTick(Ref ref) {
 
   final lastEnd = lessons
       .where((e) => !e.isCancelled)
-      .map((e) => _parseTimeMinutes(e.endTime))
+      .map((e) => parseTimeMinutes(e.endTime))
       .whereType<int>()
       .fold<int>(0, (a, b) => a > b ? a : b);
 
@@ -71,6 +71,24 @@ DateTime minuteTick(Ref ref) {
       current == null && next == null && lastEnd > 0 && nowMinutes >= lastEnd;
 
   return (current: current, next: next, allEnded: allEnded);
+}
+
+const _nextSchoolDayScanLimit = 60;
+
+@Riverpod(keepAlive: true)
+DateTime? nextSchoolDay(Ref ref) {
+  final now = DateTime.now();
+  var day = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
+
+  for (var i = 0; i < _nextSchoolDayScanLimit; i++) {
+    final entries = ref.watch(scheduleEntriesForDateProvider(day));
+    if (entries.any((e) => !e.isCancelled)) {
+      return day;
+    }
+    day = day.add(const Duration(days: 1));
+  }
+
+  return null;
 }
 
 @Riverpod(keepAlive: true)
@@ -97,7 +115,7 @@ List<PocztaMessage> latestUnreadMessages(Ref ref) {
   return unread.take(3).toList();
 }
 
-int? _parseTimeMinutes(String time) {
+int? parseTimeMinutes(String time) {
   final parts = time.split(':');
   if (parts.length < 2) return null;
   final h = int.tryParse(parts[0]);

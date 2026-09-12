@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} neu",
     "viewAll": "Alle anzeigen"
   },
+  "wearDashboard": {
+    "now": "JETZT",
+    "next": "NÄCHSTE",
+    "tomorrow": "MORGEN",
+    "noLessons": "KEIN UNTERRICHT",
+    "noData": "KEINE DATEN",
+    "endsIn": "Endet in ${n} Min",
+    "startsIn": "Beginnt in ${n} Min",
+    "syncPrompt": "Synchronisieren, um den Stundenplan zu sehen",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Stundenplan",
     "today": "Heute",

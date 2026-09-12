@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} noi",
     "viewAll": "Vezi tot"
   },
+  "wearDashboard": {
+    "now": "ACUM",
+    "next": "URMĂTOAREA",
+    "tomorrow": "MÂINE",
+    "noLessons": "FĂRĂ ORE",
+    "noData": "FĂRĂ DATE",
+    "endsIn": "Se termină în ${n} min",
+    "startsIn": "Începe în ${n} min",
+    "syncPrompt": "Sincronizează pentru a vedea orarul",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Orar",
     "today": "Astăzi",

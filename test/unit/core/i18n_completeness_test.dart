@@ -134,6 +134,7 @@ void main() {
       'gradeCategories.recytacja',
       'gradeCategories.pracaDomowa',
       'support.buyMeACoffee',
+      'wearDashboard.moreBadge',
     };
 
     final untranslated = <String, List<String>>{};

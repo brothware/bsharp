@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} новых",
     "viewAll": "Прагледзець усё"
   },
+  "wearDashboard": {
+    "now": "ЦЯПЕР",
+    "next": "НАСТУПНЫ",
+    "tomorrow": "ЗАЎТРА",
+    "noLessons": "НЯМА ЎРОКАЎ",
+    "noData": "НЯМА ДАДЗЕНЫХ",
+    "endsIn": "Заканчваецца праз ${n} хв",
+    "startsIn": "Пачынаецца праз ${n} хв",
+    "syncPrompt": "Сінхранізуйце, каб убачыць расклад",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Расклад",
     "today": "Сёння",

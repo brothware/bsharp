@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} नई",
     "viewAll": "सभी देखें"
   },
+  "wearDashboard": {
+    "now": "अभी",
+    "next": "अगला",
+    "tomorrow": "कल",
+    "noLessons": "कोई कक्षा नहीं",
+    "noData": "कोई डेटा नहीं",
+    "endsIn": "${n} मिनट में समाप्त",
+    "startsIn": "${n} मिनट में शुरू",
+    "syncPrompt": "अपना शेड्यूल देखने के लिए सिंक करें",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "समय-सारणी",
     "today": "आज",

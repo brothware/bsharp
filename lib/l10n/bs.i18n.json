@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} novih",
     "viewAll": "Prikaži sve"
   },
+  "wearDashboard": {
+    "now": "SADA",
+    "next": "SLJEDEĆI",
+    "tomorrow": "SUTRA",
+    "noLessons": "NEMA ČASOVA",
+    "noData": "NEMA PODATAKA",
+    "endsIn": "Završava za ${n} min",
+    "startsIn": "Počinje za ${n} min",
+    "syncPrompt": "Sinhronizirajte da vidite raspored",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Raspored",
     "today": "Danas",

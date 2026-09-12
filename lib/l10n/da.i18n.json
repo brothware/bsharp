@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nye",
     "viewAll": "Vis alle"
   },
+  "wearDashboard": {
+    "now": "NU",
+    "next": "NÆSTE",
+    "tomorrow": "I MORGEN",
+    "noLessons": "INGEN TIMER",
+    "noData": "INGEN DATA",
+    "endsIn": "Slutter om ${n} min",
+    "startsIn": "Starter om ${n} min",
+    "syncPrompt": "Synkroniser for at se dit skema",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Skema",
     "today": "I dag",

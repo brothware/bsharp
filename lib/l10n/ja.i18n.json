@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} 件の新着",
     "viewAll": "すべて表示"
   },
+  "wearDashboard": {
+    "now": "現在",
+    "next": "次の授業",
+    "tomorrow": "明日",
+    "noLessons": "授業なし",
+    "noData": "データなし",
+    "endsIn": "あと${n}分で終了",
+    "startsIn": "あと${n}分で開始",
+    "syncPrompt": "同期して時間割を確認",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "時間割",
     "today": "今日",

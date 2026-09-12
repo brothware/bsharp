@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nieuw",
     "viewAll": "Alles bekijken"
   },
+  "wearDashboard": {
+    "now": "NU",
+    "next": "VOLGENDE",
+    "tomorrow": "MORGEN",
+    "noLessons": "GEEN LES",
+    "noData": "GEEN GEGEVENS",
+    "endsIn": "Eindigt over ${n} min",
+    "startsIn": "Begint over ${n} min",
+    "syncPrompt": "Synchroniseer om je rooster te zien",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Rooster",
     "today": "Vandaag",

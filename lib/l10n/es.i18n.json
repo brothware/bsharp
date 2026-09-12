@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nuevas",
     "viewAll": "Ver todo"
   },
+  "wearDashboard": {
+    "now": "AHORA",
+    "next": "SIGUIENTE",
+    "tomorrow": "MAÑANA",
+    "noLessons": "SIN CLASES",
+    "noData": "SIN DATOS",
+    "endsIn": "Termina en ${n} min",
+    "startsIn": "Empieza en ${n} min",
+    "syncPrompt": "Sincroniza para ver tu horario",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Horario",
     "today": "Hoy",

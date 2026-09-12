@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} нових",
     "viewAll": "Переглянути все"
   },
+  "wearDashboard": {
+    "now": "ЗАРАЗ",
+    "next": "НАСТУПНИЙ",
+    "tomorrow": "ЗАВТРА",
+    "noLessons": "НЕМАЄ УРОКІВ",
+    "noData": "НЕМАЄ ДАНИХ",
+    "endsIn": "Закінчується через ${n} хв",
+    "startsIn": "Починається через ${n} хв",
+    "syncPrompt": "Синхронізуйте, щоб побачити розклад",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Розклад",
     "today": "Сьогодні",

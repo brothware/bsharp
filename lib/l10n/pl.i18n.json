@@ -95,6 +95,17 @@
     "newAnnotationsCount": "${count} nowych",
     "viewAll": "Zobacz wszystko"
   },
+  "wearDashboard": {
+    "now": "TERAZ",
+    "next": "NASTĘPNA",
+    "tomorrow": "JUTRO",
+    "noLessons": "BRAK LEKCJI",
+    "noData": "BRAK DANYCH",
+    "endsIn": "Koniec za ${n} min",
+    "startsIn": "Start za ${n} min",
+    "syncPrompt": "Zsynchronizuj, aby zobaczyć plan",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "Plan lekcji",
     "today": "Dziś",

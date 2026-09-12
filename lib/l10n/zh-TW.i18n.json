@@ -95,6 +95,17 @@
     "newAnnotationsCount": "新增 ${count} 則",
     "viewAll": "檢視全部"
   },
+  "wearDashboard": {
+    "now": "現在",
+    "next": "下一節",
+    "tomorrow": "明天",
+    "noLessons": "無課程",
+    "noData": "無資料",
+    "endsIn": "${n}分鐘後結束",
+    "startsIn": "${n}分鐘後開始",
+    "syncPrompt": "同步以查看課程表",
+    "moreBadge": "+${n}"
+  },
   "schedule": {
     "title": "課表",
     "today": "今天",
