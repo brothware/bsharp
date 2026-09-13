@@ -14,7 +14,7 @@ void main() {
       expect(prefs.getString(ThemeModeNotifier.preferenceKey), 'dark');
     });
 
-    test('an explicitly stored system choice is still honoured', () async {
+    test('a watch left on system moves to dark', () async {
       SharedPreferences.setMockInitialValues({
         ThemeModeNotifier.preferenceKey: 'system',
       });
@@ -22,7 +22,24 @@ void main() {
 
       await seedDefaultWearThemeMode(prefs);
 
-      expect(prefs.getString(ThemeModeNotifier.preferenceKey), 'system');
+      expect(
+        prefs.getString(ThemeModeNotifier.preferenceKey),
+        'dark',
+        reason:
+            'the watch no longer offers system, and leaving it stored would '
+            'resolve to a white screen with no row to change it from',
+      );
+    });
+
+    test('an explicitly stored dark choice is still honoured', () async {
+      SharedPreferences.setMockInitialValues({
+        ThemeModeNotifier.preferenceKey: 'dark',
+      });
+      final prefs = await SharedPreferences.getInstance();
+
+      await seedDefaultWearThemeMode(prefs);
+
+      expect(prefs.getString(ThemeModeNotifier.preferenceKey), 'dark');
     });
 
     test('an explicitly stored light choice is still honoured', () async {
