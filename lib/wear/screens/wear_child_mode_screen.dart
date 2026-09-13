@@ -7,6 +7,7 @@ import 'package:bsharp/wear/screens/wear_pin_setup_screen.dart';
 import 'package:bsharp/wear/widgets/wear_confirmation.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
+import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
@@ -38,18 +39,7 @@ class _WearChildModeScreenState extends ConsumerState<WearChildModeScreen> {
         child: WearScaffold(
           child: Column(
             children: [
-              Icon(
-                Icons.child_care,
-                size: 20,
-                color: theme.colorScheme.primary,
-              ),
-              const SizedBox(height: 2),
-              Text(
-                t.childMode.title,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              WearTileHeader(icon: Icons.child_care, title: t.childMode.title),
               const SizedBox(height: 4),
               Expanded(
                 child: WearOsScrollbar(
