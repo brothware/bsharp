@@ -162,12 +162,17 @@ void main() {
       await tester.tap(find.byIcon(Icons.brightness_6));
       await tester.pumpAndSettle();
 
-      expect(find.text('System'), findsOneWidget);
       expect(find.text('Light'), findsOneWidget);
       expect(find.text('Dark'), findsOneWidget);
-      expect(find.byIcon(Icons.brightness_auto), findsOneWidget);
       expect(find.byIcon(Icons.light_mode), findsOneWidget);
       expect(find.byIcon(Icons.dark_mode), findsOneWidget);
+      expect(
+        find.text('System'),
+        findsNothing,
+        reason:
+            'a watch reports night mode off and offers no light/dark switch, '
+            'so system just means a white screen the user did not ask for',
+      );
     });
 
     testWidgets('selecting a theme mode pops the selection screen', (
@@ -182,7 +187,6 @@ void main() {
       await tester.tap(find.text('Dark'));
       await tester.pumpAndSettle();
 
-      expect(find.text('System'), findsNothing);
       expect(find.byIcon(Icons.settings), findsOneWidget);
     });
 
@@ -252,24 +256,23 @@ void main() {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
-      expect(find.text(themeModeLabel(ThemeMode.system)), findsOneWidget);
-
       final container = ProviderScope.containerOf(
         tester.element(find.byType(WearSettingsTile)),
       );
-      await container
-          .read(themeModeProvider.notifier)
-          .setThemeMode(ThemeMode.dark);
-      await tester.pump();
 
-      expect(
-        find.text(themeModeLabel(ThemeMode.dark)),
-        findsOneWidget,
-        reason:
-            'choosing a mode whose look matches the current one is '
-            'indistinguishable from a dead control unless the row says '
-            'which mode is in force',
-      );
+      for (final mode in wearThemeModes) {
+        await container.read(themeModeProvider.notifier).setThemeMode(mode);
+        await tester.pump();
+
+        expect(
+          find.text(themeModeLabel(mode)),
+          findsOneWidget,
+          reason:
+              'choosing a mode whose look matches the current one is '
+              'indistinguishable from a dead control unless the row says '
+              'which mode is in force',
+        );
+      }
     });
   });
 }

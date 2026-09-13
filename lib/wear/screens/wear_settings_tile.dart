@@ -170,7 +170,7 @@ class _WearThemeScreenState extends ConsumerState<_WearThemeScreen> {
         child: ListView(
           controller: _scrollController,
           children: [
-            for (final mode in ThemeMode.values)
+            for (final mode in wearThemeModes)
               InkWell(
                 borderRadius: BorderRadius.circular(8),
                 onTap: () {

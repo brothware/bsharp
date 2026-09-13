@@ -8,7 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> seedDefaultWearThemeMode(SharedPreferences prefs) async {
-  if (prefs.getString(ThemeModeNotifier.preferenceKey) == null) {
+  final stored = prefs.getString(ThemeModeNotifier.preferenceKey);
+  if (stored == null || stored == 'system') {
     await prefs.setString(ThemeModeNotifier.preferenceKey, 'dark');
   }
 }
