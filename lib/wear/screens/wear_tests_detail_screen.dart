@@ -60,67 +60,60 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
                       )
                     : WearOsScrollbar(
                         controller: _scrollController,
-                        child: Scrollbar(
+                        child: ListView.builder(
                           controller: _scrollController,
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            itemCount: sorted.length,
-                            itemBuilder: (context, index) {
-                              final test = sorted[index];
-                              final isUpcoming = upcomingIds.contains(test.id);
-                              return Container(
-                                margin: const EdgeInsets.symmetric(vertical: 2),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: isUpcoming
-                                      ? theme.colorScheme.primaryContainer
-                                            .withValues(alpha: 0.2)
-                                      : null,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          itemCount: sorted.length,
+                          itemBuilder: (context, index) {
+                            final test = sorted[index];
+                            final isUpcoming = upcomingIds.contains(test.id);
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: isUpcoming
+                                    ? theme.colorScheme.primaryContainer
+                                          .withValues(alpha: 0.2)
+                                    : null,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    test.subjectName,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    test.date,
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                  if (test.title != null)
                                     Text(
-                                      test.subjectName,
+                                      test.title!,
                                       style: theme.textTheme.bodySmall
                                           ?.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
+                                  if (test.description != null)
                                     Text(
-                                      test.date,
-                                      style: theme.textTheme.labelSmall
-                                          ?.copyWith(
-                                            color: theme
-                                                .colorScheme
-                                                .onSurfaceVariant,
-                                          ),
+                                      test.description!,
+                                      style: theme.textTheme.labelSmall,
                                     ),
-                                    if (test.title != null)
-                                      Text(
-                                        test.title!,
-                                        style: theme.textTheme.bodySmall
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    if (test.description != null)
-                                      Text(
-                                        test.description!,
-                                        style: theme.textTheme.labelSmall,
-                                      ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ),
               ),

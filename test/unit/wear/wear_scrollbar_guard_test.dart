@@ -30,4 +30,24 @@ void main() {
       );
     },
   );
+
+  test('no wear screen draws a second Material scrollbar', () {
+    final offenders = <String>[];
+    for (final dir in ['lib/wear/screens', 'lib/wear/widgets']) {
+      for (final entity in Directory(dir).listSync()) {
+        if (entity is! File || !entity.path.endsWith('.dart')) continue;
+        final source = entity.readAsStringSync();
+        if (RegExp(r'(?<!WearOs)\bScrollbar\(').hasMatch(source)) {
+          offenders.add(entity.path);
+        }
+      }
+    }
+    expect(
+      offenders,
+      isEmpty,
+      reason:
+          'WearOsScrollbar already draws the curved indicator, so a Material '
+          'Scrollbar renders a second one beside it: $offenders',
+    );
+  });
 }

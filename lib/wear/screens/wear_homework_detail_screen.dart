@@ -56,62 +56,52 @@ class _WearHomeworkDetailScreenState
                       )
                     : WearOsScrollbar(
                         controller: _scrollController,
-                        child: Scrollbar(
+                        child: ListView.builder(
                           controller: _scrollController,
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            itemCount: homework.length,
-                            itemBuilder: (context, index) {
-                              final hw = homework[index];
-                              return Container(
-                                margin: const EdgeInsets.symmetric(vertical: 2),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      hw.subjectName,
-                                      style: theme.textTheme.bodySmall
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                      overflow: TextOverflow.ellipsis,
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          itemCount: homework.length,
+                          itemBuilder: (context, index) {
+                            final hw = homework[index];
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    hw.subjectName,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    Text(
-                                      t.homework.dueDate(date: hw.dueDate),
-                                      style: theme.textTheme.labelSmall
-                                          ?.copyWith(
-                                            color: theme
-                                                .colorScheme
-                                                .onSurfaceVariant,
-                                          ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    t.homework.dueDate(date: hw.dueDate),
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
                                     ),
-                                    Text(
-                                      t.homework.assignedDate(date: hw.date),
-                                      style: theme.textTheme.labelSmall
-                                          ?.copyWith(
-                                            color: theme
-                                                .colorScheme
-                                                .onSurfaceVariant,
-                                          ),
+                                  ),
+                                  Text(
+                                    t.homework.assignedDate(date: hw.date),
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
                                     ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      hw.content,
-                                      style: theme.textTheme.labelSmall,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    hw.content,
+                                    style: theme.textTheme.labelSmall,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ),
               ),

@@ -68,29 +68,26 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
                       )
                     : WearOsScrollbar(
                         controller: _scrollController,
-                        child: Scrollbar(
+                        child: ListView.builder(
                           controller: _scrollController,
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            itemCount: items.length,
-                            itemBuilder: (context, index) {
-                              final item = items[index];
-                              return _WearNoteDetailItem(
-                                item: item,
-                                translatedContent: _translations[item.id],
-                                onTranslated: (translated) {
-                                  setState(() {
-                                    if (translated != null) {
-                                      _translations[item.id] = translated;
-                                    } else {
-                                      _translations.remove(item.id);
-                                    }
-                                  });
-                                },
-                              );
-                            },
-                          ),
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            final item = items[index];
+                            return _WearNoteDetailItem(
+                              item: item,
+                              translatedContent: _translations[item.id],
+                              onTranslated: (translated) {
+                                setState(() {
+                                  if (translated != null) {
+                                    _translations[item.id] = translated;
+                                  } else {
+                                    _translations.remove(item.id);
+                                  }
+                                });
+                              },
+                            );
+                          },
                         ),
                       ),
               ),

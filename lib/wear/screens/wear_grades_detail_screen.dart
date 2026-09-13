@@ -87,15 +87,12 @@ class _WearGradesDetailScreenState
                       )
                     : WearOsScrollbar(
                         controller: _scrollController,
-                        child: Scrollbar(
+                        child: ListView.builder(
                           controller: _scrollController,
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            itemCount: subjectGrades.length,
-                            itemBuilder: (context, index) =>
-                                _WearSubjectSection(sg: subjectGrades[index]),
-                          ),
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          itemCount: subjectGrades.length,
+                          itemBuilder: (context, index) =>
+                              _WearSubjectSection(sg: subjectGrades[index]),
                         ),
                       ),
               ),
