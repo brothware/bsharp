@@ -33,11 +33,11 @@ class WearLauncherRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Container(
           constraints: const BoxConstraints(minHeight: 48),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Row(
             children: [
               Icon(icon, size: 20, color: theme.colorScheme.primary),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

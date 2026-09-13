@@ -147,8 +147,8 @@ class _WearAttendanceSummary extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: 40,
-            height: 40,
+            width: 52,
+            height: 52,
             child: CustomPaint(
               key: const Key('attendanceDonut'),
               painter: _DonutPainter(
