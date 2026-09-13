@@ -17,6 +17,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 const _wearDarkSurface = Color(0xFF000000);
 const _wearLightSurface = Color(0xFFFAFAFA);
 
+class WearScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    return child;
+  }
+}
+
 ThemeData wearTheme(ThemeData base) {
   final wearText = base.textTheme.copyWith(
     displaySmall: base.textTheme.displaySmall?.copyWith(fontSize: 22),
@@ -111,6 +122,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
       navigatorKey: BSharpWearApp.navigatorKey,
       title: 'BSharp',
       debugShowCheckedModeBanner: false,
+      scrollBehavior: WearScrollBehavior(),
       theme: wearTheme(AppTheme.light()),
       darkTheme: wearTheme(AppTheme.dark()),
       themeMode: themeMode,
