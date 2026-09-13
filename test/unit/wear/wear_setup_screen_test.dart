@@ -135,6 +135,39 @@ void main() {
 
         expect(find.text('Invalid credentials'), findsOneWidget);
       });
+
+      testWidgets('the step title stays on one line', (tester) async {
+        tester.view.physicalSize = const Size(454, 454);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.reset);
+
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await tester.tap(find.text('Next'));
+        await tester.pumpAndSettle();
+
+        final title = tester.widget<Text>(find.text('Username').first);
+        expect(title.maxLines, 1);
+
+        final painted = tester.renderObject<RenderBox>(
+          find.text('Username').first,
+        );
+        expect(
+          painted.size.height,
+          lessThan(32),
+          reason: 'the step title wrapped onto a second line',
+        );
+      });
+
+      testWidgets('the field does not steal focus on open', (tester) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        final field = tester.widget<TextField>(find.byType(TextField));
+        expect(field.autofocus, isFalse);
+      });
     });
   }
 }

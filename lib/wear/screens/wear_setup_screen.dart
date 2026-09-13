@@ -228,39 +228,43 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     final stepIndex = _credentialSteps.indexOf(_step);
     final canGoBack = stepIndex > 0;
 
-    return Row(
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        SizedBox(
-          width: 48,
-          height: 48,
-          child: canGoBack
-              ? IconButton(
-                  onPressed: _goBack,
-                  icon: const Icon(Icons.arrow_back),
-                )
-              : null,
-        ),
-        Expanded(
-          child: Column(
-            children: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            if (stepIndex >= 0)
               Text(
-                label,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.bold,
+                '${stepIndex + 1}/${_credentialSteps.length}',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              if (stepIndex >= 0)
-                Text(
-                  '${stepIndex + 1}/${_credentialSteps.length}',
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-            ],
-          ),
+          ],
         ),
-        const SizedBox(width: 48, height: 48),
+        if (canGoBack)
+          Positioned(
+            left: 0,
+            child: SizedBox(
+              width: 48,
+              height: 48,
+              child: IconButton(
+                onPressed: _goBack,
+                icon: const Icon(Icons.arrow_back),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -294,7 +298,6 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                   child: Center(
                     child: TextField(
                       controller: controller,
-                      autofocus: true,
                       obscureText: obscureText,
                       textAlign: TextAlign.center,
                       autocorrect: false,
