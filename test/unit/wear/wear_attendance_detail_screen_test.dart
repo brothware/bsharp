@@ -19,18 +19,28 @@ Widget _buildScreen({
   required SharedPreferences prefs,
   List<Attendance> attendances = const [],
   List<AttendanceType> types = const [],
+  WearScreenShape shape = WearScreenShape.rectangular,
+  double textScale = 1,
 }) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => shape),
       attendancesProvider.overrideWithBuild((ref, _) => attendances),
       attendanceTypesProvider.overrideWithBuild((ref, _) => types),
       resolvedEventsProvider.overrideWithBuild((ref, _) => []),
     ],
-    child: const MaterialApp(home: WearAttendanceDetailScreen()),
+    child: MaterialApp(
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: TextScaler.linear(textScale)),
+        child: child!,
+      ),
+      home: const WearAttendanceDetailScreen(),
+    ),
   );
 }
 
@@ -80,7 +90,7 @@ void main() {
       await tester.pumpWidget(_buildScreen(prefs: prefs));
       await tester.pump();
 
-      expect(find.byType(GridView), findsOneWidget);
+      expect(find.byType(SliverGrid), findsOneWidget);
     });
 
     testWidgets('shows month name label', (tester) async {
@@ -88,7 +98,7 @@ void main() {
       await tester.pump();
 
       expect(find.byType(Text), findsWidgets);
-      expect(find.byType(GridView), findsOneWidget);
+      expect(find.byType(SliverGrid), findsOneWidget);
     });
 
     testWidgets('hides the donut summary when there is no data', (
@@ -135,8 +145,57 @@ void main() {
       final donutBottom = tester
           .getBottomLeft(find.byKey(const Key('attendanceDonut')))
           .dy;
-      final gridTop = tester.getTopLeft(find.byType(GridView)).dy;
-      expect(donutBottom, lessThanOrEqualTo(gridTop));
+      final scrollTop = tester.getTopLeft(find.byType(CustomScrollView)).dy;
+      expect(donutBottom, greaterThanOrEqualTo(scrollTop));
     });
+
+    testWidgets(
+      'no overflow at 227dp round with data, at normal and 1.3x font scale',
+      (tester) async {
+        final types = [
+          const AttendanceType(
+            id: 1,
+            name: 'Present',
+            abbr: 'ob',
+            countAs: AttendanceCountAs.present,
+            excuseStatus: AttendanceExcuseStatus.auto,
+          ),
+          const AttendanceType(
+            id: 2,
+            name: 'Absent',
+            abbr: 'nb',
+            countAs: AttendanceCountAs.absent,
+            excuseStatus: AttendanceExcuseStatus.unexcused,
+          ),
+        ];
+        final attendances = [
+          const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+          const Attendance(id: 2, eventsId: 2, studentsId: 1, typesId: 2),
+        ];
+
+        tester.view.physicalSize = const Size(227, 227);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+
+        for (final textScale in [1.0, 1.3]) {
+          await tester.pumpWidget(
+            _buildScreen(
+              prefs: prefs,
+              attendances: attendances,
+              types: types,
+              shape: WearScreenShape.round,
+              textScale: textScale,
+            ),
+          );
+          await tester.pump();
+
+          expect(
+            tester.takeException(),
+            isNull,
+            reason: 'overflow at textScale $textScale',
+          );
+        }
+      },
+    );
   });
 }
