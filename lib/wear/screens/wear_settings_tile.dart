@@ -38,6 +38,8 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
   Widget build(BuildContext context) {
     final childState = ref.watch(childModeProvider);
     final allEntries = ref.watch(allStudentsProvider);
+    final themeMode = ref.watch(themeModeProvider);
+    final theme = Theme.of(context);
 
     return WearScaffold(
       scrollController: _scrollController,
@@ -84,6 +86,12 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
                   _WearSettingsItem(
                     icon: Icons.brightness_6,
                     label: t.settings.theme,
+                    trailing: Text(
+                      themeModeLabel(themeMode),
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(
                         builder: (_) => const _WearThemeScreen(),

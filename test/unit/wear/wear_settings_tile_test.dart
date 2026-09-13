@@ -1,6 +1,7 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/domain/theme_labels.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_settings_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
@@ -108,11 +109,14 @@ void main() {
         await fakeSecure.write(key: 'child_mode_pin', value: '1234');
         await fakeSecure.write(key: 'child_mode_active', value: 'true');
         final storage = CredentialStorage(store: fakeSecure);
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
               credentialStorageProvider.overrideWithValue(storage),
+              sharedPreferencesProvider.overrideWithValue(prefs),
               wearScreenShapeProvider.overrideWith(
                 (_) => WearScreenShape.rectangular,
               ),
@@ -244,5 +248,28 @@ void main() {
         expect(statusRect.left, greaterThanOrEqualTo(0));
       },
     );
+    testWidgets('the theme row names the mode in force', (tester) async {
+      await tester.pumpWidget(await _buildApp());
+      await tester.pump();
+
+      expect(find.text(themeModeLabel(ThemeMode.system)), findsOneWidget);
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(WearSettingsTile)),
+      );
+      await container
+          .read(themeModeProvider.notifier)
+          .setThemeMode(ThemeMode.dark);
+      await tester.pump();
+
+      expect(
+        find.text(themeModeLabel(ThemeMode.dark)),
+        findsOneWidget,
+        reason:
+            'choosing a mode whose look matches the current one is '
+            'indistinguishable from a dead control unless the row says '
+            'which mode is in force',
+      );
+    });
   });
 }
