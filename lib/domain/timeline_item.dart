@@ -8,13 +8,19 @@ sealed class TimelineItem {
   String get startTime;
   String get endTime;
   String get displayTitle;
-  String? get displaySubtitle;
+  String? get displayPerson;
+  String? get displayLocation;
+  String? get displaySubtitle {
+    final parts = <String>[?displayPerson, ?displayLocation];
+    return parts.isEmpty ? null : parts.join(' • ');
+  }
+
   Color displayColor({Brightness brightness = Brightness.light});
   bool get isCancelled => false;
   bool get isSubstitution => false;
 }
 
-class LessonTimelineItem implements TimelineItem {
+class LessonTimelineItem extends TimelineItem {
   LessonTimelineItem({required this.entry});
 
   final ScheduleEntry entry;
@@ -39,13 +45,10 @@ class LessonTimelineItem implements TimelineItem {
   String get displayTitle => entry.subjectName ?? entry.eventName ?? '';
 
   @override
-  String? get displaySubtitle {
-    final parts = <String>[
-      if (entry.teacherName != null) entry.teacherName!,
-      if (entry.roomName != null) entry.roomName!,
-    ];
-    return parts.isEmpty ? null : parts.join(' • ');
-  }
+  String? get displayPerson => entry.teacherName;
+
+  @override
+  String? get displayLocation => entry.roomName;
 
   @override
   Color displayColor({Brightness brightness = Brightness.light}) =>
@@ -54,7 +57,7 @@ class LessonTimelineItem implements TimelineItem {
       : const Color(0xFF607D8B);
 }
 
-class CustomEventTimelineItem implements TimelineItem {
+class CustomEventTimelineItem extends TimelineItem {
   CustomEventTimelineItem({required this.event, required this.occurrenceDate});
 
   final CustomEvent event;
@@ -79,7 +82,10 @@ class CustomEventTimelineItem implements TimelineItem {
   String get displayTitle => event.title;
 
   @override
-  String? get displaySubtitle => event.place;
+  String? get displayPerson => null;
+
+  @override
+  String? get displayLocation => event.place;
 
   @override
   Color displayColor({Brightness brightness = Brightness.light}) =>

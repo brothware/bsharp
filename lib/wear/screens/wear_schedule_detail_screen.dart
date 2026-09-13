@@ -172,19 +172,39 @@ class _WearDetailTimelineItem extends StatelessWidget {
                         : null,
                   ),
                 ),
-                if (item.displaySubtitle != null)
+                if (item.displayPerson case final person?)
                   WearFittedText(
-                    item.displaySubtitle!,
+                    person,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
-                Text(
+                WearFittedText(
                   timeRange,
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
+                if (item.displayLocation case final location?)
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.place_outlined,
+                        size: 11,
+                        color: theme.colorScheme.primary,
+                      ),
+                      const SizedBox(width: 2),
+                      Expanded(
+                        child: WearFittedText(
+                          location,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 if (lessonEntry?.topic != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),

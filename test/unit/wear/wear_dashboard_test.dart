@@ -1,3 +1,4 @@
+import 'package:bsharp/app/providers/dashboard_providers.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
@@ -13,6 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final _pinnedNow = DateTime(2026, 9, 14, 10, 20);
+
 ResolvedEvent _resolvedEvent({
   int id = 1,
   DateTime? date,
@@ -23,10 +26,9 @@ ResolvedEvent _resolvedEvent({
   String? roomName,
   bool isCancelled = false,
 }) {
-  final now = DateTime.now();
   return ResolvedEvent(
     id: id,
-    date: date ?? DateTime(now.year, now.month, now.day),
+    date: date ?? DateTime(_pinnedNow.year, _pinnedNow.month, _pinnedNow.day),
     number: number,
     startTime: startTime,
     endTime: endTime,
@@ -55,6 +57,7 @@ Widget _buildDashboard({
   return ProviderScope(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
+      minuteTickProvider.overrideWith((ref) => _pinnedNow),
       wearScreenShapeProvider.overrideWith((_) => shape),
       resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
       inboxProvider.overrideWithBuild((ref, _) => inbox),
@@ -86,11 +89,6 @@ void main() {
       testWidgets('shows NOW for a lesson in progress with its room', (
         tester,
       ) async {
-        final now = TimeOfDay.now();
-        final start = TimeOfDay(
-          hour: now.hour,
-          minute: now.minute,
-        ).replacing(minute: (now.minute - 5).clamp(0, 59));
         await tester.pumpWidget(
           _buildDashboard(
             prefs: prefs,
@@ -99,10 +97,8 @@ void main() {
               _resolvedEvent(
                 subjectName: 'Math',
                 roomName: 'Room 12',
-                startTime:
-                    '${start.hour.toString().padLeft(2, '0')}:'
-                    '${start.minute.toString().padLeft(2, '0')}:00',
-                endTime: '23:59:00',
+                startTime: '10:15:00',
+                endTime: '11:00:00',
               ),
             ],
           ),
@@ -124,8 +120,8 @@ void main() {
               _resolvedEvent(
                 subjectName: 'Physics',
                 roomName: 'Room 5',
-                startTime: '23:58:00',
-                endTime: '23:59:00',
+                startTime: '10:30:00',
+                endTime: '11:15:00',
               ),
             ],
           ),
@@ -137,13 +133,13 @@ void main() {
       });
 
       testWidgets('shows TOMORROW once all of today ended', (tester) async {
-        final tomorrow = DateTime.now().add(const Duration(days: 1));
+        final tomorrow = _pinnedNow.add(const Duration(days: 1));
         await tester.pumpWidget(
           _buildDashboard(
             prefs: prefs,
             shape: shape,
             resolvedEvents: [
-              _resolvedEvent(startTime: '00:00:00', endTime: '00:01:00'),
+              _resolvedEvent(),
               _resolvedEvent(
                 id: 2,
                 date: DateTime(tomorrow.year, tomorrow.month, tomorrow.day),
