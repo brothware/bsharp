@@ -2,6 +2,7 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_bulletin_detail_screen.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
@@ -144,21 +145,19 @@ class _WearBulletinItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                WearFittedText(
                   item.title,
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: item.isRead
                         ? FontWeight.normal
                         : FontWeight.bold,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
-                Text(
+                WearFittedText(
                   item.author,
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   item.date,

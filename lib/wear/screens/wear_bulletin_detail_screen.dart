@@ -1,4 +1,5 @@
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
@@ -38,24 +39,22 @@ class _WearBulletinDetailScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
+                WearFittedText(
                   widget.bulletin.title,
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                   maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
+                      child: WearFittedText(
                         widget.bulletin.author,
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Text(

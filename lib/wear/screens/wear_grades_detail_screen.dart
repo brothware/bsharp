@@ -7,6 +7,7 @@ import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -156,13 +157,12 @@ class _WearSubjectSection extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Text(
+                child: WearFittedText(
                   sg.subjectName,
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.primary,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               if (avg != null)

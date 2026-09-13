@@ -2,6 +2,7 @@ import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
@@ -105,15 +106,13 @@ class WearMessageItem extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
+                        child: WearFittedText(
                           message.senderName,
                           style: theme.textTheme.bodySmall?.copyWith(
                             fontWeight: message.isRead
                                 ? FontWeight.normal
                                 : FontWeight.bold,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -125,13 +124,11 @@ class WearMessageItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Text(
+                  WearFittedText(
                     message.title,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

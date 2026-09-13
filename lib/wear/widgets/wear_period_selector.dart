@@ -1,3 +1,4 @@
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:flutter/material.dart';
 
 const _minTouchTargetDp = 48.0;
@@ -34,23 +35,21 @@ class WearPeriodSelector extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                WearFittedText(
                   label,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.primary,
                   ),
                   maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                 ),
                 if (subLabel != null)
-                  Text(
+                  WearFittedText(
                     subLabel!,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
               ],

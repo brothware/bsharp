@@ -6,6 +6,7 @@ import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_translate_button.dart';
@@ -82,12 +83,11 @@ class _WearMessageDetailScreenState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Center(
-                    child: Text(
+                    child: WearFittedText(
                       message.senderName,
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Center(
@@ -99,13 +99,12 @@ class _WearMessageDetailScreenState
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
+                  WearFittedText(
                     displayTitle,
                     style: theme.textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                     maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                   Divider(height: 8, color: theme.colorScheme.outlineVariant),
                   if (_loadingContent)

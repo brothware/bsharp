@@ -4,6 +4,7 @@ import 'package:bsharp/app/providers/dashboard_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -159,14 +160,12 @@ class _WearHeroBody extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Text(
+        WearFittedText(
           title,
           textAlign: TextAlign.center,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
         ),
         if (room case final room?) ...[
           const SizedBox(height: 2),
@@ -179,11 +178,9 @@ class _WearHeroBody extends StatelessWidget {
         ],
         if (countdown case final countdown?) ...[
           const SizedBox(height: 2),
-          Text(
+          WearFittedText(
             countdown,
             textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
