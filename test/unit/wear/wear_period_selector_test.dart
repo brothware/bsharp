@@ -1,5 +1,6 @@
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -84,6 +85,33 @@ void main() {
 
       expect(previousTapped, isTrue);
     });
+
+    testWidgets(
+      'a long label renders without ellipsis at 227dp',
+      (tester) async {
+        tester.view.physicalSize = const Size(227, 227);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: WearPeriodSelector(
+                label: 'Pierwszy semestr',
+                onPrevious: () {},
+                onNext: () {},
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+
+        final paragraph = tester.renderObject(
+          find.text('Pierwszy semestr'),
+        ) as RenderParagraph;
+        expect(paragraph.didExceedMaxLines, isFalse);
+      },
+    );
 
     testWidgets('tapping next fires onNext', (tester) async {
       var nextTapped = false;
