@@ -122,8 +122,10 @@ class _WearTermPeriodSelector extends StatelessWidget {
         ? terms.indexWhere((t) => t.id == ct.id)
         : 0;
 
+    final currentTermName = currentTerm?.name;
+
     return WearPeriodSelector(
-      label: currentTerm?.name ?? '',
+      label: currentTermName != null ? translateTermName(currentTermName) : '',
       onPrevious: () {
         final prev = (currentIndex - 1) % terms.length;
         onChanged(terms[prev].id);
@@ -263,6 +265,14 @@ class WearGradeDetailScreen extends StatelessWidget {
             subjectName,
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Center(
+          child: Text(
+            translateGradeName(grade.displayValue),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
         ),

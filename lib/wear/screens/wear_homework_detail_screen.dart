@@ -1,4 +1,5 @@
 import 'package:bsharp/app/providers/more_providers.dart';
+import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -75,7 +76,7 @@ class _WearHomeworkDetailScreenState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    hw.subjectName,
+                                    translateSubjectName(hw.subjectName),
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
