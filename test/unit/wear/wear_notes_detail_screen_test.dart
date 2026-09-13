@@ -11,27 +11,47 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
-Widget _buildScreen({List<PortalReprimand> reprimands = const []}) {
+Widget _buildScreen({
+  List<PortalReprimand> reprimands = const [],
+  WearScreenShape shape = WearScreenShape.rectangular,
+  double textScale = 1,
+}) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => shape),
       reprimandsProvider.overrideWithBuild((ref, _) => reprimands),
       isTranslationAvailableProvider.overrideWithValue(false),
     ],
-    child: const MaterialApp(home: WearNotesDetailScreen()),
+    child: MaterialApp(
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: TextScaler.linear(textScale)),
+        child: child!,
+      ),
+      home: const WearNotesDetailScreen(),
+    ),
   );
 }
 
 void main() {
   group('WearNotesDetailScreen', () {
-    testWidgets('shows tab selector with all three tabs', (tester) async {
+    testWidgets('shows tab selector cycling through all three tabs', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildScreen());
       await tester.pump();
 
       expect(find.text('Remarks'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.chevron_right));
+      await tester.pump();
       expect(find.text('Praise'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.chevron_right));
+      await tester.pump();
       expect(find.text('Information'), findsOneWidget);
     });
 
@@ -80,7 +100,7 @@ void main() {
       expect(find.text('Disrupted class'), findsOneWidget);
       expect(find.text('Great work'), findsNothing);
 
-      await tester.tap(find.text('Praise'));
+      await tester.tap(find.byIcon(Icons.chevron_right));
       await tester.pump();
 
       expect(find.text('Great work'), findsOneWidget);
@@ -93,5 +113,30 @@ void main() {
 
       expect(find.text('No remarks'), findsOneWidget);
     });
+
+    testWidgets(
+      'no overflow at 227dp round, at normal and 1.3x font scale',
+      (tester) async {
+        tester.view.physicalSize = const Size(227, 227);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+
+        for (final textScale in [1.0, 1.3]) {
+          await tester.pumpWidget(
+            _buildScreen(
+              shape: WearScreenShape.round,
+              textScale: textScale,
+            ),
+          );
+          await tester.pump();
+
+          expect(
+            tester.takeException(),
+            isNull,
+            reason: 'overflow at textScale $textScale',
+          );
+        }
+      },
+    );
   });
 }
