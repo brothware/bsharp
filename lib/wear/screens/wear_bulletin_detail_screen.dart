@@ -33,44 +33,46 @@ class _WearBulletinDetailScreenState
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
           scrollController: _scrollController,
-          child: ListView(
+          child: SingleChildScrollView(
             controller: _scrollController,
-            padding: EdgeInsets.zero,
-            children: [
-              Text(
-                widget.bulletin.title,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  widget.bulletin.title,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 2),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.bulletin.author,
+                const SizedBox(height: 2),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.bulletin.author,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      widget.bulletin.date,
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  Text(
-                    widget.bulletin.date,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-              Divider(height: 8, color: theme.colorScheme.outlineVariant),
-              SelectableText(
-                widget.bulletin.content,
-                style: theme.textTheme.bodySmall,
-              ),
-            ],
+                  ],
+                ),
+                Divider(height: 8, color: theme.colorScheme.outlineVariant),
+                SelectableText(
+                  widget.bulletin.content,
+                  style: theme.textTheme.bodySmall,
+                ),
+              ],
+            ),
           ),
         ),
       ),

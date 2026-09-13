@@ -77,7 +77,7 @@ void main() {
       expect(find.text('Important Announcement'), findsOneWidget);
 
       await tester.drag(
-        find.byType(ListView).first,
+        find.byType(SingleChildScrollView).first,
         const Offset(0, -2000),
       );
       await tester.pump();
