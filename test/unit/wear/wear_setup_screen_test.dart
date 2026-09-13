@@ -161,6 +161,27 @@ void main() {
         );
       });
 
+      testWidgets('the back button clears the step indicator', (tester) async {
+        tester.view.physicalSize = const Size(454, 454);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.reset);
+
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await tester.tap(find.text('Next'));
+        await tester.pumpAndSettle();
+
+        final back = tester.getRect(find.byIcon(Icons.arrow_back));
+        final indicator = tester.getRect(find.text('2/3'));
+        expect(
+          back.overlaps(indicator),
+          isFalse,
+          reason: 'the back button is drawn over the step indicator',
+        );
+      });
+
       testWidgets('the field does not steal focus on open', (tester) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
