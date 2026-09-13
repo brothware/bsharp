@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const _minTouchTargetDp = 48.0;
+const _labelInsetDp = 30.0;
 const _chevronIconSizeDp = 18.0;
 
 class WearPeriodSelector extends StatelessWidget {
@@ -28,7 +29,7 @@ class WearPeriodSelector extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: _minTouchTargetDp,
+              horizontal: _labelInsetDp,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
