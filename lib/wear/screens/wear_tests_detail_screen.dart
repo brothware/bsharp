@@ -3,6 +3,7 @@ import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/portal_date_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
@@ -82,12 +83,11 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                WearFittedText(
                                   translateSubjectName(test.subjectName),
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
                                   test.date,
@@ -96,12 +96,11 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
                                   ),
                                 ),
                                 if (test.title != null)
-                                  Text(
+                                  WearFittedText(
                                     test.title!,
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 if (test.description != null)
                                   Text(

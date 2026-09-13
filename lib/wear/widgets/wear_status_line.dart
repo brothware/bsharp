@@ -1,5 +1,6 @@
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,10 +26,9 @@ class WearStatusLine extends ConsumerWidget {
           ),
           const SizedBox(width: 6),
           Flexible(
-            child: Text(
+            child: WearFittedText(
               t.sync.syncing,
               style: theme.textTheme.labelMedium,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
@@ -45,23 +45,21 @@ class WearStatusLine extends ConsumerWidget {
             ),
             const SizedBox(width: 6),
             Flexible(
-              child: Text(
+              child: WearFittedText(
                 t.sync.syncFailed,
                 style: theme.textTheme.labelMedium?.copyWith(
                   color: theme.colorScheme.error,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
             ),
             const SizedBox(width: 6),
             Flexible(
-              child: Text(
+              child: WearFittedText(
                 t.common.retry,
                 style: theme.textTheme.labelMedium?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],

@@ -9,6 +9,7 @@ import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/failure_messages.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -243,11 +244,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                WearFittedText(
                   label,
                   textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: theme.colorScheme.primary,
                     fontWeight: FontWeight.bold,

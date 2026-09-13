@@ -1,3 +1,4 @@
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 
@@ -34,13 +35,12 @@ class WearTileHeader extends StatelessWidget {
             Icon(icon, size: 20, color: theme.colorScheme.primary),
             const SizedBox(width: 6),
             Expanded(
-              child: Text(
+              child: WearFittedText(
                 title,
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
             ),
             ?trailing,
@@ -66,7 +66,10 @@ class WearTileHeader extends StatelessWidget {
           children: [
             Icon(icon, size: 20, color: theme.colorScheme.primary),
             const SizedBox(height: 2),
-            Text(title, style: titleStyle, overflow: TextOverflow.ellipsis),
+            WearFittedText(
+              title,
+              style: titleStyle,
+            ),
             if (trailing case final trailing?) Center(child: trailing),
           ],
         ),

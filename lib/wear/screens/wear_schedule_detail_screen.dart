@@ -2,6 +2,7 @@ import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -162,7 +163,7 @@ class _WearDetailTimelineItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                WearFittedText(
                   item.displayTitle,
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
@@ -170,15 +171,13 @@ class _WearDetailTimelineItem extends StatelessWidget {
                         ? TextDecoration.lineThrough
                         : null,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
                 if (item.displaySubtitle != null)
-                  Text(
+                  WearFittedText(
                     item.displaySubtitle!,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
                 Text(
                   timeRange,
@@ -189,14 +188,13 @@ class _WearDetailTimelineItem extends StatelessWidget {
                 if (lessonEntry?.topic != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
-                    child: Text(
+                    child: WearFittedText(
                       lessonEntry!.topic!,
                       style: theme.textTheme.labelSmall?.copyWith(
                         fontStyle: FontStyle.italic,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                       maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 if (lessonEntry?.changeType != null)

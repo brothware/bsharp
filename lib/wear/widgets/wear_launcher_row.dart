@@ -1,3 +1,4 @@
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
@@ -43,20 +44,18 @@ class WearLauncherRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    WearFittedText(
                       title,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
+                    WearFittedText(
                       summary,
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

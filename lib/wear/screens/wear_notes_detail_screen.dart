@@ -2,6 +2,7 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/annotation_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -161,12 +162,11 @@ class _WearNoteDetailItem extends StatelessWidget {
               Icon(style.icon, size: 14, color: style.color),
               const SizedBox(width: 4),
               Expanded(
-                child: Text(
+                child: WearFittedText(
                   item.teacherName,
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               Text(
