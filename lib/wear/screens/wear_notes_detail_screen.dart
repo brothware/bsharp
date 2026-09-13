@@ -2,6 +2,7 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/annotation_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -111,79 +112,27 @@ class _WearNotesTabSelector extends StatelessWidget {
   final _NotesTab activeTab;
   final ValueChanged<_NotesTab> onChanged;
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _TabButton(
-          label: t.notes.remarksTab,
-          isSelected: activeTab == _NotesTab.remarks,
-          onTap: () => onChanged(_NotesTab.remarks),
-          theme: theme,
-        ),
-        const SizedBox(width: 4),
-        _TabButton(
-          label: t.notes.praisesTab,
-          isSelected: activeTab == _NotesTab.praises,
-          onTap: () => onChanged(_NotesTab.praises),
-          theme: theme,
-        ),
-        const SizedBox(width: 4),
-        _TabButton(
-          label: t.notes.infoTab,
-          isSelected: activeTab == _NotesTab.info,
-          onTap: () => onChanged(_NotesTab.info),
-          theme: theme,
-        ),
-      ],
-    );
-  }
-}
-
-class _TabButton extends StatelessWidget {
-  const _TabButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-    required this.theme,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final ThemeData theme;
+  String _labelFor(_NotesTab tab) => switch (tab) {
+    _NotesTab.remarks => t.notes.remarksTab,
+    _NotesTab.praises => t.notes.praisesTab,
+    _NotesTab.info => t.notes.infoTab,
+  };
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        height: 48,
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: isSelected ? theme.colorScheme.primary : null,
-              border: isSelected
-                  ? null
-                  : Border.all(color: theme.colorScheme.outline),
-            ),
-            child: Text(
-              label,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: isSelected
-                    ? theme.colorScheme.onPrimary
-                    : theme.colorScheme.onSurface,
-                fontWeight: isSelected ? FontWeight.bold : null,
-              ),
-            ),
-          ),
-        ),
-      ),
+    const tabs = _NotesTab.values;
+    final current = tabs.indexOf(activeTab);
+
+    return WearPeriodSelector(
+      label: _labelFor(activeTab),
+      onPrevious: () {
+        final prev = (current - 1) % tabs.length;
+        onChanged(tabs[prev]);
+      },
+      onNext: () {
+        final next = (current + 1) % tabs.length;
+        onChanged(tabs[next]);
+      },
     );
   }
 }
