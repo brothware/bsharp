@@ -2,6 +2,7 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/annotation_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_translate_button.dart';
@@ -49,11 +50,13 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
         body: WearScaffold(
           child: Column(
             children: [
-              _WearNotesTabSelector(
-                activeTab: _activeTab,
-                onChanged: (tab) {
-                  setState(() => _activeTab = tab);
-                },
+              WearPinnedHeader(
+                child: _WearNotesTabSelector(
+                  activeTab: _activeTab,
+                  onChanged: (tab) {
+                    setState(() => _activeTab = tab);
+                  },
+                ),
               ),
               const SizedBox(height: 4),
               Expanded(

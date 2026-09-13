@@ -3,6 +3,7 @@ import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
+import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
@@ -59,11 +60,14 @@ class _WearScheduleDetailScreenState
         body: WearScaffold(
           child: Column(
             children: [
-              WearPeriodSelector(
-                label: formatDateShort(_selectedDate),
-                subLabel: dayLabelFull(_selectedDate.weekday),
-                onPrevious: _previousDay,
-                onNext: _nextDay,
+              WearPinnedHeader(
+                minHeight: 44,
+                child: WearPeriodSelector(
+                  label: formatDateShort(_selectedDate),
+                  subLabel: dayLabelFull(_selectedDate.weekday),
+                  onPrevious: _previousDay,
+                  onNext: _nextDay,
+                ),
               ),
               const SizedBox(height: 4),
               Expanded(

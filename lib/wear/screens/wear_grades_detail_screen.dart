@@ -8,6 +8,7 @@ import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
+import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -68,12 +69,14 @@ class _WearGradesDetailScreenState
           child: Column(
             children: [
               if (terms.length > 1)
-                _WearTermPeriodSelector(
-                  terms: terms,
-                  currentTerm: currentTerm,
-                  onChanged: (id) {
-                    ref.read(selectedTermIdProvider.notifier).value = id;
-                  },
+                WearPinnedHeader(
+                  child: _WearTermPeriodSelector(
+                    terms: terms,
+                    currentTerm: currentTerm,
+                    onChanged: (id) {
+                      ref.read(selectedTermIdProvider.notifier).value = id;
+                    },
+                  ),
                 ),
               Expanded(
                 child: subjectGrades.isEmpty

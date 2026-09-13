@@ -9,6 +9,7 @@ import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/failure_messages.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -228,47 +229,49 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     final stepIndex = _credentialSteps.indexOf(_step);
     final canGoBack = stepIndex > 0;
 
-    return SizedBox(
-      width: double.infinity,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (stepIndex >= 0)
+    return WearPinnedHeader(
+      child: SizedBox(
+        width: double.infinity,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Text(
-                  '${stepIndex + 1}/${_credentialSteps.length}',
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-            ],
-          ),
-          if (canGoBack)
-            Positioned(
-              left: 0,
-              top: 0,
-              bottom: 0,
-              child: SizedBox(
-                width: 48,
-                child: IconButton(
-                  onPressed: _goBack,
-                  icon: const Icon(Icons.arrow_back),
+                if (stepIndex >= 0)
+                  Text(
+                    '${stepIndex + 1}/${_credentialSteps.length}',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+              ],
+            ),
+            if (canGoBack)
+              Positioned(
+                left: 0,
+                top: 0,
+                bottom: 0,
+                child: SizedBox(
+                  width: 48,
+                  child: IconButton(
+                    onPressed: _goBack,
+                    icon: const Icon(Icons.arrow_back),
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -388,30 +391,32 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
     return Column(
       children: [
-        Row(
-          children: [
-            SizedBox(
-              width: 48,
-              height: 48,
-              child: IconButton(
-                onPressed: () => setState(() {
-                  _errorMessage = null;
-                  _step = _SetupStep.password;
-                }),
-                icon: const Icon(Icons.arrow_back),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                t.setup.selectStudent,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+        WearPinnedHeader(
+          child: Row(
+            children: [
+              SizedBox(
+                width: 48,
+                height: 48,
+                child: IconButton(
+                  onPressed: () => setState(() {
+                    _errorMessage = null;
+                    _step = _SetupStep.password;
+                  }),
+                  icon: const Icon(Icons.arrow_back),
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(width: 48, height: 48),
-          ],
+              Expanded(
+                child: Text(
+                  t.setup.selectStudent,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(width: 48, height: 48),
+            ],
+          ),
         ),
         const SizedBox(height: 4),
         Expanded(
