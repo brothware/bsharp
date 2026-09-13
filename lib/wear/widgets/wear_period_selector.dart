@@ -21,37 +21,56 @@ class WearPeriodSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _WearPeriodChevron(icon: Icons.chevron_left, onTap: onPrevious),
-        Flexible(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                label,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.primary,
-                ),
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
-              if (subLabel != null)
+    return SizedBox(
+      width: double.infinity,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: _minTouchTargetDp,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Text(
-                  subLabel!,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                  label,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
                   ),
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                 ),
-            ],
+                if (subLabel != null)
+                  Text(
+                    subLabel!,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+              ],
+            ),
           ),
-        ),
-        _WearPeriodChevron(icon: Icons.chevron_right, onTap: onNext),
-      ],
+          Positioned(
+            left: 0,
+            child: _WearPeriodChevron(
+              icon: Icons.chevron_left,
+              onTap: onPrevious,
+            ),
+          ),
+          Positioned(
+            right: 0,
+            child: _WearPeriodChevron(
+              icon: Icons.chevron_right,
+              onTap: onNext,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
