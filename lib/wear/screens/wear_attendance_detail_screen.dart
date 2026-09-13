@@ -10,7 +10,6 @@ import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearAttendanceDetailScreen extends ConsumerStatefulWidget {
   const WearAttendanceDetailScreen({super.key});
@@ -58,6 +57,7 @@ class _WearAttendanceDetailScreenState
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
+          scrollController: _scrollController,
           child: Column(
             children: [
               Padding(
@@ -74,54 +74,51 @@ class _WearAttendanceDetailScreenState
                 child: WearVerticalOverscrollPager(
                   onPrevious: previousMonth,
                   onNext: nextMonth,
-                  child: WearOsScrollbar(
+                  child: CustomScrollView(
                     controller: _scrollController,
-                    child: CustomScrollView(
-                      controller: _scrollController,
-                      slivers: [
-                        if (stats.totalLessons > 0)
-                          SliverToBoxAdapter(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: _WearAttendanceSummary(
-                                stats: stats,
-                                theme: theme,
-                              ),
+                    slivers: [
+                      if (stats.totalLessons > 0)
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: _WearAttendanceSummary(
+                              stats: stats,
+                              theme: theme,
                             ),
                           ),
-                        SliverGrid(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 7,
-                                mainAxisExtent: 30,
-                              ),
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              final day = calDays[index];
-                              final isCurrentMonth = day.month == month.month;
-                              final isToday = day == today;
-                              final attDay =
-                                  attDays[DateTime(
-                                    day.year,
-                                    day.month,
-                                    day.day,
-                                  )];
-                              final status =
-                                  attDay?.status ?? AttendanceDayStatus.noData;
-
-                              return _WearCalendarDay(
-                                day: day,
-                                isCurrentMonth: isCurrentMonth,
-                                isToday: isToday,
-                                status: status,
-                                theme: theme,
-                              );
-                            },
-                            childCount: calDays.length,
-                          ),
                         ),
-                      ],
-                    ),
+                      SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 7,
+                              mainAxisExtent: 30,
+                            ),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final day = calDays[index];
+                            final isCurrentMonth = day.month == month.month;
+                            final isToday = day == today;
+                            final attDay =
+                                attDays[DateTime(
+                                  day.year,
+                                  day.month,
+                                  day.day,
+                                )];
+                            final status =
+                                attDay?.status ?? AttendanceDayStatus.noData;
+
+                            return _WearCalendarDay(
+                              day: day,
+                              isCurrentMonth: isCurrentMonth,
+                              isToday: isToday,
+                              status: status,
+                              theme: theme,
+                            );
+                          },
+                          childCount: calDays.length,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

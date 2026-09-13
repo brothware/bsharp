@@ -221,6 +221,13 @@ void main() {
         );
         await tester.pump();
 
+        await tester.scrollUntilVisible(
+          find.byIcon(Icons.sync),
+          48,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.pump();
+
         final syncLabelRect = tester.getRect(find.byIcon(Icons.sync));
         final statusRect = tester.getRect(
           find.byType(CircularProgressIndicator),

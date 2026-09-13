@@ -14,7 +14,6 @@ import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 enum _SetupStep { school, username, password, studentPicker }
 
@@ -209,11 +208,17 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     await ref.read(authStateProvider.notifier).completeSetup();
   }
 
+  ScrollController get _activeScrollController =>
+      _step == _SetupStep.studentPicker
+      ? _studentPickerScrollController
+      : _fieldStepScrollController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: WearScaffold(
+        scrollController: _activeScrollController,
         child: switch (_step) {
           _SetupStep.school => _buildSchoolStep(),
           _SetupStep.username => _buildUsernameStep(),
@@ -292,31 +297,26 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         const SizedBox(height: 8),
         Expanded(
           child: LayoutBuilder(
-            builder: (context, constraints) => WearOsScrollbar(
+            builder: (context, constraints) => SingleChildScrollView(
               controller: _fieldStepScrollController,
-              indicatorColor: theme.colorScheme.primary,
-              backgroundColor: theme.colorScheme.surfaceContainerHighest,
-              child: SingleChildScrollView(
-                controller: _fieldStepScrollController,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight,
-                  ),
-                  child: Center(
-                    child: TextField(
-                      controller: controller,
-                      obscureText: obscureText,
-                      textAlign: TextAlign.center,
-                      autocorrect: false,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (_) => onSubmit(),
-                      decoration: InputDecoration(
-                        labelText: label,
-                        isDense: true,
-                        suffixIcon: suffixIcon,
-                      ),
-                      style: theme.textTheme.bodyMedium,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Center(
+                  child: TextField(
+                    controller: controller,
+                    obscureText: obscureText,
+                    textAlign: TextAlign.center,
+                    autocorrect: false,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => onSubmit(),
+                    decoration: InputDecoration(
+                      labelText: label,
+                      isDense: true,
+                      suffixIcon: suffixIcon,
                     ),
+                    style: theme.textTheme.bodyMedium,
                   ),
                 ),
               ),
@@ -420,48 +420,43 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         ),
         const SizedBox(height: 4),
         Expanded(
-          child: WearOsScrollbar(
+          child: ListView.builder(
             controller: _studentPickerScrollController,
-            indicatorColor: theme.colorScheme.primary,
-            backgroundColor: theme.colorScheme.surfaceContainerHighest,
-            child: ListView.builder(
-              controller: _studentPickerScrollController,
-              itemCount: _students.length,
-              itemBuilder: (context, index) {
-                final student = _students[index];
-                final isSelected = student.id == _selectedStudentId;
-                return InkWell(
-                  onTap: () => setState(() => _selectedStudentId = student.id),
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    constraints: const BoxConstraints(minHeight: 48),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 6,
-                    ),
-                    child: Row(
-                      children: [
-                        if (isSelected)
-                          Icon(
-                            Icons.check,
-                            size: 16,
-                            color: theme.colorScheme.primary,
-                          )
-                        else
-                          const SizedBox(width: 16),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            '${student.name} ${student.surname}',
-                            style: theme.textTheme.bodySmall,
-                          ),
-                        ),
-                      ],
-                    ),
+            itemCount: _students.length,
+            itemBuilder: (context, index) {
+              final student = _students[index];
+              final isSelected = student.id == _selectedStudentId;
+              return InkWell(
+                onTap: () => setState(() => _selectedStudentId = student.id),
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  constraints: const BoxConstraints(minHeight: 48),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 6,
                   ),
-                );
-              },
-            ),
+                  child: Row(
+                    children: [
+                      if (isSelected)
+                        Icon(
+                          Icons.check,
+                          size: 16,
+                          color: theme.colorScheme.primary,
+                        )
+                      else
+                        const SizedBox(width: 16),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          '${student.name} ${student.surname}',
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
         SizedBox(

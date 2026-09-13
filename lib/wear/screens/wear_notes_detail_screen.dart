@@ -9,7 +9,6 @@ import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_translate_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearNotesDetailScreen extends ConsumerStatefulWidget {
   const WearNotesDetailScreen({super.key});
@@ -49,6 +48,7 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
+          scrollController: _scrollController,
           child: Column(
             children: [
               WearPinnedHeader(
@@ -70,29 +70,26 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
                           ),
                         ),
                       )
-                    : WearOsScrollbar(
+                    : ListView.builder(
                         controller: _scrollController,
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                          itemCount: items.length,
-                          itemBuilder: (context, index) {
-                            final item = items[index];
-                            return _WearNoteDetailItem(
-                              item: item,
-                              translatedContent: _translations[item.id],
-                              onTranslated: (translated) {
-                                setState(() {
-                                  if (translated != null) {
-                                    _translations[item.id] = translated;
-                                  } else {
-                                    _translations.remove(item.id);
-                                  }
-                                });
-                              },
-                            );
-                          },
-                        ),
+                        padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                        itemCount: items.length,
+                        itemBuilder: (context, index) {
+                          final item = items[index];
+                          return _WearNoteDetailItem(
+                            item: item,
+                            translatedContent: _translations[item.id],
+                            onTranslated: (translated) {
+                              setState(() {
+                                if (translated != null) {
+                                  _translations[item.id] = translated;
+                                } else {
+                                  _translations.remove(item.id);
+                                }
+                              });
+                            },
+                          );
+                        },
                       ),
               ),
             ],

@@ -17,7 +17,6 @@ import 'package:bsharp/wear/widgets/wear_status_line.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearSettingsTile extends ConsumerStatefulWidget {
   const WearSettingsTile({super.key});
@@ -39,16 +38,13 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
   Widget build(BuildContext context) {
     final childState = ref.watch(childModeProvider);
     final allEntries = ref.watch(allStudentsProvider);
-    final theme = Theme.of(context);
 
-    return Column(
-      children: [
-        WearTileHeader(icon: Icons.settings, title: t.settings.title),
-        Expanded(
-          child: WearOsScrollbar(
-            controller: _scrollController,
-            indicatorColor: theme.colorScheme.primary,
-            backgroundColor: theme.colorScheme.surfaceContainerHighest,
+    return WearScaffold(
+      scrollController: _scrollController,
+      child: Column(
+        children: [
+          WearTileHeader(icon: Icons.settings, title: t.settings.title),
+          Expanded(
             child: ListView(
               controller: _scrollController,
               physics: const ClampingScrollPhysics(),
@@ -120,8 +116,8 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -162,62 +158,58 @@ class _WearThemeScreenState extends ConsumerState<_WearThemeScreen> {
 
     return Scaffold(
       body: WearScaffold(
-        child: WearOsScrollbar(
+        scrollController: _scrollController,
+        child: ListView(
           controller: _scrollController,
-          indicatorColor: theme.colorScheme.primary,
-          backgroundColor: theme.colorScheme.surfaceContainerHighest,
-          child: ListView(
-            controller: _scrollController,
-            children: [
-              for (final mode in ThemeMode.values)
-                InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: () {
-                    unawaited(
-                      ref.read(themeModeProvider.notifier).setThemeMode(mode),
-                    );
-                    Navigator.of(context).pop();
-                  },
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 48),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        children: [
+          children: [
+            for (final mode in ThemeMode.values)
+              InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () {
+                  unawaited(
+                    ref.read(themeModeProvider.notifier).setThemeMode(mode),
+                  );
+                  Navigator.of(context).pop();
+                },
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 48),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 10,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          themeModeIcon(mode),
+                          size: 18,
+                          color: mode == current
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            themeModeLabel(mode),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: mode == current
+                                  ? FontWeight.bold
+                                  : null,
+                            ),
+                          ),
+                        ),
+                        if (mode == current)
                           Icon(
-                            themeModeIcon(mode),
-                            size: 18,
-                            color: mode == current
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurfaceVariant,
+                            Icons.check,
+                            size: 16,
+                            color: theme.colorScheme.primary,
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              themeModeLabel(mode),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                fontWeight: mode == current
-                                    ? FontWeight.bold
-                                    : null,
-                              ),
-                            ),
-                          ),
-                          if (mode == current)
-                            Icon(
-                              Icons.check,
-                              size: 16,
-                              color: theme.colorScheme.primary,
-                            ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );

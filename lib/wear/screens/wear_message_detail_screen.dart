@@ -11,7 +11,6 @@ import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_translate_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearMessageDetailScreen extends ConsumerStatefulWidget {
   const WearMessageDetailScreen({required this.message, super.key});
@@ -74,75 +73,73 @@ class _WearMessageDetailScreenState
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
+          scrollController: _scrollController,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: WearOsScrollbar(
+            child: ListView(
               controller: _scrollController,
-              child: ListView(
-                controller: _scrollController,
-                padding: EdgeInsets.zero,
-                children: [
-                  Center(
-                    child: Text(
-                      message.senderName,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+              padding: EdgeInsets.zero,
+              children: [
+                Center(
+                  child: Text(
+                    message.senderName,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    formatMessageDateFull(message.sendTime),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  Center(
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  displayTitle,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Divider(height: 8, color: theme.colorScheme.outlineVariant),
+                if (_loadingContent)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Center(
+                      child: SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+                  )
+                else if (displayContent != null)
+                  Text(displayContent, style: theme.textTheme.bodySmall),
+                if (message.files != null && message.files!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      formatMessageDateFull(message.sendTime),
+                      '${t.messages.attachments} '
+                      '(${message.files!.length})',
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    displayTitle,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                if (rawContent != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: WearTranslateButton(
+                      sourceText: stripHtml(rawContent),
+                      onTranslated: _handleContentTranslation,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  Divider(height: 8, color: theme.colorScheme.outlineVariant),
-                  if (_loadingContent)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Center(
-                        child: SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      ),
-                    )
-                  else if (displayContent != null)
-                    Text(displayContent, style: theme.textTheme.bodySmall),
-                  if (message.files != null && message.files!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        '${t.messages.attachments} '
-                        '(${message.files!.length})',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  if (rawContent != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: WearTranslateButton(
-                        sourceText: stripHtml(rawContent),
-                        onTranslated: _handleContentTranslation,
-                      ),
-                    ),
-                ],
-              ),
+              ],
             ),
           ),
         ),

@@ -3,7 +3,6 @@ import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearBulletinDetailScreen extends ConsumerStatefulWidget {
   const WearBulletinDetailScreen({required this.bulletin, super.key});
@@ -33,47 +32,45 @@ class _WearBulletinDetailScreenState
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
-          child: WearOsScrollbar(
+          scrollController: _scrollController,
+          child: ListView(
             controller: _scrollController,
-            child: ListView(
-              controller: _scrollController,
-              padding: EdgeInsets.zero,
-              children: [
-                Text(
-                  widget.bulletin.title,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+            padding: EdgeInsets.zero,
+            children: [
+              Text(
+                widget.bulletin.title,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(height: 2),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        widget.bulletin.author,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Text(
-                      widget.bulletin.date,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.bulletin.author,
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ],
-                ),
-                Divider(height: 8, color: theme.colorScheme.outlineVariant),
-                SelectableText(
-                  widget.bulletin.content,
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
-            ),
+                  ),
+                  Text(
+                    widget.bulletin.date,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+              Divider(height: 8, color: theme.colorScheme.outlineVariant),
+              SelectableText(
+                widget.bulletin.content,
+                style: theme.textTheme.bodySmall,
+              ),
+            ],
           ),
         ),
       ),

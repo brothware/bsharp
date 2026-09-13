@@ -9,7 +9,6 @@ import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearScheduleDetailScreen extends ConsumerStatefulWidget {
   const WearScheduleDetailScreen({super.key});
@@ -58,6 +57,7 @@ class _WearScheduleDetailScreenState
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
+          scrollController: _scrollController,
           child: Column(
             children: [
               WearPinnedHeader(
@@ -71,38 +71,35 @@ class _WearScheduleDetailScreenState
               ),
               const SizedBox(height: 4),
               Expanded(
-                child: WearOsScrollbar(
-                  controller: _scrollController,
-                  child: WearVerticalOverscrollPager(
-                    onPrevious: _previousDay,
-                    onNext: _nextDay,
-                    child: items.isEmpty
-                        ? ListView(
-                            controller: _scrollController,
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 32),
-                                  child: Text(
-                                    t.schedule.noLessons,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
-                                    ),
+                child: WearVerticalOverscrollPager(
+                  onPrevious: _previousDay,
+                  onNext: _nextDay,
+                  child: items.isEmpty
+                      ? ListView(
+                          controller: _scrollController,
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 32),
+                                child: Text(
+                                  t.schedule.noLessons,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ),
-                            ],
-                          )
-                        : ListView.builder(
-                            controller: _scrollController,
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                            itemCount: items.length,
-                            itemBuilder: (context, index) =>
-                                _WearDetailTimelineItem(item: items[index]),
-                          ),
-                  ),
+                            ),
+                          ],
+                        )
+                      : ListView.builder(
+                          controller: _scrollController,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                          itemCount: items.length,
+                          itemBuilder: (context, index) =>
+                              _WearDetailTimelineItem(item: items[index]),
+                        ),
                 ),
               ),
             ],

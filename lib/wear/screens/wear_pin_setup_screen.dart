@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_compact_keypad.dart';
+import 'package:bsharp/wear/widgets/wear_edge_scrollbar.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 enum _PinSetupStep { create, confirm }
 
@@ -37,14 +37,12 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: WearSwipeDismiss(
-        child: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) => WearOsScrollbar(
-              controller: _scrollController,
-              indicatorColor: theme.colorScheme.primary,
-              backgroundColor: theme.colorScheme.surfaceContainerHighest,
-              child: SingleChildScrollView(
+      body: WearEdgeScrollbar(
+        controller: _scrollController,
+        child: WearSwipeDismiss(
+          child: SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
                 controller: _scrollController,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(

@@ -7,7 +7,6 @@ import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearLanguageScreen extends ConsumerStatefulWidget {
   const WearLanguageScreen({super.key});
@@ -35,6 +34,7 @@ class _WearLanguageScreenState extends ConsumerState<WearLanguageScreen> {
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
+          scrollController: _scrollController,
           child: Column(
             children: [
               WearTileHeader(
@@ -43,48 +43,43 @@ class _WearLanguageScreenState extends ConsumerState<WearLanguageScreen> {
               ),
               const SizedBox(height: 4),
               Expanded(
-                child: WearOsScrollbar(
+                child: ListView.builder(
                   controller: _scrollController,
-                  indicatorColor: theme.colorScheme.primary,
-                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    padding: EdgeInsets.zero,
-                    itemCount: AppLocale.values.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return _LanguageItem(
-                          label: t.settings.languageSystem,
-                          isSelected: isSystem,
-                          onTap: () {
-                            unawaited(
-                              ref.read(localeProvider.notifier).resetToSystem(),
-                            );
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      }
-                      final locale = AppLocale.values[index - 1];
-                      final flutterLocale = locale.flutterLocale;
-                      final isSelected =
-                          !isSystem &&
-                          currentLocale.languageCode ==
-                              flutterLocale.languageCode;
-
+                  padding: EdgeInsets.zero,
+                  itemCount: AppLocale.values.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
                       return _LanguageItem(
-                        label: localeDisplayName(flutterLocale),
-                        isSelected: isSelected,
+                        label: t.settings.languageSystem,
+                        isSelected: isSystem,
                         onTap: () {
                           unawaited(
-                            ref
-                                .read(localeProvider.notifier)
-                                .setLocale(flutterLocale),
+                            ref.read(localeProvider.notifier).resetToSystem(),
                           );
                           Navigator.of(context).pop();
                         },
                       );
-                    },
-                  ),
+                    }
+                    final locale = AppLocale.values[index - 1];
+                    final flutterLocale = locale.flutterLocale;
+                    final isSelected =
+                        !isSystem &&
+                        currentLocale.languageCode ==
+                            flutterLocale.languageCode;
+
+                    return _LanguageItem(
+                      label: localeDisplayName(flutterLocale),
+                      isSelected: isSelected,
+                      onTap: () {
+                        unawaited(
+                          ref
+                              .read(localeProvider.notifier)
+                              .setLocale(flutterLocale),
+                        );
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  },
                 ),
               ),
             ],
