@@ -94,7 +94,7 @@ void main() {
       expect(find.text('Anna Nowak'), findsOneWidget);
 
       await tester.drag(
-        find.byType(ListView).first,
+        find.byType(SingleChildScrollView).first,
         const Offset(0, -2000),
       );
       await tester.pump();
@@ -118,6 +118,41 @@ void main() {
       await tester.pump();
 
       expect(find.textContaining('(2)'), findsOneWidget);
+    });
+    testWidgets('the scroll range never changes while reading a long message', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(454, 454);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.reset);
+
+      final body = List.generate(
+        90,
+        (i) => 'Szanowni Panstwo, akapit numer $i tresci wiadomosci.',
+      ).join(' ');
+
+      await tester.pumpWidget(_buildScreen(message: _msg(content: body)));
+      await tester.pump();
+      await tester.pump();
+
+      final position = tester
+          .state<ScrollableState>(find.byType(Scrollable))
+          .position;
+      final extentAtTop = position.maxScrollExtent;
+      expect(extentAtTop, greaterThan(0));
+
+      for (var offset = 0.0; offset < extentAtTop; offset += 100) {
+        position.jumpTo(offset);
+        await tester.pump();
+        expect(
+          position.maxScrollExtent,
+          extentAtTop,
+          reason:
+              'a lazy list estimates its length from the children it has laid '
+              'out, so one long paragraph among short ones makes the estimate '
+              'lurch and the scroll indicator jump',
+        );
+      }
     });
   });
 }
