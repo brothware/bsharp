@@ -1,6 +1,7 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/portal_date_utils.dart';
+import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -84,7 +85,7 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    test.subjectName,
+                                    translateSubjectName(test.subjectName),
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),

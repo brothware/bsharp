@@ -5,6 +5,7 @@ import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
@@ -247,6 +248,36 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(WearGradeDetailScreen), findsNothing);
+    });
+
+    testWidgets('the term label is translated rather than raw', (
+      tester,
+    ) async {
+      final now = DateTime.now();
+      await tester.pumpWidget(
+        await _buildScreen(
+          terms: [
+            Term(
+              id: 1,
+              name: 'trimester I',
+              type: TermType.semester,
+              startDate: now.subtract(const Duration(days: 90)),
+              endDate: now.add(const Duration(days: 90)),
+            ),
+            Term(
+              id: 2,
+              name: 'trimester II',
+              type: TermType.semester,
+              startDate: now.add(const Duration(days: 91)),
+              endDate: now.add(const Duration(days: 270)),
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text(translateTermName('trimester I')), findsOneWidget);
+      expect(find.text('trimester I'), findsNothing);
     });
   });
 }
