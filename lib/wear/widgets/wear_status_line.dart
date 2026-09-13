@@ -24,7 +24,13 @@ class WearStatusLine extends ConsumerWidget {
             ),
           ),
           const SizedBox(width: 6),
-          Text(t.sync.syncing, style: theme.textTheme.labelMedium),
+          Flexible(
+            child: Text(
+              t.sync.syncing,
+              style: theme.textTheme.labelMedium,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
       SyncStatus.failed => GestureDetector(
@@ -38,18 +44,24 @@ class WearStatusLine extends ConsumerWidget {
               color: theme.colorScheme.error,
             ),
             const SizedBox(width: 6),
-            Text(
-              t.sync.syncFailed,
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: theme.colorScheme.error,
+            Flexible(
+              child: Text(
+                t.sync.syncFailed,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             const SizedBox(width: 6),
-            Text(
-              t.common.retry,
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.bold,
+            Flexible(
+              child: Text(
+                t.common.retry,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],

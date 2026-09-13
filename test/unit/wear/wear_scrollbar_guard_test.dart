@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'every scrollable wear screen also references WearOsScrollbar',
+    'every scrollable wear screen hands its controller to the edge '
+    'scrollbar',
     () {
       final screensDir = Directory('lib/wear/screens');
       final offenders = <String>[];
@@ -16,7 +17,8 @@ void main() {
         if (entity is! File || !entity.path.endsWith('.dart')) continue;
         final content = entity.readAsStringSync();
         if (!scrollableTypes.hasMatch(content)) continue;
-        if (!content.contains('WearOsScrollbar')) {
+        if (!content.contains('scrollController:') &&
+            !content.contains('WearEdgeScrollbar')) {
           offenders.add(entity.path);
         }
       }
@@ -37,7 +39,7 @@ void main() {
       for (final entity in Directory(dir).listSync()) {
         if (entity is! File || !entity.path.endsWith('.dart')) continue;
         final source = entity.readAsStringSync();
-        if (RegExp(r'(?<!WearOs)\bScrollbar\(').hasMatch(source)) {
+        if (RegExp(r'(?<!WearOs)(?<!WearEdge)\bScrollbar\(').hasMatch(source)) {
           offenders.add(entity.path);
         }
       }

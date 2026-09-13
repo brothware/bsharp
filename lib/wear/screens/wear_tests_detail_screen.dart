@@ -8,7 +8,6 @@ import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearTestsDetailScreen extends ConsumerStatefulWidget {
   const WearTestsDetailScreen({super.key});
@@ -45,6 +44,7 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
+          scrollController: _scrollController,
           child: Column(
             children: [
               WearTileHeader(icon: Icons.quiz_outlined, title: t.tests.title),
@@ -59,63 +59,59 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
                           ),
                         ),
                       )
-                    : WearOsScrollbar(
+                    : ListView.builder(
                         controller: _scrollController,
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                          itemCount: sorted.length,
-                          itemBuilder: (context, index) {
-                            final test = sorted[index];
-                            final isUpcoming = upcomingIds.contains(test.id);
-                            return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 2),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: isUpcoming
-                                    ? theme.colorScheme.primaryContainer
-                                          .withValues(alpha: 0.2)
-                                    : null,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                        padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                        itemCount: sorted.length,
+                        itemBuilder: (context, index) {
+                          final test = sorted[index];
+                          final isUpcoming = upcomingIds.contains(test.id);
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: isUpcoming
+                                  ? theme.colorScheme.primaryContainer
+                                        .withValues(alpha: 0.2)
+                                  : null,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  translateSubjectName(test.subjectName),
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  test.date,
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                                if (test.title != null)
                                   Text(
-                                    translateSubjectName(test.subjectName),
+                                    test.title!,
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
+                                if (test.description != null)
                                   Text(
-                                    test.date,
-                                    style: theme.textTheme.labelSmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
-                                    ),
+                                    test.description!,
+                                    style: theme.textTheme.labelSmall,
                                   ),
-                                  if (test.title != null)
-                                    Text(
-                                      test.title!,
-                                      style: theme.textTheme.bodySmall
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  if (test.description != null)
-                                    Text(
-                                      test.description!,
-                                      style: theme.textTheme.labelSmall,
-                                    ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
               ),
             ],

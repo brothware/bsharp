@@ -28,7 +28,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 const _testsWindowDays = 7;
 
@@ -175,39 +174,37 @@ class _WearHomeState extends ConsumerState<WearHome> {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: WearScaffold(
+          scrollController: _controller,
           child: LayoutBuilder(
             builder: (context, constraints) {
               WidgetsBinding.instance.addPostFrameCallback(
                 (_) => _measureLastRowBottomPadding(constraints.maxHeight),
               );
-              return WearOsScrollbar(
+              return CustomScrollView(
                 controller: _controller,
-                child: CustomScrollView(
-                  controller: _controller,
-                  scrollCacheExtent: const ScrollCacheExtent.pixels(2000),
-                  slivers: [
-                    const SliverToBoxAdapter(child: WearDashboard()),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final section = sections[index];
-                        final isLastRow = index == sections.length - 1;
-                        return WearLauncherRow(
-                          measureKey: isLastRow ? _lastRowKey : null,
-                          icon: section.icon,
-                          title: section.title,
-                          summary: section.summary,
-                          scrollController: _controller,
-                          onTap: () => section.isFullScreen
-                              ? pushWearScreen(context, section.builder)
-                              : pushWearSection(context, section.builder),
-                        );
-                      }, childCount: sections.length),
-                    ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: _lastRowBottomPadding),
-                    ),
-                  ],
-                ),
+                scrollCacheExtent: const ScrollCacheExtent.pixels(2000),
+                slivers: [
+                  const SliverToBoxAdapter(child: WearDashboard()),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final section = sections[index];
+                      final isLastRow = index == sections.length - 1;
+                      return WearLauncherRow(
+                        measureKey: isLastRow ? _lastRowKey : null,
+                        icon: section.icon,
+                        title: section.title,
+                        summary: section.summary,
+                        scrollController: _controller,
+                        onTap: () => section.isFullScreen
+                            ? pushWearScreen(context, section.builder)
+                            : pushWearSection(context, section.builder),
+                      );
+                    }, childCount: sections.length),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: _lastRowBottomPadding),
+                  ),
+                ],
               );
             },
           ),

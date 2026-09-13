@@ -14,7 +14,6 @@ import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearGradesDetailScreen extends ConsumerStatefulWidget {
   const WearGradesDetailScreen({super.key});
@@ -66,6 +65,7 @@ class _WearGradesDetailScreenState
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
+          scrollController: _scrollController,
           child: Column(
             children: [
               if (terms.length > 1)
@@ -88,15 +88,12 @@ class _WearGradesDetailScreenState
                           ),
                         ),
                       )
-                    : WearOsScrollbar(
+                    : ListView.builder(
                         controller: _scrollController,
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                          itemCount: subjectGrades.length,
-                          itemBuilder: (context, index) =>
-                              _WearSubjectSection(sg: subjectGrades[index]),
-                        ),
+                        padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                        itemCount: subjectGrades.length,
+                        itemBuilder: (context, index) =>
+                            _WearSubjectSection(sg: subjectGrades[index]),
                       ),
               ),
             ],

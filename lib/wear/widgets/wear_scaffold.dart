@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_edge_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,9 +32,15 @@ class WearDisplayScope extends InheritedWidget {
 }
 
 class WearScaffold extends ConsumerWidget {
-  const WearScaffold({required this.child, this.edgeContent, super.key});
+  const WearScaffold({
+    required this.child,
+    this.scrollController,
+    this.edgeContent,
+    super.key,
+  });
 
   final Widget child;
+  final ScrollController? scrollController;
   final Widget? edgeContent;
 
   @override
@@ -47,14 +54,22 @@ class WearScaffold extends ConsumerWidget {
       display: display,
       child: ColoredBox(
         color: theme.colorScheme.surface,
-        child: Stack(
-          children: [
-            Padding(padding: _insetFor(display), child: child),
-            ?edgeContent,
-          ],
+        child: _withEdgeScrollbar(
+          Stack(
+            children: [
+              Padding(padding: _insetFor(display), child: child),
+              ?edgeContent,
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget _withEdgeScrollbar(Widget content) {
+    final controller = scrollController;
+    if (controller == null) return content;
+    return WearEdgeScrollbar(controller: controller, child: content);
   }
 
   EdgeInsets _insetFor(WearDisplay display) {

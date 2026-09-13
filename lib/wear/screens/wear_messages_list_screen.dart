@@ -6,7 +6,6 @@ import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearMessagesListScreen extends ConsumerStatefulWidget {
   const WearMessagesListScreen({super.key});
@@ -35,24 +34,22 @@ class _WearMessagesListScreenState
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
-          child: WearOsScrollbar(
+          scrollController: _scrollController,
+          child: ListView.builder(
             controller: _scrollController,
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(4),
-              itemCount: inbox.length,
-              itemBuilder: (context, index) {
-                final msg = inbox[index];
-                return WearMessageItem(
-                  message: msg,
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => WearMessageDetailScreen(message: msg),
-                    ),
+            padding: const EdgeInsets.all(4),
+            itemCount: inbox.length,
+            itemBuilder: (context, index) {
+              final msg = inbox[index];
+              return WearMessageItem(
+                message: msg,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => WearMessageDetailScreen(message: msg),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),
