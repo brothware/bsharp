@@ -79,6 +79,7 @@ class WearMessageItem extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 3),
+        constraints: const BoxConstraints(minHeight: 48),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -87,12 +88,13 @@ class WearMessageItem extends StatelessWidget {
               : null,
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (!message.isRead)
               Container(
                 width: 6,
                 height: 6,
-                margin: const EdgeInsets.only(right: 4),
+                margin: const EdgeInsets.only(top: 4, right: 4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: theme.colorScheme.primary,
@@ -100,31 +102,41 @@ class WearMessageItem extends StatelessWidget {
               ),
             Expanded(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    message.senderName,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontWeight: message.isRead
-                          ? FontWeight.normal
-                          : FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          message.senderName,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontWeight: message.isRead
+                                ? FontWeight.normal
+                                : FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        formatMessageDate(message.sendTime),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
                   Text(
                     message.title,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
-              ),
-            ),
-            Text(
-              formatMessageDate(message.sendTime),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ],
