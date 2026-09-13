@@ -45,12 +45,6 @@ ThemeData wearTheme(ThemeData base) {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       ),
     ),
-    scrollbarTheme: const ScrollbarThemeData(
-      thickness: WidgetStatePropertyAll(3),
-      radius: Radius.circular(2),
-      thumbVisibility: WidgetStatePropertyAll(true),
-      minThumbLength: 24,
-    ),
   );
 }
 

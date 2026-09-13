@@ -90,16 +90,13 @@ class _WearScheduleDetailScreenState
                               ),
                             ],
                           )
-                        : Scrollbar(
+                        : ListView.builder(
                             controller: _scrollController,
-                            child: ListView.builder(
-                              controller: _scrollController,
-                              physics: const BouncingScrollPhysics(),
-                              padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                              itemCount: items.length,
-                              itemBuilder: (context, index) =>
-                                  _WearDetailTimelineItem(item: items[index]),
-                            ),
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                            itemCount: items.length,
+                            itemBuilder: (context, index) =>
+                                _WearDetailTimelineItem(item: items[index]),
                           ),
                   ),
                 ),
