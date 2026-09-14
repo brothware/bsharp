@@ -16,6 +16,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const _wearDarkSurface = Color(0xFF000000);
 const _wearLightSurface = Color(0xFFFAFAFA);
+const _trackAlpha = 0.24;
+
+/// The wear theme flattens every surface container onto the background for
+/// WO-V13, so a track painted in one of those is invisible. Tracks take this.
+Color wearTrackColor(ColorScheme scheme) =>
+    scheme.onSurface.withValues(alpha: _trackAlpha);
 
 class WearScrollBehavior extends MaterialScrollBehavior {
   @override
