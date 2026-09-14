@@ -11,13 +11,8 @@ class AuthService {
   final Dio _client;
 
   String _portalToken = '';
-  DateTime _tokenObtainedAt = DateTime(1970);
 
   String get portalToken => _portalToken;
-
-  bool get isTokenValid =>
-      _portalToken.isNotEmpty &&
-      DateTime.now().difference(_tokenObtainedAt).inSeconds < 20;
 
   static String hashPassword(String password) {
     final bytes = utf8.encode(password);
@@ -51,7 +46,6 @@ class AuthService {
         final token = _extractToken(location);
         if (token != null) {
           _portalToken = token;
-          _tokenObtainedAt = DateTime.now();
           return Result.success(token);
         }
       }
@@ -67,19 +61,8 @@ class AuthService {
     }
   }
 
-  Future<Result<String>> ensureValidToken({
-    required String login,
-    required String password,
-  }) async {
-    if (isTokenValid) {
-      return Result.success(_portalToken);
-    }
-    return obtainPortalToken(login: login, password: password);
-  }
-
   void clearToken() {
     _portalToken = '';
-    _tokenObtainedAt = DateTime(1970);
   }
 
   String? _extractToken(String locationUrl) {

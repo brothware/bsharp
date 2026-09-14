@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
+import 'package:bsharp/core/network/serial_queue.dart';
 import 'package:bsharp/data/data_sources/remote/auth_service.dart';
 import 'package:bsharp/data/data_sources/remote/mobile_sync_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
@@ -35,6 +38,8 @@ class MobiregDataProvider implements SchoolDataProvider {
   String _password = '';
   String? _legacyPasswordHash;
   PocztaDataSource? _pocztaDs;
+  AuthService? _portalAuth;
+  final _portalQueue = SerialQueue();
 
   String? get _njsonPassHash =>
       _password.isNotEmpty ? hashPassword(_password) : _legacyPasswordHash;
@@ -146,6 +151,43 @@ class MobiregDataProvider implements SchoolDataProvider {
       parentLogin: login,
       parentPassHash: _njsonPassHash ?? '',
     );
+    _portalAuth = null;
+  }
+
+  /// A portal token dies on first use, and logging in again invalidates
+  /// whatever the last login handed out. So a request is a login and its one
+  /// call, and two of them must never overlap: run them through a queue.
+  Future<T?> _portalRequest<T>(
+    Ref ref,
+    ApiClientFactory factory,
+    Future<T?> Function(String token) call,
+  ) {
+    return _portalQueue.add(() async {
+      final token = await _obtainPortalToken(ref, factory);
+      if (token == null) return null;
+      return call(token);
+    });
+  }
+
+  Future<String?> _obtainPortalToken(Ref ref, ApiClientFactory factory) async {
+    final auth = _portalAuth ??= AuthService(
+      webLoginClient: factory.createWebLoginClient(),
+    );
+    final result = await auth.obtainPortalToken(
+      login: _login!,
+      password: _password,
+    );
+
+    return result.when(
+      success: (token) {
+        ref.read(portalReauthRequiredProvider.notifier).value = false;
+        return token;
+      },
+      failure: (failure) {
+        debugPrint('MobiregDataProvider: portal login failed: $failure');
+        return null;
+      },
+    );
   }
 
   @override
@@ -240,39 +282,22 @@ class MobiregDataProvider implements SchoolDataProvider {
       return;
     }
 
-    final authService = AuthService(
-      webLoginClient: factory.createWebLoginClient(),
-    );
-    final tokenResult = await authService.obtainPortalToken(
-      login: _login!,
-      password: _password,
-    );
-
-    final token = tokenResult.when(
-      success: (t) => t,
-      failure: (failure) {
-        debugPrint('MobiregDataProvider: portal login failed: $failure');
-        return null;
-      },
-    );
-    if (token == null) return;
-    ref.read(portalReauthRequiredProvider.notifier).value = false;
-
     final portalDs = PortalDataSource(client: factory.createPortalClient());
-    final userResult = await portalDs.getView(
-      school: _school!,
-      token: token,
-      view: 'users',
-      params: {},
-    );
-
-    final messagesToken = userResult.when(
-      success: (data) => data['messagesToken'] as String?,
-      failure: (failure) {
-        debugPrint('MobiregDataProvider: users view failed: $failure');
-        return null;
-      },
-    );
+    final messagesToken = await _portalRequest(ref, factory, (token) async {
+      final userResult = await portalDs.getView(
+        school: _school!,
+        token: token,
+        view: 'users',
+        params: {},
+      );
+      return userResult.when(
+        success: (data) => data['messagesToken'] as String?,
+        failure: (failure) {
+          debugPrint('MobiregDataProvider: users view failed: $failure');
+          return null;
+        },
+      );
+    });
 
     if (messagesToken == null) {
       debugPrint('MobiregDataProvider: no messagesToken in users view');
@@ -485,79 +510,56 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     final changelogParams = {...params, 'limit': '100', 'offset': '0'};
 
-    Future<String?> obtainToken() async {
-      final result = await AuthService(
-        webLoginClient: ApiClientFactory(
-          school: _school!,
-          parentLogin: _login!,
-          parentPassHash: _njsonPassHash ?? '',
-        ).createWebLoginClient(),
-      ).obtainPortalToken(login: _login!, password: _password);
-      return result.when(
-        success: (t) {
-          ref.read(portalReauthRequiredProvider.notifier).value = false;
-          return t;
-        },
-        failure: (failure) {
-          debugPrint('MobiregDataProvider: portal token failed: $failure');
-          return null;
-        },
-      );
-    }
-
-    Future<void> fetchWithFreshToken(
-      String view,
-      Map<String, String> viewParams,
-      void Function(List<dynamic> items) onSuccess, {
-      String? cacheKey,
-    }) async {
-      final token = await obtainToken();
-      await _fetchPortalView(
-        ref,
-        portalDs,
-        token,
-        view,
-        viewParams,
-        cache,
-        onSuccess,
-        cacheKey: cacheKey,
-      );
-    }
-
-    await Future.wait([
-      fetchWithFreshToken(
-        'bulletins',
-        params,
-        (items) => applyPortalBulletins(ref, items),
+    final views = <_PortalViewRequest>[
+      _PortalViewRequest(
+        view: 'bulletins',
+        params: params,
+        apply: (items) => applyPortalBulletins(ref, items),
       ),
-      fetchWithFreshToken(
-        'changelog',
-        {...changelogParams, 'type': 'mark'},
-        (items) => applyPortalChangelog(ref, 'mark', items),
+      _PortalViewRequest(
+        view: 'changelog',
+        params: {...changelogParams, 'type': 'mark'},
+        apply: (items) => applyPortalChangelog(ref, 'mark', items),
         cacheKey: 'changelog_mark',
       ),
-      fetchWithFreshToken(
-        'changelog',
-        {...changelogParams, 'type': 'attendance'},
-        (items) => applyPortalChangelog(ref, 'attendance', items),
+      _PortalViewRequest(
+        view: 'changelog',
+        params: {...changelogParams, 'type': 'attendance'},
+        apply: (items) => applyPortalChangelog(ref, 'attendance', items),
         cacheKey: 'changelog_attendance',
       ),
-      fetchWithFreshToken(
-        'reprimands',
-        params,
-        (items) => applyPortalReprimands(ref, items),
+      _PortalViewRequest(
+        view: 'reprimands',
+        params: params,
+        apply: (items) => applyPortalReprimands(ref, items),
       ),
-      fetchWithFreshToken(
-        'tests',
-        params,
-        (items) => applyPortalTests(ref, items),
+      _PortalViewRequest(
+        view: 'tests',
+        params: params,
+        apply: (items) => applyPortalTests(ref, items),
       ),
-      fetchWithFreshToken(
-        'homeworks',
-        params,
-        (items) => applyPortalHomeworks(ref, items),
+      _PortalViewRequest(
+        view: 'homeworks',
+        params: params,
+        apply: (items) => applyPortalHomeworks(ref, items),
       ),
-    ]);
+    ];
+
+    for (final request in views) {
+      await _portalRequest(ref, factory, (token) async {
+        await _fetchPortalView(
+          ref,
+          portalDs,
+          token,
+          request.view,
+          request.params,
+          cache,
+          request.apply,
+          cacheKey: request.cacheKey,
+        );
+        return null;
+      });
+    }
   }
 
   Future<void> _fetchPortalView(
@@ -588,6 +590,20 @@ class MobiregDataProvider implements SchoolDataProvider {
           debugPrint('MobiregDataProvider: portal view $view failed: $failure'),
     );
   }
+}
+
+class _PortalViewRequest {
+  const _PortalViewRequest({
+    required this.view,
+    required this.params,
+    required this.apply,
+    this.cacheKey,
+  });
+
+  final String view;
+  final Map<String, String> params;
+  final void Function(List<dynamic> items) apply;
+  final String? cacheKey;
 }
 
 enum _MobiregNotificationKind {
