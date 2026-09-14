@@ -92,7 +92,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
   void _goNext(String value) {
     if (value.trim().isEmpty) {
-      setState(() => _errorMessage = t.setup.fillAllFields);
+      _showError(t.setup.fillAllFields);
       return;
     }
     final index = _credentialSteps.indexOf(_step);
@@ -108,7 +108,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     final password = _passwordController.text;
 
     if (school.isEmpty || login.isEmpty || password.isEmpty) {
-      setState(() => _errorMessage = t.setup.fillAllFields);
+      _showError(t.setup.fillAllFields);
       return;
     }
 
@@ -130,10 +130,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     await result.when(
       success: (_) => _loadStudents(),
       failure: (failure) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = failureMessage(failure);
-        });
+        setState(() => _isLoading = false);
+        _showError(failureMessage(failure));
       },
     );
   }
@@ -155,10 +153,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
     switch (result) {
       case Failure(:final failure):
-        setState(() {
-          _isLoading = false;
-          _errorMessage = failureMessage(failure);
-        });
+        setState(() => _isLoading = false);
+        _showError(failureMessage(failure));
       case Success(:final value):
         setState(() {
           _isLoading = false;
@@ -306,37 +302,43 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                   minHeight: constraints.maxHeight,
                 ),
                 child: Center(
-                  child: TextField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    obscureText: obscureText,
-                    textAlign: TextAlign.center,
-                    autocorrect: false,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => onSubmit(),
-                    decoration: InputDecoration(
-                      labelText: label,
-                      isDense: true,
-                      suffixIcon: suffixIcon,
-                    ),
-                    style: theme.textTheme.bodyMedium,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        obscureText: obscureText,
+                        textAlign: TextAlign.center,
+                        autocorrect: false,
+                        textInputAction: TextInputAction.done,
+                        onChanged: _clearError,
+                        onSubmitted: (_) => onSubmit(),
+                        decoration: InputDecoration(
+                          labelText: label,
+                          isDense: true,
+                          suffixIcon: suffixIcon,
+                        ),
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                      if (_errorMessage case final message?)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            message,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.error,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
         ),
-        if (_errorMessage != null)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              _errorMessage!,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.error,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
         SizedBox(
           height: 48,
           child: FilledButton(
@@ -388,6 +390,28 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         onPressed: _togglePasswordVisibility,
       ),
     );
+  }
+
+  /// The message sits under the field, which on a watch is past the bottom of
+  /// the glass, so bring it into view rather than leave the user to find it.
+  void _showError(String message) {
+    setState(() => _errorMessage = message);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final controller = _fieldStepScrollController;
+      if (!controller.hasClients) return;
+      controller.animateTo(
+        controller.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  /// A failure names the step it came from, which may be two steps back, so
+  /// it stays until the user does something about it. Typing counts.
+  void _clearError(String _) {
+    if (_errorMessage == null) return;
+    setState(() => _errorMessage = null);
   }
 
   /// The watch keyboard fills the screen and prints what it is given above

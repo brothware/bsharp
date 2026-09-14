@@ -11,6 +11,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
 
+/// The longest failure the setup step can show: four lines on a 432px watch.
+class _SchoolNotFoundDataProvider extends DemoDataProvider {
+  @override
+  Future<Result<String?>> validateCredentials({
+    required String school,
+    required String login,
+    required String passwordHash,
+  }) async => const Result.failure(SchoolNotFound());
+}
+
 class _RejectingDataProvider extends DemoDataProvider {
   @override
   Future<Result<String?>> validateCredentials({
@@ -221,6 +231,46 @@ void main() {
               'the watch keyboard fills the screen and prints what it is '
               'given above the keys, so revealing while it is open puts the '
               'password on the whole display',
+        );
+      });
+      testWidgets('a long failure never pushes the button off the step', (
+        tester,
+      ) async {
+        tester.view.physicalSize = const Size(432, 432);
+        tester.view.devicePixelRatio = 2.125;
+        addTearDown(tester.view.reset);
+
+        await tester.pumpWidget(
+          _buildApp(
+            shape: shape,
+            extraOverrides: [
+              activeDataProviderProvider.overrideWithBuild(
+                (ref, _) => _SchoolNotFoundDataProvider(),
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), 'parent');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), 'wrong');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+
+        final button = tester.getRect(find.byType(FilledButton));
+        expect(
+          button.bottom,
+          lessThanOrEqualTo(tester.view.physicalSize.height / 2.125),
+          reason:
+              'the failure text grew the step until the button fell off the '
+              'bottom of the watch, with no way to dismiss it',
         );
       });
     });
