@@ -301,27 +301,6 @@ jobs:
             artifacts/bsharp-ios-${{ needs.version.outputs.version }}.tar.gz
           generate_release_notes: true
 
-  deploy-play:
-    runs-on: ubuntu-latest
-    needs: [version, build-android]
-    if: vars.GOOGLE_PLAY_ENABLED == 'true'
-    concurrency:
-      group: play-edit-${{ github.ref }}
-      cancel-in-progress: false
-    steps:
-      - uses: actions/download-artifact@v8
-        with:
-          name: release-android-aab
-
-      - uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
-          packageName: pl.brothware.bsharp
-          releaseFiles: app-phone-release.aab
-          track: internal
-          releaseName: v${{ needs.version.outputs.version }}
-          status: completed
-
   deploy-play-wear:
     runs-on: ubuntu-latest
     needs: [version, build-wearos]
@@ -339,7 +318,51 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: pl.brothware.bsharp
           releaseFiles: app-wear-release.aab
-          track: wear:internal
+          tracks: wear:internal
+          releaseName: v${{ needs.version.outputs.version }}
+          status: completed
+
+  # Both uploads edit the same Play app, and Play refuses to commit an edit if
+  # the app changed while that edit was open. Waiting for the wear upload keeps
+  # the two apart; the retry covers a wear release still landing underneath.
+  deploy-play:
+    runs-on: ubuntu-latest
+    needs: [version, build-android, deploy-play-wear]
+    if: >-
+      always() && vars.GOOGLE_PLAY_ENABLED == 'true'
+      && needs.version.result == 'success'
+      && needs.build-android.result == 'success'
+    concurrency:
+      group: play-edit-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-android-aab
+
+      - id: upload
+        continue-on-error: true
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: pl.brothware.bsharp
+          releaseFiles: app-phone-release.aab
+          tracks: internal
+          releaseName: v${{ needs.version.outputs.version }}
+          status: completed
+
+      - name: Let the app settle before opening another edit
+        if: steps.upload.outcome == 'failure'
+        run: sleep 120
+
+      - name: Upload again on a fresh edit
+        if: steps.upload.outcome == 'failure'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: pl.brothware.bsharp
+          releaseFiles: app-phone-release.aab
+          tracks: internal
           releaseName: v${{ needs.version.outputs.version }}
           status: completed
 
