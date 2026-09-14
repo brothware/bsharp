@@ -24,8 +24,16 @@ class WearSideNavigation extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _WearSideChevron(icon: Icons.chevron_left, onTap: onPrevious),
-          _WearSideChevron(icon: Icons.chevron_right, onTap: onNext),
+          _WearSideChevron(
+            icon: Icons.chevron_left,
+            alignment: Alignment.centerLeft,
+            onTap: onPrevious,
+          ),
+          _WearSideChevron(
+            icon: Icons.chevron_right,
+            alignment: Alignment.centerRight,
+            onTap: onNext,
+          ),
         ],
       ),
     );
@@ -33,9 +41,14 @@ class WearSideNavigation extends StatelessWidget {
 }
 
 class _WearSideChevron extends StatelessWidget {
-  const _WearSideChevron({required this.icon, required this.onTap});
+  const _WearSideChevron({
+    required this.icon,
+    required this.alignment,
+    required this.onTap,
+  });
 
   final IconData icon;
+  final Alignment alignment;
   final VoidCallback onTap;
 
   @override
@@ -48,7 +61,10 @@ class _WearSideChevron extends StatelessWidget {
       child: SizedBox(
         width: _minTouchTargetDp,
         height: _minTouchTargetDp,
-        child: Center(
+        // out at the rim of its target, clear of the content the screen is
+        // showing rather than centred on top of it
+        child: Align(
+          alignment: alignment,
           child: Icon(
             icon,
             size: _chevronIconSizeDp,

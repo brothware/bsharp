@@ -5,10 +5,11 @@ import 'package:bsharp/wear/widgets/wear_edge_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// A thin margin, not the largest rectangle that fits the circle: that
-/// rectangle is only 64% of the glass, and rows narrow themselves near the top
-/// and bottom where the circle does.
-const double kWearRoundInsetFactor = 0.052;
+/// Not the largest rectangle that fits the circle, which is only 64% of the
+/// glass, and not so thin that rows have to halve themselves at the edges to
+/// stay inside it: at this margin the narrowing is a fifth, gentle enough to
+/// read as depth rather than as the list zooming under your finger.
+const double kWearRoundInsetFactor = 0.11;
 const _rectangularHorizontalFactor = 0.05;
 const _rectangularVerticalFactor = 0.04;
 
