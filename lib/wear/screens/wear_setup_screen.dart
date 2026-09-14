@@ -9,6 +9,7 @@ import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/failure_messages.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/wear_text_input.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -287,6 +288,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     bool obscureText = false,
     Widget? suffixIcon,
   }) {
+    // A secret stays on the masked in-app field: the system input screen shows
+    // what it is given, and on a watch that is the whole display.
+    final useSystemInput = !obscureText;
     final theme = Theme.of(context);
 
     return Column(
@@ -309,6 +313,10 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                         controller: controller,
                         focusNode: focusNode,
                         obscureText: obscureText,
+                        readOnly: useSystemInput,
+                        onTap: useSystemInput
+                            ? () => _editOnSystemInput(controller, label)
+                            : null,
                         textAlign: TextAlign.center,
                         autocorrect: false,
                         textInputAction: TextInputAction.done,
@@ -405,6 +413,17 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         curve: Curves.easeOut,
       );
     });
+  }
+
+  Future<void> _editOnSystemInput(
+    TextEditingController controller,
+    String label,
+  ) async {
+    final typed = await requestWearTextInput(label: label);
+    if (typed == null || !mounted) return;
+
+    controller.text = typed;
+    _clearError(typed);
   }
 
   /// A failure names the step it came from, which may be two steps back, so
