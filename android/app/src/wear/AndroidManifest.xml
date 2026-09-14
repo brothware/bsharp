@@ -4,5 +4,11 @@
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
+
+        <activity
+            android:name=".TextInputActivity"
+            android:exported="false"
+            android:theme="@style/NormalTheme"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
     </application>
 </manifest>

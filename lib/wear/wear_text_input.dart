@@ -8,15 +8,18 @@ const _channel = MethodChannel('pl.brothware.bsharp/wear');
 /// Flutter draws its fields itself and tells the keyboard not to go full
 /// screen, which the watch keyboard can only half honour: it fills the screen
 /// anyway and its copy of the text stops updating after the first letter. The
-/// system screen owns the text it shows, and offers voice and handwriting
-/// besides.
+/// host answers with a real native field, which the keyboard keeps in step.
 ///
 /// Returns null when the wearer backs out, or when the host has no such
 /// screen, in which case the caller keeps whatever it had.
-Future<String?> requestWearTextInput({required String label}) async {
+Future<String?> requestWearTextInput({
+  required String label,
+  String text = '',
+}) async {
   try {
     return await _channel.invokeMethod<String>('requestTextInput', {
       'label': label,
+      'text': text,
     });
   } on MissingPluginException {
     debugPrint('requestWearTextInput: no host implementation');
