@@ -97,15 +97,19 @@ class _WearScheduleDetailScreenState
                             ),
                           ],
                         )
-                      : ListView.builder(
-                          controller: _scrollController,
-                          physics: const BouncingScrollPhysics(),
-                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                          itemCount: items.length,
-                          itemBuilder: wearScaledItems(
-                            _scrollController,
-                            (context, index) =>
-                                _WearDetailTimelineItem(item: items[index]),
+                      : Builder(
+                          builder: (context) => ListView.builder(
+                            controller: _scrollController,
+                            physics: const BouncingScrollPhysics(),
+                            padding: wearListPadding(
+                              WearDisplayScope.of(context),
+                            ).add(const EdgeInsets.symmetric(horizontal: 4)),
+                            itemCount: items.length,
+                            itemBuilder: wearScaledItems(
+                              _scrollController,
+                              (context, index) =>
+                                  _WearDetailTimelineItem(item: items[index]),
+                            ),
                           ),
                         ),
                 ),

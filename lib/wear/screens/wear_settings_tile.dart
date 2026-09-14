@@ -48,81 +48,84 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
         children: [
           WearTileHeader(icon: Icons.settings, title: t.settings.title),
           Expanded(
-            child: ListView(
-              controller: _scrollController,
-              physics: const ClampingScrollPhysics(),
-              padding: EdgeInsets.zero,
-              children: wearScaledChildren(_scrollController, [
-                if (childState.isChildMode)
-                  _WearSettingsItem(
-                    icon: Icons.child_care,
-                    label: t.childMode.childModeActive,
-                    iconColor: Colors.orange,
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const WearPinEntry(),
-                      ),
-                    ),
-                  )
-                else ...[
-                  if (allEntries.length > 1)
+            child: Builder(
+              builder: (context) => ListView(
+                controller: _scrollController,
+                physics: const ClampingScrollPhysics(),
+                padding: wearListPadding(WearDisplayScope.of(context)),
+                children: wearScaledChildren(_scrollController, [
+                  if (childState.isChildMode)
                     _WearSettingsItem(
-                      icon: Icons.people,
-                      label: t.accounts.switchStudent,
+                      icon: Icons.child_care,
+                      label: t.childMode.childModeActive,
+                      iconColor: Colors.orange,
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute<void>(
-                          builder: (_) => const WearStudentPicker(),
+                          builder: (_) => const WearPinEntry(),
+                        ),
+                      ),
+                    )
+                  else ...[
+                    if (allEntries.length > 1)
+                      _WearSettingsItem(
+                        icon: Icons.people,
+                        label: t.accounts.switchStudent,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) => const WearStudentPicker(),
+                          ),
+                        ),
+                      ),
+                    _WearSettingsItem(
+                      icon: Icons.child_care,
+                      label: t.childMode.title,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const WearChildModeScreen(),
                         ),
                       ),
                     ),
-                  _WearSettingsItem(
-                    icon: Icons.child_care,
-                    label: t.childMode.title,
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const WearChildModeScreen(),
+                    _WearSettingsItem(
+                      icon: Icons.brightness_6,
+                      label: t.settings.theme,
+                      trailing: Text(
+                        themeModeLabel(themeMode),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const _WearThemeScreen(),
+                        ),
                       ),
                     ),
-                  ),
-                  _WearSettingsItem(
-                    icon: Icons.brightness_6,
-                    label: t.settings.theme,
-                    trailing: Text(
-                      themeModeLabel(themeMode),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                    _WearSettingsItem(
+                      icon: Icons.language,
+                      label: t.settings.language,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const WearLanguageScreen(),
+                        ),
                       ),
                     ),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const _WearThemeScreen(),
+                    _WearSettingsItem(
+                      icon: Icons.sync,
+                      label: t.settings.sync,
+                      trailing: const WearStatusLine(),
+                      onTap: () => unawaited(
+                        ref.read(syncStatusProvider.notifier).sync(),
                       ),
                     ),
-                  ),
-                  _WearSettingsItem(
-                    icon: Icons.language,
-                    label: t.settings.language,
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const WearLanguageScreen(),
-                      ),
+                    _WearSettingsItem(
+                      icon: Icons.logout,
+                      label: t.settings.logoutButton,
+                      iconColor: Theme.of(context).colorScheme.error,
+                      onTap: () => _confirmLogout(context, ref),
                     ),
-                  ),
-                  _WearSettingsItem(
-                    icon: Icons.sync,
-                    label: t.settings.sync,
-                    trailing: const WearStatusLine(),
-                    onTap: () =>
-                        unawaited(ref.read(syncStatusProvider.notifier).sync()),
-                  ),
-                  _WearSettingsItem(
-                    icon: Icons.logout,
-                    label: t.settings.logoutButton,
-                    iconColor: Theme.of(context).colorScheme.error,
-                    onTap: () => _confirmLogout(context, ref),
-                  ),
-                ],
-              ]),
+                  ],
+                ]),
+              ),
             ),
           ),
         ],
