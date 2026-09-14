@@ -229,6 +229,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     );
   }
 
+  static const _stepHeaderButtonWidth = 48.0;
+
   Widget _buildStepHeader({required String label}) {
     final theme = Theme.of(context);
     final stepIndex = _credentialSteps.indexOf(_step);
@@ -240,25 +242,32 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                WearFittedText(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                if (stepIndex >= 0)
-                  Text(
-                    '${stepIndex + 1}/${_credentialSteps.length}',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+            Padding(
+              // clear of the back button on both sides, so the label stays
+              // centred on the step rather than on whatever space is left
+              padding: const EdgeInsets.symmetric(
+                horizontal: _stepHeaderButtonWidth,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  WearFittedText(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-              ],
+                  if (stepIndex >= 0)
+                    Text(
+                      '${stepIndex + 1}/${_credentialSteps.length}',
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                ],
+              ),
             ),
             if (canGoBack)
               Positioned(
@@ -266,7 +275,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                 top: 0,
                 bottom: 0,
                 child: SizedBox(
-                  width: 48,
+                  width: _stepHeaderButtonWidth,
                   child: IconButton(
                     onPressed: _goBack,
                     icon: const Icon(Icons.arrow_back),

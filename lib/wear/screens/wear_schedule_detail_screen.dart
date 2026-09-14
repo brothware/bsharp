@@ -7,6 +7,7 @@ import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_side_navigation.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,10 @@ class _WearScheduleDetailScreenState
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
           scrollController: _scrollController,
+          edgeContent: WearSideNavigation(
+            onPrevious: _previousDay,
+            onNext: _nextDay,
+          ),
           child: Column(
             children: [
               WearPinnedHeader(
@@ -67,8 +72,6 @@ class _WearScheduleDetailScreenState
                 child: WearPeriodSelector(
                   label: formatDateShort(_selectedDate),
                   subLabel: dayLabelFull(_selectedDate.weekday),
-                  onPrevious: _previousDay,
-                  onNext: _nextDay,
                 ),
               ),
               const SizedBox(height: 4),

@@ -6,6 +6,7 @@ import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_side_navigation.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +29,12 @@ class _WearHomeworkDetailScreenState
     super.dispose();
   }
 
+  void _stepFilter(HomeworkFilter current, int delta) {
+    const filters = HomeworkFilter.values;
+    final next = (filters.indexOf(current) + delta) % filters.length;
+    ref.read(homeworkFilterProvider.notifier).value = filters[next];
+  }
+
   @override
   Widget build(BuildContext context) {
     final homework = ref.watch(filteredHomeworksProvider);
@@ -39,15 +46,14 @@ class _WearHomeworkDetailScreenState
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
           scrollController: _scrollController,
+          edgeContent: WearSideNavigation(
+            onPrevious: () => _stepFilter(filter, -1),
+            onNext: () => _stepFilter(filter, 1),
+          ),
           child: Column(
             children: [
               WearPinnedHeader(
-                child: _WearHomeworkFilterSelector(
-                  filter: filter,
-                  onChanged: (f) {
-                    ref.read(homeworkFilterProvider.notifier).value = f;
-                  },
-                ),
+                child: _WearHomeworkFilterSelector(filter: filter),
               ),
               const SizedBox(height: 4),
               Expanded(
@@ -119,30 +125,13 @@ class _WearHomeworkDetailScreenState
 }
 
 class _WearHomeworkFilterSelector extends StatelessWidget {
-  const _WearHomeworkFilterSelector({
-    required this.filter,
-    required this.onChanged,
-  });
+  const _WearHomeworkFilterSelector({required this.filter});
 
   final HomeworkFilter filter;
-  final ValueChanged<HomeworkFilter> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    const filters = HomeworkFilter.values;
-    final current = filters.indexOf(filter);
-
-    return WearPeriodSelector(
-      label: _filterLabel(filter),
-      onPrevious: () {
-        final prev = (current - 1) % filters.length;
-        onChanged(filters[prev]);
-      },
-      onNext: () {
-        final next = (current + 1) % filters.length;
-        onChanged(filters[next]);
-      },
-    );
+    return WearPeriodSelector(label: _filterLabel(filter));
   }
 
   String _filterLabel(HomeworkFilter f) {

@@ -1,6 +1,20 @@
+import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// The header only ever lives inside a WearScaffold, which is what tells it
+/// how much the round glass takes off its sides.
+Widget _hosted(Widget child) {
+  return WearDisplayScope(
+    display: const WearDisplay(
+      shape: WearScreenShape.round,
+      sizeDp: Size(227, 227),
+    ),
+    child: child,
+  );
+}
 
 void main() {
   group('WearPinnedHeader', () {
@@ -10,8 +24,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(colorScheme: const ColorScheme.light()),
-          home: const Scaffold(
-            body: WearPinnedHeader(child: Text('header')),
+          home: Scaffold(
+            body: _hosted(const WearPinnedHeader(child: Text('header'))),
           ),
         ),
       );
@@ -29,11 +43,13 @@ void main() {
 
     testWidgets('reserves at least its minHeight', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
-            body: WearPinnedHeader(
-              minHeight: 50,
-              child: SizedBox(height: 4),
+            body: _hosted(
+              const WearPinnedHeader(
+                minHeight: 50,
+                child: SizedBox(height: 4),
+              ),
             ),
           ),
         ),
@@ -50,18 +66,20 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: Column(
-                children: [
-                  const WearPinnedHeader(child: Text('Header')),
-                  Expanded(
-                    child: ListView(
-                      children: List.generate(
-                        10,
-                        (i) => Text('item $i'),
+              body: _hosted(
+                Column(
+                  children: [
+                    const WearPinnedHeader(child: Text('Header')),
+                    Expanded(
+                      child: ListView(
+                        children: List.generate(
+                          10,
+                          (i) => Text('item $i'),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

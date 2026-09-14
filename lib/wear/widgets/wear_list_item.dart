@@ -40,3 +40,14 @@ IndexedWidgetBuilder wearScaledItems(
     child: builder(context, index),
   );
 }
+
+/// Wraps a fixed list of rows in [WearListItem]s.
+List<Widget> wearScaledChildren(
+  ScrollController controller,
+  List<Widget> children,
+) {
+  return [
+    for (final child in children)
+      WearListItem(scrollController: controller, child: child),
+  ];
+}

@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// A thin margin, not the largest rectangle that fits the circle: that
 /// rectangle is only 64% of the glass, and rows narrow themselves near the top
 /// and bottom where the circle does.
-const double _roundInsetFactor = 0.052;
+const double kWearRoundInsetFactor = 0.052;
 const _rectangularHorizontalFactor = 0.05;
 const _rectangularVerticalFactor = 0.04;
 
@@ -79,7 +79,7 @@ class WearScaffold extends ConsumerWidget {
     if (display.isRound) {
       final inset =
           math.min(display.sizeDp.width, display.sizeDp.height) *
-          _roundInsetFactor;
+          kWearRoundInsetFactor;
       return EdgeInsets.all(inset);
     }
     return EdgeInsets.symmetric(
@@ -87,4 +87,45 @@ class WearScaffold extends ConsumerWidget {
       vertical: display.sizeDp.height * _rectangularVerticalFactor,
     );
   }
+}
+
+/// How much narrower than the content box a band has to be to stay inside a
+/// round screen, given where it sits below the top of that box.
+///
+/// The content box keeps only a thin margin, so near the top and bottom it is
+/// wider than the glass. Scrolling rows shrink themselves; anything pinned in
+/// place asks here instead.
+double wearRoundInsetFor(
+  WearDisplay display, {
+  required double top,
+  required double bottom,
+}) {
+  if (!display.isRound) return 0;
+
+  final side = display.sizeDp.shortestSide;
+  final radius = side / 2;
+  final margin = side * kWearRoundInsetFactor;
+  final contentHalf = radius - margin;
+
+  final furthest = math.max(
+    (radius - (margin + top)).abs(),
+    (radius - (margin + bottom)).abs(),
+  );
+  if (furthest >= radius) return contentHalf;
+
+  final available = math.sqrt(radius * radius - furthest * furthest);
+  return math.max(0, contentHalf - available);
+}
+
+/// The extra inset a fixed grid needs inside the content box.
+///
+/// A row of cells sits at fixed columns, so shrinking one does not move it
+/// inward the way a list row narrows: a grid cannot follow the curve and has
+/// to settle for the largest rectangle that fits the circle.
+double wearRoundGridInset(WearDisplay display) {
+  if (!display.isRound) return 0;
+
+  const inscribedSquareFactor = (1 - 1 / 1.4142135623730951) / 2;
+  return display.sizeDp.shortestSide *
+      (inscribedSquareFactor - kWearRoundInsetFactor);
 }

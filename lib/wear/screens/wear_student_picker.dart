@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,7 +34,7 @@ class _WearStudentPickerState extends ConsumerState<WearStudentPicker> {
         scrollController: _scrollController,
         child: ListView(
           controller: _scrollController,
-          children: [
+          children: wearScaledChildren(_scrollController, [
             for (final entry in entries)
               InkWell(
                 borderRadius: BorderRadius.circular(8),
@@ -77,7 +78,7 @@ class _WearStudentPickerState extends ConsumerState<WearStudentPicker> {
                   ),
                 ),
               ),
-          ],
+          ]),
         ),
       ),
     );
