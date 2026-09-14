@@ -1,9 +1,9 @@
+import 'package:bsharp/wear/wear_app.dart';
 import 'package:flutter/material.dart';
 import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 const double _edgeMarginDp = 2;
 const double _trackSweepDegrees = 60;
-const double _trackAlpha = 0.24;
 
 class WearEdgeScrollbar extends StatelessWidget {
   const WearEdgeScrollbar({
@@ -22,9 +22,7 @@ class WearEdgeScrollbar extends StatelessWidget {
     return WearOsScrollbar(
       controller: controller,
       indicatorColor: theme.colorScheme.primary,
-      backgroundColor: theme.colorScheme.onSurface.withValues(
-        alpha: _trackAlpha,
-      ),
+      backgroundColor: wearTrackColor(theme.colorScheme),
       marginRight: _edgeMarginDp,
       totalAngle: _trackSweepDegrees,
       child: child,

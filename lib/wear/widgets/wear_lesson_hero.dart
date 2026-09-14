@@ -4,6 +4,7 @@ import 'package:bsharp/app/providers/dashboard_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/wear_app.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -206,7 +207,7 @@ class _WearHeroBody extends StatelessWidget {
             painter: _ProgressRingPainter(
               progress: progress!,
               color: theme.colorScheme.primary,
-              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              backgroundColor: wearTrackColor(theme.colorScheme),
             ),
             child: Center(child: textColumn),
           ),
@@ -226,7 +227,7 @@ class _WearHeroBody extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 4,
-              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              backgroundColor: wearTrackColor(theme.colorScheme),
               color: theme.colorScheme.primary,
             ),
           ),
