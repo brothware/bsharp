@@ -12,6 +12,7 @@ import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/screens/wear_student_picker.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -73,21 +74,44 @@ Widget _buildPickerApp(AccountStorage accountStorage) {
   );
 }
 
+/// The school and login steps hand typing to the watch's own input screen.
+Future<void> _typeIntoStep(WidgetTester tester, String text) async {
+  final field = tester.widget<TextField>(find.byType(TextField));
+  if (!field.readOnly) {
+    await tester.enterText(find.byType(TextField), text);
+    return;
+  }
+
+  tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+    const MethodChannel('pl.brothware.bsharp/wear'),
+    (call) async => call.method == 'requestTextInput' ? text : null,
+  );
+  addTearDown(
+    () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      const MethodChannel('pl.brothware.bsharp/wear'),
+      null,
+    ),
+  );
+
+  await tester.tap(find.byType(TextField));
+  await tester.pumpAndSettle();
+}
+
 void main() {
   testWidgets('setup with two students persists both', (tester) async {
     final accountStorage = _newAccountStorage();
     await tester.pumpWidget(_buildSetupApp(accountStorage));
     await tester.pump();
 
-    await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+    await _typeIntoStep(tester, 'osm-wroclaw');
     await tester.tap(find.byType(FilledButton));
     await tester.pump();
 
-    await tester.enterText(find.byType(TextField), 'login');
+    await _typeIntoStep(tester, 'login');
     await tester.tap(find.byType(FilledButton));
     await tester.pump();
 
-    await tester.enterText(find.byType(TextField), 'pass');
+    await _typeIntoStep(tester, 'pass');
     await tester.tap(find.byType(FilledButton));
     await tester.pump();
     await tester.pump();

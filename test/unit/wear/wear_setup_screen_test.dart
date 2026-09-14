@@ -6,6 +6,7 @@ import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -28,6 +29,31 @@ class _RejectingDataProvider extends DemoDataProvider {
     required String login,
     required String passwordHash,
   }) async => const Result.failure(InvalidCredentials());
+}
+
+/// The school and login steps hand typing to the watch's own input screen, so
+/// a test answers the channel instead of typing into the field. The password
+/// step keeps a real field, and takes text directly.
+Future<void> _typeIntoStep(WidgetTester tester, String text) async {
+  final field = tester.widget<TextField>(find.byType(TextField));
+  if (!field.readOnly) {
+    await tester.enterText(find.byType(TextField), text);
+    return;
+  }
+
+  tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+    const MethodChannel('pl.brothware.bsharp/wear'),
+    (call) async => call.method == 'requestTextInput' ? text : null,
+  );
+  addTearDown(
+    () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      const MethodChannel('pl.brothware.bsharp/wear'),
+      null,
+    ),
+  );
+
+  await tester.tap(find.byType(TextField));
+  await tester.pumpAndSettle();
 }
 
 Widget _buildApp({
@@ -62,7 +88,7 @@ void main() {
           await tester.pumpWidget(_buildApp(shape: shape));
           await tester.pump();
 
-          await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+          await _typeIntoStep(tester, 'osm-wroclaw');
           await tester.tap(find.byType(FilledButton));
           await tester.pump();
 
@@ -95,11 +121,11 @@ void main() {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
 
-        await tester.enterText(find.byType(TextField), 'my-school');
+        await _typeIntoStep(tester, 'my-school');
         await tester.tap(find.byType(FilledButton));
         await tester.pump();
 
-        await tester.enterText(find.byType(TextField), 'my-login');
+        await _typeIntoStep(tester, 'my-login');
         await tester.tap(find.byIcon(Icons.arrow_back));
         await tester.pump();
 
@@ -131,15 +157,15 @@ void main() {
         );
         await tester.pump();
 
-        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.byType(FilledButton));
         await tester.pump();
 
-        await tester.enterText(find.byType(TextField), 'baduser');
+        await _typeIntoStep(tester, 'baduser');
         await tester.tap(find.byType(FilledButton));
         await tester.pump();
 
-        await tester.enterText(find.byType(TextField), 'badpass');
+        await _typeIntoStep(tester, 'badpass');
         await tester.tap(find.byType(FilledButton));
         await tester.pumpAndSettle();
 
@@ -154,7 +180,7 @@ void main() {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
 
-        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.text('Next'));
         await tester.pumpAndSettle();
 
@@ -179,7 +205,7 @@ void main() {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
 
-        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.text('Next'));
         await tester.pumpAndSettle();
 
@@ -205,10 +231,10 @@ void main() {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
 
-        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.byType(FilledButton));
         await tester.pumpAndSettle();
-        await tester.enterText(find.byType(TextField), 'parent');
+        await _typeIntoStep(tester, 'parent');
         await tester.tap(find.byType(FilledButton));
         await tester.pumpAndSettle();
 
@@ -252,13 +278,13 @@ void main() {
         );
         await tester.pump();
 
-        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.byType(FilledButton));
         await tester.pumpAndSettle();
-        await tester.enterText(find.byType(TextField), 'parent');
+        await _typeIntoStep(tester, 'parent');
         await tester.tap(find.byType(FilledButton));
         await tester.pumpAndSettle();
-        await tester.enterText(find.byType(TextField), 'wrong');
+        await _typeIntoStep(tester, 'wrong');
         await tester.tap(find.byType(FilledButton));
         await tester.pumpAndSettle();
 
@@ -271,6 +297,49 @@ void main() {
           reason:
               'the failure text grew the step until the button fell off the '
               'bottom of the watch, with no way to dismiss it',
+        );
+      });
+      testWidgets('the school step takes text from the watch input screen', (
+        tester,
+      ) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        final field = tester.widget<TextField>(find.byType(TextField));
+        expect(
+          field.readOnly,
+          isTrue,
+          reason:
+              'the watch keyboard stops refreshing its copy of the text after '
+              'the first letter, so the wearer would be typing blind',
+        );
+
+        await _typeIntoStep(tester, 'osm-wroclaw');
+
+        expect(find.text('osm-wroclaw'), findsOneWidget);
+      });
+
+      testWidgets('the password step keeps its own masked field', (
+        tester,
+      ) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        await _typeIntoStep(tester, 'osm-wroclaw');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pumpAndSettle();
+        await _typeIntoStep(tester, 'parent');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pumpAndSettle();
+
+        final field = tester.widget<TextField>(find.byType(TextField));
+        expect(field.obscureText, isTrue);
+        expect(
+          field.readOnly,
+          isFalse,
+          reason:
+              'the watch input screen shows what it is given, and on a watch '
+              'that is the whole display',
         );
       });
     });
