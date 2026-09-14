@@ -35,6 +35,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   final _schoolController = TextEditingController();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _passwordFocus = FocusNode();
   final _fieldStepScrollController = ScrollController();
   final _studentPickerScrollController = ScrollController();
 
@@ -74,6 +75,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     _schoolController.dispose();
     _loginController.dispose();
     _passwordController.dispose();
+    _passwordFocus.dispose();
     _fieldStepScrollController.dispose();
     _studentPickerScrollController.dispose();
     super.dispose();
@@ -285,6 +287,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     required TextEditingController controller,
     required String buttonLabel,
     required VoidCallback onSubmit,
+    FocusNode? focusNode,
     bool obscureText = false,
     Widget? suffixIcon,
   }) {
@@ -305,6 +308,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                 child: Center(
                   child: TextField(
                     controller: controller,
+                    focusNode: focusNode,
                     obscureText: obscureText,
                     textAlign: TextAlign.center,
                     autocorrect: false,
@@ -375,14 +379,23 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       buttonLabel: t.setup.loginButton,
       onSubmit: _validateAndLogin,
       obscureText: _obscurePassword,
+      focusNode: _passwordFocus,
       suffixIcon: IconButton(
         icon: Icon(
           _obscurePassword ? Icons.visibility_off : Icons.visibility,
           size: 16,
         ),
-        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+        onPressed: _togglePasswordVisibility,
       ),
     );
+  }
+
+  /// The watch keyboard fills the screen and prints what it is given above
+  /// the keys, so revealing the password while it is open puts the password
+  /// on the whole display. Close it first; hiding again is harmless.
+  void _togglePasswordVisibility() {
+    if (_obscurePassword) _passwordFocus.unfocus();
+    setState(() => _obscurePassword = !_obscurePassword);
   }
 
   Widget _buildStudentPicker() {

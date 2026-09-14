@@ -189,6 +189,40 @@ void main() {
         final field = tester.widget<TextField>(find.byType(TextField));
         expect(field.autofocus, isFalse);
       });
+      testWidgets('revealing the password closes the keyboard first', (
+        tester,
+      ) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        await tester.enterText(find.byType(TextField), 'osm-wroclaw');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), 'parent');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(TextField));
+        await tester.pumpAndSettle();
+
+        final hidden = tester.widget<TextField>(find.byType(TextField));
+        expect(hidden.obscureText, isTrue);
+        expect(hidden.focusNode!.hasFocus, isTrue);
+
+        await tester.tap(find.byIcon(Icons.visibility_off));
+        await tester.pumpAndSettle();
+
+        final revealed = tester.widget<TextField>(find.byType(TextField));
+        expect(revealed.obscureText, isFalse);
+        expect(
+          revealed.focusNode!.hasFocus,
+          isFalse,
+          reason:
+              'the watch keyboard fills the screen and prints what it is '
+              'given above the keys, so revealing while it is open puts the '
+              'password on the whole display',
+        );
+      });
     });
   }
 }
