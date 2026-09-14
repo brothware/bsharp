@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
@@ -47,7 +48,10 @@ class _WearLanguageScreenState extends ConsumerState<WearLanguageScreen> {
                   controller: _scrollController,
                   padding: EdgeInsets.zero,
                   itemCount: AppLocale.values.length + 1,
-                  itemBuilder: (context, index) {
+                  itemBuilder: wearScaledItems(_scrollController, (
+                    context,
+                    index,
+                  ) {
                     if (index == 0) {
                       return _LanguageItem(
                         label: t.settings.languageSystem,
@@ -79,7 +83,7 @@ class _WearLanguageScreenState extends ConsumerState<WearLanguageScreen> {
                         Navigator.of(context).pop();
                       },
                     );
-                  },
+                  }),
                 ),
               ),
             ],

@@ -1,7 +1,6 @@
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
-import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 class WearLauncherRow extends StatelessWidget {
   const WearLauncherRow({
@@ -24,7 +23,6 @@ class WearLauncherRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isRound = WearDisplayScope.of(context).isRound;
 
     final row = Material(
       key: measureKey,
@@ -66,11 +64,6 @@ class WearLauncherRow extends StatelessWidget {
       ),
     );
 
-    if (!isRound || scrollController == null) return row;
-
-    return WearOsExpressiveItem(
-      scrollController: scrollController!,
-      child: row,
-    );
+    return WearListItem(scrollController: scrollController, child: row);
   }
 }

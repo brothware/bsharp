@@ -4,6 +4,7 @@ import 'package:bsharp/domain/portal_date_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
@@ -64,7 +65,10 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
                         controller: _scrollController,
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         itemCount: sorted.length,
-                        itemBuilder: (context, index) {
+                        itemBuilder: wearScaledItems(_scrollController, (
+                          context,
+                          index,
+                        ) {
                           final test = sorted[index];
                           final isUpcoming = upcomingIds.contains(test.id);
                           return Container(
@@ -110,7 +114,7 @@ class _WearTestsDetailScreenState extends ConsumerState<WearTestsDetailScreen> {
                               ],
                             ),
                           );
-                        },
+                        }),
                       ),
               ),
             ],

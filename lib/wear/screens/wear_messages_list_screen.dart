@@ -3,6 +3,7 @@ import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _WearMessagesListScreenState
             controller: _scrollController,
             padding: const EdgeInsets.all(4),
             itemCount: inbox.length,
-            itemBuilder: (context, index) {
+            itemBuilder: wearScaledItems(_scrollController, (context, index) {
               final msg = inbox[index];
               return WearMessageItem(
                 message: msg,
@@ -50,7 +51,7 @@ class _WearMessagesListScreenState
                   ),
                 ),
               );
-            },
+            }),
           ),
         ),
       ),

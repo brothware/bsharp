@@ -3,6 +3,7 @@ import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_bulletin_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
 import 'package:flutter/material.dart';
@@ -87,14 +88,17 @@ class _WearBulletinsListScreenState
                 controller: _scrollController,
                 padding: EdgeInsets.zero,
                 itemCount: bulletins.length,
-                itemBuilder: (context, index) {
+                itemBuilder: wearScaledItems(_scrollController, (
+                  context,
+                  index,
+                ) {
                   final item = bulletins[index];
                   return InkWell(
                     onTap: () => _openDetail(context, item),
                     borderRadius: BorderRadius.circular(8),
                     child: _WearBulletinItem(item: item),
                   );
-                },
+                }),
               ),
             ),
         ],

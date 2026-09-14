@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +29,7 @@ Widget _app(
 
 void main() {
   group('WearScaffold', () {
-    testWidgets('round content box keeps all four corners inside the circle', (
+    testWidgets('round content keeps a margin without giving up the middle', (
       tester,
     ) async {
       const size = Size(227, 227);
@@ -39,20 +41,20 @@ void main() {
       await tester.pumpAndSettle();
 
       final box = tester.getRect(find.byKey(const Key('content')));
-      final centre = Offset(size.width / 2, size.height / 2);
-      final radius = size.width / 2;
-      for (final corner in [
-        box.topLeft,
-        box.topRight,
-        box.bottomLeft,
-        box.bottomRight,
-      ]) {
-        expect(
-          (corner - centre).distance,
-          lessThanOrEqualTo(radius),
-          reason: 'corner $corner falls outside the circle',
-        );
-      }
+      final inscribedSquare = size.width / math.sqrt(2);
+
+      expect(box.left, greaterThan(0));
+      expect(box.top, greaterThan(0));
+      expect(box.right, lessThan(size.width));
+      expect(box.bottom, lessThan(size.height));
+      expect(
+        box.width,
+        greaterThan(inscribedSquare),
+        reason:
+            'the largest rectangle inside the circle is only 64% of the '
+            'glass; rows narrow themselves near the top and bottom so the '
+            'screen does not have to give up the middle as well',
+      );
     });
 
     testWidgets('rectangular shape leaves a margin on all four sides', (
