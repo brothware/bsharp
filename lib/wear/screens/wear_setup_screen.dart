@@ -419,7 +419,10 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     TextEditingController controller,
     String label,
   ) async {
-    final typed = await requestWearTextInput(label: label);
+    final typed = await requestWearTextInput(
+      label: label,
+      text: controller.text,
+    );
     if (typed == null || !mounted) return;
 
     controller.text = typed;

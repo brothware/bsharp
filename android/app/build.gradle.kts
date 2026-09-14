@@ -47,8 +47,6 @@ android {
         create("wear") {
             dimension = "platform"
             versionCode = flutter.versionCode * 10 + 2
-            // Wear OS starts at API 25; androidx.wear:wear-input requires it.
-            minSdk = 25
         }
     }
 
@@ -82,7 +80,6 @@ kotlin {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-    "wearImplementation"("androidx.wear:wear-input:1.1.0")
     androidTestUtil("androidx.test:orchestrator:1.6.1")
 }
 
