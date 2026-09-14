@@ -3,135 +3,65 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+Widget _app(Widget child) => MaterialApp(
+  home: Scaffold(body: Center(child: child)),
+);
+
 void main() {
   group('WearPeriodSelector', () {
     testWidgets('renders label and subLabel', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: WearPeriodSelector(
-              label: '12.09',
-              subLabel: 'Friday',
-              onPrevious: () {},
-              onNext: () {},
-            ),
-          ),
+        _app(
+          const WearPeriodSelector(label: 'Wrzesień', subLabel: 'Poniedziałek'),
         ),
       );
       await tester.pump();
 
-      expect(find.text('12.09'), findsOneWidget);
-      expect(find.text('Friday'), findsOneWidget);
+      expect(find.text('Wrzesień'), findsOneWidget);
+      expect(find.text('Poniedziałek'), findsOneWidget);
     });
 
     testWidgets('renders without subLabel', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: WearPeriodSelector(
-              label: 'Semester 1',
-              onPrevious: () {},
-              onNext: () {},
-            ),
-          ),
-        ),
+        _app(const WearPeriodSelector(label: 'Semestr I')),
       );
       await tester.pump();
 
-      expect(find.text('Semester 1'), findsOneWidget);
+      expect(find.text('Semestr I'), findsOneWidget);
+      expect(find.byType(Text), findsOneWidget);
     });
 
-    testWidgets('both chevrons are at least 48dp', (tester) async {
+    testWidgets('a long label renders without ellipsis at 227dp', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(227, 227);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: WearPeriodSelector(
-              label: 'Label',
-              onPrevious: () {},
-              onNext: () {},
-            ),
-          ),
-        ),
+        _app(const WearPeriodSelector(label: 'Pierwszy semestr')),
       );
       await tester.pump();
 
-      final finder = find.byType(InkWell);
-      expect(finder, findsNWidgets(2));
-
-      for (final element in finder.evaluate()) {
-        final size = tester.getSize(find.byWidget(element.widget));
-        final smallerAxis = size.width < size.height ? size.width : size.height;
-        expect(smallerAxis, greaterThanOrEqualTo(48.0));
-      }
+      final paragraph =
+          tester.renderObject(find.text('Pierwszy semestr')) as RenderParagraph;
+      expect(paragraph.didExceedMaxLines, isFalse);
     });
 
-    testWidgets('tapping previous fires onPrevious', (tester) async {
-      var previousTapped = false;
+    testWidgets('carries no navigation of its own', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: WearPeriodSelector(
-              label: 'Label',
-              onPrevious: () => previousTapped = true,
-              onNext: () {},
-            ),
-          ),
-        ),
+        _app(const WearPeriodSelector(label: 'Wrzesień')),
       );
       await tester.pump();
 
-      await tester.tap(find.byIcon(Icons.chevron_left));
-      await tester.pump();
-
-      expect(previousTapped, isTrue);
-    });
-
-    testWidgets(
-      'a long label renders without ellipsis at 227dp',
-      (tester) async {
-        tester.view.physicalSize = const Size(227, 227);
-        tester.view.devicePixelRatio = 1.0;
-        addTearDown(tester.view.reset);
-
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: WearPeriodSelector(
-                label: 'Pierwszy semestr',
-                onPrevious: () {},
-                onNext: () {},
-              ),
-            ),
-          ),
-        );
-        await tester.pump();
-
-        final paragraph = tester.renderObject(
-          find.text('Pierwszy semestr'),
-        ) as RenderParagraph;
-        expect(paragraph.didExceedMaxLines, isFalse);
-      },
-    );
-
-    testWidgets('tapping next fires onNext', (tester) async {
-      var nextTapped = false;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: WearPeriodSelector(
-              label: 'Label',
-              onPrevious: () {},
-              onNext: () => nextTapped = true,
-            ),
-          ),
-        ),
+      expect(
+        find.byIcon(Icons.chevron_left),
+        findsNothing,
+        reason:
+            'moving between periods belongs at the edges of the glass, where '
+            'a round screen is at its widest, not in the header where it is '
+            'at its narrowest',
       );
-      await tester.pump();
-
-      await tester.tap(find.byIcon(Icons.chevron_right));
-      await tester.pump();
-
-      expect(nextTapped, isTrue);
     });
   });
 }

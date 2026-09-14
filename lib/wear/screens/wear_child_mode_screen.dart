@@ -5,6 +5,7 @@ import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
 import 'package:bsharp/wear/screens/wear_pin_setup_screen.dart';
 import 'package:bsharp/wear/widgets/wear_confirmation.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
@@ -45,7 +46,7 @@ class _WearChildModeScreenState extends ConsumerState<WearChildModeScreen> {
                 child: ListView(
                   controller: _scrollController,
                   padding: EdgeInsets.zero,
-                  children: [
+                  children: wearScaledChildren(_scrollController, [
                     _WearSectionLabel(label: t.childMode.pin),
                     if (!state.isPinSet)
                       _WearChildModeItem(
@@ -153,7 +154,7 @@ class _WearChildModeScreenState extends ConsumerState<WearChildModeScreen> {
                         ),
                     ],
                     const SizedBox(height: 8),
-                  ],
+                  ]),
                 ),
               ),
             ],

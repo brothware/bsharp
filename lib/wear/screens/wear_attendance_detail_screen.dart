@@ -6,6 +6,7 @@ import 'package:bsharp/domain/date_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_side_navigation.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
 import 'package:flutter/material.dart';
@@ -58,15 +59,15 @@ class _WearAttendanceDetailScreenState
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
           scrollController: _scrollController,
+          edgeContent: WearSideNavigation(
+            onPrevious: previousMonth,
+            onNext: nextMonth,
+          ),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 4),
-                child: WearPeriodSelector(
-                  label: monthName(month.month),
-                  onPrevious: previousMonth,
-                  onNext: nextMonth,
-                ),
+                child: WearPeriodSelector(label: monthName(month.month)),
               ),
               const SizedBox(height: 4),
               _WearWeekdayHeaders(theme: theme),
@@ -74,51 +75,68 @@ class _WearAttendanceDetailScreenState
                 child: WearVerticalOverscrollPager(
                   onPrevious: previousMonth,
                   onNext: nextMonth,
-                  child: CustomScrollView(
-                    controller: _scrollController,
-                    slivers: [
-                      if (stats.totalLessons > 0)
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: _WearAttendanceSummary(
-                              stats: stats,
-                              theme: theme,
-                            ),
-                          ),
-                        ),
-                      SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 7,
-                              mainAxisExtent: 30,
-                            ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final day = calDays[index];
-                            final isCurrentMonth = day.month == month.month;
-                            final isToday = day == today;
-                            final attDay =
-                                attDays[DateTime(
-                                  day.year,
-                                  day.month,
-                                  day.day,
-                                )];
-                            final status =
-                                attDay?.status ?? AttendanceDayStatus.noData;
+                  // below the scaffold, which is what publishes the display
+                  child: Builder(
+                    builder: (context) {
+                      final inset = wearRoundGridInset(
+                        WearDisplayScope.of(context),
+                      );
+                      return Padding(
+                        // the bottom too: at the outer columns the glass runs
+                        // out well above the bottom of the content box
+                        padding: EdgeInsets.fromLTRB(inset, 0, inset, inset),
+                        child: CustomScrollView(
+                          controller: _scrollController,
+                          slivers: [
+                            if (stats.totalLessons > 0)
+                              SliverToBoxAdapter(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                  ),
+                                  child: _WearAttendanceSummary(
+                                    stats: stats,
+                                    theme: theme,
+                                  ),
+                                ),
+                              ),
+                            SliverGrid(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 7,
+                                    mainAxisExtent: 30,
+                                  ),
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  final day = calDays[index];
+                                  final isCurrentMonth =
+                                      day.month == month.month;
+                                  final isToday = day == today;
+                                  final attDay =
+                                      attDays[DateTime(
+                                        day.year,
+                                        day.month,
+                                        day.day,
+                                      )];
+                                  final status =
+                                      attDay?.status ??
+                                      AttendanceDayStatus.noData;
 
-                            return _WearCalendarDay(
-                              day: day,
-                              isCurrentMonth: isCurrentMonth,
-                              isToday: isToday,
-                              status: status,
-                              theme: theme,
-                            );
-                          },
-                          childCount: calDays.length,
+                                  return _WearCalendarDay(
+                                    day: day,
+                                    isCurrentMonth: isCurrentMonth,
+                                    isToday: isToday,
+                                    status: status,
+                                    theme: theme,
+                                  );
+                                },
+                                childCount: calDays.length,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -279,9 +297,13 @@ class _WearWeekdayHeaders extends StatelessWidget {
       t.schedule.dayLetter.sat,
       t.schedule.dayLetter.sun,
     ];
+    // Lines up with the calendar columns below, which keep to the rectangle.
+    final inset = wearRoundGridInset(WearDisplayScope.of(context));
+
     return Container(
       color: theme.colorScheme.surface,
       constraints: const BoxConstraints(minHeight: 18),
+      padding: EdgeInsets.symmetric(horizontal: inset),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: labels

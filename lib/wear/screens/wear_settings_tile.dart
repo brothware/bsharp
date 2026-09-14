@@ -12,6 +12,7 @@ import 'package:bsharp/wear/screens/wear_language_screen.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
 import 'package:bsharp/wear/screens/wear_student_picker.dart';
 import 'package:bsharp/wear/widgets/wear_confirmation.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_status_line.dart';
 import 'package:bsharp/wear/widgets/wear_tile_header.dart';
@@ -51,7 +52,7 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
               controller: _scrollController,
               physics: const ClampingScrollPhysics(),
               padding: EdgeInsets.zero,
-              children: [
+              children: wearScaledChildren(_scrollController, [
                 if (childState.isChildMode)
                   _WearSettingsItem(
                     icon: Icons.child_care,
@@ -121,7 +122,7 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
                     onTap: () => _confirmLogout(context, ref),
                   ),
                 ],
-              ],
+              ]),
             ),
           ),
         ],
@@ -169,7 +170,7 @@ class _WearThemeScreenState extends ConsumerState<_WearThemeScreen> {
         scrollController: _scrollController,
         child: ListView(
           controller: _scrollController,
-          children: [
+          children: wearScaledChildren(_scrollController, [
             for (final mode in wearThemeModes)
               InkWell(
                 borderRadius: BorderRadius.circular(8),
@@ -217,7 +218,7 @@ class _WearThemeScreenState extends ConsumerState<_WearThemeScreen> {
                   ),
                 ),
               ),
-          ],
+          ]),
         ),
       ),
     );

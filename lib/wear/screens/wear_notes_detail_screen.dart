@@ -7,6 +7,7 @@ import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_side_navigation.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:bsharp/wear/widgets/wear_translate_button.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,12 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
     super.dispose();
   }
 
+  void _stepTab(int delta) {
+    const tabs = _NotesTab.values;
+    final next = (tabs.indexOf(_activeTab) + delta) % tabs.length;
+    setState(() => _activeTab = tabs[next]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final remarks = ref.watch(remarksProvider);
@@ -51,15 +58,14 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
           scrollController: _scrollController,
+          edgeContent: WearSideNavigation(
+            onPrevious: () => _stepTab(-1),
+            onNext: () => _stepTab(1),
+          ),
           child: Column(
             children: [
               WearPinnedHeader(
-                child: _WearNotesTabSelector(
-                  activeTab: _activeTab,
-                  onChanged: (tab) {
-                    setState(() => _activeTab = tab);
-                  },
-                ),
+                child: _WearNotesTabSelector(activeTab: _activeTab),
               ),
               const SizedBox(height: 4),
               Expanded(
@@ -106,13 +112,9 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
 }
 
 class _WearNotesTabSelector extends StatelessWidget {
-  const _WearNotesTabSelector({
-    required this.activeTab,
-    required this.onChanged,
-  });
+  const _WearNotesTabSelector({required this.activeTab});
 
   final _NotesTab activeTab;
-  final ValueChanged<_NotesTab> onChanged;
 
   String _labelFor(_NotesTab tab) => switch (tab) {
     _NotesTab.remarks => t.notes.remarksTab,
@@ -122,20 +124,7 @@ class _WearNotesTabSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const tabs = _NotesTab.values;
-    final current = tabs.indexOf(activeTab);
-
-    return WearPeriodSelector(
-      label: _labelFor(activeTab),
-      onPrevious: () {
-        final prev = (current - 1) % tabs.length;
-        onChanged(tabs[prev]);
-      },
-      onNext: () {
-        final next = (current + 1) % tabs.length;
-        onChanged(tabs[next]);
-      },
-    );
+    return WearPeriodSelector(label: _labelFor(activeTab));
   }
 }
 

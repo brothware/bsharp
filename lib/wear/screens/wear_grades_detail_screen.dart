@@ -13,6 +13,7 @@ import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_section_route.dart';
+import 'package:bsharp/wear/widgets/wear_side_navigation.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,6 +57,14 @@ class _WearGradesDetailScreenState
     super.dispose();
   }
 
+  void _stepTerm(List<Term> terms, Term? current, int delta) {
+    final index = current != null
+        ? terms.indexWhere((t) => t.id == current.id)
+        : 0;
+    final next = (index + delta) % terms.length;
+    ref.read(selectedTermIdProvider.notifier).value = terms[next].id;
+  }
+
   @override
   Widget build(BuildContext context) {
     final subjectGrades = ref.watch(subjectGradesProvider);
@@ -68,6 +77,12 @@ class _WearGradesDetailScreenState
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
           scrollController: _scrollController,
+          edgeContent: terms.length > 1
+              ? WearSideNavigation(
+                  onPrevious: () => _stepTerm(terms, currentTerm, -1),
+                  onNext: () => _stepTerm(terms, currentTerm, 1),
+                )
+              : null,
           child: Column(
             children: [
               if (terms.length > 1)
@@ -75,9 +90,6 @@ class _WearGradesDetailScreenState
                   child: _WearTermPeriodSelector(
                     terms: terms,
                     currentTerm: currentTerm,
-                    onChanged: (id) {
-                      ref.read(selectedTermIdProvider.notifier).value = id;
-                    },
                   ),
                 ),
               Expanded(
@@ -113,32 +125,17 @@ class _WearTermPeriodSelector extends StatelessWidget {
   const _WearTermPeriodSelector({
     required this.terms,
     required this.currentTerm,
-    required this.onChanged,
   });
 
   final List<Term> terms;
   final Term? currentTerm;
-  final ValueChanged<int?> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    final ct = currentTerm;
-    final currentIndex = ct != null
-        ? terms.indexWhere((t) => t.id == ct.id)
-        : 0;
-
-    final currentTermName = currentTerm?.name;
+    final name = currentTerm?.name;
 
     return WearPeriodSelector(
-      label: currentTermName != null ? translateTermName(currentTermName) : '',
-      onPrevious: () {
-        final prev = (currentIndex - 1) % terms.length;
-        onChanged(terms[prev].id);
-      },
-      onNext: () {
-        final next = (currentIndex + 1) % terms.length;
-        onChanged(terms[next].id);
-      },
+      label: name != null ? translateTermName(name) : '',
     );
   }
 }
