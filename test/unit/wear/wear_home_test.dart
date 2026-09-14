@@ -190,14 +190,16 @@ void main() {
         final firstRowTop = tester
             .getTopLeft(find.byType(WearLauncherRow).first)
             .dy;
+        const peek = 24.0;
 
         expect(
           firstRowTop,
-          lessThan(screenSize.height),
+          lessThan(screenSize.height - peek),
           reason:
-              'the first launcher row is at y=$firstRowTop, below the '
-              '${screenSize.height}dp viewport, so the hero pushed it out '
-              'of view',
+              'the first launcher row starts at y=$firstRowTop, leaving less '
+              'than ${peek}dp of it on a ${screenSize.height}dp screen. The '
+              'dashboard sits a little high of centre so that row shows: '
+              'nothing below the fold says the launcher is there',
         );
       },
     );
