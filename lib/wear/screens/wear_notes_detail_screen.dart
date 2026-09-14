@@ -3,6 +3,7 @@ import 'package:bsharp/domain/annotation_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -75,7 +76,10 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
                         controller: _scrollController,
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         itemCount: items.length,
-                        itemBuilder: (context, index) {
+                        itemBuilder: wearScaledItems(_scrollController, (
+                          context,
+                          index,
+                        ) {
                           final item = items[index];
                           return _WearNoteDetailItem(
                             item: item,
@@ -90,7 +94,7 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
                               });
                             },
                           );
-                        },
+                        }),
                       ),
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -63,7 +64,10 @@ class _WearHomeworkDetailScreenState
                         controller: _scrollController,
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         itemCount: homework.length,
-                        itemBuilder: (context, index) {
+                        itemBuilder: wearScaledItems(_scrollController, (
+                          context,
+                          index,
+                        ) {
                           final hw = homework[index];
                           return Container(
                             margin: const EdgeInsets.symmetric(vertical: 2),
@@ -103,7 +107,7 @@ class _WearHomeworkDetailScreenState
                               ],
                             ),
                           );
-                        },
+                        }),
                       ),
               ),
             ],

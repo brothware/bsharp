@@ -8,6 +8,7 @@ import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -93,8 +94,11 @@ class _WearGradesDetailScreenState
                         controller: _scrollController,
                         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         itemCount: subjectGrades.length,
-                        itemBuilder: (context, index) =>
-                            _WearSubjectSection(sg: subjectGrades[index]),
+                        itemBuilder: wearScaledItems(
+                          _scrollController,
+                          (context, index) =>
+                              _WearSubjectSection(sg: subjectGrades[index]),
+                        ),
                       ),
               ),
             ],

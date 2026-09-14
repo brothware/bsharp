@@ -5,7 +5,10 @@ import 'package:bsharp/wear/widgets/wear_edge_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const double _roundInsetFactor = (1 - 1 / 1.4142135623730951) / 2;
+/// A thin margin, not the largest rectangle that fits the circle: that
+/// rectangle is only 64% of the glass, and rows narrow themselves near the top
+/// and bottom where the circle does.
+const double _roundInsetFactor = 0.052;
 const _rectangularHorizontalFactor = 0.05;
 const _rectangularVerticalFactor = 0.04;
 
