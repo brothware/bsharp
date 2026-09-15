@@ -14,8 +14,6 @@ abstract final class AppConstants {
   static const syncWindowDays = 100;
   static const connectTimeoutMs = 10000;
   static const receiveTimeoutMs = 30000;
-  static const portalTokenTtlMs = 30000;
-  static const portalTokenRefreshMs = 20000;
   static const maxRetryCount = 1;
   static const proxyBaseUrl = 'https://bsharp-proxy.dawid-sliwa.workers.dev';
 
