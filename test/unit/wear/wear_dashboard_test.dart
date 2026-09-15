@@ -14,7 +14,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final _pinnedNow = DateTime(2026, 9, 14, 10, 20);
+/// Today, at a fixed time of day.
+///
+/// The hour has to be pinned or a lesson that is "now" at noon is over by the
+/// evening; the date has to be today's or the providers, which ask the real
+/// clock what day it is, filter the lessons out.
+final DateTime _pinnedNow = () {
+  final today = DateTime.now();
+  return DateTime(today.year, today.month, today.day, 10, 20);
+}();
 
 ResolvedEvent _resolvedEvent({
   int id = 1,
