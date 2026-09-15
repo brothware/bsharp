@@ -84,7 +84,7 @@ class ApiClientFactory {
         ? '$_proxy/portal'
         : 'https://rodzic.mobireg.pl';
 
-    return Dio(
+    final dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
         connectTimeout: const Duration(
@@ -96,6 +96,8 @@ class ApiClientFactory {
         extra: _webExtra,
       ),
     );
+    dio.interceptors.add(ErrorMappingInterceptor());
+    return dio;
   }
 
   Dio createPocztaClient() {
