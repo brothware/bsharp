@@ -6,11 +6,11 @@ import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
-import 'package:bsharp/core/network/serial_queue.dart';
 import 'package:bsharp/data/data_sources/remote/auth_service.dart';
 import 'package:bsharp/data/data_sources/remote/mobile_sync_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/portal_data_source.dart';
+import 'package:bsharp/data/data_sources/remote/portal_session.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
@@ -38,8 +38,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   String _password = '';
   String? _legacyPasswordHash;
   PocztaDataSource? _pocztaDs;
-  AuthService? _portalAuth;
-  final _portalQueue = SerialQueue();
+  PortalSessionManager? _portalSessions;
 
   String? get _njsonPassHash =>
       _password.isNotEmpty ? hashPassword(_password) : _legacyPasswordHash;
@@ -151,37 +150,28 @@ class MobiregDataProvider implements SchoolDataProvider {
       parentLogin: login,
       parentPassHash: _njsonPassHash ?? '',
     );
-    _portalAuth = null;
+    _portalSessions = null;
   }
 
-  /// A portal token dies on first use, and logging in again invalidates
-  /// whatever the last login handed out. So a request is a login and its one
-  /// call, and two of them must never overlap: run them through a queue.
-  Future<T?> _portalRequest<T>(
-    Ref ref,
-    ApiClientFactory factory,
-    Future<T?> Function(String token) call,
-  ) {
-    return _portalQueue.add(() async {
-      final token = await _obtainPortalToken(ref, factory);
-      if (token == null) return null;
-      return call(token);
-    });
-  }
-
-  Future<String?> _obtainPortalToken(Ref ref, ApiClientFactory factory) async {
-    final auth = _portalAuth ??= AuthService(
-      webLoginClient: factory.createWebLoginClient(),
-    );
-    final result = await auth.obtainPortalToken(
+  PortalSessionManager _portalSessionManager(ApiClientFactory factory) {
+    return _portalSessions ??= PortalSessionManager(
+      auth: AuthService(webLoginClient: factory.createWebLoginClient()),
+      portal: PortalDataSource(client: factory.createPortalClient()),
+      school: _school!,
       login: _login!,
       password: _password,
     );
+  }
 
+  Future<PortalSession?> _openPortalSession(
+    Ref ref,
+    PortalSessionManager sessions,
+  ) async {
+    final result = await sessions.ensureSession();
     return result.when(
-      success: (token) {
+      success: (session) {
         ref.read(portalReauthRequiredProvider.notifier).value = false;
-        return token;
+        return session;
       },
       failure: (failure) {
         debugPrint('MobiregDataProvider: portal login failed: $failure');
@@ -282,23 +272,13 @@ class MobiregDataProvider implements SchoolDataProvider {
       return;
     }
 
-    final portalDs = PortalDataSource(client: factory.createPortalClient());
-    final messagesToken = await _portalRequest(ref, factory, (token) async {
-      final userResult = await portalDs.getView(
-        school: _school!,
-        token: token,
-        view: 'users',
-        params: {},
-      );
-      return userResult.when(
-        success: (data) => data['messagesToken'] as String?,
-        failure: (failure) {
-          debugPrint('MobiregDataProvider: users view failed: $failure');
-          return null;
-        },
-      );
-    });
+    final session = await _openPortalSession(
+      ref,
+      _portalSessionManager(factory),
+    );
+    if (session == null) return;
 
+    final messagesToken = session.messagesToken;
     if (messagesToken == null) {
       debugPrint('MobiregDataProvider: no messagesToken in users view');
       return;
@@ -492,7 +472,9 @@ class MobiregDataProvider implements SchoolDataProvider {
       ref.read(portalReauthRequiredProvider.notifier).value = true;
       return;
     }
-    final portalDs = PortalDataSource(client: factory.createPortalClient());
+    final sessions = _portalSessionManager(factory);
+    if (await _openPortalSession(ref, sessions) == null) return;
+
     final now = DateTime.now();
     final schoolYearStart = now.month >= 9
         ? DateTime(now.year, 9)
@@ -546,49 +528,21 @@ class MobiregDataProvider implements SchoolDataProvider {
     ];
 
     for (final request in views) {
-      await _portalRequest(ref, factory, (token) async {
-        await _fetchPortalView(
-          ref,
-          portalDs,
-          token,
-          request.view,
-          request.params,
-          cache,
-          request.apply,
-          cacheKey: request.cacheKey,
-        );
-        return null;
-      });
+      final result = await sessions.getView(
+        view: request.view,
+        params: request.params,
+      );
+      result.when(
+        success: (data) {
+          final items = data['items'] as List<dynamic>? ?? [];
+          request.apply(items);
+          cache.savePortalView(request.cacheKey ?? request.view, items);
+        },
+        failure: (failure) => debugPrint(
+          'MobiregDataProvider: portal view ${request.view} failed: $failure',
+        ),
+      );
     }
-  }
-
-  Future<void> _fetchPortalView(
-    Ref ref,
-    PortalDataSource portalDs,
-    String? token,
-    String view,
-    Map<String, String> params,
-    SyncCache cache,
-    void Function(List<dynamic> items) onSuccess, {
-    String? cacheKey,
-  }) async {
-    if (token == null) return;
-
-    final result = await portalDs.getView(
-      school: _school!,
-      token: token,
-      view: view,
-      params: params,
-    );
-    result.when(
-      success: (data) {
-        final items = data['items'] as List<dynamic>? ?? [];
-        onSuccess(items);
-        cache.savePortalView(cacheKey ?? view, items);
-      },
-      failure: (failure) =>
-          debugPrint('MobiregDataProvider: portal view $view failed: $failure'),
-    );
   }
 }
 
