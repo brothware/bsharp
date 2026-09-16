@@ -1,127 +1,20 @@
+import 'package:bsharp/data/data_sources/local/notification_preferences_store.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/entities/notification_preferences.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-class NotificationPreferences {
-  const NotificationPreferences({
-    this.gradesEnabled = true,
-    this.messagesEnabled = true,
-    this.scheduleEnabled = true,
-    this.attendanceEnabled = false,
-    this.homeworkEnabled = true,
-    this.notesEnabled = true,
-    this.syncIntervalMinutes = 30,
-  });
-
-  factory NotificationPreferences.fromSharedPreferences(
-    SharedPreferences prefs,
-  ) {
-    return NotificationPreferences(
-      gradesEnabled: prefs.getBool(_gradesKey) ?? true,
-      messagesEnabled: prefs.getBool(_messagesKey) ?? true,
-      scheduleEnabled: prefs.getBool(_scheduleKey) ?? true,
-      attendanceEnabled: prefs.getBool(_attendanceKey) ?? false,
-      homeworkEnabled: prefs.getBool(_homeworkKey) ?? true,
-      notesEnabled: prefs.getBool(_notesKey) ?? true,
-      syncIntervalMinutes: prefs.getInt(_intervalKey) ?? 30,
-    );
-  }
-
-  final bool gradesEnabled;
-  final bool messagesEnabled;
-  final bool scheduleEnabled;
-  final bool attendanceEnabled;
-  final bool homeworkEnabled;
-  final bool notesEnabled;
-  final int syncIntervalMinutes;
-
-  static const validIntervals = [15, 30, 45, 60];
-
-  static const _gradesKey = 'notif_grades';
-  static const _messagesKey = 'notif_messages';
-  static const _scheduleKey = 'notif_schedule';
-  static const _attendanceKey = 'notif_attendance';
-  static const _homeworkKey = 'notif_homework';
-  static const _notesKey = 'notif_notes';
-  static const _intervalKey = 'notif_interval';
-
-  bool isCategoryEnabled(ChangeCategory category) {
-    return switch (category) {
-      ChangeCategory.grades => gradesEnabled,
-      ChangeCategory.messages => messagesEnabled,
-      ChangeCategory.schedule => scheduleEnabled,
-      ChangeCategory.attendance => attendanceEnabled,
-      ChangeCategory.homework => homeworkEnabled,
-      ChangeCategory.notes => notesEnabled,
-      // No switch of their own yet, so they are always delivered rather than
-      // silently riding on an unrelated one.
-      ChangeCategory.tests || ChangeCategory.bulletins => true,
-    };
-  }
-
-  NotificationPreferences copyWith({
-    bool? gradesEnabled,
-    bool? messagesEnabled,
-    bool? scheduleEnabled,
-    bool? attendanceEnabled,
-    bool? homeworkEnabled,
-    bool? notesEnabled,
-    int? syncIntervalMinutes,
-  }) {
-    return NotificationPreferences(
-      gradesEnabled: gradesEnabled ?? this.gradesEnabled,
-      messagesEnabled: messagesEnabled ?? this.messagesEnabled,
-      scheduleEnabled: scheduleEnabled ?? this.scheduleEnabled,
-      attendanceEnabled: attendanceEnabled ?? this.attendanceEnabled,
-      homeworkEnabled: homeworkEnabled ?? this.homeworkEnabled,
-      notesEnabled: notesEnabled ?? this.notesEnabled,
-      syncIntervalMinutes: syncIntervalMinutes ?? this.syncIntervalMinutes,
-    );
-  }
-}
-
-final notificationPreferencesProvider =
-    NotifierProvider<NotificationPreferencesNotifier, NotificationPreferences>(
-      NotificationPreferencesNotifier.new,
-    );
 
 class NotificationPreferencesNotifier
     extends Notifier<NotificationPreferences> {
-  static const _prefix = 'notif_';
-  static const _gradesKey = '${_prefix}grades';
-  static const _messagesKey = '${_prefix}messages';
-  static const _scheduleKey = '${_prefix}schedule';
-  static const _attendanceKey = '${_prefix}attendance';
-  static const _homeworkKey = '${_prefix}homework';
-  static const _notesKey = '${_prefix}notes';
-  static const _intervalKey = '${_prefix}interval';
+  static const _store = NotificationPreferencesStore();
 
   @override
   NotificationPreferences build() {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    return NotificationPreferences(
-      gradesEnabled: prefs.getBool(_gradesKey) ?? true,
-      messagesEnabled: prefs.getBool(_messagesKey) ?? true,
-      scheduleEnabled: prefs.getBool(_scheduleKey) ?? true,
-      attendanceEnabled: prefs.getBool(_attendanceKey) ?? false,
-      homeworkEnabled: prefs.getBool(_homeworkKey) ?? true,
-      notesEnabled: prefs.getBool(_notesKey) ?? true,
-      syncIntervalMinutes: prefs.getInt(_intervalKey) ?? 30,
-    );
+    return _store.read(ref.watch(sharedPreferencesProvider));
   }
 
   Future<void> update(NotificationPreferences prefs) async {
-    final sp = ref.read(sharedPreferencesProvider);
-    await Future.wait([
-      sp.setBool(_gradesKey, prefs.gradesEnabled),
-      sp.setBool(_messagesKey, prefs.messagesEnabled),
-      sp.setBool(_scheduleKey, prefs.scheduleEnabled),
-      sp.setBool(_attendanceKey, prefs.attendanceEnabled),
-      sp.setBool(_homeworkKey, prefs.homeworkEnabled),
-      sp.setBool(_notesKey, prefs.notesEnabled),
-      sp.setInt(_intervalKey, prefs.syncIntervalMinutes),
-    ]);
+    await _store.write(ref.read(sharedPreferencesProvider), prefs);
     state = prefs;
   }
 
@@ -154,3 +47,8 @@ class NotificationPreferencesNotifier
     await update(state.copyWith(syncIntervalMinutes: minutes));
   }
 }
+
+final notificationPreferencesProvider =
+    NotifierProvider<NotificationPreferencesNotifier, NotificationPreferences>(
+      NotificationPreferencesNotifier.new,
+    );
