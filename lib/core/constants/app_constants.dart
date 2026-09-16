@@ -4,7 +4,7 @@ abstract final class AppConstants {
   static const fixedPassword = 'eparent';
   static const deviceId = '1';
   static const userAgent = 'Andreg $deviceId';
-  static const appVersionCode = 95;
+  static const appVersionCode = 107;
   static const syncAcceptEncoding = 'gzip,deflate';
   static const syncContentType =
       'application/x-www-form-urlencoded; charset=UTF-8';
