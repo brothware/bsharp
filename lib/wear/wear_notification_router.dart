@@ -5,11 +5,13 @@ import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_bulletins_list_screen.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_homework_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_messages_list_screen.dart';
 import 'package:bsharp/wear/screens/wear_notes_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_tests_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,6 +24,8 @@ WidgetBuilder? wearScreenBuilderForCategory(ChangeCategory? category) =>
       ChangeCategory.attendance => (_) => const WearAttendanceDetailScreen(),
       ChangeCategory.homework => (_) => const WearHomeworkDetailScreen(),
       ChangeCategory.notes => (_) => const WearNotesDetailScreen(),
+      ChangeCategory.bulletins => (_) => const WearBulletinsListScreen(),
+      ChangeCategory.tests => (_) => const WearTestsDetailScreen(),
       null => null,
     };
 
