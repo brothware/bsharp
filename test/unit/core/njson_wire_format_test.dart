@@ -43,7 +43,7 @@ void main() {
   );
 
   const credentials =
-      'login=eparent&pass=eparent&device_id=1&app_version=95'
+      'login=eparent&pass=eparent&device_id=1&app_version=107'
       '&parent_login=dsliwa&parent_pass=deadbeef';
 
   Future<_CapturingAdapter> capture(
