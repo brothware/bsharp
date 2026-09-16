@@ -76,6 +76,7 @@ class BSharpWearApp extends ConsumerStatefulWidget {
 
 class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
   bool _initialSyncTriggered = false;
+  WearNotificationRouter? _notificationRouter;
 
   @override
   void initState() {
@@ -84,7 +85,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
   }
 
   Future<void> _initNotifications() async {
-    final router = WearNotificationRouter(
+    final router = _notificationRouter = WearNotificationRouter(
       ref: ref,
       navigatorKey: BSharpWearApp.navigatorKey,
     );
@@ -105,9 +106,12 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
         if (authState == AuthState.authenticated && !_initialSyncTriggered) {
           _initialSyncTriggered = true;
           unawaited(
-            Future.microtask(
-              () => ref.read(syncStatusProvider.notifier).sync(),
-            ),
+            Future.microtask(() async {
+              final changes = await ref
+                  .read(syncStatusProvider.notifier)
+                  .sync();
+              _notificationRouter?.handleSyncCompleted(changes);
+            }),
           );
         }
         if (authState != AuthState.authenticated) {

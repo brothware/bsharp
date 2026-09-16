@@ -1,11 +1,13 @@
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
@@ -13,6 +15,7 @@ import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
 import 'package:bsharp/wear/screens/wear_homework_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_messages_list_screen.dart';
 import 'package:bsharp/wear/screens/wear_notes_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
@@ -39,11 +42,15 @@ class _FakeAuthNotifier extends AsyncNotifier<AuthState>
 }
 
 class _FakeSyncStatusNotifier extends SyncStatusNotifier {
+  _FakeSyncStatusNotifier([this.result = const ChangeSet()]);
+
+  final ChangeSet result;
+
   @override
   SyncStatus build() => SyncStatus.completed;
 
   @override
-  Future<ChangeSet> sync() async => const ChangeSet();
+  Future<ChangeSet> sync() async => result;
 }
 
 class _FakeNotificationService extends NotificationService {
@@ -79,7 +86,31 @@ Future<AccountStorage> _accountStorageWithOneStudent() async {
   return storage;
 }
 
-Future<Widget> _buildApp(_FakeNotificationService service) async {
+PocztaMessage _wearMessage(int id) => PocztaMessage(
+  id: id,
+  title: 'Temat $id',
+  senderName: 'Jan Kowalski',
+  sendTime: DateTime(2026, 9, 16),
+  isRead: false,
+  isStarred: false,
+);
+
+ChangeSet _wearMessageChanges(List<int> ids) => ChangeSet(
+  changes: [
+    for (final id in ids)
+      ChangeItem(
+        category: ChangeCategory.messages,
+        title: 'Nowa wiadomosc',
+        entityId: id,
+      ),
+  ],
+);
+
+Future<Widget> _buildApp(
+  _FakeNotificationService service, {
+  List<PocztaMessage> inbox = const [],
+  ChangeSet syncResult = const ChangeSet(),
+}) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
   final credentialStorage = CredentialStorage(store: FakeKeyValueStore());
@@ -92,7 +123,10 @@ Future<Widget> _buildApp(_FakeNotificationService service) async {
       credentialStorageProvider.overrideWithValue(credentialStorage),
       accountStorageProvider.overrideWithValue(accountStorage),
       notificationServiceProvider.overrideWithValue(service),
-      syncStatusProvider.overrideWith(_FakeSyncStatusNotifier.new),
+      syncStatusProvider.overrideWith(
+        () => _FakeSyncStatusNotifier(syncResult),
+      ),
+      inboxProvider.overrideWithBuild((ref, _) => inbox),
       wearScreenShapeProvider.overrideWith(
         (_) => WearScreenShape.rectangular,
       ),
@@ -162,6 +196,48 @@ void main() {
       await tester.pump();
 
       expect(find.byType(WearMessagesListScreen), findsOneWidget);
+    });
+
+    testWidgets('a tap naming a message opens that message', (tester) async {
+      final service = _FakeNotificationService();
+      await tester.pumpWidget(
+        await _buildApp(service, inbox: [_wearMessage(7), _wearMessage(8)]),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      service.capturedOnTap!(
+        const NotificationPayload(
+          category: ChangeCategory.messages,
+          itemId: 8,
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(WearMessageDetailScreen), findsOneWidget);
+    });
+
+    testWidgets('a named message not yet fetched opens after the sync', (
+      tester,
+    ) async {
+      final service = _FakeNotificationService()
+        ..launchPayload = const NotificationPayload(
+          category: ChangeCategory.messages,
+          itemId: 9,
+        );
+      await tester.pumpWidget(
+        await _buildApp(
+          service,
+          inbox: [_wearMessage(9)],
+          syncResult: _wearMessageChanges([9]),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(WearMessageDetailScreen), findsOneWidget);
     });
 
     testWidgets('an unknown kind opens the app at the top level', (
