@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bsharp/data/data_sources/local/notification_preferences_store.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/entities/notification_preferences.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -67,10 +69,15 @@ class NotificationPayload {
 }
 
 class NotificationService {
-  NotificationService({FlutterLocalNotificationsPlugin? plugin})
-    : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+  NotificationService({
+    FlutterLocalNotificationsPlugin? plugin,
+    Future<NotificationPreferences> Function()? loadPreferences,
+  }) : _plugin = plugin ?? FlutterLocalNotificationsPlugin(),
+       _loadPreferences =
+           loadPreferences ?? const NotificationPreferencesStore().load;
 
   final FlutterLocalNotificationsPlugin _plugin;
+  final Future<NotificationPreferences> Function() _loadPreferences;
   bool _initialized = false;
 
   static const _unexcusedChannelId = 'unexcused_absences';
@@ -136,6 +143,16 @@ class NotificationService {
     return true;
   }
 
+  /// Whether the person still wants to hear about this.
+  ///
+  /// A kind the app cannot place is always shown: silence should be something
+  /// someone chose, not something a renamed kind caused.
+  Future<bool> _wanted(ChangeCategory? category) async {
+    if (category == null) return true;
+    final preferences = await _loadPreferences();
+    return preferences.isCategoryEnabled(category);
+  }
+
   Future<bool> handleForegroundFcmMessage(LocalFcmNotification? spec) async {
     if (spec == null) return false;
     if (!_initialized) await initialize();
@@ -145,6 +162,7 @@ class NotificationService {
 
   Future<void> showFcmNotification(LocalFcmNotification spec) async {
     if (!_initialized) return;
+    if (!await _wanted(spec.category)) return;
 
     final androidDetails = AndroidNotificationDetails(
       spec.channelId,
