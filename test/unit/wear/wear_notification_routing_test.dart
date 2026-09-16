@@ -102,37 +102,36 @@ Future<Widget> _buildApp(_FakeNotificationService service) async {
 }
 
 void main() {
-  group('wearScreenBuilderForRoute', () {
+  group('wearScreenBuilderForCategory', () {
     test('maps every known notification kind to its screen', () {
       expect(
-        wearScreenBuilderForRoute('/grades')!(_ctx),
+        wearScreenBuilderForCategory(ChangeCategory.grades)!(_ctx),
         isA<WearGradesDetailScreen>(),
       );
       expect(
-        wearScreenBuilderForRoute('/messages')!(_ctx),
+        wearScreenBuilderForCategory(ChangeCategory.messages)!(_ctx),
         isA<WearMessagesListScreen>(),
       );
       expect(
-        wearScreenBuilderForRoute('/schedule')!(_ctx),
+        wearScreenBuilderForCategory(ChangeCategory.schedule)!(_ctx),
         isA<WearScheduleDetailScreen>(),
       );
       expect(
-        wearScreenBuilderForRoute('/attendance')!(_ctx),
+        wearScreenBuilderForCategory(ChangeCategory.attendance)!(_ctx),
         isA<WearAttendanceDetailScreen>(),
       );
       expect(
-        wearScreenBuilderForRoute('/homework')!(_ctx),
+        wearScreenBuilderForCategory(ChangeCategory.homework)!(_ctx),
         isA<WearHomeworkDetailScreen>(),
       );
       expect(
-        wearScreenBuilderForRoute('/notes')!(_ctx),
+        wearScreenBuilderForCategory(ChangeCategory.notes)!(_ctx),
         isA<WearNotesDetailScreen>(),
       );
     });
 
     test('an unknown kind falls back to the top level', () {
-      expect(wearScreenBuilderForRoute('/unknown-thing'), isNull);
-      expect(wearScreenBuilderForRoute(null), isNull);
+      expect(wearScreenBuilderForCategory(null), isNull);
     });
   });
 
@@ -144,7 +143,7 @@ void main() {
       await tester.pump();
 
       service.capturedOnTap!(
-        const NotificationPayload(route: '/grades'),
+        const NotificationPayload(category: ChangeCategory.grades),
       );
       await tester.pump();
       await tester.pump();
@@ -154,7 +153,9 @@ void main() {
 
     testWidgets('a cold start launch payload opens messages', (tester) async {
       final service = _FakeNotificationService()
-        ..launchPayload = const NotificationPayload(route: '/messages');
+        ..launchPayload = const NotificationPayload(
+          category: ChangeCategory.messages,
+        );
       await tester.pumpWidget(await _buildApp(service));
       await tester.pump();
       await tester.pump();
@@ -172,7 +173,7 @@ void main() {
       await tester.pump();
 
       service.capturedOnTap!(
-        const NotificationPayload(route: '/something-new'),
+        const NotificationPayload(),
       );
       await tester.pump();
       await tester.pump();

@@ -1,4 +1,5 @@
 import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
+import 'package:bsharp/domain/change_detection.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,19 +12,19 @@ void main() {
 
   group('MobiregDataProvider.parseFcmMessage', () {
     test('renders every kind the server can send', () {
-      const kindToRoute = {
-        'messages': '/messages',
-        'marks': '/grades',
-        'absences': '/attendance',
-        'reprimands': '/notes',
-        'timetables': '/schedule',
-        'other': '/dashboard',
+      const kindToCategory = <String, ChangeCategory?>{
+        'messages': ChangeCategory.messages,
+        'marks': ChangeCategory.grades,
+        'absences': ChangeCategory.attendance,
+        'reprimands': ChangeCategory.notes,
+        'timetables': ChangeCategory.schedule,
+        'other': null,
       };
 
-      for (final entry in kindToRoute.entries) {
+      for (final entry in kindToCategory.entries) {
         final spec = provider.parseFcmMessage(messageOfKind(entry.key));
         expect(spec, isNotNull, reason: 'kind ${entry.key} was dropped');
-        expect(spec!.route, entry.value, reason: 'kind ${entry.key}');
+        expect(spec!.category, entry.value, reason: 'kind ${entry.key}');
         expect(spec.channelId, isNotEmpty);
         expect(spec.channelName, isNotEmpty);
       }
@@ -48,7 +49,7 @@ void main() {
       final spec = provider.parseFcmMessage(messageOfKind('somethingNew'));
 
       expect(spec, isNotNull);
-      expect(spec!.route, '/dashboard');
+      expect(spec!.category, isNull);
     });
 
     test('drops a message with no title', () {

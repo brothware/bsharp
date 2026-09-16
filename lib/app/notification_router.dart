@@ -1,10 +1,23 @@
 import 'dart:async';
 
 import 'package:bsharp/app/account_providers.dart';
+import 'package:bsharp/app/router.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/services/notification_service.dart';
+import 'package:bsharp/domain/change_detection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+/// Where each kind of news lives. Providers say what a notification is about;
+/// only the app knows which screen that is.
+const _sectionRoutes = <ChangeCategory, String>{
+  ChangeCategory.messages: AppRoutes.messages,
+  ChangeCategory.grades: AppRoutes.grades,
+  ChangeCategory.attendance: AppRoutes.attendance,
+  ChangeCategory.notes: AppRoutes.notes,
+  ChangeCategory.schedule: AppRoutes.schedule,
+  ChangeCategory.homework: AppRoutes.homework,
+};
 
 class NotificationRouter {
   NotificationRouter({required this.ref, required this.routerProvider});
@@ -16,7 +29,10 @@ class NotificationRouter {
     final router = routerProvider();
     if (router == null) return;
 
-    final route = payload.route;
+    final category = payload.category;
+    if (category == null) return;
+
+    final route = _sectionRoutes[category];
     if (route == null) return;
 
     final accountId = payload.accountId;

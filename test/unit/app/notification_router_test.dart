@@ -9,6 +9,7 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/services/notification_service.dart';
+import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
@@ -92,13 +93,15 @@ void main() {
               ref: ref,
               routerProvider: () => null,
             ).handleNotificationTap(
-              const NotificationPayload(route: AppRoutes.grades),
+              const NotificationPayload(category: ChangeCategory.grades),
             ),
         returnsNormally,
       );
     });
 
-    testWidgets('a payload with a route navigates to it', (tester) async {
+    testWidgets('a payload with a category navigates to its section', (
+      tester,
+    ) async {
       final accountStorage = await _accountStorageWithTwoStudents();
       final ref = await _captureRef(
         tester,
@@ -117,14 +120,14 @@ void main() {
         ref: ref,
         routerProvider: () => router,
       ).handleNotificationTap(
-        const NotificationPayload(route: AppRoutes.grades),
+        const NotificationPayload(category: ChangeCategory.grades),
       );
       await tester.pump();
 
       expect(router.routeInformationProvider.value.uri.path, '/grades');
     });
 
-    testWidgets('a payload with no route does nothing', (tester) async {
+    testWidgets('a payload with no category does nothing', (tester) async {
       final accountStorage = await _accountStorageWithTwoStudents();
       final ref = await _captureRef(
         tester,
@@ -183,7 +186,7 @@ void main() {
           const NotificationPayload(
             accountId: 'a2',
             studentId: 2,
-            route: AppRoutes.grades,
+            category: ChangeCategory.grades,
           ),
         );
         await tester.pump();
@@ -226,7 +229,7 @@ void main() {
           const NotificationPayload(
             accountId: 'a1',
             studentId: 1,
-            route: AppRoutes.grades,
+            category: ChangeCategory.grades,
           ),
         );
         await tester.pump();
@@ -292,7 +295,9 @@ void main() {
         final prefs = await SharedPreferences.getInstance();
         final authNotifier = _DelayedAuthNotifier();
         final service = _LaunchPayloadNotificationService()
-          ..launchPayload = const NotificationPayload(route: AppRoutes.grades);
+          ..launchPayload = const NotificationPayload(
+            category: ChangeCategory.grades,
+          );
 
         await tester.pumpWidget(
           ProviderScope(
