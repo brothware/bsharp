@@ -2,6 +2,7 @@
 library;
 
 import 'package:bsharp/data/services/notification_service.dart';
+import 'package:bsharp/domain/change_detection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
@@ -23,7 +24,7 @@ void main() {
         channelId: 'messages',
         channelName: 'Messages',
         channelDescription: 'New messages',
-        route: '/messages',
+        category: ChangeCategory.messages,
       ),
     );
 
