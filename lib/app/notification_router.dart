@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bsharp/app/account_providers.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/services/notification_service.dart';
@@ -24,6 +25,10 @@ class NotificationRouter {
 
   final WidgetRef ref;
   final GoRouter? Function() routerProvider;
+
+  /// What the tapped notification was about, kept until the sync it triggered
+  /// comes back with the item itself.
+  ChangeCategory? _awaitingReveal;
 
   void handleNotificationTap(NotificationPayload payload) {
     final router = routerProvider();
@@ -52,6 +57,35 @@ class NotificationRouter {
       }
     }
 
+    _awaitingReveal = category;
     router.go(route);
+  }
+
+  /// The sync a tapped notification set off has finished. If it brought in
+  /// exactly one item of the kind that was tapped, that item is what the
+  /// person was reaching for, so open it. Anything else and the section they
+  /// are already looking at is the honest answer.
+  void handleSyncCompleted(ChangeSet changes) {
+    final category = _awaitingReveal;
+    _awaitingReveal = null;
+    if (category == null) return;
+
+    final router = routerProvider();
+    if (router == null) return;
+
+    final arrived = changes.byCategory(category);
+    if (arrived.length != 1) return;
+
+    final entityId = arrived.single.entityId;
+    if (entityId == null) return;
+
+    if (category == ChangeCategory.messages) {
+      final message = ref
+          .read(inboxProvider)
+          .where((m) => m.id == entityId)
+          .firstOrNull;
+      if (message == null) return;
+      unawaited(router.push(AppRoutes.messageView, extra: message));
+    }
   }
 }
