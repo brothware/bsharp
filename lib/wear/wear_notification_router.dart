@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/services/notification_service.dart';
+import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_homework_detail_screen.dart';
@@ -13,15 +14,16 @@ import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-WidgetBuilder? wearScreenBuilderForRoute(String? route) => switch (route) {
-  '/grades' => (_) => const WearGradesDetailScreen(),
-  '/messages' => (_) => const WearMessagesListScreen(),
-  '/schedule' => (_) => const WearScheduleDetailScreen(),
-  '/attendance' => (_) => const WearAttendanceDetailScreen(),
-  '/homework' => (_) => const WearHomeworkDetailScreen(),
-  '/notes' => (_) => const WearNotesDetailScreen(),
-  _ => null,
-};
+WidgetBuilder? wearScreenBuilderForCategory(ChangeCategory? category) =>
+    switch (category) {
+      ChangeCategory.grades => (_) => const WearGradesDetailScreen(),
+      ChangeCategory.messages => (_) => const WearMessagesListScreen(),
+      ChangeCategory.schedule => (_) => const WearScheduleDetailScreen(),
+      ChangeCategory.attendance => (_) => const WearAttendanceDetailScreen(),
+      ChangeCategory.homework => (_) => const WearHomeworkDetailScreen(),
+      ChangeCategory.notes => (_) => const WearNotesDetailScreen(),
+      null => null,
+    };
 
 class WearNotificationRouter {
   WearNotificationRouter({required this.ref, required this.navigatorKey});
@@ -46,7 +48,7 @@ class WearNotificationRouter {
       }
     }
 
-    final builder = wearScreenBuilderForRoute(payload.route);
+    final builder = wearScreenBuilderForCategory(payload.category);
     if (builder == null) return;
 
     final context = navigatorKey.currentContext;

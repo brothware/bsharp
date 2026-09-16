@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -11,7 +12,7 @@ class LocalFcmNotification {
     required this.channelId,
     required this.channelName,
     required this.channelDescription,
-    required this.route,
+    required this.category,
     this.triggersSync = true,
   });
 
@@ -20,30 +21,36 @@ class LocalFcmNotification {
   final String channelId;
   final String channelName;
   final String channelDescription;
-  final String route;
+
+  /// What the notification is about, or null when the provider cannot place
+  /// it. Where that lands in the app is the app's business, not a provider's.
+  final ChangeCategory? category;
   final bool triggersSync;
 }
 
 class NotificationPayload {
-  const NotificationPayload({this.accountId, this.studentId, this.route});
+  const NotificationPayload({this.accountId, this.studentId, this.category});
 
   factory NotificationPayload.fromJson(String json) {
     final map = jsonDecode(json) as Map<String, dynamic>;
+    final categoryName = map['category'] as String?;
     return NotificationPayload(
       accountId: map['accountId'] as String?,
       studentId: map['studentId'] as int?,
-      route: map['route'] as String?,
+      category: ChangeCategory.values
+          .where((c) => c.name == categoryName)
+          .firstOrNull,
     );
   }
 
   final String? accountId;
   final int? studentId;
-  final String? route;
+  final ChangeCategory? category;
 
   String toJson() => jsonEncode({
     'accountId': accountId,
     'studentId': studentId,
-    'route': route,
+    'category': category?.name,
   });
 }
 
@@ -140,7 +147,7 @@ class NotificationService {
       iOS: const DarwinNotificationDetails(),
     );
 
-    final payload = NotificationPayload(route: spec.route).toJson();
+    final payload = NotificationPayload(category: spec.category).toJson();
 
     await _plugin.show(
       id: spec.title.hashCode,

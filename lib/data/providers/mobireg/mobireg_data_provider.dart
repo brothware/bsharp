@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
-import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
@@ -15,6 +14,7 @@ import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/data/services/sync_data_applier.dart';
+import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -206,7 +206,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       channelId: kind.channelId,
       channelName: kind.channelName,
       channelDescription: kind.channelDescription,
-      route: kind.route,
+      category: kind.category,
       triggersSync: data['noSync'] != 'true',
     );
   }
@@ -573,21 +573,28 @@ class _PortalViewRequest {
 }
 
 enum _MobiregNotificationKind {
-  messages('messages', 'messages', AppRoutes.messages),
-  marks('marks', 'grades', AppRoutes.grades),
-  absences('absences', 'attendance', AppRoutes.attendance),
-  reprimands('reprimands', 'notes', AppRoutes.notes),
-  timetables('timetables', 'schedule', AppRoutes.schedule),
-  other('other', 'general', AppRoutes.dashboard);
+  messages('messages', 'messages', ChangeCategory.messages),
+  marks('marks', 'grades', ChangeCategory.grades),
+  absences('absences', 'attendance', ChangeCategory.attendance),
+  reprimands('reprimands', 'notes', ChangeCategory.notes),
+  timetables('timetables', 'schedule', ChangeCategory.schedule),
+  other('other', 'general', null);
 
-  const _MobiregNotificationKind(this.key, this.channelId, this.route);
+  const _MobiregNotificationKind(this.key, this.channelId, this.category);
 
   final String key;
   final String channelId;
-  final String route;
+
+  /// Null for [other]: the server named something this app cannot place.
+  final ChangeCategory? category;
 
   static _MobiregNotificationKind forKey(String key) {
-    return values.firstWhere((kind) => kind.key == key, orElse: () => other);
+    final known = values.where((kind) => kind.key == key).firstOrNull;
+    if (known != null) return known;
+    // The server has renamed a kind, or added one. Say so: swallowing it
+    // silently is how every push ends up on the dashboard.
+    debugPrint('MobiregDataProvider: unknown notification kind "$key"');
+    return other;
   }
 
   String get channelName => switch (this) {
