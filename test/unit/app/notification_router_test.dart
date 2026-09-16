@@ -4,12 +4,14 @@ import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/app.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/notification_router.dart';
+import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
@@ -70,6 +72,26 @@ Future<WidgetRef> _captureRef(
   return capturedRef;
 }
 
+PocztaMessage _message(int id) => PocztaMessage(
+  id: id,
+  title: 'Temat $id',
+  senderName: 'Jan Kowalski',
+  sendTime: DateTime(2026, 9, 16),
+  isRead: false,
+  isStarred: false,
+);
+
+ChangeSet _messageChanges(List<int> ids) => ChangeSet(
+  changes: [
+    for (final id in ids)
+      ChangeItem(
+        category: ChangeCategory.messages,
+        title: 'Nowa wiadomosc',
+        entityId: id,
+      ),
+  ],
+);
+
 void main() {
   group('NotificationRouter', () {
     testWidgets('a null router does not throw and does nothing', (
@@ -125,6 +147,88 @@ void main() {
       await tester.pump();
 
       expect(router.routeInformationProvider.value.uri.path, '/grades');
+    });
+
+    testWidgets('one new message opens that message', (tester) async {
+      final accountStorage = await _accountStorageWithTwoStudents();
+      final ref = await _captureRef(
+        tester,
+        (child) => ProviderScope(
+          overrides: [
+            accountStorageProvider.overrideWithValue(accountStorage),
+            inboxProvider.overrideWithBuild((ref, _) => [_message(7)]),
+          ],
+          child: child,
+        ),
+      );
+      await ref.read(activeSelectionProvider.future);
+
+      final router = createRouter(authState: AuthState.authenticated);
+      final notificationRouter =
+          NotificationRouter(ref: ref, routerProvider: () => router)
+            ..handleNotificationTap(
+              const NotificationPayload(category: ChangeCategory.messages),
+            );
+      await tester.pump();
+      expect(router.routeInformationProvider.value.uri.path, '/messages');
+
+      notificationRouter.handleSyncCompleted(_messageChanges([7]));
+      await tester.pump();
+
+      expect(router.routeInformationProvider.value.uri.path, '/messages/view');
+    });
+
+    testWidgets('several new messages stay on the list', (tester) async {
+      final accountStorage = await _accountStorageWithTwoStudents();
+      final ref = await _captureRef(
+        tester,
+        (child) => ProviderScope(
+          overrides: [
+            accountStorageProvider.overrideWithValue(accountStorage),
+            inboxProvider.overrideWithBuild(
+              (ref, _) => [_message(7), _message(8)],
+            ),
+          ],
+          child: child,
+        ),
+      );
+      await ref.read(activeSelectionProvider.future);
+
+      final router = createRouter(authState: AuthState.authenticated);
+      NotificationRouter(ref: ref, routerProvider: () => router)
+        ..handleNotificationTap(
+          const NotificationPayload(category: ChangeCategory.messages),
+        )
+        ..handleSyncCompleted(_messageChanges([7, 8]));
+      await tester.pump();
+
+      expect(router.routeInformationProvider.value.uri.path, '/messages');
+    });
+
+    testWidgets('a sync nobody asked about opens nothing', (tester) async {
+      final accountStorage = await _accountStorageWithTwoStudents();
+      final ref = await _captureRef(
+        tester,
+        (child) => ProviderScope(
+          overrides: [
+            accountStorageProvider.overrideWithValue(accountStorage),
+            inboxProvider.overrideWithBuild((ref, _) => [_message(7)]),
+          ],
+          child: child,
+        ),
+      );
+      await ref.read(activeSelectionProvider.future);
+
+      final router = createRouter(authState: AuthState.authenticated);
+      final locationBefore = router.routeInformationProvider.value.uri.path;
+
+      NotificationRouter(
+        ref: ref,
+        routerProvider: () => router,
+      ).handleSyncCompleted(_messageChanges([7]));
+      await tester.pump();
+
+      expect(router.routeInformationProvider.value.uri.path, locationBefore);
     });
 
     testWidgets('a payload with no category does nothing', (tester) async {

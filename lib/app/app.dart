@@ -48,7 +48,8 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
             .read(notificationServiceProvider)
             .handleForegroundFcmMessage(spec);
         if (shouldSync && _initialSyncTriggered) {
-          await ref.read(syncStatusProvider.notifier).sync();
+          final changes = await ref.read(syncStatusProvider.notifier).sync();
+          _notificationRouter?.handleSyncCompleted(changes);
         }
       });
     }
@@ -154,10 +155,15 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
           _initialSyncTriggered = true;
           final isDemo = ref.read(demoModeProvider);
           if (!isDemo) {
+            // A notification tapped from a cold start waits on this sync to
+            // bring in the item it was about.
             unawaited(
-              Future.microtask(
-                () => ref.read(syncStatusProvider.notifier).sync(),
-              ),
+              Future.microtask(() async {
+                final changes = await ref
+                    .read(syncStatusProvider.notifier)
+                    .sync();
+                _notificationRouter?.handleSyncCompleted(changes);
+              }),
             );
           } else {
             unawaited(
