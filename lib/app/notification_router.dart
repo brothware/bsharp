@@ -29,8 +29,11 @@ class NotificationRouter {
   final GoRouter? Function() routerProvider;
 
   /// What the tapped notification was about, kept until the sync it triggered
-  /// comes back with the item itself.
+  /// brings in the item itself.
   ChangeCategory? _awaitingReveal;
+
+  /// Which item, when the notification named one.
+  int? _awaitingItemId;
 
   void handleNotificationTap(NotificationPayload payload) {
     final router = routerProvider();
@@ -60,7 +63,15 @@ class NotificationRouter {
     }
 
     _awaitingReveal = category;
+    _awaitingItemId = payload.itemId;
     router.go(route);
+
+    // The notification named the item, so there is nothing to work out: open it
+    // if it is already here, and otherwise wait for the sync to fetch it.
+    if (_reveal(router, category, payload.itemId)) {
+      _awaitingReveal = null;
+      _awaitingItemId = null;
+    }
   }
 
   /// The sync a tapped notification set off has finished. If it brought in
@@ -69,25 +80,38 @@ class NotificationRouter {
   /// are already looking at is the honest answer.
   void handleSyncCompleted(ChangeSet changes) {
     final category = _awaitingReveal;
+    final namedId = _awaitingItemId;
     _awaitingReveal = null;
+    _awaitingItemId = null;
     if (category == null) return;
 
     final router = routerProvider();
     if (router == null) return;
 
+    if (namedId != null) {
+      _reveal(router, category, namedId);
+      return;
+    }
+
+    // Nothing named an item, so the sync has to answer it: one thing of that
+    // kind arrived means that is the one, anything else and the section stands.
     final arrived = changes.byCategory(category);
     if (arrived.length != 1) return;
+    _reveal(router, category, arrived.single.entityId);
+  }
 
-    final entityId = arrived.single.entityId;
-    if (entityId == null) return;
+  /// Opens the item itself, and reports whether it managed to.
+  bool _reveal(GoRouter router, ChangeCategory category, int? itemId) {
+    if (itemId == null) return false;
+    if (category != ChangeCategory.messages) return false;
 
-    if (category == ChangeCategory.messages) {
-      final message = ref
-          .read(inboxProvider)
-          .where((m) => m.id == entityId)
-          .firstOrNull;
-      if (message == null) return;
-      unawaited(router.push(AppRoutes.messageView, extra: message));
-    }
+    final message = ref
+        .read(inboxProvider)
+        .where((m) => m.id == itemId)
+        .firstOrNull;
+    if (message == null) return false;
+
+    unawaited(router.push(AppRoutes.messageView, extra: message));
+    return true;
   }
 }

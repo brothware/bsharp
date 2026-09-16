@@ -7,6 +7,18 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('NotificationPayload', () {
+    test('an item id survives the round trip', () {
+      const payload = NotificationPayload(
+        category: ChangeCategory.messages,
+        itemId: 4321,
+      );
+
+      final restored = NotificationPayload.fromJson(payload.toJson());
+
+      expect(restored.itemId, 4321);
+      expect(restored.category, ChangeCategory.messages);
+    });
+
     test('grade notification keeps its category', () {
       const payload = NotificationPayload(
         accountId: 'acc-1',

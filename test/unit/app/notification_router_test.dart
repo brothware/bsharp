@@ -149,6 +149,82 @@ void main() {
       expect(router.routeInformationProvider.value.uri.path, '/grades');
     });
 
+    testWidgets('a tap naming a message opens it without waiting', (
+      tester,
+    ) async {
+      final accountStorage = await _accountStorageWithTwoStudents();
+      final ref = await _captureRef(
+        tester,
+        (child) => ProviderScope(
+          overrides: [
+            accountStorageProvider.overrideWithValue(accountStorage),
+            inboxProvider.overrideWithBuild(
+              (ref, _) => [_message(7), _message(8)],
+            ),
+          ],
+          child: child,
+        ),
+      );
+      await ref.read(activeSelectionProvider.future);
+
+      final router = createRouter(authState: AuthState.authenticated);
+      NotificationRouter(
+        ref: ref,
+        routerProvider: () => router,
+      ).handleNotificationTap(
+        const NotificationPayload(
+          category: ChangeCategory.messages,
+          itemId: 8,
+        ),
+      );
+      await tester.pump();
+
+      expect(router.routeInformationProvider.value.uri.path, '/messages/view');
+    });
+
+    testWidgets(
+      'a named message the app has yet to fetch opens after the sync',
+      (
+        tester,
+      ) async {
+        final accountStorage = await _accountStorageWithTwoStudents();
+        var inbox = <PocztaMessage>[];
+        final ref = await _captureRef(
+          tester,
+          (child) => ProviderScope(
+            overrides: [
+              accountStorageProvider.overrideWithValue(accountStorage),
+              inboxProvider.overrideWithBuild((ref, _) => inbox),
+            ],
+            child: child,
+          ),
+        );
+        await ref.read(activeSelectionProvider.future);
+
+        final router = createRouter(authState: AuthState.authenticated);
+        final notificationRouter =
+            NotificationRouter(ref: ref, routerProvider: () => router)
+              ..handleNotificationTap(
+                const NotificationPayload(
+                  category: ChangeCategory.messages,
+                  itemId: 9,
+                ),
+              );
+        await tester.pump();
+        expect(router.routeInformationProvider.value.uri.path, '/messages');
+
+        inbox = [_message(9), _message(10)];
+        ref.invalidate(inboxProvider);
+        notificationRouter.handleSyncCompleted(_messageChanges([9, 10]));
+        await tester.pump();
+
+        expect(
+          router.routeInformationProvider.value.uri.path,
+          '/messages/view',
+        );
+      },
+    );
+
     testWidgets('one new message opens that message', (tester) async {
       final accountStorage = await _accountStorageWithTwoStudents();
       final ref = await _captureRef(
