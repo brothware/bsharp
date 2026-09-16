@@ -36,6 +36,13 @@ jobs:
           flutter-version: '3.47.2'
           cache: true
 
+      - name: Restore native assets
+        id: native-assets
+        uses: actions/cache/restore@v5
+        with:
+          path: .dart_tool/hooks_runner/shared
+          key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
+
       - run: flutter pub get
       - run: dart run build_runner build --delete-conflicting-outputs
       - run: dart run slang
@@ -53,6 +60,13 @@ jobs:
       - run: dart format --set-exit-if-changed .
       - run: flutter analyze --fatal-warnings
       - run: flutter test --coverage
+
+      - name: Save native assets
+        if: success() && steps.native-assets.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: .dart_tool/hooks_runner/shared
+          key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
 
   build-web:
     runs-on: ubuntu-latest
@@ -97,6 +111,13 @@ jobs:
           flutter-version: '3.47.2'
           cache: true
 
+      - name: Restore native assets
+        id: native-assets
+        uses: actions/cache/restore@v5
+        with:
+          path: .dart_tool/hooks_runner/shared
+          key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
+
       - run: flutter pub get
 
       - uses: actions/download-artifact@v8
@@ -137,6 +158,13 @@ jobs:
           name: release-android-aab
           path: build/app/outputs/bundle/phoneRelease/app-phone-release.aab
 
+      - name: Save native assets
+        if: success() && steps.native-assets.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: .dart_tool/hooks_runner/shared
+          key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
+
   build-ios:
     runs-on: macos-latest
     needs: [version, quality]
@@ -153,6 +181,13 @@ jobs:
           path: ios/Pods
           key: pods-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
 
+      - name: Restore native assets
+        id: native-assets
+        uses: actions/cache/restore@v5
+        with:
+          path: .dart_tool/hooks_runner/shared
+          key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
+
       - run: flutter pub get
 
       - uses: actions/download-artifact@v8
@@ -167,6 +202,13 @@ jobs:
         with:
           name: release-ios
           path: build/ios/iphoneos/Runner.app
+
+      - name: Save native assets
+        if: success() && steps.native-assets.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: .dart_tool/hooks_runner/shared
+          key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
 
   build-wearos:
     runs-on: ubuntu-latest
@@ -184,6 +226,13 @@ jobs:
         with:
           flutter-version: '3.47.2'
           cache: true
+
+      - name: Restore native assets
+        id: native-assets
+        uses: actions/cache/restore@v5
+        with:
+          path: .dart_tool/hooks_runner/shared
+          key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
 
       - run: flutter pub get
 
@@ -238,6 +287,13 @@ jobs:
         with:
           name: release-wearos-aab
           path: build/app/outputs/bundle/wearRelease/app-wear-release.aab
+
+      - name: Save native assets
+        if: success() && steps.native-assets.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: .dart_tool/hooks_runner/shared
+          key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
 
   create-release:
     runs-on: ubuntu-latest
