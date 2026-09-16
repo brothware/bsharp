@@ -28,7 +28,13 @@ jobs:
           path: .dart_tool/hooks_runner/shared
           key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
 
-      - run: flutter pub get
+      - name: Fetch dependencies
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: flutter pub get
+
       - run: dart run build_runner build --delete-conflicting-outputs
       - run: dart run slang
       - run: dart format lib/l10n/
@@ -44,6 +50,13 @@ jobs:
 
       - run: dart format --set-exit-if-changed .
       - run: flutter analyze --fatal-warnings
+
+      - name: Warm up native assets
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 15
+          max_attempts: 3
+          command: flutter test test/unit/core/result_test.dart
 
       - name: Run tests with coverage
         run: flutter test --coverage
@@ -86,7 +99,12 @@ jobs:
           flutter-version: '3.47.2'
           cache: true
 
-      - run: flutter pub get
+      - name: Fetch dependencies
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: flutter pub get
 
       - uses: actions/download-artifact@v8
         with:
@@ -94,7 +112,12 @@ jobs:
 
       - run: tar -xzf generated-sources.tar.gz
 
-      - run: flutter build web --base-href /bsharp/
+      - name: Build web
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          command: flutter build web --base-href /bsharp/
 
       - uses: actions/upload-artifact@v7
         with:
@@ -125,7 +148,12 @@ jobs:
           path: .dart_tool/hooks_runner/shared
           key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
 
-      - run: flutter pub get
+      - name: Fetch dependencies
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: flutter pub get
 
       - uses: actions/download-artifact@v8
         with:
@@ -149,8 +177,18 @@ jobs:
           storeFile=release.jks
           EOF
 
-      - run: flutter build apk --flavor phone --release
-      - run: flutter build appbundle --flavor phone --release
+      - name: Build apk
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 30
+          max_attempts: 3
+          command: flutter build apk --flavor phone --release
+      - name: Build appbundle
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 30
+          max_attempts: 3
+          command: flutter build appbundle --flavor phone --release
 
       - uses: actions/upload-artifact@v7
         with:
@@ -192,7 +230,12 @@ jobs:
           path: .dart_tool/hooks_runner/shared
           key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
 
-      - run: flutter pub get
+      - name: Fetch dependencies
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: flutter pub get
 
       - uses: actions/download-artifact@v8
         with:
@@ -200,14 +243,24 @@ jobs:
 
       - run: tar -xzf generated-sources.tar.gz
 
-      - run: flutter build ios --release --no-codesign
+      - name: Build ios
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 45
+          max_attempts: 3
+          command: flutter build ios --release --no-codesign
 
       - uses: actions/upload-artifact@v7
         with:
           name: ios-build
           path: build/ios/iphoneos/Runner.app
 
-      - run: flutter build ios --simulator --debug
+      - name: Build ios simulator
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 45
+          max_attempts: 3
+          command: flutter build ios --simulator --debug
 
       - name: Zip simulator app
         run: |
@@ -251,7 +304,12 @@ jobs:
           path: .dart_tool/hooks_runner/shared
           key: native-assets-${{ runner.os }}-${{ github.job }}-${{ hashFiles('pubspec.lock') }}
 
-      - run: flutter pub get
+      - name: Fetch dependencies
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: flutter pub get
 
       - uses: actions/download-artifact@v8
         with:
@@ -289,7 +347,12 @@ jobs:
           EOF
           fi
 
-      - run: flutter build apk --flavor wear --release --target=lib/main_wear.dart
+      - name: Build wear apk
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 30
+          max_attempts: 3
+          command: flutter build apk --flavor wear --release --target=lib/main_wear.dart
 
       - uses: actions/upload-artifact@v7
         with:
