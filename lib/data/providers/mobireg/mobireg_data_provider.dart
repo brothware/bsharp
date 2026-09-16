@@ -578,6 +578,11 @@ enum _MobiregNotificationKind {
   absences('absences', 'attendance', ChangeCategory.attendance),
   reprimands('reprimands', 'notes', ChangeCategory.notes),
   timetables('timetables', 'schedule', ChangeCategory.schedule),
+  substitutions('substitutions', 'schedule', ChangeCategory.schedule),
+  cancellations('cancellations', 'schedule', ChangeCategory.schedule),
+  planChanges('planChanges', 'schedule', ChangeCategory.schedule),
+  exams('exams', 'tests', ChangeCategory.tests),
+  announcements('announcements', 'bulletins', ChangeCategory.bulletins),
   other('other', 'general', null);
 
   const _MobiregNotificationKind(this.key, this.channelId, this.category);
@@ -602,7 +607,12 @@ enum _MobiregNotificationKind {
     marks => t.notification.gradesName,
     absences => t.notification.attendanceName,
     reprimands => t.notification.notesName,
-    timetables => t.notification.scheduleName,
+    timetables ||
+    substitutions ||
+    cancellations ||
+    planChanges => t.notification.scheduleName,
+    exams => t.tests.title,
+    announcements => t.bulletins.title,
     other => t.notification.generalName,
   };
 
@@ -611,7 +621,12 @@ enum _MobiregNotificationKind {
     marks => t.notification.gradesDescription,
     absences => t.notification.attendanceDescription,
     reprimands => t.notification.notesDescription,
-    timetables => t.notification.scheduleDescription,
+    timetables ||
+    substitutions ||
+    cancellations ||
+    planChanges => t.notification.scheduleDescription,
+    // These two have no description of their own translated yet.
+    exams || announcements => t.notification.generalDescription,
     other => t.notification.generalDescription,
   };
 }

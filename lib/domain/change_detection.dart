@@ -1,4 +1,13 @@
-enum ChangeCategory { grades, schedule, attendance, messages, homework, notes }
+enum ChangeCategory {
+  grades,
+  schedule,
+  attendance,
+  messages,
+  homework,
+  notes,
+  tests,
+  bulletins,
+}
 
 class ChangeItem {
   const ChangeItem({

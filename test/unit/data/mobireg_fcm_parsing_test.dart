@@ -18,6 +18,11 @@ void main() {
         'absences': ChangeCategory.attendance,
         'reprimands': ChangeCategory.notes,
         'timetables': ChangeCategory.schedule,
+        'substitutions': ChangeCategory.schedule,
+        'cancellations': ChangeCategory.schedule,
+        'planChanges': ChangeCategory.schedule,
+        'exams': ChangeCategory.tests,
+        'announcements': ChangeCategory.bulletins,
         'other': null,
       };
 

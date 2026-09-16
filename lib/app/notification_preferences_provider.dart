@@ -54,6 +54,9 @@ class NotificationPreferences {
       ChangeCategory.attendance => attendanceEnabled,
       ChangeCategory.homework => homeworkEnabled,
       ChangeCategory.notes => notesEnabled,
+      // No switch of their own yet, so they are always delivered rather than
+      // silently riding on an unrelated one.
+      ChangeCategory.tests || ChangeCategory.bulletins => true,
     };
   }
 
@@ -124,6 +127,8 @@ class NotificationPreferencesNotifier
 
   Future<void> toggleCategory(ChangeCategory category) async {
     final updated = switch (category) {
+      // No switch of their own yet, so there is nothing to flip.
+      ChangeCategory.tests || ChangeCategory.bulletins => state,
       ChangeCategory.grades => state.copyWith(
         gradesEnabled: !state.gradesEnabled,
       ),

@@ -18,6 +18,8 @@ const _sectionRoutes = <ChangeCategory, String>{
   ChangeCategory.notes: AppRoutes.notes,
   ChangeCategory.schedule: AppRoutes.schedule,
   ChangeCategory.homework: AppRoutes.homework,
+  ChangeCategory.tests: AppRoutes.tests,
+  ChangeCategory.bulletins: AppRoutes.bulletins,
 };
 
 class NotificationRouter {
