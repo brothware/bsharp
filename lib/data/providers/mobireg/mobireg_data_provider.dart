@@ -141,6 +141,18 @@ class MobiregDataProvider implements SchoolDataProvider {
     required String password,
     String? legacyPasswordHash,
   }) async {
+    final sameAccount =
+        _factory != null &&
+        _school == school &&
+        _login == login &&
+        _password == password &&
+        _legacyPasswordHash == legacyPasswordHash;
+    // Every sync re-authenticates, and so does a pull to refresh. Throwing the
+    // portal session away here would mean a fresh login each time, which is
+    // the burst the server asked us to stop making. The session outlives a
+    // sync; only a different account has to start a new one.
+    if (sameAccount) return;
+
     _school = school;
     _login = login;
     _password = password;
