@@ -13,6 +13,7 @@ class LocalFcmNotification {
     required this.channelName,
     required this.channelDescription,
     required this.category,
+    this.itemId,
     this.triggersSync = true,
   });
 
@@ -25,11 +26,19 @@ class LocalFcmNotification {
   /// What the notification is about, or null when the provider cannot place
   /// it. Where that lands in the app is the app's business, not a provider's.
   final ChangeCategory? category;
+
+  /// The thing the notification is about, when the server names it.
+  final int? itemId;
   final bool triggersSync;
 }
 
 class NotificationPayload {
-  const NotificationPayload({this.accountId, this.studentId, this.category});
+  const NotificationPayload({
+    this.accountId,
+    this.studentId,
+    this.category,
+    this.itemId,
+  });
 
   factory NotificationPayload.fromJson(String json) {
     final map = jsonDecode(json) as Map<String, dynamic>;
@@ -40,17 +49,20 @@ class NotificationPayload {
       category: ChangeCategory.values
           .where((c) => c.name == categoryName)
           .firstOrNull,
+      itemId: map['itemId'] as int?,
     );
   }
 
   final String? accountId;
   final int? studentId;
   final ChangeCategory? category;
+  final int? itemId;
 
   String toJson() => jsonEncode({
     'accountId': accountId,
     'studentId': studentId,
     'category': category?.name,
+    'itemId': itemId,
   });
 }
 
@@ -147,7 +159,10 @@ class NotificationService {
       iOS: const DarwinNotificationDetails(),
     );
 
-    final payload = NotificationPayload(category: spec.category).toJson();
+    final payload = NotificationPayload(
+      category: spec.category,
+      itemId: spec.itemId,
+    ).toJson();
 
     await _plugin.show(
       id: spec.title.hashCode,

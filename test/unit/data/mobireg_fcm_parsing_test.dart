@@ -57,6 +57,22 @@ void main() {
       expect(spec!.category, isNull);
     });
 
+    test('carries the item id the server names', () {
+      const message = RemoteMessage(
+        data: {'title': 'Nowa wiadomosc', 'kind': 'messages', 'id': '4321'},
+      );
+
+      final spec = provider.parseFcmMessage(message);
+
+      expect(spec!.itemId, 4321);
+    });
+
+    test('has no item id when the server sends none', () {
+      final spec = provider.parseFcmMessage(messageOfKind('marks'));
+
+      expect(spec!.itemId, isNull);
+    });
+
     test('drops a message with no title', () {
       const message = RemoteMessage(data: {'body': 'Body', 'kind': 'marks'});
 

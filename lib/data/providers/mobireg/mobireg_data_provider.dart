@@ -207,6 +207,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       channelName: kind.channelName,
       channelDescription: kind.channelDescription,
       category: kind.category,
+      itemId: int.tryParse(data['id'] as String? ?? ''),
       triggersSync: data['noSync'] != 'true',
     );
   }
