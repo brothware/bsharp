@@ -1,3 +1,4 @@
+import 'package:bsharp/wear/widgets/wear_edge_content_fade.dart';
 import 'package:flutter/material.dart';
 
 const _minTouchTargetDp = 48.0;
@@ -12,29 +13,37 @@ class WearSideNavigation extends StatelessWidget {
   const WearSideNavigation({
     required this.onPrevious,
     required this.onNext,
+    required this.scrollController,
     super.key,
   });
 
   final VoidCallback onPrevious;
   final VoidCallback onNext;
 
+  /// The list these chevrons share the edge with. The scroll pill is drawn on
+  /// that same edge, so the two take turns rather than overlapping.
+  final ScrollController scrollController;
+
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _WearSideChevron(
-            icon: Icons.chevron_left,
-            alignment: Alignment.centerLeft,
-            onTap: onPrevious,
-          ),
-          _WearSideChevron(
-            icon: Icons.chevron_right,
-            alignment: Alignment.centerRight,
-            onTap: onNext,
-          ),
-        ],
+      child: WearEdgeContentFade(
+        controller: scrollController,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _WearSideChevron(
+              icon: Icons.chevron_left,
+              alignment: Alignment.centerLeft,
+              onTap: onPrevious,
+            ),
+            _WearSideChevron(
+              icon: Icons.chevron_right,
+              alignment: Alignment.centerRight,
+              onTap: onNext,
+            ),
+          ],
+        ),
       ),
     );
   }

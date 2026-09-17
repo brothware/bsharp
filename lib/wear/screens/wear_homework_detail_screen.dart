@@ -49,6 +49,7 @@ class _WearHomeworkDetailScreenState
           edgeContent: WearSideNavigation(
             onPrevious: () => _stepFilter(filter, -1),
             onNext: () => _stepFilter(filter, 1),
+            scrollController: _scrollController,
           ),
           child: Column(
             children: [

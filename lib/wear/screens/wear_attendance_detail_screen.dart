@@ -62,6 +62,7 @@ class _WearAttendanceDetailScreenState
           edgeContent: WearSideNavigation(
             onPrevious: previousMonth,
             onNext: nextMonth,
+            scrollController: _scrollController,
           ),
           child: Column(
             children: [
