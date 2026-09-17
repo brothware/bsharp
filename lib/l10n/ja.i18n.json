@@ -79,6 +79,7 @@
     "nextLesson": "次の授業",
     "noLessonsToday": "今日の授業はありません",
     "lessonNow": "授業中",
+    "orAlternative": "または",
     "allLessonsEnded": "本日の授業はすべて終了",
     "unreadMessages": "未読メッセージ",
     "unreadCount": "${count}件未読",

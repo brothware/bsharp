@@ -79,6 +79,7 @@
     "nextLesson": "Próxima aula",
     "noLessonsToday": "Sem aulas hoje",
     "lessonNow": "Agora",
+    "orAlternative": "ou",
     "allLessonsEnded": "Todas as aulas terminaram",
     "unreadMessages": "Mensagens não lidas",
     "unreadCount": "${count} não lidas",

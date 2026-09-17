@@ -79,6 +79,7 @@
     "nextLesson": "Наступний урок",
     "noLessonsToday": "Сьогодні немає уроків",
     "lessonNow": "Зараз",
+    "orAlternative": "або",
     "allLessonsEnded": "Усі уроки закінчились",
     "unreadMessages": "Непрочитані повідомлення",
     "unreadCount": "${count} непрочитаних",

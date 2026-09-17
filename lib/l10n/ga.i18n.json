@@ -79,6 +79,7 @@
     "nextLesson": "An chead cheacht eile",
     "noLessonsToday": "Gan ceachtanna inniu",
     "lessonNow": "Anois",
+    "orAlternative": "nó",
     "allLessonsEnded": "Gach ceacht criochnaithe",
     "unreadMessages": "Teachtaireachtai gan leamh",
     "unreadCount": "${count} gan leamh",

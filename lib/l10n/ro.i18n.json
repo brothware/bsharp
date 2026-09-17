@@ -79,6 +79,7 @@
     "nextLesson": "Lecția următoare",
     "noLessonsToday": "Fără lecții astăzi",
     "lessonNow": "Acum",
+    "orAlternative": "sau",
     "allLessonsEnded": "Toate lecțiile s-au terminat",
     "unreadMessages": "Mesaje necitite",
     "unreadCount": "${count} necitite",

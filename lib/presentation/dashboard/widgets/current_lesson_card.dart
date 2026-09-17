@@ -11,27 +11,22 @@ class CurrentLessonCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(currentLessonProvider);
-    final lessons = ref.watch(todayLessonsProvider);
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final hasLesson = data.current != null || data.next != null;
-    final entry = data.current ?? data.next;
+    final isCurrent = data.current.isNotEmpty;
+    final entries = isCurrent ? data.current : data.next;
 
     return Card(
       clipBehavior: Clip.antiAlias,
-      elevation: hasLesson ? 2 : 0,
-      color: hasLesson ? cs.primaryContainer : cs.surfaceContainerHighest,
+      elevation: entries.isEmpty ? 0 : 2,
+      color: entries.isEmpty ? cs.surfaceContainerHighest : cs.primaryContainer,
       child: InkWell(
         onTap: () => StatefulNavigationShell.of(context).goBranch(1),
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: hasLesson
-              ? _ActiveLesson(
-                  entry: entry!,
-                  isCurrent: data.current != null,
-                  lessonsToday: lessons.length,
-                )
-              : _InactiveLesson(allEnded: data.allEnded),
+          child: entries.isEmpty
+              ? _InactiveLesson(allEnded: data.allEnded)
+              : _ActiveLesson(entries: entries, isCurrent: isCurrent),
         ),
       ),
     );
@@ -39,15 +34,35 @@ class CurrentLessonCard extends ConsumerWidget {
 }
 
 class _ActiveLesson extends StatelessWidget {
-  const _ActiveLesson({
+  const _ActiveLesson({required this.entries, required this.isCurrent});
+
+  final List<ScheduleEntry> entries;
+  final bool isCurrent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final (index, entry) in entries.indexed) ...[
+          if (index > 0) const _OrDivider(),
+          _LessonRow(entry: entry, isCurrent: isCurrent, isLeading: index == 0),
+        ],
+      ],
+    );
+  }
+}
+
+class _LessonRow extends StatelessWidget {
+  const _LessonRow({
     required this.entry,
     required this.isCurrent,
-    required this.lessonsToday,
+    required this.isLeading,
   });
 
   final ScheduleEntry entry;
   final bool isCurrent;
-  final int lessonsToday;
+  final bool isLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +114,15 @@ class _ActiveLesson extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                isCurrent ? t.dashboard.currentLesson : t.dashboard.nextLesson,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: cs.onPrimaryContainer.withValues(alpha: 0.7),
+              if (isLeading)
+                Text(
+                  isCurrent
+                      ? t.dashboard.currentLesson
+                      : t.dashboard.nextLesson,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: cs.onPrimaryContainer.withValues(alpha: 0.7),
+                  ),
                 ),
-              ),
               Text(
                 entry.displayName,
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -121,9 +139,42 @@ class _ActiveLesson extends StatelessWidget {
         ),
         Icon(
           Icons.chevron_right,
-          color: cs.onPrimaryContainer.withValues(alpha: 0.5),
+          color: isLeading
+              ? cs.onPrimaryContainer.withValues(alpha: 0.5)
+              : Colors.transparent,
         ),
       ],
+    );
+  }
+}
+
+class _OrDivider extends StatelessWidget {
+  const _OrDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final lineColor = cs.onPrimaryContainer.withValues(alpha: 0.2);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          Expanded(child: Divider(color: lineColor, height: 1)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              t.dashboard.orAlternative,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: cs.onPrimaryContainer.withValues(alpha: 0.6),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(child: Divider(color: lineColor, height: 1)),
+        ],
+      ),
     );
   }
 }
@@ -170,7 +221,7 @@ class _MetadataRow extends StatelessWidget {
 
   Widget _dot(Color color) => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 5),
-    child: Text('\u00b7', style: TextStyle(color: color)),
+    child: Text('·', style: TextStyle(color: color)),
   );
 }
 

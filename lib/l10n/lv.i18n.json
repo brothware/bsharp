@@ -79,6 +79,7 @@
     "nextLesson": "Nākamā stunda",
     "noLessonsToday": "Šodien stundu nav",
     "lessonNow": "Tagad",
+    "orAlternative": "vai",
     "allLessonsEnded": "Visas stundas beigušās",
     "unreadMessages": "Nelasīti ziņojumi",
     "unreadCount": "${count} nelasīts(-i)",

@@ -79,6 +79,7 @@
     "nextLesson": "Seuraava oppitunti",
     "noLessonsToday": "Ei oppitunteja tänään",
     "lessonNow": "Nyt",
+    "orAlternative": "tai",
     "allLessonsEnded": "Kaikki oppitunnit päättyneet",
     "unreadMessages": "Lukemattomat viestit",
     "unreadCount": "${count} lukematonta",

@@ -79,6 +79,7 @@
     "nextLesson": "Neste time",
     "noLessonsToday": "Ingen timer i dag",
     "lessonNow": "Nå",
+    "orAlternative": "eller",
     "allLessonsEnded": "Alle timer er avsluttet",
     "unreadMessages": "Uleste meldinger",
     "unreadCount": "${count} uleste",

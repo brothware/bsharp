@@ -34,44 +34,51 @@ DateTime minuteTick(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
-({ScheduleEntry? current, ScheduleEntry? next, bool allEnded}) currentLesson(
-  Ref ref,
-) {
-  final lessons = ref.watch(todayLessonsProvider);
+({List<ScheduleEntry> current, List<ScheduleEntry> next, bool allEnded})
+currentLesson(Ref ref) {
+  final lessons = ref.watch(todayLessonsProvider).where(_isHeld).toList();
   if (lessons.isEmpty) {
-    return (current: null, next: null, allEnded: false);
+    return (current: const [], next: const [], allEnded: false);
   }
 
   final now = ref.watch(minuteTickProvider);
   final nowMinutes = now.hour * 60 + now.minute;
 
-  ScheduleEntry? current;
-  ScheduleEntry? next;
+  final current = <ScheduleEntry>[];
+  final next = <ScheduleEntry>[];
+  var nextStart = 0;
 
   for (final entry in lessons) {
     final start = parseTimeMinutes(entry.startTime);
     final end = parseTimeMinutes(entry.endTime);
     if (start == null || end == null) continue;
-    if (entry.isCancelled) continue;
 
     if (nowMinutes >= start && nowMinutes < end) {
-      current = entry;
-    } else if (nowMinutes < start && next == null) {
-      next = entry;
+      current.add(entry);
+    } else if (nowMinutes < start) {
+      if (next.isEmpty || start < nextStart) {
+        next
+          ..clear()
+          ..add(entry);
+        nextStart = start;
+      } else if (start == nextStart) {
+        next.add(entry);
+      }
     }
   }
 
   final lastEnd = lessons
-      .where((e) => !e.isCancelled)
       .map((e) => parseTimeMinutes(e.endTime))
       .whereType<int>()
       .fold<int>(0, (a, b) => a > b ? a : b);
 
   final allEnded =
-      current == null && next == null && lastEnd > 0 && nowMinutes >= lastEnd;
+      current.isEmpty && next.isEmpty && lastEnd > 0 && nowMinutes >= lastEnd;
 
   return (current: current, next: next, allEnded: allEnded);
 }
+
+bool _isHeld(ScheduleEntry entry) => !entry.isCancelled && !entry.isReplaced;
 
 const _nextSchoolDayScanLimit = 60;
 

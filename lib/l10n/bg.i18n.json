@@ -79,6 +79,7 @@
     "nextLesson": "Следващ час",
     "noLessonsToday": "Няма часове днес",
     "lessonNow": "Сега",
+    "orAlternative": "или",
     "allLessonsEnded": "Всички часове приключиха",
     "unreadMessages": "Непрочетени съобщения",
     "unreadCount": "${count} непрочетени",
