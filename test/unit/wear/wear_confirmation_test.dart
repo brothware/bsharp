@@ -55,6 +55,89 @@ Future<bool?> _pumpAndOpen(
 
 void main() {
   group('showWearConfirmation', () {
+    testWidgets('the question gets more of the screen than the buttons', (
+      tester,
+    ) async {
+      await _pumpAndOpen(
+        tester,
+        WearScreenShape.round,
+        viewSize: const Size(227, 227),
+      );
+
+      final question = tester.getRect(find.text(_longQuestion));
+
+      // The pill itself, not the padded target around it: the target stays
+      // 48dp because Wear asks for it, but it no longer all has to be paint.
+      final pill = tester.getRect(
+        find
+            .descendant(
+              of: find.widgetWithText(FilledButton, 'Log out'),
+              matching: find.byType(Material),
+            )
+            .first,
+      );
+
+      expect(
+        pill.height,
+        lessThanOrEqualTo(40),
+        reason: 'the buttons were taking 96dp of a 177dp screen between them',
+      );
+      expect(
+        question.height,
+        greaterThan(55),
+        reason:
+            'and the question was left with the 45dp they did not want. '
+            'The icon and the two 48dp targets account for the rest; losing '
+            'the icon is what would buy the next 18dp',
+      );
+    });
+
+    testWidgets('the whole question is drawn above the buttons', (
+      tester,
+    ) async {
+      // A real round watch is 227dp across; at dpr 1.0 that is the view size.
+      await _pumpAndOpen(
+        tester,
+        WearScreenShape.round,
+        viewSize: const Size(227, 227),
+      );
+
+      final question = tester.getRect(find.text(_longQuestion));
+      final confirm = tester.getRect(
+        find.widgetWithText(FilledButton, 'Log out'),
+      );
+
+      expect(
+        question.bottom,
+        lessThanOrEqualTo(confirm.top + 0.5),
+        reason:
+            'the question was taking 96dp of a 45dp slot and the rest was '
+            'simply cut off at the boundary',
+      );
+    });
+
+    testWidgets('the buttons stay inside the round bezel', (tester) async {
+      await _pumpAndOpen(
+        tester,
+        WearScreenShape.round,
+        viewSize: const Size(227, 227),
+      );
+
+      const radius = 227.0 / 2;
+      const centre = Offset(radius, radius);
+      final cancel = tester.getRect(
+        find.widgetWithText(OutlinedButton, 'Cancel'),
+      );
+
+      for (final corner in [cancel.bottomLeft, cancel.bottomRight]) {
+        expect(
+          (corner - centre).distance,
+          lessThanOrEqualTo(radius),
+          reason: 'the cancel button reaches $corner, past the glass',
+        );
+      }
+    });
+
     testWidgets('shows the full question text without ellipsis', (
       tester,
     ) async {
