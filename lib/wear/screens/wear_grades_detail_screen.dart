@@ -81,6 +81,7 @@ class _WearGradesDetailScreenState
               ? WearSideNavigation(
                   onPrevious: () => _stepTerm(terms, currentTerm, -1),
                   onNext: () => _stepTerm(terms, currentTerm, 1),
+                  scrollController: _scrollController,
                 )
               : null,
           child: Column(

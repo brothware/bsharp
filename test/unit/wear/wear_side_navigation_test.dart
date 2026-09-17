@@ -2,15 +2,27 @@ import 'package:bsharp/wear/widgets/wear_side_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Widget _app({VoidCallback? onPrevious, VoidCallback? onNext}) {
+Widget _app({
+  VoidCallback? onPrevious,
+  VoidCallback? onNext,
+  ScrollController? scrollController,
+}) {
+  final controller = scrollController ?? ScrollController();
   return MaterialApp(
     home: Scaffold(
       body: Stack(
         children: [
-          const SizedBox.expand(),
+          ListView(
+            controller: controller,
+            children: [
+              for (var i = 0; i < 40; i++)
+                SizedBox(height: 40, child: Text('row $i')),
+            ],
+          ),
           WearSideNavigation(
             onPrevious: onPrevious ?? () {},
             onNext: onNext ?? () {},
+            scrollController: controller,
           ),
         ],
       ),
@@ -18,8 +30,43 @@ Widget _app({VoidCallback? onPrevious, VoidCallback? onNext}) {
   );
 }
 
+double _chevronOpacity(WidgetTester tester) => tester
+    .widget<AnimatedOpacity>(
+      find.ancestor(
+        of: find.byIcon(Icons.chevron_right),
+        matching: find.byType(AnimatedOpacity),
+      ),
+    )
+    .opacity;
+
 void main() {
   group('WearSideNavigation', () {
+    testWidgets('gets out of the way while the scroll pill is up', (
+      tester,
+    ) async {
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(_app(scrollController: controller));
+      await tester.pumpAndSettle();
+
+      expect(_chevronOpacity(tester), 1, reason: 'nothing is scrolling yet');
+
+      controller.jumpTo(120);
+      await tester.pump();
+
+      expect(
+        _chevronOpacity(tester),
+        0,
+        reason: 'the pill is drawn on the same edge as the right chevron',
+      );
+
+      await tester.pump(const Duration(milliseconds: 2000));
+      await tester.pumpAndSettle();
+
+      expect(_chevronOpacity(tester), 1, reason: 'the pill has gone');
+    });
+
     testWidgets('sits at the left and right edges, vertically centred', (
       tester,
     ) async {

@@ -64,6 +64,7 @@ class _WearScheduleDetailScreenState
           edgeContent: WearSideNavigation(
             onPrevious: _previousDay,
             onNext: _nextDay,
+            scrollController: _scrollController,
           ),
           child: Column(
             children: [

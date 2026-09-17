@@ -61,6 +61,7 @@ class _WearNotesDetailScreenState extends ConsumerState<WearNotesDetailScreen> {
           edgeContent: WearSideNavigation(
             onPrevious: () => _stepTab(-1),
             onNext: () => _stepTab(1),
+            scrollController: _scrollController,
           ),
           child: Column(
             children: [
