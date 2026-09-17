@@ -17,7 +17,10 @@ void main() {
     prefs = await SharedPreferences.getInstance();
   });
 
-  Future<ProviderContainer> containerWithAccount(String providerType) async {
+  Future<ProviderContainer> containerWithAccount(
+    String providerType, {
+    bool settled = true,
+  }) async {
     final storage = AccountStorage(store: FakeKeyValueStore());
     await storage.saveAccounts([
       ProviderAccount(
@@ -42,24 +45,46 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
-    await container.read(activeSelectionProvider.future);
-    await container.read(providerAccountsProvider.future);
+    if (settled) {
+      await container.read(activeSelectionProvider.future);
+      await container.read(providerAccountsProvider.future);
+    }
     return container;
   }
 
   test('a saved demo account comes back as the demo backend', () async {
     final container = await containerWithAccount('demo');
 
-    restoreProviderForActiveAccount(container.read(Provider((ref) => ref)));
+    await restoreProviderForActiveAccount(
+      container.read(Provider((ref) => ref)),
+    );
 
     expect(container.read(activeDataProviderProvider).id, 'demo');
+  });
+
+  test('restores before the stored accounts have finished loading', () async {
+    final container = await containerWithAccount('demo', settled: false);
+
+    await restoreProviderForActiveAccount(
+      container.read(Provider((ref) => ref)),
+    );
+
+    expect(
+      container.read(activeDataProviderProvider).id,
+      'demo',
+      reason:
+          'startup syncs before storage answers, and a backend chosen '
+          'then is the one the whole sync uses',
+    );
   });
 
   test('a saved mobireg account keeps the mobireg backend', () async {
     final container = await containerWithAccount('mobireg');
     final before = container.read(activeDataProviderProvider);
 
-    restoreProviderForActiveAccount(container.read(Provider((ref) => ref)));
+    await restoreProviderForActiveAccount(
+      container.read(Provider((ref) => ref)),
+    );
 
     expect(container.read(activeDataProviderProvider).id, 'mobireg');
     expect(
