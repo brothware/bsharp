@@ -189,7 +189,11 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 24),
-            for (final provider in allKnownProviders())
+            // Only the backends someone can hold an account with. A demo
+            // needs no account, and the screen before this one offers it.
+            for (final provider in allKnownProviders().where(
+              (provider) => provider.requiresCredentials,
+            ))
               Card(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(

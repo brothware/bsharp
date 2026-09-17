@@ -29,12 +29,20 @@ void main() {
     );
   }
 
-  testWidgets('the picker lists every provider the app knows', (tester) async {
+  testWidgets('the picker lists the backends you can hold an account with', (
+    tester,
+  ) async {
     await tester.pumpWidget(wrap());
     await tester.pump();
 
     expect(find.text('Mobireg'), findsOneWidget);
-    expect(find.text('Demo'), findsOneWidget);
+    expect(
+      find.text('Demo'),
+      findsNothing,
+      reason:
+          'demo is reached from the screen before this one, and listing '
+          'it here as well offered it twice',
+    );
   });
 
   testWidgets('a provider that needs credentials asks for them', (
@@ -47,17 +55,5 @@ void main() {
     await tester.pump();
 
     expect(find.byType(TextField), findsWidgets);
-  });
-
-  testWidgets('a provider that needs no credentials does not ask', (
-    tester,
-  ) async {
-    await tester.pumpWidget(wrap());
-    await tester.pump();
-
-    await tester.tap(find.text('Demo'));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(TextField), findsNothing);
   });
 }

@@ -12,6 +12,7 @@ import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/wear_text_input.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -430,32 +431,48 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   Widget _buildWelcomeStep() {
     final theme = Theme.of(context);
 
-    // Scrollable: three lines of prose and a button do not always fit the
-    // shorter watches, and an overflow is a worse answer than a scroll.
-    return ListView(
-      controller: _fieldStepScrollController,
-      shrinkWrap: true,
-      children: [
-        Text(
-          t.accounts.noAccountsYet,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.titleSmall,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          t.accounts.addFirstAccount,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
+    // Scrollable: two buttons and three lines of prose do not fit the
+    // shorter watches, and an overflow is a worse answer than a scroll. The
+    // padding is what lets the last button be brought up off the bezel.
+    return Builder(
+      builder: (context) => ListView(
+        controller: _fieldStepScrollController,
+        padding: wearListPadding(WearDisplayScope.of(context)),
+        shrinkWrap: true,
+        children: [
+          Text(
+            t.accounts.noAccountsYet,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleSmall,
           ),
-        ),
-        const SizedBox(height: 12),
-        FilledButton(
-          onPressed: () => setState(() => _step = _SetupStep.provider),
-          child: Text(t.accounts.addAccount),
-        ),
-      ],
+          const SizedBox(height: 4),
+          Text(
+            t.accounts.addFirstAccount,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 12),
+          FilledButton(
+            onPressed: () => setState(() => _step = _SetupStep.provider),
+            child: Text(t.accounts.addAccount),
+          ),
+          const SizedBox(height: 6),
+          // Beside the way in, as on the phone: demo is not a school anyone
+          // holds an account with, so it does not belong among the providers.
+          OutlinedButton(
+            onPressed: _isLoading ? null : () => unawaited(_startDemo()),
+            child: Text(t.auth.demoMode),
+          ),
+        ],
+      ),
     );
+  }
+
+  Future<void> _startDemo() async {
+    setState(() => _isLoading = true);
+    await activateDemoMode(ref);
   }
 
   Widget _buildProviderStep() {
@@ -473,7 +490,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           child: ListView(
             controller: _fieldStepScrollController,
             children: [
-              for (final provider in allKnownProviders())
+              for (final provider in allKnownProviders().where(
+                (provider) => provider.requiresCredentials,
+              ))
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: FilledButton.tonal(
