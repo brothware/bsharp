@@ -15,6 +15,12 @@ import '../data/credential_storage_test.dart';
 /// The longest failure the setup step can show: four lines on a 432px watch.
 class _SchoolNotFoundDataProvider extends DemoDataProvider {
   @override
+  String get id => 'mobireg';
+
+  @override
+  bool get requiresCredentials => true;
+
+  @override
   Future<Result<String?>> validateCredentials({
     required String school,
     required String login,
@@ -23,6 +29,12 @@ class _SchoolNotFoundDataProvider extends DemoDataProvider {
 }
 
 class _RejectingDataProvider extends DemoDataProvider {
+  @override
+  String get id => 'mobireg';
+
+  @override
+  bool get requiresCredentials => true;
+
   @override
   Future<Result<String?>> validateCredentials({
     required String school,
@@ -71,12 +83,44 @@ Widget _buildApp({
   );
 }
 
+/// Setup now opens on the provider step, so a test about the credential
+/// steps has to choose a backend that wants credentials first.
+Future<void> _chooseMobireg(WidgetTester tester) async {
+  await tester.tap(find.text('Mobireg'));
+  await tester.pump();
+}
+
 void main() {
   for (final shape in WearScreenShape.values) {
     group('WearSetupScreen (${shape.name})', () {
+      testWidgets('setup opens on a provider step listing every backend', (
+        tester,
+      ) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        expect(find.text('Mobireg'), findsOneWidget);
+        expect(find.text('Demo'), findsOneWidget);
+        expect(find.byType(TextField), findsNothing);
+      });
+
+      testWidgets('choosing a backend that needs credentials asks for them', (
+        tester,
+      ) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+
+        await tester.tap(find.text('Mobireg'));
+        await tester.pump();
+
+        expect(find.byType(TextField), findsOneWidget);
+        expect(find.text('School'), findsWidgets);
+      });
+
       testWidgets('the school step shows exactly one input', (tester) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         expect(find.byType(TextField), findsOneWidget);
         expect(find.text('School'), findsWidgets);
@@ -87,6 +131,7 @@ void main() {
         (tester) async {
           await tester.pumpWidget(_buildApp(shape: shape));
           await tester.pump();
+          await _chooseMobireg(tester);
 
           await _typeIntoStep(tester, 'osm-wroclaw');
           await tester.tap(find.byType(FilledButton));
@@ -107,6 +152,7 @@ void main() {
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         await tester.tap(find.byType(FilledButton));
         await tester.pump();
@@ -120,6 +166,7 @@ void main() {
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         await _typeIntoStep(tester, 'my-school');
         await tester.tap(find.byType(FilledButton));
@@ -137,6 +184,7 @@ void main() {
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         final size = tester.getSize(find.byType(FilledButton));
         expect(size.height, greaterThanOrEqualTo(48));
@@ -156,6 +204,7 @@ void main() {
           ),
         );
         await tester.pump();
+        await _chooseMobireg(tester);
 
         await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.byType(FilledButton));
@@ -179,6 +228,7 @@ void main() {
 
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.text('Next'));
@@ -204,6 +254,7 @@ void main() {
 
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.text('Next'));
@@ -221,6 +272,7 @@ void main() {
       testWidgets('the field does not steal focus on open', (tester) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         final field = tester.widget<TextField>(find.byType(TextField));
         expect(field.autofocus, isFalse);
@@ -230,6 +282,7 @@ void main() {
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.byType(FilledButton));
@@ -277,6 +330,7 @@ void main() {
           ),
         );
         await tester.pump();
+        await _chooseMobireg(tester);
 
         await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.byType(FilledButton));
@@ -304,6 +358,7 @@ void main() {
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         final field = tester.widget<TextField>(find.byType(TextField));
         expect(
@@ -324,6 +379,7 @@ void main() {
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pump();
+        await _chooseMobireg(tester);
 
         await _typeIntoStep(tester, 'osm-wroclaw');
         await tester.tap(find.byType(FilledButton));

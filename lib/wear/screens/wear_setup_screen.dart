@@ -8,6 +8,7 @@ import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/failure_messages.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/wear_text_input.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
@@ -17,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-enum _SetupStep { school, username, password, studentPicker }
+enum _SetupStep { provider, school, username, password, studentPicker }
 
 const List<_SetupStep> _credentialSteps = [
   _SetupStep.school,
@@ -40,7 +41,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   final _fieldStepScrollController = ScrollController();
   final _studentPickerScrollController = ScrollController();
 
-  _SetupStep _step = _SetupStep.school;
+  _SetupStep _step = _SetupStep.provider;
   bool _isLoading = false;
   bool _obscurePassword = true;
   String? _errorMessage;
@@ -61,6 +62,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     if (accounts.isEmpty) return;
 
     final account = accounts.first;
+    _step = _SetupStep.school;
     _schoolController.text = account.slug;
     _loginController.text = account.login;
     _password = account.password;
@@ -84,11 +86,30 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
   void _goBack() {
     final index = _credentialSteps.indexOf(_step);
-    if (index <= 0) return;
+    if (index < 0) return;
     setState(() {
       _errorMessage = null;
-      _step = _credentialSteps[index - 1];
+      _step = index == 0 ? _SetupStep.provider : _credentialSteps[index - 1];
     });
+  }
+
+  Future<void> _selectProvider(SchoolDataProvider provider) async {
+    // Re-picking the backend that is already active would throw away whatever
+    // it holds - a portal session, for one - to gain an identical instance.
+    if (ref.read(activeDataProviderProvider).id != provider.id) {
+      ref.read(activeDataProviderProvider.notifier).value = provider;
+    }
+
+    if (provider.requiresCredentials) {
+      setState(() {
+        _errorMessage = null;
+        _step = _SetupStep.school;
+      });
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    await activateDemoMode(ref);
   }
 
   void _goNext(String value) {
@@ -220,6 +241,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       body: WearScaffold(
         scrollController: _activeScrollController,
         child: switch (_step) {
+          _SetupStep.provider => _buildProviderStep(),
           _SetupStep.school => _buildSchoolStep(),
           _SetupStep.username => _buildUsernameStep(),
           _SetupStep.password => _buildPasswordStep(),
@@ -367,6 +389,37 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : Text(buttonLabel),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProviderStep() {
+    final theme = Theme.of(context);
+
+    return Column(
+      children: [
+        _buildStepHeader(label: t.accounts.selectProvider),
+        const SizedBox(height: 8),
+        Expanded(
+          child: ListView(
+            controller: _fieldStepScrollController,
+            children: [
+              for (final provider in allKnownProviders())
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: FilledButton.tonal(
+                    onPressed: _isLoading
+                        ? null
+                        : () => unawaited(_selectProvider(provider)),
+                    child: Text(
+                      provider.displayName,
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ],
