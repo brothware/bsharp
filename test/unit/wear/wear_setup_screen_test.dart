@@ -11,6 +11,7 @@ import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -193,6 +194,33 @@ void main() {
 
         expect(find.text('No accounts yet'), findsNothing);
         expect(find.text('Mobireg'), findsOneWidget);
+      });
+
+      testWidgets('the provider step spells out its own heading', (
+        tester,
+      ) async {
+        // A real watch is 227dp across; the default test surface is far wider
+        // and hides anything that only fails for want of room.
+        tester.view.physicalSize = const Size(227, 227);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Add account'));
+        await tester.pumpAndSettle();
+
+        final heading = tester.renderObject<RenderParagraph>(
+          find.text('Add account'),
+        );
+
+        expect(
+          heading.didExceedMaxLines,
+          isFalse,
+          reason:
+              'the header gives a label one line, and this one does not '
+              'fit in it - it came out as "Choo..."',
+        );
       });
 
       testWidgets('the provider step lists every backend', (tester) async {
