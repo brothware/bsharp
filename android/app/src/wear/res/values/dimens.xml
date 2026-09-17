@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Wear App Quality: a 48dp app icon on black during startup. The round
+         icon size from the branded launch guidance. -->
+    <dimen name="splash_screen_icon_size">48dp</dimen>
+</resources>

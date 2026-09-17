@@ -81,6 +81,11 @@ kotlin {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
     androidTestUtil("androidx.test:orchestrator:1.6.1")
+    // Wear App Quality requires the branded launch icon on every Wear OS
+    // release, and Wear OS 3 is API 30, so the platform splash attributes
+    // alone would skip it. The compat library draws the same screen
+    // everywhere.
+    "wearImplementation"("androidx.core:core-splashscreen:1.2.0")
 }
 
 flutter {
