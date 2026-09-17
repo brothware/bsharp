@@ -76,19 +76,12 @@ DateTime selectedWeekStart(Ref ref) {
 List<ScheduleEntry> scheduleEntriesForDate(Ref ref, DateTime date) {
   ref.watch(localeProvider);
   final resolved = ref.watch(resolvedEventsProvider);
-  return resolved
+  final entries = resolved
       .where((e) => isSameDay(e.date, date))
       .map(ScheduleEntry.fromResolved)
-      .toList()
-    ..sort((a, b) {
-      final aKey = a.replacedLessonNumbers.isNotEmpty
-          ? a.replacedLessonNumbers.reduce((x, y) => x > y ? x : y) + 0.5
-          : a.number.toDouble();
-      final bKey = b.replacedLessonNumbers.isNotEmpty
-          ? b.replacedLessonNumbers.reduce((x, y) => x > y ? x : y) + 0.5
-          : b.number.toDouble();
-      return aKey.compareTo(bKey);
-    });
+      .toList();
+
+  return sortedByScheduleTime(entries, (entry) => entry);
 }
 
 @Riverpod(keepAlive: true)
@@ -98,12 +91,6 @@ Map<DateTime, List<ScheduleEntry>> weekEntries(Ref ref) {
   return {
     for (final day in days) day: ref.watch(scheduleEntriesForDateProvider(day)),
   };
-}
-
-int _timeToMinutes(String time) {
-  final parts = time.split(':');
-  if (parts.length < 2) return 0;
-  return int.parse(parts[0]) * 60 + int.parse(parts[1]);
 }
 
 @Riverpod(keepAlive: true)
@@ -125,8 +112,9 @@ List<TimelineItem> timelineItemsForDate(Ref ref, DateTime date) {
               occurrenceDate: occ.date,
             ),
       ]..sort(
-        (a, b) =>
-            _timeToMinutes(a.startTime).compareTo(_timeToMinutes(b.startTime)),
+        (a, b) => (parseTimeMinutes(a.startTime) ?? 0).compareTo(
+          parseTimeMinutes(b.startTime) ?? 0,
+        ),
       );
 
   return items;

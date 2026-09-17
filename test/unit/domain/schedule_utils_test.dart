@@ -32,6 +32,58 @@ void main() {
     );
   }
 
+  group('sortedByScheduleTime', () {
+    List<int> idsOf(List<ScheduleEntry> entries) =>
+        sortedByScheduleTime(entries, (e) => e).map((e) => e.id).toList();
+
+    test('orders by start time, not by lesson number', () {
+      final entries = [
+        entry(id: 30, number: 0, startTime: '10:40:00', endTime: '13:15:00'),
+        entry(id: 31),
+        entry(id: 32, number: 5, startTime: '11:30:00', endTime: '12:15:00'),
+      ];
+
+      expect(idsOf(entries), [31, 30, 32]);
+    });
+
+    test('puts a numberless event before a lesson at the same time', () {
+      final entries = [
+        entry(id: 31, number: 4, startTime: '10:40:00', endTime: '11:25:00'),
+        entry(id: 30, number: 0, startTime: '10:40:00', endTime: '13:15:00'),
+      ];
+
+      expect(idsOf(entries), [30, 31]);
+    });
+
+    test('puts a replacement after the last lesson it replaces', () {
+      final entries = [
+        entry(
+          id: 20,
+          number: 0,
+          startTime: '10:40:00',
+          endTime: '13:00:00',
+          replacedLessonNumbers: [5, 6],
+        ),
+        entry(id: 10, number: 5, startTime: '10:40:00', endTime: '11:25:00'),
+        entry(id: 11, number: 6, startTime: '11:30:00', endTime: '12:15:00'),
+        entry(id: 12, number: 7, startTime: '12:20:00', endTime: '13:05:00'),
+      ];
+
+      expect(idsOf(entries), [10, 11, 20, 12]);
+    });
+
+    test('puts items without a schedule entry last', () {
+      final withEntry = entry(id: 10);
+      final sorted = sortedByScheduleTime<ScheduleEntry?>([
+        null,
+        withEntry,
+      ], (e) => e);
+
+      expect(sorted.first, withEntry);
+      expect(sorted.last, isNull);
+    });
+  });
+
   group('ScheduleEntry', () {
     test('isCancelled when set to true', () {
       final e = entry(isCancelled: true);

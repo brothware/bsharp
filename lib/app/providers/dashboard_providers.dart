@@ -114,12 +114,3 @@ List<PocztaMessage> latestUnreadMessages(Ref ref) {
     ..sort((a, b) => b.sendTime.compareTo(a.sendTime));
   return unread.take(3).toList();
 }
-
-int? parseTimeMinutes(String time) {
-  final parts = time.split(':');
-  if (parts.length < 2) return null;
-  final h = int.tryParse(parts[0]);
-  final m = int.tryParse(parts[1]);
-  if (h == null || m == null) return null;
-  return h * 60 + m;
-}

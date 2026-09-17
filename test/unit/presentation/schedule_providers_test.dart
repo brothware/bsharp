@@ -57,7 +57,7 @@ void main() {
   }
 
   group('scheduleEntriesForDateProvider', () {
-    test('filters events by date and sorts by number', () {
+    test('filters events by date and sorts chronologically', () {
       final container = ProviderContainer(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
@@ -323,6 +323,139 @@ void main() {
 
       final replacement = entries.firstWhere((e) => e.id == 20);
       expect(replacement.subjectName, 'Spektakl');
+    });
+
+    test('sorts a numberless event by its start time', () {
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [
+              resolved(
+                id: 30,
+                number: 0,
+                date: DateTime(2026, 3, 5),
+                startTime: '10:40:00',
+                endTime: '13:15:00',
+                eventName: 'Próba',
+              ),
+              resolved(
+                id: 31,
+                date: DateTime(2026, 3, 5),
+                subjectName: 'przyroda',
+              ),
+              resolved(
+                id: 32,
+                number: 4,
+                date: DateTime(2026, 3, 5),
+                startTime: '11:30:00',
+                endTime: '12:15:00',
+                subjectName: 'matematyka',
+              ),
+            ],
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final entries = container.read(
+        scheduleEntriesForDateProvider(DateTime(2026, 3, 5)),
+      );
+
+      expect(entries.map((e) => e.id).toList(), [31, 30, 32]);
+    });
+
+    test(
+      'sorts a numberless event before a lesson at the same time',
+      () {
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            resolvedEventsProvider.overrideWithBuild(
+              (ref, _) => [
+                resolved(
+                  id: 30,
+                  number: 0,
+                  date: DateTime(2026, 3, 5),
+                  startTime: '10:40:00',
+                  endTime: '13:15:00',
+                  eventName: 'Próba',
+                ),
+                resolved(
+                  id: 31,
+                  number: 4,
+                  date: DateTime(2026, 3, 5),
+                  startTime: '10:40:00',
+                  endTime: '11:25:00',
+                  subjectName: 'matematyka',
+                ),
+              ],
+            ),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        final entries = container.read(
+          scheduleEntriesForDateProvider(DateTime(2026, 3, 5)),
+        );
+
+        expect(entries.map((e) => e.id).toList(), [30, 31]);
+      },
+    );
+
+    test('keeps a multi-lesson replacement after the lessons it replaces', () {
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [
+              resolved(
+                id: 20,
+                number: 0,
+                date: DateTime(2026, 3, 5),
+                isSubstitution: true,
+                startTime: '10:40:00',
+                endTime: '13:00:00',
+                replacedLessonNumbers: [5, 6, 7],
+              ),
+              resolved(
+                id: 10,
+                number: 5,
+                date: DateTime(2026, 3, 5),
+                startTime: '10:40:00',
+                endTime: '11:25:00',
+                isReplaced: true,
+                isCancelled: true,
+              ),
+              resolved(
+                id: 11,
+                number: 6,
+                date: DateTime(2026, 3, 5),
+                startTime: '11:30:00',
+                endTime: '12:15:00',
+                isReplaced: true,
+                isCancelled: true,
+              ),
+              resolved(
+                id: 12,
+                number: 7,
+                date: DateTime(2026, 3, 5),
+                startTime: '12:20:00',
+                endTime: '13:05:00',
+                isReplaced: true,
+                isCancelled: true,
+              ),
+            ],
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final entries = container.read(
+        scheduleEntriesForDateProvider(DateTime(2026, 3, 5)),
+      );
+
+      expect(entries.map((e) => e.id).toList(), [10, 11, 12, 20]);
     });
 
     test('sorts replaced originals before replacement', () {

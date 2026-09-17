@@ -113,6 +113,53 @@ class ScheduleEntry {
   }
 }
 
+int? parseTimeMinutes(String time) {
+  final parts = time.split(':');
+  if (parts.length < 2) return null;
+  final hours = int.tryParse(parts[0]);
+  final minutes = int.tryParse(parts[1]);
+  if (hours == null || minutes == null) return null;
+  return hours * 60 + minutes;
+}
+
+List<T> sortedByScheduleTime<T>(
+  List<T> items,
+  ScheduleEntry? Function(T item) entryOf,
+) {
+  final startByLessonNumber = <int, int>{};
+  for (final item in items) {
+    final entry = entryOf(item);
+    if (entry != null && entry.hasLessonNumber) {
+      startByLessonNumber[entry.number] =
+          parseTimeMinutes(entry.startTime) ?? 0;
+    }
+  }
+
+  double sortKey(ScheduleEntry entry) {
+    if (entry.replacedLessonNumbers.isNotEmpty) {
+      final last = entry.replacedLessonNumbers.reduce((x, y) => x > y ? x : y);
+      final replacedStart = startByLessonNumber[last];
+      if (replacedStart != null) return replacedStart + 0.5;
+    }
+    return (parseTimeMinutes(entry.startTime) ?? 0).toDouble();
+  }
+
+  return [...items]..sort((a, b) {
+    final entryA = entryOf(a);
+    final entryB = entryOf(b);
+    if (entryA == null || entryB == null) {
+      if (entryA == null && entryB == null) return 0;
+      return entryA == null ? 1 : -1;
+    }
+    final byStart = sortKey(entryA).compareTo(sortKey(entryB));
+    if (byStart != 0) return byStart;
+    if (entryA.hasLessonNumber != entryB.hasLessonNumber) {
+      return entryA.hasLessonNumber ? 1 : -1;
+    }
+    return entryA.number.compareTo(entryB.number);
+  });
+}
+
 enum ScheduleChangeType { added, cancelled, roomChanged, substitution }
 
 DateTime startOfWeek(DateTime date) {
