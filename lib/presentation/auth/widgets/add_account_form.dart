@@ -3,30 +3,22 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/failure_messages.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-class _ProviderOption {
-  const _ProviderOption({
-    required this.id,
-    required this.displayName,
-    required this.icon,
-  });
+/// How each backend is drawn in the picker. Presentation's business, so the
+/// domain interface stays free of Flutter types; anything unlisted gets a
+/// neutral icon rather than blocking a new provider on an icon choice.
+const _providerIcons = <String, IconData>{
+  'mobireg': Icons.school,
+  'demo': Icons.science_outlined,
+};
 
-  final String id;
-  final String displayName;
-  final IconData icon;
-}
-
-const _availableProviders = [
-  _ProviderOption(
-    id: 'mobireg',
-    displayName: 'Mobireg',
-    icon: Icons.school,
-  ),
-];
+IconData _iconFor(String providerId) =>
+    _providerIcons[providerId] ?? Icons.cloud_outlined;
 
 class AddAccountForm extends ConsumerStatefulWidget {
   const AddAccountForm({this.existingAccount, this.onComplete, super.key});
@@ -162,6 +154,18 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
     );
   }
 
+  Future<void> _selectProvider(SchoolDataProvider provider) async {
+    if (provider.requiresCredentials) {
+      setState(() => _selectedProviderType = provider.id);
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    await activateDemoMode(ref);
+    if (!mounted) return;
+    widget.onComplete?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_selectedProviderType == null) {
@@ -185,15 +189,14 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 24),
-            for (final option in _availableProviders)
+            for (final provider in allKnownProviders())
               Card(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  leading: Icon(option.icon),
-                  title: Text(option.displayName),
+                  leading: Icon(_iconFor(provider.id)),
+                  title: Text(provider.displayName),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () =>
-                      setState(() => _selectedProviderType = option.id),
+                  onTap: () => _selectProvider(provider),
                 ),
               ),
           ],

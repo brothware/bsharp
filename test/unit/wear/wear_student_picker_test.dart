@@ -20,6 +20,12 @@ import '../data/credential_storage_test.dart';
 
 class _TwoStudentsDataProvider extends DemoDataProvider {
   @override
+  String get id => 'mobireg';
+
+  @override
+  bool get requiresCredentials => true;
+
+  @override
   Future<Result<List<Student>>> fetchStudents({
     required String school,
     required String login,
@@ -101,6 +107,9 @@ void main() {
   testWidgets('setup with two students persists both', (tester) async {
     final accountStorage = _newAccountStorage();
     await tester.pumpWidget(_buildSetupApp(accountStorage));
+    await tester.pump();
+
+    await tester.tap(find.text('Mobireg'));
     await tester.pump();
 
     await _typeIntoStep(tester, 'osm-wroclaw');
