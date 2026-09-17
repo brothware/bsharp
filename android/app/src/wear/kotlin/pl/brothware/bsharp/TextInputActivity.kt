@@ -1,15 +1,15 @@
 package pl.brothware.bsharp
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
 import android.view.Gravity
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 
 /// A screen whose only job is to hold a real EditText.
 ///
@@ -58,9 +58,12 @@ class TextInputActivity : Activity() {
         if (!hasFocus) return
 
         field.requestFocus()
-        val manager = getSystemService(Context.INPUT_METHOD_SERVICE)
-            as InputMethodManager
-        manager.showSoftInput(field, InputMethodManager.SHOW_IMPLICIT)
+        // Through the window insets rather than InputMethodManager: a request
+        // to show the keyboard is advisory and the system declines it here,
+        // with or without SHOW_IMPLICIT. The wearer opened a screen whose only
+        // content is a text field, so the keyboard is not a guess.
+        WindowCompat.getInsetsController(window, field)
+            .show(WindowInsetsCompat.Type.ime())
     }
 
     /// Backing out keeps what was typed: on a watch the keyboard covers the

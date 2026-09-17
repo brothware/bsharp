@@ -86,6 +86,9 @@ dependencies {
     // alone would skip it. The compat library draws the same screen
     // everywhere.
     "wearImplementation"("androidx.core:core-splashscreen:1.2.0")
+    // WindowInsetsControllerCompat: asking the input method to show itself
+    // through the window insets is the route that actually raises it.
+    "wearImplementation"("androidx.core:core:1.17.0")
 }
 
 flutter {
