@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -187,6 +189,27 @@ List<Widget> wearScaledChildren(
     for (final child in children)
       WearListItem(scrollController: controller, child: child),
   ];
+}
+
+/// Extra room above and below prose that runs the full width of the content
+/// box, so its first and last lines clear the bezel.
+///
+/// The scaffold insets content by a rectangle, and the top corners of that
+/// rectangle sit outside a round display - a full width line placed there is
+/// cut off at both ends. A list gets away with it because rows shrink as they
+/// near the edge; a screen of text has no such help, so it keeps its lines
+/// inside the band where the circle is at least as wide as the content.
+EdgeInsets wearProsePadding(WearDisplay display) {
+  if (!display.isRound) return EdgeInsets.zero;
+
+  final radius = display.sizeDp.shortestSide / 2;
+  final halfContent = radius * (1 - 2 * kWearRoundInsetFactor);
+  final halfBand = math.sqrt(
+    math.max(0, radius * radius - halfContent * halfContent),
+  );
+  final inset = (radius - halfBand) - radius * 2 * kWearRoundInsetFactor;
+
+  return EdgeInsets.symmetric(vertical: math.max(0, inset));
 }
 
 /// Room below a wear list so its last row can be brought to the middle of the
