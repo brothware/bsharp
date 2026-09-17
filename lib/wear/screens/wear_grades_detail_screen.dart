@@ -222,7 +222,7 @@ class _WearSubjectSection extends StatelessWidget {
   }
 }
 
-class WearGradeDetailScreen extends StatelessWidget {
+class WearGradeDetailScreen extends StatefulWidget {
   const WearGradeDetailScreen({
     required this.grade,
     required this.subjectName,
@@ -233,7 +233,22 @@ class WearGradeDetailScreen extends StatelessWidget {
   final String subjectName;
 
   @override
+  State<WearGradeDetailScreen> createState() => _WearGradeDetailScreenState();
+}
+
+class _WearGradeDetailScreenState extends State<WearGradeDetailScreen> {
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final grade = widget.grade;
+    final subjectName = widget.subjectName;
     final theme = Theme.of(context);
     final color = gradeColor(
       grade.effectiveValue,
@@ -241,62 +256,78 @@ class WearGradeDetailScreen extends StatelessWidget {
     );
     final description = grade.description;
 
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      children: [
-        Center(
-          child: Container(
-            constraints: const BoxConstraints(minWidth: 56, minHeight: 40),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              grade.displayValue,
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: color,
-                fontWeight: FontWeight.bold,
+    // Pushed as a section, which wraps it in a plain Scaffold, so the card
+    // has to ask for the round inset itself. Without it the rows run under
+    // the bezel and the last one is cut into fragments.
+    return WearScaffold(
+      scrollController: _scrollController,
+      child: Builder(
+        builder: (context) => ListView(
+          controller: _scrollController,
+          padding: wearListPadding(WearDisplayScope.of(context)),
+          children: wearScaledChildren(_scrollController, [
+            Center(
+              child: Container(
+                constraints: const BoxConstraints(minWidth: 56, minHeight: 40),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                // The chip has a minimum width, so a one-character grade
+                // leaves slack inside the text box. Without this it all falls
+                // to the right and the grade sits left of the chip around it.
+                child: Text(
+                  grade.displayValue,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Center(
-          child: Text(
-            subjectName,
-            style: theme.textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.bold,
+            const SizedBox(height: 8),
+            Center(
+              child: Text(
+                subjectName,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-          ),
-        ),
-        Center(
-          child: Text(
-            translateGradeName(grade.displayValue),
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+            Center(
+              child: Text(
+                translateGradeName(grade.displayValue),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
             ),
-          ),
+            const SizedBox(height: 12),
+            _WearGradeDetailRow(
+              label: t.grades.category,
+              value: translateGradeCategory(grade.categoryName),
+            ),
+            _WearGradeDetailRow(
+              label: t.grades.weight,
+              value: grade.weight.toString(),
+            ),
+            _WearGradeDetailRow(
+              label: t.grades.date,
+              value: formatDateShort(grade.date),
+            ),
+            if (description != null && description.isNotEmpty)
+              _WearGradeDetailRow(
+                label: t.grades.description,
+                value: description,
+              ),
+          ]),
         ),
-        const SizedBox(height: 12),
-        _WearGradeDetailRow(
-          label: t.grades.category,
-          value: translateGradeCategory(grade.categoryName),
-        ),
-        _WearGradeDetailRow(
-          label: t.grades.weight,
-          value: grade.weight.toString(),
-        ),
-        _WearGradeDetailRow(
-          label: t.grades.date,
-          value: formatDateShort(grade.date),
-        ),
-        if (description != null && description.isNotEmpty)
-          _WearGradeDetailRow(
-            label: t.grades.description,
-            value: description,
-          ),
-      ],
+      ),
     );
   }
 }
@@ -312,16 +343,23 @@ class _WearGradeDetailRow extends StatelessWidget {
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
+      // Centred, not left aligned: a round watch has less room the further a
+      // line sits from the middle, and text pinned to the left edge runs
+      // under the bezel at the top and bottom of the card.
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
+            textAlign: TextAlign.center,
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
-          Text(value, style: theme.textTheme.bodySmall),
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall,
+          ),
         ],
       ),
     );
