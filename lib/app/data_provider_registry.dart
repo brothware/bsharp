@@ -27,11 +27,14 @@ class DemoMode extends _$DemoMode {
   set value(bool v) => state = v;
 }
 
+/// The provider a fresh install, or a logged-out app, starts from.
+SchoolDataProvider createDefaultProvider() => MobiregDataProvider();
+
 SchoolDataProvider createProviderForType(String providerType) {
   return switch (providerType) {
     'mobireg' => MobiregDataProvider(),
     'demo' => DemoDataProvider(),
-    _ => MobiregDataProvider(),
+    _ => createDefaultProvider(),
   };
 }
 
