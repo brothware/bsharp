@@ -447,7 +447,6 @@
     "downloadingModel": "Po shkarkohet modeli gjuhësor...",
     "translationFailed": "Përkthimi dështoi",
     "quotaExceeded": "Kufiri i përkthimeve DeepL u tejkalua",
-    "translateToPolish": "Përkthe në polonisht",
     "settingsTitle": "Përkthimi",
     "engineOnDevice": "Në pajisje (ML Kit)",
     "engineDeepL": "DeepL (kërkon çelës)",

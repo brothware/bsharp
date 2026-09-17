@@ -112,6 +112,7 @@ class _WearTranslateButtonState extends ConsumerState<WearTranslateButton> {
     final result = await service.translate(
       text: widget.sourceText,
       targetLang: locale,
+      sourceLang: ref.read(contentLanguageProvider),
       isHtml: widget.isHtml,
     );
 

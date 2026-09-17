@@ -456,7 +456,6 @@
     "downloadingModel": "Ag ioslodail an mhuintir teanga...",
     "translationFailed": "Theip ar an aistriu",
     "quotaExceeded": "Teorainn aistriu DeepL sroichte",
-    "translateToPolish": "Aistrigh go Polainnise",
     "settingsTitle": "Aistriu",
     "engineOnDevice": "Ar an ngleo (ML Kit)",
     "engineDeepL": "DeepL (eochair ag teastail)",

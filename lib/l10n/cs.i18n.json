@@ -450,7 +450,6 @@
     "downloadingModel": "Stahování jazykového modelu...",
     "translationFailed": "Překlad selhal",
     "quotaExceeded": "Limit překladů DeepL překročen",
-    "translateToPolish": "Přeložit do polštiny",
     "settingsTitle": "Překlad",
     "engineOnDevice": "Na zařízení (ML Kit)",
     "engineDeepL": "DeepL (vyžaduje klíč)",

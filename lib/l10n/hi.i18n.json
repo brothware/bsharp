@@ -447,7 +447,6 @@
     "downloadingModel": "भाषा मॉडल डाउनलोड हो रहा है...",
     "translationFailed": "अनुवाद विफल",
     "quotaExceeded": "DeepL अनुवाद सीमा पार हो गई",
-    "translateToPolish": "पोलिश में अनुवाद करें",
     "settingsTitle": "अनुवाद",
     "engineOnDevice": "डिवाइस पर (ML Kit)",
     "engineDeepL": "DeepL (कुंजी आवश्यक)",

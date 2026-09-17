@@ -45,6 +45,7 @@ class _TranslateButtonState extends ConsumerState<TranslateButton> {
     final result = await service.translate(
       text: widget.sourceText,
       targetLang: locale,
+      sourceLang: ref.read(contentLanguageProvider),
       isHtml: widget.isHtml,
     );
 
@@ -113,6 +114,7 @@ class _MultiTranslateButtonState extends ConsumerState<MultiTranslateButton> {
         (f) => service.translate(
           text: f.text,
           targetLang: locale,
+          sourceLang: ref.read(contentLanguageProvider),
           isHtml: f.isHtml,
         ),
       ),

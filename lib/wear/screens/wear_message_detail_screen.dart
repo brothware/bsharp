@@ -164,6 +164,7 @@ class _WearMessageDetailScreenState
     final result = await service.translate(
       text: widget.message.title,
       targetLang: locale,
+      sourceLang: ref.read(contentLanguageProvider),
     );
     if (!mounted) return;
 

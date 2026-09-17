@@ -447,7 +447,6 @@
     "downloadingModel": "Преземање на јазичен модел...",
     "translationFailed": "Преведувањето не успеа",
     "quotaExceeded": "Надминат е лимитот на DeepL преводи",
-    "translateToPolish": "Преведи на полски",
     "settingsTitle": "Преведување",
     "engineOnDevice": "На уред (ML Kit)",
     "engineDeepL": "DeepL (бара клуч)",

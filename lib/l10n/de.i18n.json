@@ -447,7 +447,6 @@
     "downloadingModel": "Sprachmodell wird heruntergeladen...",
     "translationFailed": "Übersetzung fehlgeschlagen",
     "quotaExceeded": "DeepL-Übersetzungslimit überschritten",
-    "translateToPolish": "Ins Polnische übersetzen",
     "settingsTitle": "Übersetzung",
     "engineOnDevice": "Auf dem Gerät (ML Kit)",
     "engineDeepL": "DeepL (Schlüssel erforderlich)",

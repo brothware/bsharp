@@ -447,7 +447,6 @@
     "downloadingModel": "Lejupielādē valodas modeli...",
     "translationFailed": "Tulkošana neizdevās",
     "quotaExceeded": "DeepL tulkošanas limits pārsniegts",
-    "translateToPolish": "Tulkot poļu valodā",
     "settingsTitle": "Tulkošana",
     "engineOnDevice": "Ierīcē (ML Kit)",
     "engineDeepL": "DeepL (nepieciešama atslēga)",

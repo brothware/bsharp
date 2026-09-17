@@ -447,7 +447,6 @@
     "downloadingModel": "Téléchargement du modèle de langue...",
     "translationFailed": "Échec de la traduction",
     "quotaExceeded": "Limite de traduction DeepL dépassée",
-    "translateToPolish": "Traduire en polonais",
     "settingsTitle": "Traduction",
     "engineOnDevice": "Sur l'appareil (ML Kit)",
     "engineDeepL": "DeepL (clé requise)",

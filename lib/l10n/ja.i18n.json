@@ -447,7 +447,6 @@
     "downloadingModel": "言語モデルをダウンロード中...",
     "translationFailed": "翻訳に失敗しました",
     "quotaExceeded": "DeepL翻訳の上限を超えました",
-    "translateToPolish": "ポーランド語に翻訳",
     "settingsTitle": "翻訳",
     "engineOnDevice": "デバイス内翻訳（ML Kit）",
     "engineDeepL": "DeepL（キーが必要）",

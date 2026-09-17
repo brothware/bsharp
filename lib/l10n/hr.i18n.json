@@ -450,7 +450,6 @@
     "downloadingModel": "Preuzimanje jezičnog modela...",
     "translationFailed": "Prevođenje nije uspjelo",
     "quotaExceeded": "Prekoračen limit DeepL prijevoda",
-    "translateToPolish": "Prevedi na poljski",
     "settingsTitle": "Prevođenje",
     "engineOnDevice": "Na uređaju (ML Kit)",
     "engineDeepL": "DeepL (zahtijeva ključ)",

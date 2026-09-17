@@ -1,4 +1,5 @@
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/data/data_sources/local/database.dart';
@@ -43,10 +44,15 @@ final _isDesktopProvider = Provider<bool>((ref) {
       defaultTargetPlatform == TargetPlatform.windows;
 });
 
+/// The language the active backend's free text arrives in.
+@Riverpod(keepAlive: true)
+String contentLanguage(Ref ref) =>
+    ref.watch(activeDataProviderProvider).contentLanguage;
+
 @Riverpod(keepAlive: true)
 bool isTranslationAvailable(Ref ref) {
   final locale = ref.watch(localeProvider);
-  if (locale.languageCode == 'pl') return false;
+  if (locale.languageCode == ref.watch(contentLanguageProvider)) return false;
   if (ref.watch(_isDesktopProvider)) return true;
   final service = ref.watch(translationServiceProvider);
   return service.isAvailable;
