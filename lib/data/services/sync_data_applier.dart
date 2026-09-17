@@ -147,7 +147,9 @@ List<PortalChangelog> parseChangelog(List<dynamic> data) {
         PortalChangelog(
           type: (item['type'] ?? '') as String,
           dateTime: (item['dateTime'] ?? '') as String,
-          subjectName: (item['subjectName'] ?? '') as String,
+          subjectName: normalizeMobiregSubjectName(
+            (item['subjectName'] ?? '') as String,
+          ),
           user: (item['user'] ?? '') as String,
           newName: (item['newName'] ?? '') as String,
           newAdditionalInfo: (item['newAdditionalInfo'] ?? '') as String,
@@ -194,7 +196,9 @@ List<PortalTest> parseTests(List<dynamic> data) {
       result.add(
         PortalTest(
           id: item['id'] as int,
-          subjectName: (item['subjectName'] ?? '') as String,
+          subjectName: normalizeMobiregSubjectName(
+            (item['subjectName'] ?? '') as String,
+          ),
           date: date,
           title: item['title'] as String?,
           description: item['description'] as String?,
@@ -215,7 +219,9 @@ List<PortalHomework> parseHomeworks(List<dynamic> data) {
       result.add(
         PortalHomework(
           id: item['id'] as int,
-          subjectName: (item['subjectName'] ?? '') as String,
+          subjectName: normalizeMobiregSubjectName(
+            (item['subjectName'] ?? '') as String,
+          ),
           date: (item['date'] ?? '') as String,
           dueDate: (item['dueDate'] ?? item['date'] ?? '') as String,
           content: (item['content'] ?? item['description'] ?? '') as String,
