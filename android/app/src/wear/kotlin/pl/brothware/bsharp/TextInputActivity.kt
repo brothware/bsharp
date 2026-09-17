@@ -47,6 +47,17 @@ class TextInputActivity : Activity() {
 
         setContentView(field)
         field.requestFocus()
+    }
+
+    /// The keyboard is asked for here rather than in onCreate: until the
+    /// window holds input focus there is nothing for the input method to
+    /// attach to, so the request made while starting up is dropped and the
+    /// wearer has to tap the field again to raise it.
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (!hasFocus) return
+
+        field.requestFocus()
         val manager = getSystemService(Context.INPUT_METHOD_SERVICE)
             as InputMethodManager
         manager.showSoftInput(field, InputMethodManager.SHOW_IMPLICIT)
