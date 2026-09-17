@@ -134,6 +134,7 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
   }
 
   Future<void> _confirmLogout(BuildContext context, WidgetRef ref) async {
+    final navigator = Navigator.of(context);
     final confirmed = await showWearConfirmation(
       context,
       icon: Icons.logout,
@@ -141,9 +142,14 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
       confirmLabel: t.settings.logoutButton,
       isDestructive: true,
     );
-    if (confirmed) {
-      await ref.read(authStateProvider.notifier).logout();
-    }
+    if (!confirmed) return;
+
+    await ref.read(authStateProvider.notifier).logout();
+
+    // Settings was pushed over the app, and signing out only swaps what the
+    // app shows underneath. Without this the confirmation closes onto the
+    // settings of an account that no longer exists.
+    navigator.popUntil((route) => route.isFirst);
   }
 }
 
