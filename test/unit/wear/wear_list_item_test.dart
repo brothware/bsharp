@@ -28,6 +28,39 @@ double _paintedWidth(WidgetTester tester, String label) =>
     tester.getRect(find.text(label)).width;
 
 void main() {
+  group('wearListPadding', () {
+    const display = WearDisplay(
+      shape: WearScreenShape.round,
+      sizeDp: Size(227, 227),
+    );
+
+    test('leaves no room above the first row', () {
+      expect(
+        wearListPadding(display).top,
+        0,
+        reason:
+            'scrolling above the top of the list is scrolling into '
+            'nothing, and the list should stop where it starts',
+      );
+    });
+
+    test('keeps room below so the last row can reach the middle', () {
+      expect(wearListPadding(display).bottom, greaterThan(0));
+    });
+
+    test('a rectangular screen needs neither', () {
+      expect(
+        wearListPadding(
+          const WearDisplay(
+            shape: WearScreenShape.rectangular,
+            sizeDp: Size(227, 227),
+          ),
+        ),
+        EdgeInsets.zero,
+      );
+    });
+  });
+
   group('WearListItem', () {
     testWidgets('a round screen paints its rows smaller near the edges', (
       tester,

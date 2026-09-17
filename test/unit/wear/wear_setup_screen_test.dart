@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/error/result.dart';
+import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
+import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
@@ -71,11 +76,15 @@ Future<void> _typeIntoStep(WidgetTester tester, String text) async {
 Widget _buildApp({
   List<Object> extraOverrides = const [],
   WearScreenShape shape = WearScreenShape.rectangular,
+  AccountStorage? accountStorage,
 }) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
+      accountStorageProvider.overrideWithValue(
+        accountStorage ?? AccountStorage(store: FakeKeyValueStore()),
+      ),
       wearScreenShapeProvider.overrideWith((_) => shape),
       ...extraOverrides.cast(),
     ],
@@ -83,9 +92,29 @@ Widget _buildApp({
   );
 }
 
+/// Reading the saved accounts is a real round trip on a watch, so the screen
+/// has a frame or two to draw before it knows whether an account exists.
+class _SlowAccountStorage extends AccountStorage {
+  _SlowAccountStorage(this._accounts) : super(store: FakeKeyValueStore());
+
+  final List<ProviderAccount> _accounts;
+  final _read = Completer<void>();
+
+  void reveal() => _read.complete();
+
+  @override
+  Future<List<ProviderAccount>> getAccounts() async {
+    await _read.future;
+    return _accounts;
+  }
+}
+
 /// Setup now opens on the provider step, so a test about the credential
 /// steps has to choose a backend that wants credentials first.
 Future<void> _chooseMobireg(WidgetTester tester) async {
+  // The screen waits to learn whether an account is already saved before it
+  // offers the provider step.
+  await tester.pumpAndSettle();
   await tester.tap(find.text('Mobireg'));
   await tester.pump();
 }
@@ -93,11 +122,45 @@ Future<void> _chooseMobireg(WidgetTester tester) async {
 void main() {
   for (final shape in WearScreenShape.values) {
     group('WearSetupScreen (${shape.name})', () {
+      testWidgets('an account already saved never sees the provider step', (
+        tester,
+      ) async {
+        final accountStorage = _SlowAccountStorage([
+          const ProviderAccount(
+            id: 'a',
+            providerType: 'mobireg',
+            slug: 'osm-wroclaw',
+            login: 'dsliwa',
+            schoolName: 'School',
+            students: [AccountStudent(id: 1, name: 'A', surname: 'B')],
+          ),
+        ]);
+
+        await tester.pumpWidget(
+          _buildApp(shape: shape, accountStorage: accountStorage),
+        );
+        await tester.pump();
+
+        expect(
+          find.text('Mobireg'),
+          findsNothing,
+          reason:
+              'the backend is already chosen, so asking again is a step '
+              'backwards - and it flashes up before the check finishes',
+        );
+
+        accountStorage.reveal();
+        await tester.pumpAndSettle();
+
+        expect(find.text('Mobireg'), findsNothing);
+        expect(find.text('School'), findsWidgets);
+      });
+
       testWidgets('setup opens on a provider step listing every backend', (
         tester,
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
-        await tester.pump();
+        await tester.pumpAndSettle();
 
         expect(find.text('Mobireg'), findsOneWidget);
         expect(find.text('Demo'), findsOneWidget);
@@ -108,7 +171,7 @@ void main() {
         tester,
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
-        await tester.pump();
+        await tester.pumpAndSettle();
 
         await tester.tap(find.text('Mobireg'));
         await tester.pump();
