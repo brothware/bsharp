@@ -35,8 +35,7 @@ class WearLessonHero extends ConsumerWidget {
     if (lesson.current case final entry?) {
       return _WearHeroBody(
         eyebrow: t.wearDashboard.now,
-        title:
-            entry.subjectName ?? '${t.schedule.lessonFallback} ${entry.number}',
+        title: entry.displayName,
         room: entry.roomName,
         countdown: t.wearDashboard.endsIn(n: _minutesUntil(entry.endTime, now)),
         progress: _lessonProgress(entry, now),
@@ -47,8 +46,7 @@ class WearLessonHero extends ConsumerWidget {
     if (lesson.next case final entry?) {
       return _WearHeroBody(
         eyebrow: t.wearDashboard.next,
-        title:
-            entry.subjectName ?? '${t.schedule.lessonFallback} ${entry.number}',
+        title: entry.displayName,
         room: entry.roomName,
         countdown: t.wearDashboard.startsIn(
           n: _minutesUntil(entry.startTime, now),
@@ -66,11 +64,7 @@ class WearLessonHero extends ConsumerWidget {
     if (lesson.allEnded) {
       return _WearHeroBody(
         eyebrow: t.wearDashboard.tomorrow,
-        title:
-            firstLesson?.subjectName ??
-            (firstLesson != null
-                ? '${t.schedule.lessonFallback} ${firstLesson.number}'
-                : t.wearDashboard.syncPrompt),
+        title: firstLesson?.displayName ?? t.wearDashboard.syncPrompt,
         room: firstLesson?.roomName,
         countdown: firstLesson?.timeRange,
         progress: null,
@@ -81,11 +75,7 @@ class WearLessonHero extends ConsumerWidget {
     if (todayLessons.isEmpty) {
       return _WearHeroBody(
         eyebrow: t.wearDashboard.noLessons,
-        title:
-            firstLesson?.subjectName ??
-            (firstLesson != null
-                ? '${t.schedule.lessonFallback} ${firstLesson.number}'
-                : t.wearDashboard.syncPrompt),
+        title: firstLesson?.displayName ?? t.wearDashboard.syncPrompt,
         room: firstLesson?.roomName,
         countdown: firstLesson == null
             ? null

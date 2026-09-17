@@ -13,6 +13,8 @@ void main() {
     bool isLocked = false,
     bool isReplaced = false,
     List<int> replacedLessonNumbers = const [],
+    String? subjectName,
+    String? eventName,
   }) {
     return ScheduleEntry(
       id: id,
@@ -25,6 +27,8 @@ void main() {
       isLocked: isLocked,
       isReplaced: isReplaced,
       replacedLessonNumbers: replacedLessonNumbers,
+      subjectName: subjectName,
+      eventName: eventName,
     );
   }
 
@@ -74,6 +78,11 @@ void main() {
       expect(e.displayLessonNumber, '3');
     });
 
+    test('displayLessonNumber shows dash for numberless events', () {
+      final e = entry(number: 0);
+      expect(e.displayLessonNumber, '-');
+    });
+
     test('displayLessonNumber shows dash for replaced entries', () {
       final e = entry(isReplaced: true);
       expect(e.displayLessonNumber, '-');
@@ -92,6 +101,21 @@ void main() {
     test('displayLessonNumber shows single number in list', () {
       final e = entry(replacedLessonNumbers: [4]);
       expect(e.displayLessonNumber, '4');
+    });
+
+    test('displayName prefers the subject name', () {
+      final e = entry(subjectName: 'przyroda', eventName: 'Próba');
+      expect(e.displayName, 'przyroda');
+    });
+
+    test('displayName falls back to the event name', () {
+      final e = entry(eventName: 'Próba');
+      expect(e.displayName, 'Próba');
+    });
+
+    test('displayName falls back to the generic label', () {
+      final e = entry();
+      expect(e.displayName, t.schedule.lessonFallback);
     });
 
     test('isReplaced defaults to false', () {

@@ -42,7 +42,7 @@ class LessonTimelineItem extends TimelineItem {
   String get endTime => entry.endTime;
 
   @override
-  String get displayTitle => entry.subjectName ?? entry.eventName ?? '';
+  String get displayTitle => entry.displayName;
 
   @override
   String? get displayPerson => entry.teacherName;
