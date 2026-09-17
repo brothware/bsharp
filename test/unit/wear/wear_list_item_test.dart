@@ -3,7 +3,6 @@ import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 Widget _list(WearScreenShape shape, ScrollController controller) {
   return MaterialApp(
@@ -23,9 +22,14 @@ Widget _list(WearScreenShape shape, ScrollController controller) {
   );
 }
 
+/// How wide a row is actually drawn, which the edge scaling shrinks even
+/// though the row still measures its full size.
+double _paintedWidth(WidgetTester tester, String label) =>
+    tester.getRect(find.text(label)).width;
+
 void main() {
   group('WearListItem', () {
-    testWidgets('a round screen narrows its rows near the edges', (
+    testWidgets('a round screen paints its rows smaller near the edges', (
       tester,
     ) async {
       final controller = ScrollController();
@@ -35,12 +39,42 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.byType(WearOsExpressiveItem),
-        findsWidgets,
+        _paintedWidth(tester, 'row 0'),
+        lessThan(_paintedWidth(tester, 'row 7')),
         reason:
             'the screen keeps only a thin margin now, so a row at the top or '
             'bottom of the viewport has to give up the width the circle does',
       );
+    });
+
+    testWidgets('scaling a row never changes the space it occupies', (
+      tester,
+    ) async {
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(_list(WearScreenShape.round, controller));
+      await tester.pumpAndSettle();
+
+      Set<double> rowHeights() => tester
+          .widgetList<WearListItem>(find.byType(WearListItem))
+          .map((row) => tester.getSize(find.byWidget(row)).height)
+          .toSet();
+
+      expect(
+        rowHeights(),
+        {40.0},
+        reason:
+            'every row is 40 high, and a row that shrinks its own extent as '
+            'it nears the edge makes the extent a function of the scroll '
+            'offset - which the sliver then corrects, moving the offset, '
+            'rescaling the rows, and never settling',
+      );
+
+      controller.jumpTo(120);
+      await tester.pumpAndSettle();
+
+      expect(rowHeights(), {40.0}, reason: 'still true once scrolled');
     });
 
     testWidgets('a rectangular screen leaves its rows alone', (tester) async {
@@ -52,7 +86,10 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.byType(WearOsExpressiveItem), findsNothing);
+      expect(
+        _paintedWidth(tester, 'row 0'),
+        _paintedWidth(tester, 'row 7'),
+      );
     });
   });
 }
