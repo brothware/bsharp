@@ -132,11 +132,15 @@ class _WearBadgeChip extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
-        child: Container(
+        // Sized by its contents, floored at the 48dp touch target. Giving it
+        // an alignment instead would make it greedy: with the loose
+        // constraints a Wrap hands out it would take the full width of the
+        // glass, and every badge would land on a line of its own.
+        child: ConstrainedBox(
           constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-          alignment: Alignment.center,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, size: 16, color: theme.colorScheme.onPrimaryContainer),
               Text(

@@ -10,6 +10,7 @@ import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_dashboard.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_news_badges.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -343,6 +344,65 @@ void main() {
         await tester.pump();
 
         expect(find.text('1'), findsOneWidget);
+      });
+
+      testWidgets('badges sit beside each other, not one per line', (
+        tester,
+      ) async {
+        if (shape != WearScreenShape.round) return;
+
+        tester.view.physicalSize = const Size(454, 454);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.reset);
+
+        await prefs.setStringList('new_grade_ids', ['1']);
+        await tester.pumpWidget(
+          _buildDashboard(
+            prefs: prefs,
+            shape: shape,
+            inbox: [
+              PocztaMessage(
+                id: 1,
+                title: 'Hi',
+                senderName: 'Teacher',
+                sendTime: DateTime(2025, 6, 15),
+                isRead: false,
+                isStarred: false,
+              ),
+            ],
+            tests: [
+              PortalTest(
+                id: 1,
+                subjectName: 'Math',
+                date: _isoDate(DateTime.now().add(const Duration(days: 3))),
+              ),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final chips = tester
+            .widgetList<Material>(
+              find.descendant(
+                of: find.byType(WearNewsBadges),
+                matching: find.byType(Material),
+              ),
+            )
+            .toList();
+        expect(chips.length, greaterThanOrEqualTo(3));
+
+        final tops = <double>{};
+        for (final chip in chips) {
+          tops.add(tester.getTopLeft(find.byWidget(chip)).dy);
+        }
+
+        expect(
+          tops.length,
+          1,
+          reason:
+              'three 48dp chips fit across the glass, so putting each on '
+              'its own line wastes the height the hero needs',
+        );
       });
 
       testWidgets('caps badges at four with a +n overflow chip', (
