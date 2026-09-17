@@ -1,5 +1,7 @@
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/theme_labels.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
@@ -79,6 +81,74 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Cancel'), findsOneWidget);
+    });
+
+    testWidgets('logging out leaves the settings screen behind', (
+      tester,
+    ) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      // Settings is pushed on top of the app in real use, so logging out has
+      // to unwind back past it rather than just closing the confirmation.
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            credentialStorageProvider.overrideWithValue(
+              CredentialStorage(store: FakeKeyValueStore()),
+            ),
+            accountStorageProvider.overrideWithValue(
+              AccountStorage(store: FakeKeyValueStore()),
+            ),
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
+          ],
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) => Scaffold(
+                body: Center(
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const Scaffold(
+                          body: WearDisplayScope(
+                            display: WearDisplay(
+                              shape: WearScreenShape.rectangular,
+                              sizeDp: Size(400, 400),
+                            ),
+                            child: WearSettingsTile(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    child: const Text('open settings'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('open settings'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.logout));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Log out'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byType(WearSettingsTile),
+        findsNothing,
+        reason:
+            'logging out only closed the confirmation, so the settings '
+            'screen it was opened from was still sitting there',
+      );
+      expect(find.text('open settings'), findsOneWidget);
     });
 
     testWidgets('cancel dismisses the logout confirmation screen', (
