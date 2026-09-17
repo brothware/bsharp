@@ -55,6 +55,10 @@ ThemeData wearTheme(ThemeData base) {
       : base.colorScheme.copyWith(surface: _wearLightSurface);
   return base.copyWith(
     colorScheme: wearColorScheme,
+    // ThemeData fixes the scaffold colour when it is built, so swapping the
+    // scheme afterwards leaves it on the seeded surface. It showed at the
+    // foot of any screen whose content stopped short of the bottom.
+    scaffoldBackgroundColor: wearColorScheme.surface,
     textTheme: wearText,
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
