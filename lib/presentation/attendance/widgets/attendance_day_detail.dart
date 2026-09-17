@@ -36,10 +36,10 @@ class AttendanceDayDetail extends ConsumerWidget {
       return !coveredEventIds.contains(e.id);
     }).toList();
 
-    final items = <_DayItem>[
+    final items = sortedByScheduleTime(<_DayItem>[
       for (final entry in day.entries) _DayItem.entry(entry),
       for (final event in unlabeledEvents) _DayItem.unlabeled(event),
-    ]..sort((a, b) => a.lessonNumber.compareTo(b.lessonNumber));
+    ], (item) => item.scheduleEntry);
 
     final title = '${dayLabelFull(date.weekday)}, ${formatDateFull(date)}';
 
@@ -121,8 +121,8 @@ class AttendanceDayDetail extends ConsumerWidget {
                     entry: entry,
                     isIgnored: ignoredIds.contains(entry.attendance.id),
                   ),
-                  _UnlabeledItem(:final event) => _UnlabeledEventTile(
-                    event: event,
+                  _UnlabeledItem(:final scheduleEntry) => _UnlabeledEventTile(
+                    entry: scheduleEntry,
                   ),
                 };
               },
@@ -151,38 +151,40 @@ sealed class _DayItem {
   factory _DayItem.entry(AttendanceEntry e) = _EntryItem;
   factory _DayItem.unlabeled(ResolvedEvent e) = _UnlabeledItem;
 
-  int get lessonNumber;
+  ScheduleEntry? get scheduleEntry;
 }
 
 class _EntryItem extends _DayItem {
-  const _EntryItem(this.entry);
+  _EntryItem(this.entry)
+    : scheduleEntry = entry.resolvedEvent == null
+          ? null
+          : ScheduleEntry.fromResolved(entry.resolvedEvent!);
+
   final AttendanceEntry entry;
 
   @override
-  int get lessonNumber => entry.resolvedEvent?.number ?? 0;
+  final ScheduleEntry? scheduleEntry;
 }
 
 class _UnlabeledItem extends _DayItem {
-  const _UnlabeledItem(this.event);
+  _UnlabeledItem(this.event)
+    : scheduleEntry = ScheduleEntry.fromResolved(event);
+
   final ResolvedEvent event;
 
   @override
-  int get lessonNumber => event.number;
+  final ScheduleEntry scheduleEntry;
 }
 
 class _UnlabeledEventTile extends StatelessWidget {
-  const _UnlabeledEventTile({required this.event});
+  const _UnlabeledEventTile({required this.entry});
 
-  final ResolvedEvent event;
+  final ScheduleEntry entry;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = theme.colorScheme.onSurfaceVariant;
-
-    final subjectName = event.subjectName != null
-        ? translateSubjectName(event.subjectName!)
-        : '${t.schedule.lessonFallback} ${event.number}';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -191,14 +193,14 @@ class _UnlabeledEventTile extends StatelessWidget {
           SizedBox(
             width: 32,
             child: Text(
-              '${event.number}',
+              entry.displayLessonNumber,
               textAlign: TextAlign.center,
               style: theme.textTheme.titleSmall?.copyWith(color: color),
             ),
           ),
           const SizedBox(width: 12),
           Text(
-            event.startTime.substring(0, 5),
+            entry.startTime.substring(0, 5),
             style: theme.textTheme.bodySmall?.copyWith(color: color),
           ),
           const SizedBox(width: 12),
@@ -206,7 +208,7 @@ class _UnlabeledEventTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(subjectName, style: theme.textTheme.bodyMedium),
+                Text(entry.displayName, style: theme.textTheme.bodyMedium),
                 Text(
                   t.attendance.noDataLabel,
                   style: theme.textTheme.bodySmall?.copyWith(color: color),
