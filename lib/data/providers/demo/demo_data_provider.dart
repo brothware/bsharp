@@ -12,6 +12,7 @@ import 'package:bsharp/data/providers/demo/demo_message_data.dart';
 import 'package:bsharp/data/providers/demo/demo_portal_data.dart';
 import 'package:bsharp/data/providers/demo/demo_schedule_data.dart';
 import 'package:bsharp/data/services/notification_service.dart';
+import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
@@ -30,6 +31,9 @@ class DemoDataProvider implements SchoolDataProvider {
 
   @override
   String get displayName => 'Demo';
+
+  @override
+  bool hydrateFromCache(Ref ref, SyncCache cache) => false;
 
   @override
   Set<DataProviderCapability> get capabilities =>

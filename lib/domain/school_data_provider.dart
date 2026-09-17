@@ -1,5 +1,6 @@
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/services/notification_service.dart';
+import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -37,6 +38,11 @@ abstract class SchoolDataProvider {
   });
 
   Future<void> loadSchoolData(Ref ref, {required int studentId});
+
+  /// Restores state this provider cached earlier, returning whether anything
+  /// was restored. A provider that regenerates its data every load caches
+  /// nothing and answers `false`.
+  bool hydrateFromCache(Ref ref, SyncCache cache);
 
   Future<void> loadMessages(Ref ref);
 

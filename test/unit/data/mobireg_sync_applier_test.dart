@@ -1,4 +1,4 @@
-import 'package:bsharp/data/services/sync_data_applier.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_sync_applier.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

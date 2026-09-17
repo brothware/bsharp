@@ -11,9 +11,9 @@ import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/portal_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/portal_session.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_sync_applier.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
-import 'package:bsharp/data/services/sync_data_applier.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/student.dart';
@@ -229,6 +229,43 @@ class MobiregDataProvider implements SchoolDataProvider {
     );
     final result = await syncDs.registerFcmToken(token: token);
     return result.when(success: (_) => true, failure: (_) => false);
+  }
+
+  @override
+  bool hydrateFromCache(Ref ref, SyncCache cache) {
+    final syncData = cache.loadSyncData();
+    if (syncData != null) {
+      applySyncData(ref, syncData);
+    }
+
+    const portalViews = {
+      'bulletins': applyPortalBulletins,
+      'tests': applyPortalTests,
+      'homeworks': applyPortalHomeworks,
+      'reprimands': applyPortalReprimands,
+    };
+    for (final entry in portalViews.entries) {
+      final items = cache.loadPortalView(entry.key);
+      if (items != null) {
+        entry.value(ref, items);
+      }
+    }
+
+    for (final kind in ['mark', 'attendance']) {
+      final changelog = cache.loadPortalView('changelog_$kind');
+      if (changelog != null) {
+        applyPortalChangelog(ref, kind, changelog);
+      }
+    }
+
+    for (final folder in ['inbox', 'sent', 'trash']) {
+      final messages = cache.loadMessages(folder);
+      if (messages != null) {
+        applyMessages(ref, folder, messages);
+      }
+    }
+
+    return syncData != null;
   }
 
   @override

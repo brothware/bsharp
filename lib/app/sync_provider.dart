@@ -7,7 +7,6 @@ import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
-import 'package:bsharp/data/services/sync_data_applier.dart';
 import 'package:bsharp/data/services/sync_snapshot.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
@@ -116,41 +115,8 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
   }
 
   void _hydrateFromCache(SyncCache cache) {
-    final syncData = cache.loadSyncData();
-    if (syncData != null) {
-      applySyncData(ref, syncData);
-    }
-
-    final portalViews = {
-      'bulletins': applyPortalBulletins,
-      'tests': applyPortalTests,
-      'homeworks': applyPortalHomeworks,
-      'reprimands': applyPortalReprimands,
-    };
-    for (final entry in portalViews.entries) {
-      final items = cache.loadPortalView(entry.key);
-      if (items != null) {
-        entry.value(ref, items);
-      }
-    }
-
-    final markChangelog = cache.loadPortalView('changelog_mark');
-    if (markChangelog != null) {
-      applyPortalChangelog(ref, 'mark', markChangelog);
-    }
-    final attendanceChangelog = cache.loadPortalView('changelog_attendance');
-    if (attendanceChangelog != null) {
-      applyPortalChangelog(ref, 'attendance', attendanceChangelog);
-    }
-
-    for (final folder in ['inbox', 'sent', 'trash']) {
-      final messages = cache.loadMessages(folder);
-      if (messages != null) {
-        applyMessages(ref, folder, messages);
-      }
-    }
-
-    if (syncData != null) {
+    final provider = ref.read(activeDataProviderProvider);
+    if (provider.hydrateFromCache(ref, cache)) {
       state = SyncStatus.hydrated;
     }
   }
