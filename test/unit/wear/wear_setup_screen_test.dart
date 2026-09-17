@@ -169,6 +169,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('No accounts yet'), findsOneWidget);
+        expect(find.text('Demo mode'), findsOneWidget);
         expect(
           find.text('Mobireg'),
           findsNothing,
@@ -181,7 +182,13 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Mobireg'), findsOneWidget);
-        expect(find.text('Demo'), findsOneWidget);
+        expect(
+          find.text('Demo mode'),
+          findsNothing,
+          reason:
+              'demo is not a school you hold an account with, so it sits '
+              'with the other way in rather than among the providers',
+        );
       });
 
       testWidgets('adding another account starts at the provider list', (
@@ -223,14 +230,22 @@ void main() {
         );
       });
 
-      testWidgets('the provider step lists every backend', (tester) async {
+      testWidgets('the provider step lists the backends with accounts', (
+        tester,
+      ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pumpAndSettle();
         await tester.tap(find.text('Add account'));
         await tester.pumpAndSettle();
 
         expect(find.text('Mobireg'), findsOneWidget);
-        expect(find.text('Demo'), findsOneWidget);
+        expect(
+          find.text('Demo'),
+          findsNothing,
+          reason:
+              'demo needs no account, so it is offered beside Add account '
+              'rather than among the schools you could have one with',
+        );
         expect(find.byType(TextField), findsNothing);
       });
 
