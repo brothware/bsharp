@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-enum _SetupStep { provider, school, username, password, studentPicker }
+enum _SetupStep { welcome, provider, school, username, password, studentPicker }
 
 const List<_SetupStep> _credentialSteps = [
   _SetupStep.school,
@@ -27,7 +27,11 @@ const List<_SetupStep> _credentialSteps = [
 ];
 
 class WearSetupScreen extends ConsumerStatefulWidget {
-  const WearSetupScreen({super.key});
+  const WearSetupScreen({super.key, this.addingAnother = false});
+
+  /// Opened from settings to add a second account rather than to set the
+  /// watch up, so there is nothing to welcome and nothing to prefill.
+  final bool addingAnother;
 
   @override
   ConsumerState<WearSetupScreen> createState() => _WearSetupScreenState();
@@ -41,7 +45,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   final _fieldStepScrollController = ScrollController();
   final _studentPickerScrollController = ScrollController();
 
-  _SetupStep _step = _SetupStep.provider;
+  _SetupStep _step = _SetupStep.welcome;
 
   /// Whether the saved accounts have been read yet. Until they have, the
   /// screen cannot know whether it is setting an account up or re-authorising
@@ -59,6 +63,11 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.addingAnother) {
+      _knowsWhetherSetUp = true;
+      _step = _SetupStep.provider;
+      return;
+    }
     unawaited(_checkNeedsSetup());
   }
 
@@ -230,7 +239,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     );
 
     final accountStorage = ref.read(accountStorageProvider);
-    await accountStorage.saveAccounts([account]);
+    // Append: replacing the list is what stopped a watch holding more than
+    // one account, whoever the provider was.
+    await accountStorage.addAccount(account);
     await accountStorage.saveActiveSelection(
       ActiveSelection(
         accountId: account.id,
@@ -255,6 +266,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       body: WearScaffold(
         scrollController: _activeScrollController,
         child: switch (_step) {
+          _SetupStep.welcome =>
+            _knowsWhetherSetUp ? _buildWelcomeStep() : const SizedBox.shrink(),
           _SetupStep.provider =>
             _knowsWhetherSetUp ? _buildProviderStep() : const SizedBox.shrink(),
           _SetupStep.school => _buildSchoolStep(),
@@ -405,6 +418,37 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                   )
                 : Text(buttonLabel),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWelcomeStep() {
+    final theme = Theme.of(context);
+
+    // Scrollable: three lines of prose and a button do not always fit the
+    // shorter watches, and an overflow is a worse answer than a scroll.
+    return ListView(
+      controller: _fieldStepScrollController,
+      shrinkWrap: true,
+      children: [
+        Text(
+          t.accounts.noAccountsYet,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.titleSmall,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          t.accounts.addFirstAccount,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: 12),
+        FilledButton(
+          onPressed: () => setState(() => _step = _SetupStep.provider),
+          child: Text(t.accounts.addAccount),
         ),
       ],
     );

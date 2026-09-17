@@ -10,6 +10,7 @@ import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_child_mode_screen.dart';
 import 'package:bsharp/wear/screens/wear_language_screen.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
+import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/screens/wear_student_picker.dart';
 import 'package:bsharp/wear/widgets/wear_confirmation.dart';
 import 'package:bsharp/wear/widgets/wear_list_item.dart';
@@ -76,6 +77,16 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
                           ),
                         ),
                       ),
+                    _WearSettingsItem(
+                      icon: Icons.person_add_alt,
+                      label: t.accounts.addAccount,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) =>
+                              const WearSetupScreen(addingAnother: true),
+                        ),
+                      ),
+                    ),
                     _WearSettingsItem(
                       icon: Icons.child_care,
                       label: t.childMode.title,

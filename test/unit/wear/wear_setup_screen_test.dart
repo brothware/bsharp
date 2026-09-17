@@ -77,6 +77,7 @@ Widget _buildApp({
   List<Object> extraOverrides = const [],
   WearScreenShape shape = WearScreenShape.rectangular,
   AccountStorage? accountStorage,
+  bool addingAnother = false,
 }) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
@@ -88,7 +89,9 @@ Widget _buildApp({
       wearScreenShapeProvider.overrideWith((_) => shape),
       ...extraOverrides.cast(),
     ],
-    child: const MaterialApp(home: WearSetupScreen()),
+    child: MaterialApp(
+      home: WearSetupScreen(addingAnother: addingAnother),
+    ),
   );
 }
 
@@ -113,7 +116,9 @@ class _SlowAccountStorage extends AccountStorage {
 /// steps has to choose a backend that wants credentials first.
 Future<void> _chooseMobireg(WidgetTester tester) async {
   // The screen waits to learn whether an account is already saved before it
-  // offers the provider step.
+  // offers to add one, and the provider list is a step past that.
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('Add account'));
   await tester.pumpAndSettle();
   await tester.tap(find.text('Mobireg'));
   await tester.pump();
@@ -156,10 +161,44 @@ void main() {
         expect(find.text('School'), findsWidgets);
       });
 
-      testWidgets('setup opens on a provider step listing every backend', (
+      testWidgets('first run asks to add an account before naming one', (
         tester,
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pumpAndSettle();
+
+        expect(find.text('No accounts yet'), findsOneWidget);
+        expect(
+          find.text('Mobireg'),
+          findsNothing,
+          reason:
+              'the phone asks to add an account first and only then which '
+              'provider it is with',
+        );
+
+        await tester.tap(find.text('Add account'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Mobireg'), findsOneWidget);
+        expect(find.text('Demo'), findsOneWidget);
+      });
+
+      testWidgets('adding another account starts at the provider list', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          _buildApp(shape: shape, addingAnother: true),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('No accounts yet'), findsNothing);
+        expect(find.text('Mobireg'), findsOneWidget);
+      });
+
+      testWidgets('the provider step lists every backend', (tester) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Add account'));
         await tester.pumpAndSettle();
 
         expect(find.text('Mobireg'), findsOneWidget);
@@ -171,6 +210,8 @@ void main() {
         tester,
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Add account'));
         await tester.pumpAndSettle();
 
         await tester.tap(find.text('Mobireg'));
