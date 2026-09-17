@@ -444,7 +444,6 @@
     "downloadingModel": "Downloading language model...",
     "translationFailed": "Translation failed",
     "quotaExceeded": "DeepL translation limit exceeded",
-    "translateToPolish": "Translate to Polish",
     "settingsTitle": "Translation",
     "engineOnDevice": "On-device (ML Kit)",
     "engineDeepL": "DeepL (requires key)",

@@ -450,7 +450,6 @@
     "downloadingModel": "Se descarcă modelul lingvistic...",
     "translationFailed": "Traducerea a eșuat",
     "quotaExceeded": "Limita de traduceri DeepL depășită",
-    "translateToPolish": "Traduce în poloneză",
     "settingsTitle": "Traducere",
     "engineOnDevice": "Pe dispozitiv (ML Kit)",
     "engineDeepL": "DeepL (necesită cheie)",

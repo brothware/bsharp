@@ -447,7 +447,6 @@
     "downloadingModel": "Nyelvi modell letöltése...",
     "translationFailed": "A fordítás sikertelen",
     "quotaExceeded": "DeepL fordítási korlát elérve",
-    "translateToPolish": "Fordítás lengyelre",
     "settingsTitle": "Fordítás",
     "engineOnDevice": "Eszközön (ML Kit)",
     "engineDeepL": "DeepL (kulcs szükséges)",

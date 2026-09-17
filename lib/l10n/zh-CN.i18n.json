@@ -447,7 +447,6 @@
     "downloadingModel": "正在下载语言模型...",
     "translationFailed": "翻译失败",
     "quotaExceeded": "DeepL翻译额度已用完",
-    "translateToPolish": "翻译为波兰语",
     "settingsTitle": "翻译",
     "engineOnDevice": "设备端翻译（ML Kit）",
     "engineDeepL": "DeepL（需要密钥）",

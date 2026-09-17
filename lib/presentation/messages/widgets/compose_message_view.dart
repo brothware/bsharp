@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/translation_utils.dart';
@@ -223,8 +224,8 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
           ),
           _FormattingToolbar(
             controller: _contentController,
-            onTranslateToPolish: ref.watch(isTranslationAvailableProvider)
-                ? () => _translateToPolish(ref)
+            onTranslate: ref.watch(isTranslationAvailableProvider)
+                ? () => _translateForRecipient(ref)
                 : null,
           ),
           Expanded(
@@ -255,11 +256,15 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
       _titleController.text.isNotEmpty &&
       _contentController.text.isNotEmpty;
 
-  Future<void> _translateToPolish(WidgetRef ref) async {
+  Future<void> _translateForRecipient(WidgetRef ref) async {
     final text = _contentController.text;
     if (text.isEmpty) return;
     final service = ref.read(translationServiceProvider);
-    final result = await service.translate(text: text, targetLang: 'pl');
+    final result = await service.translate(
+      text: text,
+      targetLang: ref.read(contentLanguageProvider),
+      sourceLang: ref.read(localeProvider).languageCode,
+    );
     if (!mounted) return;
     result.when(
       success: (translated) => _contentController.text = translated,
@@ -280,11 +285,11 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
 class _FormattingToolbar extends StatelessWidget {
   const _FormattingToolbar({
     required this.controller,
-    this.onTranslateToPolish,
+    this.onTranslate,
   });
 
   final RichTextEditingController controller;
-  final VoidCallback? onTranslateToPolish;
+  final VoidCallback? onTranslate;
 
   @override
   Widget build(BuildContext context) {
@@ -322,12 +327,12 @@ class _FormattingToolbar extends StatelessWidget {
               isActive: active.contains(FormatType.underline),
               onPressed: () => controller.toggleFormat(FormatType.underline),
             ),
-            if (onTranslateToPolish != null) ...[
+            if (onTranslate != null) ...[
               const Spacer(),
               _ToolbarButton(
                 icon: Icons.translate,
-                tooltip: t.translation.translateToPolish,
-                onPressed: onTranslateToPolish!,
+                tooltip: t.translation.translate,
+                onPressed: onTranslate!,
               ),
             ],
           ],

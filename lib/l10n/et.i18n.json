@@ -447,7 +447,6 @@
     "downloadingModel": "Keelemudeli allalaadimine...",
     "translationFailed": "Tõlkimine ebaõnnestus",
     "quotaExceeded": "DeepL tõlkelimiit ületatud",
-    "translateToPolish": "Tõlgi poola keelde",
     "settingsTitle": "Tõlkimine",
     "engineOnDevice": "Seadmes (ML Kit)",
     "engineDeepL": "DeepL (nõuab võtit)",

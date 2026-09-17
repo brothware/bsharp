@@ -447,7 +447,6 @@
     "downloadingModel": "Dil modeli indiriliyor...",
     "translationFailed": "Çeviri başarısız oldu",
     "quotaExceeded": "DeepL çeviri limiti aşıldı",
-    "translateToPolish": "Lehçeye çevir",
     "settingsTitle": "Çeviri",
     "engineOnDevice": "Cihazda (ML Kit)",
     "engineDeepL": "DeepL (anahtar gerekli)",

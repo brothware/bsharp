@@ -447,7 +447,6 @@
     "downloadingModel": "Ladataan kielimallia...",
     "translationFailed": "Käännös epäonnistui",
     "quotaExceeded": "DeepL-käännösraja ylitetty",
-    "translateToPolish": "Käännä puolaksi",
     "settingsTitle": "Käännös",
     "engineOnDevice": "Laitteella (ML Kit)",
     "engineDeepL": "DeepL (vaatii avaimen)",

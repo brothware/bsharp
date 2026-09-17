@@ -33,6 +33,9 @@ class DemoDataProvider implements SchoolDataProvider {
   String get displayName => 'Demo';
 
   @override
+  String get contentLanguage => 'en';
+
+  @override
   bool hydrateFromCache(Ref ref, SyncCache cache) => false;
 
   @override

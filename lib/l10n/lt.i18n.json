@@ -453,7 +453,6 @@
     "downloadingModel": "Atsisiunčiamas kalbos modelis...",
     "translationFailed": "Vertimas nepavyko",
     "quotaExceeded": "Viršyta DeepL vertimo riba",
-    "translateToPolish": "Versti į lenkų kalbą",
     "settingsTitle": "Vertimas",
     "engineOnDevice": "Įrenginyje (ML Kit)",
     "engineDeepL": "DeepL (reikia rakto)",

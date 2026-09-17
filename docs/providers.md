@@ -10,11 +10,13 @@ Defined in [`lib/domain/school_data_provider.dart`](../lib/domain/school_data_pr
 |-------------------|-------------|
 | `id` | Unique string identifier (e.g., `'mobireg'`, `'demo'`) |
 | `displayName` | Human-readable name shown in the UI |
+| `contentLanguage` | Language code the backend's free text is written in (`'pl'` for Mobireg) — see [The normalisation contract](#the-normalisation-contract) |
 | `capabilities` | `Set<DataProviderCapability>` declaring supported features |
 | `requiresCredentials` | Whether the provider needs login credentials |
 | `supports(cap)` | Convenience check: `capabilities.contains(cap)` |
 | `authenticate(...)` | Establish a session with `school`, `login`, `passwordHash` |
 | `loadSchoolData(ref, studentId:)` | Populate Riverpod state with grades, schedule, attendance, etc. |
+| `hydrateFromCache(ref, cache)` | Restore previously cached state, returning whether anything was restored |
 | `loadMessages(ref)` | Load inbox, sent, and trash messages |
 | `refreshMessages(ref)` | Refresh messages from the server |
 | `readMessage(messageId)` | Fetch full message content |
@@ -27,6 +29,40 @@ Defined in [`lib/domain/school_data_provider.dart`](../lib/domain/school_data_pr
 | `hashPassword(password)` | Hash a plaintext password for this system |
 | `validateCredentials(...)` | Check credentials without full login, returns `Result<void>` |
 | `fetchStudents(...)` | List available students for the authenticated account |
+
+## The normalisation contract
+
+The boundary between a provider and the rest of the app is the set of Riverpod
+state providers that `loadSchoolData` and `hydrateFromCache` write into —
+`subjectsProvider`, `resolvedEventsProvider`, `testsProvider` and the rest.
+
+**Everything written across that boundary is canonical.** Subject names,
+attendance types, grade categories and term names arrive in the backend's own
+wording, and it is the provider's job to translate that wording to the app's
+canonical English before it reaches core state. Mobireg does this with the
+`normalizeMobireg*` helpers in
+`lib/data/providers/mobireg/mobireg_translations.dart`; the demo provider
+simply authors its data canonically in the first place.
+
+The app then renders a canonical name in the reader's language with
+`translateSubjectName`. That is a presentation concern and belongs to core.
+Skipping the provider-side step means core receives, say, `przyroda`, fails to
+match it, and shows the backend's wording to a reader who does not speak it.
+
+`contentLanguage` is a separate concern and covers only **free text a teacher
+typed** — lesson topics, message bodies, notes, homework descriptions. That
+text cannot be normalised, so it is translated on demand, and
+`contentLanguage` is the language to translate from. It is never the language
+of vocabulary, which is always canonical English by the time core sees it.
+
+Two rules follow, and a test enforces the first
+(`test/unit/architecture/provider_boundary_test.dart`):
+
+- Nothing under `lib/app`, `lib/core`, `lib/domain`, `lib/presentation` or
+  `lib/wear` may import `package:bsharp/data/providers/`. The one exception is
+  `lib/app/data_provider_registry.dart`, the composition root.
+- Never hardcode a backend's language in core. Read
+  `contentLanguageProvider` instead.
 
 ## DataProviderCapability
 
@@ -161,8 +197,7 @@ Add your provider to `lib/app/data_provider_registry.dart`:
 | Provider | File | Capabilities | Credentials | Notes |
 |----------|------|-------------|-------------|-------|
 | **Mobireg** | `lib/data/providers/mobireg/mobireg_data_provider.dart` | All | Yes (MD5 password hash) | Production provider |
-| **Demo** | `lib/data/providers/demo/demo_data_provider.dart` | All except `sendMessages` | No (synthetic data) | |
-| **Test Server** | `lib/data/providers/test_server/test_server_data_provider.dart` | All | Yes (plaintext, server hashes) | Debug builds only |
+| **Demo** | `lib/data/providers/demo/demo_data_provider.dart` | All except `sendMessages` | No (synthetic data) | Authors canonical data directly |
 
 Mobireg provider documentation (API details, data model, error codes) is in [`docs/providers/mobireg/`](providers/mobireg/README.md).
 
@@ -177,17 +212,6 @@ flutter run --dart-define=MOBIREG_BASE_URL=http://localhost:8090
 ```
 
 When set, all four mobireg API clients (MobileSync, Portal, Poczta, WebLogin) will use this base URL instead of the production mobireg.pl endpoints. When unset, behaviour is unchanged.
-
-## Test Server
-
-The Test Server provider connects to [bsharp-server](https://github.com/dawid/bsharp-server), a Rust backend with a modern REST API. It is only visible in debug builds (`kDebugMode`).
-
-To use:
-1. Start bsharp-server locally (see its README)
-2. Run the app in debug mode
-3. On the "Add Account" screen, select "Test Server"
-4. Enter the server URL (e.g., `http://localhost:3000`) as the "Server URL"
-5. Enter email/password credentials created on the server
 
 ## Domain Entities
 

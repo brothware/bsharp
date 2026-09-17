@@ -447,7 +447,6 @@
     "downloadingModel": "Taalmodel downloaden...",
     "translationFailed": "Vertaling mislukt",
     "quotaExceeded": "DeepL-vertaallimiet overschreden",
-    "translateToPolish": "Vertalen naar Pools",
     "settingsTitle": "Vertaling",
     "engineOnDevice": "Op apparaat (ML Kit)",
     "engineDeepL": "DeepL (vereist sleutel)",

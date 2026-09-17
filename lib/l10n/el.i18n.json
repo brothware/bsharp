@@ -447,7 +447,6 @@
     "downloadingModel": "Λήψη γλωσσικού μοντέλου...",
     "translationFailed": "Η μετάφραση απέτυχε",
     "quotaExceeded": "Υπέρβαση ορίου μεταφράσεων DeepL",
-    "translateToPolish": "Μετάφραση στα πολωνικά",
     "settingsTitle": "Μετάφραση",
     "engineOnDevice": "Στη συσκευή (ML Kit)",
     "engineDeepL": "DeepL (απαιτείται κλειδί)",

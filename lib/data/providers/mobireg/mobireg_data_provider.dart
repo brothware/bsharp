@@ -52,6 +52,9 @@ class MobiregDataProvider implements SchoolDataProvider {
   String get displayName => 'Mobireg';
 
   @override
+  String get contentLanguage => 'pl';
+
+  @override
   Set<DataProviderCapability> get capabilities =>
       DataProviderCapability.values.toSet();
 

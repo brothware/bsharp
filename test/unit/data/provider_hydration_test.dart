@@ -88,4 +88,14 @@ void main() {
       expect(container.read(resolvedEventsProvider), isEmpty);
     });
   });
+
+  group('contentLanguage', () {
+    test('mobireg writes its free text in Polish', () {
+      expect(MobiregDataProvider().contentLanguage, 'pl');
+    });
+
+    test('demo writes its free text in English', () {
+      expect(DemoDataProvider().contentLanguage, 'en');
+    });
+  });
 }

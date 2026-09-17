@@ -24,6 +24,14 @@ abstract class SchoolDataProvider {
   String get id;
   String get displayName;
 
+  /// The language this backend's free text is written in.
+  ///
+  /// Teachers write lesson topics, message bodies and notes in this language,
+  /// so it is the language to translate *from*. It is not the language of
+  /// subject names, attendance types or grade categories: a provider
+  /// normalises those to canonical English before they reach core state.
+  String get contentLanguage;
+
   Set<DataProviderCapability> get capabilities;
 
   bool get requiresCredentials;

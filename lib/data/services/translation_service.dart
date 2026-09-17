@@ -28,7 +28,7 @@ class TranslationService {
   Future<Result<String>> translate({
     required String text,
     required String targetLang,
-    String sourceLang = 'pl',
+    required String sourceLang,
     bool isHtml = false,
   }) async {
     final hash = _sourceHash(text, targetLang);

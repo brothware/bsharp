@@ -447,7 +447,6 @@
     "downloadingModel": "Laster ned språkmodell...",
     "translationFailed": "Oversettelse mislyktes",
     "quotaExceeded": "DeepL-oversettelsesgrense overskredet",
-    "translateToPolish": "Oversett til polsk",
     "settingsTitle": "Oversettelse",
     "engineOnDevice": "På enheten (ML Kit)",
     "engineDeepL": "DeepL (krever nøkkel)",

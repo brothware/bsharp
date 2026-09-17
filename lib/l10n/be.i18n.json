@@ -453,7 +453,6 @@
     "downloadingModel": "Спампоўка моўнай мадэлі...",
     "translationFailed": "Пераклад не ўдаўся",
     "quotaExceeded": "Ліміт перакладаў DeepL вычарпаны",
-    "translateToPolish": "Перакласці на польскую",
     "settingsTitle": "Пераклад",
     "engineOnDevice": "На прыладзе (ML Kit)",
     "engineDeepL": "DeepL (патрабуецца ключ)",
