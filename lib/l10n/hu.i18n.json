@@ -79,6 +79,7 @@
     "nextLesson": "Következő óra",
     "noLessonsToday": "Ma nincsenek órák",
     "lessonNow": "Most",
+    "orAlternative": "vagy",
     "allLessonsEnded": "Minden óra véget ért",
     "unreadMessages": "Olvasatlan üzenetek",
     "unreadCount": "${count} olvasatlan",

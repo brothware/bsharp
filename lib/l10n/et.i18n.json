@@ -79,6 +79,7 @@
     "nextLesson": "Järgmine tund",
     "noLessonsToday": "Täna tunde pole",
     "lessonNow": "Praegu",
+    "orAlternative": "või",
     "allLessonsEnded": "Kõik tunnid on lõppenud",
     "unreadMessages": "Lugemata sõnumid",
     "unreadCount": "${count} lugemata",

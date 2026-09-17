@@ -79,6 +79,7 @@
     "nextLesson": "Sljedeći sat",
     "noLessonsToday": "Danas nema nastave",
     "lessonNow": "Sada",
+    "orAlternative": "ili",
     "allLessonsEnded": "Svi satovi su završili",
     "unreadMessages": "Nepročitane poruke",
     "unreadCount": "${count} nepročitanih",

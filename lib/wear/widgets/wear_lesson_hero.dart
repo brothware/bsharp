@@ -10,11 +10,20 @@ import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WearLessonHero extends ConsumerWidget {
+class WearLessonHero extends ConsumerStatefulWidget {
   const WearLessonHero({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<WearLessonHero> createState() => _WearLessonHeroState();
+}
+
+class _WearLessonHeroState extends ConsumerState<WearLessonHero> {
+  int _page = 0;
+
+  void _showNextAlternative() => setState(() => _page++);
+
+  @override
+  Widget build(BuildContext context) {
     final resolvedEvents = ref.watch(resolvedEventsProvider);
     final todayLessons = ref.watch(todayLessonsProvider);
     final lesson = ref.watch(currentLessonProvider);
@@ -32,7 +41,9 @@ class WearLessonHero extends ConsumerWidget {
       );
     }
 
-    if (lesson.current case final entry?) {
+    if (lesson.current.isNotEmpty) {
+      final page = _page % lesson.current.length;
+      final entry = lesson.current[page];
       return _WearHeroBody(
         eyebrow: t.wearDashboard.now,
         title: entry.displayName,
@@ -40,10 +51,15 @@ class WearLessonHero extends ConsumerWidget {
         countdown: t.wearDashboard.endsIn(n: _minutesUntil(entry.endTime, now)),
         progress: _lessonProgress(entry, now),
         isRound: isRound,
+        pageCount: lesson.current.length,
+        pageIndex: page,
+        onShowNext: _showNextAlternative,
       );
     }
 
-    if (lesson.next case final entry?) {
+    if (lesson.next.isNotEmpty) {
+      final page = _page % lesson.next.length;
+      final entry = lesson.next[page];
       return _WearHeroBody(
         eyebrow: t.wearDashboard.next,
         title: entry.displayName,
@@ -53,6 +69,9 @@ class WearLessonHero extends ConsumerWidget {
         ),
         progress: null,
         isRound: isRound,
+        pageCount: lesson.next.length,
+        pageIndex: page,
+        onShowNext: _showNextAlternative,
       );
     }
 
@@ -126,6 +145,9 @@ class _WearHeroBody extends StatelessWidget {
     required this.countdown,
     required this.progress,
     required this.isRound,
+    this.pageCount = 1,
+    this.pageIndex = 0,
+    this.onShowNext,
   });
 
   final String eyebrow;
@@ -134,6 +156,9 @@ class _WearHeroBody extends StatelessWidget {
   final String? countdown;
   final double? progress;
   final bool isRound;
+  final int pageCount;
+  final int pageIndex;
+  final VoidCallback? onShowNext;
 
   @override
   Widget build(BuildContext context) {
@@ -177,8 +202,27 @@ class _WearHeroBody extends StatelessWidget {
             ),
           ),
         ],
+        if (pageCount > 1) ...[
+          const SizedBox(height: 4),
+          _AlternativeDots(count: pageCount, index: pageIndex),
+        ],
       ],
     );
+
+    return _tappable(_layout(context, textColumn));
+  }
+
+  Widget _tappable(Widget child) {
+    if (pageCount < 2 || onShowNext == null) return child;
+    return GestureDetector(
+      onTap: onShowNext,
+      behavior: HitTestBehavior.opaque,
+      child: child,
+    );
+  }
+
+  Widget _layout(BuildContext context, Widget textColumn) {
+    final theme = Theme.of(context);
 
     if (progress == null) {
       return Padding(
@@ -223,6 +267,36 @@ class _WearHeroBody extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AlternativeDots extends StatelessWidget {
+  const _AlternativeDots({required this.count, required this.index});
+
+  final int count;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var dot = 0; dot < count; dot++)
+          Container(
+            width: 5,
+            height: 5,
+            margin: const EdgeInsets.symmetric(horizontal: 2),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: dot == index
+                  ? cs.primary
+                  : cs.onSurfaceVariant.withValues(alpha: 0.35),
+            ),
+          ),
+      ],
     );
   }
 }

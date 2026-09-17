@@ -79,6 +79,7 @@
     "nextLesson": "Sonraki ders",
     "noLessonsToday": "Bugün ders yok",
     "lessonNow": "Şimdi",
+    "orAlternative": "veya",
     "allLessonsEnded": "Tüm dersler bitti",
     "unreadMessages": "Okunmamış mesajlar",
     "unreadCount": "${count} okunmamış",

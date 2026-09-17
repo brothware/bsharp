@@ -79,6 +79,7 @@
     "nextLesson": "下一节课",
     "noLessonsToday": "今天没有课程",
     "lessonNow": "正在上课",
+    "orAlternative": "或",
     "allLessonsEnded": "今日课程已结束",
     "unreadMessages": "未读消息",
     "unreadCount": "${count}条未读",

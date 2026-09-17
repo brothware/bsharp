@@ -79,6 +79,7 @@
     "nextLesson": "다음 수업",
     "noLessonsToday": "오늘 수업 없음",
     "lessonNow": "수업 중",
+    "orAlternative": "또는",
     "allLessonsEnded": "오늘 수업 모두 종료",
     "unreadMessages": "읽지 않은 메시지",
     "unreadCount": "${count}개 읽지 않음",

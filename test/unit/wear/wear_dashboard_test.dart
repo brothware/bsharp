@@ -32,6 +32,7 @@ ResolvedEvent _resolvedEvent({
   String endTime = '08:45:00',
   String? subjectName,
   String? roomName,
+  String? eventName,
   bool isCancelled = false,
 }) {
   return ResolvedEvent(
@@ -42,6 +43,7 @@ ResolvedEvent _resolvedEvent({
     endTime: endTime,
     subjectName: subjectName,
     roomName: roomName,
+    eventName: eventName,
     isCancelled: isCancelled,
   );
 }
@@ -115,6 +117,74 @@ void main() {
 
         expect(find.text('NOW'), findsOneWidget);
         expect(find.text('Room 12'), findsOneWidget);
+      });
+
+      testWidgets('offers the overlapping event as a second page', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          _buildDashboard(
+            prefs: prefs,
+            shape: shape,
+            resolvedEvents: [
+              _resolvedEvent(
+                id: 30,
+                number: 0,
+                eventName: 'Próba',
+                roomName: 'Aula',
+                startTime: '10:00:00',
+                endTime: '13:15:00',
+              ),
+              _resolvedEvent(
+                id: 31,
+                number: 4,
+                subjectName: 'Math',
+                roomName: 'Room 12',
+                startTime: '10:15:00',
+                endTime: '11:00:00',
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+
+        expect(find.text('Próba'), findsOneWidget);
+        expect(find.text('Math'), findsNothing);
+
+        await tester.tap(find.text('Próba'));
+        await tester.pump();
+
+        expect(find.text('Math'), findsOneWidget);
+        expect(find.text('Próba'), findsNothing);
+
+        await tester.tap(find.text('Math'));
+        await tester.pump();
+
+        expect(find.text('Próba'), findsOneWidget);
+      });
+
+      testWidgets('shows no alternative page for a lone lesson', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          _buildDashboard(
+            prefs: prefs,
+            shape: shape,
+            resolvedEvents: [
+              _resolvedEvent(
+                subjectName: 'Math',
+                startTime: '10:15:00',
+                endTime: '11:00:00',
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+
+        await tester.tap(find.text('Math'));
+        await tester.pump();
+
+        expect(find.text('Math'), findsOneWidget);
       });
 
       testWidgets('shows NEXT for an upcoming lesson with its room', (

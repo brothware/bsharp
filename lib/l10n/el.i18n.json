@@ -79,6 +79,7 @@
     "nextLesson": "Επόμενο μάθημα",
     "noLessonsToday": "Δεν υπάρχουν μαθήματα σήμερα",
     "lessonNow": "Τώρα",
+    "orAlternative": "ή",
     "allLessonsEnded": "Όλα τα μαθήματα ολοκληρώθηκαν",
     "unreadMessages": "Αδιάβαστα μηνύματα",
     "unreadCount": "${count} αδιάβαστα",
