@@ -67,7 +67,7 @@ class _ActiveLesson extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${entry.number}',
+                entry.displayLessonNumber,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: cs.onPrimary,
                   fontWeight: FontWeight.bold,
@@ -106,7 +106,7 @@ class _ActiveLesson extends StatelessWidget {
                 ),
               ),
               Text(
-                entry.subjectName ?? t.schedule.lessonFallback,
+                entry.displayName,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: cs.onPrimaryContainer,
                   fontWeight: FontWeight.w600,

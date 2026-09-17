@@ -68,8 +68,7 @@ class LessonCard extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    entry.subjectName ??
-                                        t.schedule.lessonFallback,
+                                    entry.displayName,
                                     style: theme.textTheme.titleSmall?.copyWith(
                                       decoration: isCancelled
                                           ? TextDecoration.lineThrough

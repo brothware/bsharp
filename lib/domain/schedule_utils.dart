@@ -81,6 +81,14 @@ class ScheduleEntry {
   final bool isReplaced;
   final String? eventName;
 
+  bool get hasLessonNumber => number > 0;
+
+  String get displayName {
+    if (subjectName case final name? when name.isNotEmpty) return name;
+    if (eventName case final name? when name.isNotEmpty) return name;
+    return t.schedule.lessonFallback;
+  }
+
   String get displayLessonNumber {
     if (replacedLessonNumbers.isNotEmpty) {
       final sorted = [...replacedLessonNumbers]..sort();
@@ -90,7 +98,7 @@ class ScheduleEntry {
           ? '${sorted.first}-${sorted.last}'
           : sorted.join(', ');
     }
-    if (isReplaced) return '-';
+    if (isReplaced || !hasLessonNumber) return '-';
     return '$number';
   }
 

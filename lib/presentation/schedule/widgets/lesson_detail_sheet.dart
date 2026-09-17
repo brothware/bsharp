@@ -35,7 +35,7 @@ class LessonDetailSheet extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    entry.subjectName ?? t.schedule.lessonFallback,
+                    entry.displayName,
                     style: theme.textTheme.titleMedium,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -76,7 +76,7 @@ class LessonDetailSheet extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            entry.subjectName ?? t.schedule.lessonFallback,
+                            entry.displayName,
                             style: theme.textTheme.titleLarge?.copyWith(
                               decoration: entry.isCancelled
                                   ? TextDecoration.lineThrough
