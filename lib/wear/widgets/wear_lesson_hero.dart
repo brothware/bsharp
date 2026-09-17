@@ -137,6 +137,17 @@ class _WearLessonHeroState extends ConsumerState<WearLessonHero> {
   }
 }
 
+const double _ringDiameter = 148;
+const double _ringStroke = 6;
+
+/// The ring is a circle but the text is laid out in the square around it, so
+/// without this a long countdown - more minutes, or a language that spells
+/// them out - runs straight through the stroke. Inset to the largest square
+/// that fits inside the ring and the text can never reach it.
+const double _ringTextInset =
+    (_ringDiameter - (_ringDiameter - 2 * _ringStroke) * _inverseSqrt2) / 2;
+const double _inverseSqrt2 = 0.7071067811865476;
+
 class _WearHeroBody extends StatelessWidget {
   const _WearHeroBody({
     required this.eyebrow,
@@ -235,15 +246,22 @@ class _WearHeroBody extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(8),
         child: SizedBox(
-          width: 148,
-          height: 148,
+          width: _ringDiameter,
+          height: _ringDiameter,
           child: CustomPaint(
             painter: _ProgressRingPainter(
               progress: progress!,
               color: theme.colorScheme.primary,
               backgroundColor: wearTrackColor(theme.colorScheme),
             ),
-            child: Center(child: textColumn),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(_ringTextInset),
+                // A longer countdown or a wordier language shrinks the whole
+                // group rather than pushing it through the ring.
+                child: FittedBox(fit: BoxFit.scaleDown, child: textColumn),
+              ),
+            ),
           ),
         ),
       );
@@ -314,7 +332,7 @@ class _ProgressRingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const strokeWidth = 6.0;
+    const strokeWidth = _ringStroke;
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (math.min(size.width, size.height) - strokeWidth) / 2;
 

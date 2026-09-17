@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:bsharp/app/providers/dashboard_providers.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/providers/more_providers.dart';
@@ -117,6 +119,62 @@ void main() {
 
         expect(find.text('NOW'), findsOneWidget);
         expect(find.text('Room 12'), findsOneWidget);
+      });
+
+      testWidgets('the hero keeps its text inside the progress ring', (
+        tester,
+      ) async {
+        if (shape != WearScreenShape.round) return;
+
+        await tester.pumpWidget(
+          _buildDashboard(
+            prefs: prefs,
+            shape: shape,
+            resolvedEvents: [
+              _resolvedEvent(
+                subjectName: 'zajęcia praktyczno-techniczne',
+                roomName: 'Sala gimnastyczna 4.01',
+                startTime: '10:00:00',
+                endTime: '14:00:00',
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+
+        final ring = tester.getRect(
+          find.byWidgetPredicate(
+            (w) =>
+                w is CustomPaint &&
+                w.painter.runtimeType.toString() == '_ProgressRingPainter',
+          ),
+        );
+        final centre = ring.center;
+        // The painter insets by half its 6dp stroke, and text must clear the
+        // inner edge of that stroke.
+        final inner = (ring.shortestSide - 6) / 2 - 3;
+
+        final texts = [
+          find.text('zajęcia praktyczno-techniczne'),
+          find.textContaining('Ends in'),
+        ];
+        for (final text in texts) {
+          final box = tester.getRect(text);
+          for (final corner in [
+            box.topLeft,
+            box.topRight,
+            box.bottomLeft,
+            box.bottomRight,
+          ]) {
+            final dx = corner.dx - centre.dx;
+            final dy = corner.dy - centre.dy;
+            expect(
+              math.sqrt(dx * dx + dy * dy),
+              lessThanOrEqualTo(inner),
+              reason: '$text crosses the ring at $corner',
+            );
+          }
+        }
       });
 
       testWidgets('offers the overlapping event as a second page', (
