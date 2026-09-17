@@ -1453,10 +1453,10 @@ packages:
     dependency: "direct main"
     description:
       name: wear_os_scrollbar
-      sha256: "1096df844b06ad353c2542d138e6b2988c744659e97a898e7aebd003fc128d42"
+      sha256: cdb08dabd7e8bf0f6be0b61008ec35eb64e5654b1a377e00afcfefccba5dddf8
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.1"
   web:
     dependency: "direct main"
     description:

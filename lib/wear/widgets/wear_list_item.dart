@@ -1,10 +1,17 @@
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
+import 'package:flutter/rendering.dart';
 
-/// A row in a wear list, drawn smaller the closer it sits to the top or
+/// A row in a wear list, painted smaller the closer it sits to the top or
 /// bottom of the viewport.
+///
+/// The shrinking is a paint transform and never the row's extent. Tying the
+/// extent to the scroll offset - which is what `WearOsExpressiveItem` does
+/// with `Align(heightFactor:)` - makes a lazy list unable to settle: scrolling
+/// up forces the sliver to lay out rows above the viewport and correct the
+/// offset, the correction rescales every row, the new heights force another
+/// correction, and the list oscillates with no input at all.
 ///
 /// The glass is a circle, so a row near the edge has far less width to live in
 /// than one in the middle. Shrinking it there is what lets the screen keep a
@@ -31,10 +38,118 @@ class WearListItem extends StatelessWidget {
       return child;
     }
 
-    return WearOsExpressiveItem(
-      scrollController: controller,
-      minScale: _edgeScale,
-      child: child,
+    return _EdgeScaled(controller: controller, child: child);
+  }
+}
+
+/// Paints its child smaller towards the ends of the viewport.
+///
+/// The scale is read and applied at paint time, when the row's position is
+/// already settled, so it can never change what the row measured.
+class _EdgeScaled extends SingleChildRenderObjectWidget {
+  const _EdgeScaled({required this.controller, required super.child});
+
+  final ScrollController controller;
+
+  @override
+  _RenderEdgeScaled createRenderObject(BuildContext context) =>
+      _RenderEdgeScaled(controller);
+
+  @override
+  void updateRenderObject(BuildContext context, _RenderEdgeScaled render) {
+    render.controller = controller;
+  }
+}
+
+class _RenderEdgeScaled extends RenderProxyBox {
+  _RenderEdgeScaled(this._controller) {
+    _controller.addListener(markNeedsPaint);
+  }
+
+  ScrollController _controller;
+  ScrollController get controller => _controller;
+
+  set controller(ScrollController value) {
+    if (value == _controller) return;
+    _controller.removeListener(markNeedsPaint);
+    _controller = value;
+    _controller.addListener(markNeedsPaint);
+    markNeedsPaint();
+  }
+
+  @override
+  void detach() {
+    _controller.removeListener(markNeedsPaint);
+    super.detach();
+  }
+
+  @override
+  void attach(PipelineOwner owner) {
+    super.attach(owner);
+    _controller.addListener(markNeedsPaint);
+  }
+
+  /// Full size through the middle of the glass, shrinking to [_edgeScale] over
+  /// the outer quarter at each end.
+  double get _scale {
+    if (!hasSize || !_controller.hasClients) return 1;
+
+    final viewport = RenderAbstractViewport.maybeOf(this);
+    final halfViewport = _controller.position.viewportDimension / 2;
+    if (viewport == null || halfViewport <= 0) return 1;
+
+    final centredAt = viewport.getOffsetToReveal(this, 0.5).offset;
+    final fromCentre = (centredAt - _controller.position.pixels).abs();
+    final normalised = (fromCentre / halfViewport).clamp(0.0, 1.0);
+    if (normalised <= 0.5) return 1;
+
+    final intoEdge = (normalised - 0.5) / 0.5;
+    return 1 - (1 - _edgeScale) * Curves.easeIn.transform(intoEdge);
+  }
+
+  Matrix4 _transformAt(double scale) {
+    final centre = size.center(Offset.zero);
+    return Matrix4.identity()
+      ..translateByDouble(centre.dx, centre.dy, 0, 1)
+      ..scaleByDouble(scale, scale, 1, 1)
+      ..translateByDouble(-centre.dx, -centre.dy, 0, 1);
+  }
+
+  // A row painted smaller has to be hit where it is drawn, not where it was
+  // laid out, or a tap near the edge lands on the wrong part of the row.
+  @override
+  void applyPaintTransform(RenderBox child, Matrix4 transform) {
+    final scale = _scale;
+    if (scale != 1) transform.multiply(_transformAt(scale));
+    super.applyPaintTransform(child, transform);
+  }
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
+    final scale = _scale;
+    if (scale == 1) return super.hitTestChildren(result, position: position);
+
+    return result.addWithPaintTransform(
+      transform: _transformAt(scale),
+      position: position,
+      hitTest: (innerResult, innerPosition) =>
+          super.hitTestChildren(innerResult, position: innerPosition),
+    );
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    final scale = _scale;
+    if (scale == 1 || child == null) {
+      super.paint(context, offset);
+      return;
+    }
+
+    context.pushTransform(
+      needsCompositing,
+      offset,
+      _transformAt(scale),
+      (inner, innerOffset) => super.paint(inner, innerOffset),
     );
   }
 }
