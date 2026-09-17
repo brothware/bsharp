@@ -189,16 +189,19 @@ List<Widget> wearScaledChildren(
   ];
 }
 
-/// Room above and below a wear list so its first and last rows can be brought
-/// to the middle of the glass, where the screen is widest and the eye is.
+/// Room below a wear list so its last row can be brought to the middle of the
+/// glass, where the screen is widest and the eye is.
 ///
-/// Without it a list stops the moment its last row appears at the bottom
-/// edge, which is the worst place on a round screen to have to read it.
+/// Without it a list stops the moment its last row appears at the bottom edge,
+/// which is the worst place on a round screen to have to read it. There is no
+/// matching room on top: the first row is already where it should be when the
+/// list opens, and padding above it only buys the ability to scroll up into
+/// nothing.
 EdgeInsets wearListPadding(WearDisplay display) {
   if (!display.isRound) return EdgeInsets.zero;
 
   final content = display.sizeDp.shortestSide * (1 - 2 * kWearRoundInsetFactor);
-  return EdgeInsets.symmetric(vertical: content * _centringFraction);
+  return EdgeInsets.only(bottom: content * _centringFraction);
 }
 
 /// Enough to bring a row of ordinary height to the middle, not so much that

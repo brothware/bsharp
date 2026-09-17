@@ -42,6 +42,12 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   final _studentPickerScrollController = ScrollController();
 
   _SetupStep _step = _SetupStep.provider;
+
+  /// Whether the saved accounts have been read yet. Until they have, the
+  /// screen cannot know whether it is setting an account up or re-authorising
+  /// one, and offering the provider step in the meantime asks a returning user
+  /// a question they already answered.
+  bool _knowsWhetherSetUp = false;
   bool _isLoading = false;
   bool _obscurePassword = true;
   String? _errorMessage;
@@ -59,10 +65,18 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   Future<void> _checkNeedsSetup() async {
     final accountStorage = ref.read(accountStorageProvider);
     final accounts = await accountStorage.getAccounts();
-    if (accounts.isEmpty) return;
+    if (!mounted) return;
+
+    if (accounts.isEmpty) {
+      setState(() => _knowsWhetherSetUp = true);
+      return;
+    }
 
     final account = accounts.first;
-    _step = _SetupStep.school;
+    setState(() {
+      _knowsWhetherSetUp = true;
+      _step = _SetupStep.school;
+    });
     _schoolController.text = account.slug;
     _loginController.text = account.login;
     _password = account.password;
@@ -241,7 +255,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       body: WearScaffold(
         scrollController: _activeScrollController,
         child: switch (_step) {
-          _SetupStep.provider => _buildProviderStep(),
+          _SetupStep.provider =>
+            _knowsWhetherSetUp ? _buildProviderStep() : const SizedBox.shrink(),
           _SetupStep.school => _buildSchoolStep(),
           _SetupStep.username => _buildUsernameStep(),
           _SetupStep.password => _buildPasswordStep(),
