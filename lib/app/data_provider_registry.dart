@@ -49,7 +49,13 @@ List<SchoolDataProvider> allKnownProviders() => [
 /// asked the default backend for its data and showed none of it. Only swaps
 /// when the type actually differs: replacing a backend with an identical one
 /// would throw away the session it is holding.
-void restoreProviderForActiveAccount(Ref ref) {
+Future<void> restoreProviderForActiveAccount(Ref ref) async {
+  // Startup syncs as soon as the app knows it is signed in, which is before
+  // the stored accounts have finished loading. Reading them then gives null
+  // and the app carries on with the wrong backend for the whole sync.
+  await ref.read(activeSelectionProvider.future);
+  await ref.read(providerAccountsProvider.future);
+
   final account = ref.read(activeAccountProvider);
   if (account == null) return;
   if (ref.read(activeDataProviderProvider).id == account.providerType) return;

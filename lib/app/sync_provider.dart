@@ -48,13 +48,19 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
   Future<ChangeSet> sync() async {
     if (state == SyncStatus.syncing) return const ChangeSet();
 
-    restoreProviderForActiveAccount(ref);
+    // Claimed before the first await so a caller sees the sync start, and
+    // re-claimed after hydration, which reports the cache it restored.
+    final wasIdle = state == SyncStatus.idle;
+    state = SyncStatus.syncing;
 
-    final cache = ref.read(syncCacheProvider);
-    if (state == SyncStatus.idle) {
-      _hydrateFromCache(cache);
+    // Has to come before hydration: the cache belongs to a backend, and
+    // restoring a demo account's day from the last Mobireg sync is worse than
+    // showing nothing.
+    await restoreProviderForActiveAccount(ref);
+
+    if (wasIdle) {
+      _hydrateFromCache(ref.read(syncCacheProvider));
     }
-
     state = SyncStatus.syncing;
     try {
       final provider = ref.read(activeDataProviderProvider);
