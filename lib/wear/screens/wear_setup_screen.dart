@@ -281,7 +281,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
   static const _stepHeaderButtonWidth = 48.0;
 
-  Widget _buildStepHeader({required String label}) {
+  Widget _buildStepHeader({required String label, int maxLines = 1}) {
     final theme = Theme.of(context);
     final stepIndex = _credentialSteps.indexOf(_step);
     final canGoBack = stepIndex > 0;
@@ -293,16 +293,20 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           alignment: Alignment.center,
           children: [
             Padding(
-              // clear of the back button on both sides, so the label stays
-              // centred on the step rather than on whatever space is left
-              padding: const EdgeInsets.symmetric(
-                horizontal: _stepHeaderButtonWidth,
+              // Clear of the back button on both sides, so the label stays
+              // centred on the step rather than on whatever space is left.
+              // Only when there is one: a step without a back button was
+              // giving up 96dp of a 177dp watch and eliding its heading to
+              // fit what was left.
+              padding: EdgeInsets.symmetric(
+                horizontal: canGoBack ? _stepHeaderButtonWidth : 0,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   WearFittedText(
                     label,
+                    maxLines: maxLines,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: theme.colorScheme.primary,
@@ -459,7 +463,11 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
     return Column(
       children: [
-        _buildStepHeader(label: t.accounts.selectProvider),
+        // The phone's "Choose your e-gradebook provider" does not fit a watch
+        // header on one line and the header is only tall enough for one, so
+        // it came out as "Choo...". The list underneath names the providers,
+        // so the heading only has to say what the list is for.
+        _buildStepHeader(label: t.accounts.addAccount),
         const SizedBox(height: 8),
         Expanded(
           child: ListView(
