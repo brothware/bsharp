@@ -109,6 +109,9 @@ void main() {
     await tester.pumpWidget(_buildSetupApp(accountStorage));
     await tester.pump();
 
+    // Setup now welcomes first, then asks which backend.
+    await tester.tap(find.text('Add account'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Mobireg'));
     await tester.pump();
 

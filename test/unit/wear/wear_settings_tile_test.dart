@@ -83,6 +83,21 @@ void main() {
       expect(find.text('Cancel'), findsOneWidget);
     });
 
+    testWidgets('settings offers a way to add another account', (
+      tester,
+    ) async {
+      await tester.pumpWidget(await _buildApp());
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Add account'),
+        findsOneWidget,
+        reason:
+            'the watch could only ever hold the one account it was set '
+            'up with',
+      );
+    });
+
     testWidgets('logging out leaves the settings screen behind', (
       tester,
     ) async {
