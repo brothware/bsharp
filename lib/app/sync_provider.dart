@@ -48,6 +48,8 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
   Future<ChangeSet> sync() async {
     if (state == SyncStatus.syncing) return const ChangeSet();
 
+    restoreProviderForActiveAccount(ref);
+
     final cache = ref.read(syncCacheProvider);
     if (state == SyncStatus.idle) {
       _hydrateFromCache(cache);
