@@ -38,6 +38,26 @@ Future<Widget> _buildApp() async {
 
 void main() {
   group('BSharpWearApp theme', () {
+    testWidgets('the scaffold behind a screen is black too', (tester) async {
+      await tester.pumpWidget(await _buildApp());
+      await tester.pump();
+
+      final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
+
+      expect(
+        app.darkTheme!.scaffoldBackgroundColor,
+        const Color(0xFF000000),
+        reason:
+            'the theme flattens every surface to black but left the '
+            'scaffold on the base colour, so it showed at the foot of any '
+            'screen whose content did not reach the bottom',
+      );
+      expect(
+        app.theme!.scaffoldBackgroundColor,
+        app.theme!.colorScheme.surface,
+      );
+    });
+
     testWidgets('dark wear theme paints surface true black', (tester) async {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
