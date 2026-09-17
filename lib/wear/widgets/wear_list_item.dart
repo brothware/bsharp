@@ -91,16 +91,29 @@ class _RenderEdgeScaled extends RenderProxyBox {
 
   /// Full size through the middle of the glass, shrinking to [_edgeScale] over
   /// the outer quarter at each end.
+  ///
+  /// Measured against the viewport this row is painted into rather than the
+  /// controller: while a screen swaps one list for another the controller is
+  /// briefly attached to both, and asking it for `position` then throws - in
+  /// the middle of paint, which leaves the whole list drawing nothing.
   double get _scale {
-    if (!hasSize || !_controller.hasClients) return 1;
+    if (!hasSize) return 1;
 
-    final viewport = RenderAbstractViewport.maybeOf(this);
-    final halfViewport = _controller.position.viewportDimension / 2;
-    if (viewport == null || halfViewport <= 0) return 1;
+    final RenderObject? viewport = RenderAbstractViewport.maybeOf(this);
+    if (viewport is! RenderBox) return 1;
+    if (!viewport.hasSize) return 1;
 
-    final centredAt = viewport.getOffsetToReveal(this, 0.5).offset;
-    final fromCentre = (centredAt - _controller.position.pixels).abs();
-    final normalised = (fromCentre / halfViewport).clamp(0.0, 1.0);
+    final halfViewport = viewport.size.height / 2;
+    if (halfViewport <= 0) return 1;
+
+    final centre = localToGlobal(
+      size.center(Offset.zero),
+      ancestor: viewport,
+    ).dy;
+    final normalised = ((centre - halfViewport).abs() / halfViewport).clamp(
+      0.0,
+      1.0,
+    );
     if (normalised <= 0.5) return 1;
 
     final intoEdge = (normalised - 0.5) / 0.5;

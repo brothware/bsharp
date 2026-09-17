@@ -7,6 +7,7 @@ import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -57,13 +58,14 @@ Widget _buildScreen({
   List<ResolvedEvent> resolvedEvents = const [],
   List<CustomEvent> customEvents = const [],
   List<({int customEventId, DateTime date})> customEventOccurrences = const [],
+  WearScreenShape shape = WearScreenShape.rectangular,
 }) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
-      wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
+      wearScreenShapeProvider.overrideWith((_) => shape),
       resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
       customEventsProvider.overrideWith(() => _FakeCustomEvents(customEvents)),
       customEventOccurrencesProvider.overrideWith(
@@ -127,6 +129,45 @@ void main() {
 
       expect(find.byIcon(Icons.chevron_left), findsOneWidget);
       expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+    });
+
+    testWidgets('a day with lessons still draws them after an empty day', (
+      tester,
+    ) async {
+      final today = DateTime.now();
+      final tomorrow = today.add(const Duration(days: 1));
+
+      await tester.pumpWidget(
+        _buildScreen(
+          prefs: prefs,
+          shape: WearScreenShape.round,
+          resolvedEvents: [_resolvedEvent(date: today)],
+        ),
+      );
+      await tester.pump();
+
+      expect(find.byType(ListView), findsOneWidget);
+      final withLessons = tester.getSize(find.byType(ListView));
+
+      // Forward to a day with nothing on it, then straight back.
+      await tester.tap(find.byIcon(Icons.chevron_right));
+      await tester.pumpAndSettle();
+      expect(find.text('No lessons'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.chevron_left));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('No lessons'),
+        findsNothing,
+        reason: 'the day has a lesson on it, ${tomorrow.day} did not',
+      );
+      expect(
+        tester.getSize(find.byType(ListView)),
+        withLessons,
+        reason: 'the list is back but it is drawing nothing',
+      );
+      expect(find.byType(WearListItem), findsWidgets);
     });
 
     testWidgets('tapping forward shows next day items, back returns', (
