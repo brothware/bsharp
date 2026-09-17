@@ -43,6 +43,22 @@ List<SchoolDataProvider> allKnownProviders() => [
   DemoDataProvider(),
 ];
 
+/// Points the app at whichever backend the saved account belongs to.
+///
+/// Nothing did this on a cold start, so an app reopened on a demo account
+/// asked the default backend for its data and showed none of it. Only swaps
+/// when the type actually differs: replacing a backend with an identical one
+/// would throw away the session it is holding.
+void restoreProviderForActiveAccount(Ref ref) {
+  final account = ref.read(activeAccountProvider);
+  if (account == null) return;
+  if (ref.read(activeDataProviderProvider).id == account.providerType) return;
+
+  ref.read(activeDataProviderProvider.notifier).value = createProviderForType(
+    account.providerType,
+  );
+}
+
 final _demoActivatorProvider = Provider<_DemoActivator>((ref) {
   return _DemoActivator(ref);
 });
