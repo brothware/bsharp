@@ -452,6 +452,7 @@ jobs:
           tracks: wear:internal
           releaseName: v${{ needs.version.outputs.version }}
           status: completed
+          changesNotSentForReview: true
 
   # Both uploads edit the same Play app, and Play refuses to commit an edit if
   # the app changed while that edit was open. Waiting for the wear upload keeps
@@ -481,6 +482,7 @@ jobs:
           tracks: internal
           releaseName: v${{ needs.version.outputs.version }}
           status: completed
+          changesNotSentForReview: true
 
       - name: Let the app settle before opening another edit
         if: steps.upload.outcome == 'failure'
@@ -496,6 +498,7 @@ jobs:
           tracks: internal
           releaseName: v${{ needs.version.outputs.version }}
           status: completed
+          changesNotSentForReview: true
 
   deploy-proxy:
     runs-on: ubuntu-latest
