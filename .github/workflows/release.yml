@@ -408,14 +408,29 @@ jobs:
             - **WearOS APK** - `bsharp-wear-${{ needs.version.outputs.version }}.apk`
             - **Web** - `bsharp-web-${{ needs.version.outputs.version }}.tar.gz`
             - **iOS** - `bsharp-ios-${{ needs.version.outputs.version }}.tar.gz` (unsigned)
-          files: |
+          draft: true
+          generate_release_notes: true
+
+      - name: Attach the build artifacts
+        uses: nick-fields/retry@v4
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          command: >-
+            gh release upload v${{ needs.version.outputs.version }} --clobber
             artifacts/bsharp-${{ needs.version.outputs.version }}.apk
             artifacts/bsharp-${{ needs.version.outputs.version }}.aab
             artifacts/bsharp-wear-${{ needs.version.outputs.version }}.apk
             artifacts/bsharp-wear-${{ needs.version.outputs.version }}.aab
             artifacts/bsharp-web-${{ needs.version.outputs.version }}.tar.gz
             artifacts/bsharp-ios-${{ needs.version.outputs.version }}.tar.gz
-          generate_release_notes: true
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit v${{ needs.version.outputs.version }} --draft=false
 
   deploy-play-wear:
     runs-on: ubuntu-latest
