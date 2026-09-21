@@ -19,6 +19,17 @@ const _sectionRoutes = <ChangeCategory, String>{
   ChangeCategory.bulletins: AppRoutes.bulletins,
 };
 
+/// Whether the tab shell carries [route].
+///
+/// The shell walks back to the dashboard on its own. A section outside it
+/// would be the whole stack when a notification opened it, leaving back
+/// nowhere to go but out of the app, so such a section is stacked on the
+/// dashboard instead.
+bool _sitsInTabShell(GoRouter router, String route) => router.configuration
+    .findMatch(Uri.parse(route))
+    .matches
+    .any((match) => match is ShellRouteMatch);
+
 class NotificationRouter extends NotificationTapHandler {
   NotificationRouter({required super.ref, required this.routerProvider});
 
@@ -30,7 +41,13 @@ class NotificationRouter extends NotificationTapHandler {
     final route = _sectionRoutes[category];
     if (router == null || route == null) return false;
 
-    router.go(route);
+    if (_sitsInTabShell(router, route)) {
+      router.go(route);
+      return true;
+    }
+
+    router.go(AppRoutes.dashboard);
+    unawaited(router.push<void>(route));
     return true;
   }
 
