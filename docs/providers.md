@@ -14,7 +14,7 @@ Defined in [`lib/domain/school_data_provider.dart`](../lib/domain/school_data_pr
 | `capabilities` | `Set<DataProviderCapability>` declaring supported features |
 | `requiresCredentials` | Whether the provider needs login credentials |
 | `supports(cap)` | Convenience check: `capabilities.contains(cap)` |
-| `authenticate(...)` | Establish a session with `school`, `login`, `passwordHash` |
+| `authenticate(...)` | Establish a session with `school`, `login`, `password` (plaintext) |
 | `loadSchoolData(ref, studentId:)` | Populate Riverpod state with grades, schedule, attendance, etc. |
 | `hydrateFromCache(ref, cache)` | Restore previously cached state, returning whether anything was restored |
 | `loadMessages(ref)` | Load inbox, sent, and trash messages |
@@ -26,9 +26,10 @@ Defined in [`lib/domain/school_data_provider.dart`](../lib/domain/school_data_pr
 | `restoreMessage(messageId)` | Restore a message from trash |
 | `sendMessage(...)` | Send a message with `recipientIds`, `title`, `content`, optional `previousMessageId` |
 | `loadMoreInbox(skip)` | Paginated inbox loading |
-| `hashPassword(password)` | Hash a plaintext password for this system |
-| `validateCredentials(...)` | Check credentials without full login, returns `Result<void>` |
-| `fetchStudents(...)` | List available students for the authenticated account |
+| `downloadAttachment(url, filename)` | Download a message attachment, returning the saved path |
+| `probeAccount(...)` | Check credentials and list the account's students in one call, returns `Result<AccountProbe>` (`schoolName`, `students`) |
+| `registerPushToken(...)` | Register the device's FCM token with the backend, returns whether it was accepted |
+| `parseFcmMessage(message)` | Turn a push message into a local notification (default: none) |
 
 ## The normalisation contract
 
@@ -129,33 +130,20 @@ class MySystemDataProvider implements SchoolDataProvider {
 Future<void> authenticate({
   required String school,
   required String login,
-  required String passwordHash,
+  required String password,
 }) async {
   // establish session, store tokens, etc.
 }
 
 @override
-String hashPassword(String password) {
-  // return hashed password for your system's auth scheme
-}
-
-@override
-Future<Result<void>> validateCredentials({
+Future<Result<AccountProbe>> probeAccount({
   required String school,
   required String login,
-  required String passwordHash,
+  required String password,
 }) async {
-  // verify credentials without full login
-  // return Result.success(null) or Result.failure(AppFailure.wrongCredentials())
-}
-
-@override
-Future<List<Student>> fetchStudents({
-  required String school,
-  required String login,
-  required String passwordHash,
-}) async {
-  // return list of students linked to this account
+  // verify credentials and list the students linked to the account
+  // return Result.success(AccountProbe(schoolName: ..., students: ...))
+  // or Result.failure(InvalidCredentials())
 }
 ```
 
@@ -196,7 +184,7 @@ Add your provider to `lib/app/data_provider_registry.dart`:
 
 | Provider | File | Capabilities | Credentials | Notes |
 |----------|------|-------------|-------------|-------|
-| **Mobireg** | `lib/data/providers/mobireg/mobireg_data_provider.dart` | All | Yes (MD5 password hash) | Production provider |
+| **Mobireg** | `lib/data/providers/mobireg/mobireg_data_provider.dart` | All | Yes (plaintext password, exchanged for a JWT) | Production provider |
 | **Demo** | `lib/data/providers/demo/demo_data_provider.dart` | All except `sendMessages` | No (synthetic data) | Authors canonical data directly |
 
 Mobireg provider documentation (API details, data model, error codes) is in [`docs/providers/mobireg/`](providers/mobireg/README.md).
@@ -211,7 +199,7 @@ cd lib/data/providers/mobireg/test-mock && npm install && PORT=8090 npm start
 flutter run --dart-define=MOBIREG_BASE_URL=http://localhost:8090
 ```
 
-When set, all four mobireg API clients (MobileSync, Portal, Poczta, WebLogin) will use this base URL instead of the production mobireg.pl endpoints. When unset, behaviour is unchanged.
+When set, both mobireg API clients (app API, Poczta) will use this base URL instead of the production mobireg.pl endpoints. When unset, behaviour is unchanged.
 
 ## Domain Entities
 

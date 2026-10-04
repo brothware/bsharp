@@ -104,6 +104,11 @@ view=<name>&format=json&token=<jwt>&JWTToken=<jwt>&pupilId=<id>&<extra params>
 | Unknown view | 200 | envelope, `data: {"errno":103,"message":"No view exist"}` |
 | Server-side failure (for example `attendances` with these parameters) | 500 | empty |
 
+The responses, including the 401 error bodies, are served with
+`Content-Type: text/html` although the body is JSON. BSharp's mock server
+(`lib/data/providers/mobireg/test-mock/`) does the same, so clients must
+decode the body themselves instead of trusting the content type.
+
 **errno 102 no longer means "session expired"** as it did with the portal sid.
 Expiry is now HTTP 401. A 102 means the request itself is wrong, usually the
 `pupilId`.
@@ -217,19 +222,25 @@ not proven by a live push.
 There is no diff sync any more (njson.php's `lmt` / `last_end_date`): the
 client refetches whole views and relies on `ttlFresh` plus push invalidation.
 
-## Mapping BSharp's njson.php data onto app.php
+## How BSharp uses it
 
-| BSharp state (from `SyncDataParser`) | New source | Gaps |
+`MobiregDataProvider` is a client of exactly this API; the legacy mobile-sync
+and portal clients are gone. Where each piece of BSharp state comes from:
+
+| BSharp state | Source | Notes |
 |---|---|---|
-| students | `users.pupils` | no `sex`, no `users_edu_id` (`ParentStudents` on njson.php still works for both, for now) |
-| teachers | `marks.teachers`, `tests.teachers`, `marks.subjects[].teachers` | timetable events carry teacher **names** only |
-| subjects | `subjects` | - |
-| terms | `terms` | - |
-| events, event types, rooms, event subjects | `timetable-events` (already resolved: subject name, room name, teacher names, cancel/substitution flags) | no type/room/teacher ids to join on; `MobiregScheduleResolver` becomes mostly unnecessary |
-| attendances, attendance types | per lesson: `timetable-events.attendanceLabel`; statistics: `attendance-stats.records` (`ab`/`ca`/`tn`); unexcused list: `justification-events` | no per-record id; types are derived from `ab`/`ca`/`tn` |
-| marks, mark groups, kinds | `marks` per `termId` (`grades`, `markGroups`, `kindLabel`, `bgColor`) | no mark scales; `weight`, `count_to_avg` are parsed by the official app but were absent in the captured data |
-| term / final marks | `marks.subjects[].value`, `isFinal`, `mtTeacherId` | - |
-| bulletins (portal) | `announcements` (or `bulletins`, which still exists) | `announcements` adds polls and `pending` |
-| tests, homeworks, reprimands, changelog (portal) | same view names on app.php | `tests` takes no date range here |
-| FCM token upload (njson.php `ParentStudents` + `token`) | view `register-fcm`, `token` | - |
-| `validateCredentials` (njson.php `Settings`) | `auth.php` `status == "OK"` | - |
+| students, enabled modules, mail token | `users` (`pupils`, `appConfig.modules`, `messagesToken`) | cached on the session; no `sex` or `users_edu_id` |
+| teachers | `marks.teachers`, `tests.teachers` | timetable events carry teacher names only |
+| subjects, terms | `subjects`, `terms` | the school year is the term with `isYear=1` |
+| lessons | `timetable-events` for the whole school year in one call | already resolved: subject, room, teacher names, cancel and substitution flags |
+| attendance | per lesson `timetable-events.attendanceLabel`; statistics from `attendance-stats.records` | types are derived from `ab`/`ca`/`tn` |
+| marks | `marks` per semester `termId` | `weight` and `count_to_avg` were absent in captured data |
+| tests, reprimands | `tests`, `reprimands` (`limit` 100) | `tests` takes no date range |
+| announcements | `announcements` | read state and polls included |
+| FCM token upload | view `register-fcm`, `token` | `MobiregDataProvider.registerPushToken` |
+| credential check, account probe | `auth.php` `status == "OK"`, then `users` | `MobiregDataProvider.probeAccount` |
+| mail | `poczta.mobireg.pl` | SSO with `users.messagesToken` |
+
+Views of modules the school has switched off are not requested. There is no
+diff sync: every load refetches the views and the raw payloads are cached for
+offline start-up (`MobiregViewCache`).

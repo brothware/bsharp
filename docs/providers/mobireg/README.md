@@ -8,102 +8,96 @@ Implementation documentation for the Mobireg data provider (`MobiregDataProvider
 
 ## APIs
 
-`MobiregDataProvider` connects to five independent Mobireg APIs:
+`MobiregDataProvider` talks to two Mobireg services:
 
 | API | Dart Data Source | Purpose |
 |-----|-----------------|---------|
-| **Mobile Sync** (`njson.php`) | `MobileSyncDataSource` | Full data sync — 36 tables in a single response |
-| **Mobile Messages** (`messages.php`) | `MobileSyncDataSource` | Read/send messages via mobile endpoint |
-| **Schedules** (`schedules.php`) | `MobileSyncDataSource` | Subject curriculum database (SQLite download) |
-| **Parent Portal** (`api.php`) | `PortalDataSource` | 12 read views + 5 mutations, one session shared by every call |
-| **Poczta** (`poczta.mobireg.pl`) | `PocztaDataSource` | Full messaging: inbox, send, search, attachments |
+| **App API** (`auth.php` + `app.php`) | `AppApiDataSource`, `AppApiSession` | Login and every read view: account, terms, subjects, marks, timetable, attendance, tests, reprimands, announcements, push token registration |
+| **Poczta** (`poczta.mobireg.pl`) | `PocztaDataSource` | Full messaging: inbox, send, search, attachments, unread count |
 
-> Since October 2026 `njson.php` answers HTTP 500 to every data sync. The
-> official app 3.x uses `auth.php` + `app.php` instead; see
-> [app-api.md](app-api.md).
+The app API is the one the official MobiReg 3.x app uses; the full contract
+(transport, envelope, every view) is in [app-api.md](app-api.md).
 
 School base URL pattern: `https://mobireg.pl/{school-slug}/`
 
 ## Authentication
 
-The mobile APIs take the MD5-hashed password (no salt, lowercase hex); the
-portal login takes the **plaintext** password as `edpass` and hashes it
-server-side. Authentication differs per API:
-
 | API | Mechanism | Implementation |
 |-----|-----------|----------------|
-| Mobile Sync / Messages / Schedules | Per-request credentials (`login=eparent&pass=eparent` + user credentials) | `MobileAuthInterceptor` |
-| Parent Portal | Login redirect hands out a single-use token; the `users` view trades it for a lasting `sid` | `PortalSessionManager` |
-| Poczta | SSO via `messagesToken` from Portal `users` view, then Laravel session + CSRF | `PocztaDataSource.authenticate()` |
+| App API | `auth.php` takes the **plaintext** password and returns a JWT (30 days); every `app.php` call carries it | `AppApiDataSource.login`, `AppApiSession` |
+| Poczta | SSO via `messagesToken` from the `users` view, then Laravel session + CSRF | `PocztaDataSource.establishSession()` |
 
-The `User-Agent: Andreg {device_id}` header is required for Mobile API requests — authentication fails without it.
+### App API session
 
-### Portal session
+`AppApiSession` logs in lazily, keeps the JWT, and serialises every call
+through a `SerialQueue`. HTTP 401 from `app.php` (expired or invalid token)
+maps to `SessionExpired`; the session then logs in once more with the stored
+password and retries the call a single time. `AppApiSessionRegistry` hands out
+one session per `school/login`, so every caller on an account shares one login
+and one JWT, as the official app does.
 
-The token in the login redirect authenticates exactly one `api.php` call, and
-every login invalidates the session the previous one opened. The lasting handle
-is the `sid` the `users` view returns: it is sent alongside `token` and
-`callerHost` on every later call and stays valid until the server answers
-`errno 102`. `PortalSessionManager` opens one session, hands it to every view,
-and logs in again only on that error — a login per view reads as an attack to
-the server's monitoring.
+The `users` view result is cached on the session (`AppApiSession.account()`)
+because it carries the pupil list, the enabled modules, `messagingUrl` and
+`messagesToken`.
 
 ## Data Flow
 
-`MobiregDataProvider.loadSchoolData()` performs a full sync:
+`MobiregDataProvider.loadSchoolData()` fetches the views for one pupil:
 
-1. **Authenticate** — open the Portal session (login + `users`) and the Poczta session
-2. **Fetch** — call Mobile Sync API with a -100/+100 day window
-3. **Parse** — `SyncDataParser` deserializes the 36-table JSON response into domain entities
-4. **Populate** — write parsed entities into Riverpod state providers
+1. **Account**: `users` gives the pupils, the enabled school modules and the
+   mail SSO token
+2. **Fetch**: `terms`, `subjects`, `marks` per semester, `timetable-events`
+   for the whole school year in one call, `attendance-stats`, `tests`,
+   `reprimands`, `announcements`; views of disabled modules are skipped
+3. **Parse**: the functions in `lib/data/providers/mobireg/parsers/`
+   deserialize each view into domain entities
+4. **Populate**: write the entities into Riverpod state providers and store
+   the raw views in the sync cache (`MobiregViewCache`) for
+   `hydrateFromCache`
 
-Each sync record includes an `action` field (`I`/`U`/`D`) for incremental updates against the local Drift database.
+A failed request throws out of `loadSchoolData` instead of leaving partial
+state behind, and a payload that does not match the documented shape raises a
+`FormatException`.
 
 ## Debugging Cheatsheet
 
 ```bash
 SCHOOL="your-school-slug"
-LOGIN="your-login"
-MD5_PASS=$(echo -n 'your-password' | md5sum | cut -d' ' -f1)
+BASE="https://mobireg.pl/${SCHOOL}/modules/api"
+AGENT='MobiReg/3.1.3 (296c220)'
 
-# Portal: log in (PLAINTEXT password) — the token dies on its first use,
-# so chain this with the users call below
-TOKEN=$(curl -s -o /dev/null -w '%{redirect_url}' \
-  "https://mobireg.pl/${SCHOOL}/index.php?action=login" \
-  -X POST -d "queryString=&edlogin=${LOGIN}&edpass=your-password&resolutions=1920" \
-  | grep -oP '[a-f0-9]{32}$')
+# Log in with the PLAINTEXT password; the JWT lives 30 days
+JWT=$(curl -s "${BASE}/auth.php" -H 'Content-Type: application/json' \
+  -d '{"login":"your-login","password":"your-password"}' \
+  | python3 -c 'import sys,json;print(json.load(sys.stdin)["token"])')
 
-# Portal: trade the token for the session id
-SID=$(curl -s 'https://rodzic.mobireg.pl/api.php' \
-  -X POST -d "school=${SCHOOL}&token=${TOKEN}&sid=&callerHost=mobireg.pl&view=users" \
-  | python3 -c 'import sys,json;print(json.load(sys.stdin)["sid"])')
-
-# Portal: fetch any number of views with that one session
-curl -s --compressed 'https://rodzic.mobireg.pl/api.php' \
-  -X POST -d "school=${SCHOOL}&token=${TOKEN}&sid=${SID}&callerHost=mobireg.pl&view=tests&pupilId=${PUPIL_ID}&dateFrom=2026-09-01&dateTo=2027-08-31" \
+# The account view lists the pupils (no pupilId needed)
+curl -s "${BASE}/app.php" -H "User-Agent: ${AGENT}" \
+  -d "view=users&format=json&token=${JWT}&JWTToken=${JWT}" \
   | python3 -m json.tool
 
-# Mobile Sync: full sync
-curl -s --compressed -H 'User-Agent: Andreg 12345' \
-  "https://mobireg.pl/${SCHOOL}/modules/api/njson.php" \
-  -X POST -d "login=eparent&pass=eparent&device_id=12345&app_version=42&parent_login=${LOGIN}&parent_pass=${MD5_PASS}&start_date=2025-11-20&end_date=2026-06-07&get_all_mark_groups=1&student_id=1" \
+# Every other view needs pupilId; a wrong one answers errno 102
+curl -s "${BASE}/app.php" -H "User-Agent: ${AGENT}" \
+  -d "view=tests&format=json&token=${JWT}&JWTToken=${JWT}&pupilId=${PUPIL_ID}" \
   | python3 -m json.tool
 ```
 
-Portal views: `users`, `timetable-events`, `marks`, `subjects`, `terms`, `attendances`, `tests`, `homeworks`, `reprimands`, `bulletins`, `bulletin`, `changelog`
+The view list and parameters are in [app-api.md](app-api.md#views).
 
 ## Related Code
 
 | Component | File |
 |-----------|------|
 | Provider interface | `lib/domain/school_data_provider.dart` |
-| Mobireg provider | `lib/data/providers/mobireg_data_provider.dart` |
-| Mobile Sync data source | `lib/data/data_sources/remote/mobile_sync_data_source.dart` |
-| Portal data source | `lib/data/data_sources/remote/portal_data_source.dart` |
+| Mobireg provider | `lib/data/providers/mobireg/mobireg_data_provider.dart` |
+| View parsers | `lib/data/providers/mobireg/parsers/` |
+| View cache | `lib/data/providers/mobireg/mobireg_view_cache.dart` |
+| FCM message handler | `lib/data/providers/mobireg/mobireg_message_handler.dart` |
+| App API data source | `lib/data/data_sources/remote/app_api_data_source.dart` |
+| App API session | `lib/data/data_sources/remote/app_api_session.dart` |
+| Session registry | `lib/data/data_sources/remote/app_api_session_registry.dart` |
 | Poczta data source | `lib/data/data_sources/remote/poczta_data_source.dart` |
-| Sync response parser | `lib/data/services/sync_data_parser.dart` |
-| Mobile auth interceptor | `lib/core/network/interceptors/mobile_auth_interceptor.dart` |
 | Error mapping interceptor | `lib/core/network/interceptors/error_mapping_interceptor.dart` |
-| Error codes → AppFailure | [error-codes.md](error-codes.md) |
-| Sync data model (36 tables) | [data-model.md](data-model.md) |
-| App API (`auth.php` + `app.php`) | [app-api.md](app-api.md) |
+| Error codes to AppFailure | [error-codes.md](error-codes.md) |
+| App API contract | [app-api.md](app-api.md) |
+| Mock server | `lib/data/providers/mobireg/test-mock/` |

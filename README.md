@@ -88,7 +88,7 @@ Key technical choices:
 | Document | Description |
 |----------|-------------|
 | [Mobireg Provider](docs/providers/mobireg/README.md) | Mobireg provider implementation guide |
-| [Data Model](docs/providers/mobireg/data-model.md) | Entity relationships and synced tables |
+| [App API](docs/providers/mobireg/app-api.md) | The auth.php + app.php contract: envelope, views, push |
 | [Error Codes](docs/providers/mobireg/error-codes.md) | API error codes and app failure mapping |
 | [Adding Data Providers](docs/providers.md) | Guide to implementing new e-Grade system providers |
 
