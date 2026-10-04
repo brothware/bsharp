@@ -135,6 +135,55 @@ void main() {
     });
   });
 
+  group('cache', () {
+    late AppDatabase database;
+
+    setUp(() => database = AppDatabase(NativeDatabase.memory()));
+    tearDown(() => database.close());
+
+    Future<String> translate(
+      TranslationService service, {
+      required bool isHtml,
+    }) async {
+      final result = await service.translate(
+        text: 'Szanowni',
+        targetLang: 'en',
+        sourceLang: 'pl',
+        isHtml: isHtml,
+      );
+      return (result as Success<String>).value;
+    }
+
+    test('never serves one engine the other engine entry', () async {
+      final mlKit = _FakeMlKit((text) => 'from ML Kit');
+      final deepL = _FakeDeepL();
+
+      final first = await translate(
+        TranslationService(database: database, mlKit: mlKit),
+        isHtml: false,
+      );
+      final second = await translate(
+        TranslationService(database: database, mlKit: mlKit, deepL: deepL),
+        isHtml: false,
+      );
+
+      expect(first, 'from ML Kit');
+      expect(second, '<p><b>Dear all</b></p>');
+      expect(deepL.sent, hasLength(1));
+    });
+
+    test('keeps HTML and plain requests apart', () async {
+      final deepL = _FakeDeepL();
+      final service = TranslationService(database: database, deepL: deepL);
+
+      await translate(service, isHtml: false);
+      await translate(service, isHtml: true);
+      await translate(service, isHtml: true);
+
+      expect(deepL.sent.map((sent) => sent.isHtml), [false, true]);
+    });
+  });
+
   test('DeepL gets the original HTML and returns HTML', () async {
     final deepL = _FakeDeepL();
     final service = TranslationService(deepL: deepL);

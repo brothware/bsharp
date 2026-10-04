@@ -65,7 +65,12 @@ class TranslationService {
     String sourceLang,
     bool isHtml,
   ) async {
-    final hash = _sourceHash(text, targetLang);
+    final hash = _sourceHash(
+      text,
+      targetLang,
+      engine: preferredEngine,
+      isHtml: isHtml,
+    );
     final db = _database;
 
     if (db != null) {
@@ -173,8 +178,13 @@ class TranslationService {
     );
   }
 
-  static String _sourceHash(String text, String targetLang) {
-    final bytes = utf8.encode('$text:$targetLang');
+  static String _sourceHash(
+    String text,
+    String targetLang, {
+    required TranslationEngine engine,
+    required bool isHtml,
+  }) {
+    final bytes = utf8.encode('${engine.name}:$isHtml:$text:$targetLang');
     return sha256.convert(bytes).toString();
   }
 }
