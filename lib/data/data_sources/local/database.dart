@@ -119,6 +119,7 @@ class AppDatabase extends _$AppDatabase {
         for (final tableName in _removedTableNames) {
           await m.deleteTable(tableName);
         }
+        await delete(ignoredAttendances).go();
       }
     },
   );

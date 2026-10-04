@@ -22,7 +22,7 @@ void main() {
     await db.close();
   });
 
-  test('migrating from v4 keeps user data in the kept tables', () async {
+  test('migrating from v4 keeps user data, drops dismissed alerts', () async {
     const eventTitle = 'Dentist';
     const ignoredAttendanceId = 77;
     const translatedText = 'czesc';
@@ -59,7 +59,7 @@ void main() {
     final translations = await db.select(db.translationCacheEntries).get();
     expect(events.map((row) => row.title), [eventTitle]);
     expect(occurrences, hasLength(1));
-    expect(ignored.map((row) => row.attendanceId), [ignoredAttendanceId]);
+    expect(ignored, isEmpty);
     expect(translations.map((row) => row.translatedText), [translatedText]);
     await db.close();
   });
