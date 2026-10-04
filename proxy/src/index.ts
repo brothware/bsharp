@@ -2,12 +2,11 @@ const ALLOWED_ORIGINS = [
   'https://brothware.github.io',
 ];
 
-const USER_AGENT = 'Andreg 12345';
+const USER_AGENT = 'MobiReg/3.1.3 (296c220)';
 const ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
 
 const UPSTREAM_REWRITES: [RegExp, string][] = [
   [/^https?:\/\/poczta\.mobireg\.pl(\/.*)?$/, '/poczta$1'],
-  [/^https?:\/\/rodzic\.mobireg\.pl(\/.*)?$/, '/portal$1'],
 ];
 
 function isAllowedOrigin(origin: string | null): boolean {
@@ -41,29 +40,24 @@ interface Route {
 
 const routes: Route[] = [
   {
-    pattern: /^\/sync\/([^/]+)\/(.+)$/,
-    buildUrl: (m) => `https://mobireg.pl/${m[1]}/modules/api/${m[2]}`,
-    addUserAgent: true,
+    pattern: /^\/sync\/([^/]+)\/auth\.php$/,
+    buildUrl: (m) => `https://mobireg.pl/${m[1]}/modules/api/auth.php`,
+    addUserAgent: false,
   },
   {
-    pattern: /^\/portal\/(.+)$/,
-    buildUrl: (m) => `https://rodzic.mobireg.pl/${m[1]}`,
-    addUserAgent: false,
+    pattern: /^\/sync\/([^/]+)\/app\.php$/,
+    buildUrl: (m) => `https://mobireg.pl/${m[1]}/modules/api/app.php`,
+    addUserAgent: true,
   },
   {
     pattern: /^\/poczta\/(.+)$/,
     buildUrl: (m) => `https://poczta.mobireg.pl/${m[1]}`,
-    addUserAgent: false,
+    addUserAgent: true,
   },
   {
     pattern: /^\/poczta\/?$/,
     buildUrl: () => `https://poczta.mobireg.pl/`,
-    addUserAgent: false,
-  },
-  {
-    pattern: /^\/login\/([^/]+)\/(.+)$/,
-    buildUrl: (m) => `https://mobireg.pl/${m[1]}/${m[2]}`,
-    addUserAgent: false,
+    addUserAgent: true,
   },
 ];
 
@@ -75,7 +69,7 @@ function rewriteLocationHeader(
   if (!location) return;
 
   for (const [pattern, replacement] of UPSTREAM_REWRITES) {
-    const rewritten = location.replace(pattern, `${proxyOrigin}${replacement}`);
+    const rewritten: string = location.replace(pattern, `${proxyOrigin}${replacement}`);
     if (rewritten !== location) {
       headers.set('location', rewritten);
       return;
