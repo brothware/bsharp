@@ -21,6 +21,30 @@ void main() {
     test('a payload that is not an object is a FormatException', () {
       expect(() => parseTestItems(<Object>[]), throwsFormatException);
     });
+
+    test('leaves an unknown subject name alone', () {
+      final tests = parseTestItems({
+        'items': [
+          {
+            'id': 1,
+            'subjectName': 'Próba chóru',
+            'dateTime': '2026-09-17 10:00:00',
+          },
+        ],
+      });
+
+      expect(tests.single.subjectName, 'Próba chóru');
+    });
+
+    test('leaves an empty subject name empty', () {
+      final tests = parseTestItems({
+        'items': [
+          {'id': 1, 'subjectName': '', 'dateTime': '2026-09-17 10:00:00'},
+        ],
+      });
+
+      expect(tests.single.subjectName, '');
+    });
   });
 
   group('parseReprimandItems', () {

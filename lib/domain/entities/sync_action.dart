@@ -61,22 +61,6 @@ enum AttendanceExcuseStatus {
   };
 }
 
-enum ReprimandKind {
-  note,
-  praise;
-
-  static ReprimandKind fromInt(int value) => switch (value) {
-    0 => note,
-    1 => praise,
-    _ => throw ArgumentError('Unknown reprimand kind: $value'),
-  };
-
-  int toJsonValue() => switch (this) {
-    note => 0,
-    praise => 1,
-  };
-}
-
 enum TermType {
   year,
   semester;

@@ -1,4 +1,6 @@
+import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 List<PocztaMessage> parsePocztaMessages(List<dynamic> data) {
   final result = <PocztaMessage>[];
@@ -45,4 +47,16 @@ List<PocztaMessage> parsePocztaMessages(List<dynamic> data) {
     }
   }
   return result;
+}
+
+void applyMessages(Ref ref, String folder, List<dynamic> data) {
+  final messages = parsePocztaMessages(data);
+  switch (folder) {
+    case 'inbox':
+      ref.read(inboxProvider.notifier).value = messages;
+    case 'sent':
+      ref.read(sentProvider.notifier).value = messages;
+    case 'trash':
+      ref.read(trashProvider.notifier).value = messages;
+  }
 }

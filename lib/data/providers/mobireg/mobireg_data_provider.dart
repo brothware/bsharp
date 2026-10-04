@@ -15,7 +15,6 @@ import 'package:bsharp/data/data_sources/remote/app_api_session.dart';
 import 'package:bsharp/data/data_sources/remote/app_api_session_registry.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
-import 'package:bsharp/data/providers/mobireg/mobireg_sync_applier.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_view_cache.dart';
 import 'package:bsharp/data/providers/mobireg/parsers/account_parser.dart';
 import 'package:bsharp/data/providers/mobireg/parsers/attendance_parser.dart';

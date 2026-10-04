@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'portal.freezed.dart';
@@ -23,29 +21,6 @@ abstract class PortalPupil with _$PortalPupil {
     required String surname,
     required String className,
   }) = _PortalPupil;
-}
-
-@freezed
-abstract class PortalTimetableEvent with _$PortalTimetableEvent {
-  const factory PortalTimetableEvent({
-    required int id,
-    required DateTime dateTimeFrom,
-    required DateTime dateTimeTo,
-    required String subjectName,
-    required bool isLocked,
-    required bool isCyclic,
-    required bool isCanceled,
-    required bool substitution,
-    required List<String> teachers,
-    required bool hasTest,
-    required List<dynamic> tests,
-    required List<int> relatedEventsId,
-    Color? bgColor,
-    String? attendanceLabel,
-    String? room,
-    String? title,
-    int? relatedEventId,
-  }) = _PortalTimetableEvent;
 }
 
 @freezed
@@ -79,22 +54,6 @@ abstract class PortalAttendanceTypeCount with _$PortalAttendanceTypeCount {
     required String label,
     required int count,
   }) = _PortalAttendanceTypeCount;
-}
-
-@freezed
-abstract class PortalSubject with _$PortalSubject {
-  const factory PortalSubject({required int id, required String name}) =
-      _PortalSubject;
-}
-
-@freezed
-abstract class PortalTerm with _$PortalTerm {
-  const factory PortalTerm({
-    required int id,
-    required String name,
-    required String startDate,
-    required String endDate,
-  }) = _PortalTerm;
 }
 
 @freezed
