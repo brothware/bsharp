@@ -215,7 +215,13 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
 
   Future<void> syncMessages() async {
     final provider = ref.read(activeDataProviderProvider);
-    await provider.refreshMessages(ref);
+    try {
+      await provider.refreshMessages(ref);
+    } on FormatException catch (error, stackTrace) {
+      debugPrint(
+        'SyncStatusNotifier: mail refresh failed: $error\n$stackTrace',
+      );
+    }
   }
 }
 

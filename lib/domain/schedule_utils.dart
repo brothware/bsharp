@@ -172,11 +172,6 @@ DateTime endOfWeek(DateTime date) {
   return monday.add(const Duration(days: 4));
 }
 
-DateTime endOfWeekFull(DateTime date) {
-  final monday = startOfWeek(date);
-  return monday.add(const Duration(days: 6));
-}
-
 List<DateTime> weekDays(DateTime date) {
   final monday = startOfWeek(date);
   return List.generate(5, (i) => monday.add(Duration(days: i)));

@@ -1,5 +1,4 @@
 import 'package:bsharp/domain/entities/attendance.dart';
-import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/entities/subject.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -98,44 +97,6 @@ void main() {
         excuseStatus: AttendanceExcuseStatus.auto,
       );
       expect(type.countAs, AttendanceCountAs.present);
-    });
-  });
-
-  group('Portal entities', () {
-    test('PortalUser construction', () {
-      const user = PortalUser(
-        login: 'parent1',
-        name: 'John',
-        surname: 'Smith',
-        pupils: [],
-      );
-      expect(user.pupils, isEmpty);
-    });
-
-    test('PortalMark construction', () {
-      const mark = PortalMark(
-        id: 1,
-        subjectId: 100,
-        kindLabel: 'Test',
-        value: '4+',
-        markGroupId: 10,
-        parentMarkGroupId: 0,
-        date: '2026-02-27',
-        weight: 3,
-      );
-      expect(mark.value, '4+');
-    });
-
-    test('PortalAttendanceSummary construction', () {
-      const summary = PortalAttendanceSummary(
-        percent: 95.5,
-        types: [
-          PortalAttendanceTypeCount(label: 'Present', count: 100),
-          PortalAttendanceTypeCount(label: 'Absent', count: 5),
-        ],
-      );
-      expect(summary.percent, 95.5);
-      expect(summary.types, hasLength(2));
     });
   });
 

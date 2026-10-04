@@ -201,7 +201,7 @@ void main() {
       final response = await postFolder('inbox', await ssoCookie());
 
       final items = response.data!['items'] as List<dynamic>;
-      final messages = parsePocztaMessages(items);
+      final messages = parsePocztaMessages(items, 'inbox');
       expect(messages, isNotEmpty);
       expect(messages.first.title, isNotEmpty);
       expect(messages.first.senderName, isNotEmpty);
@@ -211,7 +211,7 @@ void main() {
       final response = await postFolder('sent', await ssoCookie());
 
       final items = response.data!['items'] as List<dynamic>;
-      expect(parsePocztaMessages(items), isNotEmpty);
+      expect(parsePocztaMessages(items, 'sent'), isNotEmpty);
     });
 
     test('folder lists answer 401 without the cookie', () async {

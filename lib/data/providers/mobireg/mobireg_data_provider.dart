@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bsharp/app/child_provider.dart';
 import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/app/providers/grades_providers.dart';
-import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
@@ -237,7 +236,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       views.apply(ref);
     }
 
-    for (final folder in ['inbox', 'sent', 'trash']) {
+    for (final folder in _messageFolders) {
       final messages = cache.loadMessages(folder);
       if (messages != null) {
         applyMessages(ref, folder, messages);
@@ -372,30 +371,26 @@ class MobiregDataProvider implements SchoolDataProvider {
       pocztaDs.getTrash(),
     ]);
 
-    results[0].when(
-      success: (data) {
-        ref.read(inboxProvider.notifier).value = parsePocztaMessages(data);
-        cache.saveMessages('inbox', data);
-      },
-      failure: (failure) =>
-          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
-    );
-    results[1].when(
-      success: (data) {
-        ref.read(sentProvider.notifier).value = parsePocztaMessages(data);
-        cache.saveMessages('sent', data);
-      },
-      failure: (failure) =>
-          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
-    );
-    results[2].when(
-      success: (data) {
-        ref.read(trashProvider.notifier).value = parsePocztaMessages(data);
-        cache.saveMessages('trash', data);
-      },
-      failure: (failure) =>
-          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
-    );
+    _applyFolders(ref, cache, results);
+  }
+
+  static const _messageFolders = ['inbox', 'sent', 'trash'];
+
+  void _applyFolders(
+    Ref ref,
+    SyncCache cache,
+    List<Result<List<dynamic>>> results,
+  ) {
+    for (final (index, folder) in _messageFolders.indexed) {
+      results[index].when(
+        success: (data) {
+          applyMessages(ref, folder, data);
+          cache.saveMessages(folder, data);
+        },
+        failure: (failure) =>
+            debugPrint('MobiregDataProvider: message fetch failed: $failure'),
+      );
+    }
   }
 
   @override
@@ -411,30 +406,7 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     final cache = ref.read(syncCacheProvider);
 
-    results[0].when(
-      success: (data) {
-        ref.read(inboxProvider.notifier).value = parsePocztaMessages(data);
-        cache.saveMessages('inbox', data);
-      },
-      failure: (failure) =>
-          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
-    );
-    results[1].when(
-      success: (data) {
-        ref.read(sentProvider.notifier).value = parsePocztaMessages(data);
-        cache.saveMessages('sent', data);
-      },
-      failure: (failure) =>
-          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
-    );
-    results[2].when(
-      success: (data) {
-        ref.read(trashProvider.notifier).value = parsePocztaMessages(data);
-        cache.saveMessages('trash', data);
-      },
-      failure: (failure) =>
-          debugPrint('MobiregDataProvider: message fetch failed: $failure'),
-    );
+    _applyFolders(ref, cache, results);
   }
 
   @override
@@ -510,7 +482,10 @@ class MobiregDataProvider implements SchoolDataProvider {
     if (pocztaDs == null || !pocztaDs.hasSession) return [];
 
     final result = await pocztaDs.getInbox(skip: skip);
-    return result.when(success: parsePocztaMessages, failure: (_) => []);
+    return result.when(
+      success: (data) => parsePocztaMessages(data, 'inbox'),
+      failure: (_) => [],
+    );
   }
 
   @override

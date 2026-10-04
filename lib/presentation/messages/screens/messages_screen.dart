@@ -187,7 +187,16 @@ class _MessageListState extends ConsumerState<_MessageList> {
     setState(() => _isLoadingMore = true);
     final dataProvider = ref.read(activeDataProviderProvider);
     final currentInbox = ref.read(inboxProvider);
-    final newMessages = await dataProvider.loadMoreInbox(currentInbox.length);
+    final List<PocztaMessage> newMessages;
+    try {
+      newMessages = await dataProvider.loadMoreInbox(currentInbox.length);
+    } on FormatException catch (error, stackTrace) {
+      debugPrint(
+        'MessagesScreen: loading more mail failed: $error\n$stackTrace',
+      );
+      if (mounted) setState(() => _isLoadingMore = false);
+      return;
+    }
     if (!mounted) return;
     if (newMessages.length < _inboxPageSize) {
       ref.read(inboxHasMoreProvider.notifier).value = false;

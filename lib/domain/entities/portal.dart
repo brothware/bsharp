@@ -3,60 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'portal.freezed.dart';
 
 @freezed
-abstract class PortalUser with _$PortalUser {
-  const factory PortalUser({
-    required String login,
-    required String name,
-    required String surname,
-    required List<PortalPupil> pupils,
-    String? messagesToken,
-  }) = _PortalUser;
-}
-
-@freezed
-abstract class PortalPupil with _$PortalPupil {
-  const factory PortalPupil({
-    required int id,
-    required String name,
-    required String surname,
-    required String className,
-  }) = _PortalPupil;
-}
-
-@freezed
-abstract class PortalMark with _$PortalMark {
-  const factory PortalMark({
-    required int id,
-    required int subjectId,
-    required String kindLabel,
-    required String value,
-    required int markGroupId,
-    required int parentMarkGroupId,
-    required String date,
-    required int weight,
-    String? bgColor,
-    String? description,
-    String? comments,
-  }) = _PortalMark;
-}
-
-@freezed
-abstract class PortalAttendanceSummary with _$PortalAttendanceSummary {
-  const factory PortalAttendanceSummary({
-    required double percent,
-    required List<PortalAttendanceTypeCount> types,
-  }) = _PortalAttendanceSummary;
-}
-
-@freezed
-abstract class PortalAttendanceTypeCount with _$PortalAttendanceTypeCount {
-  const factory PortalAttendanceTypeCount({
-    required String label,
-    required int count,
-  }) = _PortalAttendanceTypeCount;
-}
-
-@freezed
 abstract class PortalBulletin with _$PortalBulletin {
   const factory PortalBulletin({
     required int id,

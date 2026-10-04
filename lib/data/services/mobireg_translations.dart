@@ -188,75 +188,6 @@ String normalizeMobiregGradeCategory(String name) {
   return matchNormCase(trimmed, value);
 }
 
-const _gradeNameMap = <String, String>{
-  'celujący': 'Excellent',
-  'celujący z minusem': 'Excellent minus',
-  'bardzo dobry z plusem': 'Very good plus',
-  'bardzo dobry': 'Very good',
-  'bardzo dobry z minusem': 'Very good minus',
-  'dobry z plusem': 'Good plus',
-  'dobry': 'Good',
-  'dobry z minusem': 'Good minus',
-  'dostateczny z plusem': 'Satisfactory plus',
-  'dostateczny': 'Satisfactory',
-  'dostateczny z minusem': 'Satisfactory minus',
-  'dopuszczający z plusem': 'Acceptable plus',
-  'dopuszczający': 'Acceptable',
-  'dopuszczający z minusem': 'Acceptable minus',
-  'niedostateczny z plusem': 'Unsatisfactory plus',
-  'niedostateczny': 'Unsatisfactory',
-  'nieklasyfikowany': 'Unclassified',
-  'nieklasyfikowana': 'Unclassified',
-  'zwolniony': 'Exempt',
-  'zwolniona': 'Exempt',
-  'szóstka': 'Six',
-  'piątka z plusem': 'Five plus',
-  'piątka': 'Five',
-  'piątka z minusem': 'Five minus',
-  'czwórka z plusem': 'Four plus',
-  'czwórka': 'Four',
-  'czwórka z minusem': 'Four minus',
-  'trójka z plusem': 'Three plus',
-  'trójka': 'Three',
-  'trójka z minusem': 'Three minus',
-  'dwójka z plusem': 'Two plus',
-  'dwójka': 'Two',
-  'dwójka z minusem': 'Two minus',
-  'jedynka z plusem': 'One plus',
-  'jedynka': 'One',
-  'wspaniale': 'Wonderful',
-  'bardzo dobrze': 'Very well',
-  'dobrze': 'Well',
-  'poprawnie': 'Correctly',
-  'słabo': 'Poorly',
-  'znakomicie': 'Brilliantly',
-  'celująco': 'Outstandingly',
-  'wybitnie': 'Exceptionally',
-  'zadowalająco': 'Satisfactorily',
-  'przeciętnie': 'Averagely',
-  'niezadowalająco': 'Unsatisfactorily',
-  'nieodpowiednio': 'Inappropriately',
-  'wzorowe': 'Exemplary',
-  'bardzo dobre': 'Very good',
-  'dobre': 'Good',
-  'poprawne': 'Correct',
-  'nieodpowiednie': 'Inappropriate',
-  'naganne': 'Reprehensible',
-  'nieobecny': 'Absent',
-  'nieobecna': 'Absent',
-  'brak zadania': 'Missing assignment',
-  'nieprzygotowany': 'Unprepared',
-  'nieprzygotowana': 'Unprepared',
-};
-
-String normalizeMobiregGradeName(String name) {
-  final trimmed = name.trim();
-  final key = trimmed.toLowerCase();
-  final value = _gradeNameMap[key];
-  if (value == null) return name;
-  return matchNormCase(trimmed, value);
-}
-
 const _attendanceNameMap = <String, String>{
   'obecność': 'Present',
   'nieobecność': 'Absent',
@@ -332,30 +263,6 @@ String normalizeMobiregAttendanceAbbr(String abbr) {
   final value = _attendanceAbbrMap[key];
   if (value == null) return abbr;
   return matchNormCase(abbr.trim(), value);
-}
-
-const _receiverRoleMap = <String, String>{
-  'nauczyciel': 'Teacher',
-  'nauczycielka': 'Teacher',
-  'wychowawca': 'Homeroom teacher',
-  'wychowawczyni': 'Homeroom teacher',
-  'dyrektor': 'Principal',
-  'pedagog': 'School counsellor',
-  'sekretarz': 'Secretary',
-  'sekretarka': 'Secretary',
-  'bibliotekarz': 'Librarian',
-  'bibliotekarka': 'Librarian',
-  'psycholog': 'Psychologist',
-  'logopeda': 'Speech therapist',
-  'rodzic': 'Parent',
-};
-
-String normalizeMobiregReceiverRole(String role) {
-  final trimmed = role.trim();
-  final key = trimmed.toLowerCase();
-  final value = _receiverRoleMap[key];
-  if (value == null) return role;
-  return matchNormCase(trimmed, value);
 }
 
 const _termLabelMap = <String, String>{
