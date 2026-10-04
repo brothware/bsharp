@@ -93,11 +93,22 @@ class PocztaDataSource {
     return _folder('trash', skip, query);
   }
 
-  Future<Result<List<dynamic>>> _folder(String folder, int skip, String query) {
-    return _postMessages('/api/messages/$folder', {
+  Future<Result<List<dynamic>>> _folder(
+    String folder,
+    int skip,
+    String query,
+  ) async {
+    final path = '/api/messages/$folder';
+    final result = await _post(path, {
       'limit': _pageSize,
       'skip': skip,
       if (query.isNotEmpty) 'query': query,
+    });
+    return result.map((data) {
+      if (data is Map && data['items'] is List && data['total'] is int) {
+        return data['items'] as List<dynamic>;
+      }
+      throw FormatException('Poczta $path: expected {items, total}');
     });
   }
 
@@ -181,46 +192,29 @@ class PocztaDataSource {
     );
   }
 
-  Future<Result<List<dynamic>>> searchReceivers(String query) {
-    return _postMessages('/api/messages/receivers/search', {
-      'query': query,
-      'ids': <Object>[],
+  Future<Result<List<dynamic>>> searchReceivers(String query) async {
+    const path = '/api/messages/receivers/search';
+    final result = await _post(path, {'query': query, 'ids': <Object>[]});
+    return result.map((data) {
+      if (data is List) {
+        return data;
+      }
+      throw const FormatException('Poczta $path: expected a list');
     });
   }
 
-  Future<Result<List<dynamic>>> _postMessages(
-    String path,
-    Map<String, dynamic> body,
-  ) async {
+  Future<Result<Object?>> _post(String path, Map<String, dynamic> body) async {
     final result = await _call(
       (options) => _client.post<dynamic>(path, data: body, options: options),
     );
-    return result.when(
-      success: (response) {
-        final data = response.data;
-        if (data is List) {
-          return Result.success(data);
-        }
-        if (data is Map) {
-          if (data.containsKey('items')) {
-            return Result.success((data['items'] as List?) ?? []);
-          }
-          if (data.containsKey('users')) {
-            return Result.success((data['users'] as List?) ?? []);
-          }
-          if (data.containsKey('data')) {
-            return Result.success((data['data'] as List?) ?? []);
-          }
-        }
-        return const Result.success([]);
-      },
-      failure: Result.failure,
-    );
+    return result.map((response) => response.data);
   }
 
   Future<Result<void>> downloadFile(String url, String savePath) async {
     final baseUri = Uri.parse(_client.options.baseUrl);
-    if (baseUri.resolve(url).authority != baseUri.authority) {
+    final target = baseUri.resolve(url);
+    if (target.scheme != baseUri.scheme ||
+        target.authority != baseUri.authority) {
       return Result.failure(
         UnknownFailure(message: 'Refusing to download from foreign host: $url'),
       );

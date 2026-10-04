@@ -15,6 +15,8 @@ class _PocztaFake {
   bool expireOnce = false;
   bool expireAlways = false;
   bool exposeCookiesAsJar = false;
+  Object folderBody = {'items': <Object>[], 'total': 0};
+  Object searchBody = <Object>[];
 
   Dio client(List<RequestOptions> seen) {
     final factory = ApiClientFactory(
@@ -51,7 +53,10 @@ class _PocztaFake {
     }
     const folders = ['inbox', 'sent', 'trash'];
     if (folders.any((folder) => options.path == '/api/messages/$folder')) {
-      return _respond(options, _ok, {'items': <Object>[], 'total': 0});
+      return _respond(options, _ok, folderBody);
+    }
+    if (options.path == '/api/messages/receivers/search') {
+      return _respond(options, _ok, searchBody);
     }
     return _respond(options, _ok, <String, dynamic>{});
   }
@@ -240,6 +245,47 @@ void main() {
     expect(seen.map((o) => o.data), [<String, dynamic>{}, <String, dynamic>{}]);
   });
 
+  test('a folder that is not {items, total} is a FormatException', () async {
+    final seen = <RequestOptions>[];
+    final server = _PocztaFake()
+      ..folderBody = {
+        'users': [
+          {'id': 1},
+        ],
+      };
+    final source = PocztaDataSource(client: server.client(seen));
+    await source.establishSession(school: 'sp1', messagesToken: 't');
+
+    await expectLater(
+      source.getInbox(),
+      throwsA(
+        isA<FormatException>().having(
+          (e) => e.message,
+          'message',
+          contains('/api/messages/inbox'),
+        ),
+      ),
+    );
+  });
+
+  test('a folder answering a bare list is a FormatException', () async {
+    final seen = <RequestOptions>[];
+    final server = _PocztaFake()..folderBody = <Object>[];
+    final source = PocztaDataSource(client: server.client(seen));
+    await source.establishSession(school: 'sp1', messagesToken: 't');
+
+    await expectLater(source.getTrash(), throwsFormatException);
+  });
+
+  test('a receiver search that is not a list is a FormatException', () async {
+    final seen = <RequestOptions>[];
+    final server = _PocztaFake()..searchBody = <String, dynamic>{};
+    final source = PocztaDataSource(client: server.client(seen));
+    await source.establishSession(school: 'sp1', messagesToken: 't');
+
+    await expectLater(source.searchReceivers('Nowak'), throwsFormatException);
+  });
+
   test('fails with SessionExpired after two consecutive 401s', () async {
     final seen = <RequestOptions>[];
     final server = _PocztaFake()..expireAlways = true;
@@ -282,6 +328,18 @@ void main() {
 
     final result = await source.downloadFile(
       'https://evil.example/files/1',
+      savePath,
+    );
+
+    expect(result, isA<Failure<void>>());
+    expect(seen, isEmpty);
+  });
+
+  test('never sends the cookie over another scheme', () async {
+    final (source, seen) = await _signedIn();
+
+    final result = await source.downloadFile(
+      'http://poczta.mobireg.pl/files/1',
       savePath,
     );
 
