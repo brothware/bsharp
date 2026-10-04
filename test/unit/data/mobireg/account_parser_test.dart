@@ -39,6 +39,30 @@ void main() {
       );
     });
 
+    test('no appConfig means the modules are unknown', () {
+      final users = Map<String, dynamic>.of(
+        loadMobiregFixture('users') as Map<String, dynamic>,
+      )..remove('appConfig');
+
+      expect(parseAccount(users).enabledModules, isNull);
+    });
+
+    test('an appConfig without a modules map means unknown', () {
+      final users = Map<String, dynamic>.of(
+        loadMobiregFixture('users') as Map<String, dynamic>,
+      )..['appConfig'] = {'marks': <String, dynamic>{}};
+
+      expect(parseAccount(users).enabledModules, isNull);
+    });
+
+    test('an empty modules map means every module is off', () {
+      final users = Map<String, dynamic>.of(
+        loadMobiregFixture('users') as Map<String, dynamic>,
+      )..['appConfig'] = {'modules': <String, dynamic>{}};
+
+      expect(parseAccount(users).enabledModules, isEmpty);
+    });
+
     test('an account without pupils is a FormatException', () {
       expect(() => parseAccount({'id': 1}), throwsFormatException);
     });

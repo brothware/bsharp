@@ -295,6 +295,56 @@ void main() {
     expect(fresh.read(attendancesProvider), isEmpty);
   });
 
+  test('an account without appConfig keeps every module', () async {
+    server.users.remove('appConfig');
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadSchoolData(ref(), studentId: 6339);
+
+    for (final capability in [
+      DataProviderCapability.attendance,
+      DataProviderCapability.notes,
+      DataProviderCapability.schedule,
+      DataProviderCapability.bulletins,
+    ]) {
+      expect(provider.supports(capability), isTrue, reason: '$capability');
+    }
+    expect(
+      server.views,
+      containsAll(<String>[
+        'timetable-events',
+        'attendance-stats',
+        'reprimands',
+        'announcements',
+      ]),
+    );
+  });
+
+  test('attendances without timetable still loads lessons', () async {
+    server.users['appConfig'] = {
+      'modules': {'attendances': 1, 'reprimands': 1, 'timetable': 0},
+    };
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadSchoolData(ref(), studentId: 6339);
+
+    expect(server.views, contains('timetable-events'));
+    expect(provider.supports(DataProviderCapability.schedule), isFalse);
+    expect(container.read(attendancesProvider), isNotEmpty);
+    expect(container.read(resolvedEventsProvider), isEmpty);
+  });
+
+  test('a different account forgets the previous modules', () async {
+    server.users['appConfig'] = {
+      'modules': {'attendances': 0, 'timetable': 1},
+    };
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadSchoolData(ref(), studentId: 6339);
+    expect(provider.supports(DataProviderCapability.attendance), isFalse);
+
+    await provider.authenticate(school: 'sp1', login: 'other', password: 's');
+
+    expect(provider.supports(DataProviderCapability.attendance), isTrue);
+  });
+
   test('never offers homework or changelog', () {
     expect(provider.supports(DataProviderCapability.homework), isFalse);
     expect(provider.supports(DataProviderCapability.changelog), isFalse);

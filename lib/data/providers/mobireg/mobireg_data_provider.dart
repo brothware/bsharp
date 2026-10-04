@@ -58,6 +58,13 @@ const Map<String, DataProviderCapability> _capabilityByModule = {
   _announcementsModule: DataProviderCapability.bulletins,
 };
 
+bool _isModuleOn(Set<String>? enabledModules, String module) =>
+    enabledModules == null || enabledModules.contains(module);
+
+bool _needsTimetable(Set<String>? enabledModules) =>
+    _isModuleOn(enabledModules, _timetableModule) ||
+    _isModuleOn(enabledModules, _attendancesModule);
+
 class SendMessageException implements Exception {
   SendMessageException(this.failure);
 
@@ -99,7 +106,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     final enabledModules = _enabledModules;
     if (enabledModules != null) {
       for (final MapEntry(:key, :value) in _capabilityByModule.entries) {
-        if (!enabledModules.contains(key)) {
+        if (!_isModuleOn(enabledModules, key)) {
           capabilities.remove(value);
         }
       }
@@ -140,6 +147,9 @@ class MobiregDataProvider implements SchoolDataProvider {
     required String login,
     required String password,
   }) async {
+    if (school != _school || login != _login) {
+      _enabledModules = null;
+    }
     _school = school;
     _login = login;
     _password = password;
@@ -251,7 +261,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     final account = parseAccount(accountData);
     final pupils = account.students;
     final enabledModules = account.enabledModules;
-    bool isEnabled(String module) => enabledModules.contains(module);
+    bool isEnabled(String module) => _isModuleOn(enabledModules, module);
     if (!pupils.any((pupil) => pupil.id == studentId)) {
       throw StateError('Pupil $studentId is not on this account');
     }
@@ -277,9 +287,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     final year =
         parsedTerms.where((term) => term.type == TermType.year).firstOrNull ??
         (throw FormatException('View terms: no school year', terms));
-    final needsTimetable =
-        isEnabled(_timetableModule) || isEnabled(_attendancesModule);
-    final timetable = needsTimetable
+    final timetable = _needsTimetable(enabledModules)
         ? await view('timetable-events', {
             'dateFrom': _day(year.startDate),
             'dateTo': _day(year.endDate),
@@ -548,28 +556,24 @@ class _MobiregViews {
   final Object? reprimands;
   final Object? announcements;
 
-  Set<String> get enabledModules => parseAccount(account).enabledModules;
+  Set<String>? get enabledModules => parseAccount(account).enabledModules;
 
   static _MobiregViews? load(MobiregViewCache cache) {
-    final cachedAccount = cache.load(_usersKey);
-    if (cachedAccount == null) {
+    final account = cache.load(_usersKey);
+    if (account == null) {
       return null;
     }
     Object stored(String key) =>
         cache.load(key) ??
         (throw FormatException('Cached view $key is missing'));
-    final account = cachedAccount;
     final pupilId = stored(_pupilKey);
     if (account is! Map<String, dynamic> || pupilId is! int) {
       throw const FormatException('Cached account is malformed');
     }
     final modules = parseAccount(account).enabledModules;
     Object? storedFor(String module, String key) =>
-        modules.contains(module) ? stored(key) : null;
+        _isModuleOn(modules, module) ? stored(key) : null;
     final terms = stored(_termsKey);
-    final needsTimetable =
-        modules.contains(_timetableModule) ||
-        modules.contains(_attendancesModule);
     return _MobiregViews(
       pupilId: pupilId,
       account: account,
@@ -579,7 +583,7 @@ class _MobiregViews {
         for (final term in parseTerms(terms).where(_isSemester))
           term.id: stored(_marksKey(term.id)),
       },
-      timetable: needsTimetable ? stored(_timetableKey) : null,
+      timetable: _needsTimetable(modules) ? stored(_timetableKey) : null,
       attendanceStats: storedFor(_attendancesModule, _attendanceStatsKey),
       tests: stored(_testsKey),
       reprimands: storedFor(_reprimandsModule, _reprimandsKey),
@@ -626,7 +630,7 @@ class _MobiregViews {
     };
     final timetableView = timetable;
     final events =
-        timetableView != null && enabledModules.contains(_timetableModule)
+        timetableView != null && _isModuleOn(enabledModules, _timetableModule)
         ? parseTimetableEvents(
             timetableView,
             subjectIdsByName: {

@@ -22,7 +22,7 @@ class MobiregAccount {
   final String? schoolName;
   final String? messagingUrl;
   final String? messagesToken;
-  final Set<String> enabledModules;
+  final Set<String>? enabledModules;
 }
 
 MobiregAccount parseAccount(Map<String, dynamic> data) {
@@ -55,13 +55,13 @@ String? _firstSchoolNameLine(Object? schoolName) {
   return first;
 }
 
-Set<String> _enabledModules(Object? appConfig) {
+Set<String>? _enabledModules(Object? appConfig) {
   if (appConfig is! Map<String, dynamic>) {
-    return const {};
+    return null;
   }
   final modules = appConfig['modules'];
   if (modules is! Map<String, dynamic>) {
-    return const {};
+    return null;
   }
   return {
     for (final entry in modules.entries)
