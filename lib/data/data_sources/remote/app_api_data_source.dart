@@ -19,9 +19,13 @@ class ViewPayload {
 }
 
 class AppApiDataSource {
-  AppApiDataSource({required this._client});
+  AppApiDataSource({required this._client, bool isWeb = kIsWeb})
+    : _appHeaders = isWeb
+          ? const {}
+          : const {'User-Agent': AppConstants.appUserAgent};
 
   final Dio _client;
+  final Map<String, String> _appHeaders;
 
   Future<Result<String>> login({
     required String login,
@@ -64,7 +68,7 @@ class AppApiDataSource {
         options: Options(
           contentType: Headers.formUrlEncodedContentType,
           responseType: ResponseType.plain,
-          headers: {'User-Agent': AppConstants.appUserAgent},
+          headers: _appHeaders,
         ),
       ),
     );

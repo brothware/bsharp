@@ -170,6 +170,18 @@ void main() {
       expect(seen.single.contentType, Headers.formUrlEncodedContentType);
     });
 
+    test('leaves the user agent to the proxy on web', () async {
+      final seen = <RequestOptions>[];
+      final source = AppApiDataSource(
+        client: _client((o) => _json(o, 200, _envelope(<Object>[])), seen),
+        isWeb: true,
+      );
+
+      await source.getView(jwt: _jwt, view: 'terms');
+
+      expect(seen.single.headers.containsKey('User-Agent'), isFalse);
+    });
+
     test('maps HTTP 401 to SessionExpired', () async {
       final source = AppApiDataSource(
         client: _client(
