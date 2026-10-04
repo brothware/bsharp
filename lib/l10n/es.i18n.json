@@ -12,7 +12,6 @@
     "noData": "Sin datos",
     "offline": "Modo sin conexión",
     "search": "Buscar",
-    "tryAgain": "Intentar de nuevo",
     "undo": "Deshacer",
     "change": "Cambiar",
     "clear": "Borrar",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Sin conexión a internet",
     "timeout": "Tiempo de espera agotado",
-    "serverError": "Error del servidor",
     "schoolNotFound": "Escuela no encontrada. Verifique el identificador de la escuela e intente de nuevo.",
-    "unknownError": "Se ha producido un error desconocido",
-    "invalidCredentials": "Nombre de usuario o contraseña incorrectos.",
-    "viewNotFound": "Datos solicitados no encontrados.",
-    "noData": "No hay datos que mostrar.",
-    "timeoutLong": "Tiempo de respuesta del servidor agotado.",
-    "sessionExpired": "Sesión expirada. Por favor, inicie sesión de nuevo.",
-    "databaseError": "Error de base de datos. Pruebe a borrar la caché.",
-    "protocolMismatch": "Versión de protocolo incompatible. Por favor, actualice la aplicación.",
-    "databaseIdChanged": "Base de datos de la escuela modificada. Se requiere sincronización completa.",
-    "unknownFailure": "Se ha producido un error inesperado."
+    "unknownError": "Se ha producido un error desconocido"
   },
   "notification": {
     "gradesName": "Notas",

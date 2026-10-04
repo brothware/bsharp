@@ -12,7 +12,6 @@
     "noData": "Geen gegevens",
     "offline": "Offlinemodus",
     "search": "Zoeken",
-    "tryAgain": "Probeer opnieuw",
     "undo": "Ongedaan maken",
     "change": "Wijzigen",
     "clear": "Wissen",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Geen internetverbinding",
     "timeout": "Verzoek is verlopen",
-    "serverError": "Serverfout",
     "schoolNotFound": "School niet gevonden. Controleer het school-ID en probeer het opnieuw.",
-    "unknownError": "Er is een onbekende fout opgetreden",
-    "invalidCredentials": "Ongeldige gebruikersnaam of wachtwoord.",
-    "viewNotFound": "Gevraagde gegevens niet gevonden.",
-    "noData": "Geen gegevens om weer te geven.",
-    "timeoutLong": "Serverantwoord is verlopen.",
-    "sessionExpired": "Sessie verlopen. Log opnieuw in.",
-    "databaseError": "Databasefout. Probeer de cache te wissen.",
-    "protocolMismatch": "Incompatibele protocolversie. Werk de app bij.",
-    "databaseIdChanged": "Schooldatabase gewijzigd. Volledige synchronisatie vereist.",
-    "unknownFailure": "Er is een onverwachte fout opgetreden."
+    "unknownError": "Er is een onbekende fout opgetreden"
   },
   "notification": {
     "gradesName": "Cijfers",

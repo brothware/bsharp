@@ -12,7 +12,6 @@
     "noData": "Ei tietoja",
     "offline": "Offline-tila",
     "search": "Haku",
-    "tryAgain": "Yritä uudelleen",
     "undo": "Kumoa",
     "change": "Vaihda",
     "clear": "Tyhjennä",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Ei internetyhteyttä",
     "timeout": "Pyyntö aikakatkaistiin",
-    "serverError": "Palvelinvirhe",
     "schoolNotFound": "Koulua ei löytynyt. Tarkista koulutunnus ja yritä uudelleen.",
-    "unknownError": "Tuntematon virhe tapahtui",
-    "invalidCredentials": "Virheellinen käyttäjänimi tai salasana.",
-    "viewNotFound": "Pyydettejä tietoja ei löytynyt.",
-    "noData": "Ei tietoja näytettäväksi.",
-    "timeoutLong": "Palvelimen vastausaika ylittyi.",
-    "sessionExpired": "Istunto päättynyt. Kirjaudu sisään uudelleen.",
-    "databaseError": "Tietokantavirhe. Kokeile tyhjentää välimuisti.",
-    "protocolMismatch": "Yhteensopimaton protokollaversio. Päivitä sovellus.",
-    "databaseIdChanged": "Koulun tietokanta muuttunut. Täysi synkronointi vaaditaan.",
-    "unknownFailure": "Odottamaton virhe tapahtui."
+    "unknownError": "Tuntematon virhe tapahtui"
   },
   "notification": {
     "gradesName": "Arvosanat",

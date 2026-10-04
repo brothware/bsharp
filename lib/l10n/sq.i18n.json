@@ -12,7 +12,6 @@
     "noData": "Nuk ka të dhëna",
     "offline": "Modaliteti jashtë linje",
     "search": "Kërko",
-    "tryAgain": "Provo përsëri",
     "undo": "Zhbëj",
     "change": "Ndrysho",
     "clear": "Pastro",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Nuk ka lidhje interneti",
     "timeout": "Kërkesa skadoi",
-    "serverError": "Gabim i serverit",
     "schoolNotFound": "Shkolla nuk u gjet. Kontrolloni identifikuesin e shkollës dhe provoni përsëri.",
-    "unknownError": "Ndodhi një gabim i panjohur",
-    "invalidCredentials": "Emri i përdoruesit ose fjalëkalimi i gabuar.",
-    "viewNotFound": "Të dhënat e kërkuara nuk u gjetën.",
-    "noData": "Nuk ka të dhëna për shfaqje.",
-    "timeoutLong": "Koha e pritjes për përgjigjen e serverit ka skaduar.",
-    "sessionExpired": "Sesioni ka skaduar. Hyni përsëri.",
-    "databaseError": "Gabim i bazës së të dhënave. Provoni të pastroni memorien.",
-    "protocolMismatch": "Version i papajtueshëm i protokollit. Përditësoni aplikacionin.",
-    "databaseIdChanged": "Baza e të dhënave e shkollës ka ndryshuar. Nevojitet sinkronizim i plotë.",
-    "unknownFailure": "Ndodhi një gabim i papritur."
+    "unknownError": "Ndodhi një gabim i panjohur"
   },
   "notification": {
     "gradesName": "Notat",

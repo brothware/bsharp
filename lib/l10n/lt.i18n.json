@@ -12,7 +12,6 @@
     "noData": "Nėra duomenų",
     "offline": "Neprisijungus",
     "search": "Ieškoti",
-    "tryAgain": "Bandyti dar kartą",
     "undo": "Atšaukti",
     "change": "Keisti",
     "clear": "Išvalyti",
@@ -466,18 +465,8 @@
   "errors": {
     "noConnection": "Nėra interneto ryšio",
     "timeout": "Baigėsi užklausos laikas",
-    "serverError": "Serverio klaida",
     "schoolNotFound": "Mokykla nerasta. Patikrinkite mokyklos identifikatorių ir bandykite dar kartą.",
-    "unknownError": "Įvyko nežinoma klaida",
-    "invalidCredentials": "Neteisingas vartotojo vardas arba slaptažodis.",
-    "viewNotFound": "Prašomi duomenys nerasti.",
-    "noData": "Nėra duomenų rodymui.",
-    "timeoutLong": "Baigėsi serverio atsakymo laukimo laikas.",
-    "sessionExpired": "Sesija baigėsi. Prisijunkite iš naujo.",
-    "databaseError": "Duomenų bazės klaida. Pabandykite išvalyti talpyklą.",
-    "protocolMismatch": "Nesuderinama protokolo versija. Atnaujinkite programėlę.",
-    "databaseIdChanged": "Mokyklos duomenų bazė pasikeitė. Reikalinga pilna sinchronizacija.",
-    "unknownFailure": "Įvyko netikėta klaida."
+    "unknownError": "Įvyko nežinoma klaida"
   },
   "notification": {
     "gradesName": "Pažymiai",

@@ -199,18 +199,6 @@ final class SessionExpired extends AppFailure {
   int get hashCode => Object.hash(runtimeType, message);
 }
 
-final class DatabaseError extends AppFailure {
-  const DatabaseError({super.message});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is DatabaseError && message == other.message;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-}
-
 final class ProtocolMismatch extends AppFailure {
   const ProtocolMismatch({super.message});
 
@@ -218,18 +206,6 @@ final class ProtocolMismatch extends AppFailure {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ProtocolMismatch && message == other.message;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-}
-
-final class DatabaseIdChanged extends AppFailure {
-  const DatabaseIdChanged({super.message});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is DatabaseIdChanged && message == other.message;
 
   @override
   int get hashCode => Object.hash(runtimeType, message);

@@ -12,7 +12,6 @@
     "noData": "Nincs adat",
     "offline": "Offline mód",
     "search": "Keresés",
-    "tryAgain": "Próbálja újra",
     "undo": "Visszavonás",
     "change": "Módosítás",
     "clear": "Törlés",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Nincs internetkapcsolat",
     "timeout": "A kérés időkorlátja lejárt",
-    "serverError": "Szerverhiba",
     "schoolNotFound": "Az iskola nem található. Ellenőrizze az iskola azonosítóját, és próbálja újra.",
-    "unknownError": "Ismeretlen hiba történt",
-    "invalidCredentials": "Érvénytelen felhasználónév vagy jelszó.",
-    "viewNotFound": "A kért adatok nem találhatók.",
-    "noData": "Nincs megjeleníthető adat.",
-    "timeoutLong": "A szerver válaszideje lejárt.",
-    "sessionExpired": "A munkamenet lejárt. Jelentkezzen be újra.",
-    "databaseError": "Adatbázis-hiba. Próbálja meg törölni a gyorsítótárat.",
-    "protocolMismatch": "Nem kompatibilis protokollverzió. Frissítse az alkalmazást.",
-    "databaseIdChanged": "Az iskola adatbázisa megváltozott. Teljes szinkronizálás szükséges.",
-    "unknownFailure": "Váratlan hiba történt."
+    "unknownError": "Ismeretlen hiba történt"
   },
   "notification": {
     "gradesName": "Jegyek",

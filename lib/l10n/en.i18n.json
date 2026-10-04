@@ -12,7 +12,6 @@
     "noData": "No data",
     "offline": "Offline mode",
     "search": "Search",
-    "tryAgain": "Try again",
     "undo": "Undo",
     "change": "Change",
     "clear": "Clear",
@@ -457,18 +456,8 @@
   "errors": {
     "noConnection": "No internet connection",
     "timeout": "Request timed out",
-    "serverError": "Server error",
     "schoolNotFound": "School not found. Check the school ID and try again.",
-    "unknownError": "An unknown error occurred",
-    "invalidCredentials": "Invalid username or password.",
-    "viewNotFound": "Requested data not found.",
-    "noData": "No data to display.",
-    "timeoutLong": "Server response timed out.",
-    "sessionExpired": "Session expired. Please log in again.",
-    "databaseError": "Database error. Try clearing the cache.",
-    "protocolMismatch": "Incompatible protocol version. Please update the app.",
-    "databaseIdChanged": "School database changed. Full synchronisation required.",
-    "unknownFailure": "An unexpected error occurred."
+    "unknownError": "An unknown error occurred"
   },
   "notification": {
     "gradesName": "Grades",

@@ -12,7 +12,6 @@
     "noData": "M'hemmx dejta",
     "offline": "Modalita' offline",
     "search": "Fittex",
-    "tryAgain": "Erġa' pprova",
     "undo": "Neħħi",
     "change": "Ibdel",
     "clear": "Naddaf",
@@ -466,18 +465,8 @@
   "errors": {
     "noConnection": "M'hemmx konnessjoni mal-internet",
     "timeout": "It-talba skadiet",
-    "serverError": "Żball fis-server",
     "schoolNotFound": "L-iskola ma nstabitx. Iċċekkja l-ID tal-iskola u erġa' pprova.",
-    "unknownError": "Seħħ żball mhux magħruf",
-    "invalidCredentials": "Username jew password mhux validu.",
-    "viewNotFound": "Id-dejta mitluba ma nstabitx.",
-    "noData": "M'hemmx dejta x'turi.",
-    "timeoutLong": "Ir-risposta mis-server skadiet.",
-    "sessionExpired": "Is-sessjoni skadiet. Erġa' idħol.",
-    "databaseError": "Żball fid-database. Ipprova naddaf il-cache.",
-    "protocolMismatch": "Verżjoni tal-protokoll inkompatibbli. Aġġorna l-app.",
-    "databaseIdChanged": "Id-database tal-iskola nbidlet. Meħtieġa sinkronizzazzjoni sħiħa.",
-    "unknownFailure": "Seħħ żball mhux mistenni."
+    "unknownError": "Seħħ żball mhux magħruf"
   },
   "notification": {
     "gradesName": "Marki",

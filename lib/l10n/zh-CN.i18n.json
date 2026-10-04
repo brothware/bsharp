@@ -12,7 +12,6 @@
     "noData": "暂无数据",
     "offline": "离线模式",
     "search": "搜索",
-    "tryAgain": "重试",
     "undo": "撤销",
     "change": "更改",
     "clear": "清除",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "无网络连接",
     "timeout": "请求超时",
-    "serverError": "服务器错误",
     "schoolNotFound": "未找到学校。请检查学校ID并重试。",
-    "unknownError": "发生未知错误",
-    "invalidCredentials": "用户名或密码错误。",
-    "viewNotFound": "未找到请求的数据。",
-    "noData": "没有可显示的数据。",
-    "timeoutLong": "等待服务器响应超时。",
-    "sessionExpired": "会话已过期，请重新登录。",
-    "databaseError": "数据库错误，请尝试清除缓存。",
-    "protocolMismatch": "协议版本不兼容，请更新应用。",
-    "databaseIdChanged": "学校数据库已变更，需要完全同步。",
-    "unknownFailure": "发生意外错误。"
+    "unknownError": "发生未知错误"
   },
   "notification": {
     "gradesName": "成绩",

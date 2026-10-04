@@ -12,7 +12,6 @@
     "noData": "沒有資料",
     "offline": "離線模式",
     "search": "搜尋",
-    "tryAgain": "重試",
     "undo": "復原",
     "change": "變更",
     "clear": "清除",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "沒有網路連線",
     "timeout": "請求逾時",
-    "serverError": "伺服器錯誤",
     "schoolNotFound": "找不到學校。請檢查學校ID並重試。",
-    "unknownError": "發生未知錯誤",
-    "invalidCredentials": "使用者名稱或密碼錯誤。",
-    "viewNotFound": "找不到請求的資料。",
-    "noData": "沒有可顯示的資料。",
-    "timeoutLong": "等待伺服器回應逾時。",
-    "sessionExpired": "工作階段已過期，請重新登入。",
-    "databaseError": "資料庫錯誤，請嘗試清除快取。",
-    "protocolMismatch": "通訊協定版本不相容，請更新應用程式。",
-    "databaseIdChanged": "學校資料庫已變更，需要完整同步。",
-    "unknownFailure": "發生意外錯誤。"
+    "unknownError": "發生未知錯誤"
   },
   "notification": {
     "gradesName": "成績",

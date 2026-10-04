@@ -12,7 +12,6 @@
     "noData": "Nav datu",
     "offline": "Bezsaistes režīms",
     "search": "Meklēt",
-    "tryAgain": "Mēģināt vēlreiz",
     "undo": "Atsaukt",
     "change": "Mainīt",
     "clear": "Notīrīt",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Nav interneta savienojuma",
     "timeout": "Pieprasījuma laiks beidzās",
-    "serverError": "Servera kļūda",
     "schoolNotFound": "Skola nav atrasta. Pārbaudiet skolas identifikatoru un mēģiniet vēlreiz.",
-    "unknownError": "Radās nezināma kļūda",
-    "invalidCredentials": "Nepareizs lietotājvārds vai parole.",
-    "viewNotFound": "Pieprasītie dati nav atrasti.",
-    "noData": "Nav datu attēlošanai.",
-    "timeoutLong": "Servera atbildes laiks beidzās.",
-    "sessionExpired": "Sesija beidzās. Lūdzu piesakieties vēlreiz.",
-    "databaseError": "Datu bāzes kļūda. Mēģiniet notīrīt kešatmiņu.",
-    "protocolMismatch": "Nesaderīga protokola versija. Lūdzu atjauniniet lietotni.",
-    "databaseIdChanged": "Skolas datu bāze mainījusies. Nepieciešama pilna sinhronizācija.",
-    "unknownFailure": "Radās neparedzēta kļūda."
+    "unknownError": "Radās nezināma kļūda"
   },
   "notification": {
     "gradesName": "Atzīmes",

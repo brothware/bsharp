@@ -12,7 +12,6 @@
     "noData": "Brak danych",
     "offline": "Tryb offline",
     "search": "Szukaj",
-    "tryAgain": "Spróbuj ponownie",
     "undo": "Cofnij",
     "change": "Zmień",
     "clear": "Wyczyść",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Brak połączenia z internetem",
     "timeout": "Przekroczono czas oczekiwania",
-    "serverError": "Błąd serwera",
     "schoolNotFound": "Nie znaleziono szkoły. Sprawdź identyfikator szkoły i spróbuj ponownie.",
-    "unknownError": "Wystąpił nieznany błąd",
-    "invalidCredentials": "Nieprawidłowy login lub hasło.",
-    "viewNotFound": "Żądane dane nie zostały znalezione.",
-    "noData": "Brak danych do wyświetlenia.",
-    "timeoutLong": "Przekroczono czas oczekiwania na odpowiedź serwera.",
-    "sessionExpired": "Sesja wygasła. Zaloguj się ponownie.",
-    "databaseError": "Błąd bazy danych. Spróbuj wyczyścić pamięć podręczną.",
-    "protocolMismatch": "Niekompatybilna wersja protokołu. Zaktualizuj aplikację.",
-    "databaseIdChanged": "Zmieniono bazę danych szkoły. Wymagana pełna synchronizacja.",
-    "unknownFailure": "Wystąpił nieoczekiwany błąd."
+    "unknownError": "Wystąpił nieznany błąd"
   },
   "notification": {
     "gradesName": "Oceny",

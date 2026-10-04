@@ -12,7 +12,6 @@
     "noData": "Andmed puuduvad",
     "offline": "Võrguühenduseta režiim",
     "search": "Otsi",
-    "tryAgain": "Proovi uuesti",
     "undo": "Võta tagasi",
     "change": "Muuda",
     "clear": "Tühjenda",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Internetiühendus puudub",
     "timeout": "Päringu ajalõpp",
-    "serverError": "Serveri viga",
     "schoolNotFound": "Kooli ei leitud. Kontrollige kooli identifikaatorit ja proovige uuesti.",
-    "unknownError": "Tekkis tundmatu viga",
-    "invalidCredentials": "Vale kasutajanimi või parool.",
-    "viewNotFound": "Soovitud andmeid ei leitud.",
-    "noData": "Andmeid pole kuvamiseks.",
-    "timeoutLong": "Serveri vastuse ajalõpp.",
-    "sessionExpired": "Seanss aegus. Palun logi uuesti sisse.",
-    "databaseError": "Andmebaasi viga. Proovi vahemälu tühjendada.",
-    "protocolMismatch": "Ühildumatu protokolli versioon. Palun uuenda rakendust.",
-    "databaseIdChanged": "Kooli andmebaas on muutunud. Vajalik on täielik sünkroonimine.",
-    "unknownFailure": "Tekkis ootamatu viga."
+    "unknownError": "Tekkis tundmatu viga"
   },
   "notification": {
     "gradesName": "Hinded",

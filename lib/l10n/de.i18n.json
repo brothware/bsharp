@@ -12,7 +12,6 @@
     "noData": "Keine Daten",
     "offline": "Offline-Modus",
     "search": "Suchen",
-    "tryAgain": "Erneut versuchen",
     "undo": "Rückgängig",
     "change": "Ändern",
     "clear": "Löschen",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Keine Internetverbindung",
     "timeout": "Zeitüberschreitung der Anfrage",
-    "serverError": "Serverfehler",
     "schoolNotFound": "Schule nicht gefunden. Überprüfen Sie die Schulkennung und versuchen Sie es erneut.",
-    "unknownError": "Ein unbekannter Fehler ist aufgetreten",
-    "invalidCredentials": "Ungültiger Benutzername oder Passwort.",
-    "viewNotFound": "Angeforderte Daten nicht gefunden.",
-    "noData": "Keine Daten zur Anzeige.",
-    "timeoutLong": "Zeitüberschreitung der Serverantwort.",
-    "sessionExpired": "Sitzung abgelaufen. Bitte erneut anmelden.",
-    "databaseError": "Datenbankfehler. Versuchen Sie den Cache zu leeren.",
-    "protocolMismatch": "Inkompatible Protokollversion. Bitte aktualisieren Sie die App.",
-    "databaseIdChanged": "Schuldatenbank geändert. Vollständige Synchronisierung erforderlich.",
-    "unknownFailure": "Ein unerwarteter Fehler ist aufgetreten."
+    "unknownError": "Ein unbekannter Fehler ist aufgetreten"
   },
   "notification": {
     "gradesName": "Noten",

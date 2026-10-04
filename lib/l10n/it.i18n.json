@@ -12,7 +12,6 @@
     "noData": "Nessun dato",
     "offline": "Modalità offline",
     "search": "Cerca",
-    "tryAgain": "Riprova",
     "undo": "Annulla",
     "change": "Cambia",
     "clear": "Cancella",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Nessuna connessione internet",
     "timeout": "Tempo di attesa scaduto",
-    "serverError": "Errore del server",
     "schoolNotFound": "Scuola non trovata. Controlla l'identificativo della scuola e riprova.",
-    "unknownError": "Si è verificato un errore sconosciuto",
-    "invalidCredentials": "Nome utente o password non validi.",
-    "viewNotFound": "Dati richiesti non trovati.",
-    "noData": "Nessun dato da visualizzare.",
-    "timeoutLong": "Tempo di risposta del server scaduto.",
-    "sessionExpired": "Sessione scaduta. Effettua nuovamente l'accesso.",
-    "databaseError": "Errore del database. Prova a svuotare la cache.",
-    "protocolMismatch": "Versione del protocollo incompatibile. Aggiorna l'app.",
-    "databaseIdChanged": "Database della scuola modificato. Sincronizzazione completa necessaria.",
-    "unknownFailure": "Si è verificato un errore imprevisto."
+    "unknownError": "Si è verificato un errore sconosciuto"
   },
   "notification": {
     "gradesName": "Voti",

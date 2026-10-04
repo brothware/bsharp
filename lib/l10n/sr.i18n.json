@@ -12,7 +12,6 @@
     "noData": "Nema podataka",
     "offline": "Režim van mreže",
     "search": "Pretraži",
-    "tryAgain": "Pokušaj ponovo",
     "undo": "Opozovi",
     "change": "Promeni",
     "clear": "Obriši",
@@ -463,18 +462,8 @@
   "errors": {
     "noConnection": "Nema internet veze",
     "timeout": "Zahtev je istekao",
-    "serverError": "Greška servera",
     "schoolNotFound": "Школа није пронађена. Проверите идентификатор школе и покушајте поново.",
-    "unknownError": "Došlo je do nepoznate greške",
-    "invalidCredentials": "Pogrešno korisničko ime ili lozinka.",
-    "viewNotFound": "Traženi podaci nisu pronađeni.",
-    "noData": "Nema podataka za prikaz.",
-    "timeoutLong": "Isteklo je vreme čekanja na odgovor servera.",
-    "sessionExpired": "Sesija je istekla. Prijavite se ponovo.",
-    "databaseError": "Greška baze podataka. Pokušajte da obrišete keš.",
-    "protocolMismatch": "Nekompatibilna verzija protokola. Ažurirajte aplikaciju.",
-    "databaseIdChanged": "Baza podataka škole je promenjena. Potrebna potpuna sinhronizacija.",
-    "unknownFailure": "Došlo je do neočekivane greške."
+    "unknownError": "Došlo je do nepoznate greške"
   },
   "notification": {
     "gradesName": "Ocene",

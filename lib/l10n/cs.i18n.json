@@ -12,7 +12,6 @@
     "noData": "Žádná data",
     "offline": "Režim offline",
     "search": "Hledat",
-    "tryAgain": "Zkusit znovu",
     "undo": "Zpět",
     "change": "Změnit",
     "clear": "Vymazat",
@@ -463,18 +462,8 @@
   "errors": {
     "noConnection": "Žádné internetové připojení",
     "timeout": "Vypršel časový limit požadavku",
-    "serverError": "Chyba serveru",
     "schoolNotFound": "Škola nebyla nalezena. Zkontrolujte identifikátor školy a zkuste to znovu.",
-    "unknownError": "Došlo k neznámé chybě",
-    "invalidCredentials": "Neplatné uživatelské jméno nebo heslo.",
-    "viewNotFound": "Požadovaná data nebyla nalezena.",
-    "noData": "Žádná data k zobrazení.",
-    "timeoutLong": "Vypršel časový limit odpovědi serveru.",
-    "sessionExpired": "Relace vypršela. Přihlaste se znovu.",
-    "databaseError": "Chyba databáze. Zkuste vymazat mezipaměť.",
-    "protocolMismatch": "Nekompatibilní verze protokolu. Aktualizujte aplikaci.",
-    "databaseIdChanged": "Databáze školy se změnila. Je vyžadována úplná synchronizace.",
-    "unknownFailure": "Došlo k neočekávané chybě."
+    "unknownError": "Došlo k neznámé chybě"
   },
   "notification": {
     "gradesName": "Známky",

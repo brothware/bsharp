@@ -12,7 +12,6 @@
     "noData": "Inga data",
     "offline": "Offlineläge",
     "search": "Sök",
-    "tryAgain": "Försök igen",
     "undo": "Ångra",
     "change": "Ändra",
     "clear": "Rensa",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Ingen internetanslutning",
     "timeout": "Förfrågan tog för lång tid",
-    "serverError": "Serverfel",
     "schoolNotFound": "Skolan hittades inte. Kontrollera skol-ID och försök igen.",
-    "unknownError": "Ett okänt fel uppstod",
-    "invalidCredentials": "Ogiltigt användarnamn eller lösenord.",
-    "viewNotFound": "Begärd data hittades inte.",
-    "noData": "Ingen data att visa.",
-    "timeoutLong": "Serverns svarstid överskreds.",
-    "sessionExpired": "Sessionen har gått ut. Logga in igen.",
-    "databaseError": "Databasfel. Försök rensa cachen.",
-    "protocolMismatch": "Inkompatibel protokollversion. Uppdatera appen.",
-    "databaseIdChanged": "Skoldatabasen har ändrats. Fullständig synkronisering krävs.",
-    "unknownFailure": "Ett oväntat fel uppstod."
+    "unknownError": "Ett okänt fel uppstod"
   },
   "notification": {
     "gradesName": "Betyg",

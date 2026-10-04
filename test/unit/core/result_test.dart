@@ -154,9 +154,7 @@ void main() {
         NoConnection(),
         ConnectionTimeout(),
         SessionExpired(),
-        DatabaseError(),
         ProtocolMismatch(),
-        DatabaseIdChanged(),
         SchoolNotFound(),
         TranslationQuotaExceeded(),
         TranslationFailed(),
@@ -173,9 +171,7 @@ void main() {
           NoConnection() => 'k',
           ConnectionTimeout() => 'l',
           SessionExpired() => 'm',
-          DatabaseError() => 'n',
           ProtocolMismatch() => 'o',
-          DatabaseIdChanged() => 'p',
           SchoolNotFound() => 'p2',
           TranslationQuotaExceeded() => 'r',
           TranslationFailed() => 's',
@@ -193,9 +189,7 @@ void main() {
       );
       expect(const ConnectionTimeout(), equals(const ConnectionTimeout()));
       expect(const SessionExpired(), equals(const SessionExpired()));
-      expect(const DatabaseError(), equals(const DatabaseError()));
       expect(const ProtocolMismatch(), equals(const ProtocolMismatch()));
-      expect(const DatabaseIdChanged(), equals(const DatabaseIdChanged()));
       expect(
         const UnknownFailure(errno: 1),
         equals(const UnknownFailure(errno: 1)),

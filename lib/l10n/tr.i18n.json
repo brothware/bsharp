@@ -12,7 +12,6 @@
     "noData": "Veri yok",
     "offline": "Çevrimdışı mod",
     "search": "Ara",
-    "tryAgain": "Tekrar dene",
     "undo": "Geri al",
     "change": "Değiştir",
     "clear": "Temizle",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "İnternet bağlantısı yok",
     "timeout": "İstek zaman aşımına uğradı",
-    "serverError": "Sunucu hatası",
     "schoolNotFound": "Okul bulunamadı. Okul kimliğini kontrol edin ve tekrar deneyin.",
-    "unknownError": "Bilinmeyen bir hata oluştu",
-    "invalidCredentials": "Geçersiz kullanıcı adı veya şifre.",
-    "viewNotFound": "İstenen veriler bulunamadı.",
-    "noData": "Görüntülenecek veri yok.",
-    "timeoutLong": "Sunucu yanıt süresi aşıldı.",
-    "sessionExpired": "Oturum sona erdi. Lütfen tekrar giriş yapın.",
-    "databaseError": "Veritabanı hatası. Önbelleği temizlemeyi deneyin.",
-    "protocolMismatch": "Uyumsuz protokol sürümü. Lütfen uygulamayı güncelleyin.",
-    "databaseIdChanged": "Okul veritabanı değişti. Tam senkronizasyon gerekli.",
-    "unknownFailure": "Beklenmeyen bir hata oluştu."
+    "unknownError": "Bilinmeyen bir hata oluştu"
   },
   "notification": {
     "gradesName": "Notlar",

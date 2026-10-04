@@ -12,7 +12,6 @@
     "noData": "データなし",
     "offline": "オフラインモード",
     "search": "検索",
-    "tryAgain": "再試行",
     "undo": "元に戻す",
     "change": "変更",
     "clear": "クリア",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "インターネット接続なし",
     "timeout": "リクエストがタイムアウトしました",
-    "serverError": "サーバーエラー",
     "schoolNotFound": "学校が見つかりません。学校IDを確認して、もう一度お試しください。",
-    "unknownError": "不明なエラーが発生しました",
-    "invalidCredentials": "ユーザー名またはパスワードが正しくありません。",
-    "viewNotFound": "リクエストされたデータが見つかりません。",
-    "noData": "表示するデータがありません。",
-    "timeoutLong": "サーバーの応答がタイムアウトしました。",
-    "sessionExpired": "セッションが期限切れです。再度ログインしてください。",
-    "databaseError": "データベースエラーです。キャッシュの削除をお試しください。",
-    "protocolMismatch": "プロトコルバージョンに互換性がありません。アプリを更新してください。",
-    "databaseIdChanged": "学校データベースが変更されました。完全同期が必要です。",
-    "unknownFailure": "予期しないエラーが発生しました。"
+    "unknownError": "不明なエラーが発生しました"
   },
   "notification": {
     "gradesName": "成績",

@@ -12,7 +12,6 @@
     "noData": "Sem dados",
     "offline": "Modo offline",
     "search": "Pesquisar",
-    "tryAgain": "Tentar novamente",
     "undo": "Desfazer",
     "change": "Alterar",
     "clear": "Limpar",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Sem ligação à internet",
     "timeout": "Tempo de espera esgotado",
-    "serverError": "Erro do servidor",
     "schoolNotFound": "Escola não encontrada. Verifique o identificador da escola e tente novamente.",
-    "unknownError": "Ocorreu um erro desconhecido",
-    "invalidCredentials": "Nome de utilizador ou palavra-passe inválidos.",
-    "viewNotFound": "Dados solicitados não encontrados.",
-    "noData": "Sem dados para apresentar.",
-    "timeoutLong": "Tempo de resposta do servidor esgotado.",
-    "sessionExpired": "Sessão expirada. Por favor, inicie sessão novamente.",
-    "databaseError": "Erro na base de dados. Tente limpar a cache.",
-    "protocolMismatch": "Versão de protocolo incompatível. Por favor, atualize a aplicação.",
-    "databaseIdChanged": "Base de dados da escola alterada. Sincronização completa necessária.",
-    "unknownFailure": "Ocorreu um erro inesperado."
+    "unknownError": "Ocorreu um erro desconhecido"
   },
   "notification": {
     "gradesName": "Notas",

@@ -12,7 +12,6 @@
     "noData": "Ingen data",
     "offline": "Frakoblet modus",
     "search": "Søk",
-    "tryAgain": "Prøv igjen",
     "undo": "Angre",
     "change": "Endre",
     "clear": "Tøm",
@@ -460,18 +459,8 @@
   "errors": {
     "noConnection": "Ingen internettforbindelse",
     "timeout": "Forespørselen ble tidsavbrutt",
-    "serverError": "Serverfeil",
     "schoolNotFound": "Skolen ble ikke funnet. Sjekk skole-ID og prøv igjen.",
-    "unknownError": "En ukjent feil oppsto",
-    "invalidCredentials": "Ugyldig brukernavn eller passord.",
-    "viewNotFound": "Forespurte data ble ikke funnet.",
-    "noData": "Ingen data å vise.",
-    "timeoutLong": "Serverens svartid ble overskredet.",
-    "sessionExpired": "Økten har utløpt. Logg inn igjen.",
-    "databaseError": "Databasefeil. Prøv å tømme hurtigbufferen.",
-    "protocolMismatch": "Inkompatibel protokollversjon. Oppdater appen.",
-    "databaseIdChanged": "Skoledatabasen er endret. Full synkronisering kreves.",
-    "unknownFailure": "En uventet feil oppsto."
+    "unknownError": "En ukjent feil oppsto"
   },
   "notification": {
     "gradesName": "Karakterer",

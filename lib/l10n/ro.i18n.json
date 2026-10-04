@@ -12,7 +12,6 @@
     "noData": "Fără date",
     "offline": "Mod offline",
     "search": "Caută",
-    "tryAgain": "Încearcă din nou",
     "undo": "Anulează",
     "change": "Schimbă",
     "clear": "Șterge",
@@ -463,18 +462,8 @@
   "errors": {
     "noConnection": "Fără conexiune la internet",
     "timeout": "Cererea a expirat",
-    "serverError": "Eroare de server",
     "schoolNotFound": "Școala nu a fost găsită. Verificați identificatorul școlii și încercați din nou.",
-    "unknownError": "A apărut o eroare necunoscută",
-    "invalidCredentials": "Nume de utilizator sau parolă incorectă.",
-    "viewNotFound": "Datele solicitate nu au fost găsite.",
-    "noData": "Fără date de afișat.",
-    "timeoutLong": "Timpul de răspuns al serverului a expirat.",
-    "sessionExpired": "Sesiunea a expirat. Conectați-vă din nou.",
-    "databaseError": "Eroare de bază de date. Încercați să goliți memoria cache.",
-    "protocolMismatch": "Versiune de protocol incompatibilă. Actualizați aplicația.",
-    "databaseIdChanged": "Baza de date a școlii s-a schimbat. Este necesară o sincronizare completă.",
-    "unknownFailure": "A apărut o eroare neașteptată."
+    "unknownError": "A apărut o eroare necunoscută"
   },
   "notification": {
     "gradesName": "Note",
