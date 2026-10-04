@@ -1,4 +1,3 @@
-import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/grade_utils.dart';
 import 'package:bsharp/domain/translation_utils.dart';
@@ -36,7 +35,6 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
       grade.effectiveValue,
       brightness: theme.brightness,
     );
-    final translationAvailable = ref.watch(isTranslationAvailableProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -154,12 +152,11 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
               label: t.grades.comment,
               value: _translatedComment ?? grade.comment!,
             ),
-          if (translationAvailable)
-            _buildTranslateButton(
-              grade.categoryName,
-              grade.description,
-              grade.comment,
-            ),
+          _buildTranslateButton(
+            grade.categoryName,
+            grade.description,
+            grade.comment,
+          ),
           if (grade.effectiveValue != null)
             _DetailRow(
               icon: Icons.tag,
