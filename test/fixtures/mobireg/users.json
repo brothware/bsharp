@@ -1,0 +1,11 @@
+{
+  "id": 8256, "eduId": 959517, "firstname": "Jan", "lastname": "Kowalski", "role": 2,
+  "schoolName": ["Ogólnokształcąca Szkoła Muzyczna I i II stopnia", "ul. Przykładowa 1 50-044 Wrocław", "https://example.test"],
+  "pupils": [{"id": 6339, "firstname": "Maria", "lastname": "Kowalska"}],
+  "messagingUrl": "https://poczta.mobireg.pl/sso",
+  "messagesToken": "bW9jay1tZXNzYWdlcy10b2tlbg==",
+  "appConfig": {
+    "modules": {"attendances": 1, "reprimands": 1, "timetable": 1, "announcements": 1, "notifications": 1, "schedule": 1, "sms": 1},
+    "marks": {"parentSuggestionMode": 0, "showAverage": 0, "showDescriptive": 1}
+  }
+}

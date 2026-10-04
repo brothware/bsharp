@@ -1,0 +1,4 @@
+{"count": 2, "items": [
+  {"id": 709, "subjectName": "kształcenie słuchu", "dateTime": "2026-10-12 09:45:00", "addedTime": "2026-09-30 09:30:31", "title": "Interwały budowanie", "description": "", "teacherId": 5331},
+  {"id": 769, "subjectName": "przyroda", "dateTime": "2026-10-08 08:00:00", "addedTime": "2026-09-29 12:00:00", "title": "dział 1", "description": "rozdziały 1-3", "teacherId": 4977}
+], "teachers": {"5331": {"first_name": "Agnieszka", "surname": "Nowak", "id": 5331}}}
