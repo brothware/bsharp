@@ -310,7 +310,8 @@
     "messageSent": "Poruka poslata",
     "sendFailed": "Slanje poruke nije uspelo",
     "readReceipt": "Pročitano",
-    "notReadYet": "Još nije pročitano"
+    "notReadYet": "Još nije pročitano",
+    "loadMoreFailed": "Није могуће учитати више порука"
   },
   "settings": {
     "title": "Podešavanja",

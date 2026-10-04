@@ -84,6 +84,12 @@ class _PupilGoneDataProvider extends DemoDataProvider {
   }) async => throw StateError('Pupil $studentId is not on this account');
 }
 
+class _MalformedMailDataProvider extends DemoDataProvider {
+  @override
+  Future<void> refreshMessages(Ref ref) async =>
+      throw const FormatException('View poczta inbox: expected objects');
+}
+
 CredentialStorage _emptyStorage() =>
     CredentialStorage(store: FakeKeyValueStore());
 
@@ -149,6 +155,28 @@ void main() {
       addTearDown(failing.dispose);
 
       await failing.read(syncStatusProvider.notifier).sync();
+
+      expect(failing.read(syncStatusProvider), SyncStatus.failed);
+    });
+
+    test('a malformed mail payload during refresh fails the status', () async {
+      final failing = ProviderContainer(
+        overrides: [
+          credentialStorageProvider.overrideWithValue(_emptyStorage()),
+          sharedPreferencesProvider.overrideWithValue(
+            container.read(sharedPreferencesProvider),
+          ),
+          accountStorageProvider.overrideWithValue(
+            AccountStorage(store: FakeKeyValueStore()),
+          ),
+          activeDataProviderProvider.overrideWithBuild(
+            (ref, _) => _MalformedMailDataProvider(),
+          ),
+        ],
+      );
+      addTearDown(failing.dispose);
+
+      await failing.read(syncStatusProvider.notifier).syncMessages();
 
       expect(failing.read(syncStatusProvider), SyncStatus.failed);
     });

@@ -61,6 +61,19 @@ void main() {
       );
     });
 
+    test('a failure does not carry the mail content', () {
+      expect(
+        () => parsePocztaMessages([_message(id: null)], _folder),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => '${e.source}',
+            'source',
+            isNot(contains('Szczegóły')),
+          ),
+        ),
+      );
+    });
+
     test('an unreadable date is a FormatException', () {
       expect(
         () => parsePocztaMessages([_message(date: 'jutro')], _folder),

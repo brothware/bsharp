@@ -307,7 +307,8 @@
     "messageSent": "メッセージを送信しました",
     "sendFailed": "メッセージの送信に失敗しました",
     "readReceipt": "既読",
-    "notReadYet": "未読"
+    "notReadYet": "未読",
+    "loadMoreFailed": "これ以上のメッセージを読み込めませんでした"
   },
   "settings": {
     "title": "設定",

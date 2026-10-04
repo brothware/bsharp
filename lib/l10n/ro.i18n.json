@@ -310,7 +310,8 @@
     "messageSent": "Mesaj trimis",
     "sendFailed": "Trimiterea mesajului a eșuat",
     "readReceipt": "Citit",
-    "notReadYet": "Încă necitit"
+    "notReadYet": "Încă necitit",
+    "loadMoreFailed": "Nu s-au putut încărca mai multe mesaje"
   },
   "settings": {
     "title": "Setări",

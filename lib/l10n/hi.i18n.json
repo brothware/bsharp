@@ -307,7 +307,8 @@
     "messageSent": "संदेश भेजा गया",
     "sendFailed": "संदेश भेजने में विफल",
     "readReceipt": "पढ़ा गया",
-    "notReadYet": "अभी तक नहीं पढ़ा"
+    "notReadYet": "अभी तक नहीं पढ़ा",
+    "loadMoreFailed": "और संदेश लोड नहीं हो सके"
   },
   "settings": {
     "title": "सेटिंग्स",

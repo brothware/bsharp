@@ -313,7 +313,8 @@
     "messageSent": "Messaġġ mibgħut",
     "sendFailed": "Ma rnexxielekx tibgħat il-messaġġ",
     "readReceipt": "Maqri",
-    "notReadYet": "Għadu mhux maqri"
+    "notReadYet": "Għadu mhux maqri",
+    "loadMoreFailed": "Ma setgħux jitqiegħdu aktar messaġġi"
   },
   "settings": {
     "title": "Issettjar",

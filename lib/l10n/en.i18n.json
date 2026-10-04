@@ -307,7 +307,8 @@
     "messageSent": "Message sent",
     "sendFailed": "Failed to send message",
     "readReceipt": "Read",
-    "notReadYet": "Not read yet"
+    "notReadYet": "Not read yet",
+    "loadMoreFailed": "Could not load more messages"
   },
   "settings": {
     "title": "Settings",

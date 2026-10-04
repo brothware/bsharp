@@ -307,7 +307,8 @@
     "messageSent": "消息已发送",
     "sendFailed": "消息发送失败",
     "readReceipt": "已读",
-    "notReadYet": "未读"
+    "notReadYet": "未读",
+    "loadMoreFailed": "无法加载更多消息"
   },
   "settings": {
     "title": "设置",

@@ -221,6 +221,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       debugPrint(
         'SyncStatusNotifier: mail refresh failed: $error\n$stackTrace',
       );
+      state = SyncStatus.failed;
     }
   }
 }

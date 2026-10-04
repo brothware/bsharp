@@ -313,7 +313,8 @@
     "messageSent": "Sporočilo poslano",
     "sendFailed": "Pošiljanje sporočila ni uspelo",
     "readReceipt": "Prebrano",
-    "notReadYet": "Še ni prebrano"
+    "notReadYet": "Še ni prebrano",
+    "loadMoreFailed": "Nalaganje več sporočil ni uspelo"
   },
   "settings": {
     "title": "Nastavitve",

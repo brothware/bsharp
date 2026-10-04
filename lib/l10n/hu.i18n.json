@@ -307,7 +307,8 @@
     "messageSent": "Üzenet elküldve",
     "sendFailed": "Az üzenet küldése sikertelen",
     "readReceipt": "Elolvasva",
-    "notReadYet": "Még nem olvasták el"
+    "notReadYet": "Még nem olvasták el",
+    "loadMoreFailed": "Nem sikerült további üzeneteket betölteni"
   },
   "settings": {
     "title": "Beállítások",

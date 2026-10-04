@@ -310,7 +310,8 @@
     "messageSent": "Wiadomość wysłana",
     "sendFailed": "Nie udało się wysłać wiadomości",
     "readReceipt": "Przeczytano",
-    "notReadYet": "Jeszcze nie przeczytano"
+    "notReadYet": "Jeszcze nie przeczytano",
+    "loadMoreFailed": "Nie udało się wczytać kolejnych wiadomości"
   },
   "settings": {
     "title": "Ustawienia",

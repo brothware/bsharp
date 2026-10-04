@@ -307,7 +307,8 @@
     "messageSent": "Nachricht gesendet",
     "sendFailed": "Nachricht konnte nicht gesendet werden",
     "readReceipt": "Gelesen",
-    "notReadYet": "Noch nicht gelesen"
+    "notReadYet": "Noch nicht gelesen",
+    "loadMoreFailed": "Weitere Nachrichten konnten nicht geladen werden"
   },
   "settings": {
     "title": "Einstellungen",

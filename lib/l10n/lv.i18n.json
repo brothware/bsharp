@@ -307,7 +307,8 @@
     "messageSent": "Ziņojums nosūtīts",
     "sendFailed": "Neizdevās nosūtīt ziņojumu",
     "readReceipt": "Izlasīts",
-    "notReadYet": "Vēl nav izlasīts"
+    "notReadYet": "Vēl nav izlasīts",
+    "loadMoreFailed": "Neizdevās ielādēt vairāk ziņojumu"
   },
   "settings": {
     "title": "Iestatījumi",

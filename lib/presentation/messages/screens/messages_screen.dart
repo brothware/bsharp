@@ -194,7 +194,11 @@ class _MessageListState extends ConsumerState<_MessageList> {
       debugPrint(
         'MessagesScreen: loading more mail failed: $error\n$stackTrace',
       );
-      if (mounted) setState(() => _isLoadingMore = false);
+      if (!mounted) return;
+      setState(() => _isLoadingMore = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(t.messages.loadMoreFailed)));
       return;
     }
     if (!mounted) return;

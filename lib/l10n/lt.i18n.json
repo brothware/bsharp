@@ -313,7 +313,8 @@
     "messageSent": "Žinutė išsiųsta",
     "sendFailed": "Nepavyko išsiųsti žinutės",
     "readReceipt": "Perskaityta",
-    "notReadYet": "Dar neperskaityta"
+    "notReadYet": "Dar neperskaityta",
+    "loadMoreFailed": "Nepavyko įkelti daugiau žinučių"
   },
   "settings": {
     "title": "Nustatymai",

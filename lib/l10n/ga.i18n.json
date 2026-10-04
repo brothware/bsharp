@@ -316,7 +316,8 @@
     "messageSent": "Teachtaireacht seolta",
     "sendFailed": "Theip ar sheoladh na teachtaireachta",
     "readReceipt": "Léite",
-    "notReadYet": "Gan léamh fós"
+    "notReadYet": "Gan léamh fós",
+    "loadMoreFailed": "Níorbh fhéidir tuilleadh teachtaireachtaí a luchtú"
   },
   "settings": {
     "title": "Socruithe",

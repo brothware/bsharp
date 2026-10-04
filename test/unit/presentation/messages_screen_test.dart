@@ -1,9 +1,17 @@
+import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/presentation/messages/screens/messages_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+class _MalformedPageDataProvider extends DemoDataProvider {
+  @override
+  Future<List<PocztaMessage>> loadMoreInbox(int skip) async =>
+      throw const FormatException('View poczta inbox: expected objects');
+}
 
 void main() {
   PocztaMessage msg({int id = 1, String title = 'Test', bool isRead = false}) {
@@ -80,5 +88,26 @@ void main() {
     await tester.pumpWidget(wrap(inbox: [msg()]));
 
     expect(find.byIcon(Icons.edit), findsOneWidget);
+  });
+
+  testWidgets('a malformed page of older mail shows an error', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          inboxProvider.overrideWithBuild((ref, _) => [msg()]),
+          sentProvider.overrideWithBuild((ref, _) => const []),
+          trashProvider.overrideWithBuild((ref, _) => const []),
+          activeDataProviderProvider.overrideWithBuild(
+            (ref, _) => _MalformedPageDataProvider(),
+          ),
+        ],
+        child: const MaterialApp(home: Scaffold(body: MessagesScreen())),
+      ),
+    );
+
+    await tester.drag(find.byType(ListView), const Offset(0, -300));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Could not load more messages'), findsOneWidget);
   });
 }

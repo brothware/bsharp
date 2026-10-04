@@ -310,7 +310,8 @@
     "messageSent": "Zpráva odeslána",
     "sendFailed": "Nepodařilo se odeslat zprávu",
     "readReceipt": "Přečteno",
-    "notReadYet": "Zatím nepřečteno"
+    "notReadYet": "Zatím nepřečteno",
+    "loadMoreFailed": "Nepodařilo se načíst další zprávy"
   },
   "settings": {
     "title": "Nastavení",

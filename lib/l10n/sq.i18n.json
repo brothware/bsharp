@@ -307,7 +307,8 @@
     "messageSent": "Mesazhi u dërgua",
     "sendFailed": "Dërgimi i mesazhit dështoi",
     "readReceipt": "Lexuar",
-    "notReadYet": "Ende nuk është lexuar"
+    "notReadYet": "Ende nuk është lexuar",
+    "loadMoreFailed": "Nuk u ngarkuan dot më shumë mesazhe"
   },
   "settings": {
     "title": "Cilësimet",

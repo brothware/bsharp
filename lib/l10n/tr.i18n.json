@@ -307,7 +307,8 @@
     "messageSent": "Mesaj gönderildi",
     "sendFailed": "Mesaj gönderilemedi",
     "readReceipt": "Okundu",
-    "notReadYet": "Henüz okunmadı"
+    "notReadYet": "Henüz okunmadı",
+    "loadMoreFailed": "Daha fazla mesaj yüklenemedi"
   },
   "settings": {
     "title": "Ayarlar",

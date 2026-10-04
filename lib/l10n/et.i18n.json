@@ -307,7 +307,8 @@
     "messageSent": "Sõnum saadetud",
     "sendFailed": "Sõnumi saatmine ebaõnnestus",
     "readReceipt": "Loetud",
-    "notReadYet": "Pole veel loetud"
+    "notReadYet": "Pole veel loetud",
+    "loadMoreFailed": "Rohkemate sõnumite laadimine ebaõnnestus"
   },
   "settings": {
     "title": "Seaded",
