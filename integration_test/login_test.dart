@@ -24,7 +24,7 @@ void main() {
       );
       await tapAddAccount(tester);
 
-      expect(find.textContaining('Dawid'), findsWidgets);
+      expect(find.textContaining('Maria'), findsWidgets);
       expect(find.textContaining('Zofia'), findsWidgets);
     });
 
@@ -113,7 +113,7 @@ void main() {
       );
       await tapAddAccount(tester);
 
-      expect(find.textContaining('liwa'), findsWidgets);
+      expect(find.textContaining('Kowalsk'), findsWidgets);
 
       await tapAddAccountOutlined(tester);
       await selectProvider(tester, 'Mobireg');
@@ -125,7 +125,7 @@ void main() {
       );
       await tapAddAccount(tester);
 
-      expect(find.textContaining('liwa'), findsWidgets);
+      expect(find.textContaining('Kowalsk'), findsWidgets);
       expect(find.textContaining('Wi'), findsWidgets);
     });
   });

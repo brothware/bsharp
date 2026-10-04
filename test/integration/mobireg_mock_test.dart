@@ -6,265 +6,253 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
-import 'package:bsharp/data/services/sync_data_parser.dart';
+import 'package:bsharp/data/providers/mobireg/parsers/account_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-const _mockBaseUrl = 'http://localhost:8090';
+const _mockPort = 8090;
+const _mockBaseUrl = 'http://localhost:$_mockPort';
+const _school = 'osm-wroclaw';
+const _apiPath = '/$_school/modules/api';
+const _mockLogin = 'user';
+const _mockPassword = 'pass';
+const _unauthorized = 401;
+const _firstPupilId = 6339;
+const _protocolVersion = 1;
+const _unknownViewErrno = 103;
+const _pageSize = 20;
+const _firstMessageId = 20001;
+const _connectTimeout = Duration(seconds: 1);
+const _requestTimeout = Duration(seconds: 5);
+const _formContentType = 'application/x-www-form-urlencoded';
 
 Future<bool> _isMockRunning() async {
   try {
     final socket = await Socket.connect(
       'localhost',
-      8090,
-      timeout: const Duration(seconds: 1),
+      _mockPort,
+      timeout: _connectTimeout,
     );
-    socket.destroy();
+    await socket.close();
     return true;
-  } on Object {
+  } on SocketException {
     return false;
   }
 }
 
 void main() {
   late Dio dio;
-  late bool mockAvailable;
 
   setUpAll(() async {
-    mockAvailable = await _isMockRunning();
-    if (!mockAvailable) {
-      markTestSkipped(
-        'mobireg-mock not running on localhost:8090. '
+    if (!await _isMockRunning()) {
+      fail(
+        'mobireg-mock not running on localhost:$_mockPort. '
         'Start with: cd lib/data/providers/mobireg/test-mock && npm start',
       );
-      return;
     }
     dio = Dio(
       BaseOptions(
         baseUrl: _mockBaseUrl,
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 5),
+        connectTimeout: _requestTimeout,
+        receiveTimeout: _requestTimeout,
+        validateStatus: (status) => status != null && status < 500,
       ),
     );
   });
 
   tearDownAll(() => dio.close());
 
-  group('Mobile Sync', () {
-    test('Settings response parses correctly', () async {
+  Future<String> login() async {
+    final response = await dio.post<Map<String, dynamic>>(
+      '$_apiPath/auth.php',
+      data: {'login': _mockLogin, 'password': _mockPassword},
+    );
+    return response.data!['token'] as String;
+  }
+
+  Future<Response<Map<String, dynamic>>> appCall(
+    Map<String, Object?> fields,
+  ) {
+    return dio.post<Map<String, dynamic>>(
+      '$_apiPath/app.php',
+      data: fields.map((key, value) => MapEntry(key, '$value')),
+      options: Options(contentType: _formContentType),
+    );
+  }
+
+  group('auth.php', () {
+    test('returns a token for valid credentials', () async {
       final response = await dio.post<Map<String, dynamic>>(
-        '/osm-wroclaw/modules/api/njson.php',
-        data: 'login=eparent&pass=test&view=Settings',
-        options: Options(contentType: 'application/x-www-form-urlencoded'),
+        '$_apiPath/auth.php',
+        data: {'login': _mockLogin, 'password': _mockPassword},
       );
 
-      final data = response.data!;
-      expect(data, contains('Settings'));
-      final settings = data['Settings'] as List;
-      expect(settings, isNotEmpty);
-      final first = settings.first as Map<String, dynamic>;
-      expect(first['schoolName'], isA<String>());
-      expect(first['version'], isA<String>());
-      expect(first['protocol'], isA<String>());
+      expect(response.data!['status'], 'OK');
+      expect(response.data!['token'], isA<String>());
     });
 
-    test('ParentStudents response parses correctly', () async {
+    test('rejects wrong credentials with an error message', () async {
       final response = await dio.post<Map<String, dynamic>>(
-        '/osm-wroclaw/modules/api/njson.php',
-        data: 'login=eparent&pass=test&view=ParentStudents',
-        options: Options(contentType: 'application/x-www-form-urlencoded'),
+        '$_apiPath/auth.php',
+        data: {'login': _mockLogin, 'password': 'wrong'},
       );
 
-      final data = response.data!;
-      expect(data, contains('ParentStudents'));
-      final students = data['ParentStudents'] as List;
-      expect(students, isNotEmpty);
-      final first = students.first as Map<String, dynamic>;
-      expect(first['id'], isA<int>());
-      expect(first['name'], isA<String>());
-      expect(first['surname'], isA<String>());
-      expect(first['sex'], isA<String>());
-    });
-
-    test('Full sync response parses through SyncDataParser', () async {
-      final response = await dio.post<Map<String, dynamic>>(
-        '/osm-wroclaw/modules/api/njson.php',
-        data: 'login=eparent&pass=test&student_id=6541&start_date=2025-09-01&end_date=2026-06-30',
-        options: Options(contentType: 'application/x-www-form-urlencoded'),
-      );
-
-      final data = response.data!;
-      final parser = SyncDataParser();
-      final syncData = parser.parse(data);
-
-      expect(
-        syncData.students,
-        isNotEmpty,
-        reason: 'Students should not be empty',
-      );
-      expect(
-        syncData.teachers,
-        isNotEmpty,
-        reason: 'Teachers should not be empty',
-      );
-      expect(
-        syncData.subjects,
-        isNotEmpty,
-        reason: 'Subjects should not be empty',
-      );
-      expect(syncData.events, isNotEmpty, reason: 'Events should not be empty');
-      expect(syncData.marks, isNotEmpty, reason: 'Marks should not be empty');
-      expect(
-        syncData.attendances,
-        isNotEmpty,
-        reason: 'Attendances should not be empty',
-      );
-      expect(
-        syncData.attendanceTypes,
-        isNotEmpty,
-        reason: 'AttendanceTypes should not be empty',
-      );
-
-      expect(syncData.students.first.name, isNotEmpty);
-      expect(syncData.teachers.first.name, isNotEmpty);
-      expect(syncData.subjects.first.name, isNotEmpty);
+      expect(response.data!['status'], 'ERROR');
+      expect(response.data!['message'], isA<String>());
     });
   });
 
-  group('Portal API', () {
-    test('subjects view parses correctly', () async {
-      final response = await dio.post<Map<String, dynamic>>(
-        '/api.php',
-        data: 'school=osm-wroclaw&token=abc&view=subjects&pupilId=6541',
-        options: Options(contentType: 'application/x-www-form-urlencoded'),
-      );
+  group('app.php', () {
+    test('terms answer in the envelope', () async {
+      final token = await login();
 
-      final items = response.data!['items'] as List;
-      expect(items, isNotEmpty);
-      final first = items.first as Map<String, dynamic>;
-      expect(first['id'], isA<int>());
-      expect(first['name'], isA<String>());
+      final response = await appCall({
+        'view': 'terms',
+        'format': 'json',
+        'token': token,
+        'JWTToken': token,
+        'pupilId': _firstPupilId,
+      });
+
+      final body = response.data!;
+      expect(body['v'], _protocolVersion);
+      expect(body['data'], isA<List<dynamic>>());
+      expect(body['data'], isNotEmpty);
     });
 
-    test('timetable-events view parses correctly', () async {
-      final response = await dio.post<Map<String, dynamic>>(
-        '/api.php',
-        data: 'school=osm-wroclaw&token=abc&view=timetable-events&pupilId=6541&dateFrom=2026-03-01&dateTo=2026-03-31',
-        options: Options(contentType: 'application/x-www-form-urlencoded'),
-      );
+    test('users view parses into an account', () async {
+      final token = await login();
 
-      final items = response.data!['items'] as List;
-      expect(items, isNotEmpty);
-      final first = items.first as Map<String, dynamic>;
-      expect(first['id'], isA<int>());
-      expect(first['dateTimeFrom'], isA<String>());
-      expect(first['subjectName'], isA<String>());
-      expect(first['teachers'], isA<List<dynamic>>());
+      final response = await appCall({
+        'view': 'users',
+        'format': 'json',
+        'token': token,
+        'JWTToken': token,
+      });
+
+      final account = parseAccount(
+        response.data!['data'] as Map<String, dynamic>,
+      );
+      expect(account.students, isNotEmpty);
+      expect(account.messagingUrl, isNotEmpty);
+      expect(account.messagesToken, isNotEmpty);
     });
 
-    test('marks view parses correctly', () async {
-      final response = await dio.post<Map<String, dynamic>>(
-        '/api.php',
-        data: 'school=osm-wroclaw&token=abc&view=marks&pupilId=6541&termId=1',
-        options: Options(contentType: 'application/x-www-form-urlencoded'),
-      );
+    test('answers 401 without a token', () async {
+      final response = await appCall({
+        'view': 'terms',
+        'format': 'json',
+        'pupilId': _firstPupilId,
+      });
 
-      final items = response.data!['items'] as List;
-      expect(items, isNotEmpty);
-      final first = items.first as Map<String, dynamic>;
-      expect(first['id'], isA<int>());
-      expect(first['value'], isA<String>());
-      expect(first['subjectId'], isA<int>());
-      expect(first['weight'], isA<int>());
+      expect(response.statusCode, _unauthorized);
     });
 
-    test('homeworks view parses correctly', () async {
-      final response = await dio.post<Map<String, dynamic>>(
-        '/api.php',
-        data: 'school=osm-wroclaw&token=abc&view=homeworks&pupilId=6541',
-        options: Options(contentType: 'application/x-www-form-urlencoded'),
-      );
+    test('answers errno 103 for an unknown view', () async {
+      final token = await login();
 
-      final items = response.data!['items'] as List;
-      expect(items, isNotEmpty);
-      final first = items.first as Map<String, dynamic>;
-      expect(first['id'], isA<int>());
-      expect(first['subjectName'], isA<String>());
-      expect(first['dueDate'], isA<String>());
-    });
+      final response = await appCall({
+        'view': 'no-such-view',
+        'format': 'json',
+        'token': token,
+        'JWTToken': token,
+        'pupilId': _firstPupilId,
+      });
 
-    test('attendances view parses correctly', () async {
-      final response = await dio.post<Map<String, dynamic>>(
-        '/api.php',
-        data: 'school=osm-wroclaw&token=abc&view=attendances&pupilId=6541',
-        options: Options(contentType: 'application/x-www-form-urlencoded'),
-      );
-
-      final data = response.data!;
-      expect(data['percent'], isA<num>());
-      expect(data['types'], isA<List<dynamic>>());
+      final data = response.data!['data'] as Map<String, dynamic>;
+      expect(data['errno'], _unknownViewErrno);
     });
   });
 
-  group('Poczta Messages', () {
-    test('inbox parses through PocztaMessage parser', () async {
-      final response = await dio.post<String>(
-        '/api/messages/inbox',
-        data: jsonEncode({'page': 1}),
+  group('poczta', () {
+    Future<String> ssoCookie() async {
+      final response = await dio.get<String>(
+        '/sso/$_school/token',
+        options: Options(followRedirects: false),
+      );
+      return (response.headers['set-cookie'] ?? const <String>[])
+          .map((value) => value.split(';').first.trim())
+          .join('; ');
+    }
+
+    Future<Response<Map<String, dynamic>>> postFolder(
+      String folder,
+      String cookie,
+    ) {
+      return dio.post<Map<String, dynamic>>(
+        '/api/messages/$folder',
+        data: jsonEncode({'limit': _pageSize, 'skip': 0}),
         options: Options(
           contentType: 'application/json',
-          responseType: ResponseType.plain,
+          headers: {'Cookie': cookie},
         ),
       );
+    }
 
-      final decoded = jsonDecode(response.data!) as List;
-      expect(decoded, isNotEmpty);
+    test('SSO sets a session cookie', () async {
+      expect(await ssoCookie(), isNotEmpty);
+    });
 
-      final messages = parsePocztaMessages(decoded);
+    test('inbox parses through the message parser', () async {
+      final response = await postFolder('inbox', await ssoCookie());
+
+      final items = response.data!['items'] as List<dynamic>;
+      final messages = parsePocztaMessages(items);
       expect(messages, isNotEmpty);
       expect(messages.first.title, isNotEmpty);
       expect(messages.first.senderName, isNotEmpty);
     });
 
-    test('sent parses correctly', () async {
-      final response = await dio.post<String>(
-        '/api/messages/sent',
-        data: jsonEncode({'page': 1}),
-        options: Options(
-          contentType: 'application/json',
-          responseType: ResponseType.plain,
-        ),
-      );
+    test('sent parses through the message parser', () async {
+      final response = await postFolder('sent', await ssoCookie());
 
-      final decoded = jsonDecode(response.data!) as List;
-      expect(decoded, isNotEmpty);
-      final messages = parsePocztaMessages(decoded);
-      expect(messages, isNotEmpty);
+      final items = response.data!['items'] as List<dynamic>;
+      expect(parsePocztaMessages(items), isNotEmpty);
+    });
+
+    test('folder lists answer 401 without the cookie', () async {
+      final response = await postFolder('inbox', '');
+
+      expect(response.statusCode, _unauthorized);
     });
 
     test('read message returns full content', () async {
       final response = await dio.get<Map<String, dynamic>>(
-        '/api/messages/read/20001',
+        '/api/messages/read/$_firstMessageId',
+        options: Options(headers: {'Cookie': await ssoCookie()}),
       );
 
       final data = response.data!;
       expect(data['id'], isA<int>());
       expect(data['subject'], isA<String>());
       expect(data['content'], isA<String>());
-      expect(data['author'], isA<Map<String, dynamic>>());
-      expect((data['author'] as Map)['name'], isA<String>());
+      expect((data['author'] as Map<String, dynamic>)['name'], isA<String>());
+    });
+
+    test('unread count is plain integer text', () async {
+      final response = await dio.post<String>(
+        '/api/unreadMessages',
+        data: jsonEncode({'school': _school, 'messagesToken': 'token'}),
+        options: Options(
+          contentType: 'application/json',
+          responseType: ResponseType.plain,
+        ),
+      );
+
+      expect(int.tryParse(response.data!.trim()), isNotNull);
     });
 
     test('receivers search returns results', () async {
       final response = await dio.post<List<dynamic>>(
         '/api/messages/receivers/search',
-        data: jsonEncode({'query': 'Kowalska'}),
-        options: Options(contentType: 'application/json'),
+        data: jsonEncode({'query': 'Kowalska', 'ids': <Object>[]}),
+        options: Options(
+          contentType: 'application/json',
+          headers: {'Cookie': await ssoCookie()},
+        ),
       );
 
-      final data = response.data!;
-      expect(data, isNotEmpty);
-      final first = data.first as Map<String, dynamic>;
+      final first = response.data!.first as Map<String, dynamic>;
       expect(first['id'], isA<String>());
       expect(first['name'], isA<String>());
     });

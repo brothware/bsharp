@@ -37,8 +37,8 @@ void main() {
       await setupMockApp(tester);
       await addSchoolA(tester);
 
-      expect(find.textContaining('liwa'), findsWidgets);
-      expect(find.textContaining('Kowalczyk'), findsWidgets);
+      expect(find.textContaining('Kowalsk'), findsWidgets);
+      expect(find.textContaining('Maria'), findsWidgets);
     });
 
     testWidgets('continue to app after adding account shows dashboard', (
@@ -57,7 +57,7 @@ void main() {
       await addSchoolA(tester);
       await addSchoolB(tester);
 
-      expect(find.textContaining('liwa'), findsWidgets);
+      expect(find.textContaining('Kowalsk'), findsWidgets);
       expect(find.textContaining('Wi'), findsWidgets);
     });
 

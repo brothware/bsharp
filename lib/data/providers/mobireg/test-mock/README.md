@@ -1,8 +1,8 @@
 # mobireg-mock
 
-Mock server for [mobireg.pl](https://mobireg.pl) API endpoints. Express.js server that routes by request body parameters (e.g. `view=Settings` vs `view=ParentStudents`), solving the limitation where Prism couldn't distinguish requests to the same endpoint. Used for offline development and E2E testing of the the BSharp Flutter app.
+Mock server for the [mobireg.pl](https://mobireg.pl) app API (`auth.php`, `app.php`) and the poczta mailbox. Express.js server that routes `app.php` by its `view` form field. Used for offline development and E2E testing of the BSharp Flutter app. Log in with `user` / `pass`.
 
-The OpenAPI 3.1 spec (`openapi.yaml`) is retained as documentation and for Prism-based testing with `Prefer` headers (`npm run start:prism`).
+The OpenAPI 3.1 spec (`openapi.yaml`) is retained as documentation.
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@ npm install
 npm start
 ```
 
-The mock server starts on `http://localhost:8080`.
+The mock server starts on `http://localhost:8080`. Set `PORT=8090` to match the integration test.
 
 ### Docker
 
@@ -48,48 +48,28 @@ flutter run --dart-define=MOBIREG_BASE_URL=http://10.0.2.2:8080
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/{school}/modules/api/njson.php` | POST | Mobile sync (Settings, ParentStudents, full sync) |
-| `/{school}/index.php` | POST | Portal login (returns 302 with token) |
-| `/api.php` | POST | Portal API (users, timetable-events, marks, attendances, subjects, terms, homeworks, tests, reprimands, bulletins, changelog) |
-| `/sso/{school}/{token}` | GET | Poczta SSO login |
-| `/` | GET | Poczta homepage (HTML with CSRF token) |
-| `/api/messages/inbox` | POST | Inbox messages |
-| `/api/messages/sent` | POST | Sent messages |
-| `/api/messages/trash` | POST | Trash messages |
-| `/api/messages/important` | POST | Starred messages |
+| `/{school}/modules/api/auth.php` | POST | Login (JSON `{login, password}`), returns `{status, token}` |
+| `/{school}/modules/api/app.php` | POST | View envelope (`view`, `token` or `JWTToken` as form fields); 401 without a token |
+| `/sso/{school}/{token}` | GET | Poczta SSO, answers with `Set-Cookie` |
+| `/api/unreadMessages` | POST | Unread count as plain text |
+| `/api/messages/{inbox,sent,important,trash}` | POST | Folder page `{items, total}`, needs the session cookie |
 | `/api/messages/read/{id}` | GET | Read single message |
-| `/api/messages/receivers` | POST | Receiver types |
+| `/api/messages/receivers` | POST | Receiver types, or receivers of a `type` |
 | `/api/messages/receivers/search` | POST | Search receivers |
 | `/api/messages` | PUT | Send message |
 | `/api/messages/{id}` | DELETE | Delete message |
 | `/api/messages/{id}/stared` | POST | Toggle star |
 | `/api/messages/{id}/restore` | POST | Restore from trash |
 
-Error responses (401, invalid credentials) are also defined for key endpoints.
+`app.php` serves the views `users`, `terms`, `subjects`, `marks`, `timetable-events`, `attendance-stats`, `tests`, `reprimands`, `announcements`, `notif-settings` and `register-fcm`; other views answer errno 103. The school `sp5-krakow` gets a different `users` view.
 
-## How to Add New Examples
+## Test Controls
 
-1. Edit `openapi.yaml` and add a new named example under the relevant endpoint's `responses` -> `"200"` -> `content` -> `examples` section.
-2. Validate the spec:
-   ```bash
-   npm run validate
-   ```
-3. Restart Prism to pick up changes. When using `docker compose`, the spec is mounted read-only so a container restart is sufficient.
-
-To request a specific example from Prism, use the `Prefer` header:
-
-```bash
-curl -X POST http://localhost:8080/osm-wroclaw/modules/api/njson.php \
-  -H "Prefer: example=emptyMarks"
-```
-
-## Dynamic Mode
-
-Prism can generate random responses from the schema instead of returning static examples:
-
-```bash
-npm run start:dynamic
-```
+| Endpoint | Method | Description |
+|---|---|---|
+| `/test/scenario` | POST | Set per-school flags (`school`, `failLogin`, `extraInbox`) |
+| `/test/reset` | POST | Clear all scenarios |
+| `/test/health` | GET | Liveness and active scenarios |
 
 ## Related
 

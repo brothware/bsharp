@@ -2,7 +2,7 @@
   "name": "mobireg-mock",
   "version": "2.0.0",
   "private": true,
-  "description": "Mock server for mobireg.pl API — routes by request body parameters",
+  "description": "Mock server for the mobireg.pl app API and poczta, routes app.php by view",
   "scripts": {
     "start": "node server.js",
     "start:prism": "prism mock openapi.yaml -p 8080 --host 0.0.0.0",
