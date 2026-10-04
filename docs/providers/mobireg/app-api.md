@@ -161,17 +161,36 @@ None of these were called during the analysis.
 ## Mail (`poczta.mobireg.pl`)
 
 The mailbox URL and the token come from the `users` view (`messagingUrl`,
-`messagesToken`), not from a separate login.
+`messagesToken`), not from a separate login. The API server is
+`messagingUrl` with its trailing `/sso` removed.
 
-| Operation | Request |
-|---|---|
-| SSO | `GET <messagingUrl>/<school>/<urlencoded messagesToken>`, `Accept: text/html`; keep every `Set-Cookie` and send it as `Cookie` from then on |
-| Unread count | `POST /api/unreadMessages {school, messagesToken}` (no cookie) |
-| Folders | `GET /api/messages/{inbox,sent,important,trash}?limit&skip&query` (the app pages by 20) |
-| Read | `GET /api/messages/read/<id>` (probably marks read) |
-| Send | `POST /api/messages {title, content, odbiorcy, previousMessageId}`; attachments `POST /api/messages/<id>/files` |
-| Receivers | `GET /api/messages/receivers[?type=]`, `POST /api/messages/receivers/search {query, ids}` |
-| Star / restore / delete | `PUT /api/messages/<id>/stared`, `PUT /api/messages/<id>/restore`, `DELETE /api/messages/<id>` |
+**Sign-in (SSO).** One request, `GET <messagingUrl>/<school>/<encodeComponent(messagesToken)>`
+with `Accept: text/html` and the user agent, redirects **not** followed and
+nothing requested afterwards. Every `Set-Cookie` value is cut at its first
+`;` and joined with `"; "`; that string is sent as `Cookie` on every later
+call. The official app keeps it until the server answers 401 or 403, then
+runs the SSO again once and replays the call. There is no CSRF token and no
+`X-Requested-With`.
+
+**Calls.** Headers on all of them: `Content-Type: application/json`,
+`Accept: application/json`, the user agent and the cookie.
+
+| Operation | Request | Response |
+|---|---|---|
+| Unread count | `POST /api/unreadMessages {school, messagesToken}`, **no cookie** | plain integer text |
+| Folders | `POST /api/messages/{inbox,sent,important,trash}` `{limit: 20, skip, query?}` (`query` only when searching) | `{items, total}` |
+| Read | `GET /api/messages/read/<id>` (probably marks read) | message |
+| Send | `PUT /api/messages {title, content (HTML), odbiorcy: [ids], previousMessageId}` | `{id}` |
+| Attach | `POST /api/messages/<id>/files`, multipart, cookie only | status 200 |
+| Delete | `DELETE /api/messages/<id>` | ignored |
+| Star / restore | `POST /api/messages/<id>/stared` / `/restore` with `{}` | ignored |
+| Receiver types | `POST /api/messages/receivers {}` | `{types}` |
+| Receivers of a type | `POST /api/messages/receivers {type}` | list, or `{users: [...]}` |
+| Search receivers | `POST /api/messages/receivers/search {query, ids}` | list |
+
+Not settled statically: the multipart field name, whether `read` marks the
+message read, and the exact id format in `odbiorcy` (bare digits are
+normalised to `user_<n>`).
 
 On 2026-10-04 the SSO, `unreadMessages` and the folder lists answered HTTP 500
 for the official app too: a server-side outage, not a protocol change.
