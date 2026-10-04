@@ -1,96 +1,132 @@
 import 'package:bsharp/core/error/result.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+
+const _pageSize = 20;
+const _unauthorized = 401;
+const _forbidden = 403;
+const _serverErrorFloor = 500;
+const _clientErrorFloor = 400;
 
 class PocztaDataSource {
   PocztaDataSource({required this._client});
 
   final Dio _client;
-  String _csrfToken = '';
+  String? _cookie;
+  String? _school;
+  String? _messagesToken;
+
+  bool get hasSession => _cookie != null;
 
   Future<Result<void>> establishSession({
     required String school,
     required String messagesToken,
   }) async {
+    _school = school;
+    _messagesToken = messagesToken;
+    return _signIn();
+  }
+
+  Future<Result<void>> _signIn() async {
+    final school = _school;
+    final messagesToken = _messagesToken;
+    if (school == null || messagesToken == null) {
+      return const Result.failure(
+        SessionExpired(message: 'Poczta session was never established'),
+      );
+    }
     try {
-      final ssoResponse = await _client.get<String>(
-        '/sso/$school/$messagesToken',
+      final response = await _client.get<String>(
+        '/sso/$school/${Uri.encodeComponent(messagesToken)}',
         options: Options(
           followRedirects: false,
           validateStatus: (status) =>
-              status != null && (status < 400 || status == 302),
+              status != null && status < _serverErrorFloor,
+          headers: {'Accept': 'text/html'},
         ),
       );
-
-      if (kIsWeb) {
-        if (ssoResponse.headers['x-redirect-location']?.first != null) {
-          await _client.get<String>('/');
-        }
-      } else if (ssoResponse.statusCode == 302) {
-        final location = ssoResponse.headers['location']?.first;
-        if (location != null) {
-          await _client.get<String>(location);
-        }
+      final cookie = (response.headers['set-cookie'] ?? const <String>[])
+          .map((value) => value.split(';').first.trim())
+          .where((value) => value.isNotEmpty)
+          .join('; ');
+      if (cookie.isEmpty) {
+        _cookie = null;
+        return const Result.failure(
+          SessionExpired(message: 'Poczta SSO returned no cookie'),
+        );
       }
-
-      final pageResponse = await _client.get<String>(
-        '/',
-        options: Options(headers: {'Accept': 'text/html'}),
-      );
-      final pageHtml = pageResponse.data ?? '';
-      final csrfMatch = RegExp('"csrfToken":"([^"]+)"').firstMatch(pageHtml);
-      if (csrfMatch != null) {
-        _csrfToken = csrfMatch.group(1)!;
-        return const Result.success(null);
-      }
-
-      return const Result.failure(
-        UnknownFailure(message: 'Could not extract CSRF token'),
-      );
+      _cookie = cookie;
+      return const Result.success(null);
     } on DioException catch (e) {
-      if (e.error is AppFailure) {
-        return Result.failure(e.error! as AppFailure);
-      }
-      return Result.failure(UnknownFailure(message: e.message));
+      return Result.failure(_failureOf(e));
     }
   }
 
-  bool get hasSession => _csrfToken.isNotEmpty;
-
-  Future<Result<List<dynamic>>> getInbox({int limit = 25, int skip = 0}) async {
-    return _postMessages('/api/messages/inbox', {'limit': limit, 'skip': skip});
+  Future<Result<int>> unreadCount({
+    required String school,
+    required String messagesToken,
+  }) async {
+    try {
+      final response = await _client.post<dynamic>(
+        '/api/unreadMessages',
+        data: {'school': school, 'messagesToken': messagesToken},
+        options: Options(headers: _baseHeaders()),
+      );
+      final count = int.tryParse('${response.data}'.trim());
+      if (count == null) {
+        return const Result.failure(
+          UnknownFailure(message: 'Unread count is not a number'),
+        );
+      }
+      return Result.success(count);
+    } on DioException catch (e) {
+      return Result.failure(_failureOf(e));
+    }
   }
 
-  Future<Result<List<dynamic>>> getSent({int limit = 25, int skip = 0}) async {
-    return _postMessages('/api/messages/sent', {'limit': limit, 'skip': skip});
+  Future<Result<List<dynamic>>> getInbox({int skip = 0, String query = ''}) {
+    return _folder('inbox', skip, query);
   }
 
-  Future<Result<List<dynamic>>> getImportant() async {
-    return _postMessages('/api/messages/important', {});
+  Future<Result<List<dynamic>>> getSent({int skip = 0, String query = ''}) {
+    return _folder('sent', skip, query);
   }
 
-  Future<Result<List<dynamic>>> getTrash() async {
-    return _postMessages('/api/messages/trash', {});
+  Future<Result<List<dynamic>>> getImportant({
+    int skip = 0,
+    String query = '',
+  }) {
+    return _folder('important', skip, query);
+  }
+
+  Future<Result<List<dynamic>>> getTrash({int skip = 0, String query = ''}) {
+    return _folder('trash', skip, query);
+  }
+
+  Future<Result<List<dynamic>>> _folder(String folder, int skip, String query) {
+    return _postMessages('/api/messages/$folder', {
+      'limit': _pageSize,
+      'skip': skip,
+      if (query.isNotEmpty) 'query': query,
+    });
   }
 
   Future<Result<Map<String, dynamic>>> readMessage(int messageId) async {
-    try {
-      final response = await _client.get<Map<String, dynamic>>(
+    final result = await _call(
+      (options) => _client.get<dynamic>(
         '/api/messages/read/$messageId',
-        options: _authOptions(),
-      );
-
-      if (response.data == null) {
+        options: options,
+      ),
+    );
+    return result.when(
+      success: (response) {
+        final data = response.data;
+        if (data is Map<String, dynamic>) {
+          return Result.success(data);
+        }
         return const Result.failure(NoData());
-      }
-
-      return Result.success(response.data!);
-    } on DioException catch (e) {
-      if (e.error is AppFailure) {
-        return Result.failure(e.error! as AppFailure);
-      }
-      return Result.failure(UnknownFailure(message: e.message));
-    }
+      },
+      failure: Result.failure,
+    );
   }
 
   Future<Result<void>> sendMessage({
@@ -100,8 +136,8 @@ class PocztaDataSource {
     List<String>? copyTo,
     int? previousMessageId,
   }) async {
-    try {
-      await _client.put<dynamic>(
+    final result = await _call(
+      (options) => _client.put<dynamic>(
         '/api/messages',
         data: {
           'title': title,
@@ -110,139 +146,176 @@ class PocztaDataSource {
           'kopiaDo': copyTo ?? [],
           'previousMessageId': ?previousMessageId,
         },
-        options: _authOptions(),
-      );
-      return const Result.success(null);
-    } on DioException catch (e) {
-      if (e.error is AppFailure) {
-        return Result.failure(e.error! as AppFailure);
-      }
-      return Result.failure(UnknownFailure(message: e.message));
-    }
+        options: options,
+      ),
+    );
+    return result.when(
+      success: (_) => const Result.success(null),
+      failure: Result.failure,
+    );
   }
 
   Future<Result<void>> deleteMessage(int messageId) async {
-    try {
-      await _client.delete<dynamic>(
+    final result = await _call(
+      (options) => _client.delete<dynamic>(
         '/api/messages/$messageId',
-        options: _authOptions(),
-      );
-      return const Result.success(null);
-    } on DioException catch (e) {
-      if (e.error is AppFailure) {
-        return Result.failure(e.error! as AppFailure);
-      }
-      return Result.failure(UnknownFailure(message: e.message));
-    }
+        options: options,
+      ),
+    );
+    return result.when(
+      success: (_) => const Result.success(null),
+      failure: Result.failure,
+    );
   }
 
-  Future<Result<void>> toggleStar(int messageId) async {
-    try {
-      await _client.post<dynamic>(
-        '/api/messages/$messageId/stared',
-        options: _authOptions(),
-      );
-      return const Result.success(null);
-    } on DioException catch (e) {
-      if (e.error is AppFailure) {
-        return Result.failure(e.error! as AppFailure);
-      }
-      return Result.failure(UnknownFailure(message: e.message));
-    }
+  Future<Result<void>> toggleStar(int messageId) {
+    return _postEmpty('/api/messages/$messageId/stared');
   }
 
-  Future<Result<void>> restoreMessage(int messageId) async {
-    try {
-      await _client.post<dynamic>(
-        '/api/messages/$messageId/restore',
-        options: _authOptions(),
-      );
-      return const Result.success(null);
-    } on DioException catch (e) {
-      if (e.error is AppFailure) {
-        return Result.failure(e.error! as AppFailure);
-      }
-      return Result.failure(UnknownFailure(message: e.message));
-    }
+  Future<Result<void>> restoreMessage(int messageId) {
+    return _postEmpty('/api/messages/$messageId/restore');
+  }
+
+  Future<Result<void>> _postEmpty(String path) async {
+    final result = await _call(
+      (options) => _client.post<dynamic>(
+        path,
+        data: <String, dynamic>{},
+        options: options,
+      ),
+    );
+    return result.when(
+      success: (_) => const Result.success(null),
+      failure: Result.failure,
+    );
   }
 
   Future<Result<Map<String, dynamic>>> getReceiverTypes() async {
-    try {
-      final response = await _client.post<dynamic>(
+    final result = await _call(
+      (options) => _client.post<dynamic>(
         '/api/messages/receivers',
         data: <String, dynamic>{},
-        options: _authOptions(),
-      );
-      final data = response.data;
-      if (data is Map<String, dynamic>) return Result.success(data);
-      return const Result.success(<String, dynamic>{
-        'types': <String, dynamic>{},
-        'users': <dynamic>[],
-      });
-    } on DioException catch (e) {
-      if (e.error is AppFailure) {
-        return Result.failure(e.error! as AppFailure);
-      }
-      return Result.failure(UnknownFailure(message: e.message));
-    }
+        options: options,
+      ),
+    );
+    return result.when(
+      success: (response) {
+        final data = response.data;
+        if (data is Map<String, dynamic>) {
+          return Result.success(data);
+        }
+        return const Result.success(<String, dynamic>{
+          'types': <String, dynamic>{},
+          'users': <dynamic>[],
+        });
+      },
+      failure: Result.failure,
+    );
   }
 
-  Future<Result<List<dynamic>>> getReceiversByType(String type) async {
+  Future<Result<List<dynamic>>> getReceiversByType(String type) {
     return _postMessages('/api/messages/receivers', {'type': type});
   }
 
-  Future<Result<List<dynamic>>> searchReceivers(String query) async {
-    return _postMessages('/api/messages/receivers/search', {'query': query});
+  Future<Result<List<dynamic>>> searchReceivers(String query) {
+    return _postMessages('/api/messages/receivers/search', {
+      'query': query,
+      'ids': <Object>[],
+    });
   }
 
   Future<Result<List<dynamic>>> _postMessages(
     String path,
     Map<String, dynamic> body,
   ) async {
-    try {
-      final response = await _client.post<dynamic>(
-        path,
-        data: body,
-        options: _authOptions(),
-      );
-      final data = response.data;
-      if (data is List) return Result.success(data);
-      if (data is Map) {
-        if (data.containsKey('items')) {
-          return Result.success((data['items'] as List?) ?? []);
+    final result = await _call(
+      (options) => _client.post<dynamic>(path, data: body, options: options),
+    );
+    return result.when(
+      success: (response) {
+        final data = response.data;
+        if (data is List) {
+          return Result.success(data);
         }
-        if (data.containsKey('data')) {
-          return Result.success((data['data'] as List?) ?? []);
+        if (data is Map) {
+          if (data.containsKey('items')) {
+            return Result.success((data['items'] as List?) ?? []);
+          }
+          if (data.containsKey('users')) {
+            return Result.success((data['users'] as List?) ?? []);
+          }
+          if (data.containsKey('data')) {
+            return Result.success((data['data'] as List?) ?? []);
+          }
         }
-      }
-      return const Result.success([]);
-    } on DioException catch (e) {
-      if (e.error is AppFailure) {
-        return Result.failure(e.error! as AppFailure);
-      }
-      return Result.failure(UnknownFailure(message: e.message));
-    }
+        return const Result.success([]);
+      },
+      failure: Result.failure,
+    );
   }
 
   Future<Result<void>> downloadFile(String url, String savePath) async {
+    final result = await _call((options) async {
+      await _client.download(url, savePath, options: options);
+      return Response<dynamic>(requestOptions: RequestOptions(path: url));
+    });
+    return result.when(
+      success: (_) => const Result.success(null),
+      failure: Result.failure,
+    );
+  }
+
+  Future<Result<Response<dynamic>>> _call(
+    Future<Response<dynamic>> Function(Options options) send,
+  ) async {
     try {
-      await _client.download(url, savePath);
-      return const Result.success(null);
-    } on DioException catch (e) {
-      if (e.error is AppFailure) {
-        return Result.failure(e.error! as AppFailure);
+      var response = await send(_authorizedOptions());
+      if (_isRejected(response)) {
+        final signIn = await _signIn();
+        if (signIn case Failure(:final failure)) {
+          return Result.failure(failure);
+        }
+        response = await send(_authorizedOptions());
       }
-      return Result.failure(UnknownFailure(message: e.message));
+      if (_isRejected(response)) {
+        return const Result.failure(
+          SessionExpired(message: 'Poczta rejected the session'),
+        );
+      }
+      final status = response.statusCode ?? _clientErrorFloor;
+      if (status >= _clientErrorFloor) {
+        return Result.failure(UnknownFailure(message: 'Poczta HTTP $status'));
+      }
+      return Result.success(response);
+    } on DioException catch (e) {
+      return Result.failure(_failureOf(e));
     }
   }
 
-  Options _authOptions() {
+  bool _isRejected(Response<dynamic> response) {
+    final status = response.statusCode;
+    return status == _unauthorized || status == _forbidden;
+  }
+
+  AppFailure _failureOf(DioException e) {
+    final error = e.error;
+    return error is AppFailure ? error : UnknownFailure(message: e.message);
+  }
+
+  Map<String, String> _baseHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+  }
+
+  Options _authorizedOptions() {
+    final cookie = _cookie;
     return Options(
+      validateStatus: (status) => status != null && status < _serverErrorFloor,
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': _csrfToken,
-        'X-Requested-With': 'XMLHttpRequest',
+        ..._baseHeaders(),
+        'Cookie': ?cookie,
       },
     );
   }

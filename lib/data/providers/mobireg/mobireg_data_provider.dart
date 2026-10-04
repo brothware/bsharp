@@ -290,24 +290,16 @@ class MobiregDataProvider implements SchoolDataProvider {
       return;
     }
 
-    final accountResult = await session.account();
-    final Map<String, dynamic> accountData;
-    switch (accountResult) {
-      case Failure(:final failure):
-        debugPrint('MobiregDataProvider: users view failed: $failure');
-        return;
-      case Success(:final value):
-        accountData = value;
-    }
-
-    final messagesToken = parseAccount(accountData).messagesToken;
-    if (messagesToken == null) {
-      debugPrint('MobiregDataProvider: no messagesToken in users view');
+    final account = parseAccount(await _valueOf('users', session.account()));
+    final messagingUrl = account.messagingUrl;
+    final messagesToken = account.messagesToken;
+    if (messagingUrl == null || messagesToken == null) {
+      debugPrint('MobiregDataProvider: users view has no mailbox');
       return;
     }
 
     final pocztaDs = PocztaDataSource(
-      client: _clientFactory(school).createPocztaClient(),
+      client: _clientFactory(school).createPocztaClient(messagingUrl),
     );
     final sessionResult = await pocztaDs.establishSession(
       school: school,

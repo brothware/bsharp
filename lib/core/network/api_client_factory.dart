@@ -1,10 +1,7 @@
 import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/core/network/interceptors/error_mapping_interceptor.dart';
 import 'package:bsharp/core/network/interceptors/mobile_auth_interceptor.dart';
-import 'package:bsharp/core/network/interceptors/web_cookie_interceptor.dart';
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
 
 class ApiClientFactory {
@@ -121,14 +118,18 @@ class ApiClientFactory {
     return dio;
   }
 
-  Dio createPocztaClient() {
+  Dio createPocztaClient(String messagingUrl) {
+    const ssoSuffix = '/sso';
+    final officialBaseUrl = messagingUrl.endsWith(ssoSuffix)
+        ? messagingUrl.substring(0, messagingUrl.length - ssoSuffix.length)
+        : messagingUrl;
     final baseUrl = AppConstants.hasMobiregBaseUrlOverride
         ? AppConstants.mobiregBaseUrl
         : kIsWeb
         ? '$_proxy/poczta'
-        : 'https://poczta.mobireg.pl';
+        : officialBaseUrl;
 
-    final dio = Dio(
+    return Dio(
       BaseOptions(
         baseUrl: baseUrl,
         connectTimeout: const Duration(
@@ -137,14 +138,10 @@ class ApiClientFactory {
         receiveTimeout: const Duration(
           milliseconds: AppConstants.receiveTimeoutMs,
         ),
-        headers: {'X-Requested-With': 'XMLHttpRequest'},
+        headers: kIsWeb ? null : {'User-Agent': AppConstants.appUserAgent},
         extra: _webExtra,
       ),
     );
-    dio.interceptors.add(
-      kIsWeb ? WebCookieInterceptor() : CookieManager(CookieJar()),
-    );
-    return dio;
   }
 
   Dio createWebLoginClient() {
