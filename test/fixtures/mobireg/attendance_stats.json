@@ -1,0 +1,10 @@
+{
+  "records": [
+    {"d": "2026-09-02", "sid": 69, "ab": "O", "ca": "P", "tn": "Obecność"},
+    {"d": "2026-09-03", "sid": 69, "ab": "NU", "ca": "A", "tn": "Nieobecność usprawiedliwiona"},
+    {"d": "2026-09-04", "sid": 69, "ab": "N", "ca": "A", "tn": "Nieobecność"},
+    {"d": "2026-09-05", "sid": 123, "ab": "ph", "ca": "A", "tn": "Próba chóru"}
+  ],
+  "subjects": {"69": "język polski", "123": "chór"},
+  "terms": []
+}
