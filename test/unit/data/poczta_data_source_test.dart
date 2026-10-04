@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
@@ -12,6 +14,7 @@ const _unreadCount = 3;
 
 class _PocztaFake {
   bool expireOnce = false;
+  bool expireAlways = false;
 
   Dio client(List<RequestOptions> seen) {
     final factory = ApiClientFactory(
@@ -36,9 +39,12 @@ class _PocztaFake {
         'set-cookie': ['laravel_session=abc; path=/', 'XSRF-TOKEN=x; path=/'],
       });
     }
-    if (expireOnce) {
+    if (expireOnce || expireAlways) {
       expireOnce = false;
-      return _respond(options, _unauthorized, '');
+      return _respond(options, _unauthorized, _body(options, ''));
+    }
+    if (options.path.startsWith('/files/')) {
+      return _respond(options, _ok, _body(options, 'content'));
     }
     if (options.path == '/api/unreadMessages') {
       return _respond(options, _ok, '$_unreadCount');
@@ -48,6 +54,12 @@ class _PocztaFake {
       return _respond(options, _ok, {'items': <Object>[], 'total': 0});
     }
     return _respond(options, _ok, <String, dynamic>{});
+  }
+
+  Object _body(RequestOptions options, String text) {
+    return options.responseType == ResponseType.stream
+        ? ResponseBody.fromString(text, _ok)
+        : text;
   }
 
   Response<dynamic> _respond(
@@ -74,6 +86,8 @@ Future<(PocztaDataSource, List<RequestOptions>)> _signedIn() async {
   seen.clear();
   return (source, seen);
 }
+
+String get savePath => '${Directory.systemTemp.createTempSync().path}/file';
 
 void main() {
   test('signs in with one SSO request and sends its cookies', () async {
@@ -226,5 +240,54 @@ void main() {
       <String, dynamic>{},
       {'type': 'teachers'},
     ]);
+  });
+
+  test('fails with SessionExpired after two consecutive 401s', () async {
+    final seen = <RequestOptions>[];
+    final server = _PocztaFake()..expireAlways = true;
+    final source = PocztaDataSource(client: server.client(seen));
+    await source.establishSession(school: 'sp1', messagesToken: 't');
+
+    final result = await source.getInbox();
+
+    expect(result.failureOrNull, isA<SessionExpired>());
+    expect(seen.where((o) => o.path.startsWith('/sso/')).length, 2);
+    expect(seen.where((o) => o.path == '/api/messages/inbox').length, 2);
+  });
+
+  test('downloads a file with the cookie', () async {
+    final (source, seen) = await _signedIn();
+
+    final result = await source.downloadFile('/files/1', savePath);
+
+    expect(result, isA<Success<void>>());
+    expect(seen.single.path, '/files/1');
+    expect(seen.single.headers['Cookie'], 'laravel_session=abc; XSRF-TOKEN=x');
+  });
+
+  test('signs in again and replays a download after a 401', () async {
+    final seen = <RequestOptions>[];
+    final server = _PocztaFake();
+    final source = PocztaDataSource(client: server.client(seen));
+    await source.establishSession(school: 'sp1', messagesToken: 't');
+    server.expireOnce = true;
+
+    final result = await source.downloadFile('/files/1', savePath);
+
+    expect(result, isA<Success<void>>());
+    expect(seen.where((o) => o.path == '/files/1').length, 2);
+    expect(seen.where((o) => o.path.startsWith('/sso/')).length, 2);
+  });
+
+  test('never sends the cookie to a foreign host', () async {
+    final (source, seen) = await _signedIn();
+
+    final result = await source.downloadFile(
+      'https://evil.example/files/1',
+      savePath,
+    );
+
+    expect(result, isA<Failure<void>>());
+    expect(seen, isEmpty);
   });
 }

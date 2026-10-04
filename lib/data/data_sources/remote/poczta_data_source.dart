@@ -6,6 +6,8 @@ const _unauthorized = 401;
 const _forbidden = 403;
 const _serverErrorFloor = 500;
 const _clientErrorFloor = 400;
+const _successFloor = 200;
+const _redirectFloor = 300;
 
 class PocztaDataSource {
   PocztaDataSource({required this._client});
@@ -255,9 +257,31 @@ class PocztaDataSource {
   }
 
   Future<Result<void>> downloadFile(String url, String savePath) async {
+    final baseUri = Uri.parse(_client.options.baseUrl);
+    if (baseUri.resolve(url).authority != baseUri.authority) {
+      return Result.failure(
+        UnknownFailure(message: 'Refusing to download from foreign host: $url'),
+      );
+    }
     final result = await _call((options) async {
-      await _client.download(url, savePath, options: options);
-      return Response<dynamic>(requestOptions: RequestOptions(path: url));
+      try {
+        return await _client.download(
+          url,
+          savePath,
+          options: options.copyWith(
+            validateStatus: (status) =>
+                status != null &&
+                status >= _successFloor &&
+                status < _redirectFloor,
+          ),
+        );
+      } on DioException catch (e) {
+        final response = e.response;
+        if (response != null && _isRejected(response)) {
+          return response;
+        }
+        rethrow;
+      }
     });
     return result.when(
       success: (_) => const Result.success(null),
