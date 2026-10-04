@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:dio/dio.dart';
@@ -26,11 +28,13 @@ class AppApiDataSource {
     required String password,
   }) async {
     final response = await _send(
-      () => _client.post<Map<String, dynamic>>(
+      endpoint: 'auth.php',
+      request: () => _client.post<String>(
         '/auth.php',
         data: {'login': login, 'password': password},
         options: Options(
           contentType: 'application/json; charset=UTF-8',
+          responseType: ResponseType.plain,
           headers: {'Accept': 'application/json'},
         ),
       ),
@@ -47,7 +51,8 @@ class AppApiDataSource {
     Map<String, String> params = const {},
   }) async {
     final response = await _send(
-      () => _client.post<Map<String, dynamic>>(
+      endpoint: 'View $view',
+      request: () => _client.post<String>(
         '/app.php',
         data: {
           'view': view,
@@ -58,6 +63,7 @@ class AppApiDataSource {
         },
         options: Options(
           contentType: Headers.formUrlEncodedContentType,
+          responseType: ResponseType.plain,
           headers: {'User-Agent': AppConstants.appUserAgent},
         ),
       ),
@@ -68,20 +74,25 @@ class AppApiDataSource {
     };
   }
 
-  Future<Result<Map<String, dynamic>>> _send(
-    Future<Response<Map<String, dynamic>>> Function() request,
-  ) async {
+  Future<Result<Map<String, dynamic>>> _send({
+    required String endpoint,
+    required Future<Response<String>> Function() request,
+  }) async {
     const unauthorized = 401;
     try {
       final response = await request();
-      final body = response.data;
+      final raw = response.data;
       if (response.statusCode == unauthorized) {
         return Result.failure(
-          SessionExpired(message: body?['message'] as String?),
+          SessionExpired(message: _decodeObject(raw)?['message'] as String?),
         );
       }
-      if (body == null) {
+      if (raw == null || raw.isEmpty) {
         return const Result.failure(NoData(message: 'Empty response'));
+      }
+      final body = _decodeObject(raw);
+      if (body == null) {
+        throw FormatException('$endpoint answered non-JSON', raw);
       }
       return Result.success(body);
     } on DioException catch (e) {
@@ -90,6 +101,18 @@ class AppApiDataSource {
         return Result.failure(failure);
       }
       return Result.failure(UnknownFailure(message: e.message));
+    }
+  }
+
+  Map<String, dynamic>? _decodeObject(String? raw) {
+    if (raw == null) {
+      return null;
+    }
+    try {
+      final decoded = jsonDecode(raw);
+      return decoded is Map<String, dynamic> ? decoded : null;
+    } on FormatException {
+      return null;
     }
   }
 

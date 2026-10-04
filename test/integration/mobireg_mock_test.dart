@@ -70,15 +70,19 @@ void main() {
     return response.data!['token'] as String;
   }
 
-  Future<Response<Map<String, dynamic>>> appCall(
-    Map<String, Object?> fields,
-  ) {
-    return dio.post<Map<String, dynamic>>(
+  Future<Response<String>> appCall(Map<String, Object?> fields) {
+    return dio.post<String>(
       '$_apiPath/app.php',
       data: fields.map((key, value) => MapEntry(key, '$value')),
-      options: Options(contentType: _formContentType),
+      options: Options(
+        contentType: _formContentType,
+        responseType: ResponseType.plain,
+      ),
     );
   }
+
+  Map<String, dynamic> decoded(Response<String> response) =>
+      jsonDecode(response.data!) as Map<String, dynamic>;
 
   group('auth.php', () {
     test('returns a token for valid credentials', () async {
@@ -114,7 +118,7 @@ void main() {
         'pupilId': _firstPupilId,
       });
 
-      final body = response.data!;
+      final body = decoded(response);
       expect(body['v'], _protocolVersion);
       expect(body['data'], isA<List<dynamic>>());
       expect(body['data'], isNotEmpty);
@@ -131,7 +135,7 @@ void main() {
       });
 
       final account = parseAccount(
-        response.data!['data'] as Map<String, dynamic>,
+        decoded(response)['data'] as Map<String, dynamic>,
       );
       expect(account.students, isNotEmpty);
       expect(account.messagingUrl, isNotEmpty);
@@ -159,7 +163,7 @@ void main() {
         'pupilId': _firstPupilId,
       });
 
-      final data = response.data!['data'] as Map<String, dynamic>;
+      final data = decoded(response)['data'] as Map<String, dynamic>;
       expect(data['errno'], _unknownViewErrno);
     });
   });

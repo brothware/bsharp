@@ -1,8 +1,20 @@
+import 'dart:convert';
+
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/remote/app_api_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/app_api_session.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+Response<dynamic> _htmlJson(RequestOptions options, int status, Object body) =>
+    Response<dynamic>(
+      requestOptions: options,
+      statusCode: status,
+      data: jsonEncode(body),
+      headers: Headers.fromMap({
+        Headers.contentTypeHeader: ['text/html; charset=UTF-8'],
+      }),
+    );
 
 class _FakeAppServer {
   int logins = 0;
@@ -17,36 +29,27 @@ class _FakeAppServer {
     if (options.path == '/auth.php') {
       logins++;
       _liveToken = 'jwt-$logins';
-      return Response<dynamic>(
-        requestOptions: options,
-        statusCode: 200,
-        data: {'status': 'OK', 'token': _liveToken},
-      );
+      return _htmlJson(options, 200, {'status': 'OK', 'token': _liveToken});
     }
     final body = Map<String, dynamic>.from(options.data as Map);
     final view = body['view'] as String;
     views.add(view);
     if (alwaysUnauthorized || body['token'] != _liveToken) {
-      return Response<dynamic>(
-        requestOptions: options,
-        statusCode: 401,
-        data: {'status': 'ERROR', 'message': 'Sesja wygasła'},
-      );
+      return _htmlJson(options, 401, {
+        'status': 'ERROR',
+        'message': 'Sesja wygasła',
+      });
     }
     if (view == 'users') {
       usersCalls++;
     }
-    return Response<dynamic>(
-      requestOptions: options,
-      statusCode: 200,
-      data: {
-        'v': 1,
-        'serverTime': '2026-10-04T21:06:32+02:00',
-        'ttlFresh': 60,
-        'ttlRetain': 1209600,
-        'data': {'view': view},
-      },
-    );
+    return _htmlJson(options, 200, {
+      'v': 1,
+      'serverTime': '2026-10-04T21:06:32+02:00',
+      'ttlFresh': 60,
+      'ttlRetain': 1209600,
+      'data': {'view': view},
+    });
   }
 }
 

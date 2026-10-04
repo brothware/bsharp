@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bsharp/core/network/api_client_factory.dart';
 import 'package:dio/dio.dart';
 
@@ -93,6 +95,9 @@ class FakeAppServer {
       Response<dynamic>(
         requestOptions: options,
         statusCode: status,
-        data: body,
+        data: jsonEncode(body),
+        headers: Headers.fromMap({
+          Headers.contentTypeHeader: ['text/html; charset=UTF-8'],
+        }),
       );
 }

@@ -247,6 +247,7 @@ void main() {
     server.users['appConfig'] = {
       'modules': {'attendances': 0, 'reprimands': 1, 'timetable': 1},
     };
+    await provider.authenticate(school: 'sp1', login: 'p2', password: 's');
     await provider.loadSchoolData(ref(), studentId: 6339);
 
     expect(container.read(attendancesProvider), isEmpty);

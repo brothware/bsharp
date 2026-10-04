@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/remote/app_api_data_source.dart';
@@ -21,8 +23,24 @@ Dio _client(
     );
 }
 
+const _htmlContentType = 'text/html; charset=UTF-8';
+
+Response<dynamic> _raw(
+  RequestOptions options,
+  int status,
+  String body, {
+  String contentType = _htmlContentType,
+}) => Response<dynamic>(
+  requestOptions: options,
+  statusCode: status,
+  data: body,
+  headers: Headers.fromMap({
+    Headers.contentTypeHeader: [contentType],
+  }),
+);
+
 Response<dynamic> _json(RequestOptions options, int status, Object body) =>
-    Response<dynamic>(requestOptions: options, statusCode: status, data: body);
+    _raw(options, status, jsonEncode(body));
 
 Map<String, dynamic> _envelope(Object data, {int version = 1}) => {
   'v': version,
@@ -54,6 +72,41 @@ void main() {
       expect(seen.single.data, {'login': 'parent', 'password': 'p@ss'});
       expect(seen.single.contentType, 'application/json; charset=UTF-8');
       expect(seen.single.headers['Accept'], 'application/json');
+    });
+
+    test('parses a token served as application/json', () async {
+      final source = AppApiDataSource(
+        client: _client(
+          (o) => _raw(
+            o,
+            200,
+            jsonEncode({'status': 'OK', 'token': _jwt}),
+            contentType: 'application/json',
+          ),
+          [],
+        ),
+      );
+
+      final result = await source.login(login: 'parent', password: 'p@ss');
+
+      expect(result.valueOrNull, _jwt);
+    });
+
+    test('rejects a non-JSON login answer as a FormatException', () async {
+      final source = AppApiDataSource(
+        client: _client((o) => _raw(o, 200, '<html>oops</html>'), []),
+      );
+
+      expect(
+        () => source.login(login: 'parent', password: 'p@ss'),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('auth.php'),
+          ),
+        ),
+      );
     });
 
     test('maps a refused login to InvalidCredentials', () async {
@@ -129,6 +182,67 @@ void main() {
       );
 
       final result = await source.getView(jwt: _jwt, view: 'terms');
+
+      expect(result.failureOrNull, isA<SessionExpired>());
+    });
+
+    test('decodes a JSON body served as text/html like production', () async {
+      final source = AppApiDataSource(
+        client: _client(
+          (o) => _raw(
+            o,
+            200,
+            jsonEncode(_envelope({'students': <Object>[]})),
+          ),
+          [],
+        ),
+      );
+
+      final result = await source.getView(jwt: _jwt, view: 'users');
+
+      expect(result.valueOrNull!.data, {'students': <Object>[]});
+    });
+
+    test(
+      'rejects an HTML error page as a FormatException naming the view',
+      () async {
+        final source = AppApiDataSource(
+          client: _client(
+            (o) => _raw(o, 200, '<html><body>Błąd</body></html>'),
+            [],
+          ),
+        );
+
+        expect(
+          () => source.getView(jwt: _jwt, view: 'users'),
+          throwsA(
+            isA<FormatException>().having(
+              (e) => e.message,
+              'message',
+              'View users answered non-JSON',
+            ),
+          ),
+        );
+      },
+    );
+
+    test('rejects a JSON array body as a FormatException', () async {
+      final source = AppApiDataSource(
+        client: _client((o) => _raw(o, 200, '[1,2]'), []),
+      );
+
+      expect(
+        () => source.getView(jwt: _jwt, view: 'users'),
+        throwsA(isA<FormatException>()),
+      );
+    });
+
+    test('maps a 401 with an undecodable body to SessionExpired', () async {
+      final source = AppApiDataSource(
+        client: _client((o) => _raw(o, 401, '<html>denied</html>'), []),
+      );
+
+      final result = await source.getView(jwt: _jwt, view: 'users');
 
       expect(result.failureOrNull, isA<SessionExpired>());
     });
