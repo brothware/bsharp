@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Sinhronizācija neizdevās",
+    "pupilNotOnAccount": "Šis skolēns vairs nav kontā. Izvēlieties skolēnu vēlreiz.",
     "lastSync": "Pēdējā sinhronizācija: ${time}",
     "neverSynced": "Nekad nav sinhronizēts",
     "currentLesson": "Pašreizējā stunda",

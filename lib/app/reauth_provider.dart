@@ -9,3 +9,11 @@ class ReauthRequired extends _$ReauthRequired {
   bool get value => state;
   set value(bool v) => state = v;
 }
+
+@Riverpod(keepAlive: true)
+class MissingPupil extends _$MissingPupil {
+  @override
+  bool build() => false;
+  bool get value => state;
+  set value(bool v) => state = v;
+}

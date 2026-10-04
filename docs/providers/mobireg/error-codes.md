@@ -21,7 +21,7 @@ missing envelope is a `FormatException`, not a silent failure.
 | errno | Message | AppFailure | Description |
 |-------|---------|------------|-------------|
 | 101 | Login FAILED, give inputs | `AuthFailure.missingCredentials` | Missing credentials |
-| 102 | Authorization error | `AuthFailure.expiredSession` | Wrong or missing `pupilId`, or a `GET` request. Does **not** mean an expired session any more: expiry is HTTP 401 |
+| 102 | Authorization error | `PupilNotOnAccount` | Wrong or missing `pupilId`, or a `GET` request. Does **not** mean an expired session any more: expiry is HTTP 401 |
 | 103 | No view exist | `ServerFailure.viewNotFound` | Requested view does not exist |
 | 105, 106, 107 | (varies) | `AuthFailure.invalidCredentials` | Authentication failure variants |
 | 108 | Incorrect action parameter | `ServerFailure.missingParameter` | Missing required parameter for the action |
@@ -33,8 +33,12 @@ missing envelope is a `FormatException`, not a silent failure.
 | other | (varies) | `UnknownFailure(errno:)` | Unclassified |
 
 A 102 on a view that needs a pupil usually means the `pupilId` is wrong for
-this school year (ids change between years). Read the pupils from the `users`
-view instead of assuming one.
+this school year (ids change between years). The provider then drops the
+session's cached `users` view and asks for it once more. If the pupil is
+still missing, the sync fails with `PupilNotOnAccountException`: the account's
+student list is replaced with the pupils `users` returned and the dashboard
+asks the user to choose the student again. A pupil missing from `users` takes
+the same path without waiting for a 102.
 
 ## Poczta
 

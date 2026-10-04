@@ -43,6 +43,10 @@ class AppApiSession {
     });
   }
 
+  void forgetAccount() {
+    _account = null;
+  }
+
   Future<Result<ViewPayload>> _getViewWithRelogin(
     String view,
     Map<String, String> params,

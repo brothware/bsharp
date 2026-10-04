@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Theip ar an sioncronu",
+    "pupilNotOnAccount": "Níl an dalta seo ar an gcuntas a thuilleadh. Roghnaigh an dalta arís.",
     "lastSync": "Sioncronithe go deireanach: ${time}",
     "neverSynced": "Nar sioncroniodh riamh",
     "currentLesson": "Ceacht reatha",

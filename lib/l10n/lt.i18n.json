@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Sinchronizacija nepavyko",
+    "pupilNotOnAccount": "Šio mokinio paskyroje nebėra. Pasirinkite mokinį iš naujo.",
     "lastSync": "Paskutinė sinchronizacija: ${time}",
     "neverSynced": "Niekada nesinchronizuota",
     "currentLesson": "Dabartinė pamoka",

@@ -92,7 +92,7 @@ sealed class AppFailure {
   factory AppFailure.fromErrno(int errno, [String? message]) {
     return switch (errno) {
       101 => AuthFailure.missingCredentials(message: message),
-      102 => AuthFailure.expiredSession(message: message),
+      102 => PupilNotOnAccount(message: message),
       103 => ServerFailure.viewNotFound(message: message),
       105 => AuthFailure.invalidCredentials(message: message),
       106 => AuthFailure.invalidCredentials(message: message),
@@ -222,6 +222,18 @@ final class Informational extends ServerFailure {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Informational && message == other.message;
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+}
+
+final class PupilNotOnAccount extends AppFailure {
+  const PupilNotOnAccount({super.message});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PupilNotOnAccount && message == other.message;
 
   @override
   int get hashCode => Object.hash(runtimeType, message);

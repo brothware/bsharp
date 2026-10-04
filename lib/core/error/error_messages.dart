@@ -17,6 +17,7 @@ String errorMessage(AppFailure failure) {
     NoConnection() => t.errors.noConnection,
     ConnectionTimeout() => t.errors.timeoutLong,
     SessionExpired() => t.errors.sessionExpired,
+    PupilNotOnAccount() => t.dashboard.pupilNotOnAccount,
     DatabaseError() => t.errors.databaseError,
     ProtocolMismatch() => t.errors.protocolMismatch,
     DatabaseIdChanged() => t.errors.databaseIdChanged,

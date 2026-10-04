@@ -259,7 +259,7 @@ void main() {
       expect(result.failureOrNull, isA<SessionExpired>());
     });
 
-    test('maps errno 102 inside the envelope to ExpiredSession', () async {
+    test('maps errno 102 inside the envelope to PupilNotOnAccount', () async {
       final source = AppApiDataSource(
         client: _client(
           (o) => _json(
@@ -273,7 +273,7 @@ void main() {
 
       final result = await source.getView(jwt: _jwt, view: 'terms');
 
-      expect(result.failureOrNull, isA<ExpiredSession>());
+      expect(result.failureOrNull, isA<PupilNotOnAccount>());
     });
 
     test('maps errno 103 to ViewNotFound', () async {

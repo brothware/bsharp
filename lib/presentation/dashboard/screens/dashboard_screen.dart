@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
+import 'package:bsharp/presentation/common/widgets/child_switcher.dart';
 import 'package:bsharp/presentation/dashboard/widgets/current_lesson_card.dart';
 import 'package:bsharp/presentation/dashboard/widgets/new_annotations_card.dart';
 import 'package:bsharp/presentation/dashboard/widgets/recent_grades_card.dart';
@@ -27,7 +32,9 @@ class DashboardScreen extends ConsumerWidget {
       onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
       child: CustomScrollView(
         slivers: [
-          if (syncStatus == SyncStatus.failed && lastSync == null)
+          if (ref.watch(missingPupilProvider))
+            const SliverToBoxAdapter(child: _MissingPupilBanner())
+          else if (syncStatus == SyncStatus.failed && lastSync == null)
             SliverToBoxAdapter(child: _SyncFailedBanner(ref: ref)),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -140,6 +147,65 @@ class _SyncFailedBanner extends StatelessWidget {
             child: Text(t.common.retry),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MissingPupilBanner extends ConsumerWidget {
+  const _MissingPupilBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: colors.errorContainer,
+      child: Row(
+        children: [
+          Icon(Icons.person_off, size: 16, color: colors.onErrorContainer),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              t.dashboard.pupilNotOnAccount,
+              style: TextStyle(color: colors.onErrorContainer),
+            ),
+          ),
+          TextButton(
+            onPressed: () => _chooseStudent(context, ref),
+            child: Text(t.accounts.switchStudent),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _chooseStudent(BuildContext context, WidgetRef ref) {
+    final account = ref.read(activeAccountProvider);
+    final entries = ref
+        .read(allStudentsProvider)
+        .where((entry) => entry.account.id == account?.id)
+        .toList();
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (sheetContext) => SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final entry in entries)
+                ListTile(
+                  title: Text('${entry.student.name} ${entry.student.surname}'),
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    ref.read(missingPupilProvider.notifier).value = false;
+                    unawaited(switchToStudent(ref, entry));
+                  },
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

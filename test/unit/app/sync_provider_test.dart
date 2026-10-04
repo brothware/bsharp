@@ -44,12 +44,13 @@ const _account = ProviderAccount(
 Future<ProviderContainer> _mobiregContainer({
   required FakeAppServer server,
   required ProviderAccount account,
+  int pupilId = _pupilId,
 }) async {
   final prefs = await SharedPreferences.getInstance();
   final accountStorage = AccountStorage(store: FakeKeyValueStore());
   await accountStorage.saveAccounts([account]);
   await accountStorage.saveActiveSelection(
-    ActiveSelection(accountId: account.id, studentId: _pupilId),
+    ActiveSelection(accountId: account.id, studentId: pupilId),
   );
   final provider = MobiregDataProvider(
     clientFactory: server.factoryFor,
@@ -69,21 +70,6 @@ Future<ProviderContainer> _mobiregContainer({
   );
   addTearDown(container.dispose);
   return container;
-}
-
-class _PupilGoneDataProvider extends DemoDataProvider {
-  @override
-  String get id => 'mobireg';
-
-  @override
-  bool get requiresCredentials => true;
-
-  @override
-  Future<void> loadSchoolData(
-    Ref ref, {
-    required int studentId,
-    DateTime? now,
-  }) async => throw StateError('Pupil $studentId is not on this account');
 }
 
 class _MalformedMailDataProvider extends DemoDataProvider {
@@ -133,39 +119,6 @@ void main() {
         expect(container.read(syncStatusProvider), SyncStatus.failed);
       },
     );
-
-    test('a pupil missing from the account fails the sync', () async {
-      final accountStorage = AccountStorage(store: FakeKeyValueStore());
-      await accountStorage.saveAccounts([
-        const ProviderAccount(
-          id: 'a1',
-          providerType: 'mobireg',
-          slug: 'sp1',
-          login: 'p',
-          password: 's',
-        ),
-      ]);
-      await accountStorage.saveActiveSelection(
-        const ActiveSelection(accountId: 'a1', studentId: 6541),
-      );
-      final failing = ProviderContainer(
-        overrides: [
-          credentialStorageProvider.overrideWithValue(_emptyStorage()),
-          sharedPreferencesProvider.overrideWithValue(
-            container.read(sharedPreferencesProvider),
-          ),
-          accountStorageProvider.overrideWithValue(accountStorage),
-          activeDataProviderProvider.overrideWithBuild(
-            (ref, _) => _PupilGoneDataProvider(),
-          ),
-        ],
-      );
-      addTearDown(failing.dispose);
-
-      await failing.read(syncStatusProvider.notifier).sync();
-
-      expect(failing.read(syncStatusProvider), SyncStatus.failed);
-    });
 
     test('a malformed mail payload during refresh fails the status', () async {
       final failing = ProviderContainer(
@@ -270,6 +223,48 @@ void main() {
         expect(changes.isEmpty, isTrue);
       },
     );
+
+    test('a pupil gone from the account asks to pick again', () async {
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account.copyWith(
+          students: const [
+            AccountStudent(id: 6541, name: 'Maria', surname: 'Kowalska'),
+          ],
+        ),
+        pupilId: 6541,
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      expect(container.read(syncStatusProvider), SyncStatus.failed);
+      expect(container.read(missingPupilProvider), isTrue);
+      final stored = await container.read(accountStorageProvider).getAccounts();
+      expect(stored.single.students.map((student) => student.id), [6339]);
+      expect(
+        container
+            .read(providerAccountsProvider)
+            .value!
+            .single
+            .students
+            .single
+            .id,
+        6339,
+      );
+    });
+
+    test('a completed sync clears the missing pupil state', () async {
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+      container.read(missingPupilProvider.notifier).value = true;
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      expect(container.read(syncStatusProvider), SyncStatus.completed);
+      expect(container.read(missingPupilProvider), isFalse);
+    });
 
     test('a mail failure fails the sync', () async {
       server.mailSignInFails = true;

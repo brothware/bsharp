@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "सिंक विफल",
+    "pupilNotOnAccount": "यह छात्र अब खाते में नहीं है। छात्र को फिर से चुनें।",
     "lastSync": "अंतिम सिंक: ${time}",
     "neverSynced": "कभी सिंक नहीं हुआ",
     "currentLesson": "वर्तमान कक्षा",

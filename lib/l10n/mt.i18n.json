@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Is-sinkronizzazzjoni falliet",
+    "pupilNotOnAccount": "Dan l-istudent m'għadux fuq il-kont. Agħżel l-istudent mill-ġdid.",
     "lastSync": "L-aħħar sinkronizzata: ${time}",
     "neverSynced": "Qatt ma ġiet sinkronizzata",
     "currentLesson": "Lezzjoni attwali",

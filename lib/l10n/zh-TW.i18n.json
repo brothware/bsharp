@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "同步失敗",
+    "pupilNotOnAccount": "該學生已不在此帳戶中。請重新選擇學生。",
     "lastSync": "上次同步：${time}",
     "neverSynced": "從未同步",
     "currentLesson": "目前課程",

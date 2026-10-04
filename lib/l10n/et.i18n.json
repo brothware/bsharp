@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Sünkroonimine ebaõnnestus",
+    "pupilNotOnAccount": "Seda õpilast pole enam kontol. Vali õpilane uuesti.",
     "lastSync": "Viimane sünkroonimine: ${time}",
     "neverSynced": "Pole kunagi sünkroonitud",
     "currentLesson": "Praegune tund",

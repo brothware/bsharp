@@ -8,6 +8,7 @@ import 'fixtures.dart';
 const _unauthorized = 401;
 const _ok = 200;
 const _badRequest = 400;
+const _pupilErrno = 102;
 const _mailFolders = ['inbox', 'sent', 'trash'];
 
 class _FakeAppApiFactory extends ApiClientFactory {
@@ -33,6 +34,8 @@ class FakeAppServer {
   final timetableRanges = <(String, String)>[];
   final _bodies = <String, Map<String, dynamic>>{};
   final users = loadMobiregFixture('users') as Map<String, dynamic>;
+  final staleUsers = <Map<String, dynamic>>[];
+  final rejectedPupilIds = <String>{};
   int logins = 0;
   int mailSignIns = 0;
   bool mailSignInFails = false;
@@ -131,13 +134,30 @@ class FakeAppServer {
     final view = body['view'] as String;
     views.add(view);
     _bodies[view] = body;
+    final data = view == 'users' && staleUsers.isNotEmpty
+        ? staleUsers.removeAt(0)
+        : _isPupilRejected(view, body)
+        ? {'errno': _pupilErrno, 'message': 'Authorization error'}
+        : _dataFor(view, body);
     return _respond(options, _ok, {
       'v': 1,
       'serverTime': '2026-10-04T21:06:32+02:00',
       'ttlFresh': 60,
       'ttlRetain': 1209600,
-      'data': _dataFor(view, body),
+      'data': data,
     });
+  }
+
+  bool _isPupilRejected(String view, Map<String, dynamic> body) {
+    const accountViews = {'users', 'register-fcm', 'notif-settings'};
+    if (accountViews.contains(view)) {
+      return false;
+    }
+    if (rejectedPupilIds.contains(body['pupilId'])) {
+      return true;
+    }
+    final pupils = (users['pupils'] as List).cast<Map<String, dynamic>>();
+    return !pupils.any((pupil) => '${pupil['id']}' == body['pupilId']);
   }
 
   Object _dataFor(String view, Map<String, dynamic> body) {

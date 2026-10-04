@@ -137,13 +137,61 @@ void main() {
     expect(server.logins, 1);
   });
 
-  test('a pupil missing from the account fails the sync', () async {
+  test('a pupil missing from users refetches users once, then fails', () async {
     await provider.authenticate(school: 'sp1', login: 'p', password: 's');
 
     await expectLater(
       () => provider.loadSchoolData(ref(), studentId: 6541),
-      throwsStateError,
+      throwsA(
+        isA<PupilNotOnAccountException>().having(
+          (e) => e.students.map((student) => student.id),
+          'students',
+          [6339],
+        ),
+      ),
     );
+    expect(server.views.where((view) => view == 'users'), hasLength(2));
+    expect(server.views, isNot(contains('terms')));
+  });
+
+  test('errno 102 refetches users and reports the pupil gone', () async {
+    server.staleUsers.add({
+      ...server.users,
+      'pupils': [
+        {'id': 6541, 'firstname': 'Maria', 'lastname': 'Kowalska'},
+      ],
+    });
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+
+    await expectLater(
+      () => provider.loadSchoolData(ref(), studentId: 6541),
+      throwsA(isA<PupilNotOnAccountException>()),
+    );
+    expect(server.views, ['users', 'terms', 'users']);
+  });
+
+  test('a listed pupil rejected with errno 102 fails the view', () async {
+    server.users['pupils'] = [
+      ...server.users['pupils'] as List,
+      {'id': 6541, 'firstname': 'Jan', 'lastname': 'Kowalski'},
+    ];
+    server.rejectedPupilIds.add('6541');
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+
+    await expectLater(
+      () => provider.loadSchoolData(ref(), studentId: 6541),
+      throwsA(
+        allOf(
+          isNot(isA<PupilNotOnAccountException>()),
+          isA<Exception>().having(
+            (e) => '$e',
+            'description',
+            contains('PupilNotOnAccount'),
+          ),
+        ),
+      ),
+    );
+    expect(server.views, ['users', 'terms', 'users']);
   });
 
   test('an account saved before the switch asks for the password', () async {

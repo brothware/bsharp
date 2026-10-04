@@ -28,6 +28,20 @@ class ReauthRequiredException implements Exception {
   String toString() => 'ReauthRequiredException: the saved password is gone';
 }
 
+class PupilNotOnAccountException implements Exception {
+  const PupilNotOnAccountException({
+    required this.pupilId,
+    required this.students,
+  });
+
+  final int pupilId;
+  final List<Student> students;
+
+  @override
+  String toString() =>
+      'PupilNotOnAccountException: pupil $pupilId is not on the account';
+}
+
 class MessagingException implements Exception {
   const MessagingException(this.failure);
 

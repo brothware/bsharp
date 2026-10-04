@@ -5,10 +5,13 @@ import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
+import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/data/services/sync_snapshot.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/entities/provider_account.dart';
+import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter/foundation.dart';
@@ -104,6 +107,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       await loadCustomEventsFromRef(ref, accountId);
 
       state = SyncStatus.completed;
+      ref.read(missingPupilProvider.notifier).value = false;
       ref.read(lastSyncTimeProvider.notifier).value = DateTime.now();
 
       final changeSet = await _detectChanges();
@@ -119,6 +123,9 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     } on ReauthRequiredException {
       state = SyncStatus.failed;
       return const ChangeSet();
+    } on PupilNotOnAccountException catch (error, stackTrace) {
+      await _offerPupilsOnAccount(error.students);
+      return _fail(error, stackTrace);
     } on Object catch (error, stackTrace) {
       return _fail(error, stackTrace);
     }
@@ -130,6 +137,29 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       state = SyncStatus.failed;
     }
     return const ChangeSet();
+  }
+
+  Future<void> _offerPupilsOnAccount(List<Student> students) async {
+    ref.read(missingPupilProvider.notifier).value = true;
+    final account = ref.read(activeAccountProvider);
+    if (account == null) {
+      return;
+    }
+    await ref
+        .read(accountStorageProvider)
+        .updateAccount(
+          account.copyWith(
+            students: [
+              for (final student in students)
+                AccountStudent(
+                  id: student.id,
+                  name: student.name,
+                  surname: student.surname,
+                ),
+            ],
+          ),
+        );
+    await ref.read(providerAccountsProvider.notifier).reload();
   }
 
   void _hydrateFromCache(SyncCache cache) {

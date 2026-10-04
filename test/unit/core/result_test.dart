@@ -97,8 +97,8 @@ void main() {
       expect(AppFailure.fromErrno(101), isA<MissingCredentials>());
     });
 
-    test('102 maps to ExpiredSession', () {
-      expect(AppFailure.fromErrno(102), isA<ExpiredSession>());
+    test('102 maps to PupilNotOnAccount', () {
+      expect(AppFailure.fromErrno(102), isA<PupilNotOnAccount>());
     });
 
     test('103 maps to ViewNotFound', () {
@@ -214,11 +214,13 @@ void main() {
         SchoolNotFound(),
         TranslationQuotaExceeded(),
         TranslationFailed(),
+        PupilNotOnAccount(),
         UnknownFailure(),
       ];
 
       for (final failure in failures) {
         final result = switch (failure) {
+          PupilNotOnAccount() => 'q',
           MissingCredentials() => 'a',
           ExpiredSession() => 'b',
           InvalidCredentials() => 'c',

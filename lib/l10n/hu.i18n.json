@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "A szinkronizálás sikertelen",
+    "pupilNotOnAccount": "Ez a tanuló már nincs a fiókban. Válassza ki újra a tanulót.",
     "lastSync": "Utolsó szinkronizálás: ${time}",
     "neverSynced": "Még nem szinkronizált",
     "currentLesson": "Jelenlegi óra",

@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Sinkronizimi dështoi",
+    "pupilNotOnAccount": "Ky nxënës nuk është më në llogari. Zgjidhni përsëri nxënësin.",
     "lastSync": "Sinkronizimi i fundit: ${time}",
     "neverSynced": "Asnjëherë e sinkronizuar",
     "currentLesson": "Ora aktuale",

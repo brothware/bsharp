@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Synchronizácia zlyhala",
+    "pupilNotOnAccount": "Tento žiak už na účte nie je. Vyberte žiaka znova.",
     "lastSync": "Posledná synchronizácia: ${time}",
     "neverSynced": "Nikdy nesynchronizované",
     "currentLesson": "Aktuálna hodina",

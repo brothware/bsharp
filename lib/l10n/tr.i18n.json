@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Senkronizasyon başarısız oldu",
+    "pupilNotOnAccount": "Bu öğrenci artık hesapta değil. Öğrenciyi yeniden seçin.",
     "lastSync": "Son senkronizasyon: ${time}",
     "neverSynced": "Hiç senkronize edilmedi",
     "currentLesson": "Şu anki ders",

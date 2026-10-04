@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Falha na sincronização",
+    "pupilNotOnAccount": "Este aluno já não está na conta. Escolha o aluno novamente.",
     "lastSync": "Última sincronização: ${time}",
     "neverSynced": "Nunca sincronizado",
     "currentLesson": "Aula atual",

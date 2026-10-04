@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Synkronointi epäonnistui",
+    "pupilNotOnAccount": "Tätä oppilasta ei enää ole tilillä. Valitse oppilas uudelleen.",
     "lastSync": "Viimeksi synkronoitu: ${time}",
     "neverSynced": "Ei koskaan synkronoitu",
     "currentLesson": "Nykyinen oppitunti",

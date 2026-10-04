@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Synkronisering misslyckades",
+    "pupilNotOnAccount": "Den här eleven finns inte längre på kontot. Välj eleven igen.",
     "lastSync": "Senast synkad: ${time}",
     "neverSynced": "Aldrig synkad",
     "currentLesson": "Nuvarande lektion",

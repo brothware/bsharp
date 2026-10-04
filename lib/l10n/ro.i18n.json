@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Sincronizarea a eșuat",
+    "pupilNotOnAccount": "Acest elev nu mai este în cont. Alegeți din nou elevul.",
     "lastSync": "Ultima sincronizare: ${time}",
     "neverSynced": "Niciodată sincronizat",
     "currentLesson": "Lecția curentă",

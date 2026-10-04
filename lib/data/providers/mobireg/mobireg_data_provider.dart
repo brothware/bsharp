@@ -249,25 +249,27 @@ class MobiregDataProvider implements SchoolDataProvider {
       return;
     }
 
-    final accountData = await _valueOf('users', session.account());
+    final accountData = await _accountListing(
+      session,
+      studentId,
+      trustCached: true,
+    );
     ref.read(reauthRequiredProvider.notifier).value = false;
-    final account = parseAccount(accountData);
-    final pupils = account.students;
-    final enabledModules = account.enabledModules;
+    final enabledModules = parseAccount(accountData).enabledModules;
     bool isEnabled(String module) => _isModuleOn(enabledModules, module);
-    if (!pupils.any((pupil) => pupil.id == studentId)) {
-      throw StateError('Pupil $studentId is not on this account');
-    }
 
     Future<Object> view(
       String name, [
       Map<String, String> extra = const {},
     ]) async {
-      final payload = await _valueOf(
+      final result = await session.getView(
         name,
-        session.getView(name, params: {'pupilId': '$studentId', ...extra}),
+        params: {'pupilId': '$studentId', ...extra},
       );
-      return payload.data;
+      if (result case Failure(failure: PupilNotOnAccount())) {
+        await _accountListing(session, studentId, trustCached: false);
+      }
+      return _valueOf(name, result).data;
     }
 
     final terms = await view('terms');
@@ -313,8 +315,31 @@ class MobiregDataProvider implements SchoolDataProvider {
       ..save(MobiregViewCache(ref.read(syncCacheProvider)));
   }
 
-  Future<T> _valueOf<T>(String view, Future<Result<T>> request) async {
-    final result = await request;
+  Future<Map<String, dynamic>> _accountListing(
+    AppApiSession session,
+    int studentId, {
+    required bool trustCached,
+  }) async {
+    bool lists(Map<String, dynamic> account) =>
+        parseAccount(account).students.any((pupil) => pupil.id == studentId);
+    if (trustCached) {
+      final cached = _valueOf('users', await session.account());
+      if (lists(cached)) {
+        return cached;
+      }
+    }
+    session.forgetAccount();
+    final fresh = _valueOf('users', await session.account());
+    if (lists(fresh)) {
+      return fresh;
+    }
+    throw PupilNotOnAccountException(
+      pupilId: studentId,
+      students: parseAccount(fresh).students,
+    );
+  }
+
+  T _valueOf<T>(String view, Result<T> result) {
     return switch (result) {
       Success(:final value) => value,
       Failure(:final failure) => throw Exception(
@@ -331,7 +356,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       return;
     }
 
-    final account = parseAccount(await _valueOf('users', session.account()));
+    final account = parseAccount(_valueOf('users', await session.account()));
     final messagingUrl = account.messagingUrl;
     final messagesToken = account.messagesToken;
     if (messagingUrl == null || messagesToken == null) {

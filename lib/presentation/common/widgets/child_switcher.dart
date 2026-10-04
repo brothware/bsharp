@@ -170,18 +170,20 @@ class ChildSwitcher extends ConsumerWidget {
   }
 
   void _switchToStudent(WidgetRef ref, StudentEntry entry) {
-    unawaited(
-      ref
-          .read(activeSelectionProvider.notifier)
-          .select(
-            ActiveSelection(
-              accountId: entry.account.id,
-              studentId: entry.student.id,
-            ),
-          ),
-    );
-    unawaited(ref.read(syncStatusProvider.notifier).sync());
+    unawaited(switchToStudent(ref, entry));
   }
+}
+
+Future<void> switchToStudent(WidgetRef ref, StudentEntry entry) async {
+  await ref
+      .read(activeSelectionProvider.notifier)
+      .select(
+        ActiveSelection(
+          accountId: entry.account.id,
+          studentId: entry.student.id,
+        ),
+      );
+  await ref.read(syncStatusProvider.notifier).sync();
 }
 
 class _StudentTile extends StatelessWidget {

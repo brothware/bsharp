@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Synchronisatie mislukt",
+    "pupilNotOnAccount": "Deze leerling staat niet meer op het account. Kies de leerling opnieuw.",
     "lastSync": "Laatst gesynchroniseerd: ${time}",
     "neverSynced": "Nooit gesynchroniseerd",
     "currentLesson": "Huidige les",

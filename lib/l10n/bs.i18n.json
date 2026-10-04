@@ -73,6 +73,7 @@
   },
   "dashboard": {
     "syncFailed": "Sinhronizacija nije uspjela",
+    "pupilNotOnAccount": "Ovaj učenik više nije na računu. Ponovo odaberite učenika.",
     "lastSync": "Posljednja sinhronizacija: ${time}",
     "neverSynced": "Nikada sinhronizirano",
     "currentLesson": "Trenutni čas",
