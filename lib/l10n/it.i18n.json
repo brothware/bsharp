@@ -7,6 +7,7 @@
     "edit": "Modifica",
     "close": "Chiudi",
     "retry": "Riprova",
+    "linkOpenFailed": "Impossibile aprire il link",
     "loading": "Caricamento...",
     "error": "Errore",
     "noData": "Nessun dato",

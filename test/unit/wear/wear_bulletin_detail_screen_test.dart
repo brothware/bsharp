@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../fixtures/real_bodies.dart';
 import '../data/credential_storage_test.dart';
 
 Widget _buildScreen({required PortalBulletin bulletin}) {
@@ -86,6 +87,26 @@ void main() {
         find.text('Important Announcement').hitTestable(),
         findsNothing,
       );
+    });
+
+    testWidgets('shows the real body as plain text', (tester) async {
+      await tester.pumpWidget(
+        _buildScreen(
+          bulletin: PortalBulletin(
+            id: 12,
+            title: 'Nowa aplikacja',
+            content: realAnnouncementHtml,
+            date: DateTime(2025, 9, 30, 15, 9),
+            author: 'mobireg',
+            isRead: true,
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.textContaining('<p>'), findsNothing);
+      expect(find.textContaining('• Rodzic/Uczeń'), findsOneWidget);
+      expect(find.textContaining('szacunku,\nZespół MobiReg'), findsOneWidget);
     });
 
     testWidgets('shows content text', (tester) async {

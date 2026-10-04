@@ -7,6 +7,7 @@
     "edit": "Uredi",
     "close": "Zatvori",
     "retry": "Pokušaj ponovo",
+    "linkOpenFailed": "Nije moguće otvoriti link",
     "loading": "Učitavanje...",
     "error": "Greška",
     "noData": "Nema podataka",

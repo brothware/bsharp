@@ -7,6 +7,7 @@ import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/html_body.dart';
 import 'package:bsharp/presentation/common/widgets/obscurable_fab.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
@@ -100,7 +101,6 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
         widget.message;
     final rawContent = _fullContent ?? message.content;
     final displayTitle = _translatedTitle ?? message.title;
-    final hasContent = _translatedContent != null || rawContent != null;
     final isInbox = _isInbox;
 
     final scrollable = SingleChildScrollView(
@@ -168,22 +168,10 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Center(child: CircularProgressIndicator()),
             )
-          else if (hasContent)
-            SelectableText.rich(
-              TextSpan(
-                children: _translatedContent != null
-                    ? [
-                        TextSpan(
-                          text: _translatedContent,
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                      ]
-                    : parseHtmlSpans(
-                        rawContent!,
-                        baseStyle: theme.textTheme.bodyMedium,
-                      ),
-              ),
-            ),
+          else if (_translatedContent case final translated?)
+            SelectableText(translated, style: theme.textTheme.bodyMedium)
+          else if (rawContent != null)
+            HtmlBody(rawContent),
           if (_detailFiles ?? message.files case final files?
               when files.isNotEmpty) ...[
             const SizedBox(height: 16),

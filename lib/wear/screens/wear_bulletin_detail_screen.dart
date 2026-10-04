@@ -65,7 +65,7 @@ class _WearBulletinDetailScreenState
                   ),
                   Divider(height: 8, color: theme.colorScheme.outlineVariant),
                   SelectableText(
-                    widget.bulletin.content,
+                    stripHtml(widget.bulletin.content),
                     style: theme.textTheme.bodySmall,
                   ),
                 ],

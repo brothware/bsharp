@@ -3,6 +3,7 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/html_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -122,7 +123,7 @@ class _BulletinDetailScreen extends StatelessWidget {
               ],
             ),
             const Divider(height: 24),
-            SelectableText(bulletin.content, style: theme.textTheme.bodyMedium),
+            HtmlBody(bulletin.content),
           ],
         ),
       ),

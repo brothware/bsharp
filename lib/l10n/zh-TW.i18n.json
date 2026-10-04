@@ -7,6 +7,7 @@
     "edit": "編輯",
     "close": "關閉",
     "retry": "重試",
+    "linkOpenFailed": "無法開啟連結",
     "loading": "載入中...",
     "error": "錯誤",
     "noData": "沒有資料",
