@@ -1,9 +1,6 @@
 import 'dart:convert';
 
-import 'package:bsharp/data/services/sync_data_parser.dart';
 import 'package:bsharp/domain/change_detection.dart';
-import 'package:bsharp/domain/entities/poczta.dart';
-import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,24 +14,6 @@ class SyncSnapshot {
     this.reprimandIds = const {},
     this.inboxMessageIds = const {},
   });
-
-  factory SyncSnapshot.fromSyncData({
-    required SyncData syncData,
-    List<PortalHomework> homeworks = const [],
-    List<PortalTest> tests = const [],
-    List<PortalReprimand> reprimands = const [],
-    List<PocztaMessage> inboxMessages = const [],
-  }) {
-    return SyncSnapshot(
-      markIds: syncData.marks.map((m) => m.id).toSet(),
-      eventIds: syncData.events.map((e) => e.id).toSet(),
-      attendanceIds: syncData.attendances.map((a) => a.id).toSet(),
-      homeworkIds: homeworks.map((h) => h.id).toSet(),
-      testIds: tests.map((t) => t.id).toSet(),
-      reprimandIds: reprimands.map((r) => r.id).toSet(),
-      inboxMessageIds: inboxMessages.map((m) => m.id).toSet(),
-    );
-  }
 
   factory SyncSnapshot.fromJson(Map<String, dynamic> json) {
     return SyncSnapshot(
@@ -135,6 +114,7 @@ class SyncSnapshot {
   }
 
   Map<String, dynamic> toJson() => {
+    'version': currentVersion,
     'markIds': markIds.toList(),
     'eventIds': eventIds.toList(),
     'attendanceIds': attendanceIds.toList(),
@@ -150,12 +130,16 @@ class SyncSnapshot {
   }
 
   static const _prefsKey = 'sync_snapshot';
+  static const currentVersion = 2;
 
   static Future<SyncSnapshot?> load(SharedPreferences prefs) async {
     final json = prefs.getString(_prefsKey);
     if (json == null) return null;
     try {
       final map = jsonDecode(json) as Map<String, dynamic>;
+      if (map['version'] != currentVersion) {
+        return null;
+      }
       return SyncSnapshot.fromJson(map);
     } on Object {
       return null;

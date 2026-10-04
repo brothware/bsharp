@@ -59,7 +59,6 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   List<Student> _students = [];
   int? _selectedStudentId;
   String _password = '';
-  String _passwordHash = '';
 
   @override
   void initState() {
@@ -90,9 +89,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     _schoolController.text = account.slug;
     _loginController.text = account.login;
     _password = account.password;
-    _passwordHash = account.password.isNotEmpty
-        ? ref.read(activeDataProviderProvider).hashPassword(account.password)
-        : account.legacyPasswordHash ?? '';
+    if (_password.isEmpty) {
+      return;
+    }
 
     await _loadStudents();
   }
@@ -163,23 +162,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       _errorMessage = null;
     });
 
-    final provider = ref.read(activeDataProviderProvider);
     _password = password;
-    _passwordHash = provider.hashPassword(password);
-
-    final result = await provider.validateCredentials(
-      school: school,
-      login: login,
-      passwordHash: _passwordHash,
-    );
-
-    await result.when(
-      success: (_) => _loadStudents(),
-      failure: (failure) {
-        setState(() => _isLoading = false);
-        _showError(failureMessage(failure));
-      },
-    );
+    await _loadStudents();
   }
 
   Future<void> _loadStudents() async {
@@ -189,10 +173,10 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     });
 
     final provider = ref.read(activeDataProviderProvider);
-    final result = await provider.fetchStudents(
+    final result = await provider.probeAccount(
       school: _schoolController.text.trim(),
       login: _loginController.text.trim(),
-      passwordHash: _passwordHash,
+      password: _password,
     );
 
     if (!mounted) return;
@@ -204,12 +188,12 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       case Success(:final value):
         setState(() {
           _isLoading = false;
-          _students = value;
+          _students = value.students;
           _step = _SetupStep.studentPicker;
         });
 
-        if (value.length == 1) {
-          _selectedStudentId = value.first.id;
+        if (value.students.length == 1) {
+          _selectedStudentId = value.students.single.id;
           await _finishSetup();
         }
     }

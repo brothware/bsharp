@@ -1,29 +1,51 @@
 import 'dart:async';
 
+import 'package:bsharp/app/child_provider.dart';
+import 'package:bsharp/app/providers/attendance_providers.dart';
+import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/app/providers/more_providers.dart';
+import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
-import 'package:bsharp/data/data_sources/remote/auth_service.dart';
-import 'package:bsharp/data/data_sources/remote/mobile_sync_data_source.dart';
+import 'package:bsharp/data/data_sources/remote/app_api_data_source.dart';
+import 'package:bsharp/data/data_sources/remote/app_api_session.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
-import 'package:bsharp/data/data_sources/remote/portal_data_source.dart';
-import 'package:bsharp/data/data_sources/remote/portal_session.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_sync_applier.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_view_cache.dart';
+import 'package:bsharp/data/providers/mobireg/parsers/account_parser.dart';
+import 'package:bsharp/data/providers/mobireg/parsers/attendance_parser.dart';
+import 'package:bsharp/data/providers/mobireg/parsers/grade_parser.dart';
+import 'package:bsharp/data/providers/mobireg/parsers/school_item_parser.dart';
+import 'package:bsharp/data/providers/mobireg/parsers/term_parser.dart';
+import 'package:bsharp/data/providers/mobireg/parsers/timetable_parser.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
-import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
+import 'package:bsharp/domain/entities/teacher.dart';
+import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
+
+const _usersKey = 'users';
+const _pupilKey = 'pupil';
+const _termsKey = 'terms';
+const _subjectsKey = 'subjects';
+const _timetableKey = 'timetable';
+const _attendanceStatsKey = 'attendance-stats';
+const _testsKey = 'tests';
+const _reprimandsKey = 'reprimands';
+const _announcementsKey = 'announcements';
+const _dateLength = 10;
 
 class SendMessageException implements Exception {
   SendMessageException(this.failure);
@@ -32,18 +54,19 @@ class SendMessageException implements Exception {
 }
 
 class MobiregDataProvider implements SchoolDataProvider {
-  ApiClientFactory? _factory;
+  MobiregDataProvider({
+    ApiClientFactory Function(String school)? clientFactory,
+  }) : _clientFactory = clientFactory ?? _productionClientFactory;
+
+  final ApiClientFactory Function(String school) _clientFactory;
+  final Map<String, _AccountSession> _sessions = {};
   String? _school;
   String? _login;
   String _password = '';
-  String? _legacyPasswordHash;
   PocztaDataSource? _pocztaDs;
-  PortalSessionManager? _portalSessions;
 
-  String? get _njsonPassHash =>
-      _password.isNotEmpty ? hashPassword(_password) : _legacyPasswordHash;
-
-  bool get _needsReauth => _password.isEmpty && _legacyPasswordHash != null;
+  static ApiClientFactory _productionClientFactory(String school) =>
+      ApiClientFactory(school: school, parentLogin: '', parentPassHash: '');
 
   @override
   String get id => 'mobireg';
@@ -56,7 +79,9 @@ class MobiregDataProvider implements SchoolDataProvider {
 
   @override
   Set<DataProviderCapability> get capabilities =>
-      DataProviderCapability.values.toSet();
+      DataProviderCapability.values.toSet()
+        ..remove(DataProviderCapability.homework)
+        ..remove(DataProviderCapability.changelog);
 
   @override
   bool get requiresCredentials => true;
@@ -65,134 +90,70 @@ class MobiregDataProvider implements SchoolDataProvider {
   bool supports(DataProviderCapability cap) => capabilities.contains(cap);
 
   @override
-  String hashPassword(String password) => AuthService.hashPassword(password);
-
-  @override
-  Future<Result<String?>> validateCredentials({
+  Future<Result<AccountProbe>> probeAccount({
     required String school,
     required String login,
-    required String passwordHash,
+    required String password,
   }) async {
-    final factory = ApiClientFactory(
+    final session = _sessionFor(
       school: school,
-      parentLogin: login,
-      parentPassHash: passwordHash,
+      login: login,
+      password: password,
     );
-    final syncDs = MobileSyncDataSource(
-      client: factory.createMobileSyncClient(),
-    );
-    final result = await syncDs.getSettings();
-    return result.when(
-      success: (data) {
-        final settingsRaw = data['Settings'];
-        String? schoolName;
-        if (settingsRaw is List && settingsRaw.isNotEmpty) {
-          final first = settingsRaw.first;
-          if (first is Map<String, dynamic>) {
-            schoolName = first['schoolName'] as String?;
-          }
-        } else if (settingsRaw is Map<String, dynamic>) {
-          schoolName = settingsRaw['schoolName'] as String?;
-        }
-        return Result.success(schoolName);
-      },
-      failure: Result.failure,
-    );
+    final result = await session.account();
+    return switch (result) {
+      Failure(:final failure) => Result.failure(failure),
+      Success(:final value) => Result.success(_probeOf(parseAccount(value))),
+    };
   }
 
-  @override
-  Future<Result<List<Student>>> fetchStudents({
-    required String school,
-    required String login,
-    required String passwordHash,
-  }) async {
-    final factory = ApiClientFactory(
-      school: school,
-      parentLogin: login,
-      parentPassHash: passwordHash,
-    );
-    final syncDs = MobileSyncDataSource(
-      client: factory.createMobileSyncClient(),
-    );
-    final result = await syncDs.getStudents();
-    return result.when(
-      success: (data) {
-        final studentsJson = data['ParentStudents'] as List<dynamic>? ?? [];
-        return Result.success(
-          studentsJson
-              .whereType<Map<String, dynamic>>()
-              .map(
-                (json) => Student(
-                  id: json['id'] as int,
-                  usersEduId: json['users_edu_id'] as int,
-                  name: json['name'] as String,
-                  surname: json['surname'] as String,
-                  sex: Sex.fromString(json['sex'] as String),
-                ),
-              )
-              .toList(),
-        );
-      },
-      failure: Result.failure,
-    );
-  }
+  AccountProbe _probeOf(MobiregAccount account) =>
+      AccountProbe(schoolName: account.schoolName, students: account.students);
 
   @override
   Future<void> authenticate({
     required String school,
     required String login,
     required String password,
-    String? legacyPasswordHash,
   }) async {
-    final sameAccount =
-        _factory != null &&
-        _school == school &&
-        _login == login &&
-        _password == password &&
-        _legacyPasswordHash == legacyPasswordHash;
-    // Every sync re-authenticates, and so does a pull to refresh. Throwing the
-    // portal session away here would mean a fresh login each time, which is
-    // the burst the server asked us to stop making. The session outlives a
-    // sync; only a different account has to start a new one.
-    if (sameAccount) return;
-
     _school = school;
     _login = login;
     _password = password;
-    _legacyPasswordHash = legacyPasswordHash;
-    _factory = ApiClientFactory(
-      school: school,
-      parentLogin: login,
-      parentPassHash: _njsonPassHash ?? '',
-    );
-    _portalSessions = null;
   }
 
-  PortalSessionManager _portalSessionManager(ApiClientFactory factory) {
-    return _portalSessions ??= PortalSessionManager(
-      auth: AuthService(webLoginClient: factory.createWebLoginClient()),
-      portal: PortalDataSource(client: factory.createPortalClient()),
-      school: _school!,
-      login: _login!,
-      password: _password,
+  AppApiSession _sessionFor({
+    required String school,
+    required String login,
+    required String password,
+  }) {
+    final key = '$school/$login';
+    final existing = _sessions[key];
+    if (existing != null && existing.password == password) {
+      return existing.session;
+    }
+    final session = AppApiSession(
+      api: AppApiDataSource(
+        client: _clientFactory(school).createAppApiClient(),
+      ),
+      login: login,
+      password: password,
     );
+    _sessions[key] = _AccountSession(password: password, session: session);
+    return session;
   }
 
-  Future<PortalSession?> _openPortalSession(
-    Ref ref,
-    PortalSessionManager sessions,
-  ) async {
-    final result = await sessions.ensureSession();
-    return result.when(
-      success: (session) {
-        ref.read(portalReauthRequiredProvider.notifier).value = false;
-        return session;
-      },
-      failure: (failure) {
-        debugPrint('MobiregDataProvider: portal login failed: $failure');
-        return null;
-      },
-    );
+  AppApiSession? _activeSession(Ref ref) {
+    final school = _school;
+    final login = _login;
+    if (school == null || login == null) {
+      return null;
+    }
+    if (_password.isEmpty) {
+      debugPrint('MobiregDataProvider: $school/$login has no password saved');
+      ref.read(reauthRequiredProvider.notifier).value = true;
+      return null;
+    }
+    return _sessionFor(school: school, login: login, password: _password);
   }
 
   @override
@@ -211,7 +172,6 @@ class MobiregDataProvider implements SchoolDataProvider {
       channelDescription: kind.channelDescription,
       category: kind.category,
       itemId: int.tryParse(data['id'] as String? ?? ''),
-      triggersSync: data['noSync'] != 'true',
     );
   }
 
@@ -219,46 +179,30 @@ class MobiregDataProvider implements SchoolDataProvider {
   Future<bool> registerPushToken({
     required String school,
     required String login,
-    required String passwordHash,
+    required String password,
     required String token,
   }) async {
-    final factory = ApiClientFactory(
+    final session = _sessionFor(
       school: school,
-      parentLogin: login,
-      parentPassHash: passwordHash,
+      login: login,
+      password: password,
     );
-    final syncDs = MobileSyncDataSource(
-      client: factory.createTokenUploadClient(),
+    final result = await session.getView(
+      'register-fcm',
+      params: {'token': token},
     );
-    final result = await syncDs.registerFcmToken(token: token);
-    return result.when(success: (_) => true, failure: (_) => false);
+    if (result case Failure(:final failure)) {
+      debugPrint('MobiregDataProvider: register-fcm failed: $failure');
+      return false;
+    }
+    return true;
   }
 
   @override
   bool hydrateFromCache(Ref ref, SyncCache cache) {
-    final syncData = cache.loadSyncData();
-    if (syncData != null) {
-      applySyncData(ref, syncData);
-    }
-
-    const portalViews = {
-      'bulletins': applyPortalBulletins,
-      'tests': applyPortalTests,
-      'homeworks': applyPortalHomeworks,
-      'reprimands': applyPortalReprimands,
-    };
-    for (final entry in portalViews.entries) {
-      final items = cache.loadPortalView(entry.key);
-      if (items != null) {
-        entry.value(ref, items);
-      }
-    }
-
-    for (final kind in ['mark', 'attendance']) {
-      final changelog = cache.loadPortalView('changelog_$kind');
-      if (changelog != null) {
-        applyPortalChangelog(ref, kind, changelog);
-      }
+    final views = _MobiregViews.load(MobiregViewCache(cache));
+    if (views != null) {
+      views.apply(ref);
     }
 
     for (final folder in ['inbox', 'sent', 'trash']) {
@@ -268,78 +212,104 @@ class MobiregDataProvider implements SchoolDataProvider {
       }
     }
 
-    return syncData != null;
+    return views != null;
   }
 
   @override
   Future<void> loadSchoolData(Ref ref, {required int studentId}) async {
-    final factory = _factory;
-    if (factory == null) return;
+    const reprimandLimit = 100;
+    final session = _activeSession(ref);
+    if (session == null) {
+      return;
+    }
 
-    final syncDataSource = MobileSyncDataSource(
-      client: factory.createMobileSyncClient(),
-    );
+    final accountData = await _valueOf('users', session.account());
+    ref.read(reauthRequiredProvider.notifier).value = false;
+    final pupils = parseAccount(accountData).students;
+    if (!pupils.any((pupil) => pupil.id == studentId)) {
+      throw StateError('Pupil $studentId is not on this account');
+    }
 
-    final now = DateTime.now();
-    final startDate = now
-        .subtract(const Duration(days: 100))
-        .toIso8601String()
-        .substring(0, 10);
-    final endDate = now
-        .add(const Duration(days: 100))
-        .toIso8601String()
-        .substring(0, 10);
+    Future<Object> view(
+      String name, [
+      Map<String, String> extra = const {},
+    ]) async {
+      final payload = await _valueOf(
+        name,
+        session.getView(name, params: {'pupilId': '$studentId', ...extra}),
+      );
+      return payload.data;
+    }
 
-    final result = await syncDataSource.fullSync(
-      studentId: studentId,
-      startDate: startDate,
-      endDate: endDate,
-    );
+    final terms = await view('terms');
+    final subjects = await view('subjects');
+    final parsedTerms = parseTerms(terms);
+    final marksByTerm = <int, Object>{
+      for (final term in parsedTerms.where(_isSemester))
+        term.id: await view('marks', {'termId': '${term.id}'}),
+    };
+    final year =
+        parsedTerms.where((term) => term.type == TermType.year).firstOrNull ??
+        (throw FormatException('View terms: no school year', terms));
+    final timetable = await view('timetable-events', {
+      'dateFrom': _day(year.startDate),
+      'dateTo': _day(year.endDate),
+    });
+    _MobiregViews(
+        pupilId: studentId,
+        account: accountData,
+        terms: terms,
+        subjects: subjects,
+        marksByTerm: marksByTerm,
+        timetable: timetable,
+        attendanceStats: await view('attendance-stats'),
+        tests: await view('tests'),
+        reprimands: await view('reprimands', {'limit': '$reprimandLimit'}),
+        announcements: await view('announcements'),
+      )
+      ..apply(ref)
+      ..save(MobiregViewCache(ref.read(syncCacheProvider)));
+  }
 
-    final cache = ref.read(syncCacheProvider);
-
-    final syncOk = result.when(
-      success: (data) {
-        applySyncData(ref, data);
-        cache.saveSyncData(data);
-        return true;
-      },
-      failure: (_) => false,
-    );
-
-    if (!syncOk) throw Exception('Sync failed');
-
-    await _syncPortalData(ref, factory, studentId, cache);
+  Future<T> _valueOf<T>(String view, Future<Result<T>> request) async {
+    final result = await request;
+    return switch (result) {
+      Success(:final value) => value,
+      Failure(:final failure) => throw Exception(
+        'Mobireg view $view failed: $failure',
+      ),
+    };
   }
 
   @override
   Future<void> loadMessages(Ref ref) async {
-    final factory = _factory;
-    if (factory == null || _login == null || _school == null) {
+    final school = _school;
+    final session = _activeSession(ref);
+    if (school == null || session == null) {
       return;
     }
 
-    if (_needsReauth) {
-      debugPrint('MobiregDataProvider: portal reauth required, skip messages');
-      ref.read(portalReauthRequiredProvider.notifier).value = true;
-      return;
+    final accountResult = await session.account();
+    final Map<String, dynamic> accountData;
+    switch (accountResult) {
+      case Failure(:final failure):
+        debugPrint('MobiregDataProvider: users view failed: $failure');
+        return;
+      case Success(:final value):
+        accountData = value;
     }
 
-    final session = await _openPortalSession(
-      ref,
-      _portalSessionManager(factory),
-    );
-    if (session == null) return;
-
-    final messagesToken = session.messagesToken;
+    final messagesToken = parseAccount(accountData).messagesToken;
     if (messagesToken == null) {
       debugPrint('MobiregDataProvider: no messagesToken in users view');
       return;
     }
 
-    final pocztaDs = PocztaDataSource(client: factory.createPocztaClient());
+    final pocztaDs = PocztaDataSource(
+      client: _clientFactory(school).createPocztaClient(),
+    );
     final sessionResult = await pocztaDs.establishSession(
-      school: _school!,
+      school: school,
       messagesToken: messagesToken,
     );
 
@@ -513,104 +483,136 @@ class MobiregDataProvider implements SchoolDataProvider {
     final result = await pocztaDs.downloadFile(url, savePath);
     return result.when(success: (_) => savePath, failure: (_) => null);
   }
-
-  Future<void> _syncPortalData(
-    Ref ref,
-    ApiClientFactory factory,
-    int pupilId,
-    SyncCache cache,
-  ) async {
-    if (_needsReauth) {
-      debugPrint('MobiregDataProvider: portal reauth required, skip portal');
-      ref.read(portalReauthRequiredProvider.notifier).value = true;
-      return;
-    }
-    final sessions = _portalSessionManager(factory);
-    if (await _openPortalSession(ref, sessions) == null) return;
-
-    final now = DateTime.now();
-    final schoolYearStart = now.month >= 9
-        ? DateTime(now.year, 9)
-        : DateTime(now.year - 1, 9);
-    final schoolYearEnd = DateTime(schoolYearStart.year + 1, 8, 31);
-    final dateFrom = schoolYearStart.toIso8601String().substring(0, 10);
-    final dateTo = schoolYearEnd.toIso8601String().substring(0, 10);
-    final pupilIdStr = pupilId.toString();
-
-    final params = {
-      'pupilId': pupilIdStr,
-      'dateFrom': dateFrom,
-      'dateTo': dateTo,
-    };
-
-    final changelogParams = {...params, 'limit': '100', 'offset': '0'};
-
-    final views = <_PortalViewRequest>[
-      _PortalViewRequest(
-        view: 'bulletins',
-        params: params,
-        apply: (items) => applyPortalBulletins(ref, items),
-      ),
-      _PortalViewRequest(
-        view: 'changelog',
-        params: {...changelogParams, 'type': 'mark'},
-        apply: (items) => applyPortalChangelog(ref, 'mark', items),
-        cacheKey: 'changelog_mark',
-      ),
-      _PortalViewRequest(
-        view: 'changelog',
-        params: {...changelogParams, 'type': 'attendance'},
-        apply: (items) => applyPortalChangelog(ref, 'attendance', items),
-        cacheKey: 'changelog_attendance',
-      ),
-      _PortalViewRequest(
-        view: 'reprimands',
-        params: params,
-        apply: (items) => applyPortalReprimands(ref, items),
-      ),
-      _PortalViewRequest(
-        view: 'tests',
-        params: params,
-        apply: (items) => applyPortalTests(ref, items),
-      ),
-      _PortalViewRequest(
-        view: 'homeworks',
-        params: params,
-        apply: (items) => applyPortalHomeworks(ref, items),
-      ),
-    ];
-
-    for (final request in views) {
-      final result = await sessions.getView(
-        view: request.view,
-        params: request.params,
-      );
-      result.when(
-        success: (data) {
-          final items = data['items'] as List<dynamic>? ?? [];
-          request.apply(items);
-          cache.savePortalView(request.cacheKey ?? request.view, items);
-        },
-        failure: (failure) => debugPrint(
-          'MobiregDataProvider: portal view ${request.view} failed: $failure',
-        ),
-      );
-    }
-  }
 }
 
-class _PortalViewRequest {
-  const _PortalViewRequest({
-    required this.view,
-    required this.params,
-    required this.apply,
-    this.cacheKey,
+bool _isSemester(Term term) => term.type == TermType.semester;
+
+String _day(DateTime date) => date.toIso8601String().substring(0, _dateLength);
+
+@immutable
+class _AccountSession {
+  const _AccountSession({required this.password, required this.session});
+
+  final String password;
+  final AppApiSession session;
+}
+
+@immutable
+class _MobiregViews {
+  const _MobiregViews({
+    required this.pupilId,
+    required this.account,
+    required this.terms,
+    required this.subjects,
+    required this.marksByTerm,
+    required this.timetable,
+    required this.attendanceStats,
+    required this.tests,
+    required this.reprimands,
+    required this.announcements,
   });
 
-  final String view;
-  final Map<String, String> params;
-  final void Function(List<dynamic> items) apply;
-  final String? cacheKey;
+  final int pupilId;
+  final Map<String, dynamic> account;
+  final Object terms;
+  final Object subjects;
+  final Map<int, Object> marksByTerm;
+  final Object timetable;
+  final Object attendanceStats;
+  final Object tests;
+  final Object reprimands;
+  final Object announcements;
+
+  static _MobiregViews? load(MobiregViewCache cache) {
+    final timetable = cache.load(_timetableKey);
+    if (timetable == null) {
+      return null;
+    }
+    Object stored(String key) =>
+        cache.load(key) ??
+        (throw FormatException('Cached view $key is missing'));
+    final account = stored(_usersKey);
+    final pupilId = stored(_pupilKey);
+    if (account is! Map<String, dynamic> || pupilId is! int) {
+      throw const FormatException('Cached account is malformed');
+    }
+    final terms = stored(_termsKey);
+    return _MobiregViews(
+      pupilId: pupilId,
+      account: account,
+      terms: terms,
+      subjects: stored(_subjectsKey),
+      marksByTerm: {
+        for (final term in parseTerms(terms).where(_isSemester))
+          term.id: stored(_marksKey(term.id)),
+      },
+      timetable: timetable,
+      attendanceStats: stored(_attendanceStatsKey),
+      tests: stored(_testsKey),
+      reprimands: stored(_reprimandsKey),
+      announcements: stored(_announcementsKey),
+    );
+  }
+
+  static String _marksKey(int termId) => 'marks_$termId';
+
+  void save(MobiregViewCache cache) {
+    cache
+      ..save(_usersKey, account)
+      ..save(_pupilKey, pupilId)
+      ..save(_termsKey, terms)
+      ..save(_subjectsKey, subjects)
+      ..save(_timetableKey, timetable)
+      ..save(_attendanceStatsKey, attendanceStats)
+      ..save(_testsKey, tests)
+      ..save(_reprimandsKey, reprimands)
+      ..save(_announcementsKey, announcements);
+    for (final MapEntry(:key, :value) in marksByTerm.entries) {
+      cache.save(_marksKey(key), value);
+    }
+  }
+
+  void apply(Ref ref) {
+    final students = parseAccount(account).students;
+    final parsedTerms = parseTerms(terms);
+    final parsedSubjects = parseSubjects(subjects);
+    final marks = [
+      for (final MapEntry(:key, :value) in marksByTerm.entries)
+        parseMarks(value, termId: key),
+    ];
+    final teachers = <int, Teacher>{
+      for (final termMarks in marks)
+        for (final teacher in termMarks.teachers) teacher.id: teacher,
+    };
+    final events = parseTimetableEvents(
+      timetable,
+      subjectIdsByName: {
+        for (final subject in parsedSubjects) subject.name: subject.id,
+      },
+    );
+    final attendance = parseAttendance(
+      timetableEvents: timetable,
+      attendanceStats: attendanceStats,
+      pupilId: pupilId,
+    );
+    final parsedTests = parseTestItems(tests);
+    final parsedReprimands = parseReprimandItems(reprimands);
+    final bulletins = parseAnnouncements(announcements);
+
+    ref.read(studentsProvider.notifier).value = students;
+    ref.read(termsProvider.notifier).value = parsedTerms;
+    ref.read(subjectsProvider.notifier).value = parsedSubjects;
+    ref.read(teachersProvider.notifier).value = teachers.values.toList();
+    ref.read(resolvedGradesProvider.notifier).value = [
+      for (final termMarks in marks) ...termMarks.grades,
+    ];
+    ref.read(resolvedEventsProvider.notifier).value = events;
+    ref.read(attendancesProvider.notifier).value = attendance.attendances;
+    ref.read(attendanceTypesProvider.notifier).value = attendance.types;
+    ref.read(testsProvider.notifier).value = parsedTests;
+    ref.read(reprimandsProvider.notifier).value = parsedReprimands;
+    ref.read(bulletinsProvider.notifier).value = bulletins;
+  }
 }
 
 enum _MobiregNotificationKind {

@@ -5,22 +5,21 @@ import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Future<void> showPortalReauthDialog(BuildContext context, WidgetRef ref) {
+Future<void> showReauthDialog(BuildContext context, WidgetRef ref) {
   return showDialog<void>(
     context: context,
-    builder: (_) => const _PortalReauthDialog(),
+    builder: (_) => const _ReauthDialog(),
   );
 }
 
-class _PortalReauthDialog extends ConsumerStatefulWidget {
-  const _PortalReauthDialog();
+class _ReauthDialog extends ConsumerStatefulWidget {
+  const _ReauthDialog();
 
   @override
-  ConsumerState<_PortalReauthDialog> createState() =>
-      _PortalReauthDialogState();
+  ConsumerState<_ReauthDialog> createState() => _ReauthDialogState();
 }
 
-class _PortalReauthDialogState extends ConsumerState<_PortalReauthDialog> {
+class _ReauthDialogState extends ConsumerState<_ReauthDialog> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isSubmitting = false;
@@ -46,7 +45,7 @@ class _PortalReauthDialogState extends ConsumerState<_PortalReauthDialog> {
           account.copyWith(password: password, legacyPasswordHash: null),
         );
 
-    ref.read(portalReauthRequiredProvider.notifier).value = false;
+    ref.read(reauthRequiredProvider.notifier).value = false;
 
     if (!mounted) return;
     Navigator.of(context).pop();

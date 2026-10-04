@@ -11,6 +11,7 @@ class SyncCache {
   static const _syncDataKey = 'cache_sync_data';
   static const _portalPrefix = 'cache_portal_';
   static const _messagesPrefix = 'cache_messages_';
+  static const _viewPrefix = 'mobireg_view_';
 
   void saveSyncData(Map<String, dynamic> data) {
     unawaited(_prefs.setString(_syncDataKey, jsonEncode(data)));
@@ -44,6 +45,18 @@ class SyncCache {
     return jsonDecode(raw) as List<dynamic>;
   }
 
+  void saveView(String key, Object data) {
+    unawaited(_prefs.setString('$_viewPrefix$key', jsonEncode(data)));
+  }
+
+  Object? loadView(String key) {
+    final raw = _prefs.getString('$_viewPrefix$key');
+    if (raw == null) {
+      return null;
+    }
+    return jsonDecode(raw);
+  }
+
   void clear() {
     _prefs
         .getKeys()
@@ -51,7 +64,8 @@ class SyncCache {
           (k) =>
               k == _syncDataKey ||
               k.startsWith(_portalPrefix) ||
-              k.startsWith(_messagesPrefix),
+              k.startsWith(_messagesPrefix) ||
+              k.startsWith(_viewPrefix),
         )
         .toList()
         .forEach(_prefs.remove);

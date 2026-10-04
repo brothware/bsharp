@@ -8,7 +8,7 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/auth/widgets/portal_reauth_dialog.dart';
+import 'package:bsharp/presentation/auth/widgets/reauth_dialog.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
 import 'package:bsharp/presentation/messages/widgets/message_tile.dart';
 import 'package:flutter/material.dart';
@@ -50,13 +50,13 @@ class MessagesScreen extends ConsumerWidget {
         length: 3,
         child: Column(
           children: [
-            if (ref.watch(portalReauthRequiredProvider))
+            if (ref.watch(reauthRequiredProvider))
               MaterialBanner(
                 content: Text(t.auth.reauthMessage),
                 leading: const Icon(Icons.lock_outline),
                 actions: [
                   TextButton(
-                    onPressed: () => showPortalReauthDialog(context, ref),
+                    onPressed: () => showReauthDialog(context, ref),
                     child: Text(t.auth.reauthTitle),
                   ),
                 ],

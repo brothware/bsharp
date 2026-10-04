@@ -79,16 +79,18 @@ void main() {
       expect(provider.parseFcmMessage(message), isNull);
     });
 
-    test('honors noSync', () {
-      final syncing = provider.parseFcmMessage(messageOfKind('marks'));
-      final quiet = provider.parseFcmMessage(
+    test('every push triggers a sync, whatever noSync says', () {
+      final legacy = provider.parseFcmMessage(
         const RemoteMessage(
           data: {'title': 'T', 'body': 'B', 'kind': 'marks', 'noSync': 'true'},
         ),
       );
 
-      expect(syncing!.triggersSync, isTrue);
-      expect(quiet!.triggersSync, isFalse);
+      expect(
+        provider.parseFcmMessage(messageOfKind('marks'))!.triggersSync,
+        isTrue,
+      );
+      expect(legacy!.triggersSync, isTrue);
     });
   });
 }

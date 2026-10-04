@@ -10,6 +10,7 @@ import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/data/services/sync_snapshot.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -85,7 +86,6 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
           school: creds.school,
           login: creds.login,
           password: creds.password,
-          legacyPasswordHash: creds.legacyPasswordHash,
         );
 
         await Future.wait([
@@ -114,12 +114,17 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       }
 
       return changeSet;
-    } on Exception {
-      if (state == SyncStatus.syncing) {
-        state = SyncStatus.failed;
-      }
-      return const ChangeSet();
+    } on Object catch (error, stackTrace) {
+      return _fail(error, stackTrace);
     }
+  }
+
+  ChangeSet _fail(Object error, StackTrace stackTrace) {
+    debugPrint('SyncStatusNotifier: sync failed: $error\n$stackTrace');
+    if (state == SyncStatus.syncing) {
+      state = SyncStatus.failed;
+    }
+    return const ChangeSet();
   }
 
   void _hydrateFromCache(SyncCache cache) {
@@ -190,7 +195,6 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       school: account.slug,
       login: account.login,
       password: account.password,
-      legacyPasswordHash: account.legacyPasswordHash,
     );
   }
 
@@ -210,13 +214,11 @@ class _Credentials {
     required this.school,
     required this.login,
     required this.password,
-    this.legacyPasswordHash,
   });
 
   final String school;
   final String login;
   final String password;
-  final String? legacyPasswordHash;
 }
 
 @Riverpod(keepAlive: true)

@@ -82,76 +82,56 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
     });
 
     final provider = createProviderForType(_selectedProviderType!);
-    final passwordHash = provider.hashPassword(password);
-
-    final result = await provider.validateCredentials(
+    final result = await provider.probeAccount(
       school: school,
       login: login,
-      passwordHash: passwordHash,
+      password: password,
     );
 
     if (!mounted) return;
 
-    await result.when(
-      success: (schoolName) async {
-        final studentsResult = await provider.fetchStudents(
-          school: school,
-          login: login,
-          passwordHash: passwordHash,
-        );
-
-        if (!mounted) return;
-
-        switch (studentsResult) {
-          case Failure(:final failure):
-            setState(() {
-              _isLoading = false;
-              _errorMessage = failureMessage(failure);
-            });
-          case Success(:final value):
-            final accountStudents = value
-                .map(
-                  (s) => AccountStudent(
-                    id: s.id,
-                    name: s.name,
-                    surname: s.surname,
-                  ),
-                )
-                .toList();
-
-            final account = ProviderAccount(
-              id: _isEditing ? widget.existingAccount!.id : const Uuid().v4(),
-              providerType: _selectedProviderType!,
-              slug: school,
-              login: login,
-              password: password,
-              schoolName: schoolName ?? school,
-              students: accountStudents,
-            );
-
-            final notifier = ref.read(providerAccountsProvider.notifier);
-            if (_isEditing) {
-              await notifier.updateAccount(account);
-            } else {
-              await notifier.addAccount(account);
-            }
-
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(t.accounts.accountAddedSuccess)),
-            );
-
-            widget.onComplete?.call();
-        }
-      },
-      failure: (failure) {
+    switch (result) {
+      case Failure(:final failure):
         setState(() {
           _isLoading = false;
           _errorMessage = failureMessage(failure);
         });
-      },
-    );
+      case Success(:final value):
+        final accountStudents = value.students
+            .map(
+              (s) => AccountStudent(
+                id: s.id,
+                name: s.name,
+                surname: s.surname,
+              ),
+            )
+            .toList();
+
+        final account = ProviderAccount(
+          id: _isEditing ? widget.existingAccount!.id : const Uuid().v4(),
+          providerType: _selectedProviderType!,
+          slug: school,
+          login: login,
+          password: password,
+          schoolName: value.schoolName ?? school,
+          students: accountStudents,
+        );
+
+        final notifier = ref.read(providerAccountsProvider.notifier);
+        if (_isEditing) {
+          await notifier.updateAccount(account);
+        } else {
+          await notifier.addAccount(account);
+        }
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(t.accounts.accountAddedSuccess)),
+        );
+
+        widget.onComplete?.call();
+    }
   }
 
   Future<void> _selectProvider(SchoolDataProvider provider) async {

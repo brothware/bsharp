@@ -4,6 +4,7 @@ import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum DataProviderCapability {
@@ -18,6 +19,14 @@ enum DataProviderCapability {
   bulletins,
   changelog,
   pushNotifications,
+}
+
+@immutable
+class AccountProbe {
+  const AccountProbe({required this.schoolName, required this.students});
+
+  final String? schoolName;
+  final List<Student> students;
 }
 
 abstract class SchoolDataProvider {
@@ -42,7 +51,6 @@ abstract class SchoolDataProvider {
     required String school,
     required String login,
     required String password,
-    String? legacyPasswordHash,
   });
 
   Future<void> loadSchoolData(Ref ref, {required int studentId});
@@ -77,24 +85,16 @@ abstract class SchoolDataProvider {
 
   Future<String?> downloadAttachment(String url, String filename);
 
-  String hashPassword(String password);
-
-  Future<Result<String?>> validateCredentials({
+  Future<Result<AccountProbe>> probeAccount({
     required String school,
     required String login,
-    required String passwordHash,
-  });
-
-  Future<Result<List<Student>>> fetchStudents({
-    required String school,
-    required String login,
-    required String passwordHash,
+    required String password,
   });
 
   Future<bool> registerPushToken({
     required String school,
     required String login,
-    required String passwordHash,
+    required String password,
     required String token,
   });
 

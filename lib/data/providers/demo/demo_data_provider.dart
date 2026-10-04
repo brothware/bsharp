@@ -55,7 +55,6 @@ class DemoDataProvider implements SchoolDataProvider {
     required String school,
     required String login,
     required String password,
-    String? legacyPasswordHash,
   }) async {}
 
   @override
@@ -158,29 +157,24 @@ class DemoDataProvider implements SchoolDataProvider {
   Future<String?> downloadAttachment(String url, String filename) async => null;
 
   @override
-  String hashPassword(String password) => '';
-
-  @override
-  Future<Result<String?>> validateCredentials({
+  Future<Result<AccountProbe>> probeAccount({
     required String school,
     required String login,
-    required String passwordHash,
-  }) async => const Result.success(null);
-
-  @override
-  Future<Result<List<Student>>> fetchStudents({
-    required String school,
-    required String login,
-    required String passwordHash,
-  }) async => const Result.success([
-    Student(
-      id: 1,
-      usersEduId: 1,
-      name: 'Jan',
-      surname: 'Kowalski',
-      sex: Sex.male,
+    required String password,
+  }) async => const Result.success(
+    AccountProbe(
+      schoolName: null,
+      students: [
+        Student(
+          id: 1,
+          usersEduId: 1,
+          name: 'Jan',
+          surname: 'Kowalski',
+          sex: Sex.male,
+        ),
+      ],
     ),
-  ]);
+  );
 
   @override
   LocalFcmNotification? parseFcmMessage(RemoteMessage message) => null;
@@ -189,7 +183,7 @@ class DemoDataProvider implements SchoolDataProvider {
   Future<bool> registerPushToken({
     required String school,
     required String login,
-    required String passwordHash,
+    required String password,
     required String token,
   }) async => false;
 

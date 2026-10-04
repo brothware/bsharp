@@ -8,6 +8,7 @@ import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,10 @@ class _SchoolNotFoundDataProvider extends DemoDataProvider {
   bool get requiresCredentials => true;
 
   @override
-  Future<Result<String?>> validateCredentials({
+  Future<Result<AccountProbe>> probeAccount({
     required String school,
     required String login,
-    required String passwordHash,
+    required String password,
   }) async => const Result.failure(SchoolNotFound());
 }
 
@@ -42,11 +43,31 @@ class _RejectingDataProvider extends DemoDataProvider {
   bool get requiresCredentials => true;
 
   @override
-  Future<Result<String?>> validateCredentials({
+  Future<Result<AccountProbe>> probeAccount({
     required String school,
     required String login,
-    required String passwordHash,
+    required String password,
   }) async => const Result.failure(InvalidCredentials());
+}
+
+class _CountingProbeDataProvider extends DemoDataProvider {
+  int probes = 0;
+
+  @override
+  String get id => 'mobireg';
+
+  @override
+  bool get requiresCredentials => true;
+
+  @override
+  Future<Result<AccountProbe>> probeAccount({
+    required String school,
+    required String login,
+    required String password,
+  }) {
+    probes++;
+    return super.probeAccount(school: school, login: login, password: password);
+  }
 }
 
 /// The school and login steps hand typing to the watch's own input screen, so
@@ -160,6 +181,38 @@ void main() {
 
         expect(find.text('Mobireg'), findsNothing);
         expect(find.text('School'), findsWidgets);
+      });
+
+      testWidgets('an account saved without a password makes no login', (
+        tester,
+      ) async {
+        final provider = _CountingProbeDataProvider();
+        final accountStorage = _SlowAccountStorage([
+          const ProviderAccount(
+            id: 'a',
+            providerType: 'mobireg',
+            slug: 'osm-wroclaw',
+            login: 'parent.login',
+            legacyPasswordHash: 'abc',
+            schoolName: 'School',
+          ),
+        ]);
+
+        await tester.pumpWidget(
+          _buildApp(
+            shape: shape,
+            accountStorage: accountStorage,
+            extraOverrides: [
+              activeDataProviderProvider.overrideWithBuild(
+                (ref, _) => provider,
+              ),
+            ],
+          ),
+        );
+        accountStorage.reveal();
+        await tester.pumpAndSettle();
+
+        expect(provider.probes, 0);
       });
 
       testWidgets('first run asks to add an account before naming one', (

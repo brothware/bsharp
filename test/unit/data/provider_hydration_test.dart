@@ -1,12 +1,18 @@
+import 'package:bsharp/app/child_provider.dart';
+import 'package:bsharp/app/providers/attendance_providers.dart';
+import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_view_cache.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../fixtures/mobireg/fixtures.dart';
 
 void main() {
   late SharedPreferences prefs;
@@ -22,49 +28,41 @@ void main() {
   });
 
   group('MobiregDataProvider.hydrateFromCache', () {
-    test('restores schedule and portal state from a populated cache', () {
-      final cache = SyncCache(prefs)
-        ..saveSyncData({
-          'Subjects': [
-            {'id': 10, 'name': 'przyroda', 'action': 'I'},
-          ],
-          'Events': [
-            {
-              'id': 1,
-              'name': '',
-              'date': '2026-09-17',
-              'number': 1,
-              'start_time': '08:00:00',
-              'end_time': '08:45:00',
-              'event_types_id': 100,
-              'status': 0,
-              'substitution': 0,
-              'type': 1,
-              'attr': 0,
-              'locked': 0,
-            },
-          ],
-          'EventTypes': [
-            {
-              'id': 100,
-              'subjects_id': 10,
-              'teaching_level': 0,
-              'substitution': 0,
-            },
-          ],
-        })
-        ..savePortalView('tests', [
-          {'id': 5, 'subjectName': 'przyroda', 'date': '2026-09-17'},
-        ]);
+    MobiregViewCache populatedCache() {
+      final views = MobiregViewCache(SyncCache(prefs));
+      const fixtures = {
+        'users': 'users',
+        'terms': 'terms',
+        'subjects': 'subjects',
+        'marks_4': 'marks_term4',
+        'marks_7': 'marks_empty',
+        'timetable': 'timetable_events',
+        'attendance-stats': 'attendance_stats',
+        'tests': 'tests',
+        'reprimands': 'reprimands',
+        'announcements': 'announcements',
+      };
+      for (final MapEntry(:key, :value) in fixtures.entries) {
+        views.save(key, loadMobiregFixture(value));
+      }
+      views.save('pupil', 6339);
+      return views;
+    }
+
+    test('restores every view from a populated cache', () {
+      populatedCache();
 
       final restored = MobiregDataProvider().hydrateFromCache(
         container.read(Provider((ref) => ref)),
-        cache,
+        SyncCache(prefs),
       );
 
       expect(restored, isTrue);
-      expect(container.read(resolvedEventsProvider).single.id, 1);
-      expect(container.read(testsProvider).single.subjectName, 'nature');
+      expect(container.read(resolvedEventsProvider), isNotEmpty);
+      expect(container.read(resolvedGradesProvider), isNotEmpty);
+      expect(container.read(attendancesProvider), isNotEmpty);
+      expect(container.read(testsProvider), isNotEmpty);
+      expect(container.read(studentsProvider).single.id, 6339);
     });
 
     test('reports nothing restored when the cache is empty', () {
@@ -74,6 +72,18 @@ void main() {
       );
 
       expect(restored, isFalse);
+    });
+
+    test('a malformed cached view fails loudly', () {
+      populatedCache().save('terms', {'not': 'a list'});
+
+      expect(
+        () => MobiregDataProvider().hydrateFromCache(
+          container.read(Provider((ref) => ref)),
+          SyncCache(prefs),
+        ),
+        throwsFormatException,
+      );
     });
   });
 
