@@ -93,10 +93,6 @@ void main() {
   });
 
   group('AppFailure.fromErrno', () {
-    test('101 maps to MissingCredentials', () {
-      expect(AppFailure.fromErrno(101), isA<MissingCredentials>());
-    });
-
     test('102 maps to PupilNotOnAccount', () {
       expect(AppFailure.fromErrno(102), isA<PupilNotOnAccount>());
     });
@@ -105,40 +101,12 @@ void main() {
       expect(AppFailure.fromErrno(103), isA<ViewNotFound>());
     });
 
-    test('105 maps to InvalidCredentials', () {
-      expect(AppFailure.fromErrno(105), isA<InvalidCredentials>());
-    });
-
-    test('106 maps to InvalidCredentials', () {
-      expect(AppFailure.fromErrno(106), isA<InvalidCredentials>());
-    });
-
-    test('107 maps to InvalidCredentials', () {
-      expect(AppFailure.fromErrno(107), isA<InvalidCredentials>());
-    });
-
-    test('108 maps to MissingParameter', () {
-      expect(AppFailure.fromErrno(108), isA<MissingParameter>());
-    });
-
-    test('110 maps to NoData', () {
-      expect(AppFailure.fromErrno(110), isA<NoData>());
-    });
-
-    test('111 maps to MutationFailed', () {
-      expect(AppFailure.fromErrno(111), isA<MutationFailed>());
-    });
-
-    test('199 maps to Informational', () {
-      expect(AppFailure.fromErrno(199), isA<Informational>());
-    });
-
-    test('200 maps to LicenseExpired', () {
-      expect(AppFailure.fromErrno(200), isA<LicenseExpired>());
-    });
-
-    test('201 maps to RateLimited', () {
-      expect(AppFailure.fromErrno(201), isA<RateLimited>());
+    test('the njson errno codes app.php never sends are unknown', () {
+      for (final errno in [101, 105, 106, 107, 108, 110, 111, 199, 200, 201]) {
+        final failure = AppFailure.fromErrno(errno);
+        expect(failure, isA<UnknownFailure>(), reason: '$errno');
+        expect((failure as UnknownFailure).errno, errno);
+      }
     });
 
     test('unknown errno maps to UnknownFailure', () {
@@ -149,23 +117,17 @@ void main() {
     });
 
     test('message is preserved', () {
-      final failure = AppFailure.fromErrno(101, 'custom msg');
+      final failure = AppFailure.fromErrno(102, 'custom msg');
       expect(failure.message, 'custom msg');
     });
   });
 
   group('AppFailure subtypes', () {
     test('AuthFailure exhaustive matching', () {
-      const failures = <AuthFailure>[
-        MissingCredentials(),
-        ExpiredSession(),
-        InvalidCredentials(),
-      ];
+      const failures = <AuthFailure>[InvalidCredentials()];
 
       for (final failure in failures) {
         final result = switch (failure) {
-          MissingCredentials() => 'missing',
-          ExpiredSession() => 'expired',
           InvalidCredentials() => 'invalid',
         };
         expect(result, isNotEmpty);
@@ -173,21 +135,12 @@ void main() {
     });
 
     test('ServerFailure exhaustive matching', () {
-      const failures = <ServerFailure>[
-        ViewNotFound(),
-        MissingParameter(),
-        NoData(),
-        MutationFailed(),
-        Informational(),
-      ];
+      const failures = <ServerFailure>[ViewNotFound(), NoData()];
 
       for (final failure in failures) {
         final result = switch (failure) {
           ViewNotFound() => 'not_found',
-          MissingParameter() => 'missing_param',
           NoData() => 'no_data',
-          MutationFailed() => 'mutation_failed',
-          Informational() => 'info',
         };
         expect(result, isNotEmpty);
       }
@@ -195,16 +148,9 @@ void main() {
 
     test('AppFailure exhaustive matching', () {
       const failures = <AppFailure>[
-        MissingCredentials(),
-        ExpiredSession(),
         InvalidCredentials(),
         ViewNotFound(),
-        MissingParameter(),
         NoData(),
-        MutationFailed(),
-        Informational(),
-        LicenseExpired(),
-        RateLimited(),
         NoConnection(),
         ConnectionTimeout(),
         SessionExpired(),
@@ -221,16 +167,9 @@ void main() {
       for (final failure in failures) {
         final result = switch (failure) {
           PupilNotOnAccount() => 'q',
-          MissingCredentials() => 'a',
-          ExpiredSession() => 'b',
           InvalidCredentials() => 'c',
           ViewNotFound() => 'd',
-          MissingParameter() => 'e',
           NoData() => 'f',
-          MutationFailed() => 'g',
-          Informational() => 'h',
-          LicenseExpired() => 'i',
-          RateLimited() => 'j',
           NoConnection() => 'k',
           ConnectionTimeout() => 'l',
           SessionExpired() => 'm',
@@ -257,8 +196,6 @@ void main() {
       expect(const DatabaseError(), equals(const DatabaseError()));
       expect(const ProtocolMismatch(), equals(const ProtocolMismatch()));
       expect(const DatabaseIdChanged(), equals(const DatabaseIdChanged()));
-      expect(const LicenseExpired(), equals(const LicenseExpired()));
-      expect(const RateLimited(), equals(const RateLimited()));
       expect(
         const UnknownFailure(errno: 1),
         equals(const UnknownFailure(errno: 1)),

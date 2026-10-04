@@ -90,19 +90,11 @@ sealed class AppFailure {
   const AppFailure({this.message});
 
   factory AppFailure.fromErrno(int errno, [String? message]) {
+    const pupilNotOnAccountErrno = 102;
+    const viewNotFoundErrno = 103;
     return switch (errno) {
-      101 => AuthFailure.missingCredentials(message: message),
-      102 => PupilNotOnAccount(message: message),
-      103 => ServerFailure.viewNotFound(message: message),
-      105 => AuthFailure.invalidCredentials(message: message),
-      106 => AuthFailure.invalidCredentials(message: message),
-      107 => AuthFailure.invalidCredentials(message: message),
-      108 => ServerFailure.missingParameter(message: message),
-      110 => ServerFailure.noData(message: message),
-      111 => ServerFailure.mutationFailed(message: message),
-      199 => ServerFailure.informational(message: message),
-      200 => LicenseExpired(message: message),
-      201 => RateLimited(message: message),
+      pupilNotOnAccountErrno => PupilNotOnAccount(message: message),
+      viewNotFoundErrno => ServerFailure.viewNotFound(message: message),
       _ => UnknownFailure(errno: errno, message: message),
     };
   }
@@ -113,35 +105,8 @@ sealed class AppFailure {
 sealed class AuthFailure extends AppFailure {
   const AuthFailure({super.message});
 
-  const factory AuthFailure.missingCredentials({String? message}) =
-      MissingCredentials;
-  const factory AuthFailure.expiredSession({String? message}) = ExpiredSession;
   const factory AuthFailure.invalidCredentials({String? message}) =
       InvalidCredentials;
-}
-
-final class MissingCredentials extends AuthFailure {
-  const MissingCredentials({super.message});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MissingCredentials && message == other.message;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-}
-
-final class ExpiredSession extends AuthFailure {
-  const ExpiredSession({super.message});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ExpiredSession && message == other.message;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
 }
 
 final class InvalidCredentials extends AuthFailure {
@@ -160,12 +125,7 @@ sealed class ServerFailure extends AppFailure {
   const ServerFailure({super.message});
 
   const factory ServerFailure.viewNotFound({String? message}) = ViewNotFound;
-  const factory ServerFailure.missingParameter({String? message}) =
-      MissingParameter;
   const factory ServerFailure.noData({String? message}) = NoData;
-  const factory ServerFailure.mutationFailed({String? message}) =
-      MutationFailed;
-  const factory ServerFailure.informational({String? message}) = Informational;
 }
 
 final class ViewNotFound extends ServerFailure {
@@ -175,18 +135,6 @@ final class ViewNotFound extends ServerFailure {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ViewNotFound && message == other.message;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-}
-
-final class MissingParameter extends ServerFailure {
-  const MissingParameter({super.message});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MissingParameter && message == other.message;
 
   @override
   int get hashCode => Object.hash(runtimeType, message);
@@ -203,30 +151,6 @@ final class NoData extends ServerFailure {
   int get hashCode => Object.hash(runtimeType, message);
 }
 
-final class MutationFailed extends ServerFailure {
-  const MutationFailed({super.message});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MutationFailed && message == other.message;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-}
-
-final class Informational extends ServerFailure {
-  const Informational({super.message});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Informational && message == other.message;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-}
-
 final class PupilNotOnAccount extends AppFailure {
   const PupilNotOnAccount({super.message});
 
@@ -234,30 +158,6 @@ final class PupilNotOnAccount extends AppFailure {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PupilNotOnAccount && message == other.message;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-}
-
-final class LicenseExpired extends AppFailure {
-  const LicenseExpired({super.message});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is LicenseExpired && message == other.message;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-}
-
-final class RateLimited extends AppFailure {
-  const RateLimited({super.message});
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RateLimited && message == other.message;
 
   @override
   int get hashCode => Object.hash(runtimeType, message);

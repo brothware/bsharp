@@ -55,8 +55,6 @@ class ErrorCard extends StatelessWidget {
       ConnectionTimeout() => Icons.timer_off,
       AuthFailure() => Icons.lock_outline,
       SessionExpired() => Icons.lock_outline,
-      RateLimited() => Icons.hourglass_empty,
-      LicenseExpired() => Icons.block,
       _ => Icons.error_outline,
     };
   }

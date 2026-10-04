@@ -4,14 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('errorMessage', () {
-    test('MissingCredentials returns login prompt', () {
-      expect(errorMessage(const MissingCredentials()), contains('log in'));
-    });
-
-    test('ExpiredSession returns session message', () {
-      expect(errorMessage(const ExpiredSession()), contains('Session expired'));
-    });
-
     test('InvalidCredentials returns credentials message', () {
       expect(
         errorMessage(const InvalidCredentials()),
@@ -25,14 +17,6 @@ void main() {
 
     test('ConnectionTimeout returns timeout message', () {
       expect(errorMessage(const ConnectionTimeout()), contains('timed out'));
-    });
-
-    test('RateLimited returns rate limit message', () {
-      expect(errorMessage(const RateLimited()), contains('Too many'));
-    });
-
-    test('LicenseExpired returns license message', () {
-      expect(errorMessage(const LicenseExpired()), contains('licence'));
     });
 
     test('DatabaseError returns database message', () {
@@ -65,26 +49,15 @@ void main() {
       expect(errorMessage(const ViewNotFound()), contains('not found'));
     });
 
-    test('MutationFailed returns retry message', () {
-      expect(errorMessage(const MutationFailed()), contains('try again'));
-    });
-
     test('SessionExpired returns session message', () {
       expect(errorMessage(const SessionExpired()), contains('Session expired'));
     });
 
     test('all failure types produce non-empty messages', () {
       final failures = <AppFailure>[
-        const MissingCredentials(),
-        const ExpiredSession(),
         const InvalidCredentials(),
         const ViewNotFound(),
-        const MissingParameter(),
         const NoData(),
-        const MutationFailed(),
-        const Informational(message: 'info'),
-        const LicenseExpired(),
-        const RateLimited(),
         const NoConnection(),
         const ConnectionTimeout(),
         const SessionExpired(),
@@ -93,6 +66,7 @@ void main() {
         const DatabaseIdChanged(),
         const TranslationQuotaExceeded(),
         const TranslationFailed(),
+        const PupilNotOnAccount(),
         const UnknownFailure(),
       ];
 
@@ -115,20 +89,8 @@ void main() {
       expect(isRetryable(const ConnectionTimeout()), isTrue);
     });
 
-    test('RateLimited is retryable', () {
-      expect(isRetryable(const RateLimited()), isTrue);
-    });
-
-    test('MutationFailed is retryable', () {
-      expect(isRetryable(const MutationFailed()), isTrue);
-    });
-
     test('InvalidCredentials is not retryable', () {
       expect(isRetryable(const InvalidCredentials()), isFalse);
-    });
-
-    test('LicenseExpired is not retryable', () {
-      expect(isRetryable(const LicenseExpired()), isFalse);
     });
 
     test('UnknownFailure is not retryable', () {

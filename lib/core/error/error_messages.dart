@@ -3,16 +3,9 @@ import 'package:bsharp/l10n/strings.g.dart';
 
 String errorMessage(AppFailure failure) {
   return switch (failure) {
-    MissingCredentials() => t.errors.missingCredentials,
-    ExpiredSession() => t.errors.expiredSession,
     InvalidCredentials() => t.errors.invalidCredentials,
     ViewNotFound() => t.errors.viewNotFound,
-    MissingParameter() => t.errors.missingParameter,
     NoData() => t.errors.noData,
-    MutationFailed() => t.errors.mutationFailed,
-    Informational() => failure.message ?? t.errors.informational,
-    LicenseExpired() => t.errors.licenseExpiredLong,
-    RateLimited() => t.errors.rateLimitedLong,
     SchoolNotFound() => t.errors.schoolNotFound,
     NoConnection() => t.errors.noConnection,
     ConnectionTimeout() => t.errors.timeoutLong,
@@ -31,8 +24,6 @@ bool isRetryable(AppFailure failure) {
   return switch (failure) {
     NoConnection() => true,
     ConnectionTimeout() => true,
-    RateLimited() => true,
-    MutationFailed() => true,
     _ => false,
   };
 }

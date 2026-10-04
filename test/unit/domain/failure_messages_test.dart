@@ -24,17 +24,9 @@ void main() {
       expect(failureMessage(const ConnectionTimeout()), t.errors.timeout);
     });
 
-    test('maps LicenseExpired', () {
-      expect(failureMessage(const LicenseExpired()), t.errors.licenseExpired);
-    });
-
-    test('maps RateLimited', () {
-      expect(failureMessage(const RateLimited()), t.errors.rateLimited);
-    });
-
     test('falls back to the unknown error message', () {
       expect(
-        failureMessage(const MissingCredentials()),
+        failureMessage(const PupilNotOnAccount()),
         t.errors.unknownError,
       );
     });

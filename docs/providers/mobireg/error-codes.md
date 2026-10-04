@@ -20,17 +20,13 @@ missing envelope is a `FormatException`, not a silent failure.
 
 | errno | Message | AppFailure | Description |
 |-------|---------|------------|-------------|
-| 101 | Login FAILED, give inputs | `AuthFailure.missingCredentials` | Missing credentials |
 | 102 | Authorization error | `PupilNotOnAccount` | Wrong or missing `pupilId`, or a `GET` request. Does **not** mean an expired session any more: expiry is HTTP 401 |
-| 103 | No view exist | `ServerFailure.viewNotFound` | Requested view does not exist |
-| 105, 106, 107 | (varies) | `AuthFailure.invalidCredentials` | Authentication failure variants |
-| 108 | Incorrect action parameter | `ServerFailure.missingParameter` | Missing required parameter for the action |
-| 110 | No data send | `ServerFailure.noData` | Mutation without a data parameter |
-| 111 | Update data failed | `ServerFailure.mutationFailed` | Mutation failed (wrong format or permissions) |
-| 199 | (varies) | `ServerFailure.informational` | Informational |
-| 200 | (varies) | `LicenseExpired` | The school's Mobireg license has expired |
-| 201 | (varies) | `RateLimited` | Rate limit encountered |
+| 103 | No view exist | `ViewNotFound` | Requested view does not exist |
 | other | (varies) | `UnknownFailure(errno:)` | Unclassified |
+
+`app.php` answers only 102 and 103 (see [app-api.md](app-api.md#errors)). The
+njson-era codes (101, 105 to 111, 199, 200, 201) are no longer produced; should
+one ever arrive it is an `UnknownFailure` that carries the errno.
 
 A 102 on a view that needs a pupil usually means the `pupilId` is wrong for
 this school year (ids change between years). The provider then drops the
