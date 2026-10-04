@@ -60,6 +60,19 @@ void main() {
       );
     });
 
+    test('honours an item value and continues from it', () {
+      final blocks = parseHtmlBlocks(
+        '<ol><li value="5">Pięć</li><li>Sześć</li></ol>',
+      );
+
+      expect(
+        [
+          for (final block in blocks) (block.kind as ListItemKind).index,
+        ],
+        [5, 6],
+      );
+    });
+
     test('keeps nested lists inside their parent list', () {
       final blocks = parseHtmlBlocks(
         '<ul><li>A<ol><li>A1</li></ol></li><li>B</li></ul>',
@@ -185,6 +198,44 @@ void main() {
       expect(kinds.map((kind) => kind.index), [3, 1, 4]);
       expect(kinds.map((kind) => kind.list.isOrdered), [true, false, true]);
       expect(kinds.map((kind) => kind.lists.length), [1, 2, 1]);
+    });
+
+    test('keeps numbers after an empty list item', () {
+      final blocks = parseHtmlBlocks(
+        rebuild('<ol><li>A</li><li></li><li>C</li></ol>', ['A', 'C']),
+      );
+
+      expect(
+        [
+          for (final block in blocks) (block.kind as ListItemKind).index,
+        ],
+        [1, 3],
+      );
+      expect(
+        rebuild('<ol><li>A</li><li></li><li>C</li></ol>', ['A', 'C']),
+        contains('<ol start="3"><li>C'),
+      );
+    });
+
+    test('keeps numbers after text that follows a nested list', () {
+      final blocks = parseHtmlBlocks(
+        rebuild(
+          '<ol><li>A<ul><li>a1</li></ul>dalej</li><li>B</li><li>C</li></ol>',
+          ['A', 'a1', 'more', 'B', 'C'],
+        ),
+      );
+      final ordered = blocks
+          .map((block) => block.kind as ListItemKind)
+          .where((kind) => kind.list.isOrdered);
+
+      expect(ordered.map((kind) => kind.index), [1, 1, 2, 3]);
+      expect(
+        rebuild(
+          '<ol><li>A<ul><li>a1</li></ul>dalej</li><li>B</li></ol>',
+          ['A', 'a1', 'more', 'B'],
+        ),
+        contains('</ul><br>more</li><li>B'),
+      );
     });
 
     test('keeps headings and tables', () {

@@ -132,6 +132,7 @@ class _HtmlWriter {
   final Iterator<String> _pieces;
   final _out = StringBuffer();
   final _openLists = <HtmlList>[];
+  final _openIndexes = <int>[];
   int? _openTable;
   int? _openRow;
 
@@ -172,8 +173,17 @@ class _HtmlWriter {
     }
     _closeLists(common);
     if (_openLists.length == lists.length) {
-      _out.write('</li><li>');
-      return;
+      final previousIndex = _openIndexes.last;
+      if (index == previousIndex) {
+        _out.write('<br>');
+        return;
+      }
+      if (!lists.last.isOrdered || index == previousIndex + 1) {
+        _out.write('</li><li>');
+        _openIndexes.last = index;
+        return;
+      }
+      _closeLists(_openLists.length - 1);
     }
     while (_openLists.length < lists.length) {
       final list = lists[_openLists.length];
@@ -183,12 +193,14 @@ class _HtmlWriter {
         ..write(list.isOrdered ? '<ol start="$start">' : '<ul>')
         ..write('<li>');
       _openLists.add(list);
+      _openIndexes.add(start);
     }
   }
 
   void _closeLists(int keep) {
     while (_openLists.length > keep) {
       final list = _openLists.removeLast();
+      _openIndexes.removeLast();
       _out.write(list.isOrdered ? '</li></ol>' : '</li></ul>');
     }
   }
@@ -288,7 +300,7 @@ class _BlockCollector {
   final _styles = <HtmlTextStyle>[];
   final _hrefs = <String?>[];
   final _lists = <HtmlList>[];
-  final _listPositions = <int>[];
+  final _nextIndexes = <int>[];
   var _nextListId = 0;
   var _table = -1;
   var _row = -1;
@@ -378,11 +390,11 @@ class _BlockCollector {
   }) {
     _flush();
     _lists.add(HtmlList(id: _nextListId++, isOrdered: isOrdered, start: start));
-    _listPositions.add(0);
+    _nextIndexes.add(start);
     visit();
     _flush();
     _lists.removeLast();
-    _listPositions.removeLast();
+    _nextIndexes.removeLast();
   }
 
   void _visitItem(Element element) {
@@ -394,14 +406,12 @@ class _BlockCollector {
       );
       return;
     }
-    final position = _listPositions.removeLast();
-    _listPositions.add(position + 1);
+    final nextIndex = _nextIndexes.removeLast();
+    final index = int.tryParse(element.attributes['value'] ?? '') ?? nextIndex;
+    _nextIndexes.add(index + 1);
     _visitBlock(
       element,
-      ListItemKind(
-        lists: List.unmodifiable(_lists),
-        index: _lists.last.start + position,
-      ),
+      ListItemKind(lists: List.unmodifiable(_lists), index: index),
       isItem: true,
     );
   }
