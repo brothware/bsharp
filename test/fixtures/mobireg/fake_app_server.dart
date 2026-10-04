@@ -24,6 +24,7 @@ class FakeAppServer {
   final markTermIds = <String>[];
   final timetableRanges = <(String, String)>[];
   final _bodies = <String, Map<String, dynamic>>{};
+  final users = loadMobiregFixture('users') as Map<String, dynamic>;
   int logins = 0;
 
   Map<String, dynamic> lastBodyFor(String view) => _bodies[view]!;
@@ -79,6 +80,8 @@ class FakeAppServer {
         return loadMobiregFixture('timetable_events');
       case 'attendance-stats':
         return loadMobiregFixture('attendance_stats');
+      case 'users':
+        return users;
       case 'register-fcm':
         return {'success': true};
       default:

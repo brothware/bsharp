@@ -196,6 +196,110 @@ void main() {
     expect(fresh.read(attendancesProvider), isNotEmpty);
   });
 
+  test('hides the modules the school switched off', () async {
+    server.users['appConfig'] = {
+      'modules': {
+        'attendances': 0,
+        'reprimands': 1,
+        'timetable': 1,
+        'announcements': 0,
+      },
+    };
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadSchoolData(ref(), studentId: 6339);
+
+    expect(provider.supports(DataProviderCapability.attendance), isFalse);
+    expect(provider.supports(DataProviderCapability.bulletins), isFalse);
+    expect(provider.supports(DataProviderCapability.schedule), isTrue);
+    expect(provider.supports(DataProviderCapability.notes), isTrue);
+    expect(server.views, isNot(contains('attendance-stats')));
+    expect(server.views, isNot(contains('announcements')));
+    expect(container.read(attendancesProvider), isEmpty);
+    expect(container.read(bulletinsProvider), isEmpty);
+    expect(container.read(resolvedEventsProvider), isNotEmpty);
+  });
+
+  test('skips timetable and reprimands when both are off', () async {
+    server.users['appConfig'] = {
+      'modules': {
+        'attendances': 0,
+        'reprimands': 0,
+        'timetable': 0,
+        'announcements': 1,
+      },
+    };
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadSchoolData(ref(), studentId: 6339);
+
+    expect(provider.supports(DataProviderCapability.schedule), isFalse);
+    expect(provider.supports(DataProviderCapability.notes), isFalse);
+    expect(server.views, isNot(contains('timetable-events')));
+    expect(server.views, isNot(contains('reprimands')));
+    expect(container.read(resolvedEventsProvider), isEmpty);
+    expect(container.read(reprimandsProvider), isEmpty);
+  });
+
+  test('a later load clears the data of a module switched off', () async {
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadSchoolData(ref(), studentId: 6339);
+    expect(container.read(attendancesProvider), isNotEmpty);
+
+    server.users['appConfig'] = {
+      'modules': {'attendances': 0, 'reprimands': 1, 'timetable': 1},
+    };
+    await provider.loadSchoolData(ref(), studentId: 6339);
+
+    expect(container.read(attendancesProvider), isEmpty);
+    expect(container.read(bulletinsProvider), isEmpty);
+  });
+
+  test('reports every module before the account has loaded', () {
+    expect(provider.supports(DataProviderCapability.attendance), isTrue);
+    expect(provider.supports(DataProviderCapability.bulletins), isTrue);
+  });
+
+  test('hydrateFromCache restores which modules were off', () async {
+    server.users['appConfig'] = {
+      'modules': {'attendances': 0, 'reprimands': 1, 'timetable': 1},
+    };
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadSchoolData(ref(), studentId: 6339);
+    final fresh = ProviderContainer(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(
+          container.read(sharedPreferencesProvider),
+        ),
+      ],
+    );
+    addTearDown(fresh.dispose);
+    final restoredProvider = MobiregDataProvider(
+      clientFactory: server.factoryFor,
+      sessions: AppApiSessionRegistry(),
+    );
+
+    final restored = restoredProvider.hydrateFromCache(
+      fresh.read(Provider((ref) => ref)),
+      fresh.read(syncCacheProvider),
+    );
+
+    expect(restored, isTrue);
+    expect(
+      restoredProvider.supports(DataProviderCapability.attendance),
+      isFalse,
+    );
+    expect(
+      restoredProvider.supports(DataProviderCapability.bulletins),
+      isFalse,
+    );
+    expect(fresh.read(resolvedEventsProvider), isNotEmpty);
+    expect(fresh.read(attendancesProvider), isEmpty);
+  });
+
+  test('never offers homework or changelog', () {
+    expect(provider.supports(DataProviderCapability.homework), isFalse);
+    expect(provider.supports(DataProviderCapability.changelog), isFalse);
+  });
+
   test('registerPushToken sends register-fcm without a pupil', () async {
     final ok = await provider.registerPushToken(
       school: 'sp1',

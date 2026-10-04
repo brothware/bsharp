@@ -47,6 +47,16 @@ const _testsKey = 'tests';
 const _reprimandsKey = 'reprimands';
 const _announcementsKey = 'announcements';
 const _dateLength = 10;
+const _attendancesModule = 'attendances';
+const _reprimandsModule = 'reprimands';
+const _timetableModule = 'timetable';
+const _announcementsModule = 'announcements';
+const Map<String, DataProviderCapability> _capabilityByModule = {
+  _attendancesModule: DataProviderCapability.attendance,
+  _reprimandsModule: DataProviderCapability.notes,
+  _timetableModule: DataProviderCapability.schedule,
+  _announcementsModule: DataProviderCapability.bulletins,
+};
 
 class SendMessageException implements Exception {
   SendMessageException(this.failure);
@@ -67,6 +77,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   String? _login;
   String _password = '';
   PocztaDataSource? _pocztaDs;
+  Set<String>? _enabledModules;
 
   static ApiClientFactory _productionClientFactory(String school) =>
       ApiClientFactory(school: school, parentLogin: '', parentPassHash: '');
@@ -81,10 +92,20 @@ class MobiregDataProvider implements SchoolDataProvider {
   String get contentLanguage => 'pl';
 
   @override
-  Set<DataProviderCapability> get capabilities =>
-      DataProviderCapability.values.toSet()
-        ..remove(DataProviderCapability.homework)
-        ..remove(DataProviderCapability.changelog);
+  Set<DataProviderCapability> get capabilities {
+    final capabilities = DataProviderCapability.values.toSet()
+      ..remove(DataProviderCapability.homework)
+      ..remove(DataProviderCapability.changelog);
+    final enabledModules = _enabledModules;
+    if (enabledModules != null) {
+      for (final MapEntry(:key, :value) in _capabilityByModule.entries) {
+        if (!enabledModules.contains(key)) {
+          capabilities.remove(value);
+        }
+      }
+    }
+    return capabilities;
+  }
 
   @override
   bool get requiresCredentials => true;
@@ -203,6 +224,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   bool hydrateFromCache(Ref ref, SyncCache cache) {
     final views = _MobiregViews.load(MobiregViewCache(cache));
     if (views != null) {
+      _enabledModules = views.enabledModules;
       views.apply(ref);
     }
 
@@ -226,7 +248,10 @@ class MobiregDataProvider implements SchoolDataProvider {
 
     final accountData = await _valueOf('users', session.account());
     ref.read(reauthRequiredProvider.notifier).value = false;
-    final pupils = parseAccount(accountData).students;
+    final account = parseAccount(accountData);
+    final pupils = account.students;
+    final enabledModules = account.enabledModules;
+    bool isEnabled(String module) => enabledModules.contains(module);
     if (!pupils.any((pupil) => pupil.id == studentId)) {
       throw StateError('Pupil $studentId is not on this account');
     }
@@ -252,10 +277,25 @@ class MobiregDataProvider implements SchoolDataProvider {
     final year =
         parsedTerms.where((term) => term.type == TermType.year).firstOrNull ??
         (throw FormatException('View terms: no school year', terms));
-    final timetable = await view('timetable-events', {
-      'dateFrom': _day(year.startDate),
-      'dateTo': _day(year.endDate),
-    });
+    final needsTimetable =
+        isEnabled(_timetableModule) || isEnabled(_attendancesModule);
+    final timetable = needsTimetable
+        ? await view('timetable-events', {
+            'dateFrom': _day(year.startDate),
+            'dateTo': _day(year.endDate),
+          })
+        : null;
+    final attendanceStats = isEnabled(_attendancesModule)
+        ? await view('attendance-stats')
+        : null;
+    final tests = await view('tests');
+    final reprimands = isEnabled(_reprimandsModule)
+        ? await view('reprimands', {'limit': '$reprimandLimit'})
+        : null;
+    final announcements = isEnabled(_announcementsModule)
+        ? await view('announcements')
+        : null;
+    _enabledModules = enabledModules;
     _MobiregViews(
         pupilId: studentId,
         account: accountData,
@@ -263,10 +303,10 @@ class MobiregDataProvider implements SchoolDataProvider {
         subjects: subjects,
         marksByTerm: marksByTerm,
         timetable: timetable,
-        attendanceStats: await view('attendance-stats'),
-        tests: await view('tests'),
-        reprimands: await view('reprimands', {'limit': '$reprimandLimit'}),
-        announcements: await view('announcements'),
+        attendanceStats: attendanceStats,
+        tests: tests,
+        reprimands: reprimands,
+        announcements: announcements,
       )
       ..apply(ref)
       ..save(MobiregViewCache(ref.read(syncCacheProvider)));
@@ -502,26 +542,34 @@ class _MobiregViews {
   final Object terms;
   final Object subjects;
   final Map<int, Object> marksByTerm;
-  final Object timetable;
-  final Object attendanceStats;
+  final Object? timetable;
+  final Object? attendanceStats;
   final Object tests;
-  final Object reprimands;
-  final Object announcements;
+  final Object? reprimands;
+  final Object? announcements;
+
+  Set<String> get enabledModules => parseAccount(account).enabledModules;
 
   static _MobiregViews? load(MobiregViewCache cache) {
-    final timetable = cache.load(_timetableKey);
-    if (timetable == null) {
+    final cachedAccount = cache.load(_usersKey);
+    if (cachedAccount == null) {
       return null;
     }
     Object stored(String key) =>
         cache.load(key) ??
         (throw FormatException('Cached view $key is missing'));
-    final account = stored(_usersKey);
+    final account = cachedAccount;
     final pupilId = stored(_pupilKey);
     if (account is! Map<String, dynamic> || pupilId is! int) {
       throw const FormatException('Cached account is malformed');
     }
+    final modules = parseAccount(account).enabledModules;
+    Object? storedFor(String module, String key) =>
+        modules.contains(module) ? stored(key) : null;
     final terms = stored(_termsKey);
+    final needsTimetable =
+        modules.contains(_timetableModule) ||
+        modules.contains(_attendancesModule);
     return _MobiregViews(
       pupilId: pupilId,
       account: account,
@@ -531,11 +579,11 @@ class _MobiregViews {
         for (final term in parseTerms(terms).where(_isSemester))
           term.id: stored(_marksKey(term.id)),
       },
-      timetable: timetable,
-      attendanceStats: stored(_attendanceStatsKey),
+      timetable: needsTimetable ? stored(_timetableKey) : null,
+      attendanceStats: storedFor(_attendancesModule, _attendanceStatsKey),
       tests: stored(_testsKey),
-      reprimands: stored(_reprimandsKey),
-      announcements: stored(_announcementsKey),
+      reprimands: storedFor(_reprimandsModule, _reprimandsKey),
+      announcements: storedFor(_announcementsModule, _announcementsKey),
     );
   }
 
@@ -547,11 +595,18 @@ class _MobiregViews {
       ..save(_pupilKey, pupilId)
       ..save(_termsKey, terms)
       ..save(_subjectsKey, subjects)
-      ..save(_timetableKey, timetable)
-      ..save(_attendanceStatsKey, attendanceStats)
-      ..save(_testsKey, tests)
-      ..save(_reprimandsKey, reprimands)
-      ..save(_announcementsKey, announcements);
+      ..save(_testsKey, tests);
+    final optionalViews = {
+      _timetableKey: timetable,
+      _attendanceStatsKey: attendanceStats,
+      _reprimandsKey: reprimands,
+      _announcementsKey: announcements,
+    };
+    for (final MapEntry(:key, :value) in optionalViews.entries) {
+      if (value != null) {
+        cache.save(key, value);
+      }
+    }
     for (final MapEntry(:key, :value) in marksByTerm.entries) {
       cache.save(_marksKey(key), value);
     }
@@ -569,20 +624,33 @@ class _MobiregViews {
       for (final termMarks in marks)
         for (final teacher in termMarks.teachers) teacher.id: teacher,
     };
-    final events = parseTimetableEvents(
-      timetable,
-      subjectIdsByName: {
-        for (final subject in parsedSubjects) subject.name: subject.id,
-      },
-    );
-    final attendance = parseAttendance(
-      timetableEvents: timetable,
-      attendanceStats: attendanceStats,
-      pupilId: pupilId,
-    );
+    final timetableView = timetable;
+    final events =
+        timetableView != null && enabledModules.contains(_timetableModule)
+        ? parseTimetableEvents(
+            timetableView,
+            subjectIdsByName: {
+              for (final subject in parsedSubjects) subject.name: subject.id,
+            },
+          )
+        : null;
+    final attendanceStatsView = attendanceStats;
+    final attendance = timetableView != null && attendanceStatsView != null
+        ? parseAttendance(
+            timetableEvents: timetableView,
+            attendanceStats: attendanceStatsView,
+            pupilId: pupilId,
+          )
+        : null;
     final parsedTests = parseTestItems(tests);
-    final parsedReprimands = parseReprimandItems(reprimands);
-    final bulletins = parseAnnouncements(announcements);
+    final reprimandsView = reprimands;
+    final parsedReprimands = reprimandsView == null
+        ? null
+        : parseReprimandItems(reprimandsView);
+    final announcementsView = announcements;
+    final bulletins = announcementsView == null
+        ? null
+        : parseAnnouncements(announcementsView);
 
     ref.read(studentsProvider.notifier).value = students;
     ref.read(termsProvider.notifier).value = parsedTerms;
@@ -591,12 +659,14 @@ class _MobiregViews {
     ref.read(resolvedGradesProvider.notifier).value = [
       for (final termMarks in marks) ...termMarks.grades,
     ];
-    ref.read(resolvedEventsProvider.notifier).value = events;
-    ref.read(attendancesProvider.notifier).value = attendance.attendances;
-    ref.read(attendanceTypesProvider.notifier).value = attendance.types;
+    ref.read(resolvedEventsProvider.notifier).value = events ?? const [];
+    ref.read(attendancesProvider.notifier).value =
+        attendance?.attendances ?? const [];
+    ref.read(attendanceTypesProvider.notifier).value =
+        attendance?.types ?? const [];
     ref.read(testsProvider.notifier).value = parsedTests;
-    ref.read(reprimandsProvider.notifier).value = parsedReprimands;
-    ref.read(bulletinsProvider.notifier).value = bulletins;
+    ref.read(reprimandsProvider.notifier).value = parsedReprimands ?? const [];
+    ref.read(bulletinsProvider.notifier).value = bulletins ?? const [];
   }
 }
 
