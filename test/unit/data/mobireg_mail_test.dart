@@ -45,6 +45,18 @@ void main() {
     expect(container.read(inboxProvider).single.id, 20001);
   });
 
+  test('two syncs sign in to the mailbox once', () async {
+    await signedIn();
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadMessages(ref());
+
+    expect(server.mailSignIns, 1);
+    expect(
+      server.mailPaths.where((path) => path == '/api/messages/inbox'),
+      hasLength(2),
+    );
+  });
+
   test('a failed SSO fails loadMessages', () async {
     server.mailSignInFails = true;
     await provider.authenticate(school: 'sp1', login: 'p', password: 's');

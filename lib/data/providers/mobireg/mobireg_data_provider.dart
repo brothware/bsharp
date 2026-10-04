@@ -76,6 +76,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   String? _login;
   String _password = '';
   PocztaDataSource? _pocztaDs;
+  ({String school, String messagingUrl, String messagesToken})? _mailboxKey;
   Set<String>? _enabledModules;
 
   static ApiClientFactory _productionClientFactory(String school) =>
@@ -352,7 +353,17 @@ class MobiregDataProvider implements SchoolDataProvider {
     required String messagingUrl,
     required String messagesToken,
   }) async {
+    final key = (
+      school: school,
+      messagingUrl: messagingUrl,
+      messagesToken: messagesToken,
+    );
+    final current = _pocztaDs;
+    if (current != null && current.hasSession && _mailboxKey == key) {
+      return current;
+    }
     _pocztaDs = null;
+    _mailboxKey = null;
     final pocztaDs = PocztaDataSource(
       client: _clientFactory(school).createPocztaClient(messagingUrl),
     );
@@ -363,6 +374,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       ),
     );
     _pocztaDs = pocztaDs;
+    _mailboxKey = key;
     return pocztaDs;
   }
 
