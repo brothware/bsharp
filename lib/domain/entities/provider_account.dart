@@ -28,10 +28,6 @@ abstract class ProviderAccount with _$ProviderAccount {
   }
 }
 
-extension ProviderAccountReauth on ProviderAccount {
-  bool get needsReauth => password.isEmpty;
-}
-
 @freezed
 abstract class AccountStudent with _$AccountStudent {
   const factory AccountStudent({

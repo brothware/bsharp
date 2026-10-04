@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ProviderAccount credentials', () {
-    test('fresh account stores plaintext and does not need reauth', () {
+    test('fresh account stores plaintext and keeps it', () {
       const account = ProviderAccount(
         id: '1',
         providerType: 'mobireg',
@@ -12,11 +12,10 @@ void main() {
         password: 'PlainPass123',
       );
 
-      expect(account.needsReauth, isFalse);
       expect(account.password, 'PlainPass123');
     });
 
-    test('legacy json migrates passwordHash and needs reauth', () {
+    test('legacy json migrates passwordHash to an empty password', () {
       final account = ProviderAccount.fromJson({
         'id': '1',
         'providerType': 'mobireg',
@@ -30,7 +29,6 @@ void main() {
       expect(ProviderAccount.migrateLegacyJson({'passwordHash': 'x'}), {
         'password': '',
       });
-      expect(account.needsReauth, isTrue);
     });
 
     test('new json with plaintext password does not migrate', () {
@@ -44,7 +42,6 @@ void main() {
       });
 
       expect(account.password, 'PlainPass123');
-      expect(account.needsReauth, isFalse);
     });
   });
 }

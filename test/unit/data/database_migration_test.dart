@@ -5,8 +5,8 @@ import 'package:bsharp/data/data_sources/local/database.dart';
 import 'package:drift_dev/api/migrations_native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'generated/schema.dart';
-import 'generated/schema_v4.dart' as v4;
+import 'default/generated/schema.dart';
+import 'default/generated/schema_v4.dart' as v4;
 
 void main() {
   late SchemaVerifier verifier;
@@ -26,19 +26,22 @@ void main() {
     const eventTitle = 'Dentist';
     const ignoredAttendanceId = 77;
     const translatedText = 'czesc';
+    const accountId = 1;
+    const customEventId = 1;
+    const timestampSeconds = 1790000000;
     final schema = await verifier.schemaAt(4);
     final oldDb = v4.DatabaseAtV4(schema.newConnection());
     await oldDb.customStatement(
       'INSERT INTO custom_events (account_id, title, start_time, end_time) '
-      "VALUES (1, '$eventTitle', '10:00', '11:00')",
+      "VALUES ($accountId, '$eventTitle', '10:00', '11:00')",
     );
     await oldDb.customStatement(
       'INSERT INTO custom_event_occurrences (custom_event_id, date) '
-      'VALUES (1, 1790000000)',
+      'VALUES ($customEventId, $timestampSeconds)',
     );
     await oldDb.customStatement(
       'INSERT INTO ignored_attendances (attendance_id, ignored_at) '
-      'VALUES ($ignoredAttendanceId, 1790000000)',
+      'VALUES ($ignoredAttendanceId, $timestampSeconds)',
     );
     await oldDb.customStatement(
       'INSERT INTO translation_cache_entries '

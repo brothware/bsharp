@@ -79,7 +79,6 @@ void main() {
           attendance: const Attendance(
             id: 100,
             eventsId: 1,
-            studentsId: 1,
             typesId: 1,
           ),
           type: presentType,

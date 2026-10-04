@@ -8,7 +8,5 @@ abstract class Student with _$Student {
     required int id,
     required String name,
     required String surname,
-    String? phone,
-    String? pin,
   }) = _Student;
 }

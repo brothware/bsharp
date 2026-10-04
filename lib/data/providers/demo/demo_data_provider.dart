@@ -329,7 +329,7 @@ class DemoDataProvider implements SchoolDataProvider {
         typeId = 5;
       }
       attendances.add(
-        Attendance(id: id, eventsId: event.id, studentsId: 1, typesId: typeId),
+        Attendance(id: id, eventsId: event.id, typesId: typeId),
       );
       id++;
     }

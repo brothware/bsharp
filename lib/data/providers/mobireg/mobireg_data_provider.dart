@@ -617,7 +617,6 @@ class _MobiregViews {
         ? parseAttendance(
             timetableEvents: timetableView,
             attendanceStats: attendanceStatsView,
-            pupilId: pupilId,
           )
         : null;
     final parsedTests = parseTestItems(tests);

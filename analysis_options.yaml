@@ -6,7 +6,7 @@ analyzer:
     - '**/*.freezed.dart'
     - 'lib/l10n/**'
     - 'test/.test_coverage.dart'
-    - 'test/unit/data/generated/**'
+    - 'test/unit/data/default/generated/**'
     - build/**
     - android/**
     - ios/**

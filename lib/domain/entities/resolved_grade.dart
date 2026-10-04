@@ -16,7 +16,6 @@ abstract class ResolvedGrade with _$ResolvedGrade {
     String? description,
     String? teacherName,
     String? comment,
-    double? markMax,
     int? termId,
     int? subjectId,
   }) = _ResolvedGrade;

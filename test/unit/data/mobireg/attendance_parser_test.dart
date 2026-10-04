@@ -10,7 +10,6 @@ void main() {
     final parsed = parseAttendance(
       timetableEvents: loadMobiregFixture('timetable_events'),
       attendanceStats: loadMobiregFixture('attendance_stats'),
-      pupilId: 6339,
     );
 
     test('records attendance only for checked lessons', () {
@@ -19,7 +18,6 @@ void main() {
         unorderedEquals([173, 150190]),
       );
       expect(parsed.attendances.every((a) => a.id == a.eventsId), isTrue);
-      expect(parsed.attendances.every((a) => a.studentsId == 6339), isTrue);
     });
 
     test('joins each attendance to the type with its label', () {
@@ -62,7 +60,6 @@ void main() {
       final again = parseAttendance(
         timetableEvents: loadMobiregFixture('timetable_events'),
         attendanceStats: loadMobiregFixture('attendance_stats'),
-        pupilId: 6339,
       );
       expect(again.types, parsed.types);
     });
@@ -72,7 +69,6 @@ void main() {
         () => parseAttendance(
           timetableEvents: <Object>[],
           attendanceStats: <Object>[],
-          pupilId: 1,
         ),
         throwsFormatException,
       );

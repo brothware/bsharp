@@ -166,13 +166,6 @@ class _GradeDetailSheetState extends ConsumerState<GradeDetailSheet> {
               label: t.grades.numericValue,
               value: grade.effectiveValue!.toStringAsFixed(2),
             ),
-          if (grade.markMax != null)
-            _DetailRow(
-              icon: Icons.score,
-              label: t.grades.points,
-              value:
-                  '${grade.effectiveValue?.toInt() ?? "?"} / ${grade.markMax!.toInt()}',
-            ),
           const SizedBox(height: 16),
         ],
       ),

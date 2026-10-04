@@ -60,7 +60,7 @@ void main() {
     await tester.pumpWidget(
       wrap(
         attendances: [
-          const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+          const Attendance(id: 1, eventsId: 1, typesId: 1),
         ],
         types: [presentType],
         resolvedEvents: [
@@ -94,7 +94,7 @@ void main() {
     await tester.pumpWidget(
       wrap(
         attendances: [
-          const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+          const Attendance(id: 1, eventsId: 1, typesId: 1),
         ],
         types: [presentType],
         resolvedEvents: [
@@ -117,7 +117,7 @@ void main() {
     await tester.pumpWidget(
       wrap(
         attendances: [
-          const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
+          const Attendance(id: 1, eventsId: 1, typesId: 1),
         ],
         types: [presentType],
         resolvedEvents: [
@@ -144,8 +144,8 @@ void main() {
           sharedPreferencesProvider.overrideWithValue(prefs),
           attendancesProvider.overrideWithBuild(
             (ref, _) => [
-              const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
-              const Attendance(id: 2, eventsId: 2, studentsId: 1, typesId: 1),
+              const Attendance(id: 1, eventsId: 1, typesId: 1),
+              const Attendance(id: 2, eventsId: 2, typesId: 1),
             ],
           ),
           attendanceTypesProvider.overrideWithBuild((ref, _) => [presentType]),

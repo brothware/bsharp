@@ -130,8 +130,8 @@ void main() {
         ),
       ];
       final attendances = [
-        const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
-        const Attendance(id: 2, eventsId: 2, studentsId: 1, typesId: 2),
+        const Attendance(id: 1, eventsId: 1, typesId: 1),
+        const Attendance(id: 2, eventsId: 2, typesId: 2),
       ];
 
       await tester.pumpWidget(
@@ -169,8 +169,8 @@ void main() {
           ),
         ];
         final attendances = [
-          const Attendance(id: 1, eventsId: 1, studentsId: 1, typesId: 1),
-          const Attendance(id: 2, eventsId: 2, studentsId: 1, typesId: 2),
+          const Attendance(id: 1, eventsId: 1, typesId: 1),
+          const Attendance(id: 2, eventsId: 2, typesId: 2),
         ];
 
         tester.view.physicalSize = const Size(227, 227);

@@ -44,7 +44,6 @@ void main() {
     return Attendance(
       id: id,
       eventsId: eventsId,
-      studentsId: 1,
       typesId: typesId,
     );
   }

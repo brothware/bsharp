@@ -33,7 +33,6 @@ class _RawType {
 ParsedAttendance parseAttendance({
   required Object timetableEvents,
   required Object attendanceStats,
-  required int pupilId,
 }) {
   if (attendanceStats is! Map<String, dynamic>) {
     throw FormatException(
@@ -73,7 +72,6 @@ ParsedAttendance parseAttendance({
         Attendance(
           id: intField(event, 'id', _timetableView),
           eventsId: intField(event, 'id', _timetableView),
-          studentsId: pupilId,
           typesId: typeIds[label]!,
         ),
   ];

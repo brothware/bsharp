@@ -1,22 +1,3 @@
-enum SyncAction {
-  insert,
-  update,
-  delete;
-
-  static SyncAction fromString(String value) => switch (value) {
-    'I' => insert,
-    'U' => update,
-    'D' => delete,
-    _ => throw ArgumentError('Unknown sync action: $value'),
-  };
-
-  String toJsonValue() => switch (this) {
-    insert => 'I',
-    update => 'U',
-    delete => 'D',
-  };
-}
-
 enum AttendanceCountAs {
   present,
   absent,

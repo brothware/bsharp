@@ -48,7 +48,6 @@ void main() {
     test('Subject construction', () {
       const subject = Subject(
         id: 1,
-        subjectsEduId: 300,
         name: 'Mathematics',
         abbr: 'MATH',
       );
@@ -72,7 +71,6 @@ void main() {
       const attendance = Attendance(
         id: 1,
         eventsId: 10,
-        studentsId: 1,
         typesId: 1,
       );
       expect(attendance.typesId, 1);
@@ -91,22 +89,6 @@ void main() {
   });
 
   group('Sync enums', () {
-    test('SyncAction fromString', () {
-      expect(SyncAction.fromString('I'), SyncAction.insert);
-      expect(SyncAction.fromString('U'), SyncAction.update);
-      expect(SyncAction.fromString('D'), SyncAction.delete);
-    });
-
-    test('SyncAction toJsonValue', () {
-      expect(SyncAction.insert.toJsonValue(), 'I');
-      expect(SyncAction.update.toJsonValue(), 'U');
-      expect(SyncAction.delete.toJsonValue(), 'D');
-    });
-
-    test('SyncAction fromString throws on unknown', () {
-      expect(() => SyncAction.fromString('X'), throwsArgumentError);
-    });
-
     test('AttendanceCountAs fromString', () {
       expect(AttendanceCountAs.fromString('P'), AttendanceCountAs.present);
       expect(AttendanceCountAs.fromString('A'), AttendanceCountAs.absent);

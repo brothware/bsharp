@@ -8,7 +8,6 @@ abstract class Attendance with _$Attendance {
   const factory Attendance({
     required int id,
     required int eventsId,
-    required int studentsId,
     required int typesId,
   }) = _Attendance;
 }

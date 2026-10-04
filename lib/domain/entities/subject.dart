@@ -8,6 +8,5 @@ abstract class Subject with _$Subject {
     required int id,
     required String name,
     required String abbr,
-    int? subjectsEduId,
   }) = _Subject;
 }
