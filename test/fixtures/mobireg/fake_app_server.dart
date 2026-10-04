@@ -7,14 +7,21 @@ import 'fixtures.dart';
 
 const _unauthorized = 401;
 const _ok = 200;
+const _badRequest = 400;
+const _mailFolders = ['inbox', 'sent', 'trash'];
 
 class _FakeAppApiFactory extends ApiClientFactory {
-  _FakeAppApiFactory(this._client, String school) : super(school: school);
+  _FakeAppApiFactory(this._client, this._pocztaClient, String school)
+    : super(school: school);
 
   final Dio _client;
+  final Dio _pocztaClient;
 
   @override
   Dio createAppApiClient() => _client;
+
+  @override
+  Dio createPocztaClient(String messagingUrl) => _pocztaClient;
 }
 
 class FakeAppServer {
@@ -27,6 +34,24 @@ class FakeAppServer {
   final _bodies = <String, Map<String, dynamic>>{};
   final users = loadMobiregFixture('users') as Map<String, dynamic>;
   int logins = 0;
+  int mailSignIns = 0;
+  bool mailSignInFails = false;
+  bool mailFoldersFail = false;
+  final mailPaths = <String>[];
+  Object receivers = <Object>[
+    {'id': 'user_201', 'name': 'Anna Nowak', 'role': 'Nauczyciel'},
+  ];
+  final inbox = <Map<String, dynamic>>[
+    {
+      'id': 20001,
+      'subject': 'Zebranie',
+      'date': '2026-10-01T10:00:00',
+      'content': 'Tresc',
+      'read_at': null,
+      'stared': false,
+      'author': {'name': 'Anna Nowak'},
+    },
+  ];
 
   Map<String, dynamic> lastBodyFor(String view) => _bodies[view]!;
 
@@ -39,7 +64,57 @@ class FakeAppServer {
                   handler.resolve(_answer(options)),
             ),
           );
-    return _FakeAppApiFactory(client, school);
+    final pocztaClient = Dio(BaseOptions(baseUrl: 'https://poczta.mobireg.pl'))
+      ..interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) =>
+              handler.resolve(_answerMail(options)),
+        ),
+      );
+    return _FakeAppApiFactory(client, pocztaClient, school);
+  }
+
+  Response<dynamic> _answerMail(RequestOptions options) {
+    mailPaths.add(options.path);
+    if (options.path.startsWith('/sso/')) {
+      mailSignIns++;
+      return Response<dynamic>(
+        requestOptions: options,
+        statusCode: _ok,
+        headers: Headers.fromMap({
+          if (!mailSignInFails) 'set-cookie': ['laravel_session=fake; path=/'],
+        }),
+      );
+    }
+    final folder = _mailFolders
+        .where((name) => options.path == '/api/messages/$name')
+        .firstOrNull;
+    if (folder != null) {
+      if (mailFoldersFail) {
+        return Response<dynamic>(
+          requestOptions: options,
+          statusCode: _badRequest,
+        );
+      }
+      final items = folder == 'inbox' ? inbox : <Map<String, dynamic>>[];
+      return Response<dynamic>(
+        requestOptions: options,
+        statusCode: _ok,
+        data: {'items': items, 'total': items.length},
+      );
+    }
+    if (options.path == '/api/messages/receivers/search') {
+      return Response<dynamic>(
+        requestOptions: options,
+        statusCode: _ok,
+        data: receivers,
+      );
+    }
+    return Response<dynamic>(
+      requestOptions: options,
+      statusCode: _ok,
+      data: <String, dynamic>{},
+    );
   }
 
   Response<dynamic> _answer(RequestOptions options) {

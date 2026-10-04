@@ -307,7 +307,10 @@
     "sendFailed": "Error al enviar el mensaje",
     "readReceipt": "Leído",
     "notReadYet": "Aún no leído",
-    "loadMoreFailed": "No se pudieron cargar más mensajes"
+    "loadMoreFailed": "No se pudieron cargar más mensajes",
+    "actionFailed": "No se pudo actualizar el mensaje",
+    "readFailed": "No se pudo cargar el mensaje",
+    "searchFailed": "No se pudo buscar destinatarios"
   },
   "settings": {
     "title": "Ajustes",

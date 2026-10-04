@@ -4,6 +4,7 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/data_sources/remote/app_api_session_registry.dart';
@@ -12,6 +13,7 @@ import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -88,6 +90,12 @@ class _MalformedMailDataProvider extends DemoDataProvider {
   @override
   Future<void> refreshMessages(Ref ref) async =>
       throw const FormatException('View poczta inbox: expected objects');
+}
+
+class _MailRejectedDataProvider extends DemoDataProvider {
+  @override
+  Future<void> refreshMessages(Ref ref) async =>
+      throw const MessagingException(SessionExpired());
 }
 
 CredentialStorage _emptyStorage() =>
@@ -181,6 +189,28 @@ void main() {
       expect(failing.read(syncStatusProvider), SyncStatus.failed);
     });
 
+    test('a rejected mail refresh fails the status', () async {
+      final failing = ProviderContainer(
+        overrides: [
+          credentialStorageProvider.overrideWithValue(_emptyStorage()),
+          sharedPreferencesProvider.overrideWithValue(
+            container.read(sharedPreferencesProvider),
+          ),
+          accountStorageProvider.overrideWithValue(
+            AccountStorage(store: FakeKeyValueStore()),
+          ),
+          activeDataProviderProvider.overrideWithBuild(
+            (ref, _) => _MailRejectedDataProvider(),
+          ),
+        ],
+      );
+      addTearDown(failing.dispose);
+
+      await failing.read(syncStatusProvider.notifier).syncMessages();
+
+      expect(failing.read(syncStatusProvider), SyncStatus.failed);
+    });
+
     test('reset sets state to idle', () async {
       final notifier = container.read(syncStatusProvider.notifier);
       await notifier.sync();
@@ -240,6 +270,18 @@ void main() {
         expect(changes.isEmpty, isTrue);
       },
     );
+
+    test('a mail failure fails the sync', () async {
+      server.mailSignInFails = true;
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      expect(container.read(syncStatusProvider), SyncStatus.failed);
+    });
 
     test('an unreadable cache is cleared and the sync carries on', () async {
       final container = await _mobiregContainer(

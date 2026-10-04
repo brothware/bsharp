@@ -307,7 +307,10 @@
     "sendFailed": "Mesaj gönderilemedi",
     "readReceipt": "Okundu",
     "notReadYet": "Henüz okunmadı",
-    "loadMoreFailed": "Daha fazla mesaj yüklenemedi"
+    "loadMoreFailed": "Daha fazla mesaj yüklenemedi",
+    "actionFailed": "Mesaj güncellenemedi",
+    "readFailed": "Mesaj yüklenemedi",
+    "searchFailed": "Alıcılar aranamadı"
   },
   "settings": {
     "title": "Ayarlar",

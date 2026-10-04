@@ -307,7 +307,10 @@
     "sendFailed": "Dërgimi i mesazhit dështoi",
     "readReceipt": "Lexuar",
     "notReadYet": "Ende nuk është lexuar",
-    "loadMoreFailed": "Nuk u ngarkuan dot më shumë mesazhe"
+    "loadMoreFailed": "Nuk u ngarkuan dot më shumë mesazhe",
+    "actionFailed": "Mesazhi nuk u përditësua dot",
+    "readFailed": "Mesazhi nuk u ngarkua dot",
+    "searchFailed": "Kërkimi i marrësve dështoi"
   },
   "settings": {
     "title": "Cilësimet",

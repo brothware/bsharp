@@ -1,9 +1,11 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/translation_provider.dart';
+import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
@@ -31,14 +33,23 @@ PocztaMessage _msg({
   );
 }
 
-Widget _buildScreen({required PocztaMessage message}) {
+class _RejectingReadProvider extends DemoDataProvider {
+  @override
+  Future<Map<String, dynamic>?> readMessage(int messageId) async =>
+      throw const MessagingException(SessionExpired());
+}
+
+Widget _buildScreen({
+  required PocztaMessage message,
+  SchoolDataProvider? provider,
+}) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
     overrides: [
       credentialStorageProvider.overrideWithValue(storage),
       wearScreenShapeProvider.overrideWith((_) => WearScreenShape.rectangular),
       activeDataProviderProvider.overrideWithBuild(
-        (ref, _) => DemoDataProvider(),
+        (ref, _) => provider ?? DemoDataProvider(),
       ),
       isTranslationAvailableProvider.overrideWithValue(false),
     ],
@@ -48,6 +59,17 @@ Widget _buildScreen({required PocztaMessage message}) {
 
 void main() {
   group('WearMessageDetailScreen', () {
+    testWidgets('a message that cannot be read says so', (tester) async {
+      await tester.pumpWidget(
+        _buildScreen(message: _msg(), provider: _RejectingReadProvider()),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.text('Could not load the message'), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+    });
+
     testWidgets('shows sender name and title', (tester) async {
       await tester.pumpWidget(
         _buildScreen(

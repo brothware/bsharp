@@ -307,7 +307,10 @@
     "sendFailed": "Invio del messaggio non riuscito",
     "readReceipt": "Letto",
     "notReadYet": "Non ancora letto",
-    "loadMoreFailed": "Impossibile caricare altri messaggi"
+    "loadMoreFailed": "Impossibile caricare altri messaggi",
+    "actionFailed": "Impossibile aggiornare il messaggio",
+    "readFailed": "Impossibile caricare il messaggio",
+    "searchFailed": "Impossibile cercare i destinatari"
   },
   "settings": {
     "title": "Impostazioni",

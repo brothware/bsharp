@@ -310,7 +310,10 @@
     "sendFailed": "Nie udało się wysłać wiadomości",
     "readReceipt": "Przeczytano",
     "notReadYet": "Jeszcze nie przeczytano",
-    "loadMoreFailed": "Nie udało się wczytać kolejnych wiadomości"
+    "loadMoreFailed": "Nie udało się wczytać kolejnych wiadomości",
+    "actionFailed": "Nie udało się zaktualizować wiadomości",
+    "readFailed": "Nie udało się wczytać wiadomości",
+    "searchFailed": "Nie udało się wyszukać odbiorców"
   },
   "settings": {
     "title": "Ustawienia",

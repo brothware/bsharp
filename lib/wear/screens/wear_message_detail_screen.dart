@@ -5,6 +5,7 @@ import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -27,6 +28,7 @@ class _WearMessageDetailScreenState
     extends ConsumerState<WearMessageDetailScreen> {
   String? _fullContent;
   var _loadingContent = true;
+  var _loadFailed = false;
   String? _translatedTitle;
   String? _translatedContent;
   final _scrollController = ScrollController();
@@ -45,7 +47,22 @@ class _WearMessageDetailScreenState
 
   Future<void> _fetchFullContent() async {
     final dataProvider = ref.read(activeDataProviderProvider);
-    final data = await dataProvider.readMessage(widget.message.id);
+    final Map<String, dynamic>? data;
+    try {
+      data = await dataProvider.readMessage(widget.message.id);
+    } on MessagingException catch (error, stackTrace) {
+      debugPrint(
+        'WearMessageDetailScreen: reading failed: $error\n$stackTrace',
+      );
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _loadingContent = false;
+        _loadFailed = true;
+      });
+      return;
+    }
     if (!mounted) return;
 
     if (data == null) {
@@ -118,7 +135,14 @@ class _WearMessageDetailScreenState
                         ),
                       ),
                     )
-                  else if (displayContent != null)
+                  else if (_loadFailed)
+                    Text(
+                      t.messages.readFailed,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
+                    ),
+                  if (!_loadingContent && displayContent != null)
                     Text(displayContent, style: theme.textTheme.bodySmall),
                   if (message.files != null && message.files!.isNotEmpty)
                     Padding(

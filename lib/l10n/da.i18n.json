@@ -307,7 +307,10 @@
     "sendFailed": "Kunne ikke sende besked",
     "readReceipt": "Læst",
     "notReadYet": "Ikke læst endnu",
-    "loadMoreFailed": "Kunne ikke indlæse flere beskeder"
+    "loadMoreFailed": "Kunne ikke indlæse flere beskeder",
+    "actionFailed": "Beskeden kunne ikke opdateres",
+    "readFailed": "Beskeden kunne ikke indlæses",
+    "searchFailed": "Søgningen efter modtagere mislykkedes"
   },
   "settings": {
     "title": "Indstillinger",

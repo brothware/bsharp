@@ -307,7 +307,10 @@
     "sendFailed": "메시지 전송 실패",
     "readReceipt": "읽음",
     "notReadYet": "아직 읽지 않음",
-    "loadMoreFailed": "메시지를 더 불러오지 못했습니다"
+    "loadMoreFailed": "메시지를 더 불러오지 못했습니다",
+    "actionFailed": "메시지를 업데이트하지 못했습니다",
+    "readFailed": "메시지를 불러오지 못했습니다",
+    "searchFailed": "받는 사람을 검색하지 못했습니다"
   },
   "settings": {
     "title": "설정",

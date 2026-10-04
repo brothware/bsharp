@@ -307,7 +307,10 @@
     "sendFailed": "Bericht verzenden mislukt",
     "readReceipt": "Gelezen",
     "notReadYet": "Nog niet gelezen",
-    "loadMoreFailed": "Meer berichten kunnen niet worden geladen"
+    "loadMoreFailed": "Meer berichten kunnen niet worden geladen",
+    "actionFailed": "Bericht kon niet worden bijgewerkt",
+    "readFailed": "Bericht kon niet worden geladen",
+    "searchFailed": "Zoeken naar ontvangers mislukt"
   },
   "settings": {
     "title": "Instellingen",

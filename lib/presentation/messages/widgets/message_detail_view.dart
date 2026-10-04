@@ -5,10 +5,12 @@ import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/obscurable_fab.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
+import 'package:bsharp/presentation/messages/widgets/mail_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -41,7 +43,20 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
 
   Future<void> _fetchFullContent() async {
     final dataProvider = ref.read(activeDataProviderProvider);
-    final data = await dataProvider.readMessage(widget.message.id);
+    final Map<String, dynamic>? data;
+    try {
+      data = await dataProvider.readMessage(widget.message.id);
+    } on MessagingException catch (error, stackTrace) {
+      debugPrint('MessageDetailView: reading failed: $error\n$stackTrace');
+      if (!mounted) {
+        return;
+      }
+      setState(() => _loadingContent = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(t.messages.readFailed)));
+      return;
+    }
     if (!mounted) return;
 
     if (data == null) {
@@ -242,10 +257,18 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
       for (final m in messages)
         if (m.id == message.id) m.copyWith(isStarred: !m.isStarred) else m,
     ]);
-    unawaited(ref.read(activeDataProviderProvider).toggleStar(message.id));
+    final dataProvider = ref.read(activeDataProviderProvider);
+    unawaited(
+      runMailAction(
+        messenger: ScaffoldMessenger.of(context),
+        failureText: t.messages.actionFailed,
+        action: () => dataProvider.toggleStar(message.id),
+      ),
+    );
   }
 
   void _deleteAndPop(BuildContext context) {
+    final messenger = ScaffoldMessenger.of(context);
     context.pop();
     final message = widget.message;
     final folder = ref.read(selectedFolderProvider);
@@ -255,23 +278,16 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
     final dataProvider = ref.read(activeDataProviderProvider);
     final syncNotifier = ref.read(syncStatusProvider.notifier);
 
-    if (folder == MessageFolder.trash) {
-      unawaited(
-        dataProvider
-            .restoreMessage(message.id)
-            .then(
-              (_) => syncNotifier.syncMessages(),
-            ),
-      );
-    } else {
-      unawaited(
-        dataProvider
-            .deleteMessage(message.id)
-            .then(
-              (_) => syncNotifier.syncMessages(),
-            ),
-      );
-    }
+    final isTrash = folder == MessageFolder.trash;
+    unawaited(
+      runMailAction(
+        messenger: messenger,
+        failureText: t.messages.actionFailed,
+        action: () => isTrash
+            ? dataProvider.restoreMessage(message.id)
+            : dataProvider.deleteMessage(message.id),
+      ).then((_) => syncNotifier.syncMessages()),
+    );
   }
 
   void _updateFilesInProvider(List<PocztaAttachment> files) {
@@ -337,13 +353,23 @@ class _AttachmentTileState extends ConsumerState<_AttachmentTile> {
       if (path != null) {
         await OpenFilex.open(path);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(t.messages.downloadFailed)),
-        );
+        _showDownloadFailed();
       }
+    } on MessagingException catch (error, stackTrace) {
+      debugPrint('MessageDetailView: download failed: $error\n$stackTrace');
+      _showDownloadFailed();
     } finally {
       if (mounted) setState(() => _downloading = false);
     }
+  }
+
+  void _showDownloadFailed() {
+    if (!mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(t.messages.downloadFailed)));
   }
 
   @override

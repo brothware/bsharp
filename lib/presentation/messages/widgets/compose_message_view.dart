@@ -4,6 +4,7 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/messages/widgets/rich_text_editing_controller.dart';
@@ -77,7 +78,19 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
 
   Future<void> _performSearch(String query) async {
     final dataProvider = ref.read(activeDataProviderProvider);
-    final receivers = await dataProvider.searchReceivers(query);
+    final List<PocztaReceiver> receivers;
+    try {
+      receivers = await dataProvider.searchReceivers(query);
+    } on MessagingException catch (error, stackTrace) {
+      debugPrint('ComposeMessageView: search failed: $error\n$stackTrace');
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(t.messages.searchFailed)));
+      return;
+    }
     if (!mounted) return;
 
     setState(() {

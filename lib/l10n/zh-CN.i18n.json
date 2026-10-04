@@ -307,7 +307,10 @@
     "sendFailed": "消息发送失败",
     "readReceipt": "已读",
     "notReadYet": "未读",
-    "loadMoreFailed": "无法加载更多消息"
+    "loadMoreFailed": "无法加载更多消息",
+    "actionFailed": "无法更新消息",
+    "readFailed": "无法加载消息",
+    "searchFailed": "无法搜索收件人"
   },
   "settings": {
     "title": "设置",

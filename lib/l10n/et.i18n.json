@@ -307,7 +307,10 @@
     "sendFailed": "Sõnumi saatmine ebaõnnestus",
     "readReceipt": "Loetud",
     "notReadYet": "Pole veel loetud",
-    "loadMoreFailed": "Rohkemate sõnumite laadimine ebaõnnestus"
+    "loadMoreFailed": "Rohkemate sõnumite laadimine ebaõnnestus",
+    "actionFailed": "Sõnumit ei õnnestunud uuendada",
+    "readFailed": "Sõnumit ei õnnestunud laadida",
+    "searchFailed": "Saajate otsing ebaõnnestus"
   },
   "settings": {
     "title": "Seaded",

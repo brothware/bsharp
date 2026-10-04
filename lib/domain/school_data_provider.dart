@@ -28,6 +28,16 @@ class ReauthRequiredException implements Exception {
   String toString() => 'ReauthRequiredException: the saved password is gone';
 }
 
+class MessagingException implements Exception {
+  const MessagingException(this.failure);
+
+  final AppFailure failure;
+
+  @override
+  String toString() =>
+      'MessagingException: ${failure.runtimeType} ${failure.message ?? ''}';
+}
+
 @immutable
 class AccountProbe {
   const AccountProbe({required this.schoolName, required this.students});

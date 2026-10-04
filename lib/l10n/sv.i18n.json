@@ -307,7 +307,10 @@
     "sendFailed": "Kunde inte skicka meddelandet",
     "readReceipt": "Läst",
     "notReadYet": "Inte läst ännu",
-    "loadMoreFailed": "Det gick inte att läsa in fler meddelanden"
+    "loadMoreFailed": "Det gick inte att läsa in fler meddelanden",
+    "actionFailed": "Det gick inte att uppdatera meddelandet",
+    "readFailed": "Det gick inte att läsa in meddelandet",
+    "searchFailed": "Det gick inte att söka efter mottagare"
   },
   "settings": {
     "title": "Inställningar",

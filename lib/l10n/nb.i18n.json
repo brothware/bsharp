@@ -307,7 +307,10 @@
     "sendFailed": "Kunne ikke sende melding",
     "readReceipt": "Lest",
     "notReadYet": "Ikke lest ennå",
-    "loadMoreFailed": "Kunne ikke laste inn flere meldinger"
+    "loadMoreFailed": "Kunne ikke laste inn flere meldinger",
+    "actionFailed": "Kunne ikke oppdatere meldingen",
+    "readFailed": "Kunne ikke laste inn meldingen",
+    "searchFailed": "Kunne ikke søke etter mottakere"
   },
   "settings": {
     "title": "Innstillinger",

@@ -63,12 +63,6 @@ bool _needsTimetable(Set<String>? enabledModules) =>
     _isModuleOn(enabledModules, _timetableModule) ||
     _isModuleOn(enabledModules, _attendancesModule);
 
-class SendMessageException implements Exception {
-  SendMessageException(this.failure);
-
-  final AppFailure failure;
-}
-
 class MobiregDataProvider implements SchoolDataProvider {
   MobiregDataProvider({
     ApiClientFactory Function(String school)? clientFactory,
@@ -340,122 +334,113 @@ class MobiregDataProvider implements SchoolDataProvider {
     final messagingUrl = account.messagingUrl;
     final messagesToken = account.messagesToken;
     if (messagingUrl == null || messagesToken == null) {
-      debugPrint('MobiregDataProvider: users view has no mailbox');
-      return;
+      throw const MessagingException(
+        NoData(message: 'View users has no messagingUrl or messagesToken'),
+      );
     }
 
+    final pocztaDs = await _signedInMailbox(
+      school: school,
+      messagingUrl: messagingUrl,
+      messagesToken: messagesToken,
+    );
+    await _fetchFolders(ref, pocztaDs);
+  }
+
+  Future<PocztaDataSource> _signedInMailbox({
+    required String school,
+    required String messagingUrl,
+    required String messagesToken,
+  }) async {
+    _pocztaDs = null;
     final pocztaDs = PocztaDataSource(
       client: _clientFactory(school).createPocztaClient(messagingUrl),
     );
-    final sessionResult = await pocztaDs.establishSession(
-      school: school,
-      messagesToken: messagesToken,
+    _mailValue(
+      await pocztaDs.establishSession(
+        school: school,
+        messagesToken: messagesToken,
+      ),
     );
-
-    final sessionOk = sessionResult.when(
-      success: (_) => true,
-      failure: (failure) {
-        debugPrint('MobiregDataProvider: poczta session failed: $failure');
-        return false;
-      },
-    );
-    if (!sessionOk) return;
-
     _pocztaDs = pocztaDs;
-
-    final cache = ref.read(syncCacheProvider);
-
-    final results = await Future.wait([
-      pocztaDs.getInbox(),
-      pocztaDs.getSent(),
-      pocztaDs.getTrash(),
-    ]);
-
-    _applyFolders(ref, cache, results);
+    return pocztaDs;
   }
 
   static const _messageFolders = ['inbox', 'sent', 'trash'];
 
-  void _applyFolders(
-    Ref ref,
-    SyncCache cache,
-    List<Result<List<dynamic>>> results,
-  ) {
-    for (final (index, folder) in _messageFolders.indexed) {
-      results[index].when(
-        success: (data) {
-          applyMessages(ref, folder, data);
-          cache.saveMessages(folder, data);
-        },
-        failure: (failure) =>
-            debugPrint('MobiregDataProvider: message fetch failed: $failure'),
-      );
-    }
-  }
-
-  @override
-  Future<void> refreshMessages(Ref ref) async {
-    final pocztaDs = _pocztaDs;
-    if (pocztaDs == null || !pocztaDs.hasSession) return;
-
+  Future<void> _fetchFolders(Ref ref, PocztaDataSource pocztaDs) async {
     final results = await Future.wait([
       pocztaDs.getInbox(),
       pocztaDs.getSent(),
       pocztaDs.getTrash(),
     ]);
-
+    final folders = [for (final result in results) _mailValue(result)];
     final cache = ref.read(syncCacheProvider);
+    for (final (index, folder) in _messageFolders.indexed) {
+      applyMessages(ref, folder, folders[index]);
+      cache.saveMessages(folder, folders[index]);
+    }
+  }
 
-    _applyFolders(ref, cache, results);
+  PocztaDataSource _mailbox() {
+    final pocztaDs = _pocztaDs;
+    if (pocztaDs == null || !pocztaDs.hasSession) {
+      throw const MessagingException(
+        SessionExpired(message: 'Poczta has no session'),
+      );
+    }
+    return pocztaDs;
+  }
+
+  T _mailValue<T>(Result<T> result) {
+    return switch (result) {
+      Success(:final value) => value,
+      Failure(:final failure) => throw MessagingException(failure),
+    };
+  }
+
+  @override
+  Future<void> refreshMessages(Ref ref) async {
+    await _fetchFolders(ref, _mailbox());
   }
 
   @override
   Future<Map<String, dynamic>?> readMessage(int messageId) async {
-    final pocztaDs = _pocztaDs;
-    if (pocztaDs == null || !pocztaDs.hasSession) return null;
-
-    final result = await pocztaDs.readMessage(messageId);
-    return result.when(success: (data) => data, failure: (_) => null);
+    return _mailValue(await _mailbox().readMessage(messageId));
   }
 
   @override
   Future<List<PocztaReceiver>> searchReceivers(String query) async {
-    final pocztaDs = _pocztaDs;
-    if (pocztaDs == null || !pocztaDs.hasSession) return [];
-
-    final result = await pocztaDs.searchReceivers(query);
-    return result.when(
-      success: (data) {
-        final receivers = <PocztaReceiver>[];
-        for (final item in data) {
-          if (item is! Map<String, dynamic>) continue;
-          receivers.add(
-            PocztaReceiver(
-              id: (item['id'] ?? '').toString(),
-              name: (item['name'] ?? '') as String,
-              role: item['role'] as String?,
-            ),
-          );
-        }
-        return receivers;
-      },
-      failure: (_) => [],
-    );
+    final data = _mailValue(await _mailbox().searchReceivers(query));
+    return [
+      for (final item in data)
+        if (item is Map<String, dynamic>)
+          PocztaReceiver(
+            id: (item['id'] ?? '').toString(),
+            name: (item['name'] ?? '') as String,
+            role: item['role'] as String?,
+          )
+        else
+          throw FormatException(
+            'Poczta receivers/search: expected objects',
+            item.runtimeType,
+          ),
+    ];
   }
 
   @override
   Future<void> toggleStar(int messageId) async {
-    await _pocztaDs?.toggleStar(messageId);
+    _mailValue(await _mailbox().toggleStar(messageId));
   }
 
   @override
   Future<void> deleteMessage(int messageId) async {
-    await _pocztaDs?.deleteMessage(messageId);
+    _mailValue(await _mailbox().deleteMessage(messageId));
   }
 
   @override
   Future<void> restoreMessage(int messageId) async {
-    await _pocztaDs?.restoreMessage(messageId);
+    _mailValue(await _mailbox().restoreMessage(messageId));
   }
 
   @override
@@ -465,38 +450,29 @@ class MobiregDataProvider implements SchoolDataProvider {
     required String content,
     int? previousMessageId,
   }) async {
-    final result = await _pocztaDs?.sendMessage(
-      title: title,
-      content: content,
-      recipients: recipientIds,
-      previousMessageId: previousMessageId,
+    _mailValue(
+      await _mailbox().sendMessage(
+        title: title,
+        content: content,
+        recipients: recipientIds,
+        previousMessageId: previousMessageId,
+      ),
     );
-    if (result case Failure(:final failure)) {
-      throw SendMessageException(failure);
-    }
   }
 
   @override
   Future<List<PocztaMessage>> loadMoreInbox(int skip) async {
-    final pocztaDs = _pocztaDs;
-    if (pocztaDs == null || !pocztaDs.hasSession) return [];
-
-    final result = await pocztaDs.getInbox(skip: skip);
-    return result.when(
-      success: (data) => parsePocztaMessages(data, 'inbox'),
-      failure: (_) => [],
-    );
+    final data = _mailValue(await _mailbox().getInbox(skip: skip));
+    return parsePocztaMessages(data, 'inbox');
   }
 
   @override
   Future<String?> downloadAttachment(String url, String filename) async {
-    final pocztaDs = _pocztaDs;
-    if (pocztaDs == null || !pocztaDs.hasSession) return null;
-
+    final pocztaDs = _mailbox();
     final dir = await getTemporaryDirectory();
     final savePath = '${dir.path}/$filename';
-    final result = await pocztaDs.downloadFile(url, savePath);
-    return result.when(success: (_) => savePath, failure: (_) => null);
+    _mailValue(await pocztaDs.downloadFile(url, savePath));
+    return savePath;
   }
 }
 

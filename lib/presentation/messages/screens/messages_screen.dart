@@ -10,6 +10,7 @@ import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/auth/widgets/reauth_dialog.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
+import 'package:bsharp/presentation/messages/widgets/mail_action.dart';
 import 'package:bsharp/presentation/messages/widgets/message_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -134,7 +135,14 @@ class _MessageListState extends ConsumerState<_MessageList> {
         if (m.id == message.id) m.copyWith(isStarred: !m.isStarred) else m,
     ]);
 
-    unawaited(ref.read(activeDataProviderProvider).toggleStar(message.id));
+    final dataProvider = ref.read(activeDataProviderProvider);
+    unawaited(
+      runMailAction(
+        messenger: ScaffoldMessenger.of(context),
+        failureText: t.messages.actionFailed,
+        action: () => dataProvider.toggleStar(message.id),
+      ),
+    );
   }
 
   void _removeMessage(PocztaMessage message) {
@@ -191,14 +199,10 @@ class _MessageListState extends ConsumerState<_MessageList> {
     try {
       newMessages = await dataProvider.loadMoreInbox(currentInbox.length);
     } on FormatException catch (error, stackTrace) {
-      debugPrint(
-        'MessagesScreen: loading more mail failed: $error\n$stackTrace',
-      );
-      if (!mounted) return;
-      setState(() => _isLoadingMore = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(t.messages.loadMoreFailed)));
+      _onLoadMoreFailed(error, stackTrace);
+      return;
+    } on MessagingException catch (error, stackTrace) {
+      _onLoadMoreFailed(error, stackTrace);
       return;
     }
     if (!mounted) return;
@@ -209,13 +213,30 @@ class _MessageListState extends ConsumerState<_MessageList> {
     if (mounted) setState(() => _isLoadingMore = false);
   }
 
+  void _onLoadMoreFailed(Object error, StackTrace stackTrace) {
+    debugPrint('MessagesScreen: loading more mail failed: $error\n$stackTrace');
+    if (!mounted) {
+      return;
+    }
+    setState(() => _isLoadingMore = false);
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(t.messages.loadMoreFailed)));
+  }
+
   Future<void> _restoreAndSync(
     SchoolDataProvider dataProvider,
     SyncStatusNotifier syncNotifier,
     int messageId,
   ) async {
-    await dataProvider.restoreMessage(messageId);
-    if (mounted) await syncNotifier.syncMessages();
+    await runMailAction(
+      messenger: ScaffoldMessenger.of(context),
+      failureText: t.messages.actionFailed,
+      action: () => dataProvider.restoreMessage(messageId),
+    );
+    if (mounted) {
+      await syncNotifier.syncMessages();
+    }
   }
 
   Future<void> _deleteAndSync(
@@ -223,8 +244,14 @@ class _MessageListState extends ConsumerState<_MessageList> {
     SyncStatusNotifier syncNotifier,
     int messageId,
   ) async {
-    await dataProvider.deleteMessage(messageId);
-    if (mounted) await syncNotifier.syncMessages();
+    await runMailAction(
+      messenger: ScaffoldMessenger.of(context),
+      failureText: t.messages.actionFailed,
+      action: () => dataProvider.deleteMessage(messageId),
+    );
+    if (mounted) {
+      await syncNotifier.syncMessages();
+    }
   }
 
   bool _onScrollNotification(ScrollNotification notification) {

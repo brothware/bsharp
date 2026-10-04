@@ -316,7 +316,10 @@
     "sendFailed": "Theip ar sheoladh na teachtaireachta",
     "readReceipt": "Léite",
     "notReadYet": "Gan léamh fós",
-    "loadMoreFailed": "Níorbh fhéidir tuilleadh teachtaireachtaí a luchtú"
+    "loadMoreFailed": "Níorbh fhéidir tuilleadh teachtaireachtaí a luchtú",
+    "actionFailed": "Níorbh fhéidir an teachtaireacht a nuashonrú",
+    "readFailed": "Níorbh fhéidir an teachtaireacht a luchtú",
+    "searchFailed": "Níorbh fhéidir faighteoirí a chuardach"
   },
   "settings": {
     "title": "Socruithe",

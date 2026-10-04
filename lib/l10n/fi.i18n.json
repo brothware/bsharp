@@ -307,7 +307,10 @@
     "sendFailed": "Viestin lähetys epäonnistui",
     "readReceipt": "Luettu",
     "notReadYet": "Ei vielä luettu",
-    "loadMoreFailed": "Lisää viestejä ei voitu ladata"
+    "loadMoreFailed": "Lisää viestejä ei voitu ladata",
+    "actionFailed": "Viestiä ei voitu päivittää",
+    "readFailed": "Viestiä ei voitu ladata",
+    "searchFailed": "Vastaanottajien haku epäonnistui"
   },
   "settings": {
     "title": "Asetukset",

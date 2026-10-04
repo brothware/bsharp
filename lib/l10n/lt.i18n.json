@@ -313,7 +313,10 @@
     "sendFailed": "Nepavyko išsiųsti žinutės",
     "readReceipt": "Perskaityta",
     "notReadYet": "Dar neperskaityta",
-    "loadMoreFailed": "Nepavyko įkelti daugiau žinučių"
+    "loadMoreFailed": "Nepavyko įkelti daugiau žinučių",
+    "actionFailed": "Nepavyko atnaujinti žinutės",
+    "readFailed": "Nepavyko įkelti žinutės",
+    "searchFailed": "Nepavyko ieškoti gavėjų"
   },
   "settings": {
     "title": "Nustatymai",

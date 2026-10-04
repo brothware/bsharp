@@ -307,7 +307,10 @@
     "sendFailed": "訊息傳送失敗",
     "readReceipt": "已讀",
     "notReadYet": "未讀",
-    "loadMoreFailed": "無法載入更多訊息"
+    "loadMoreFailed": "無法載入更多訊息",
+    "actionFailed": "無法更新訊息",
+    "readFailed": "無法載入訊息",
+    "searchFailed": "無法搜尋收件人"
   },
   "settings": {
     "title": "設定",

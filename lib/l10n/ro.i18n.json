@@ -310,7 +310,10 @@
     "sendFailed": "Trimiterea mesajului a eșuat",
     "readReceipt": "Citit",
     "notReadYet": "Încă necitit",
-    "loadMoreFailed": "Nu s-au putut încărca mai multe mesaje"
+    "loadMoreFailed": "Nu s-au putut încărca mai multe mesaje",
+    "actionFailed": "Mesajul nu a putut fi actualizat",
+    "readFailed": "Mesajul nu a putut fi încărcat",
+    "searchFailed": "Căutarea destinatarilor a eșuat"
   },
   "settings": {
     "title": "Setări",

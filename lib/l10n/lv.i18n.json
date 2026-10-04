@@ -307,7 +307,10 @@
     "sendFailed": "Neizdevās nosūtīt ziņojumu",
     "readReceipt": "Izlasīts",
     "notReadYet": "Vēl nav izlasīts",
-    "loadMoreFailed": "Neizdevās ielādēt vairāk ziņojumu"
+    "loadMoreFailed": "Neizdevās ielādēt vairāk ziņojumu",
+    "actionFailed": "Neizdevās atjaunināt ziņojumu",
+    "readFailed": "Neizdevās ielādēt ziņojumu",
+    "searchFailed": "Neizdevās meklēt adresātus"
   },
   "settings": {
     "title": "Iestatījumi",

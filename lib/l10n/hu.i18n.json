@@ -307,7 +307,10 @@
     "sendFailed": "Az üzenet küldése sikertelen",
     "readReceipt": "Elolvasva",
     "notReadYet": "Még nem olvasták el",
-    "loadMoreFailed": "Nem sikerült további üzeneteket betölteni"
+    "loadMoreFailed": "Nem sikerült további üzeneteket betölteni",
+    "actionFailed": "Nem sikerült frissíteni az üzenetet",
+    "readFailed": "Nem sikerült betölteni az üzenetet",
+    "searchFailed": "Nem sikerült címzetteket keresni"
   },
   "settings": {
     "title": "Beállítások",

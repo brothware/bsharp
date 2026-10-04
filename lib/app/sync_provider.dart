@@ -218,11 +218,15 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     try {
       await provider.refreshMessages(ref);
     } on FormatException catch (error, stackTrace) {
-      debugPrint(
-        'SyncStatusNotifier: mail refresh failed: $error\n$stackTrace',
-      );
-      state = SyncStatus.failed;
+      _failMailRefresh(error, stackTrace);
+    } on MessagingException catch (error, stackTrace) {
+      _failMailRefresh(error, stackTrace);
     }
+  }
+
+  void _failMailRefresh(Object error, StackTrace stackTrace) {
+    debugPrint('SyncStatusNotifier: mail refresh failed: $error\n$stackTrace');
+    state = SyncStatus.failed;
   }
 }
 

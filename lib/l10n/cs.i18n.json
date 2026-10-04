@@ -310,7 +310,10 @@
     "sendFailed": "Nepodařilo se odeslat zprávu",
     "readReceipt": "Přečteno",
     "notReadYet": "Zatím nepřečteno",
-    "loadMoreFailed": "Nepodařilo se načíst další zprávy"
+    "loadMoreFailed": "Nepodařilo se načíst další zprávy",
+    "actionFailed": "Zprávu se nepodařilo upravit",
+    "readFailed": "Zprávu se nepodařilo načíst",
+    "searchFailed": "Hledání příjemců se nezdařilo"
   },
   "settings": {
     "title": "Nastavení",

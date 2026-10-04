@@ -310,7 +310,10 @@
     "sendFailed": "Slanje poruke nije uspelo",
     "readReceipt": "Pročitano",
     "notReadYet": "Još nije pročitano",
-    "loadMoreFailed": "Није могуће учитати више порука"
+    "loadMoreFailed": "Није могуће учитати више порука",
+    "actionFailed": "Није могуће ажурирати поруку",
+    "readFailed": "Није могуће учитати поруку",
+    "searchFailed": "Претрага прималаца није успела"
   },
   "settings": {
     "title": "Podešavanja",
