@@ -1,4 +1,8 @@
 import 'package:bsharp/app/providers/more_providers.dart';
+import 'package:bsharp/app/translation_provider.dart';
+import 'package:bsharp/core/error/result.dart';
+import 'package:bsharp/data/data_sources/local/mlkit_translation_source.dart';
+import 'package:bsharp/data/services/translation_service.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/presentation/bulletins/screens/bulletins_screen.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
@@ -59,4 +63,69 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('translates the title and keeps the body structure', (
+    tester,
+  ) async {
+    final mlKit = _NumberingMlKit();
+    await tester.pumpWidget(
+      _app(
+        overrides: [
+          isTranslationAvailableProvider.overrideWithValue(true),
+          translationServiceProvider.overrideWithValue(
+            TranslationService(mlKit: mlKit),
+          ),
+        ],
+      ),
+    );
+    await _openDetail(tester);
+
+    await tester.tap(find.byIcon(Icons.translate));
+    await tester.pumpAndSettle();
+
+    expect(mlKit.sent, contains(_title));
+    expect(mlKit.sent.where((text) => text.contains('<')), isEmpty);
+    expect(find.text('T0'), findsOneWidget);
+    expect(find.textContaining('Zespół', findRichText: true), findsNothing);
+    expect(find.textContaining('T8', findRichText: true), findsOneWidget);
+
+    await tester.tap(find.text('Show original'));
+    await tester.pumpAndSettle();
+
+    expect(find.text(_title), findsOneWidget);
+    expect(
+      find.textContaining('Zespół MobiReg', findRichText: true),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('hides translation when the app speaks the content language', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        overrides: [isTranslationAvailableProvider.overrideWithValue(false)],
+      ),
+    );
+    await _openDetail(tester);
+
+    expect(find.byIcon(Icons.translate), findsNothing);
+  });
+}
+
+class _NumberingMlKit extends MlKitTranslationSource {
+  final sent = <String>[];
+
+  @override
+  Future<Result<String>> translate({
+    required String text,
+    required String sourceLang,
+    required String targetLang,
+  }) async {
+    sent.add(text);
+    final pieces = text.split(' ‣ ');
+    return Result.success(
+      [for (var i = 0; i < pieces.length; i++) 'T$i'].join(' ‣ '),
+    );
+  }
 }

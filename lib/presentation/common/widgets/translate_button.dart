@@ -95,6 +95,9 @@ class _MultiTranslateButtonState extends ConsumerState<MultiTranslateButton> {
 
   @override
   Widget build(BuildContext context) {
+    if (!ref.watch(isTranslationAvailableProvider)) {
+      return const SizedBox.shrink();
+    }
     return _translateButtonUI(
       context,
       state: _state,

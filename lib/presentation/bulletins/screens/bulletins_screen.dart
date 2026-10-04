@@ -4,6 +4,7 @@ import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/html_body.dart';
+import 'package:bsharp/presentation/common/widgets/translate_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -76,14 +77,23 @@ class _BulletinTile extends StatelessWidget {
   }
 }
 
-class _BulletinDetailScreen extends StatelessWidget {
+class _BulletinDetailScreen extends StatefulWidget {
   const _BulletinDetailScreen({required this.bulletin});
 
   final PortalBulletin bulletin;
 
   @override
+  State<_BulletinDetailScreen> createState() => _BulletinDetailScreenState();
+}
+
+class _BulletinDetailScreenState extends State<_BulletinDetailScreen> {
+  List<String>? _translations;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final bulletin = widget.bulletin;
+    final translations = _translations;
     return Scaffold(
       appBar: AppBar(title: Text(t.bulletins.detail)),
       body: SingleChildScrollView(
@@ -91,7 +101,10 @@ class _BulletinDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(bulletin.title, style: theme.textTheme.titleLarge),
+            Text(
+              translations?.first ?? bulletin.title,
+              style: theme.textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             Row(
               children: [
@@ -122,8 +135,15 @@ class _BulletinDetailScreen extends StatelessWidget {
                 ),
               ],
             ),
+            MultiTranslateButton(
+              fields: [
+                TranslationField(bulletin.title),
+                TranslationField(bulletin.content, isHtml: true),
+              ],
+              onTranslated: (values) => setState(() => _translations = values),
+            ),
             const Divider(height: 24),
-            HtmlBody(bulletin.content),
+            HtmlBody(translations?.last ?? bulletin.content),
           ],
         ),
       ),

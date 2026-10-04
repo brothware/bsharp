@@ -155,6 +155,7 @@ void main() {
       _app(
         _BodyProvider(realAnnouncementHtml),
         overrides: [
+          isTranslationAvailableProvider.overrideWithValue(true),
           translationServiceProvider.overrideWithValue(
             TranslationService(mlKit: mlKit),
           ),
@@ -183,6 +184,20 @@ void main() {
       find.textContaining('Zespół MobiReg', findRichText: true),
       findsOneWidget,
     );
+  });
+
+  testWidgets('hides translation when the app speaks the content language', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        _BodyProvider(realAnnouncementHtml),
+        overrides: [isTranslationAvailableProvider.overrideWithValue(false)],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.translate), findsNothing);
   });
 
   testWidgets('decodes every entity and keeps links tappable', (
