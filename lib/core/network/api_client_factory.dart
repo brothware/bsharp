@@ -35,6 +35,27 @@ class ApiClientFactory {
     contentType: AppConstants.tokenUploadContentType,
   );
 
+  Dio createAppApiClient() {
+    final baseUrl = AppConstants.hasMobiregBaseUrlOverride
+        ? '${AppConstants.mobiregBaseUrl}/$_school/modules/api'
+        : kIsWeb
+        ? '$_proxy/sync/$_school'
+        : 'https://mobireg.pl/$_school/modules/api';
+    const unauthorized = 401;
+    const timeout = Duration(milliseconds: AppConstants.appApiTimeoutMs);
+    return Dio(
+      BaseOptions(
+        baseUrl: baseUrl,
+        connectTimeout: timeout,
+        receiveTimeout: timeout,
+        validateStatus: (status) =>
+            status != null &&
+            ((status >= 200 && status < 300) || status == unauthorized),
+        extra: _webExtra,
+      ),
+    )..interceptors.add(ErrorMappingInterceptor());
+  }
+
   Dio _createNjsonClient({
     required String userAgent,
     required String acceptEncoding,

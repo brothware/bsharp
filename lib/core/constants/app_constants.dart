@@ -15,6 +15,9 @@ abstract final class AppConstants {
   static const connectTimeoutMs = 10000;
   static const receiveTimeoutMs = 30000;
   static const maxRetryCount = 1;
+  static const appUserAgent = 'MobiReg/3.1.3 (296c220)';
+  static const appApiProtocolVersion = 1;
+  static const appApiTimeoutMs = 15000;
   static const proxyBaseUrl = 'https://bsharp-proxy.dawid-sliwa.workers.dev';
 
   static const mobiregBaseUrl = String.fromEnvironment('MOBIREG_BASE_URL');

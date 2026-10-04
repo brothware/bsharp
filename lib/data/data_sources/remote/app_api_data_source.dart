@@ -1,0 +1,135 @@
+import 'package:bsharp/core/constants/app_constants.dart';
+import 'package:bsharp/core/error/result.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+
+@immutable
+class ViewPayload {
+  const ViewPayload({
+    required this.data,
+    required this.serverTime,
+    required this.freshFor,
+  });
+
+  final Object data;
+  final DateTime serverTime;
+  final Duration freshFor;
+}
+
+class AppApiDataSource {
+  AppApiDataSource({required this._client});
+
+  final Dio _client;
+
+  Future<Result<String>> login({
+    required String login,
+    required String password,
+  }) async {
+    final response = await _send(
+      () => _client.post<Map<String, dynamic>>(
+        '/auth.php',
+        data: {'login': login, 'password': password},
+        options: Options(
+          contentType: 'application/json; charset=UTF-8',
+          headers: {'Accept': 'application/json'},
+        ),
+      ),
+    );
+    return switch (response) {
+      Failure(:final failure) => Result.failure(failure),
+      Success(:final value) => _tokenFrom(value),
+    };
+  }
+
+  Future<Result<ViewPayload>> getView({
+    required String jwt,
+    required String view,
+    Map<String, String> params = const {},
+  }) async {
+    final response = await _send(
+      () => _client.post<Map<String, dynamic>>(
+        '/app.php',
+        data: {
+          'view': view,
+          'format': 'json',
+          'token': jwt,
+          'JWTToken': jwt,
+          ...params,
+        },
+        options: Options(
+          contentType: Headers.formUrlEncodedContentType,
+          headers: {'User-Agent': AppConstants.appUserAgent},
+        ),
+      ),
+    );
+    return switch (response) {
+      Failure(:final failure) => Result.failure(failure),
+      Success(:final value) => _unwrap(view, value),
+    };
+  }
+
+  Future<Result<Map<String, dynamic>>> _send(
+    Future<Response<Map<String, dynamic>>> Function() request,
+  ) async {
+    const unauthorized = 401;
+    try {
+      final response = await request();
+      final body = response.data;
+      if (response.statusCode == unauthorized) {
+        return Result.failure(
+          SessionExpired(message: body?['message'] as String?),
+        );
+      }
+      if (body == null) {
+        return const Result.failure(NoData(message: 'Empty response'));
+      }
+      return Result.success(body);
+    } on DioException catch (e) {
+      final failure = e.error;
+      if (failure is AppFailure) {
+        return Result.failure(failure);
+      }
+      return Result.failure(UnknownFailure(message: e.message));
+    }
+  }
+
+  Result<String> _tokenFrom(Map<String, dynamic> body) {
+    final token = body['token'];
+    if (body['status'] != 'OK' || token is! String || token.isEmpty) {
+      return Result.failure(
+        InvalidCredentials(message: body['message'] as String?),
+      );
+    }
+    return Result.success(token);
+  }
+
+  Result<ViewPayload> _unwrap(String view, Map<String, dynamic> body) {
+    final version = body['v'];
+    final Object? data = body['data'];
+    final serverTime = body['serverTime'];
+    final ttlFresh = body['ttlFresh'];
+    if (version is! int ||
+        data == null ||
+        serverTime is! String ||
+        ttlFresh is! int) {
+      throw FormatException('View $view answered without an envelope', body);
+    }
+    if (version != AppConstants.appApiProtocolVersion) {
+      return Result.failure(
+        ProtocolMismatch(message: 'View $view answered protocol v$version'),
+      );
+    }
+    if (data is Map<String, dynamic> && data['errno'] is int) {
+      return Result.failure(
+        AppFailure.fromErrno(data['errno'] as int, data['message'] as String?),
+      );
+    }
+    return Result.success(
+      ViewPayload(
+        data: data,
+        serverTime: DateTime.parse(serverTime),
+        freshFor: Duration(seconds: ttlFresh),
+      ),
+    );
+  }
+}
