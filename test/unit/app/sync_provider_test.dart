@@ -208,7 +208,7 @@ void main() {
     test('a password-less account fails without saving a snapshot', () async {
       final container = await _mobiregContainer(
         server: server,
-        account: _account.copyWith(password: '', legacyPasswordHash: 'abc'),
+        account: _account.copyWith(password: ''),
       );
 
       await container.read(syncStatusProvider.notifier).sync();
@@ -227,7 +227,7 @@ void main() {
       () async {
         final container = await _mobiregContainer(
           server: server,
-          account: _account.copyWith(password: '', legacyPasswordHash: 'abc'),
+          account: _account.copyWith(password: ''),
         );
         final notifier = container.read(syncStatusProvider.notifier);
         await notifier.sync();

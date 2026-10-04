@@ -8,7 +8,6 @@ const _view = 'marks';
 const _plusBonus = 0.5;
 const _minusPenalty = 0.25;
 const _defaultWeight = 1;
-const _teacherUserType = 0;
 final _gradePattern = RegExp(r'^([1-6])([+-]?)$');
 
 @immutable
@@ -94,10 +93,8 @@ List<Teacher> _teachersOf(Object? data) {
     }
     return Teacher(
       id: intField(value, 'id', _view),
-      login: '',
       name: stringField(value, 'first_name', _view),
       surname: stringField(value, 'surname', _view),
-      userType: _teacherUserType,
     );
   }).toList();
 }

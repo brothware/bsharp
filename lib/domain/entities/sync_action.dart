@@ -17,22 +17,6 @@ enum SyncAction {
   };
 }
 
-enum Sex {
-  female,
-  male;
-
-  static Sex fromString(String value) => switch (value) {
-    'K' => female,
-    'M' => male,
-    _ => throw ArgumentError('Unknown sex: $value'),
-  };
-
-  String toJsonValue() => switch (this) {
-    female => 'K',
-    male => 'M',
-  };
-}
-
 enum AttendanceCountAs {
   present,
   absent,

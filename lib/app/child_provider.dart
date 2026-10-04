@@ -2,7 +2,6 @@ import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/domain/entities/student.dart';
-import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'child_provider.g.dart';
@@ -50,5 +49,4 @@ class ActiveStudent extends _$ActiveStudent {
   }
 }
 
-Student placeholderStudent() =>
-    const Student(id: 0, usersEduId: 0, name: '', surname: '', sex: Sex.male);
+Student placeholderStudent() => const Student(id: 0, name: '', surname: '');

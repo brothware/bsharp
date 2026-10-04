@@ -75,7 +75,7 @@ class _ReauthDialogState extends ConsumerState<_ReauthDialog> {
     await ref
         .read(providerAccountsProvider.notifier)
         .updateAccount(
-          account.copyWith(password: password, legacyPasswordHash: null),
+          account.copyWith(password: password),
         );
 
     ref.read(reauthRequiredProvider.notifier).value = false;

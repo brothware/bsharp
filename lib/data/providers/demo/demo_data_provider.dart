@@ -73,10 +73,8 @@ class DemoDataProvider implements SchoolDataProvider {
     ref.read(studentsProvider.notifier).value = [
       const Student(
         id: 1,
-        usersEduId: 1,
         name: 'Jan',
         surname: 'Kowalski',
-        sex: Sex.male,
       ),
     ];
 
@@ -167,10 +165,8 @@ class DemoDataProvider implements SchoolDataProvider {
       students: [
         Student(
           id: 1,
-          usersEduId: 1,
           name: 'Jan',
           surname: 'Kowalski',
-          sex: Sex.male,
         ),
       ],
     ),
@@ -190,59 +186,43 @@ class DemoDataProvider implements SchoolDataProvider {
   List<Teacher> _buildTeachers() => const [
     Teacher(
       id: 1,
-      login: 'anowak',
       name: 'Anna',
       surname: 'Nowak',
-      userType: 1,
     ),
     Teacher(
       id: 2,
-      login: 'mkowalczyk',
       name: 'Marek',
       surname: 'Kowalczyk',
-      userType: 1,
     ),
     Teacher(
       id: 3,
-      login: 'ewiszniewska',
       name: 'Ewa',
       surname: 'Wiśniewska',
-      userType: 1,
     ),
     Teacher(
       id: 4,
-      login: 'tkaminski',
       name: 'Tomasz',
       surname: 'Kamiński',
-      userType: 1,
     ),
     Teacher(
       id: 5,
-      login: 'jzielinska',
       name: 'Joanna',
       surname: 'Zielińska',
-      userType: 1,
     ),
     Teacher(
       id: 6,
-      login: 'plewandowski',
       name: 'Piotr',
       surname: 'Lewandowski',
-      userType: 1,
     ),
     Teacher(
       id: 7,
-      login: 'mwojciechowska',
       name: 'Magdalena',
       surname: 'Wojciechowska',
-      userType: 1,
     ),
     Teacher(
       id: 8,
-      login: 'kdabrowski',
       name: 'Krzysztof',
       surname: 'Dąbrowski',
-      userType: 1,
     ),
   ];
 

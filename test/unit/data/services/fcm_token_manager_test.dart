@@ -68,7 +68,6 @@ void main() {
         providerType: 'mobireg',
         slug: 'sp1',
         login: 'legacy',
-        legacyPasswordHash: 'abc',
       ),
       ProviderAccount(
         id: 'new',

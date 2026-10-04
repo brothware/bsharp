@@ -1,11 +1,8 @@
 import 'package:bsharp/data/providers/mobireg/parsers/json_fields.dart';
 import 'package:bsharp/domain/entities/student.dart';
-import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:flutter/foundation.dart';
 
 const _view = 'users';
-const _unknownUsersEduId = 0;
-const Sex _unknownSex = Sex.female;
 const _enabledModuleFlag = 1;
 
 @immutable
@@ -29,10 +26,8 @@ MobiregAccount parseAccount(Map<String, dynamic> data) {
   final students = objectsOf(data['pupils'], _view).map((pupil) {
     return Student(
       id: intField(pupil, 'id', _view),
-      usersEduId: _unknownUsersEduId,
       name: stringField(pupil, 'firstname', _view),
       surname: stringField(pupil, 'lastname', _view),
-      sex: _unknownSex,
     );
   }).toList();
   return MobiregAccount(

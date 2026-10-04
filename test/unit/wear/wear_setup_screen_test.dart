@@ -193,7 +193,6 @@ void main() {
             providerType: 'mobireg',
             slug: 'osm-wroclaw',
             login: 'parent.login',
-            legacyPasswordHash: 'abc',
             schoolName: 'School',
           ),
         ]);

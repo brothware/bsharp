@@ -27,7 +27,9 @@ void main() {
       });
 
       expect(account.password, isEmpty);
-      expect(account.legacyPasswordHash, 'legacyhash');
+      expect(ProviderAccount.migrateLegacyJson({'passwordHash': 'x'}), {
+        'password': '',
+      });
       expect(account.needsReauth, isTrue);
     });
 
@@ -42,7 +44,6 @@ void main() {
       });
 
       expect(account.password, 'PlainPass123');
-      expect(account.legacyPasswordHash, isNull);
       expect(account.needsReauth, isFalse);
     });
   });

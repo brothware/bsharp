@@ -11,21 +11,16 @@ void main() {
     test('Student construction and equality', () {
       const student = Student(
         id: 1,
-        usersEduId: 100,
         name: 'John',
         surname: 'Smith',
-        sex: Sex.male,
       );
       expect(student.id, 1);
       expect(student.name, 'John');
-      expect(student.sex, Sex.male);
 
       const same = Student(
         id: 1,
-        usersEduId: 100,
         name: 'John',
         surname: 'Smith',
-        sex: Sex.male,
       );
       expect(student, same);
     });
@@ -33,10 +28,8 @@ void main() {
     test('Student copyWith', () {
       const student = Student(
         id: 1,
-        usersEduId: 100,
         name: 'John',
         surname: 'Smith',
-        sex: Sex.male,
       );
       final modified = student.copyWith(name: 'Adam');
       expect(modified.name, 'Adam');
@@ -46,11 +39,8 @@ void main() {
     test('Teacher construction', () {
       const teacher = Teacher(
         id: 1,
-        login: 'teacher1',
-        usersEduId: 200,
         name: 'Anna',
         surname: 'Brown',
-        userType: 1,
       );
       expect(teacher.name, 'Anna');
     });
@@ -115,16 +105,6 @@ void main() {
 
     test('SyncAction fromString throws on unknown', () {
       expect(() => SyncAction.fromString('X'), throwsArgumentError);
-    });
-
-    test('Sex fromString', () {
-      expect(Sex.fromString('K'), Sex.female);
-      expect(Sex.fromString('M'), Sex.male);
-    });
-
-    test('Sex toJsonValue', () {
-      expect(Sex.female.toJsonValue(), 'K');
-      expect(Sex.male.toJsonValue(), 'M');
     });
 
     test('AttendanceCountAs fromString', () {

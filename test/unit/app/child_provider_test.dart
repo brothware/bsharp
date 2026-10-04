@@ -4,24 +4,19 @@ import 'package:bsharp/app/child_provider.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/key_value_store.dart';
 import 'package:bsharp/domain/entities/student.dart';
-import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   const jan = Student(
     id: 1,
-    usersEduId: 100,
     name: 'Jan',
     surname: 'Kowalski',
-    sex: Sex.male,
   );
   const anna = Student(
     id: 2,
-    usersEduId: 200,
     name: 'Anna',
     surname: 'Kowalska',
-    sex: Sex.female,
   );
 
   group('ActiveStudentNotifier', () {

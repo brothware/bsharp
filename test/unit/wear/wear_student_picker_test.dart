@@ -7,7 +7,6 @@ import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
-import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/screens/wear_student_picker.dart';
@@ -37,17 +36,13 @@ class _TwoStudentsDataProvider extends DemoDataProvider {
       students: [
         Student(
           id: 1,
-          usersEduId: 1,
           name: 'Jan',
           surname: 'Kowalski',
-          sex: Sex.male,
         ),
         Student(
           id: 2,
-          usersEduId: 2,
           name: 'Anna',
           surname: 'Kowalska',
-          sex: Sex.female,
         ),
       ],
     ),
