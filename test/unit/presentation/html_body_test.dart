@@ -1,11 +1,11 @@
 import 'package:bsharp/presentation/common/widgets/html_body.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../fixtures/real_bodies.dart';
+import 'link_tap.dart';
 
 Widget _app(String html, Future<bool> Function(Uri) launcher) {
   return ProviderScope(
@@ -17,28 +17,6 @@ Widget _app(String html, Future<bool> Function(Uri) launcher) {
 }
 
 Future<bool> _neverOpens(Uri uri) async => false;
-
-Future<void> tapLink(WidgetTester tester, String text) async {
-  final richTexts = tester.widgetList<RichText>(find.byType(RichText));
-  for (final richText in richTexts) {
-    var tapped = false;
-    richText.text.visitChildren((span) {
-      if (span is TextSpan &&
-          (span.text ?? '').contains(text) &&
-          span.recognizer is TapGestureRecognizer) {
-        (span.recognizer! as TapGestureRecognizer).onTap!();
-        tapped = true;
-        return false;
-      }
-      return true;
-    });
-    if (tapped) {
-      await tester.pumpAndSettle();
-      return;
-    }
-  }
-  fail('no tappable link with "$text"');
-}
 
 void main() {
   testWidgets('renders the real announcement without markup', (tester) async {
@@ -74,7 +52,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tapLink(tester, 'Rodzic/Uczeń');
+    await tapLinkText(tester, 'Rodzic/Uczeń');
 
     expect(opened, [Uri.parse(realAnnouncementLink)]);
     expect(find.text('Could not open the link'), findsNothing);
@@ -84,7 +62,7 @@ void main() {
     await tester.pumpWidget(_app(realAnnouncementHtml, _neverOpens));
     await tester.pumpAndSettle();
 
-    await tapLink(tester, 'Rodzic/Uczeń');
+    await tapLinkText(tester, 'Rodzic/Uczeń');
 
     expect(find.text('Could not open the link'), findsOneWidget);
   });
@@ -98,7 +76,21 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tapLink(tester, 'Rodzic/Uczeń');
+    await tapLinkText(tester, 'Rodzic/Uczeń');
+
+    expect(find.text('Could not open the link'), findsOneWidget);
+  });
+
+  testWidgets('any launcher failure shows an error', (tester) async {
+    await tester.pumpWidget(
+      _app(
+        realAnnouncementHtml,
+        (uri) async => throw ArgumentError.value(uri, 'uri', 'no handler'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tapLinkText(tester, 'Rodzic/Uczeń');
 
     expect(find.text('Could not open the link'), findsOneWidget);
   });

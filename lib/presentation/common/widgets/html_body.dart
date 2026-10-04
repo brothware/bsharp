@@ -1,6 +1,5 @@
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,7 +42,7 @@ class HtmlBody extends ConsumerWidget {
   Future<bool> _launch(WidgetRef ref, Uri uri) async {
     try {
       return await ref.read(linkLauncherProvider)(uri);
-    } on PlatformException catch (error, stackTrace) {
+    } on Object catch (error, stackTrace) {
       debugPrint('HtmlBody: opening $uri failed: $error\n$stackTrace');
       return false;
     }
