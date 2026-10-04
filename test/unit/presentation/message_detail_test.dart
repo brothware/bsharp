@@ -10,7 +10,6 @@ import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/common/widgets/html_body.dart';
 import 'package:bsharp/presentation/messages/widgets/message_detail_view.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -18,6 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../fixtures/real_bodies.dart';
+import 'link_tap.dart';
 
 class _BodyProvider extends DemoDataProvider {
   _BodyProvider(this.body);
@@ -58,20 +58,6 @@ class _NumberingMlKit extends MlKitTranslationSource {
       [for (var i = 0; i < pieces.length; i++) 'T$i'].join(' ‣ '),
     );
   }
-}
-
-bool _hasTappableText(InlineSpan root, String text) {
-  var found = false;
-  root.visitChildren((span) {
-    if (span is TextSpan &&
-        (span.text ?? '').contains(text) &&
-        span.recognizer is TapGestureRecognizer) {
-      found = true;
-      return false;
-    }
-    return true;
-  });
-  return found;
 }
 
 final _message = PocztaMessage(
@@ -151,10 +137,15 @@ void main() {
     tester,
   ) async {
     final mlKit = _NumberingMlKit();
+    final opened = <Uri>[];
     await tester.pumpWidget(
       _app(
         _BodyProvider(realAnnouncementHtml),
         overrides: [
+          linkLauncherProvider.overrideWithValue((uri) async {
+            opened.add(uri);
+            return true;
+          }),
           isTranslationAvailableProvider.overrideWithValue(true),
           translationServiceProvider.overrideWithValue(
             TranslationService(mlKit: mlKit),
@@ -171,11 +162,8 @@ void main() {
     expect(find.byType(HtmlBody), findsOneWidget);
     expect(find.textContaining('Zespół', findRichText: true), findsNothing);
     expect(find.textContaining('T8', findRichText: true), findsOneWidget);
-    final link = tester
-        .widgetList<RichText>(find.byType(RichText))
-        .expand((richText) => [richText.text])
-        .any((span) => _hasTappableText(span, 'T4'));
-    expect(link, isTrue);
+    await tapLinkText(tester, 'T4');
+    expect(opened, [Uri.parse(realAnnouncementLink)]);
 
     await tester.tap(find.text('Show original'));
     await tester.pumpAndSettle();
