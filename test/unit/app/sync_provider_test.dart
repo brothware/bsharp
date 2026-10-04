@@ -388,6 +388,22 @@ void main() {
       expect(container.read(syncStatusProvider), SyncStatus.failed);
     });
 
+    test('an account with no mailbox syncs without mail', () async {
+      server.users.remove('messagingUrl');
+      server.users.remove('messagesToken');
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      final provider = container.read(activeDataProviderProvider);
+      expect(container.read(syncStatusProvider), SyncStatus.completed);
+      expect(provider.supports(DataProviderCapability.messages), isFalse);
+      expect(provider.supports(DataProviderCapability.sendMessages), isFalse);
+    });
+
     test('an unreadable cache is cleared and the sync carries on', () async {
       final container = await _mobiregContainer(
         server: server,

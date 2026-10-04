@@ -75,13 +75,70 @@ void main() {
     );
   });
 
-  test('an account without a mailbox fails loadMessages', () async {
+  test('an account with no mailbox turns the mail features off', () async {
+    server.users.remove('messagingUrl');
     server.users.remove('messagesToken');
     await provider.authenticate(school: 'sp1', login: 'p', password: 's');
 
-    await expectLater(provider.loadMessages(ref()), failsWithMessaging);
+    await provider.loadMessages(ref());
+
     expect(server.mailSignIns, 0);
+    expect(provider.supports(DataProviderCapability.messages), isFalse);
+    expect(provider.supports(DataProviderCapability.sendMessages), isFalse);
   });
+
+  test('switching to an account with no mailbox clears the mail', () async {
+    await signedIn();
+    expect(provider.supports(DataProviderCapability.messages), isTrue);
+    server.users.remove('messagingUrl');
+    server.users.remove('messagesToken');
+
+    await provider.authenticate(school: 'sp2', login: 'p', password: 's');
+    await provider.loadMessages(ref());
+
+    expect(container.read(inboxProvider), isEmpty);
+    expect(container.read(sentProvider), isEmpty);
+    expect(container.read(trashProvider), isEmpty);
+    expect(container.read(syncCacheProvider).loadMessages('inbox'), isEmpty);
+    expect(provider.supports(DataProviderCapability.messages), isFalse);
+    await expectLater(
+      provider.sendMessage(recipientIds: ['user_1'], title: 'T', content: 'C'),
+      failsWithMessaging,
+    );
+  });
+
+  test('switching back to an account with a mailbox restores it', () async {
+    await signedIn();
+    server.users.remove('messagingUrl');
+    server.users.remove('messagesToken');
+    await provider.authenticate(school: 'sp2', login: 'p', password: 's');
+    await provider.loadMessages(ref());
+
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadMessages(ref());
+
+    expect(provider.supports(DataProviderCapability.messages), isTrue);
+    expect(container.read(inboxProvider).single.id, 20001);
+  });
+
+  for (final missing in ['messagingUrl', 'messagesToken']) {
+    test('only $missing missing is a malformed users view', () async {
+      server.users.remove(missing);
+      await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+
+      await expectLater(
+        provider.loadMessages(ref()),
+        throwsA(
+          isA<FormatException>().having(
+            (error) => error.message,
+            'message',
+            contains('users'),
+          ),
+        ),
+      );
+      expect(server.mailSignIns, 0);
+    });
+  }
 
   test('sending without a mail session fails', () async {
     await expectLater(

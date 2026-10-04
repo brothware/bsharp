@@ -78,6 +78,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   PocztaDataSource? _pocztaDs;
   ({String school, String messagingUrl, String messagesToken})? _mailboxKey;
   Set<String>? _enabledModules;
+  var _hasMailbox = true;
 
   static ApiClientFactory _productionClientFactory(String school) =>
       ApiClientFactory(school: school);
@@ -96,6 +97,11 @@ class MobiregDataProvider implements SchoolDataProvider {
     final capabilities = DataProviderCapability.values.toSet()
       ..remove(DataProviderCapability.homework)
       ..remove(DataProviderCapability.changelog);
+    if (!_hasMailbox) {
+      capabilities
+        ..remove(DataProviderCapability.messages)
+        ..remove(DataProviderCapability.sendMessages);
+    }
     final enabledModules = _enabledModules;
     if (enabledModules != null) {
       for (final MapEntry(:key, :value) in _capabilityByModule.entries) {
@@ -142,6 +148,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   }) async {
     if (school != _school || login != _login) {
       _enabledModules = null;
+      _hasMailbox = true;
     }
     _school = school;
     _login = login;
@@ -374,11 +381,17 @@ class MobiregDataProvider implements SchoolDataProvider {
     );
     final messagingUrl = account.messagingUrl;
     final messagesToken = account.messagesToken;
+    if (messagingUrl == null && messagesToken == null) {
+      debugPrint('MobiregDataProvider: $school has no mailbox');
+      _clearMailbox(ref);
+      return;
+    }
     if (messagingUrl == null || messagesToken == null) {
-      throw const MessagingException(
-        NoData(message: 'View users has no messagingUrl or messagesToken'),
+      throw const FormatException(
+        'View users has only one of messagingUrl and messagesToken',
       );
     }
+    _hasMailbox = true;
 
     final pocztaDs = await _signedInMailbox(
       school: school,
@@ -386,6 +399,17 @@ class MobiregDataProvider implements SchoolDataProvider {
       messagesToken: messagesToken,
     );
     await _fetchFolders(ref, pocztaDs);
+  }
+
+  void _clearMailbox(Ref ref) {
+    _hasMailbox = false;
+    _pocztaDs = null;
+    _mailboxKey = null;
+    final cache = ref.read(syncCacheProvider);
+    for (final folder in _messageFolders) {
+      applyMessages(ref, folder, const []);
+      cache.saveMessages(folder, const []);
+    }
   }
 
   Future<PocztaDataSource> _signedInMailbox({
