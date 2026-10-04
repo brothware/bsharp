@@ -1,0 +1,19 @@
+{
+  "markDescriptives": {"zachowanie": "", "obowiazkowe": "", "zalecenia": ""},
+  "subjects": [
+    {"id": 54, "label": "przyroda", "teachers": [{"id": 4977, "name": "Joanna Nowak"}], "suggestView": 0, "value": "", "isFinal": 0, "mtTeacherId": 0},
+    {"id": 384, "label": "edukacja zdrowotna", "teachers": [{"id": 4938, "name": "Anna Nowak"}], "suggestView": 0, "value": "5", "isFinal": 1, "mtTeacherId": 4938}
+  ],
+  "markGroups": [
+    {"id": 2200, "subjectId": 54, "kindLabel": "karty pracy", "markGroupId": 2200, "parentMarkGroupId": 0, "bgColor": "color: #0000FF;", "description": "kodeks przyrodnika"}
+  ],
+  "grades": [
+    {"id": 13414, "subjectId": 54, "kindLabel": "karty pracy", "value": "+", "markGroupId": 2200, "parentMarkGroupId": 0, "date": "2026-10-01", "teacherId": 4977, "bgColor": "color: #0000FF;", "description": "kodeks przyrodnika", "comments": ""},
+    {"id": 13415, "subjectId": 54, "kindLabel": "sprawdzian", "value": "4+", "markGroupId": 2201, "parentMarkGroupId": 0, "date": "2026-10-02", "teacherId": 4977, "bgColor": "color: #000000;", "description": "dział 1", "comments": "poprawa"},
+    {"id": 4430, "subjectId": 384, "kindLabel": "Aktywność", "value": "5", "markGroupId": 1073, "parentMarkGroupId": 0, "date": "2026-09-19", "teacherId": 4938, "bgColor": "color: #0000FF;", "description": "Aktywność i zaangażowanie na lekcji", "comments": ""}
+  ],
+  "teachers": {
+    "4938": {"first_name": "Anna", "surname": "Nowak", "id": 4938},
+    "4977": {"first_name": "Joanna", "surname": "Nowak", "id": 4977}
+  }
+}
