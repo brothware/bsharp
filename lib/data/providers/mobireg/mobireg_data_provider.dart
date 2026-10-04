@@ -250,6 +250,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     }
 
     final accountData = await _accountListing(
+      ref,
       session,
       studentId,
       trustCached: true,
@@ -267,9 +268,9 @@ class MobiregDataProvider implements SchoolDataProvider {
         params: {'pupilId': '$studentId', ...extra},
       );
       if (result case Failure(failure: PupilNotOnAccount())) {
-        await _accountListing(session, studentId, trustCached: false);
+        await _accountListing(ref, session, studentId, trustCached: false);
       }
-      return _valueOf(name, result).data;
+      return _valueOf(ref, name, result).data;
     }
 
     final terms = await view('terms');
@@ -316,6 +317,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   }
 
   Future<Map<String, dynamic>> _accountListing(
+    Ref ref,
     AppApiSession session,
     int studentId, {
     required bool trustCached,
@@ -323,13 +325,13 @@ class MobiregDataProvider implements SchoolDataProvider {
     bool lists(Map<String, dynamic> account) =>
         parseAccount(account).students.any((pupil) => pupil.id == studentId);
     if (trustCached) {
-      final cached = _valueOf('users', await session.account());
+      final cached = _valueOf(ref, 'users', await session.account());
       if (lists(cached)) {
         return cached;
       }
     }
     session.forgetAccount();
-    final fresh = _valueOf('users', await session.account());
+    final fresh = _valueOf(ref, 'users', await session.account());
     if (lists(fresh)) {
       return fresh;
     }
@@ -339,7 +341,12 @@ class MobiregDataProvider implements SchoolDataProvider {
     );
   }
 
-  T _valueOf<T>(String view, Result<T> result) {
+  T _valueOf<T>(Ref ref, String view, Result<T> result) {
+    if (result case Failure(failure: InvalidCredentials())) {
+      debugPrint('MobiregDataProvider: the saved password was rejected');
+      ref.read(reauthRequiredProvider.notifier).value = true;
+      throw const ReauthRequiredException();
+    }
     return switch (result) {
       Success(:final value) => value,
       Failure(:final failure) => throw Exception(
@@ -356,7 +363,9 @@ class MobiregDataProvider implements SchoolDataProvider {
       return;
     }
 
-    final account = parseAccount(_valueOf('users', await session.account()));
+    final account = parseAccount(
+      _valueOf(ref, 'users', await session.account()),
+    );
     final messagingUrl = account.messagingUrl;
     final messagesToken = account.messagesToken;
     if (messagingUrl == null || messagesToken == null) {

@@ -37,6 +37,7 @@ class FakeAppServer {
   final staleUsers = <Map<String, dynamic>>[];
   final rejectedPupilIds = <String>{};
   int logins = 0;
+  bool rejectsPassword = false;
   int mailSignIns = 0;
   bool mailSignInFails = false;
   bool mailFoldersFail = false;
@@ -123,6 +124,12 @@ class FakeAppServer {
   Response<dynamic> _answer(RequestOptions options) {
     if (options.path == '/auth.php') {
       logins++;
+      if (rejectsPassword) {
+        return _respond(options, _ok, {
+          'status': 'ERROR',
+          'message': 'Nieprawidłowy login lub hasło',
+        });
+      }
       return _respond(options, _ok, {'status': 'OK', 'token': issuedToken});
     }
     final body = Map<String, dynamic>.from(options.data as Map);

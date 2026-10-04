@@ -205,6 +205,23 @@ void main() {
       expect(server.logins, 0);
     });
 
+    test('a changed password fails without saving a snapshot', () async {
+      server.rejectsPassword = true;
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      expect(container.read(syncStatusProvider), SyncStatus.failed);
+      expect(container.read(reauthRequiredProvider), isTrue);
+      expect(
+        container.read(sharedPreferencesProvider).getString('sync_snapshot'),
+        isNull,
+      );
+    });
+
     test(
       're-entering the password notifies nothing on the next sync',
       () async {

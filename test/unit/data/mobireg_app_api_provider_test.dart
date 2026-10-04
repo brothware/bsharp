@@ -205,6 +205,28 @@ void main() {
     expect(container.read(reauthRequiredProvider), isTrue);
   });
 
+  test('a rejected password asks for it again', () async {
+    server.rejectsPassword = true;
+    await provider.authenticate(school: 'sp1', login: 'p', password: 'old');
+
+    await expectLater(
+      () => provider.loadSchoolData(ref(), studentId: 6339),
+      throwsA(isA<ReauthRequiredException>()),
+    );
+    expect(container.read(reauthRequiredProvider), isTrue);
+  });
+
+  test('a rejected password while loading mail asks for it again', () async {
+    server.rejectsPassword = true;
+    await provider.authenticate(school: 'sp1', login: 'p', password: 'old');
+
+    await expectLater(
+      () => provider.loadMessages(ref()),
+      throwsA(isA<ReauthRequiredException>()),
+    );
+    expect(container.read(reauthRequiredProvider), isTrue);
+  });
+
   test('probeAccount makes one login and one users call', () async {
     final probe = await provider.probeAccount(
       school: 'sp1',

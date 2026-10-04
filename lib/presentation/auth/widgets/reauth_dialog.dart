@@ -1,9 +1,11 @@
 import 'dart:async';
 
-import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/core/error/result.dart';
+import 'package:bsharp/domain/failure_messages.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/auth/reauthenticate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -56,6 +58,7 @@ class _ReauthDialogState extends ConsumerState<_ReauthDialog> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isSubmitting = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -65,22 +68,27 @@ class _ReauthDialogState extends ConsumerState<_ReauthDialog> {
 
   Future<void> _submit() async {
     final password = _passwordController.text;
-    if (password.isEmpty) return;
+    if (password.isEmpty || _isSubmitting) {
+      return;
+    }
 
-    final account = ref.read(activeAccountProvider);
-    if (account == null) return;
+    setState(() {
+      _isSubmitting = true;
+      _errorMessage = null;
+    });
 
-    setState(() => _isSubmitting = true);
+    final result = await saveVerifiedPassword(ref, password);
+    if (!mounted) {
+      return;
+    }
+    if (result case Failure(:final failure)) {
+      setState(() {
+        _isSubmitting = false;
+        _errorMessage = failureMessage(failure);
+      });
+      return;
+    }
 
-    await ref
-        .read(providerAccountsProvider.notifier)
-        .updateAccount(
-          account.copyWith(password: password),
-        );
-
-    ref.read(reauthRequiredProvider.notifier).value = false;
-
-    if (!mounted) return;
     Navigator.of(context).pop();
     await ref.read(syncStatusProvider.notifier).sync();
   }
@@ -101,6 +109,7 @@ class _ReauthDialogState extends ConsumerState<_ReauthDialog> {
             autofocus: true,
             decoration: InputDecoration(
               labelText: t.auth.password,
+              errorText: _errorMessage,
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscurePassword ? Icons.visibility_off : Icons.visibility,

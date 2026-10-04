@@ -25,7 +25,8 @@ class ReauthRequiredException implements Exception {
   const ReauthRequiredException();
 
   @override
-  String toString() => 'ReauthRequiredException: the saved password is gone';
+  String toString() =>
+      'ReauthRequiredException: the saved password is missing or rejected';
 }
 
 class PupilNotOnAccountException implements Exception {
