@@ -20,6 +20,8 @@ const _unauthorized = 401;
 const _firstPupilId = 6339;
 const _protocolVersion = 1;
 const _unknownViewErrno = 103;
+const _wrongPupilErrno = 102;
+const _foreignPupilId = 6541;
 const _pageSize = 20;
 const _firstMessageId = 20001;
 const _connectTimeout = Duration(seconds: 1);
@@ -47,7 +49,7 @@ void main() {
     if (!await _isMockRunning()) {
       fail(
         'mobireg-mock not running on localhost:$_mockPort. '
-        'Start with: cd lib/data/providers/mobireg/test-mock && npm start',
+        'Start with: cd lib/data/providers/mobireg/test-mock && PORT=8090 npm start',
       );
     }
     dio = Dio(
@@ -150,6 +152,21 @@ void main() {
       });
 
       expect(response.statusCode, _unauthorized);
+    });
+
+    test('answers errno 102 for a pupil not on the account', () async {
+      final token = await login();
+
+      final response = await appCall({
+        'view': 'terms',
+        'format': 'json',
+        'token': token,
+        'JWTToken': token,
+        'pupilId': _foreignPupilId,
+      });
+
+      final data = decoded(response)['data'] as Map<String, dynamic>;
+      expect(data['errno'], _wrongPupilErrno);
     });
 
     test('answers errno 103 for an unknown view', () async {
