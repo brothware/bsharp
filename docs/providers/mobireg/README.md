@@ -18,6 +18,10 @@ Implementation documentation for the Mobireg data provider (`MobiregDataProvider
 | **Parent Portal** (`api.php`) | `PortalDataSource` | 12 read views + 5 mutations, one session shared by every call |
 | **Poczta** (`poczta.mobireg.pl`) | `PocztaDataSource` | Full messaging: inbox, send, search, attachments |
 
+> Since October 2026 `njson.php` answers HTTP 500 to every data sync. The
+> official app 3.x uses `auth.php` + `app.php` instead; see
+> [app-api.md](app-api.md).
+
 School base URL pattern: `https://mobireg.pl/{school-slug}/`
 
 ## Authentication
@@ -102,3 +106,4 @@ Portal views: `users`, `timetable-events`, `marks`, `subjects`, `terms`, `attend
 | Error mapping interceptor | `lib/core/network/interceptors/error_mapping_interceptor.dart` |
 | Error codes → AppFailure | [error-codes.md](error-codes.md) |
 | Sync data model (36 tables) | [data-model.md](data-model.md) |
+| App API (`auth.php` + `app.php`) | [app-api.md](app-api.md) |
