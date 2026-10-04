@@ -1,4 +1,5 @@
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -50,23 +51,17 @@ class _WearBulletinDetailScreenState
                     maxLines: 2,
                   ),
                   const SizedBox(height: 2),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: WearFittedText(
-                          widget.bulletin.author,
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        widget.bulletin.date,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
+                  WearFittedText(
+                    widget.bulletin.author,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  Text(
+                    formatMessageDateFull(widget.bulletin.date),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                   Divider(height: 8, color: theme.colorScheme.outlineVariant),
                   SelectableText(

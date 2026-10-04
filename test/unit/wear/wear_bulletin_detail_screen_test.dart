@@ -25,11 +25,11 @@ void main() {
     testWidgets('shows bulletin title', (tester) async {
       await tester.pumpWidget(
         _buildScreen(
-          bulletin: const PortalBulletin(
+          bulletin: PortalBulletin(
             id: 1,
             title: 'Important Announcement',
             content: 'Details here...',
-            date: '2025-06-15',
+            date: DateTime(2025, 6, 15, 9, 5),
             author: 'School Director',
             isRead: true,
           ),
@@ -43,11 +43,11 @@ void main() {
     testWidgets('shows author and date', (tester) async {
       await tester.pumpWidget(
         _buildScreen(
-          bulletin: const PortalBulletin(
+          bulletin: PortalBulletin(
             id: 1,
             title: 'Test',
             content: 'Content',
-            date: '2025-06-15',
+            date: DateTime(2025, 6, 15, 9, 5),
             author: 'School Director',
             isRead: true,
           ),
@@ -56,7 +56,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('School Director'), findsOneWidget);
-      expect(find.text('2025-06-15'), findsOneWidget);
+      expect(find.text('15.06.2025 09:05'), findsOneWidget);
     });
 
     testWidgets('title scrolls out of view with the content', (tester) async {
@@ -66,7 +66,7 @@ void main() {
             id: 1,
             title: 'Important Announcement',
             content: List.filled(1000, 'Long bulletin line.').join(' '),
-            date: '2025-06-15',
+            date: DateTime(2025, 6, 15, 9, 5),
             author: 'School Director',
             isRead: true,
           ),
@@ -91,11 +91,11 @@ void main() {
     testWidgets('shows content text', (tester) async {
       await tester.pumpWidget(
         _buildScreen(
-          bulletin: const PortalBulletin(
+          bulletin: PortalBulletin(
             id: 1,
             title: 'Title',
             content: 'This is the full content of the announcement.',
-            date: '2025-06-15',
+            date: DateTime(2025, 6, 15, 9, 5),
             author: 'Admin',
             isRead: true,
           ),

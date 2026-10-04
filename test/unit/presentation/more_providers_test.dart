@@ -205,27 +205,27 @@ void main() {
         overrides: [
           bulletinsProvider.overrideWithBuild(
             (ref, _) => [
-              const PortalBulletin(
+              PortalBulletin(
                 id: 1,
                 title: 'A',
                 content: '',
-                date: '2026-02-27',
+                date: DateTime(2026, 2, 27, 9, 5),
                 author: 'Admin',
                 isRead: false,
               ),
-              const PortalBulletin(
+              PortalBulletin(
                 id: 2,
                 title: 'B',
                 content: '',
-                date: '2026-02-27',
+                date: DateTime(2026, 2, 27, 9, 5),
                 author: 'Admin',
                 isRead: true,
               ),
-              const PortalBulletin(
+              PortalBulletin(
                 id: 3,
                 title: 'C',
                 content: '',
-                date: '2026-02-27',
+                date: DateTime(2026, 2, 27, 9, 5),
                 author: 'Admin',
                 isRead: false,
               ),

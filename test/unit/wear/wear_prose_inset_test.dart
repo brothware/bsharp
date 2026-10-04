@@ -24,13 +24,13 @@ void main() {
           sharedPreferencesProvider.overrideWithValue(prefs),
           wearScreenShapeProvider.overrideWith((_) => WearScreenShape.round),
         ],
-        child: const MaterialApp(
+        child: MaterialApp(
           home: WearBulletinDetailScreen(
             bulletin: PortalBulletin(
               id: 1,
               title: 'Parent-teacher meeting - March 15',
               author: 'Dyrekcja',
-              date: '2026-09-14',
+              date: DateTime(2026, 9, 14, 9, 5),
               content: 'The meeting starts at 17:00 in the main hall.',
               isRead: false,
             ),

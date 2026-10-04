@@ -8,7 +8,7 @@ abstract class PortalBulletin with _$PortalBulletin {
     required int id,
     required String title,
     required String content,
-    required String date,
+    required DateTime date,
     required String author,
     required bool isRead,
   }) = _PortalBulletin;

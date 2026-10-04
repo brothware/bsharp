@@ -199,11 +199,11 @@ void main() {
           overrides: [
             bulletinsProvider.overrideWithBuild(
               (ref, _) => [
-                const PortalBulletin(
+                PortalBulletin(
                   id: 1,
                   title: 'Important announcement',
                   content: 'Content',
-                  date: '2026-02-27',
+                  date: DateTime(2025, 2, 27, 9, 5),
                   author: 'Principal',
                   isRead: false,
                 ),
@@ -215,7 +215,13 @@ void main() {
       );
 
       expect(find.text('Important announcement'), findsOneWidget);
+      expect(find.text('Principal • 27.02.2025'), findsOneWidget);
       expect(find.byIcon(Icons.mark_email_unread_outlined), findsOneWidget);
+
+      await tester.tap(find.text('Important announcement'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('27.02.2025 09:05'), findsOneWidget);
     });
 
     testWidgets('shows read indicator for read bulletins', (tester) async {
@@ -224,11 +230,11 @@ void main() {
           overrides: [
             bulletinsProvider.overrideWithBuild(
               (ref, _) => [
-                const PortalBulletin(
+                PortalBulletin(
                   id: 1,
                   title: 'Read',
                   content: 'Content',
-                  date: '2026-02-27',
+                  date: DateTime(2025, 2, 27, 9, 5),
                   author: 'Admin',
                   isRead: true,
                 ),

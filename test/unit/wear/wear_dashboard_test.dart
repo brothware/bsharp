@@ -444,7 +444,7 @@ void main() {
                 id: 1,
                 title: 'Trip',
                 content: 'Content',
-                date: _isoDate(DateTime.now()),
+                date: DateTime.now(),
                 author: 'Author',
                 isRead: false,
               ),

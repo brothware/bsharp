@@ -44,7 +44,7 @@ List<PortalBulletin> parseAnnouncements(Object data) {
       id: intField(json, 'id', view),
       title: stringField(json, 'title', view),
       content: optionalStringField(json, 'content') ?? '',
-      date: stringField(json, 'dateTime', view),
+      date: _localDateTime(stringField(json, 'dateTime', view), view),
       author:
           optionalStringField(json, 'author') ??
           optionalStringField(json, 'login') ??
@@ -59,6 +59,14 @@ Object? _field(Object data, String key, String view) {
     throw FormatException('View $view: expected an object', data.runtimeType);
   }
   return data[key];
+}
+
+DateTime _localDateTime(String dateTime, String view) {
+  final parsed = DateTime.tryParse(dateTime);
+  if (parsed == null) {
+    throw FormatException('View $view: a date field is not a date', dateTime);
+  }
+  return parsed.toLocal();
 }
 
 String _datePart(String dateTime, String view) {

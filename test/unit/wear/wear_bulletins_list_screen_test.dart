@@ -54,11 +54,11 @@ void main() {
       await tester.pumpWidget(
         _buildTile(
           bulletins: [
-            const PortalBulletin(
+            PortalBulletin(
               id: 1,
               title: 'School Trip',
               content: 'We are going to...',
-              date: '2025-06-15',
+              date: DateTime(2025, 6, 15, 9, 5),
               author: 'Director',
               isRead: true,
             ),
@@ -69,25 +69,26 @@ void main() {
 
       expect(find.text('School Trip'), findsOneWidget);
       expect(find.text('Director'), findsOneWidget);
+      expect(find.text('15.06.2025'), findsOneWidget);
     });
 
     testWidgets('shows unread badge', (tester) async {
       await tester.pumpWidget(
         _buildTile(
           bulletins: [
-            const PortalBulletin(
+            PortalBulletin(
               id: 1,
               title: 'Announcement',
               content: 'Text',
-              date: '2025-06-15',
+              date: DateTime(2025, 6, 15, 9, 5),
               author: 'Admin',
               isRead: false,
             ),
-            const PortalBulletin(
+            PortalBulletin(
               id: 2,
               title: 'Announcement 2',
               content: 'Text',
-              date: '2025-06-16',
+              date: DateTime(2025, 6, 16, 9, 5),
               author: 'Admin',
               isRead: false,
             ),
@@ -103,11 +104,11 @@ void main() {
       await tester.pumpWidget(
         _buildTile(
           bulletins: [
-            const PortalBulletin(
+            PortalBulletin(
               id: 1,
               title: 'Unread Item',
               content: 'Text',
-              date: '2025-06-15',
+              date: DateTime(2025, 6, 15, 9, 5),
               author: 'Admin',
               isRead: false,
             ),

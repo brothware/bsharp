@@ -1,5 +1,6 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_bulletin_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
@@ -164,7 +165,7 @@ class _WearBulletinItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  item.date,
+                  formatMessageDate(item.date),
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),

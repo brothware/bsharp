@@ -87,6 +87,33 @@ void main() {
       expect(bulletins.single.content, '<p>Szanowni Państwo</p>');
     });
 
+    test('carry their publication time in local time', () {
+      final bulletins = parseAnnouncements(loadMobiregFixture('announcements'));
+
+      expect(
+        bulletins.single.date,
+        DateTime.parse('2026-09-30T15:09:03+02:00').toLocal(),
+      );
+      expect(bulletins.single.date.isUtc, isFalse);
+    });
+
+    test('a dateTime that is not a date is a FormatException', () {
+      expect(
+        () => parseAnnouncements({
+          'data': [
+            {'id': 1, 'title': 'T', 'dateTime': 'wczoraj'},
+          ],
+        }),
+        throwsA(
+          isA<FormatException>().having(
+            (error) => error.message,
+            'message',
+            contains('announcements'),
+          ),
+        ),
+      );
+    });
+
     test('a missing data list is a FormatException', () {
       expect(() => parseAnnouncements({'count': 0}), throwsFormatException);
     });

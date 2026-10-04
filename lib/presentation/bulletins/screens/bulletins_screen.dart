@@ -1,6 +1,7 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/message_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,7 +56,7 @@ class _BulletinTile extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          '${bulletin.author} • ${bulletin.date}',
+          '${bulletin.author} • ${formatMessageDate(bulletin.date)}',
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
@@ -113,7 +114,7 @@ class _BulletinDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  bulletin.date,
+                  formatMessageDateFull(bulletin.date),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
