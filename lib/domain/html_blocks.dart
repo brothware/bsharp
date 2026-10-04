@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as html_parser;
 
@@ -87,6 +89,154 @@ String htmlBlocksToPlainText(List<HtmlBlock> blocks) {
       })
       .join('\n')
       .trim();
+}
+
+List<String> translationUnits(List<HtmlBlock> blocks) {
+  return [
+    for (final block in blocks)
+      for (final line in block.lines)
+        if (!line.isBlank) line.text,
+  ];
+}
+
+String rebuildTranslatedHtml(List<HtmlBlock> blocks, String translated) {
+  final pieces = translated.split('\n').map((piece) => piece.trim()).toList();
+  if (pieces.length != translationUnits(blocks).length) {
+    return _plainTextAsHtml(translated);
+  }
+  final writer = _HtmlWriter(pieces.iterator);
+  blocks.forEach(writer.write);
+  return writer.finish();
+}
+
+String _plainTextAsHtml(String text) {
+  final lines = text.trim().split('\n').map(_escapeText);
+  return '<p>${lines.join('<br>')}</p>';
+}
+
+String _escapeText(String text) =>
+    const HtmlEscape(HtmlEscapeMode.element).convert(text);
+
+String _escapeAttribute(String text) =>
+    const HtmlEscape(HtmlEscapeMode.attribute).convert(text);
+
+const Map<HtmlTextStyle, String> _styleTagNames = {
+  HtmlTextStyle.bold: 'b',
+  HtmlTextStyle.italic: 'i',
+  HtmlTextStyle.underline: 'u',
+};
+
+class _HtmlWriter {
+  _HtmlWriter(this._pieces);
+
+  final Iterator<String> _pieces;
+  final _out = StringBuffer();
+  final _openLists = <HtmlList>[];
+  int? _openTable;
+  int? _openRow;
+
+  String finish() {
+    _closeLists(0);
+    _closeTable();
+    return _out.toString();
+  }
+
+  void write(HtmlBlock block) {
+    switch (block.kind) {
+      case ParagraphKind():
+        _closeLists(0);
+        _closeTable();
+        _out.write('<p>${_contentOf(block)}</p>');
+      case HeadingKind(:final level):
+        _closeLists(0);
+        _closeTable();
+        _out.write('<h$level>${_contentOf(block)}</h$level>');
+      case ListItemKind(:final lists, :final index):
+        _closeTable();
+        _openItem(lists, index);
+        _out.write(_contentOf(block));
+      case CellKind(:final table, :final row, :final isHeader):
+        _closeLists(0);
+        _openCell(table, row);
+        final tag = isHeader ? 'th' : 'td';
+        _out.write('<$tag>${_contentOf(block)}</$tag>');
+    }
+  }
+
+  void _openItem(List<HtmlList> lists, int index) {
+    var common = 0;
+    while (common < _openLists.length &&
+        common < lists.length &&
+        _openLists[common].id == lists[common].id) {
+      common++;
+    }
+    _closeLists(common);
+    if (_openLists.length == lists.length) {
+      _out.write('</li><li>');
+      return;
+    }
+    while (_openLists.length < lists.length) {
+      final list = lists[_openLists.length];
+      final isInnermost = _openLists.length == lists.length - 1;
+      final start = isInnermost ? index : list.start;
+      _out
+        ..write(list.isOrdered ? '<ol start="$start">' : '<ul>')
+        ..write('<li>');
+      _openLists.add(list);
+    }
+  }
+
+  void _closeLists(int keep) {
+    while (_openLists.length > keep) {
+      final list = _openLists.removeLast();
+      _out.write(list.isOrdered ? '</li></ol>' : '</li></ul>');
+    }
+  }
+
+  void _openCell(int table, int row) {
+    if (_openTable != table) {
+      _closeTable();
+      _out.write('<table><tr>');
+      _openTable = table;
+      _openRow = row;
+    } else if (_openRow != row) {
+      _out.write('</tr><tr>');
+      _openRow = row;
+    }
+  }
+
+  void _closeTable() {
+    if (_openTable != null) {
+      _out.write('</tr></table>');
+      _openTable = null;
+      _openRow = null;
+    }
+  }
+
+  String _contentOf(HtmlBlock block) {
+    final lines = [
+      for (final line in block.lines)
+        if (line.isBlank) '' else _translatedLine(line),
+    ];
+    final links = {for (final line in block.lines) ...line.links};
+    return [...lines, ...links.map(_linkTo)].join('<br>');
+  }
+
+  String _translatedLine(HtmlLine line) {
+    _pieces.moveNext();
+    var html = _escapeText(_pieces.current);
+    for (final style in line.styles) {
+      final tag = _styleTagNames[style];
+      html = '<$tag>$html</$tag>';
+    }
+    final link = line.link;
+    return link == null ? html : _linkTo(link, label: html);
+  }
+
+  String _linkTo(String href, {String? label}) {
+    return '<a href="${_escapeAttribute(href)}">'
+        '${label ?? _escapeText(href)}</a>';
+  }
 }
 
 String _plainPrefix(HtmlBlockKind kind) {

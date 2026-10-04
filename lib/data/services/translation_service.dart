@@ -4,6 +4,7 @@ import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/database.dart';
 import 'package:bsharp/data/data_sources/local/mlkit_translation_source.dart';
 import 'package:bsharp/data/data_sources/remote/deepl_data_source.dart';
+import 'package:bsharp/domain/html_blocks.dart';
 import 'package:crypto/crypto.dart';
 import 'package:drift/drift.dart';
 
@@ -31,6 +32,39 @@ class TranslationService {
     required String sourceLang,
     bool isHtml = false,
   }) async {
+    if (isHtml && _deepL == null) {
+      return _translateHtmlBlocks(text, targetLang, sourceLang);
+    }
+    return _translateCached(text, targetLang, sourceLang, isHtml);
+  }
+
+  Future<Result<String>> _translateHtmlBlocks(
+    String html,
+    String targetLang,
+    String sourceLang,
+  ) async {
+    final blocks = parseHtmlBlocks(html);
+    final units = translationUnits(blocks);
+    if (units.isEmpty) {
+      return Result.success(html);
+    }
+    final result = await _translateCached(
+      units.join('\n'),
+      targetLang,
+      sourceLang,
+      false,
+    );
+    return result.map(
+      (translated) => rebuildTranslatedHtml(blocks, translated),
+    );
+  }
+
+  Future<Result<String>> _translateCached(
+    String text,
+    String targetLang,
+    String sourceLang,
+    bool isHtml,
+  ) async {
     final hash = _sourceHash(text, targetLang);
     final db = _database;
 

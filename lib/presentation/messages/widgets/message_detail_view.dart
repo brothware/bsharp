@@ -167,7 +167,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
             MultiTranslateButton(
               fields: [
                 TranslationField(message.title),
-                TranslationField(stripHtml(rawContent)),
+                TranslationField(rawContent, isHtml: true),
               ],
               onTranslated: (translations) {
                 setState(() {
@@ -190,7 +190,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
           else if (_loadFailed)
             _ReadFailure(onRetry: _retry)
           else if (_translatedContent case final translated?)
-            SelectableText(translated, style: theme.textTheme.bodyMedium)
+            HtmlBody(translated)
           else if (rawContent != null)
             HtmlBody(rawContent),
           if (_detailFiles ?? message.files case final files?

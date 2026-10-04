@@ -94,4 +94,133 @@ void main() {
       expect(parseHtmlBlocks('<p>&nbsp;</p><p> </p>'), isEmpty);
     });
   });
+
+  group('translationUnits', () {
+    test('are the plain non-blank lines in order', () {
+      expect(
+        translationUnits(parseHtmlBlocks(realAnnouncementHtml)),
+        realAnnouncementLines,
+      );
+    });
+
+    test('skip blank lines between line breaks', () {
+      expect(translationUnits(parseHtmlBlocks('<p>a<br><br>b</p>')), [
+        'a',
+        'b',
+      ]);
+    });
+  });
+
+  group('rebuildTranslatedHtml', () {
+    String rebuild(String html, List<String> pieces) {
+      return rebuildTranslatedHtml(parseHtmlBlocks(html), pieces.join('\n'));
+    }
+
+    test('keeps the real announcement structure', () {
+      final pieces = [
+        for (var i = 0; i < realAnnouncementLines.length; i++) 'T$i',
+      ];
+      final rebuilt = parseHtmlBlocks(
+        rebuild(realAnnouncementHtml, pieces),
+      );
+      final original = parseHtmlBlocks(realAnnouncementHtml);
+
+      expect(translationUnits(rebuilt), pieces);
+      expect(
+        rebuilt.map((block) => block.kind.runtimeType),
+        original.map((block) => block.kind.runtimeType),
+      );
+      expect(rebuilt.last.lines.map((line) => line.text), ['T7', 'T8']);
+    });
+
+    test('a whole-block link stays a link', () {
+      final pieces = [
+        for (var i = 0; i < realAnnouncementLines.length; i++) 'T$i',
+      ];
+      final item = parseHtmlBlocks(rebuild(realAnnouncementHtml, pieces))[4];
+
+      expect(item.kind, isA<ListItemKind>());
+      expect(item.lines.single.text, 'T4');
+      expect(item.lines.single.link, realAnnouncementLink);
+    });
+
+    test('re-applies whole-block styling only', () {
+      final blocks = parseHtmlBlocks(
+        rebuild('<p><strong>Uwaga!</strong></p><p>Jest <b>ważne</b>.</p>', [
+          'Note!',
+          'It is important.',
+        ]),
+      );
+
+      expect(blocks[0].lines.single.styles, {HtmlTextStyle.bold});
+      expect(blocks[1].lines.single.styles, isEmpty);
+      expect(blocks[1].lines.single.text, 'It is important.');
+    });
+
+    test('lists a mid-sentence link under its translated block', () {
+      final block = parseHtmlBlocks(
+        rebuild(
+          '<p>Instrukcja jest <a href="https://a.pl/x?a=1&amp;b=2">tutaj</a>, '
+          'a pytania do sekretariatu.</p><p>Dalej</p>',
+          ['The manual is here, and questions to the office.', 'Next'],
+        ),
+      ).first;
+
+      expect(block.lines.map((line) => line.text), [
+        'The manual is here, and questions to the office.',
+        'https://a.pl/x?a=1&b=2',
+      ]);
+      expect(block.lines.last.link, 'https://a.pl/x?a=1&b=2');
+    });
+
+    test('keeps list numbering and nesting', () {
+      final blocks = parseHtmlBlocks(
+        rebuild(
+          '<ol start="3"><li>Trzy<ul><li>Pod</li></ul></li><li>Cztery</li></ol>',
+          ['Three', 'Sub', 'Four'],
+        ),
+      );
+      final kinds = blocks.map((block) => block.kind as ListItemKind).toList();
+
+      expect(kinds.map((kind) => kind.index), [3, 1, 4]);
+      expect(kinds.map((kind) => kind.list.isOrdered), [true, false, true]);
+      expect(kinds.map((kind) => kind.lists.length), [1, 2, 1]);
+    });
+
+    test('keeps headings and tables', () {
+      final blocks = parseHtmlBlocks(
+        rebuild(
+          '<h2>Plan</h2><table><tr><th>Dzień</th><td>Pon</td></tr>'
+          '<tr><td>Wt</td></tr></table>',
+          ['Plan', 'Day', 'Mon', 'Tue'],
+        ),
+      );
+
+      expect((blocks[0].kind as HeadingKind).level, 2);
+      final cells = blocks.skip(1).map((block) => block.kind as CellKind);
+      expect(cells.map((cell) => cell.isHeader), [true, false, false]);
+      expect(cells.elementAt(0).row, cells.elementAt(1).row);
+      expect(cells.elementAt(2).row, isNot(cells.elementAt(1).row));
+    });
+
+    test('escapes the translated text', () {
+      final line = parseHtmlBlocks(
+        rebuild('<p>a</p>', ['<b>x</b> & y']),
+      ).single.lines.single;
+
+      expect(line.text, '<b>x</b> & y');
+      expect(line.styles, isEmpty);
+    });
+
+    test('a piece count mismatch falls back to plain lines', () {
+      final rebuilt = rebuild(realAnnouncementHtml, ['One', 'Two']);
+
+      expect(stripHtmlLines(rebuilt), ['One', 'Two']);
+      expect(parseHtmlBlocks(rebuilt).single.kind, isA<ParagraphKind>());
+    });
+  });
+}
+
+List<String> stripHtmlLines(String html) {
+  return htmlBlocksToPlainText(parseHtmlBlocks(html)).split('\n');
 }

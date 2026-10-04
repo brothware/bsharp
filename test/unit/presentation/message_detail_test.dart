@@ -1,12 +1,16 @@
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/core/error/result.dart';
+import 'package:bsharp/data/data_sources/local/mlkit_translation_source.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
+import 'package:bsharp/data/services/translation_service.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/common/widgets/html_body.dart';
 import 'package:bsharp/presentation/messages/widgets/message_detail_view.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -37,6 +41,37 @@ class _FlakyProvider extends DemoDataProvider {
     }
     return {'content': libraryMessageHtml};
   }
+}
+
+class _NumberingMlKit extends MlKitTranslationSource {
+  final sent = <String>[];
+
+  @override
+  Future<Result<String>> translate({
+    required String text,
+    required String sourceLang,
+    required String targetLang,
+  }) async {
+    sent.add(text);
+    final pieces = text.split(' ‣ ');
+    return Result.success(
+      [for (var i = 0; i < pieces.length; i++) 'T$i'].join(' ‣ '),
+    );
+  }
+}
+
+bool _hasTappableText(InlineSpan root, String text) {
+  var found = false;
+  root.visitChildren((span) {
+    if (span is TextSpan &&
+        (span.text ?? '').contains(text) &&
+        span.recognizer is TapGestureRecognizer) {
+      found = true;
+      return false;
+    }
+    return true;
+  });
+  return found;
 }
 
 final _message = PocztaMessage(
@@ -108,6 +143,44 @@ void main() {
     expect(find.text('Could not load the message'), findsNothing);
     expect(
       find.textContaining('Szanowni Państwo!', findRichText: true),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('a translated body keeps its paragraphs and link', (
+    tester,
+  ) async {
+    final mlKit = _NumberingMlKit();
+    await tester.pumpWidget(
+      _app(
+        _BodyProvider(realAnnouncementHtml),
+        overrides: [
+          translationServiceProvider.overrideWithValue(
+            TranslationService(mlKit: mlKit),
+          ),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.translate));
+    await tester.pumpAndSettle();
+
+    expect(mlKit.sent.last, isNot(contains('<')));
+    expect(find.byType(HtmlBody), findsOneWidget);
+    expect(find.textContaining('Zespół', findRichText: true), findsNothing);
+    expect(find.textContaining('T8', findRichText: true), findsOneWidget);
+    final link = tester
+        .widgetList<RichText>(find.byType(RichText))
+        .expand((richText) => [richText.text])
+        .any((span) => _hasTappableText(span, 'T4'));
+    expect(link, isTrue);
+
+    await tester.tap(find.text('Show original'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.textContaining('Zespół MobiReg', findRichText: true),
       findsOneWidget,
     );
   });
