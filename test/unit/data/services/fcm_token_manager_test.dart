@@ -87,7 +87,89 @@ void main() {
     ).registerTokenForAllAccounts();
 
     expect(provider.registeredLogins, ['current']);
-    expect(prefs.getString('fcm_last_registration'), 'fcm-123');
+  });
+
+  test('an install upgraded with the old marker registers again', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    SharedPreferences.setMockInitialValues({
+      'fcm_last_registration': 'fcm-123',
+    });
+    final prefs = await SharedPreferences.getInstance();
+    final storage = AccountStorage(store: _InMemoryStore());
+    await storage.saveAccounts(const [
+      ProviderAccount(
+        id: 'a',
+        providerType: 'mobireg',
+        slug: 'sp1',
+        login: 'current',
+        password: 's',
+      ),
+    ]);
+    final provider = _PushProvider();
+
+    await FcmTokenManager(
+      accountStorage: storage,
+      prefs: prefs,
+      fetchToken: () async => 'fcm-123',
+      providerFor: (_) => provider,
+    ).registerTokenForAllAccounts();
+
+    expect(provider.registeredLogins, ['current']);
+  });
+
+  test('an unchanged token and accounts skip the upload', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final storage = AccountStorage(store: _InMemoryStore());
+    await storage.saveAccounts(const [
+      ProviderAccount(
+        id: 'a',
+        providerType: 'mobireg',
+        slug: 'sp1',
+        login: 'current',
+        password: 's',
+      ),
+    ]);
+    final provider = _PushProvider();
+    final manager = FcmTokenManager(
+      accountStorage: storage,
+      prefs: prefs,
+      fetchToken: () async => 'fcm-123',
+      providerFor: (_) => provider,
+    );
+
+    await manager.registerTokenForAllAccounts();
+    await manager.registerTokenForAllAccounts();
+
+    expect(provider.registeredLogins, ['current']);
+  });
+
+  test('a password-less account registers once it gets a password', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final storage = AccountStorage(store: _InMemoryStore());
+    const legacy = ProviderAccount(
+      id: 'old',
+      providerType: 'mobireg',
+      slug: 'sp1',
+      login: 'legacy',
+    );
+    await storage.saveAccounts(const [legacy]);
+    final provider = _PushProvider();
+    final manager = FcmTokenManager(
+      accountStorage: storage,
+      prefs: prefs,
+      fetchToken: () async => 'fcm-123',
+      providerFor: (_) => provider,
+    );
+
+    await manager.registerTokenForAllAccounts();
+    await storage.updateAccount(legacy.copyWith(password: 's'));
+    await manager.registerTokenForAllAccounts();
+
+    expect(provider.registeredLogins, ['legacy']);
   });
 
   test('registerTokenForAllAccounts is a no-op on iOS (no Firebase)', () async {

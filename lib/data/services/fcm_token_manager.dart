@@ -22,24 +22,28 @@ class FcmTokenManager {
   final Future<String?> Function() _fetchToken;
   final SchoolDataProvider Function(String providerType) _providerFor;
 
-  static const _lastRegistrationKey = 'fcm_last_registration';
+  static const _lastRegistrationKey = 'fcm_registration_v2';
+  static const _registrationSeparator = '|';
 
   Future<void> registerTokenForAllAccounts() async {
-    if (!isPushSupported) return;
+    if (!isPushSupported) {
+      return;
+    }
     final token = await _fetchToken();
     if (token == null) {
       debugPrint('FcmTokenManager: no FCM token available');
       return;
     }
 
-    if (token == _prefs.getString(_lastRegistrationKey)) {
-      debugPrint('FcmTokenManager: registration unchanged, skipping upload');
-      return;
-    }
-
     final accounts = await _accountStorage.getAccounts();
     if (accounts.isEmpty) {
       debugPrint('FcmTokenManager: no accounts to register');
+      return;
+    }
+
+    final registration = _registrationOf(token, accounts);
+    if (registration == _prefs.getString(_lastRegistrationKey)) {
+      debugPrint('FcmTokenManager: registration unchanged, skipping upload');
       return;
     }
 
@@ -50,15 +54,25 @@ class FcmTokenManager {
         account: account,
         token: token,
       );
-      if (!success) allSucceeded = false;
+      if (!success) {
+        allSucceeded = false;
+      }
     }
 
     if (allSucceeded) {
-      await _prefs.setString(_lastRegistrationKey, token);
+      await _prefs.setString(_lastRegistrationKey, registration);
       debugPrint(
         'FcmTokenManager: token registered for ${accounts.length} accounts',
       );
     }
+  }
+
+  String _registrationOf(String token, List<ProviderAccount> accounts) {
+    final registeredIds = [
+      for (final account in accounts)
+        if (account.password.isNotEmpty) account.id,
+    ]..sort();
+    return [token, ...registeredIds].join(_registrationSeparator);
   }
 
   Future<void> registerTokenForAccount(ProviderAccount account) async {
