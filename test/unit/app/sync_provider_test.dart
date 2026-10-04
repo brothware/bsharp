@@ -14,6 +14,7 @@ import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
+import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,16 +47,27 @@ Future<ProviderContainer> _mobiregContainer({
   required FakeAppServer server,
   required ProviderAccount account,
   int pupilId = _pupilId,
+}) {
+  return _containerWith(
+    provider: MobiregDataProvider(
+      clientFactory: server.factoryFor,
+      sessions: AppApiSessionRegistry(),
+    ),
+    account: account,
+    pupilId: pupilId,
+  );
+}
+
+Future<ProviderContainer> _containerWith({
+  required SchoolDataProvider provider,
+  required ProviderAccount account,
+  int pupilId = _pupilId,
 }) async {
   final prefs = await SharedPreferences.getInstance();
   final accountStorage = AccountStorage(store: FakeKeyValueStore());
   await accountStorage.saveAccounts([account]);
   await accountStorage.saveActiveSelection(
     ActiveSelection(accountId: account.id, studentId: pupilId),
-  );
-  final provider = MobiregDataProvider(
-    clientFactory: server.factoryFor,
-    sessions: AppApiSessionRegistry(),
   );
   final container = ProviderContainer(
     overrides: [
@@ -71,6 +83,42 @@ Future<ProviderContainer> _mobiregContainer({
   );
   addTearDown(container.dispose);
   return container;
+}
+
+class _SlowSchoolFailureProvider extends DemoDataProvider {
+  _SlowSchoolFailureProvider(this.schoolFailure);
+
+  final Exception schoolFailure;
+
+  @override
+  String get id => 'mobireg';
+
+  @override
+  bool get requiresCredentials => true;
+
+  @override
+  Future<void> authenticate({
+    required String school,
+    required String login,
+    required String password,
+  }) async {}
+
+  @override
+  Future<void> loadSchoolData(
+    Ref ref, {
+    required int studentId,
+    DateTime? now,
+  }) async {
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    if (schoolFailure is ReauthRequiredException) {
+      ref.read(reauthRequiredProvider.notifier).value = true;
+    }
+    throw schoolFailure;
+  }
+
+  @override
+  Future<void> loadMessages(Ref ref, {DateTime? now}) async =>
+      throw const MessagingException(SessionExpired());
 }
 
 class _MalformedMailDataProvider extends DemoDataProvider {
@@ -269,6 +317,35 @@ void main() {
             .id,
         6339,
       );
+    });
+
+    test('a mail failure does not mask a missing pupil', () async {
+      final container = await _containerWith(
+        provider: _SlowSchoolFailureProvider(
+          const PupilNotOnAccountException(
+            pupilId: _pupilId,
+            students: [Student(id: 6541, name: 'Maria', surname: 'Kowalska')],
+          ),
+        ),
+        account: _account,
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      expect(container.read(syncStatusProvider), SyncStatus.failed);
+      expect(container.read(missingPupilProvider), isTrue);
+    });
+
+    test('a mail failure does not mask a reauth request', () async {
+      final container = await _containerWith(
+        provider: _SlowSchoolFailureProvider(const ReauthRequiredException()),
+        account: _account,
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      expect(container.read(syncStatusProvider), SyncStatus.failed);
+      expect(container.read(reauthRequiredProvider), isTrue);
     });
 
     test('a completed sync clears the missing pupil state', () async {
