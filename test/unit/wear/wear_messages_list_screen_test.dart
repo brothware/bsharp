@@ -3,6 +3,7 @@ import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_messages_list_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
@@ -112,7 +113,12 @@ void main() {
         final senderRect = tester.getRect(
           find.text('Krzenciessa Wielorybowska-Zawadzka'),
         );
-        final dateFinder = find.text(formatMessageDate(messages[0].sendTime));
+        final dateFinder = find.text(
+          formatMessageDate(
+            messages[0].sendTime,
+            yesterday: t.common.yesterday,
+          ),
+        );
         final dateRect = tester.getRect(dateFinder.first);
         expect(senderRect.right, lessThanOrEqualTo(dateRect.left));
 

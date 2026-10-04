@@ -19,7 +19,8 @@
     "dataAfterSync": "Τα δεδομένα θα εμφανιστούν μετά τον συγχρονισμό",
     "agoJustNow": "μόλις τώρα",
     "agoMinutes": "πριν ${n} λεπ.",
-    "agoHours": "πριν ${n} ώρ."
+    "agoHours": "πριν ${n} ώρ.",
+    "yesterday": "Χθες"
   },
   "nav": {
     "dashboard": "Πίνακας",

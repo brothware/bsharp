@@ -19,7 +19,8 @@
     "dataAfterSync": "Dati parādīsies pēc sinhronizācijas",
     "agoJustNow": "tikko",
     "agoMinutes": "pirms ${n} min",
-    "agoHours": "pirms ${n} st."
+    "agoHours": "pirms ${n} st.",
+    "yesterday": "Vakar"
   },
   "nav": {
     "dashboard": "Panelis",

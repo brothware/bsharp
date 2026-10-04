@@ -19,7 +19,8 @@
     "dataAfterSync": "Tiedot näkyvät synkronoinnin jälkeen",
     "agoJustNow": "juuri nyt",
     "agoMinutes": "${n} min sitten",
-    "agoHours": "${n} t sitten"
+    "agoHours": "${n} t sitten",
+    "yesterday": "Eilen"
   },
   "nav": {
     "dashboard": "Yleiskatsaus",

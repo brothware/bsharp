@@ -19,7 +19,8 @@
     "dataAfterSync": "Даныя з’явяцца пасля сінхранізацыі",
     "agoJustNow": "толькі што",
     "agoMinutes": "${n} хв таму",
-    "agoHours": "${n} гадз таму"
+    "agoHours": "${n} гадз таму",
+    "yesterday": "Учора"
   },
   "nav": {
     "dashboard": "Галоўная",

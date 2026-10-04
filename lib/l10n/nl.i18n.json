@@ -19,7 +19,8 @@
     "dataAfterSync": "Gegevens verschijnen na synchronisatie",
     "agoJustNow": "zojuist",
     "agoMinutes": "${n} min geleden",
-    "agoHours": "${n} u geleden"
+    "agoHours": "${n} u geleden",
+    "yesterday": "Gisteren"
   },
   "nav": {
     "dashboard": "Dashboard",

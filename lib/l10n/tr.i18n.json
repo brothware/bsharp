@@ -19,7 +19,8 @@
     "dataAfterSync": "Veriler senkronizasyondan sonra görünecek",
     "agoJustNow": "az önce",
     "agoMinutes": "${n} dk önce",
-    "agoHours": "${n} sa önce"
+    "agoHours": "${n} sa önce",
+    "yesterday": "Dün"
   },
   "nav": {
     "dashboard": "Ana Sayfa",

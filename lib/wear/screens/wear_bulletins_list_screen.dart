@@ -165,7 +165,7 @@ class _WearBulletinItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  formatMessageDate(item.date),
+                  formatMessageDate(item.date, yesterday: t.common.yesterday),
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),

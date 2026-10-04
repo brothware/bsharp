@@ -19,7 +19,8 @@
     "dataAfterSync": "Az adatok szinkronizálás után jelennek meg",
     "agoJustNow": "épp most",
     "agoMinutes": "${n} perce",
-    "agoHours": "${n} órája"
+    "agoHours": "${n} órája",
+    "yesterday": "Tegnap"
   },
   "nav": {
     "dashboard": "Áttekintés",

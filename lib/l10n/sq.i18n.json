@@ -19,7 +19,8 @@
     "dataAfterSync": "Të dhënat do të shfaqen pas sinkronizimit",
     "agoJustNow": "pikërisht tani",
     "agoMinutes": "${n} min më parë",
-    "agoHours": "${n} orë më parë"
+    "agoHours": "${n} orë më parë",
+    "yesterday": "Dje"
   },
   "nav": {
     "dashboard": "Ballina",

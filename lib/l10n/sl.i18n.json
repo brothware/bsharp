@@ -19,7 +19,8 @@
     "dataAfterSync": "Podatki se bodo prikazali po sinhronizaciji",
     "agoJustNow": "pravkar",
     "agoMinutes": "pred ${n} min",
-    "agoHours": "pred ${n} h"
+    "agoHours": "pred ${n} h",
+    "yesterday": "Včeraj"
   },
   "nav": {
     "dashboard": "Nadzorna plošča",

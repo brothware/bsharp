@@ -19,7 +19,8 @@
     "dataAfterSync": "Podaci će se pojaviti nakon sinkronizacije",
     "agoJustNow": "upravo sada",
     "agoMinutes": "prije ${n} min",
-    "agoHours": "prije ${n} h"
+    "agoHours": "prije ${n} h",
+    "yesterday": "Jučer"
   },
   "nav": {
     "dashboard": "Početna",

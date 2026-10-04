@@ -19,7 +19,8 @@
     "dataAfterSync": "동기화 후 데이터가 표시됩니다",
     "agoJustNow": "방금 전",
     "agoMinutes": "${n}분 전",
-    "agoHours": "${n}시간 전"
+    "agoHours": "${n}시간 전",
+    "yesterday": "어제"
   },
   "nav": {
     "dashboard": "대시보드",

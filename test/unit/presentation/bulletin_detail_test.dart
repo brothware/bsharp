@@ -4,6 +4,7 @@ import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/mlkit_translation_source.dart';
 import 'package:bsharp/data/services/translation_service.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/bulletins/screens/bulletins_screen.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,34 @@ void main() {
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     _prefs = await SharedPreferences.getInstance();
+  });
+
+  testWidgets('the list says yesterday in the app language', (tester) async {
+    await tester.runAsync(() => LocaleSettings.setLocale(AppLocale.pl));
+    addTearDown(() => LocaleSettings.setLocaleSync(AppLocale.en));
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          bulletinsProvider.overrideWithBuild(
+            (ref, _) => [
+              PortalBulletin(
+                id: 1,
+                title: _title,
+                content: '',
+                date: DateTime(yesterday.year, yesterday.month, yesterday.day),
+                author: 'mobireg',
+                isRead: true,
+              ),
+            ],
+          ),
+        ],
+        child: const MaterialApp(home: Scaffold(body: BulletinsScreen())),
+      ),
+    );
+
+    expect(find.text('mobireg • Wczoraj'), findsOneWidget);
   });
 
   testWidgets('the detail renders the real body formatted', (tester) async {

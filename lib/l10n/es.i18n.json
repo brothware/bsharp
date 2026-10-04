@@ -19,7 +19,8 @@
     "dataAfterSync": "Los datos aparecerán tras la sincronización",
     "agoJustNow": "justo ahora",
     "agoMinutes": "hace ${n} min",
-    "agoHours": "hace ${n} h"
+    "agoHours": "hace ${n} h",
+    "yesterday": "Ayer"
   },
   "nav": {
     "dashboard": "Panel",

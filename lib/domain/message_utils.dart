@@ -1,6 +1,6 @@
 import 'package:bsharp/domain/html_blocks.dart';
 
-String formatMessageDate(DateTime date, {String yesterday = 'Yesterday'}) {
+String formatMessageDate(DateTime date, {required String yesterday}) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   final messageDay = DateTime(date.year, date.month, date.day);

@@ -19,7 +19,8 @@
     "dataAfterSync": "Id-dejta se tidher wara s-sinkronizzazzjoni",
     "agoJustNow": "bħalissa",
     "agoMinutes": "${n} min ilu",
-    "agoHours": "${n} sig ilu"
+    "agoHours": "${n} sig ilu",
+    "yesterday": "Ilbieraħ"
   },
   "nav": {
     "dashboard": "Dashboard",

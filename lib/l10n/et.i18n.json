@@ -19,7 +19,8 @@
     "dataAfterSync": "Andmed ilmuvad pärast sünkroonimist",
     "agoJustNow": "just praegu",
     "agoMinutes": "${n} min tagasi",
-    "agoHours": "${n} t tagasi"
+    "agoHours": "${n} t tagasi",
+    "yesterday": "Eile"
   },
   "nav": {
     "dashboard": "Avaleht",

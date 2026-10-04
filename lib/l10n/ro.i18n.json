@@ -19,7 +19,8 @@
     "dataAfterSync": "Datele vor apărea după sincronizare",
     "agoJustNow": "chiar acum",
     "agoMinutes": "acum ${n} min",
-    "agoHours": "acum ${n} ore"
+    "agoHours": "acum ${n} ore",
+    "yesterday": "Ieri"
   },
   "nav": {
     "dashboard": "Panou",

@@ -58,7 +58,7 @@ class _BulletinTile extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          '${bulletin.author} • ${formatMessageDate(bulletin.date)}',
+          '${bulletin.author} • ${formatMessageDate(bulletin.date, yesterday: t.common.yesterday)}',
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),

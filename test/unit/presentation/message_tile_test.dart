@@ -1,4 +1,5 @@
 import 'package:bsharp/domain/entities/poczta.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/messages/widgets/message_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -34,6 +35,25 @@ void main() {
 
     expect(find.text('Jan Kowalski'), findsOneWidget);
     expect(find.text('Message subject'), findsOneWidget);
+  });
+
+  testWidgets('says yesterday in the app language', (tester) async {
+    await tester.runAsync(() => LocaleSettings.setLocale(AppLocale.pl));
+    addTearDown(() => LocaleSettings.setLocaleSync(AppLocale.en));
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+
+    await tester.pumpWidget(
+      wrap(
+        MessageTile(
+          message: msg0().copyWith(
+            sendTime: DateTime(yesterday.year, yesterday.month, yesterday.day),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Wczoraj'), findsOneWidget);
+    expect(find.text('Yesterday'), findsNothing);
   });
 
   testWidgets('shows sender initial in avatar', (tester) async {

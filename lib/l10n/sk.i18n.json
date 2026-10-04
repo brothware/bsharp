@@ -19,7 +19,8 @@
     "dataAfterSync": "Dáta sa zobrazia po synchronizácii",
     "agoJustNow": "práve teraz",
     "agoMinutes": "pred ${n} min",
-    "agoHours": "pred ${n} hod"
+    "agoHours": "pred ${n} hod",
+    "yesterday": "Včera"
   },
   "nav": {
     "dashboard": "Prehľad",

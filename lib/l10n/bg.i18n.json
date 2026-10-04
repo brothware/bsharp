@@ -19,7 +19,8 @@
     "dataAfterSync": "Данните ще се появят след синхронизация",
     "agoJustNow": "току-що",
     "agoMinutes": "преди ${n} мин",
-    "agoHours": "преди ${n} ч"
+    "agoHours": "преди ${n} ч",
+    "yesterday": "Вчера"
   },
   "nav": {
     "dashboard": "Табло",

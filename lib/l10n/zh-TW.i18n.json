@@ -19,7 +19,8 @@
     "dataAfterSync": "資料將在同步後顯示",
     "agoJustNow": "剛剛",
     "agoMinutes": "${n}分鐘前",
-    "agoHours": "${n}小時前"
+    "agoHours": "${n}小時前",
+    "yesterday": "昨天"
   },
   "nav": {
     "dashboard": "總覽",

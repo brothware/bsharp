@@ -19,7 +19,8 @@
     "dataAfterSync": "सिंक के बाद डेटा दिखाई देगा",
     "agoJustNow": "अभी-अभी",
     "agoMinutes": "${n} मिनट पहले",
-    "agoHours": "${n} घंटे पहले"
+    "agoHours": "${n} घंटे पहले",
+    "yesterday": "कल"
   },
   "nav": {
     "dashboard": "डैशबोर्ड",

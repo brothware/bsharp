@@ -157,7 +157,10 @@ class MessageTile extends StatelessWidget {
               if (showReadReceipt && message.recipients.isNotEmpty)
                 _ReadReceiptIcon(recipients: message.recipients),
               Text(
-                formatMessageDate(message.sendTime),
+                formatMessageDate(
+                  message.sendTime,
+                  yesterday: t.common.yesterday,
+                ),
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: isUnread
                       ? theme.colorScheme.primary

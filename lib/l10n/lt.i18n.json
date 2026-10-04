@@ -19,7 +19,8 @@
     "dataAfterSync": "Duomenys bus rodomi po sinchronizacijos",
     "agoJustNow": "ką tik",
     "agoMinutes": "prieš ${n} min",
-    "agoHours": "prieš ${n} val."
+    "agoHours": "prieš ${n} val.",
+    "yesterday": "Vakar"
   },
   "nav": {
     "dashboard": "Pradžia",

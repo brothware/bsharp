@@ -8,13 +8,13 @@ void main() {
     test('shows time for today', () {
       final now = DateTime.now();
       final msg = DateTime(now.year, now.month, now.day, 14, 30);
-      expect(formatMessageDate(msg), '14:30');
+      expect(formatMessageDate(msg, yesterday: 'Wczoraj'), '14:30');
     });
 
     test('shows Yesterday for yesterday', () {
       final yesterday = DateTime.now().subtract(const Duration(days: 1));
       final msg = DateTime(yesterday.year, yesterday.month, yesterday.day, 10);
-      expect(formatMessageDate(msg), 'Yesterday');
+      expect(formatMessageDate(msg, yesterday: 'Wczoraj'), 'Wczoraj');
     });
 
     test('shows day.month for same year', () {
@@ -25,13 +25,13 @@ void main() {
       final yesterday = today.subtract(const Duration(days: 1));
 
       if (msgDay != today && msgDay != yesterday) {
-        expect(formatMessageDate(msg), '05.01');
+        expect(formatMessageDate(msg, yesterday: 'Wczoraj'), '05.01');
       }
     });
 
     test('shows full date for different year', () {
       final msg = DateTime(2025, 6, 15, 10);
-      expect(formatMessageDate(msg), '15.06.2025');
+      expect(formatMessageDate(msg, yesterday: 'Wczoraj'), '15.06.2025');
     });
   });
 

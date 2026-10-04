@@ -19,7 +19,8 @@
     "dataAfterSync": "Data vises etter synkronisering",
     "agoJustNow": "akkurat nå",
     "agoMinutes": "${n} min siden",
-    "agoHours": "${n} t siden"
+    "agoHours": "${n} t siden",
+    "yesterday": "I går"
   },
   "nav": {
     "dashboard": "Oversikt",

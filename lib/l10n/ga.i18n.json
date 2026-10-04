@@ -19,7 +19,8 @@
     "dataAfterSync": "Beidh sonrai ar fail tar eis sioncronithe",
     "agoJustNow": "direach anois",
     "agoMinutes": "${n} noi. o shin",
-    "agoHours": "${n} u. o shin"
+    "agoHours": "${n} u. o shin",
+    "yesterday": "Inné"
   },
   "nav": {
     "dashboard": "Deais",
