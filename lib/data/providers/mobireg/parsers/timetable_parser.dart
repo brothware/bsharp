@@ -8,7 +8,6 @@ const _timeStart = 11;
 const _timeEnd = 16;
 const _noLessonNumber = 0;
 const _flagSet = 1;
-const _noSubstitution = 0;
 const _nameSeparator = ', ';
 
 List<ResolvedEvent> parseTimetableEvents(
@@ -39,7 +38,7 @@ List<ResolvedEvent> parseTimetableEvents(
       roomName: optionalStringField(json, 'room'),
       topic: optionalStringField(json, 'title'),
       isCancelled: isCancelled,
-      isSubstitution: json['substitution'] != _noSubstitution,
+      isSubstitution: json['substitution'] == _flagSet,
       isLocked: json['isLocked'] == _flagSet,
       originalSubjectName: oldSubjectName == null
           ? null

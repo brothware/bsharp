@@ -37,6 +37,31 @@ void main() {
       expect(substitute.originalSubjectName, 'polish');
     });
 
+    test('only substitution 1 marks a substitution', () {
+      Map<String, dynamic> lesson(int id, Object? substitution) => {
+        'id': id,
+        'dateTimeFrom': '2026-09-28T08:00:00+02:00',
+        'dateTimeTo': '2026-09-28T08:45:00+02:00',
+        'subjectName': 'Chór',
+        'teachers': <String>[],
+        'substitution': ?substitution,
+      };
+
+      final parsed = parseTimetableEvents([
+        lesson(1, null),
+        lesson(2, false),
+        lesson(3, 0),
+        lesson(4, 1),
+      ], subjectIdsByName: {});
+
+      expect(parsed.map((event) => event.isSubstitution), [
+        false,
+        false,
+        false,
+        true,
+      ]);
+    });
+
     test('a missing dateTimeFrom is a FormatException', () {
       expect(
         () => parseTimetableEvents(
