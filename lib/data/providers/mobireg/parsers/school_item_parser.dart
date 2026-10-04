@@ -56,14 +56,14 @@ List<PortalBulletin> parseAnnouncements(Object data) {
 
 Object? _field(Object data, String key, String view) {
   if (data is! Map<String, dynamic>) {
-    throw FormatException('View $view: expected an object', data);
+    throw FormatException('View $view: expected an object', data.runtimeType);
   }
   return data[key];
 }
 
 String _datePart(String dateTime, String view) {
   if (dateTime.length < _dateLength) {
-    throw FormatException('View $view: "$dateTime" is not a date', dateTime);
+    throw FormatException('View $view: a date field is not a date');
   }
   return dateTime.substring(0, _dateLength);
 }

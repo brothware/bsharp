@@ -36,7 +36,10 @@ class AppApiSession {
       }
       final data = (result as Success<ViewPayload>).value.data;
       if (data is! Map<String, dynamic>) {
-        throw FormatException('View users answered a non-object', data);
+        throw FormatException(
+          'View users answered a non-object',
+          data.runtimeType,
+        );
       }
       _account = data;
       return Result.success(data);

@@ -174,7 +174,7 @@ class MobiregDataProvider implements SchoolDataProvider {
       return null;
     }
     if (_password.isEmpty) {
-      debugPrint('MobiregDataProvider: $school/$login has no password saved');
+      debugPrint('MobiregDataProvider: $school has no password saved');
       ref.read(reauthRequiredProvider.notifier).value = true;
       throw const ReauthRequiredException();
     }
@@ -285,7 +285,10 @@ class MobiregDataProvider implements SchoolDataProvider {
     };
     final year =
         parsedTerms.where((term) => term.type == TermType.year).firstOrNull ??
-        (throw FormatException('View terms: no school year', terms));
+        (throw FormatException(
+          'View terms: no school year',
+          terms.runtimeType,
+        ));
     final timetable = _needsTimetable(enabledModules)
         ? await view('timetable-events', {
             'dateFrom': _day(year.startDate),

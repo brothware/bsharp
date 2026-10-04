@@ -42,7 +42,7 @@ GradeValue gradeValueOf(String raw) {
 
 ParsedMarks parseMarks(Object data, {required int termId}) {
   if (data is! Map<String, dynamic>) {
-    throw FormatException('View $_view: expected an object', data);
+    throw FormatException('View $_view: expected an object', data.runtimeType);
   }
   final teachers = _teachersOf(data['teachers']);
   final teacherNames = {
@@ -85,11 +85,17 @@ List<Teacher> _teachersOf(Object? data) {
     return const [];
   }
   if (data is! Map<String, dynamic>) {
-    throw FormatException('View $_view: "teachers" is not a map', data);
+    throw FormatException(
+      'View $_view: "teachers" is not a map',
+      data.runtimeType,
+    );
   }
   return data.values.map((value) {
     if (value is! Map<String, dynamic>) {
-      throw FormatException('View $_view: teacher is not an object', value);
+      throw FormatException(
+        'View $_view: teacher is not an object',
+        value.runtimeType,
+      );
     }
     return Teacher(
       id: intField(value, 'id', _view),

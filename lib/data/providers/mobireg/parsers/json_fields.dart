@@ -1,10 +1,10 @@
 List<Map<String, dynamic>> objectsOf(Object? data, String view) {
   if (data is! List) {
-    throw FormatException('View $view: expected a list', data);
+    throw FormatException('View $view: expected a list', data.runtimeType);
   }
   return data.map((item) {
     if (item is! Map<String, dynamic>) {
-      throw FormatException('View $view: expected objects', item);
+      throw FormatException('View $view: expected objects', item.runtimeType);
     }
     return item;
   }).toList();
@@ -13,7 +13,10 @@ List<Map<String, dynamic>> objectsOf(Object? data, String view) {
 int intField(Map<String, dynamic> json, String key, String view) {
   final value = json[key];
   if (value is! int) {
-    throw FormatException('View $view: "$key" is not an int', json);
+    throw FormatException(
+      'View $view: "$key" is not an int',
+      json.keys.toList(),
+    );
   }
   return value;
 }
@@ -21,7 +24,10 @@ int intField(Map<String, dynamic> json, String key, String view) {
 String stringField(Map<String, dynamic> json, String key, String view) {
   final value = json[key];
   if (value is! String) {
-    throw FormatException('View $view: "$key" is not a string', json);
+    throw FormatException(
+      'View $view: "$key" is not a string',
+      json.keys.toList(),
+    );
   }
   return value;
 }

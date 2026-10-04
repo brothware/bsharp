@@ -316,5 +316,34 @@ void main() {
         throwsA(isA<FormatException>()),
       );
     });
+
+    test('a malformed body never carries its values in the error', () async {
+      const token = 'secret-messages-token';
+      final source = AppApiDataSource(
+        client: _client(
+          (o) => _json(o, 200, {'messagesToken': token}),
+          [],
+        ),
+      );
+      final nonJson = AppApiDataSource(
+        client: _client((o) => _raw(o, 200, '<p>$token</p>'), []),
+      );
+
+      for (final request in [
+        () => source.getView(jwt: _jwt, view: 'users'),
+        () => nonJson.getView(jwt: _jwt, view: 'users'),
+      ]) {
+        await expectLater(
+          request(),
+          throwsA(
+            isA<FormatException>().having(
+              (e) => '${e.source}',
+              'source',
+              isNot(contains(token)),
+            ),
+          ),
+        );
+      }
+    });
   });
 }

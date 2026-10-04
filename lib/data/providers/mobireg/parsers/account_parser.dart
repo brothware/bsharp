@@ -45,7 +45,10 @@ String? _firstSchoolNameLine(Object? schoolName) {
   }
   final first = schoolName.first;
   if (first is! String) {
-    throw FormatException('View $_view: "schoolName" is not strings', first);
+    throw FormatException(
+      'View $_view: "schoolName" is not strings',
+      first.runtimeType,
+    );
   }
   return first;
 }

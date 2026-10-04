@@ -96,7 +96,7 @@ class AppApiDataSource {
       }
       final body = _decodeObject(raw);
       if (body == null) {
-        throw FormatException('$endpoint answered non-JSON', raw);
+        throw FormatException('$endpoint answered non-JSON', raw.length);
       }
       return Result.success(body);
     } on DioException catch (e) {
@@ -139,7 +139,10 @@ class AppApiDataSource {
         data == null ||
         serverTime is! String ||
         ttlFresh is! int) {
-      throw FormatException('View $view answered without an envelope', body);
+      throw FormatException(
+        'View $view answered without an envelope',
+        body.keys.toList(),
+      );
     }
     if (version != AppConstants.appApiProtocolVersion) {
       return Result.failure(

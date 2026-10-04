@@ -37,7 +37,7 @@ ParsedAttendance parseAttendance({
   if (attendanceStats is! Map<String, dynamic>) {
     throw FormatException(
       'View $_statsView: expected an object',
-      attendanceStats,
+      attendanceStats.runtimeType,
     );
   }
   final rawTypes = <String, _RawType>{};
