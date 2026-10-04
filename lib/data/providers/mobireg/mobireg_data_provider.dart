@@ -87,7 +87,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   Set<String>? _enabledModules;
 
   static ApiClientFactory _productionClientFactory(String school) =>
-      ApiClientFactory(school: school, parentLogin: '', parentPassHash: '');
+      ApiClientFactory(school: school);
 
   @override
   String get id => 'mobireg';

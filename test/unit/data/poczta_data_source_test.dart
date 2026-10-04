@@ -20,8 +20,6 @@ class _PocztaFake {
   Dio client(List<RequestOptions> seen) {
     final factory = ApiClientFactory(
       school: 'sp1',
-      parentLogin: '',
-      parentPassHash: '',
     );
     return factory.createPocztaClient(_messagingUrl)
       ..interceptors.add(
@@ -151,8 +149,6 @@ void main() {
   test('derives the base url from the messaging url', () {
     final client = ApiClientFactory(
       school: 'sp1',
-      parentLogin: '',
-      parentPassHash: '',
     ).createPocztaClient(_messagingUrl);
 
     expect(client.options.baseUrl, 'https://poczta.mobireg.pl');

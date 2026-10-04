@@ -5,28 +5,6 @@ import 'package:dio/dio.dart';
 
 class ErrorMappingInterceptor extends Interceptor {
   @override
-  void onResponse(
-    Response<dynamic> response,
-    ResponseInterceptorHandler handler,
-  ) {
-    final data = response.data;
-    if (data is Map<String, dynamic> && data.containsKey('errno')) {
-      final errno = data['errno'] as int;
-      final message = data['message'] as String?;
-      handler.reject(
-        DioException(
-          requestOptions: response.requestOptions,
-          response: response,
-          error: AppFailure.fromErrno(errno, message),
-          type: DioExceptionType.badResponse,
-        ),
-      );
-      return;
-    }
-    handler.next(response);
-  }
-
-  @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.error is AppFailure) {
       handler.next(err);

@@ -1,20 +1,6 @@
 abstract final class AppConstants {
-  static const protocolVersion = '1.6.0';
-  static const fixedLogin = 'eparent';
-  static const fixedPassword = 'eparent';
-  static const deviceId = '1';
-  static const userAgent = 'Andreg $deviceId';
-  static const appVersionCode = 107;
-  static const syncAcceptEncoding = 'gzip,deflate';
-  static const syncContentType =
-      'application/x-www-form-urlencoded; charset=UTF-8';
-  static const tokenUploadUserAgent = 'okhttp/4.9.3';
-  static const tokenUploadAcceptEncoding = 'gzip';
-  static const tokenUploadContentType = 'application/x-www-form-urlencoded';
-  static const syncWindowDays = 100;
   static const connectTimeoutMs = 10000;
   static const receiveTimeoutMs = 30000;
-  static const maxRetryCount = 1;
   static const appUserAgent = 'MobiReg/3.1.3 (296c220)';
   static const appApiProtocolVersion = 1;
   static const appApiTimeoutMs = 15000;

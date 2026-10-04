@@ -10,8 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 final _refProvider = Provider<Ref>((ref) => ref);
 
 class _OfflineFactory extends ApiClientFactory {
-  _OfflineFactory(this._requests, String school)
-    : super(school: school, parentLogin: '', parentPassHash: '');
+  _OfflineFactory(this._requests, String school) : super(school: school);
 
   final List<String> _requests;
 

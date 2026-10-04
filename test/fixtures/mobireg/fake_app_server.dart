@@ -9,8 +9,7 @@ const _unauthorized = 401;
 const _ok = 200;
 
 class _FakeAppApiFactory extends ApiClientFactory {
-  _FakeAppApiFactory(this._client, String school)
-    : super(school: school, parentLogin: '', parentPassHash: '');
+  _FakeAppApiFactory(this._client, String school) : super(school: school);
 
   final Dio _client;
 
