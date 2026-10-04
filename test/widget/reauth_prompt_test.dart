@@ -30,6 +30,9 @@ class _ProbingProvider extends DemoDataProvider {
   final probedPasswords = <String>[];
 
   @override
+  String get id => 'mobireg';
+
+  @override
   bool get requiresCredentials => true;
 
   @override

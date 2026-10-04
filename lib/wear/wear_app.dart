@@ -8,6 +8,7 @@ import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/app_theme.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
+import 'package:bsharp/wear/screens/wear_reauth_screen.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/wear_notification_router.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +123,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
           _initialSyncTriggered = false;
         }
         return switch (authState) {
-          AuthState.authenticated => const WearHome(),
+          AuthState.authenticated => const WearReauthPrompt(child: WearHome()),
           AuthState.unauthenticated => const WearSetupScreen(),
         };
       },
