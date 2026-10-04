@@ -33,12 +33,21 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
   String? _fullContent;
   List<PocztaAttachment>? _detailFiles;
   var _loadingContent = true;
+  var _loadFailed = false;
   String? _translatedTitle;
   String? _translatedContent;
 
   @override
   void initState() {
     super.initState();
+    unawaited(_fetchFullContent());
+  }
+
+  void _retry() {
+    setState(() {
+      _loadingContent = true;
+      _loadFailed = false;
+    });
     unawaited(_fetchFullContent());
   }
 
@@ -52,20 +61,29 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
       if (!mounted) {
         return;
       }
-      setState(() => _loadingContent = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(t.messages.readFailed)));
+      setState(() {
+        _loadingContent = false;
+        _loadFailed = true;
+      });
       return;
     }
     if (!mounted) return;
 
     if (data == null) {
-      setState(() => _loadingContent = false);
+      setState(() {
+        _fullContent = widget.message.content;
+        _loadingContent = false;
+        _loadFailed = _fullContent == null;
+      });
       return;
     }
 
     final content = data['content'] as String?;
+    if (content == null) {
+      debugPrint(
+        'MessageDetailView: message ${widget.message.id} came without content',
+      );
+    }
     final filesRaw = data['files'] as List<dynamic>?;
     final files = filesRaw
         ?.whereType<Map<String, dynamic>>()
@@ -84,6 +102,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
       _fullContent = content;
       _detailFiles = files;
       _loadingContent = false;
+      _loadFailed = content == null;
     });
   }
 
@@ -99,7 +118,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
     final message =
         messages.where((m) => m.id == widget.message.id).firstOrNull ??
         widget.message;
-    final rawContent = _fullContent ?? message.content;
+    final rawContent = _fullContent;
     final displayTitle = _translatedTitle ?? message.title;
     final isInbox = _isInbox;
 
@@ -168,6 +187,8 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Center(child: CircularProgressIndicator()),
             )
+          else if (_loadFailed)
+            _ReadFailure(onRetry: _retry)
           else if (_translatedContent case final translated?)
             SelectableText(translated, style: theme.textTheme.bodyMedium)
           else if (rawContent != null)
@@ -315,6 +336,39 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
         SnackBar(content: Text(t.messages.sendFailed)),
       );
     }
+  }
+}
+
+class _ReadFailure extends StatelessWidget {
+  const _ReadFailure({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        children: [
+          Icon(Icons.error_outline, color: theme.colorScheme.error),
+          const SizedBox(height: 8),
+          Text(
+            t.messages.readFailed,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.error,
+            ),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: onRetry,
+            icon: const Icon(Icons.refresh),
+            label: Text(t.common.retry),
+          ),
+        ],
+      ),
+    );
   }
 }
 

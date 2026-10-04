@@ -17,7 +17,6 @@ List<PocztaMessage> parsePocztaMessages(List<dynamic> data, String folder) {
       preview: item['content'] as String?,
       isRead: item['read_at'] != null,
       isStarred: item['stared'] == true,
-      content: item['content'] as String?,
       recipients: recipients == null
           ? const []
           : _objectsOf(recipients as Object, view).map(_recipientOf).toList(),

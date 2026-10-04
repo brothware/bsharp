@@ -31,6 +31,13 @@ void main() {
       expect(messages.single.recipients.single.role, 'rodzic');
     });
 
+    test('the list text is only a preview, never the body', () {
+      final message = parsePocztaMessages([_message()], _folder).single;
+
+      expect(message.preview, 'Szczegóły w załączniku');
+      expect(message.content, isNull);
+    });
+
     test('keeps optional fields optional', () {
       final messages = parsePocztaMessages([
         {'id': 1, 'date': '2026-10-01T12:30:00Z'},

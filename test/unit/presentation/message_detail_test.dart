@@ -1,5 +1,6 @@
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
@@ -25,6 +26,19 @@ class _BodyProvider extends DemoDataProvider {
   };
 }
 
+class _FlakyProvider extends DemoDataProvider {
+  int reads = 0;
+
+  @override
+  Future<Map<String, dynamic>?> readMessage(int messageId) async {
+    reads++;
+    if (reads == 1) {
+      throw const MessagingException(ConnectionTimeout());
+    }
+    return {'content': libraryMessageHtml};
+  }
+}
+
 final _message = PocztaMessage(
   id: 7,
   title: 'Inwentaryzacja biblioteki',
@@ -33,6 +47,7 @@ final _message = PocztaMessage(
   isRead: true,
   isStarred: false,
   preview: realLibraryPreview,
+  content: realLibraryPreview,
 );
 
 late SharedPreferences _prefs;
@@ -72,6 +87,27 @@ void main() {
     );
     expect(
       find.textContaining('Prosimy o współpracę.', findRichText: true),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('a failed read shows an error with retry, never the preview', (
+    tester,
+  ) async {
+    final provider = _FlakyProvider();
+    await tester.pumpWidget(_app(provider));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Could not load the message'), findsOneWidget);
+    expect(find.textContaining('Szanowni', findRichText: true), findsNothing);
+
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+
+    expect(provider.reads, 2);
+    expect(find.text('Could not load the message'), findsNothing);
+    expect(
+      find.textContaining('Szanowni Państwo!', findRichText: true),
       findsOneWidget,
     );
   });

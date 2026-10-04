@@ -66,7 +66,11 @@ class _WearMessageDetailScreenState
     if (!mounted) return;
 
     if (data == null) {
-      setState(() => _loadingContent = false);
+      setState(() {
+        _fullContent = widget.message.content;
+        _loadingContent = false;
+        _loadFailed = _fullContent == null;
+      });
       return;
     }
 
@@ -74,6 +78,7 @@ class _WearMessageDetailScreenState
     setState(() {
       _fullContent = content;
       _loadingContent = false;
+      _loadFailed = content == null;
     });
   }
 
@@ -81,7 +86,7 @@ class _WearMessageDetailScreenState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final message = widget.message;
-    final rawContent = _fullContent ?? message.content;
+    final rawContent = _fullContent;
     final displayTitle = _translatedTitle ?? message.title;
     final displayContent =
         _translatedContent ??

@@ -70,6 +70,22 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsNothing);
     });
 
+    testWidgets('a message that cannot be read hides the list text', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _buildScreen(
+          message: _msg(content: 'Szanowni Państwo!Informujemy'),
+          provider: _RejectingReadProvider(),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.text('Could not load the message'), findsOneWidget);
+      expect(find.textContaining('Szanowni'), findsNothing);
+    });
+
     testWidgets('shows sender name and title', (tester) async {
       await tester.pumpWidget(
         _buildScreen(
