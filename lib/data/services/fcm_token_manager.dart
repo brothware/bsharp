@@ -11,16 +11,22 @@ class FcmTokenManager {
   FcmTokenManager({
     required this._accountStorage,
     required this._prefs,
-  });
+    Future<String?> Function()? fetchToken,
+    SchoolDataProvider Function(String providerType)? providerFor,
+  }) : _fetchToken =
+           fetchToken ?? (() => FirebaseMessaging.instance.getToken()),
+       _providerFor = providerFor ?? createProviderForType;
 
   final AccountStorage _accountStorage;
   final SharedPreferences _prefs;
+  final Future<String?> Function() _fetchToken;
+  final SchoolDataProvider Function(String providerType) _providerFor;
 
   static const _lastRegistrationKey = 'fcm_last_registration';
 
   Future<void> registerTokenForAllAccounts() async {
     if (!isPushSupported) return;
-    final token = await FirebaseMessaging.instance.getToken();
+    final token = await _fetchToken();
     if (token == null) {
       debugPrint('FcmTokenManager: no FCM token available');
       return;
@@ -57,7 +63,7 @@ class FcmTokenManager {
 
   Future<void> registerTokenForAccount(ProviderAccount account) async {
     if (!isPushSupported) return;
-    final token = await FirebaseMessaging.instance.getToken();
+    final token = await _fetchToken();
     if (token == null) return;
 
     await _uploadTokenForAccount(account: account, token: token);
@@ -74,14 +80,14 @@ class FcmTokenManager {
     required ProviderAccount account,
     required String token,
   }) async {
-    final provider = createProviderForType(account.providerType);
+    final provider = _providerFor(account.providerType);
     if (!provider.supports(DataProviderCapability.pushNotifications)) {
       return true;
     }
 
     if (account.password.isEmpty) {
       debugPrint('FcmTokenManager: no password for ${account.slug}, skipping');
-      return false;
+      return true;
     }
 
     try {

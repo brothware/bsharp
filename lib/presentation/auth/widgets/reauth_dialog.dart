@@ -1,9 +1,42 @@
+import 'dart:async';
+
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class ReauthPrompt extends ConsumerStatefulWidget {
+  const ReauthPrompt({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  ConsumerState<ReauthPrompt> createState() => _ReauthPromptState();
+}
+
+class _ReauthPromptState extends ConsumerState<ReauthPrompt> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && ref.read(reauthRequiredProvider)) {
+        unawaited(showReauthDialog(context, ref));
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen<bool>(reauthRequiredProvider, (previous, next) {
+      if (next && previous != true) {
+        unawaited(showReauthDialog(context, ref));
+      }
+    });
+    return widget.child;
+  }
+}
 
 Future<void> showReauthDialog(BuildContext context, WidgetRef ref) {
   return showDialog<void>(

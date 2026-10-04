@@ -8,6 +8,7 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/auth/widgets/reauth_dialog.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
 import 'package:bsharp/presentation/common/widgets/child_switcher.dart';
 import 'package:flutter/material.dart';
@@ -80,95 +81,98 @@ class MainShell extends ConsumerWidget {
 
     final onDashboard = navigationShell.currentIndex == 0;
 
-    return PopScope(
-      canPop: onDashboard,
-      onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) {
-          navigationShell.goBranch(0);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: _buildTitle(context, ref),
-          actions: [
-            if (provider.requiresCredentials) ...[
-              if (syncStatus.isBusy)
-                const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+    return ReauthPrompt(
+      child: PopScope(
+        canPop: onDashboard,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) {
+            navigationShell.goBranch(0);
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            title: _buildTitle(context, ref),
+            actions: [
+              if (provider.requiresCredentials) ...[
+                if (syncStatus.isBusy)
+                  const Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  )
+                else
+                  IconButton(
+                    icon: const Icon(Icons.sync),
+                    tooltip: t.settings.sync,
+                    onPressed: () =>
+                        ref.read(syncStatusProvider.notifier).sync(),
                   ),
-                )
-              else
+              ],
+              if (messagesVisible)
                 IconButton(
-                  icon: const Icon(Icons.sync),
-                  tooltip: t.settings.sync,
-                  onPressed: () => ref.read(syncStatusProvider.notifier).sync(),
+                  icon: Badge(
+                    isLabelVisible: unreadCount > 0,
+                    label: Text('$unreadCount'),
+                    child: const Icon(Icons.mail_outline),
+                  ),
+                  onPressed: () => context.push(AppRoutes.messages),
+                ),
+              if (settingsVisible)
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () => context.push(AppRoutes.settings),
                 ),
             ],
-            if (messagesVisible)
-              IconButton(
-                icon: Badge(
-                  isLabelVisible: unreadCount > 0,
-                  label: Text('$unreadCount'),
-                  child: const Icon(Icons.mail_outline),
-                ),
-                onPressed: () => context.push(AppRoutes.messages),
-              ),
-            if (settingsVisible)
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () => context.push(AppRoutes.settings),
-              ),
-          ],
-        ),
-        body: size == ScreenSize.phone
-            ? navigationShell
-            : Row(
-                children: [
-                  SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight:
-                            MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).padding.top -
-                            kToolbarHeight,
-                      ),
-                      child: IntrinsicHeight(
-                        child: NavigationRail(
-                          selectedIndex: effectiveVisibleIndex,
-                          onDestinationSelected: (i) =>
-                              _onTap(visible[i].branchIndex),
-                          labelType: size == ScreenSize.desktop
-                              ? null
-                              : NavigationRailLabelType.all,
-                          extended: size == ScreenSize.desktop,
-                          destinations: [
-                            for (final entry in visible)
-                              NavigationRailDestination(
-                                icon: Icon(entry.item.icon),
-                                selectedIcon: Icon(entry.item.selectedIcon),
-                                label: Text(entry.item.label),
-                              ),
-                          ],
+          ),
+          body: size == ScreenSize.phone
+              ? navigationShell
+              : Row(
+                  children: [
+                    SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight:
+                              MediaQuery.of(context).size.height -
+                              MediaQuery.of(context).padding.top -
+                              kToolbarHeight,
+                        ),
+                        child: IntrinsicHeight(
+                          child: NavigationRail(
+                            selectedIndex: effectiveVisibleIndex,
+                            onDestinationSelected: (i) =>
+                                _onTap(visible[i].branchIndex),
+                            labelType: size == ScreenSize.desktop
+                                ? null
+                                : NavigationRailLabelType.all,
+                            extended: size == ScreenSize.desktop,
+                            destinations: [
+                              for (final entry in visible)
+                                NavigationRailDestination(
+                                  icon: Icon(entry.item.icon),
+                                  selectedIcon: Icon(entry.item.selectedIcon),
+                                  label: Text(entry.item.label),
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const VerticalDivider(thickness: 1, width: 1),
-                  Expanded(child: navigationShell),
-                ],
-              ),
-        bottomNavigationBar: size == ScreenSize.phone
-            ? _PhoneBottomNav(
-                items: visible,
-                currentVisibleIndex: effectiveVisibleIndex,
-                onTap: (i) => _onTap(visible[i].branchIndex),
-              )
-            : null,
+                    const VerticalDivider(thickness: 1, width: 1),
+                    Expanded(child: navigationShell),
+                  ],
+                ),
+          bottomNavigationBar: size == ScreenSize.phone
+              ? _PhoneBottomNav(
+                  items: visible,
+                  currentVisibleIndex: effectiveVisibleIndex,
+                  onTap: (i) => _onTap(visible[i].branchIndex),
+                )
+              : null,
+        ),
       ),
     );
   }

@@ -21,6 +21,13 @@ enum DataProviderCapability {
   pushNotifications,
 }
 
+class ReauthRequiredException implements Exception {
+  const ReauthRequiredException();
+
+  @override
+  String toString() => 'ReauthRequiredException: the saved password is gone';
+}
+
 @immutable
 class AccountProbe {
   const AccountProbe({required this.schoolName, required this.students});

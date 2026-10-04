@@ -1,17 +1,73 @@
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/providers/custom_event_providers.dart';
+import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
+import 'package:bsharp/data/data_sources/remote/app_api_session_registry.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
+import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
+import 'package:bsharp/data/services/notification_service.dart';
+import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../fixtures/mobireg/fake_app_server.dart';
+import '../../fixtures/mobireg/fixtures.dart';
 import '../data/credential_storage_test.dart';
+
+class _SilentNotificationService extends NotificationService {
+  @override
+  Future<void> initialize({void Function(NotificationPayload)? onTap}) async {}
+
+  @override
+  Future<void> showUnexcusedAbsenceAlert(int count) async {}
+}
+
+const _pupilId = 6339;
+
+const _account = ProviderAccount(
+  id: 'a1',
+  providerType: 'mobireg',
+  slug: 'sp1',
+  login: 'p',
+  password: 's',
+);
+
+Future<ProviderContainer> _mobiregContainer({
+  required FakeAppServer server,
+  required ProviderAccount account,
+}) async {
+  final prefs = await SharedPreferences.getInstance();
+  final accountStorage = AccountStorage(store: FakeKeyValueStore());
+  await accountStorage.saveAccounts([account]);
+  await accountStorage.saveActiveSelection(
+    ActiveSelection(accountId: account.id, studentId: _pupilId),
+  );
+  final provider = MobiregDataProvider(
+    clientFactory: server.factoryFor,
+    sessions: AppApiSessionRegistry(),
+  );
+  final container = ProviderContainer(
+    overrides: [
+      credentialStorageProvider.overrideWithValue(_emptyStorage()),
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      accountStorageProvider.overrideWithValue(accountStorage),
+      activeDataProviderProvider.overrideWithBuild((ref, _) => provider),
+      notificationServiceProvider.overrideWithValue(
+        _SilentNotificationService(),
+      ),
+      customEventDaoProvider.overrideWithValue(null),
+    ],
+  );
+  addTearDown(container.dispose);
+  return container;
+}
 
 class _PupilGoneDataProvider extends DemoDataProvider {
   @override
@@ -110,6 +166,70 @@ void main() {
       final future2 = notifier.sync();
       await Future.wait([future1, future2]);
       expect(container.read(syncStatusProvider), SyncStatus.failed);
+    });
+  });
+
+  group('SyncStatusNotifier against the app API', () {
+    late FakeAppServer server;
+
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+      server = FakeAppServer.fromFixtures();
+    });
+
+    test('a password-less account fails without saving a snapshot', () async {
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account.copyWith(password: '', legacyPasswordHash: 'abc'),
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      expect(container.read(syncStatusProvider), SyncStatus.failed);
+      expect(container.read(reauthRequiredProvider), isTrue);
+      expect(
+        container.read(sharedPreferencesProvider).getString('sync_snapshot'),
+        isNull,
+      );
+      expect(server.logins, 0);
+    });
+
+    test(
+      're-entering the password notifies nothing on the next sync',
+      () async {
+        final container = await _mobiregContainer(
+          server: server,
+          account: _account.copyWith(password: '', legacyPasswordHash: 'abc'),
+        );
+        final notifier = container.read(syncStatusProvider.notifier);
+        await notifier.sync();
+
+        await container.read(accountStorageProvider).updateAccount(_account);
+        container.invalidate(providerAccountsProvider);
+        final changes = await notifier.sync();
+
+        expect(container.read(syncStatusProvider), SyncStatus.completed);
+        expect(changes.isEmpty, isTrue);
+      },
+    );
+
+    test('an unreadable cache is cleared and the sync carries on', () async {
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+      SyncCache(
+        container.read(sharedPreferencesProvider),
+      ).saveView('timetable', loadMobiregFixture('timetable_events'));
+      final notifier = container.read(syncStatusProvider.notifier);
+
+      await notifier.sync();
+      final viewsAfterFirst = server.views.length;
+      await notifier.sync();
+
+      expect(container.read(syncStatusProvider), SyncStatus.completed);
+      expect(viewsAfterFirst, greaterThan(0));
+      expect(server.views.length, greaterThan(viewsAfterFirst));
     });
   });
 

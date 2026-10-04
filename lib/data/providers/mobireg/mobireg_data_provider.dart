@@ -12,6 +12,7 @@ import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
 import 'package:bsharp/data/data_sources/remote/app_api_data_source.dart';
 import 'package:bsharp/data/data_sources/remote/app_api_session.dart';
+import 'package:bsharp/data/data_sources/remote/app_api_session_registry.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_sync_applier.dart';
@@ -56,10 +57,12 @@ class SendMessageException implements Exception {
 class MobiregDataProvider implements SchoolDataProvider {
   MobiregDataProvider({
     ApiClientFactory Function(String school)? clientFactory,
-  }) : _clientFactory = clientFactory ?? _productionClientFactory;
+    AppApiSessionRegistry? sessions,
+  }) : _clientFactory = clientFactory ?? _productionClientFactory,
+       _sessions = sessions ?? AppApiSessionRegistry.shared;
 
   final ApiClientFactory Function(String school) _clientFactory;
-  final Map<String, _AccountSession> _sessions = {};
+  final AppApiSessionRegistry _sessions;
   String? _school;
   String? _login;
   String _password = '';
@@ -126,20 +129,18 @@ class MobiregDataProvider implements SchoolDataProvider {
     required String login,
     required String password,
   }) {
-    final key = '$school/$login';
-    final existing = _sessions[key];
-    if (existing != null && existing.password == password) {
-      return existing.session;
-    }
-    final session = AppApiSession(
-      api: AppApiDataSource(
-        client: _clientFactory(school).createAppApiClient(),
-      ),
+    return _sessions.sessionFor(
+      school: school,
       login: login,
       password: password,
+      create: () => AppApiSession(
+        api: AppApiDataSource(
+          client: _clientFactory(school).createAppApiClient(),
+        ),
+        login: login,
+        password: password,
+      ),
     );
-    _sessions[key] = _AccountSession(password: password, session: session);
-    return session;
   }
 
   AppApiSession? _activeSession(Ref ref) {
@@ -151,7 +152,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     if (_password.isEmpty) {
       debugPrint('MobiregDataProvider: $school/$login has no password saved');
       ref.read(reauthRequiredProvider.notifier).value = true;
-      return null;
+      throw const ReauthRequiredException();
     }
     return _sessionFor(school: school, login: login, password: _password);
   }
@@ -488,14 +489,6 @@ class MobiregDataProvider implements SchoolDataProvider {
 bool _isSemester(Term term) => term.type == TermType.semester;
 
 String _day(DateTime date) => date.toIso8601String().substring(0, _dateLength);
-
-@immutable
-class _AccountSession {
-  const _AccountSession({required this.password, required this.session});
-
-  final String password;
-  final AppApiSession session;
-}
 
 @immutable
 class _MobiregViews {

@@ -9,6 +9,7 @@ import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/data/services/sync_snapshot.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,16 +55,17 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     final wasIdle = state == SyncStatus.idle;
     state = SyncStatus.syncing;
 
-    // Has to come before hydration: the cache belongs to a backend, and
-    // restoring a demo account's day from the last Mobireg sync is worse than
-    // showing nothing.
-    await restoreProviderForActiveAccount(ref);
-
-    if (wasIdle) {
-      _hydrateFromCache(ref.read(syncCacheProvider));
-    }
-    state = SyncStatus.syncing;
     try {
+      // Has to come before hydration: the cache belongs to a backend, and
+      // restoring a demo account's day from the last Mobireg sync is worse
+      // than showing nothing.
+      await restoreProviderForActiveAccount(ref);
+
+      if (wasIdle) {
+        _hydrateFromCache(ref.read(syncCacheProvider));
+      }
+      state = SyncStatus.syncing;
+
       final provider = ref.read(activeDataProviderProvider);
       var accountId = 1;
 
@@ -114,6 +116,9 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       }
 
       return changeSet;
+    } on ReauthRequiredException {
+      state = SyncStatus.failed;
+      return const ChangeSet();
     } on Object catch (error, stackTrace) {
       return _fail(error, stackTrace);
     }
@@ -129,8 +134,13 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
 
   void _hydrateFromCache(SyncCache cache) {
     final provider = ref.read(activeDataProviderProvider);
-    if (provider.hydrateFromCache(ref, cache)) {
-      state = SyncStatus.hydrated;
+    try {
+      if (provider.hydrateFromCache(ref, cache)) {
+        state = SyncStatus.hydrated;
+      }
+    } on FormatException catch (error) {
+      debugPrint('SyncStatusNotifier: cache unreadable, cleared: $error');
+      cache.clear();
     }
   }
 

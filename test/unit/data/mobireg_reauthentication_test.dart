@@ -1,6 +1,8 @@
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
+import 'package:bsharp/data/data_sources/remote/app_api_session_registry.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -40,6 +42,7 @@ void main() {
       requests = [];
       provider = MobiregDataProvider(
         clientFactory: (school) => _OfflineFactory(requests, school),
+        sessions: AppApiSessionRegistry(),
       );
     });
 
@@ -53,7 +56,10 @@ void main() {
       );
 
       await provider.authenticate(school: 'sp1', login: 'parent', password: '');
-      await provider.loadSchoolData(ref, studentId: 1);
+      await expectLater(
+        () => provider.loadSchoolData(ref, studentId: 1),
+        throwsA(isA<ReauthRequiredException>()),
+      );
 
       expect(container.read(reauthRequiredProvider), isTrue);
       expect(requests, isEmpty);
@@ -67,7 +73,10 @@ void main() {
       );
 
       await provider.authenticate(school: 'sp2', login: 'parent', password: '');
-      await provider.loadSchoolData(ref, studentId: 1);
+      await expectLater(
+        () => provider.loadSchoolData(ref, studentId: 1),
+        throwsA(isA<ReauthRequiredException>()),
+      );
 
       expect(container.read(reauthRequiredProvider), isTrue);
       expect(requests, isEmpty);
@@ -81,7 +90,10 @@ void main() {
       );
 
       await provider.authenticate(school: 'sp1', login: 'other', password: '');
-      await provider.loadMessages(ref);
+      await expectLater(
+        () => provider.loadMessages(ref),
+        throwsA(isA<ReauthRequiredException>()),
+      );
 
       expect(container.read(reauthRequiredProvider), isTrue);
       expect(requests, isEmpty);

@@ -4,110 +4,19 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
-import 'package:bsharp/core/network/api_client_factory.dart';
+import 'package:bsharp/data/data_sources/remote/app_api_session_registry.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../fixtures/mobireg/fixtures.dart';
-
-const _unauthorized = 401;
-const _ok = 200;
-
-class _FakeAppApiFactory extends ApiClientFactory {
-  _FakeAppApiFactory(this._client, String school)
-    : super(school: school, parentLogin: '', parentPassHash: '');
-
-  final Dio _client;
-
-  @override
-  Dio createAppApiClient() => _client;
-}
-
-class _FakeAppServer {
-  _FakeAppServer.fromFixtures();
-
-  final issuedToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.e30.fake';
-  final views = <String>[];
-  final markTermIds = <String>[];
-  final timetableRanges = <(String, String)>[];
-  final _bodies = <String, Map<String, dynamic>>{};
-  int logins = 0;
-
-  Map<String, dynamic> lastBodyFor(String view) => _bodies[view]!;
-
-  ApiClientFactory factoryFor(String school) {
-    final client =
-        Dio(BaseOptions(baseUrl: 'https://mobireg.pl/$school/modules/api'))
-          ..interceptors.add(
-            InterceptorsWrapper(
-              onRequest: (options, handler) =>
-                  handler.resolve(_answer(options)),
-            ),
-          );
-    return _FakeAppApiFactory(client, school);
-  }
-
-  Response<dynamic> _answer(RequestOptions options) {
-    if (options.path == '/auth.php') {
-      logins++;
-      return _respond(options, _ok, {'status': 'OK', 'token': issuedToken});
-    }
-    final body = Map<String, dynamic>.from(options.data as Map);
-    final authorized =
-        body['token'] == issuedToken || body['JWTToken'] == issuedToken;
-    if (!authorized) {
-      return _respond(options, _unauthorized, {'message': 'Unauthorized'});
-    }
-    final view = body['view'] as String;
-    views.add(view);
-    _bodies[view] = body;
-    return _respond(options, _ok, {
-      'v': 1,
-      'serverTime': '2026-10-04T21:06:32+02:00',
-      'ttlFresh': 60,
-      'ttlRetain': 1209600,
-      'data': _dataFor(view, body),
-    });
-  }
-
-  Object _dataFor(String view, Map<String, dynamic> body) {
-    switch (view) {
-      case 'marks':
-        final termId = body['termId'] as String;
-        markTermIds.add(termId);
-        return loadMobiregFixture(
-          termId == '4' ? 'marks_term4' : 'marks_empty',
-        );
-      case 'timetable-events':
-        timetableRanges.add((
-          body['dateFrom'] as String,
-          body['dateTo'] as String,
-        ));
-        return loadMobiregFixture('timetable_events');
-      case 'attendance-stats':
-        return loadMobiregFixture('attendance_stats');
-      case 'register-fcm':
-        return {'success': true};
-      default:
-        return loadMobiregFixture(view);
-    }
-  }
-
-  Response<dynamic> _respond(RequestOptions options, int status, Object body) =>
-      Response<dynamic>(
-        requestOptions: options,
-        statusCode: status,
-        data: body,
-      );
-}
+import '../../fixtures/mobireg/fake_app_server.dart';
 
 void main() {
   late ProviderContainer container;
-  late _FakeAppServer server;
+  late FakeAppServer server;
   late MobiregDataProvider provider;
 
   setUp(() async {
@@ -117,8 +26,11 @@ void main() {
       overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
     );
     addTearDown(container.dispose);
-    server = _FakeAppServer.fromFixtures();
-    provider = MobiregDataProvider(clientFactory: server.factoryFor);
+    server = FakeAppServer.fromFixtures();
+    provider = MobiregDataProvider(
+      clientFactory: server.factoryFor,
+      sessions: AppApiSessionRegistry(),
+    );
   });
 
   Ref ref() => container.read(Provider((ref) => ref));
@@ -191,6 +103,40 @@ void main() {
     expect(server.logins, 2);
   });
 
+  test('two providers share one login per account', () async {
+    final sessions = AppApiSessionRegistry();
+    final first = MobiregDataProvider(
+      clientFactory: server.factoryFor,
+      sessions: sessions,
+    );
+    final second = MobiregDataProvider(
+      clientFactory: server.factoryFor,
+      sessions: sessions,
+    );
+
+    await first.probeAccount(school: 'sp1', login: 'p', password: 's');
+    await second.registerPushToken(
+      school: 'sp1',
+      login: 'p',
+      password: 's',
+      token: 'fcm-123',
+    );
+
+    expect(server.logins, 1);
+  });
+
+  test('providers share the process-wide registry by default', () async {
+    const school = 'registry-default';
+    await MobiregDataProvider(
+      clientFactory: server.factoryFor,
+    ).probeAccount(school: school, login: 'p', password: 's');
+    await MobiregDataProvider(
+      clientFactory: server.factoryFor,
+    ).probeAccount(school: school, login: 'p', password: 's');
+
+    expect(server.logins, 1);
+  });
+
   test('a pupil missing from the account fails the sync', () async {
     await provider.authenticate(school: 'sp1', login: 'p', password: 's');
 
@@ -202,8 +148,11 @@ void main() {
 
   test('an account saved before the switch asks for the password', () async {
     await provider.authenticate(school: 'sp1', login: 'p', password: '');
-    await provider.loadSchoolData(ref(), studentId: 6339);
 
+    await expectLater(
+      () => provider.loadSchoolData(ref(), studentId: 6339),
+      throwsA(isA<ReauthRequiredException>()),
+    );
     expect(server.logins, 0);
     expect(container.read(reauthRequiredProvider), isTrue);
   });
@@ -235,6 +184,7 @@ void main() {
     final restored =
         MobiregDataProvider(
           clientFactory: server.factoryFor,
+          sessions: AppApiSessionRegistry(),
         ).hydrateFromCache(
           fresh.read(Provider((ref) => ref)),
           fresh.read(syncCacheProvider),
