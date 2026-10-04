@@ -209,7 +209,6 @@
     "teacher": "Teacher",
     "comment": "Comment",
     "numericValue": "Numeric value",
-    "points": "Points",
     "grade(context=one)": "grade",
     "grade(context=other)": "grades",
     "other": "Other"

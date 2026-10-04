@@ -207,7 +207,6 @@
     "teacher": "教師",
     "comment": "コメント",
     "numericValue": "数値",
-    "points": "点数",
     "grade(context=one)": "件の成績",
     "grade(context=other)": "件の成績",
     "other": "その他",

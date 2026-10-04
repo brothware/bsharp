@@ -209,7 +209,6 @@
     "teacher": "Вчитель",
     "comment": "Коментар",
     "numericValue": "Числове значення",
-    "points": "Бали",
     "grade(context=one)": "оцінка",
     "grade(context=few)": "оцінки",
     "grade(context=many)": "оцінок",

@@ -207,7 +207,6 @@
     "teacher": "Lærer",
     "comment": "Kommentar",
     "numericValue": "Numerisk verdi",
-    "points": "Poeng",
     "grade(context=one)": "karakter",
     "grade(context=other)": "karakterer",
     "other": "Annet",

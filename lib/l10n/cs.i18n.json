@@ -208,7 +208,6 @@
     "teacher": "Učitel",
     "comment": "Komentář",
     "numericValue": "Číselná hodnota",
-    "points": "Body",
     "grade(context=one)": "známka",
     "grade(context=few)": "známky",
     "grade(context=other)": "známek",

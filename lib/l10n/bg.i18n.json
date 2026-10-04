@@ -207,7 +207,6 @@
     "teacher": "Учител",
     "comment": "Коментар",
     "numericValue": "Числова стойност",
-    "points": "Точки",
     "grade(context=one)": "оценка",
     "grade(context=other)": "оценки",
     "other": "Други",

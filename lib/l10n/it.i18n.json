@@ -207,7 +207,6 @@
     "teacher": "Insegnante",
     "comment": "Commento",
     "numericValue": "Valore numerico",
-    "points": "Punti",
     "grade(context=one)": "voto",
     "grade(context=other)": "voti",
     "other": "Altro",

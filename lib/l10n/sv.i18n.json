@@ -207,7 +207,6 @@
     "teacher": "Lärare",
     "comment": "Kommentar",
     "numericValue": "Numeriskt värde",
-    "points": "Poäng",
     "grade(context=one)": "betyg",
     "grade(context=other)": "betyg",
     "other": "Övrigt",

@@ -111,7 +111,6 @@ void main() {
       'schedule.customEvent.description',
       'grades.date',
       'grades.description',
-      'grades.points',
       'messages.title',
       'messages.messageLabel',
       'messages.message(context=one)',

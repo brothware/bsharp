@@ -210,7 +210,6 @@
     "teacher": "Muinteoir",
     "comment": "Nota",
     "numericValue": "Luach uimhriuil",
-    "points": "Pointi",
     "grade(context=one)": "gradam",
     "grade(context=two)": "ghradam",
     "grade(context=few)": "ghradam",

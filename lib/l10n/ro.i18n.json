@@ -208,7 +208,6 @@
     "teacher": "Profesor",
     "comment": "Comentariu",
     "numericValue": "Valoare numerică",
-    "points": "Puncte",
     "grade(context=one)": "notă",
     "grade(context=few)": "note",
     "grade(context=other)": "de note",

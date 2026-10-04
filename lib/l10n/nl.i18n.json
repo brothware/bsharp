@@ -207,7 +207,6 @@
     "teacher": "Docent",
     "comment": "Opmerking",
     "numericValue": "Numerieke waarde",
-    "points": "Punten",
     "grade(context=one)": "cijfer",
     "grade(context=other)": "cijfers",
     "other": "Overig",

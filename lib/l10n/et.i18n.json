@@ -207,7 +207,6 @@
     "teacher": "Õpetaja",
     "comment": "Kommentaar",
     "numericValue": "Numbriline väärtus",
-    "points": "Punktid",
     "grade(context=one)": "hinne",
     "grade(context=other)": "hinnet",
     "other": "Muu",

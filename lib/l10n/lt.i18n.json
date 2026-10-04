@@ -209,7 +209,6 @@
     "teacher": "Mokytojas",
     "comment": "Komentaras",
     "numericValue": "Skaitinė reikšmė",
-    "points": "Taškai",
     "grade(context=one)": "pažymys",
     "grade(context=few)": "pažymiai",
     "grade(context=many)": "pažymių",

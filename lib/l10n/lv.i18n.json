@@ -207,7 +207,6 @@
     "teacher": "Skolotājs",
     "comment": "Komentārs",
     "numericValue": "Skaitliskā vērtība",
-    "points": "Punkti",
     "grade(context=one)": "atzīme",
     "grade(context=other)": "atzīmes",
     "other": "Cits",

@@ -207,7 +207,6 @@
     "teacher": "Lærer",
     "comment": "Kommentar",
     "numericValue": "Numerisk værdi",
-    "points": "Point",
     "grade(context=one)": "karakter",
     "grade(context=other)": "karakterer",
     "other": "Andet",

@@ -207,7 +207,6 @@
     "teacher": "Opettaja",
     "comment": "Kommentti",
     "numericValue": "Numeerinen arvo",
-    "points": "Pisteet",
     "grade(context=one)": "arvosana",
     "grade(context=other)": "arvosanaa",
     "other": "Muu",

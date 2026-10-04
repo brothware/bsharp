@@ -209,7 +209,6 @@
     "teacher": "Učitelj",
     "comment": "Komentar",
     "numericValue": "Številčna vrednost",
-    "points": "Točke",
     "grade(context=one)": "ocena",
     "grade(context=two)": "oceni",
     "grade(context=few)": "ocene",

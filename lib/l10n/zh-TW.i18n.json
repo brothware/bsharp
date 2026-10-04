@@ -207,7 +207,6 @@
     "teacher": "教師",
     "comment": "評語",
     "numericValue": "數值",
-    "points": "分數",
     "grade(context=one)": "筆成績",
     "grade(context=other)": "筆成績",
     "other": "其他",

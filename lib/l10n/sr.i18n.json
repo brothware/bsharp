@@ -208,7 +208,6 @@
     "teacher": "Nastavnik",
     "comment": "Komentar",
     "numericValue": "Numerička vrednost",
-    "points": "Bodovi",
     "grade(context=one)": "ocena",
     "grade(context=few)": "ocene",
     "grade(context=other)": "ocena",

@@ -209,7 +209,6 @@
     "teacher": "Għalliem",
     "comment": "Kumment",
     "numericValue": "Valur numeriku",
-    "points": "Punti",
     "grade(context=one)": "marka",
     "grade(context=few)": "marki",
     "grade(context=many)": "marka",

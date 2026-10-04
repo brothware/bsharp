@@ -207,7 +207,6 @@
     "teacher": "Tanár",
     "comment": "Megjegyzés",
     "numericValue": "Számérték",
-    "points": "Pontok",
     "grade(context=one)": "jegy",
     "grade(context=other)": "jegy",
     "other": "Egyéb",

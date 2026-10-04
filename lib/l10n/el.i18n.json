@@ -207,7 +207,6 @@
     "teacher": "Καθηγητής",
     "comment": "Σχόλιο",
     "numericValue": "Αριθμητική τιμή",
-    "points": "Πόντοι",
     "grade(context=one)": "βαθμός",
     "grade(context=other)": "βαθμοί",
     "other": "Άλλο",

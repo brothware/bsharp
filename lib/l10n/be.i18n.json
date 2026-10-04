@@ -209,7 +209,6 @@
     "teacher": "Настаўнік",
     "comment": "Каментар",
     "numericValue": "Лічбавае значэнне",
-    "points": "Балы",
     "grade(context=one)": "адзнака",
     "grade(context=few)": "адзнакі",
     "grade(context=many)": "адзнак",

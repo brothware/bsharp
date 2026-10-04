@@ -207,7 +207,6 @@
     "teacher": "शिक्षक",
     "comment": "टिप्पणी",
     "numericValue": "संख्यात्मक मान",
-    "points": "अंक",
     "grade(context=one)": "अंक",
     "grade(context=other)": "अंक",
     "other": "अन्य",

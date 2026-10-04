@@ -207,7 +207,6 @@
     "teacher": "Öğretmen",
     "comment": "Yorum",
     "numericValue": "Sayısal değer",
-    "points": "Puanlar",
     "grade(context=one)": "not",
     "grade(context=other)": "not",
     "other": "Diğer",

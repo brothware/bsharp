@@ -207,7 +207,6 @@
     "teacher": "교사",
     "comment": "코멘트",
     "numericValue": "수치",
-    "points": "점수",
     "grade(context=one)": "성적",
     "grade(context=other)": "성적",
     "other": "기타",
