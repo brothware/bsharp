@@ -1,3 +1,4 @@
+import 'package:bsharp/domain/html_blocks.dart';
 import 'package:flutter/painting.dart';
 
 String formatMessageDate(DateTime date, {String yesterday = 'Yesterday'}) {
@@ -33,22 +34,7 @@ String formatMessageDateFull(DateTime date) {
       '${date.minute.toString().padLeft(2, '0')}';
 }
 
-String stripHtml(String html) {
-  return html
-      .replaceAll(RegExp(r'<br\s*/?>'), '\n')
-      .replaceAll(
-        RegExp('</(?:p|div|li|tr|h[1-6])>', caseSensitive: false),
-        '\n',
-      )
-      .replaceAll(RegExp('<[^>]*>'), '')
-      .replaceAll('&nbsp;', ' ')
-      .replaceAll('&amp;', '&')
-      .replaceAll('&lt;', '<')
-      .replaceAll('&gt;', '>')
-      .replaceAll('&quot;', '"')
-      .replaceAll(RegExp(r'\n{3,}'), '\n\n')
-      .trim();
-}
+String stripHtml(String html) => htmlBlocksToPlainText(parseHtmlBlocks(html));
 
 String formatFileSize(int bytes) {
   if (bytes < 1024) return '$bytes B';
@@ -148,20 +134,11 @@ String _unescapeHtml(String text) => text
     .replaceAll('&quot;', '"');
 
 String messagePreview(String content, {int maxLength = 100}) {
-  final stripped = content
-      .replaceAll(RegExp(r'<br\s*/?>'), ' ')
-      .replaceAll(
-        RegExp('</(?:p|div|li|tr|h[1-6])>', caseSensitive: false),
-        ' ',
-      )
-      .replaceAll(RegExp('<[^>]*>'), '')
-      .replaceAll('&nbsp;', ' ')
-      .replaceAll('&amp;', '&')
-      .replaceAll('&lt;', '<')
-      .replaceAll('&gt;', '>')
-      .replaceAll('&quot;', '"')
-      .replaceAll(RegExp(r'\s+'), ' ')
-      .trim();
+  final stripped = parseHtmlBlocks(content)
+      .expand((block) => block.lines)
+      .where((line) => !line.isBlank)
+      .map((line) => line.text)
+      .join(' ');
   if (stripped.length <= maxLength) return stripped;
   return '${stripped.substring(0, maxLength)}...';
 }
