@@ -2,6 +2,7 @@ import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/providers/custom_event_providers.dart';
+import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
@@ -281,6 +282,21 @@ void main() {
 
       expect(container.read(syncStatusProvider), SyncStatus.completed);
       expect(container.read(missingPupilProvider), isFalse);
+    });
+
+    test('a cache from another pupil is not shown', () async {
+      final first = await _mobiregContainer(server: server, account: _account);
+      await first.read(syncStatusProvider.notifier).sync();
+      expect(first.read(resolvedGradesProvider), isNotEmpty);
+
+      final second = await _mobiregContainer(
+        server: server,
+        account: _account,
+        pupilId: 6541,
+      );
+      await second.read(syncStatusProvider.notifier).sync();
+
+      expect(second.read(resolvedGradesProvider), isEmpty);
     });
 
     test('a mail failure fails the sync', () async {

@@ -90,7 +90,7 @@ abstract class SchoolDataProvider {
   /// Restores state this provider cached earlier, returning whether anything
   /// was restored. A provider that regenerates its data every load caches
   /// nothing and answers `false`.
-  bool hydrateFromCache(Ref ref, SyncCache cache);
+  bool hydrateFromCache(Ref ref, SyncCache cache, {required int studentId});
 
   Future<void> loadMessages(Ref ref);
 

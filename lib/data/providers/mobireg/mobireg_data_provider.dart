@@ -224,8 +224,11 @@ class MobiregDataProvider implements SchoolDataProvider {
   }
 
   @override
-  bool hydrateFromCache(Ref ref, SyncCache cache) {
+  bool hydrateFromCache(Ref ref, SyncCache cache, {required int studentId}) {
     final views = _MobiregViews.load(MobiregViewCache(cache));
+    if (views != null && views.pupilId != studentId) {
+      return false;
+    }
     if (views != null) {
       _enabledModules = views.enabledModules;
       views.apply(ref);

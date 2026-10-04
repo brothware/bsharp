@@ -258,6 +258,7 @@ void main() {
         ).hydrateFromCache(
           fresh.read(Provider((ref) => ref)),
           fresh.read(syncCacheProvider),
+          studentId: 6339,
         );
 
     expect(restored, isTrue);
@@ -351,6 +352,7 @@ void main() {
     final restored = restoredProvider.hydrateFromCache(
       fresh.read(Provider((ref) => ref)),
       fresh.read(syncCacheProvider),
+      studentId: 6339,
     );
 
     expect(restored, isTrue);

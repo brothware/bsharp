@@ -64,8 +64,12 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       // than showing nothing.
       await restoreProviderForActiveAccount(ref);
 
-      if (wasIdle) {
-        _hydrateFromCache(ref.read(syncCacheProvider));
+      final selectedStudentId = await _getStudentId();
+      if (wasIdle && selectedStudentId != null) {
+        _hydrateFromCache(
+          ref.read(syncCacheProvider),
+          studentId: selectedStudentId,
+        );
       }
       state = SyncStatus.syncing;
 
@@ -162,10 +166,10 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     await ref.read(providerAccountsProvider.notifier).reload();
   }
 
-  void _hydrateFromCache(SyncCache cache) {
+  void _hydrateFromCache(SyncCache cache, {required int studentId}) {
     final provider = ref.read(activeDataProviderProvider);
     try {
-      if (provider.hydrateFromCache(ref, cache)) {
+      if (provider.hydrateFromCache(ref, cache, studentId: studentId)) {
         state = SyncStatus.hydrated;
       }
     } on FormatException catch (error) {

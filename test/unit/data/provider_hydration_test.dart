@@ -55,6 +55,7 @@ void main() {
       final restored = MobiregDataProvider().hydrateFromCache(
         container.read(Provider((ref) => ref)),
         SyncCache(prefs),
+        studentId: 6339,
       );
 
       expect(restored, isTrue);
@@ -65,10 +66,25 @@ void main() {
       expect(container.read(studentsProvider).single.id, 6339);
     });
 
+    test('a cache saved for another pupil restores nothing', () {
+      populatedCache();
+
+      final restored = MobiregDataProvider().hydrateFromCache(
+        container.read(Provider((ref) => ref)),
+        SyncCache(prefs),
+        studentId: 6541,
+      );
+
+      expect(restored, isFalse);
+      expect(container.read(resolvedGradesProvider), isEmpty);
+      expect(container.read(studentsProvider), isEmpty);
+    });
+
     test('reports nothing restored when the cache is empty', () {
       final restored = MobiregDataProvider().hydrateFromCache(
         container.read(Provider((ref) => ref)),
         SyncCache(prefs),
+        studentId: 6339,
       );
 
       expect(restored, isFalse);
@@ -81,6 +97,7 @@ void main() {
         () => MobiregDataProvider().hydrateFromCache(
           container.read(Provider((ref) => ref)),
           SyncCache(prefs),
+          studentId: 6339,
         ),
         throwsFormatException,
       );
@@ -92,6 +109,7 @@ void main() {
       final restored = DemoDataProvider().hydrateFromCache(
         container.read(Provider((ref) => ref)),
         SyncCache(prefs),
+        studentId: 6339,
       );
 
       expect(restored, isFalse);

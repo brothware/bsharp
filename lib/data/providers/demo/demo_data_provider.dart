@@ -36,7 +36,8 @@ class DemoDataProvider implements SchoolDataProvider {
   String get contentLanguage => 'en';
 
   @override
-  bool hydrateFromCache(Ref ref, SyncCache cache) => false;
+  bool hydrateFromCache(Ref ref, SyncCache cache, {required int studentId}) =>
+      false;
 
   @override
   Set<DataProviderCapability> get capabilities =>
