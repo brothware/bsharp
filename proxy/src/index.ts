@@ -2,7 +2,9 @@ const ALLOWED_ORIGINS = [
   'https://brothware.github.io',
 ];
 
-const USER_AGENT = 'MobiReg/3.1.3 (296c220)';
+const AUTH_USER_AGENT = 'Dart/3.13 (dart:io)';
+const APP_USER_AGENT = 'MobiReg/3.1.3 (296c220)';
+const FORWARDED_HEADERS = ['content-type', 'accept'];
 const ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
 
 const UPSTREAM_REWRITES: [RegExp, string][] = [
@@ -25,7 +27,7 @@ function corsHeaders(origin: string): Record<string, string> {
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': ALLOWED_METHODS.join(', '),
     'Access-Control-Allow-Headers':
-      'Content-Type, X-Requested-With, X-CSRF-TOKEN, X-Cookie-Jar',
+      'Content-Type, X-Cookie-Jar',
     'Access-Control-Expose-Headers':
       'X-Redirect-Location, X-Original-Status, X-Cookie-Jar',
     'Access-Control-Allow-Credentials': 'true',
@@ -35,31 +37,47 @@ function corsHeaders(origin: string): Record<string, string> {
 interface Route {
   pattern: RegExp;
   buildUrl: (match: RegExpMatchArray) => string;
-  addUserAgent: boolean;
+  userAgent: string;
 }
 
 const routes: Route[] = [
   {
     pattern: /^\/sync\/([^/]+)\/auth\.php$/,
     buildUrl: (m) => `https://mobireg.pl/${m[1]}/modules/api/auth.php`,
-    addUserAgent: false,
+    userAgent: AUTH_USER_AGENT,
   },
   {
     pattern: /^\/sync\/([^/]+)\/app\.php$/,
     buildUrl: (m) => `https://mobireg.pl/${m[1]}/modules/api/app.php`,
-    addUserAgent: true,
+    userAgent: APP_USER_AGENT,
   },
   {
     pattern: /^\/poczta\/(.+)$/,
     buildUrl: (m) => `https://poczta.mobireg.pl/${m[1]}`,
-    addUserAgent: true,
+    userAgent: APP_USER_AGENT,
   },
   {
     pattern: /^\/poczta\/?$/,
     buildUrl: () => `https://poczta.mobireg.pl/`,
-    addUserAgent: true,
+    userAgent: APP_USER_AGENT,
   },
 ];
+
+function upstreamHeaders(request: Request, userAgent: string): Headers {
+  const headers = new Headers();
+  for (const name of FORWARDED_HEADERS) {
+    const value = request.headers.get(name);
+    if (value) {
+      headers.set(name, value);
+    }
+  }
+  headers.set('User-Agent', userAgent);
+  const cookieJar = request.headers.get('X-Cookie-Jar');
+  if (cookieJar) {
+    headers.set('Cookie', cookieJar);
+  }
+  return headers;
+}
 
 function rewriteLocationHeader(
   headers: Headers,
@@ -155,21 +173,7 @@ export default {
         targetUrl += url.search;
       }
 
-      const headers = new Headers(request.headers);
-      headers.delete('host');
-      if (route.addUserAgent) {
-        headers.set('User-Agent', USER_AGENT);
-      }
-
-      const clientCookies = headers.get('X-Cookie-Jar');
-      if (clientCookies) {
-        const existing = headers.get('cookie') ?? '';
-        headers.set(
-          'cookie',
-          existing ? `${existing}; ${clientCookies}` : clientCookies,
-        );
-        headers.delete('X-Cookie-Jar');
-      }
+      const headers = upstreamHeaders(request, route.userAgent);
 
       const hasBody = request.method !== 'GET' && request.method !== 'DELETE';
 
