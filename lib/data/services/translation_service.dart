@@ -128,13 +128,6 @@ class TranslationService {
     await _mlKit?.deleteModel(langCode);
   }
 
-  Future<void> clearCache() async {
-    final db = _database;
-    if (db != null) {
-      await db.delete(db.translationCacheEntries).go();
-    }
-  }
-
   Future<void> dispose() async {
     await _mlKit?.close();
     _deepL?.dispose();
