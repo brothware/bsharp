@@ -692,15 +692,13 @@ enum _MobiregNotificationKind {
 
   final String key;
   final String channelId;
-
-  /// Null for [other]: the server named something this app cannot place.
   final ChangeCategory? category;
 
   static _MobiregNotificationKind forKey(String key) {
     final known = values.where((kind) => kind.key == key).firstOrNull;
-    if (known != null) return known;
-    // The server has renamed a kind, or added one. Say so: swallowing it
-    // silently is how every push ends up on the dashboard.
+    if (known != null) {
+      return known;
+    }
     debugPrint('MobiregDataProvider: unknown notification kind "$key"');
     return other;
   }
@@ -728,8 +726,6 @@ enum _MobiregNotificationKind {
     substitutions ||
     cancellations ||
     planChanges => t.notification.scheduleDescription,
-    // These two have no description of their own translated yet.
-    exams || announcements => t.notification.generalDescription,
-    other => t.notification.generalDescription,
+    exams || announcements || other => t.notification.generalDescription,
   };
 }
