@@ -22,7 +22,9 @@ npm install
 npm start
 ```
 
-The mock server starts on `http://localhost:8080`. Set `PORT=8090` to match the integration test.
+The mock server starts on `http://localhost:8080`. The integration test
+(`test/integration/mobireg_mock_test.dart`) expects port 8090, so start the
+mock with `PORT=8090 npm start` for it; see [TESTING.md](TESTING.md).
 
 ### Docker
 
