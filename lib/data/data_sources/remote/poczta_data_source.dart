@@ -81,41 +81,12 @@ class PocztaDataSource {
     }
   }
 
-  Future<Result<int>> unreadCount({
-    required String school,
-    required String messagesToken,
-  }) async {
-    try {
-      final response = await _client.post<dynamic>(
-        '/api/unreadMessages',
-        data: {'school': school, 'messagesToken': messagesToken},
-        options: Options(headers: _baseHeaders()),
-      );
-      final count = int.tryParse('${response.data}'.trim());
-      if (count == null) {
-        return const Result.failure(
-          UnknownFailure(message: 'Unread count is not a number'),
-        );
-      }
-      return Result.success(count);
-    } on DioException catch (e) {
-      return Result.failure(_failureOf(e));
-    }
-  }
-
   Future<Result<List<dynamic>>> getInbox({int skip = 0, String query = ''}) {
     return _folder('inbox', skip, query);
   }
 
   Future<Result<List<dynamic>>> getSent({int skip = 0, String query = ''}) {
     return _folder('sent', skip, query);
-  }
-
-  Future<Result<List<dynamic>>> getImportant({
-    int skip = 0,
-    String query = '',
-  }) {
-    return _folder('important', skip, query);
   }
 
   Future<Result<List<dynamic>>> getTrash({int skip = 0, String query = ''}) {
@@ -208,33 +179,6 @@ class PocztaDataSource {
       success: (_) => const Result.success(null),
       failure: Result.failure,
     );
-  }
-
-  Future<Result<Map<String, dynamic>>> getReceiverTypes() async {
-    final result = await _call(
-      (options) => _client.post<dynamic>(
-        '/api/messages/receivers',
-        data: <String, dynamic>{},
-        options: options,
-      ),
-    );
-    return result.when(
-      success: (response) {
-        final data = response.data;
-        if (data is Map<String, dynamic>) {
-          return Result.success(data);
-        }
-        return const Result.success(<String, dynamic>{
-          'types': <String, dynamic>{},
-          'users': <dynamic>[],
-        });
-      },
-      failure: Result.failure,
-    );
-  }
-
-  Future<Result<List<dynamic>>> getReceiversByType(String type) {
-    return _postMessages('/api/messages/receivers', {'type': type});
   }
 
   Future<Result<List<dynamic>>> searchReceivers(String query) {

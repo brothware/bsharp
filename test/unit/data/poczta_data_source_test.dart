@@ -10,7 +10,6 @@ import 'package:flutter_test/flutter_test.dart';
 const _messagingUrl = 'https://poczta.mobireg.pl/sso';
 const _unauthorized = 401;
 const _ok = 200;
-const _unreadCount = 3;
 
 class _PocztaFake {
   bool expireOnce = false;
@@ -50,10 +49,7 @@ class _PocztaFake {
     if (options.path.startsWith('/files/')) {
       return _respond(options, _ok, _body(options, 'content'));
     }
-    if (options.path == '/api/unreadMessages') {
-      return _respond(options, _ok, '$_unreadCount');
-    }
-    const folders = ['inbox', 'sent', 'important', 'trash'];
+    const folders = ['inbox', 'sent', 'trash'];
     if (folders.any((folder) => options.path == '/api/messages/$folder')) {
       return _respond(options, _ok, {'items': <Object>[], 'total': 0});
     }
@@ -158,12 +154,10 @@ void main() {
     final (source, seen) = await _signedIn();
 
     await source.getSent(skip: 20);
-    await source.getImportant();
     await source.getTrash();
 
     expect(seen.map((o) => o.data), [
       {'limit': 20, 'skip': 20},
-      {'limit': 20, 'skip': 0},
       {'limit': 20, 'skip': 0},
     ]);
   });
@@ -188,17 +182,6 @@ void main() {
     expect(result, isA<Success<List<dynamic>>>());
     expect(seen.where((o) => o.path.startsWith('/sso/')).length, 2);
     expect(seen.where((o) => o.path == '/api/messages/inbox').length, 2);
-  });
-
-  test('reads the unread count without a cookie', () async {
-    final seen = <RequestOptions>[];
-    final source = PocztaDataSource(client: _fakePoczta(seen));
-
-    final count = await source.unreadCount(school: 'sp1', messagesToken: 't');
-
-    expect(count.valueOrNull, 3);
-    expect(seen.single.data, {'school': 'sp1', 'messagesToken': 't'});
-    expect(seen.single.headers.containsKey('Cookie'), isFalse);
   });
 
   test('searches receivers with query and ids', () async {
@@ -255,22 +238,6 @@ void main() {
     ]);
     expect(seen.map((o) => o.method), ['POST', 'POST']);
     expect(seen.map((o) => o.data), [<String, dynamic>{}, <String, dynamic>{}]);
-  });
-
-  test('lists receiver types and receivers of a type', () async {
-    final (source, seen) = await _signedIn();
-
-    await source.getReceiverTypes();
-    await source.getReceiversByType('teachers');
-
-    expect(seen.map((o) => o.path), [
-      '/api/messages/receivers',
-      '/api/messages/receivers',
-    ]);
-    expect(seen.map((o) => o.data), [
-      <String, dynamic>{},
-      {'type': 'teachers'},
-    ]);
   });
 
   test('fails with SessionExpired after two consecutive 401s', () async {
