@@ -46,6 +46,16 @@ class _MalformedReceiversProvider extends DemoDataProvider {
       throw const FormatException('receivers payload malformed');
 }
 
+class _SendRejectingProvider extends _ReadableRejectingMailProvider {
+  @override
+  Future<void> sendMessage({
+    required List<String> recipientIds,
+    required String title,
+    required String content,
+    int? previousMessageId,
+  }) async => throw _rejected;
+}
+
 PocztaMessage _message({int id = 1, List<PocztaAttachment>? files}) {
   return PocztaMessage(
     id: id,
@@ -153,5 +163,34 @@ void main() {
 
     expect(find.text('Could not search for recipients'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a rejected reply shows an error and logs without content', (
+    tester,
+  ) async {
+    const secretContent = 'confidential body';
+    final logs = <String>[];
+    final originalDebugPrint = debugPrint;
+    debugPrint = (message, {wrapWidth}) => logs.add(message ?? '');
+    await tester.pumpWidget(
+      _app(
+        MessageDetailView(message: _message()),
+        provider: _SendRejectingProvider(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.reply));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, secretContent);
+    await tester.pump();
+    await tester.tap(find.byIcon(Icons.send));
+    await tester.pumpAndSettle();
+
+    debugPrint = originalDebugPrint;
+
+    expect(find.text('Failed to send message'), findsOneWidget);
+    expect(logs.where((line) => line.contains('send failed')), isNotEmpty);
+    expect(logs.any((line) => line.contains(secretContent)), isFalse);
   });
 }

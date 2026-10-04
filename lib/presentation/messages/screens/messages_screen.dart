@@ -394,7 +394,8 @@ class _MessageListState extends ConsumerState<_MessageList> {
         SnackBar(content: Text(t.messages.messageSent)),
       );
       unawaited(ref.read(syncStatusProvider.notifier).syncMessages());
-    } on Exception {
+    } on Exception catch (error, stackTrace) {
+      debugPrint('MessagesScreen: send failed: $error\n$stackTrace');
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(t.messages.sendFailed)),
