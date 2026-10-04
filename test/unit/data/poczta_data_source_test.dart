@@ -245,7 +245,23 @@ void main() {
     expect(seen.map((o) => o.data), [<String, dynamic>{}, <String, dynamic>{}]);
   });
 
-  test('a folder that is not {items, total} is a FormatException', () async {
+  test('a folder without a total still yields its items', () async {
+    final seen = <RequestOptions>[];
+    final server = _PocztaFake()
+      ..folderBody = {
+        'items': [
+          {'id': 1},
+        ],
+      };
+    final source = PocztaDataSource(client: server.client(seen));
+    await source.establishSession(school: 'sp1', messagesToken: 't');
+
+    final result = await source.getInbox();
+
+    expect(result.valueOrNull, hasLength(1));
+  });
+
+  test('a folder without items is a FormatException', () async {
     final seen = <RequestOptions>[];
     final server = _PocztaFake()
       ..folderBody = {

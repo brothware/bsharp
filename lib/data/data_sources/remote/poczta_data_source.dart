@@ -105,10 +105,10 @@ class PocztaDataSource {
       if (query.isNotEmpty) 'query': query,
     });
     return result.map((data) {
-      if (data is Map && data['items'] is List && data['total'] is int) {
+      if (data is Map && data['items'] is List) {
         return data['items'] as List<dynamic>;
       }
-      throw FormatException('Poczta $path: expected {items, total}');
+      throw FormatException('Poczta $path: expected {items}');
     });
   }
 
