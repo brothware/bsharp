@@ -1,5 +1,6 @@
 import 'package:bsharp/core/error/result.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 const _pageSize = 20;
 const _unauthorized = 401;
@@ -9,10 +10,30 @@ const _clientErrorFloor = 400;
 const _successFloor = 200;
 const _redirectFloor = 300;
 
+class _CookieChannel {
+  const _CookieChannel({required this.isWeb});
+
+  final bool isWeb;
+
+  String get requestHeader => isWeb ? 'X-Cookie-Jar' : 'Cookie';
+
+  String fromResponse(Headers headers) {
+    if (isWeb) {
+      return headers.value('x-cookie-jar') ?? '';
+    }
+    return (headers['set-cookie'] ?? const <String>[])
+        .map((value) => value.split(';').first.trim())
+        .where((value) => value.isNotEmpty)
+        .join('; ');
+  }
+}
+
 class PocztaDataSource {
-  PocztaDataSource({required this._client});
+  PocztaDataSource({required this._client, bool isWeb = kIsWeb})
+    : _cookieChannel = _CookieChannel(isWeb: isWeb);
 
   final Dio _client;
+  final _CookieChannel _cookieChannel;
   String? _cookie;
   String? _school;
   String? _messagesToken;
@@ -46,10 +67,7 @@ class PocztaDataSource {
           headers: {'Accept': 'text/html'},
         ),
       );
-      final cookie = (response.headers['set-cookie'] ?? const <String>[])
-          .map((value) => value.split(';').first.trim())
-          .where((value) => value.isNotEmpty)
-          .join('; ');
+      final cookie = _cookieChannel.fromResponse(response.headers);
       if (cookie.isEmpty) {
         _cookie = null;
         return const Result.failure(
@@ -339,7 +357,7 @@ class PocztaDataSource {
       validateStatus: (status) => status != null && status < _serverErrorFloor,
       headers: {
         ..._baseHeaders(),
-        'Cookie': ?cookie,
+        _cookieChannel.requestHeader: ?cookie,
       },
     );
   }

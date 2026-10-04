@@ -15,6 +15,7 @@ const _unreadCount = 3;
 class _PocztaFake {
   bool expireOnce = false;
   bool expireAlways = false;
+  bool exposeCookiesAsJar = false;
 
   Dio client(List<RequestOptions> seen) {
     final factory = ApiClientFactory(
@@ -35,6 +36,11 @@ class _PocztaFake {
 
   Response<dynamic> _answer(RequestOptions options) {
     if (options.path.startsWith('/sso/')) {
+      if (exposeCookiesAsJar) {
+        return _respond(options, _ok, '', {
+          'x-cookie-jar': ['laravel_session=abc; XSRF-TOKEN=x'],
+        });
+      }
       return _respond(options, _ok, '', {
         'set-cookie': ['laravel_session=abc; path=/', 'XSRF-TOKEN=x; path=/'],
       });
@@ -111,6 +117,35 @@ void main() {
     expect(inbox.headers['User-Agent'], AppConstants.appUserAgent);
     expect(inbox.headers.containsKey('X-CSRF-TOKEN'), isFalse);
     expect(inbox.headers.containsKey('X-Requested-With'), isFalse);
+  });
+
+  test('relays cookies through the proxy jar header on web', () async {
+    final seen = <RequestOptions>[];
+    final server = _PocztaFake()..exposeCookiesAsJar = true;
+    final source = PocztaDataSource(
+      client: server.client(seen),
+      isWeb: true,
+    );
+
+    await source.establishSession(school: 'sp1', messagesToken: 't');
+    await source.getInbox();
+
+    final inbox = seen.last;
+    expect(inbox.headers['X-Cookie-Jar'], 'laravel_session=abc; XSRF-TOKEN=x');
+    expect(inbox.headers.containsKey('Cookie'), isFalse);
+  });
+
+  test('fails the web sign-in when the proxy exposes no jar', () async {
+    final seen = <RequestOptions>[];
+    final source = PocztaDataSource(client: _fakePoczta(seen), isWeb: true);
+
+    final result = await source.establishSession(
+      school: 'sp1',
+      messagesToken: 't',
+    );
+
+    expect(result, isA<Failure<void>>());
+    expect(source.hasSession, isFalse);
   });
 
   test('derives the base url from the messaging url', () {
