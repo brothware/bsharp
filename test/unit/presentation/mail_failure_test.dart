@@ -40,6 +40,12 @@ class _ReadableRejectingMailProvider extends _RejectingMailProvider {
   Future<Map<String, dynamic>?> readMessage(int messageId) async => null;
 }
 
+class _MalformedReceiversProvider extends DemoDataProvider {
+  @override
+  Future<List<PocztaReceiver>> searchReceivers(String query) async =>
+      throw const FormatException('receivers payload malformed');
+}
+
 PocztaMessage _message({int id = 1, List<PocztaAttachment>? files}) {
   return PocztaMessage(
     id: id,
@@ -130,5 +136,22 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Could not search for recipients'), findsOneWidget);
+  });
+
+  testWidgets('a malformed receiver search shows an error', (tester) async {
+    await tester.pumpWidget(
+      _app(
+        const Scaffold(body: ComposeMessageView()),
+        provider: _MalformedReceiversProvider(),
+      ),
+    );
+    await tester.pump();
+
+    await tester.enterText(find.byType(TextField).first, 'Nowak');
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Could not search for recipients'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }

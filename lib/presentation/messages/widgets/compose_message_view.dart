@@ -82,13 +82,10 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     try {
       receivers = await dataProvider.searchReceivers(query);
     } on MessagingException catch (error, stackTrace) {
-      debugPrint('ComposeMessageView: search failed: $error\n$stackTrace');
-      if (!mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(t.messages.searchFailed)));
+      _reportSearchFailure(error, stackTrace);
+      return;
+    } on FormatException catch (error, stackTrace) {
+      _reportSearchFailure(error, stackTrace);
       return;
     }
     if (!mounted) return;
@@ -97,6 +94,16 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
       _searchResults = receivers;
       _isSearching = true;
     });
+  }
+
+  void _reportSearchFailure(Object error, StackTrace stackTrace) {
+    debugPrint('ComposeMessageView: search failed: $error\n$stackTrace');
+    if (!mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(t.messages.searchFailed)));
   }
 
   @override
