@@ -17,12 +17,17 @@ jobs:
       version: ${{ steps.extract.outputs.version }}
       build_number: ${{ steps.extract.outputs.build_number }}
     steps:
+      - uses: actions/checkout@v6
+
+      - name: Test build number script
+        run: bash tool/build_number_test.sh
+
       - name: Extract version from tag
         id: extract
         run: |
           TAG="${GITHUB_REF#refs/tags/v}"
           VERSION="${TAG}"
-          BUILD_NUMBER="$(echo "$TAG" | tr -d '.' | head -c 8)"
+          BUILD_NUMBER="$(bash tool/build_number.sh "v${TAG}")"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
 
