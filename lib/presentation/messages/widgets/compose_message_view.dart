@@ -169,11 +169,6 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
           widget.replyTo != null ? t.messages.reply : t.messages.newMessage,
         ),
         actions: [
-          IconButton(
-            onPressed: _isSending ? null : _pickAttachments,
-            icon: const Icon(Icons.attach_file),
-            tooltip: t.compose.attach,
-          ),
           TextButton.icon(
             onPressed: _canSend ? _send : null,
             icon: const Icon(Icons.send),
@@ -304,6 +299,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
           ),
           _FormattingToolbar(
             controller: _contentController,
+            onAttach: _isSending ? null : _pickAttachments,
             onTranslate: ref.watch(isTranslationAvailableProvider)
                 ? () => _translateForRecipient(ref)
                 : null,
@@ -581,10 +577,12 @@ class _SendingProgress extends StatelessWidget {
 class _FormattingToolbar extends StatelessWidget {
   const _FormattingToolbar({
     required this.controller,
+    required this.onAttach,
     this.onTranslate,
   });
 
   final RichTextEditingController controller;
+  final VoidCallback? onAttach;
   final VoidCallback? onTranslate;
 
   @override
@@ -623,14 +621,18 @@ class _FormattingToolbar extends StatelessWidget {
               isActive: active.contains(FormatType.underline),
               onPressed: () => controller.toggleFormat(FormatType.underline),
             ),
-            if (onTranslate != null) ...[
-              const Spacer(),
+            const Spacer(),
+            _ToolbarButton(
+              icon: Icons.attach_file,
+              tooltip: t.compose.attach,
+              onPressed: onAttach,
+            ),
+            if (onTranslate case final translate?)
               _ToolbarButton(
                 icon: Icons.translate,
                 tooltip: t.translation.translate,
-                onPressed: onTranslate!,
+                onPressed: translate,
               ),
-            ],
           ],
         ),
       ),
@@ -647,7 +649,7 @@ class _ToolbarButton extends StatelessWidget {
   });
 
   final IconData icon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String tooltip;
   final bool isActive;
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/app/attachment_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/data/services/attachment_inspector.dart';
@@ -9,6 +10,7 @@ import 'package:bsharp/domain/attachment_uploader.dart';
 import 'package:bsharp/domain/entities/outgoing_attachment.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/messages/attachments/attachment_picker.dart';
 import 'package:bsharp/presentation/messages/widgets/attachment_widgets.dart';
@@ -145,6 +147,8 @@ Future<void> _openCompose(
   required _MailProvider provider,
   required _FakePicker picker,
   _FakeInspector? inspector,
+  bool isReply = true,
+  bool isTranslationAvailable = false,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
@@ -155,13 +159,19 @@ Future<void> _openCompose(
         attachmentInspectorProvider.overrideWithValue(
           inspector ?? _FakeInspector(),
         ),
+        isTranslationAvailableProvider.overrideWithValue(
+          isTranslationAvailable,
+        ),
       ],
       child: MaterialApp(
         home: Scaffold(
           body: Consumer(
             builder: (context, ref, _) => TextButton(
-              onPressed: () =>
-                  composeAndSend(context, ref, replyTo: _received()),
+              onPressed: () => composeAndSend(
+                context,
+                ref,
+                replyTo: isReply ? _received() : null,
+              ),
               child: const Text('open'),
             ),
           ),
@@ -185,6 +195,16 @@ Future<void> _attach(
   await tester.pumpAndSettle();
   await tester.tap(find.text('Browse files'));
   await tester.pumpAndSettle();
+}
+
+Finder _toolbarRow() {
+  return find
+      .ancestor(of: find.byTooltip(t.messages.bold), matching: find.byType(Row))
+      .first;
+}
+
+Finder _inToolbar(Finder finder) {
+  return find.descendant(of: _toolbarRow(), matching: finder);
 }
 
 Future<void> _tapSend(WidgetTester tester) async {
@@ -220,6 +240,107 @@ void main() {
     expect(find.text('Record a video'), findsOneWidget);
     expect(find.text('Photos and videos'), findsOneWidget);
     expect(find.text('Browse files'), findsOneWidget);
+  });
+
+  for (final isReply in [false, true]) {
+    testWidgets(
+      'the paperclip is in the formatting toolbar, not the app bar '
+      '(${isReply ? 'reply' : 'new message'})',
+      (tester) async {
+        await _openCompose(
+          tester,
+          provider: provider,
+          picker: picker,
+          isReply: isReply,
+        );
+
+        expect(
+          find.descendant(
+            of: find.byType(AppBar),
+            matching: find.byIcon(Icons.attach_file),
+          ),
+          findsNothing,
+        );
+        expect(_inToolbar(find.byTooltip('Attach files')), findsOneWidget);
+        expect(_inToolbar(find.byIcon(Icons.attach_file)), findsOneWidget);
+      },
+    );
+  }
+
+  testWidgets('the paperclip sits right before the translate button', (
+    tester,
+  ) async {
+    await _openCompose(
+      tester,
+      provider: provider,
+      picker: picker,
+      isTranslationAvailable: true,
+    );
+
+    final buttons = tester
+        .widgetList<IconButton>(_inToolbar(find.byType(IconButton)))
+        .map((button) => button.tooltip)
+        .toList();
+
+    expect(buttons.sublist(buttons.length - 2), [
+      'Attach files',
+      t.translation.translate,
+    ]);
+    final attach = tester.getSize(find.byTooltip('Attach files'));
+    final bold = tester.getSize(find.byTooltip(t.messages.bold));
+    expect(attach, bold);
+  });
+
+  testWidgets('without translation the paperclip ends the toolbar', (
+    tester,
+  ) async {
+    await _openCompose(tester, provider: provider, picker: picker);
+
+    final buttons = tester
+        .widgetList<IconButton>(_inToolbar(find.byType(IconButton)))
+        .map((button) => button.tooltip)
+        .toList();
+
+    expect(buttons.last, 'Attach files');
+    expect(
+      tester.getTopRight(find.byTooltip('Attach files')).dx,
+      greaterThan(tester.getTopRight(find.byTooltip(t.messages.bold)).dx),
+    );
+  });
+
+  testWidgets('a narrow German compose screen does not overflow', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.runAsync(() => LocaleSettings.setLocale(AppLocale.de));
+    addTearDown(() => LocaleSettings.setLocaleSync(AppLocale.en));
+
+    for (final isReply in [false, true]) {
+      await tester.pumpWidget(const SizedBox());
+      await _openCompose(
+        tester,
+        provider: provider,
+        picker: picker,
+        isReply: isReply,
+        isTranslationAvailable: true,
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(
+        find.text(isReply ? t.messages.reply : t.messages.newMessage),
+        findsOneWidget,
+      );
+      expect(find.text(t.messages.send), findsOneWidget);
+      expect(_inToolbar(find.byTooltip(t.compose.attach)), findsOneWidget);
+      expect(
+        _inToolbar(find.byTooltip(t.translation.translate)),
+        findsOneWidget,
+      );
+      final sendRight = tester.getTopRight(find.text(t.messages.send)).dx;
+      expect(sendRight, lessThanOrEqualTo(320));
+    }
   });
 
   testWidgets('each option asks the picker for its source', (tester) async {
