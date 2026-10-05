@@ -26,6 +26,11 @@ class _ExplodingMailProvider extends DemoDataProvider {
       throw StateError('mail exploded');
 }
 
+class _SessionlessMailProvider extends DemoDataProvider {
+  @override
+  Future<bool> loadMessages(Ref ref, {DateTime? now}) async => false;
+}
+
 class _CountingMailProvider extends DemoDataProvider {
   int loads = 0;
   int refreshes = 0;
@@ -147,6 +152,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(provider.loads, 1);
+    expect(find.text('Could not load messages'), findsNothing);
   });
 
   testWidgets('a retry that throws is reported instead of escaping', (
@@ -165,6 +171,21 @@ void main() {
 
     expect(find.text('Could not load messages'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a retry that cannot load mail is reported', (tester) async {
+    await tester.pumpWidget(
+      _app(
+        const Scaffold(body: MessagesScreen()),
+        health: _staleIn(DataProviderCapability.messages),
+        provider: _SessionlessMailProvider(),
+      ),
+    );
+
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Could not load messages'), findsOneWidget);
   });
 
   testWidgets('the grades page shows the label when grades are stale', (

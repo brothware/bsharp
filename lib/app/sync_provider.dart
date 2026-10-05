@@ -260,12 +260,12 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     return selection?.studentId;
   }
 
-  Future<void> syncMessages() async {
+  Future<bool> syncMessages() async {
     final provider = ref.read(activeDataProviderProvider);
     final isStale = ref
         .read(syncHealthProvider)
         .isStale(DataProviderCapability.messages);
-    await _loadMail(provider, () async {
+    return _loadMail(provider, () async {
       if (isStale) {
         return provider.loadMessages(ref);
       }
@@ -274,7 +274,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     });
   }
 
-  Future<void> _loadMail(
+  Future<bool> _loadMail(
     SchoolDataProvider provider,
     Future<bool> Function() load,
   ) async {
@@ -284,6 +284,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       if (isLoaded) {
         _recordSynced(provider.areasCovered(SyncOperation.mail));
       }
+      return isLoaded;
     } on Object catch (error, stackTrace) {
       final staleAreas = provider.staleAreasAfter(
         error,
@@ -301,6 +302,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
         staleAreas,
         knownSyncedAt: _persistedSyncTimes(staleAreas),
       );
+      return false;
     }
   }
 

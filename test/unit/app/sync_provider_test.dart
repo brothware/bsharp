@@ -589,8 +589,9 @@ void main() {
       await notifier.sync();
 
       server.mailSignInFails = false;
-      await notifier.syncMessages();
+      final isLoaded = await notifier.syncMessages();
 
+      expect(isLoaded, isTrue);
       expect(container.read(syncHealthProvider).staleAreas, isEmpty);
     });
 
@@ -604,6 +605,34 @@ void main() {
 
       expect(container.read(syncStatusProvider), SyncStatus.completed);
       expect(container.read(syncHealthProvider).lastSyncedAt, isEmpty);
+    });
+
+    test('a mail retry that loads nothing reports it', () async {
+      final container = await _containerWith(
+        provider: _UnloadedMailProvider(),
+        account: _account.copyWith(providerType: 'demo'),
+      );
+      container.read(syncHealthProvider.notifier).markStale({
+        DataProviderCapability.messages,
+      });
+
+      final isLoaded = await container
+          .read(syncStatusProvider.notifier)
+          .syncMessages();
+
+      expect(isLoaded, isFalse);
+    });
+
+    test('a mail retry that fails again reports it', () async {
+      server.mailSignInFails = true;
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+      final notifier = container.read(syncStatusProvider.notifier);
+      await notifier.sync();
+
+      expect(await notifier.syncMessages(), isFalse);
     });
 
     test('a mobireg parse failure is stale only for the mail operation', () {

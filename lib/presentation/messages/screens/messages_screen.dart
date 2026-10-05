@@ -103,11 +103,14 @@ class MessagesScreen extends ConsumerWidget {
 Future<void> _retryMail(BuildContext context, WidgetRef ref) async {
   final messenger = ScaffoldMessenger.of(context);
   try {
-    await ref.read(syncStatusProvider.notifier).syncMessages();
+    if (await ref.read(syncStatusProvider.notifier).syncMessages()) {
+      return;
+    }
+    debugPrint('MessagesScreen: mail retry loaded no mail');
   } on Object catch (error, stackTrace) {
     debugPrint('MessagesScreen: mail retry failed: $error\n$stackTrace');
-    messenger.showSnackBar(SnackBar(content: Text(t.messages.loadFailed)));
   }
+  messenger.showSnackBar(SnackBar(content: Text(t.messages.loadFailed)));
 }
 
 class _MessageList extends ConsumerStatefulWidget {
