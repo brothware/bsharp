@@ -436,7 +436,15 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     var pending = attachments;
     while (pending.isNotEmpty && mounted) {
       final failed = await _uploadPending(dataProvider, messageId, pending);
-      if (failed.isEmpty || !mounted) {
+      if (!mounted) {
+        break;
+      }
+      if (failed == null) {
+        setState(() => _isTransferring = false);
+        await showAttachmentsLostDialog(context);
+        break;
+      }
+      if (failed.isEmpty) {
         break;
       }
       setState(() => _isTransferring = false);
@@ -499,7 +507,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     }
   }
 
-  Future<List<AttachmentUploadResult>> _uploadPending(
+  Future<List<AttachmentUploadResult>?> _uploadPending(
     SchoolDataProvider dataProvider,
     int messageId,
     List<OutgoingAttachment> pending,
@@ -533,6 +541,12 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
             AttachmentUploadFailure.server,
           ),
       ];
+    } on Object catch (error, stackTrace) {
+      debugPrint(
+        'ComposeMessageView: uploads to sent message $messageId broke: '
+        '$error\n$stackTrace',
+      );
+      return null;
     }
   }
 }

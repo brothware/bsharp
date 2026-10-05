@@ -69,6 +69,7 @@ class _MailProvider extends DemoDataProvider {
   bool isSessionDead = false;
   bool sendFails = false;
   bool answersNoId = false;
+  Object? uploadError;
   Completer<void>? uploadGate;
 
   @override
@@ -102,6 +103,10 @@ class _MailProvider extends DemoDataProvider {
     void Function(int index)? onUploading,
   }) {
     expect(messageId, _sentId);
+    final error = uploadError;
+    if (error != null) {
+      Error.throwWithStackTrace(error, StackTrace.current);
+    }
     uploadBatches.add([for (final attachment in attachments) attachment.name]);
     return AttachmentUploader(pause: (_) async {}).uploadAll(attachments, (
       attachment,
@@ -573,6 +578,37 @@ void main() {
     expect(find.text('Message sent'), findsOneWidget);
     expect(provider.sentTitles, hasLength(1));
   });
+
+  for (final error in <Object>[
+    StateError('attachment has no content'),
+    const FormatException('unexpected upload answer'),
+  ]) {
+    testWidgets('an upload that throws ${error.runtimeType} is reported', (
+      tester,
+    ) async {
+      provider.uploadError = error;
+      await _openCompose(tester, provider: provider, picker: picker);
+      await _attach(tester, picker, [_attachment('a.pdf')]);
+
+      await _tapSend(tester);
+
+      expect(provider.sentTitles, hasLength(1));
+      expect(
+        find.text(
+          'The files could not be attached to this message. '
+          'Send them in a new message.',
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ComposeMessageView), findsNothing);
+      expect(find.text('Message sent'), findsOneWidget);
+      expect(provider.sentTitles, hasLength(1));
+    });
+  }
 
   testWidgets('a message without files is sent without a mailbox check', (
     tester,
