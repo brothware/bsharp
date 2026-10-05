@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bsharp/data/services/sync_snapshot.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +18,28 @@ void main() {
 
       expect(await SyncSnapshot.load(prefs), isNull);
     });
+
+    for (final (label, stored) in [
+      ('not JSON', 'not json'),
+      ('not an object', '[1, 2]'),
+      ('a malformed object', '{"version": 2, "isInboxBaselineKnown": "yes"}'),
+    ]) {
+      test('a snapshot that is $label is logged and cleared', () async {
+        SharedPreferences.setMockInitialValues({'sync_snapshot': stored});
+        final prefs = await SharedPreferences.getInstance();
+        final logs = <String>[];
+        final originalDebugPrint = debugPrint;
+        debugPrint = (message, {wrapWidth}) => logs.add(message ?? '');
+        addTearDown(() => debugPrint = originalDebugPrint);
+
+        expect(await SyncSnapshot.load(prefs), isNull);
+        expect(prefs.containsKey('sync_snapshot'), isFalse);
+        expect(
+          logs.where((line) => line.contains('sync snapshot unreadable')),
+          isNotEmpty,
+        );
+      });
+    }
 
     test('a snapshot saved by this version comes back', () async {
       SharedPreferences.setMockInitialValues({});

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SyncSnapshot {
@@ -25,7 +26,14 @@ class SyncSnapshot {
       testIds: _intSet(json['testIds']),
       reprimandIds: _intSet(json['reprimandIds']),
       inboxMessageIds: _intSet(json['inboxMessageIds']),
-      isInboxBaselineKnown: json['isInboxBaselineKnown'] as bool? ?? true,
+      isInboxBaselineKnown: switch (json['isInboxBaselineKnown']) {
+        final bool isKnown => isKnown,
+        null => true,
+        final other => throw FormatException(
+          'isInboxBaselineKnown is not a bool',
+          other,
+        ),
+      },
     );
   }
 
@@ -142,12 +150,17 @@ class SyncSnapshot {
     final json = prefs.getString(_prefsKey);
     if (json == null) return null;
     try {
-      final map = jsonDecode(json) as Map<String, dynamic>;
+      final map = jsonDecode(json);
+      if (map is! Map<String, dynamic>) {
+        throw const FormatException('expected a JSON object');
+      }
       if (map['version'] != currentVersion) {
         return null;
       }
       return SyncSnapshot.fromJson(map);
-    } on Object {
+    } on FormatException catch (error) {
+      debugPrint('SyncSnapshot: sync snapshot unreadable, cleared: $error');
+      await prefs.remove(_prefsKey);
       return null;
     }
   }
