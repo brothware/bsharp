@@ -38,6 +38,7 @@ class FakeAppServer {
   final staleUsers = <Map<String, dynamic>>[];
   final rejectedPupilIds = <String>{};
   int logins = 0;
+  Object? timetableOverride;
   bool rejectsPassword = false;
   int mailSignIns = 0;
   bool mailSignInFails = false;
@@ -210,7 +211,7 @@ class FakeAppServer {
           body['dateFrom'] as String,
           body['dateTo'] as String,
         ));
-        return loadMobiregFixture('timetable_events');
+        return timetableOverride ?? loadMobiregFixture('timetable_events');
       case 'attendance-stats':
         return loadMobiregFixture('attendance_stats');
       case 'users':

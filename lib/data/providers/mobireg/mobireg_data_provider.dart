@@ -17,6 +17,7 @@ import 'package:bsharp/data/providers/mobireg/mobireg_message_handler.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_view_cache.dart';
 import 'package:bsharp/data/providers/mobireg/parsers/account_parser.dart';
 import 'package:bsharp/data/providers/mobireg/parsers/attendance_parser.dart';
+import 'package:bsharp/data/providers/mobireg/parsers/bell_slots.dart';
 import 'package:bsharp/data/providers/mobireg/parsers/grade_parser.dart';
 import 'package:bsharp/data/providers/mobireg/parsers/school_item_parser.dart';
 import 'package:bsharp/data/providers/mobireg/parsers/term_parser.dart';
@@ -737,11 +738,13 @@ class _MobiregViews {
     final timetableView = timetable;
     final events =
         timetableView != null && _isModuleOn(enabledModules, _timetableModule)
-        ? parseTimetableEvents(
-            timetableView,
-            subjectIdsByName: {
-              for (final subject in parsedSubjects) subject.name: subject.id,
-            },
+        ? assignBellSlotNumbers(
+            parseTimetableEvents(
+              timetableView,
+              subjectIdsByName: {
+                for (final subject in parsedSubjects) subject.name: subject.id,
+              },
+            ),
           )
         : null;
     final attendanceStatsView = attendanceStats;

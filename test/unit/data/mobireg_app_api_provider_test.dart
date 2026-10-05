@@ -267,6 +267,49 @@ void main() {
     expect(fresh.read(attendancesProvider), isNotEmpty);
   });
 
+  test('a load and a cache hydration number lessons identically', () async {
+    server.timetableOverride = [
+      for (var day = 1; day <= 3; day++)
+        {
+          'id': 900 + day,
+          'dateTimeFrom': '2026-09-0$day 08:50:00',
+          'dateTimeTo': '2026-09-0$day 09:35:00',
+          'subjectName': 'matematyka',
+          'isCanceled': 0,
+          'substitution': 0,
+        },
+    ];
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+    await provider.loadSchoolData(ref(), studentId: 6339);
+    final loadedNumbers = container
+        .read(resolvedEventsProvider)
+        .map((event) => event.number)
+        .toList();
+    final fresh = ProviderContainer(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(
+          container.read(sharedPreferencesProvider),
+        ),
+      ],
+    );
+    addTearDown(fresh.dispose);
+
+    MobiregDataProvider(
+      clientFactory: server.factoryFor,
+      sessions: AppApiSessionRegistry(),
+    ).hydrateFromCache(
+      fresh.read(Provider((ref) => ref)),
+      fresh.read(syncCacheProvider),
+      studentId: 6339,
+    );
+
+    expect(loadedNumbers, [1, 1, 1]);
+    expect(
+      fresh.read(resolvedEventsProvider).map((event) => event.number),
+      loadedNumbers,
+    );
+  });
+
   test('hides the modules the school switched off', () async {
     server.users['appConfig'] = {
       'modules': {

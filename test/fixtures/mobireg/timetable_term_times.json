@@ -1,0 +1,4386 @@
+[
+{
+"id": 164,
+"dateTimeFrom": "2026-09-07 14:25:00",
+"dateTimeTo": "2026-09-07 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 167,
+"dateTimeFrom": "2026-09-14 14:25:00",
+"dateTimeTo": "2026-09-14 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 170,
+"dateTimeFrom": "2026-09-21 14:25:00",
+"dateTimeTo": "2026-09-21 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 173,
+"dateTimeFrom": "2026-09-28 14:25:00",
+"dateTimeTo": "2026-09-28 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 176,
+"dateTimeFrom": "2026-10-05 13:30:00",
+"dateTimeTo": "2026-10-05 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 179,
+"dateTimeFrom": "2026-10-12 14:25:00",
+"dateTimeTo": "2026-10-12 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 182,
+"dateTimeFrom": "2026-10-19 14:25:00",
+"dateTimeTo": "2026-10-19 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 185,
+"dateTimeFrom": "2026-10-26 14:25:00",
+"dateTimeTo": "2026-10-26 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 188,
+"dateTimeFrom": "2026-11-02 14:25:00",
+"dateTimeTo": "2026-11-02 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 191,
+"dateTimeFrom": "2026-11-09 14:25:00",
+"dateTimeTo": "2026-11-09 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 194,
+"dateTimeFrom": "2026-11-16 14:25:00",
+"dateTimeTo": "2026-11-16 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 197,
+"dateTimeFrom": "2026-11-23 14:25:00",
+"dateTimeTo": "2026-11-23 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 200,
+"dateTimeFrom": "2026-11-30 14:25:00",
+"dateTimeTo": "2026-11-30 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 203,
+"dateTimeFrom": "2026-12-07 14:25:00",
+"dateTimeTo": "2026-12-07 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 206,
+"dateTimeFrom": "2026-12-14 14:25:00",
+"dateTimeTo": "2026-12-14 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 209,
+"dateTimeFrom": "2026-12-21 14:25:00",
+"dateTimeTo": "2026-12-21 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 212,
+"dateTimeFrom": "2027-01-04 14:25:00",
+"dateTimeTo": "2027-01-04 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 215,
+"dateTimeFrom": "2027-01-11 14:25:00",
+"dateTimeTo": "2027-01-11 15:55:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8087,
+"dateTimeFrom": "2026-09-02 10:40:00",
+"dateTimeTo": "2026-09-02 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8090,
+"dateTimeFrom": "2026-09-09 10:40:00",
+"dateTimeTo": "2026-09-09 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8093,
+"dateTimeFrom": "2026-09-16 10:40:00",
+"dateTimeTo": "2026-09-16 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8096,
+"dateTimeFrom": "2026-09-23 10:40:00",
+"dateTimeTo": "2026-09-23 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8099,
+"dateTimeFrom": "2026-09-30 10:40:00",
+"dateTimeTo": "2026-09-30 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8102,
+"dateTimeFrom": "2026-10-07 10:40:00",
+"dateTimeTo": "2026-10-07 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8105,
+"dateTimeFrom": "2026-10-21 10:40:00",
+"dateTimeTo": "2026-10-21 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8108,
+"dateTimeFrom": "2026-10-28 10:40:00",
+"dateTimeTo": "2026-10-28 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8111,
+"dateTimeFrom": "2026-11-04 10:40:00",
+"dateTimeTo": "2026-11-04 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8114,
+"dateTimeFrom": "2026-11-18 10:40:00",
+"dateTimeTo": "2026-11-18 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8117,
+"dateTimeFrom": "2026-11-25 10:40:00",
+"dateTimeTo": "2026-11-25 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8120,
+"dateTimeFrom": "2026-12-02 10:40:00",
+"dateTimeTo": "2026-12-02 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8123,
+"dateTimeFrom": "2026-12-09 10:40:00",
+"dateTimeTo": "2026-12-09 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8126,
+"dateTimeFrom": "2026-12-16 10:40:00",
+"dateTimeTo": "2026-12-16 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8129,
+"dateTimeFrom": "2027-01-13 10:40:00",
+"dateTimeTo": "2027-01-13 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8132,
+"dateTimeFrom": "2026-09-02 11:30:00",
+"dateTimeTo": "2026-09-02 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8135,
+"dateTimeFrom": "2026-09-09 11:30:00",
+"dateTimeTo": "2026-09-09 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8138,
+"dateTimeFrom": "2026-09-16 11:30:00",
+"dateTimeTo": "2026-09-16 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8141,
+"dateTimeFrom": "2026-09-23 11:30:00",
+"dateTimeTo": "2026-09-23 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8144,
+"dateTimeFrom": "2026-09-30 11:30:00",
+"dateTimeTo": "2026-09-30 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8147,
+"dateTimeFrom": "2026-10-07 11:30:00",
+"dateTimeTo": "2026-10-07 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8150,
+"dateTimeFrom": "2026-10-21 11:30:00",
+"dateTimeTo": "2026-10-21 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8153,
+"dateTimeFrom": "2026-10-28 11:30:00",
+"dateTimeTo": "2026-10-28 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8156,
+"dateTimeFrom": "2026-11-04 11:30:00",
+"dateTimeTo": "2026-11-04 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8159,
+"dateTimeFrom": "2026-11-18 11:30:00",
+"dateTimeTo": "2026-11-18 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8162,
+"dateTimeFrom": "2026-11-25 11:30:00",
+"dateTimeTo": "2026-11-25 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8165,
+"dateTimeFrom": "2026-12-02 11:30:00",
+"dateTimeTo": "2026-12-02 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8168,
+"dateTimeFrom": "2026-12-09 11:30:00",
+"dateTimeTo": "2026-12-09 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8171,
+"dateTimeFrom": "2026-12-16 11:30:00",
+"dateTimeTo": "2026-12-16 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 8174,
+"dateTimeFrom": "2027-01-13 11:30:00",
+"dateTimeTo": "2027-01-13 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9743,
+"dateTimeFrom": "2026-09-04 12:30:00",
+"dateTimeTo": "2026-09-04 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9746,
+"dateTimeFrom": "2026-09-11 12:30:00",
+"dateTimeTo": "2026-09-11 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9749,
+"dateTimeFrom": "2026-09-18 12:30:00",
+"dateTimeTo": "2026-09-18 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9752,
+"dateTimeFrom": "2026-09-25 12:30:00",
+"dateTimeTo": "2026-09-25 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9755,
+"dateTimeFrom": "2026-10-02 12:30:00",
+"dateTimeTo": "2026-10-02 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9758,
+"dateTimeFrom": "2026-10-09 12:30:00",
+"dateTimeTo": "2026-10-09 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9761,
+"dateTimeFrom": "2026-10-16 12:30:00",
+"dateTimeTo": "2026-10-16 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9764,
+"dateTimeFrom": "2026-10-23 12:30:00",
+"dateTimeTo": "2026-10-23 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9767,
+"dateTimeFrom": "2026-10-30 12:30:00",
+"dateTimeTo": "2026-10-30 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9770,
+"dateTimeFrom": "2026-11-06 12:30:00",
+"dateTimeTo": "2026-11-06 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9773,
+"dateTimeFrom": "2026-11-13 12:30:00",
+"dateTimeTo": "2026-11-13 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9776,
+"dateTimeFrom": "2026-11-20 12:30:00",
+"dateTimeTo": "2026-11-20 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9779,
+"dateTimeFrom": "2026-11-27 12:30:00",
+"dateTimeTo": "2026-11-27 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9782,
+"dateTimeFrom": "2026-12-04 12:30:00",
+"dateTimeTo": "2026-12-04 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9785,
+"dateTimeFrom": "2026-12-11 12:30:00",
+"dateTimeTo": "2026-12-11 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9788,
+"dateTimeFrom": "2026-12-18 12:30:00",
+"dateTimeTo": "2026-12-18 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9791,
+"dateTimeFrom": "2027-01-08 12:30:00",
+"dateTimeTo": "2027-01-08 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 9794,
+"dateTimeFrom": "2027-01-15 12:30:00",
+"dateTimeTo": "2027-01-15 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10175,
+"dateTimeFrom": "2026-09-04 10:40:00",
+"dateTimeTo": "2026-09-04 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10178,
+"dateTimeFrom": "2026-09-11 10:40:00",
+"dateTimeTo": "2026-09-11 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10181,
+"dateTimeFrom": "2026-09-18 10:40:00",
+"dateTimeTo": "2026-09-18 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10184,
+"dateTimeFrom": "2026-09-25 10:40:00",
+"dateTimeTo": "2026-09-25 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10187,
+"dateTimeFrom": "2026-10-02 10:40:00",
+"dateTimeTo": "2026-10-02 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10190,
+"dateTimeFrom": "2026-10-09 10:40:00",
+"dateTimeTo": "2026-10-09 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10193,
+"dateTimeFrom": "2026-10-16 10:40:00",
+"dateTimeTo": "2026-10-16 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10196,
+"dateTimeFrom": "2026-10-23 10:40:00",
+"dateTimeTo": "2026-10-23 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10199,
+"dateTimeFrom": "2026-10-30 10:40:00",
+"dateTimeTo": "2026-10-30 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10202,
+"dateTimeFrom": "2026-11-06 10:40:00",
+"dateTimeTo": "2026-11-06 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10205,
+"dateTimeFrom": "2026-11-13 10:40:00",
+"dateTimeTo": "2026-11-13 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10208,
+"dateTimeFrom": "2026-11-20 10:40:00",
+"dateTimeTo": "2026-11-20 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10211,
+"dateTimeFrom": "2026-11-27 10:40:00",
+"dateTimeTo": "2026-11-27 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10214,
+"dateTimeFrom": "2026-12-04 10:40:00",
+"dateTimeTo": "2026-12-04 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10217,
+"dateTimeFrom": "2026-12-11 10:40:00",
+"dateTimeTo": "2026-12-11 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10220,
+"dateTimeFrom": "2026-12-18 10:40:00",
+"dateTimeTo": "2026-12-18 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10223,
+"dateTimeFrom": "2027-01-08 10:40:00",
+"dateTimeTo": "2027-01-08 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10226,
+"dateTimeFrom": "2027-01-15 10:40:00",
+"dateTimeTo": "2027-01-15 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10985,
+"dateTimeFrom": "2026-09-07 11:30:00",
+"dateTimeTo": "2026-09-07 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10988,
+"dateTimeFrom": "2026-09-14 11:30:00",
+"dateTimeTo": "2026-09-14 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10991,
+"dateTimeFrom": "2026-09-21 11:30:00",
+"dateTimeTo": "2026-09-21 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 10994,
+"dateTimeFrom": "2026-09-28 11:30:00",
+"dateTimeTo": "2026-09-28 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 1
+},
+{
+"id": 10997,
+"dateTimeFrom": "2026-10-05 11:30:00",
+"dateTimeTo": "2026-10-05 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11000,
+"dateTimeFrom": "2026-10-12 11:30:00",
+"dateTimeTo": "2026-10-12 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11003,
+"dateTimeFrom": "2026-10-19 11:30:00",
+"dateTimeTo": "2026-10-19 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11006,
+"dateTimeFrom": "2026-10-26 11:30:00",
+"dateTimeTo": "2026-10-26 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11009,
+"dateTimeFrom": "2026-11-02 11:30:00",
+"dateTimeTo": "2026-11-02 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11012,
+"dateTimeFrom": "2026-11-09 11:30:00",
+"dateTimeTo": "2026-11-09 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11015,
+"dateTimeFrom": "2026-11-16 11:30:00",
+"dateTimeTo": "2026-11-16 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11018,
+"dateTimeFrom": "2026-11-23 11:30:00",
+"dateTimeTo": "2026-11-23 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11021,
+"dateTimeFrom": "2026-11-30 11:30:00",
+"dateTimeTo": "2026-11-30 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11024,
+"dateTimeFrom": "2026-12-07 11:30:00",
+"dateTimeTo": "2026-12-07 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11027,
+"dateTimeFrom": "2026-12-14 11:30:00",
+"dateTimeTo": "2026-12-14 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11030,
+"dateTimeFrom": "2026-12-21 11:30:00",
+"dateTimeTo": "2026-12-21 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11033,
+"dateTimeFrom": "2027-01-04 11:30:00",
+"dateTimeTo": "2027-01-04 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11036,
+"dateTimeFrom": "2027-01-11 11:30:00",
+"dateTimeTo": "2027-01-11 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11957,
+"dateTimeFrom": "2026-09-08 11:30:00",
+"dateTimeTo": "2026-09-08 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11960,
+"dateTimeFrom": "2026-09-15 11:30:00",
+"dateTimeTo": "2026-09-15 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11963,
+"dateTimeFrom": "2026-09-22 11:30:00",
+"dateTimeTo": "2026-09-22 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11966,
+"dateTimeFrom": "2026-09-29 11:30:00",
+"dateTimeTo": "2026-09-29 12:15:00",
+"isCyclic": 1,
+"isCanceled": 1,
+"substitution": 0
+},
+{
+"id": 11969,
+"dateTimeFrom": "2026-10-06 11:30:00",
+"dateTimeTo": "2026-10-06 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11972,
+"dateTimeFrom": "2026-10-13 11:30:00",
+"dateTimeTo": "2026-10-13 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11975,
+"dateTimeFrom": "2026-10-20 11:30:00",
+"dateTimeTo": "2026-10-20 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11978,
+"dateTimeFrom": "2026-10-27 11:30:00",
+"dateTimeTo": "2026-10-27 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11981,
+"dateTimeFrom": "2026-11-03 11:30:00",
+"dateTimeTo": "2026-11-03 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11984,
+"dateTimeFrom": "2026-11-10 11:30:00",
+"dateTimeTo": "2026-11-10 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11987,
+"dateTimeFrom": "2026-11-17 11:30:00",
+"dateTimeTo": "2026-11-17 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11990,
+"dateTimeFrom": "2026-11-24 11:30:00",
+"dateTimeTo": "2026-11-24 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11993,
+"dateTimeFrom": "2026-12-01 11:30:00",
+"dateTimeTo": "2026-12-01 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11996,
+"dateTimeFrom": "2026-12-08 11:30:00",
+"dateTimeTo": "2026-12-08 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 11999,
+"dateTimeFrom": "2026-12-15 11:30:00",
+"dateTimeTo": "2026-12-15 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 12002,
+"dateTimeFrom": "2026-12-22 11:30:00",
+"dateTimeTo": "2026-12-22 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 12005,
+"dateTimeFrom": "2027-01-05 11:30:00",
+"dateTimeTo": "2027-01-05 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 12008,
+"dateTimeFrom": "2027-01-12 11:30:00",
+"dateTimeTo": "2027-01-12 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19555,
+"dateTimeFrom": "2026-09-03 09:45:00",
+"dateTimeTo": "2026-09-03 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19558,
+"dateTimeFrom": "2026-09-10 09:45:00",
+"dateTimeTo": "2026-09-10 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19561,
+"dateTimeFrom": "2026-09-17 09:45:00",
+"dateTimeTo": "2026-09-17 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19564,
+"dateTimeFrom": "2026-09-24 09:45:00",
+"dateTimeTo": "2026-09-24 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19567,
+"dateTimeFrom": "2026-10-01 09:45:00",
+"dateTimeTo": "2026-10-01 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 1
+},
+{
+"id": 19570,
+"dateTimeFrom": "2026-10-08 09:45:00",
+"dateTimeTo": "2026-10-08 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19573,
+"dateTimeFrom": "2026-10-15 09:45:00",
+"dateTimeTo": "2026-10-15 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19576,
+"dateTimeFrom": "2026-10-22 09:45:00",
+"dateTimeTo": "2026-10-22 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19579,
+"dateTimeFrom": "2026-10-29 09:45:00",
+"dateTimeTo": "2026-10-29 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19582,
+"dateTimeFrom": "2026-11-05 09:45:00",
+"dateTimeTo": "2026-11-05 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19585,
+"dateTimeFrom": "2026-11-12 09:45:00",
+"dateTimeTo": "2026-11-12 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19588,
+"dateTimeFrom": "2026-11-19 09:45:00",
+"dateTimeTo": "2026-11-19 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19591,
+"dateTimeFrom": "2026-11-26 09:45:00",
+"dateTimeTo": "2026-11-26 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19594,
+"dateTimeFrom": "2026-12-03 09:45:00",
+"dateTimeTo": "2026-12-03 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19597,
+"dateTimeFrom": "2026-12-10 09:45:00",
+"dateTimeTo": "2026-12-10 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19600,
+"dateTimeFrom": "2026-12-17 09:45:00",
+"dateTimeTo": "2026-12-17 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19603,
+"dateTimeFrom": "2027-01-07 09:45:00",
+"dateTimeTo": "2027-01-07 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19606,
+"dateTimeFrom": "2027-01-14 09:45:00",
+"dateTimeTo": "2027-01-14 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19879,
+"dateTimeFrom": "2026-09-04 09:45:00",
+"dateTimeTo": "2026-09-04 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19882,
+"dateTimeFrom": "2026-09-11 09:45:00",
+"dateTimeTo": "2026-09-11 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19885,
+"dateTimeFrom": "2026-09-18 09:45:00",
+"dateTimeTo": "2026-09-18 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19888,
+"dateTimeFrom": "2026-09-25 09:45:00",
+"dateTimeTo": "2026-09-25 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19891,
+"dateTimeFrom": "2026-10-02 09:45:00",
+"dateTimeTo": "2026-10-02 10:30:00",
+"isCyclic": 1,
+"isCanceled": 1,
+"substitution": 1
+},
+{
+"id": 19894,
+"dateTimeFrom": "2026-10-09 09:45:00",
+"dateTimeTo": "2026-10-09 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19897,
+"dateTimeFrom": "2026-10-16 09:45:00",
+"dateTimeTo": "2026-10-16 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19900,
+"dateTimeFrom": "2026-10-23 09:45:00",
+"dateTimeTo": "2026-10-23 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19903,
+"dateTimeFrom": "2026-10-30 09:45:00",
+"dateTimeTo": "2026-10-30 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19906,
+"dateTimeFrom": "2026-11-06 09:45:00",
+"dateTimeTo": "2026-11-06 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19909,
+"dateTimeFrom": "2026-11-13 09:45:00",
+"dateTimeTo": "2026-11-13 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19912,
+"dateTimeFrom": "2026-11-20 09:45:00",
+"dateTimeTo": "2026-11-20 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19915,
+"dateTimeFrom": "2026-11-27 09:45:00",
+"dateTimeTo": "2026-11-27 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19918,
+"dateTimeFrom": "2026-12-04 09:45:00",
+"dateTimeTo": "2026-12-04 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19921,
+"dateTimeFrom": "2026-12-11 09:45:00",
+"dateTimeTo": "2026-12-11 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19924,
+"dateTimeFrom": "2026-12-18 09:45:00",
+"dateTimeTo": "2026-12-18 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19927,
+"dateTimeFrom": "2027-01-08 09:45:00",
+"dateTimeTo": "2027-01-08 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 19930,
+"dateTimeFrom": "2027-01-15 09:45:00",
+"dateTimeTo": "2027-01-15 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20041,
+"dateTimeFrom": "2026-09-07 08:50:00",
+"dateTimeTo": "2026-09-07 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20044,
+"dateTimeFrom": "2026-09-14 08:50:00",
+"dateTimeTo": "2026-09-14 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20047,
+"dateTimeFrom": "2026-09-21 08:50:00",
+"dateTimeTo": "2026-09-21 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20050,
+"dateTimeFrom": "2026-09-28 08:50:00",
+"dateTimeTo": "2026-09-28 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20053,
+"dateTimeFrom": "2026-10-05 08:50:00",
+"dateTimeTo": "2026-10-05 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20056,
+"dateTimeFrom": "2026-10-12 08:50:00",
+"dateTimeTo": "2026-10-12 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20059,
+"dateTimeFrom": "2026-10-19 08:50:00",
+"dateTimeTo": "2026-10-19 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20062,
+"dateTimeFrom": "2026-10-26 08:50:00",
+"dateTimeTo": "2026-10-26 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20065,
+"dateTimeFrom": "2026-11-02 08:50:00",
+"dateTimeTo": "2026-11-02 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20068,
+"dateTimeFrom": "2026-11-09 08:50:00",
+"dateTimeTo": "2026-11-09 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20071,
+"dateTimeFrom": "2026-11-16 08:50:00",
+"dateTimeTo": "2026-11-16 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20074,
+"dateTimeFrom": "2026-11-23 08:50:00",
+"dateTimeTo": "2026-11-23 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20077,
+"dateTimeFrom": "2026-11-30 08:50:00",
+"dateTimeTo": "2026-11-30 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20080,
+"dateTimeFrom": "2026-12-07 08:50:00",
+"dateTimeTo": "2026-12-07 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20083,
+"dateTimeFrom": "2026-12-14 08:50:00",
+"dateTimeTo": "2026-12-14 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20086,
+"dateTimeFrom": "2026-12-21 08:50:00",
+"dateTimeTo": "2026-12-21 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20089,
+"dateTimeFrom": "2027-01-04 08:50:00",
+"dateTimeTo": "2027-01-04 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20092,
+"dateTimeFrom": "2027-01-11 08:50:00",
+"dateTimeTo": "2027-01-11 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20419,
+"dateTimeFrom": "2026-09-08 09:45:00",
+"dateTimeTo": "2026-09-08 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20422,
+"dateTimeFrom": "2026-09-15 09:45:00",
+"dateTimeTo": "2026-09-15 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20425,
+"dateTimeFrom": "2026-09-22 09:45:00",
+"dateTimeTo": "2026-09-22 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20428,
+"dateTimeFrom": "2026-09-29 09:45:00",
+"dateTimeTo": "2026-09-29 10:30:00",
+"isCyclic": 1,
+"isCanceled": 1,
+"substitution": 0
+},
+{
+"id": 20431,
+"dateTimeFrom": "2026-10-06 09:45:00",
+"dateTimeTo": "2026-10-06 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20434,
+"dateTimeFrom": "2026-10-13 09:45:00",
+"dateTimeTo": "2026-10-13 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20437,
+"dateTimeFrom": "2026-10-20 09:45:00",
+"dateTimeTo": "2026-10-20 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20440,
+"dateTimeFrom": "2026-10-27 09:45:00",
+"dateTimeTo": "2026-10-27 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20443,
+"dateTimeFrom": "2026-11-03 09:45:00",
+"dateTimeTo": "2026-11-03 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20446,
+"dateTimeFrom": "2026-11-10 09:45:00",
+"dateTimeTo": "2026-11-10 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20449,
+"dateTimeFrom": "2026-11-17 09:45:00",
+"dateTimeTo": "2026-11-17 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20452,
+"dateTimeFrom": "2026-11-24 09:45:00",
+"dateTimeTo": "2026-11-24 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20455,
+"dateTimeFrom": "2026-12-01 09:45:00",
+"dateTimeTo": "2026-12-01 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20458,
+"dateTimeFrom": "2026-12-08 09:45:00",
+"dateTimeTo": "2026-12-08 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20461,
+"dateTimeFrom": "2026-12-15 09:45:00",
+"dateTimeTo": "2026-12-15 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20464,
+"dateTimeFrom": "2026-12-22 09:45:00",
+"dateTimeTo": "2026-12-22 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20467,
+"dateTimeFrom": "2027-01-05 09:45:00",
+"dateTimeTo": "2027-01-05 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 20470,
+"dateTimeFrom": "2027-01-12 09:45:00",
+"dateTimeTo": "2027-01-12 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23290,
+"dateTimeFrom": "2026-09-02 08:00:00",
+"dateTimeTo": "2026-09-02 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23293,
+"dateTimeFrom": "2026-09-09 08:00:00",
+"dateTimeTo": "2026-09-09 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23296,
+"dateTimeFrom": "2026-09-16 08:00:00",
+"dateTimeTo": "2026-09-16 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23299,
+"dateTimeFrom": "2026-09-23 08:00:00",
+"dateTimeTo": "2026-09-23 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23302,
+"dateTimeFrom": "2026-09-30 08:00:00",
+"dateTimeTo": "2026-09-30 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23305,
+"dateTimeFrom": "2026-10-07 08:00:00",
+"dateTimeTo": "2026-10-07 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23308,
+"dateTimeFrom": "2026-10-21 08:00:00",
+"dateTimeTo": "2026-10-21 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23311,
+"dateTimeFrom": "2026-10-28 08:00:00",
+"dateTimeTo": "2026-10-28 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23314,
+"dateTimeFrom": "2026-11-04 08:00:00",
+"dateTimeTo": "2026-11-04 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23317,
+"dateTimeFrom": "2026-11-18 08:00:00",
+"dateTimeTo": "2026-11-18 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23320,
+"dateTimeFrom": "2026-11-25 08:00:00",
+"dateTimeTo": "2026-11-25 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23323,
+"dateTimeFrom": "2026-12-02 08:00:00",
+"dateTimeTo": "2026-12-02 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23326,
+"dateTimeFrom": "2026-12-09 08:00:00",
+"dateTimeTo": "2026-12-09 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23329,
+"dateTimeFrom": "2026-12-16 08:00:00",
+"dateTimeTo": "2026-12-16 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23332,
+"dateTimeFrom": "2027-01-13 08:00:00",
+"dateTimeTo": "2027-01-13 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23839,
+"dateTimeFrom": "2026-09-03 08:00:00",
+"dateTimeTo": "2026-09-03 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23842,
+"dateTimeFrom": "2026-09-10 08:00:00",
+"dateTimeTo": "2026-09-10 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23845,
+"dateTimeFrom": "2026-09-17 08:00:00",
+"dateTimeTo": "2026-09-17 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23848,
+"dateTimeFrom": "2026-09-24 08:00:00",
+"dateTimeTo": "2026-09-24 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 1
+},
+{
+"id": 23851,
+"dateTimeFrom": "2026-10-01 08:00:00",
+"dateTimeTo": "2026-10-01 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23854,
+"dateTimeFrom": "2026-10-08 08:00:00",
+"dateTimeTo": "2026-10-08 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23857,
+"dateTimeFrom": "2026-10-15 08:00:00",
+"dateTimeTo": "2026-10-15 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23860,
+"dateTimeFrom": "2026-10-22 08:00:00",
+"dateTimeTo": "2026-10-22 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23863,
+"dateTimeFrom": "2026-10-29 08:00:00",
+"dateTimeTo": "2026-10-29 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23866,
+"dateTimeFrom": "2026-11-05 08:00:00",
+"dateTimeTo": "2026-11-05 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23869,
+"dateTimeFrom": "2026-11-12 08:00:00",
+"dateTimeTo": "2026-11-12 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23872,
+"dateTimeFrom": "2026-11-19 08:00:00",
+"dateTimeTo": "2026-11-19 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23875,
+"dateTimeFrom": "2026-11-26 08:00:00",
+"dateTimeTo": "2026-11-26 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23878,
+"dateTimeFrom": "2026-12-03 08:00:00",
+"dateTimeTo": "2026-12-03 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23881,
+"dateTimeFrom": "2026-12-10 08:00:00",
+"dateTimeTo": "2026-12-10 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23884,
+"dateTimeFrom": "2026-12-17 08:00:00",
+"dateTimeTo": "2026-12-17 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23887,
+"dateTimeFrom": "2027-01-07 08:00:00",
+"dateTimeTo": "2027-01-07 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23890,
+"dateTimeFrom": "2027-01-14 08:00:00",
+"dateTimeTo": "2027-01-14 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23893,
+"dateTimeFrom": "2026-09-03 08:50:00",
+"dateTimeTo": "2026-09-03 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23896,
+"dateTimeFrom": "2026-09-10 08:50:00",
+"dateTimeTo": "2026-09-10 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23899,
+"dateTimeFrom": "2026-09-17 08:50:00",
+"dateTimeTo": "2026-09-17 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23902,
+"dateTimeFrom": "2026-09-24 08:50:00",
+"dateTimeTo": "2026-09-24 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 1
+},
+{
+"id": 23905,
+"dateTimeFrom": "2026-10-01 08:50:00",
+"dateTimeTo": "2026-10-01 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23908,
+"dateTimeFrom": "2026-10-08 08:50:00",
+"dateTimeTo": "2026-10-08 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23911,
+"dateTimeFrom": "2026-10-15 08:50:00",
+"dateTimeTo": "2026-10-15 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23914,
+"dateTimeFrom": "2026-10-22 08:50:00",
+"dateTimeTo": "2026-10-22 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23917,
+"dateTimeFrom": "2026-10-29 08:50:00",
+"dateTimeTo": "2026-10-29 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23920,
+"dateTimeFrom": "2026-11-05 08:50:00",
+"dateTimeTo": "2026-11-05 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23923,
+"dateTimeFrom": "2026-11-12 08:50:00",
+"dateTimeTo": "2026-11-12 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23926,
+"dateTimeFrom": "2026-11-19 08:50:00",
+"dateTimeTo": "2026-11-19 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23929,
+"dateTimeFrom": "2026-11-26 08:50:00",
+"dateTimeTo": "2026-11-26 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23932,
+"dateTimeFrom": "2026-12-03 08:50:00",
+"dateTimeTo": "2026-12-03 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23935,
+"dateTimeFrom": "2026-12-10 08:50:00",
+"dateTimeTo": "2026-12-10 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23938,
+"dateTimeFrom": "2026-12-17 08:50:00",
+"dateTimeTo": "2026-12-17 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23941,
+"dateTimeFrom": "2027-01-07 08:50:00",
+"dateTimeTo": "2027-01-07 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 23944,
+"dateTimeFrom": "2027-01-14 08:50:00",
+"dateTimeTo": "2027-01-14 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24217,
+"dateTimeFrom": "2026-09-03 10:40:00",
+"dateTimeTo": "2026-09-03 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24220,
+"dateTimeFrom": "2026-09-10 10:40:00",
+"dateTimeTo": "2026-09-10 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24223,
+"dateTimeFrom": "2026-09-17 10:40:00",
+"dateTimeTo": "2026-09-17 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24226,
+"dateTimeFrom": "2026-09-24 10:40:00",
+"dateTimeTo": "2026-09-24 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24229,
+"dateTimeFrom": "2026-10-01 10:40:00",
+"dateTimeTo": "2026-10-01 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24232,
+"dateTimeFrom": "2026-10-08 10:40:00",
+"dateTimeTo": "2026-10-08 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24235,
+"dateTimeFrom": "2026-10-15 10:40:00",
+"dateTimeTo": "2026-10-15 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24238,
+"dateTimeFrom": "2026-10-22 10:40:00",
+"dateTimeTo": "2026-10-22 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24241,
+"dateTimeFrom": "2026-10-29 10:40:00",
+"dateTimeTo": "2026-10-29 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24244,
+"dateTimeFrom": "2026-11-05 10:40:00",
+"dateTimeTo": "2026-11-05 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24247,
+"dateTimeFrom": "2026-11-12 10:40:00",
+"dateTimeTo": "2026-11-12 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24250,
+"dateTimeFrom": "2026-11-19 10:40:00",
+"dateTimeTo": "2026-11-19 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24253,
+"dateTimeFrom": "2026-11-26 10:40:00",
+"dateTimeTo": "2026-11-26 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24256,
+"dateTimeFrom": "2026-12-03 10:40:00",
+"dateTimeTo": "2026-12-03 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24259,
+"dateTimeFrom": "2026-12-10 10:40:00",
+"dateTimeTo": "2026-12-10 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24262,
+"dateTimeFrom": "2026-12-17 10:40:00",
+"dateTimeTo": "2026-12-17 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24265,
+"dateTimeFrom": "2027-01-07 10:40:00",
+"dateTimeTo": "2027-01-07 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 24268,
+"dateTimeFrom": "2027-01-14 10:40:00",
+"dateTimeTo": "2027-01-14 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25612,
+"dateTimeFrom": "2026-09-04 11:30:00",
+"dateTimeTo": "2026-09-04 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25615,
+"dateTimeFrom": "2026-09-11 11:30:00",
+"dateTimeTo": "2026-09-11 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25618,
+"dateTimeFrom": "2026-09-18 11:30:00",
+"dateTimeTo": "2026-09-18 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25621,
+"dateTimeFrom": "2026-09-25 11:30:00",
+"dateTimeTo": "2026-09-25 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25624,
+"dateTimeFrom": "2026-10-02 11:30:00",
+"dateTimeTo": "2026-10-02 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25627,
+"dateTimeFrom": "2026-10-09 11:30:00",
+"dateTimeTo": "2026-10-09 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25630,
+"dateTimeFrom": "2026-10-16 11:30:00",
+"dateTimeTo": "2026-10-16 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25633,
+"dateTimeFrom": "2026-10-23 11:30:00",
+"dateTimeTo": "2026-10-23 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25636,
+"dateTimeFrom": "2026-10-30 11:30:00",
+"dateTimeTo": "2026-10-30 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25639,
+"dateTimeFrom": "2026-11-06 11:30:00",
+"dateTimeTo": "2026-11-06 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25642,
+"dateTimeFrom": "2026-11-13 11:30:00",
+"dateTimeTo": "2026-11-13 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25645,
+"dateTimeFrom": "2026-11-20 11:30:00",
+"dateTimeTo": "2026-11-20 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25648,
+"dateTimeFrom": "2026-11-27 11:30:00",
+"dateTimeTo": "2026-11-27 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25651,
+"dateTimeFrom": "2026-12-04 11:30:00",
+"dateTimeTo": "2026-12-04 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25654,
+"dateTimeFrom": "2026-12-11 11:30:00",
+"dateTimeTo": "2026-12-11 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25657,
+"dateTimeFrom": "2026-12-18 11:30:00",
+"dateTimeTo": "2026-12-18 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25660,
+"dateTimeFrom": "2027-01-08 11:30:00",
+"dateTimeTo": "2027-01-08 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 25663,
+"dateTimeFrom": "2027-01-15 11:30:00",
+"dateTimeTo": "2027-01-15 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29347,
+"dateTimeFrom": "2026-09-08 08:00:00",
+"dateTimeTo": "2026-09-08 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29350,
+"dateTimeFrom": "2026-09-15 08:00:00",
+"dateTimeTo": "2026-09-15 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29353,
+"dateTimeFrom": "2026-09-22 08:00:00",
+"dateTimeTo": "2026-09-22 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29356,
+"dateTimeFrom": "2026-09-29 08:00:00",
+"dateTimeTo": "2026-09-29 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29359,
+"dateTimeFrom": "2026-10-06 08:00:00",
+"dateTimeTo": "2026-10-06 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29362,
+"dateTimeFrom": "2026-10-13 08:00:00",
+"dateTimeTo": "2026-10-13 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29365,
+"dateTimeFrom": "2026-10-20 08:00:00",
+"dateTimeTo": "2026-10-20 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29368,
+"dateTimeFrom": "2026-10-27 08:00:00",
+"dateTimeTo": "2026-10-27 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29371,
+"dateTimeFrom": "2026-11-03 08:00:00",
+"dateTimeTo": "2026-11-03 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29374,
+"dateTimeFrom": "2026-11-10 08:00:00",
+"dateTimeTo": "2026-11-10 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29377,
+"dateTimeFrom": "2026-11-17 08:00:00",
+"dateTimeTo": "2026-11-17 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29380,
+"dateTimeFrom": "2026-11-24 08:00:00",
+"dateTimeTo": "2026-11-24 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29383,
+"dateTimeFrom": "2026-12-01 08:00:00",
+"dateTimeTo": "2026-12-01 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29386,
+"dateTimeFrom": "2026-12-08 08:00:00",
+"dateTimeTo": "2026-12-08 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29389,
+"dateTimeFrom": "2026-12-15 08:00:00",
+"dateTimeTo": "2026-12-15 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29392,
+"dateTimeFrom": "2026-12-22 08:00:00",
+"dateTimeTo": "2026-12-22 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29395,
+"dateTimeFrom": "2027-01-05 08:00:00",
+"dateTimeTo": "2027-01-05 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29398,
+"dateTimeFrom": "2027-01-12 08:00:00",
+"dateTimeTo": "2027-01-12 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29668,
+"dateTimeFrom": "2026-09-08 08:50:00",
+"dateTimeTo": "2026-09-08 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29671,
+"dateTimeFrom": "2026-09-15 08:50:00",
+"dateTimeTo": "2026-09-15 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 1
+},
+{
+"id": 29674,
+"dateTimeFrom": "2026-09-22 08:50:00",
+"dateTimeTo": "2026-09-22 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29677,
+"dateTimeFrom": "2026-09-29 08:50:00",
+"dateTimeTo": "2026-09-29 09:35:00",
+"isCyclic": 1,
+"isCanceled": 1,
+"substitution": 0
+},
+{
+"id": 29680,
+"dateTimeFrom": "2026-10-06 08:50:00",
+"dateTimeTo": "2026-10-06 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29683,
+"dateTimeFrom": "2026-10-13 08:50:00",
+"dateTimeTo": "2026-10-13 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29686,
+"dateTimeFrom": "2026-10-20 08:50:00",
+"dateTimeTo": "2026-10-20 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29689,
+"dateTimeFrom": "2026-10-27 08:50:00",
+"dateTimeTo": "2026-10-27 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29692,
+"dateTimeFrom": "2026-11-03 08:50:00",
+"dateTimeTo": "2026-11-03 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29695,
+"dateTimeFrom": "2026-11-10 08:50:00",
+"dateTimeTo": "2026-11-10 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29698,
+"dateTimeFrom": "2026-11-17 08:50:00",
+"dateTimeTo": "2026-11-17 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29701,
+"dateTimeFrom": "2026-11-24 08:50:00",
+"dateTimeTo": "2026-11-24 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29704,
+"dateTimeFrom": "2026-12-01 08:50:00",
+"dateTimeTo": "2026-12-01 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29707,
+"dateTimeFrom": "2026-12-08 08:50:00",
+"dateTimeTo": "2026-12-08 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29710,
+"dateTimeFrom": "2026-12-15 08:50:00",
+"dateTimeTo": "2026-12-15 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29713,
+"dateTimeFrom": "2026-12-22 08:50:00",
+"dateTimeTo": "2026-12-22 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29716,
+"dateTimeFrom": "2027-01-05 08:50:00",
+"dateTimeTo": "2027-01-05 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 29719,
+"dateTimeFrom": "2027-01-12 08:50:00",
+"dateTimeTo": "2027-01-12 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31240,
+"dateTimeFrom": "2026-09-02 13:30:00",
+"dateTimeTo": "2026-09-02 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31243,
+"dateTimeFrom": "2026-09-09 13:30:00",
+"dateTimeTo": "2026-09-09 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31246,
+"dateTimeFrom": "2026-09-16 13:30:00",
+"dateTimeTo": "2026-09-16 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31249,
+"dateTimeFrom": "2026-09-23 13:30:00",
+"dateTimeTo": "2026-09-23 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31252,
+"dateTimeFrom": "2026-09-30 13:30:00",
+"dateTimeTo": "2026-09-30 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31255,
+"dateTimeFrom": "2026-10-07 13:30:00",
+"dateTimeTo": "2026-10-07 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31258,
+"dateTimeFrom": "2026-10-21 13:30:00",
+"dateTimeTo": "2026-10-21 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31261,
+"dateTimeFrom": "2026-10-28 13:30:00",
+"dateTimeTo": "2026-10-28 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31264,
+"dateTimeFrom": "2026-11-04 13:30:00",
+"dateTimeTo": "2026-11-04 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31267,
+"dateTimeFrom": "2026-11-18 13:30:00",
+"dateTimeTo": "2026-11-18 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31270,
+"dateTimeFrom": "2026-11-25 13:30:00",
+"dateTimeTo": "2026-11-25 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31273,
+"dateTimeFrom": "2026-12-02 13:30:00",
+"dateTimeTo": "2026-12-02 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31276,
+"dateTimeFrom": "2026-12-09 13:30:00",
+"dateTimeTo": "2026-12-09 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31279,
+"dateTimeFrom": "2026-12-16 13:30:00",
+"dateTimeTo": "2026-12-16 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31282,
+"dateTimeFrom": "2027-01-13 13:30:00",
+"dateTimeTo": "2027-01-13 14:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31285,
+"dateTimeFrom": "2026-09-02 14:25:00",
+"dateTimeTo": "2026-09-02 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31288,
+"dateTimeFrom": "2026-09-09 14:25:00",
+"dateTimeTo": "2026-09-09 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31291,
+"dateTimeFrom": "2026-09-16 14:25:00",
+"dateTimeTo": "2026-09-16 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31294,
+"dateTimeFrom": "2026-09-23 14:25:00",
+"dateTimeTo": "2026-09-23 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31297,
+"dateTimeFrom": "2026-09-30 14:25:00",
+"dateTimeTo": "2026-09-30 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31300,
+"dateTimeFrom": "2026-10-07 14:25:00",
+"dateTimeTo": "2026-10-07 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31303,
+"dateTimeFrom": "2026-10-21 14:25:00",
+"dateTimeTo": "2026-10-21 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31306,
+"dateTimeFrom": "2026-10-28 14:25:00",
+"dateTimeTo": "2026-10-28 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31309,
+"dateTimeFrom": "2026-11-04 14:25:00",
+"dateTimeTo": "2026-11-04 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31312,
+"dateTimeFrom": "2026-11-18 14:25:00",
+"dateTimeTo": "2026-11-18 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31315,
+"dateTimeFrom": "2026-11-25 14:25:00",
+"dateTimeTo": "2026-11-25 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31318,
+"dateTimeFrom": "2026-12-02 14:25:00",
+"dateTimeTo": "2026-12-02 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31321,
+"dateTimeFrom": "2026-12-09 14:25:00",
+"dateTimeTo": "2026-12-09 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31324,
+"dateTimeFrom": "2026-12-16 14:25:00",
+"dateTimeTo": "2026-12-16 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 31327,
+"dateTimeFrom": "2027-01-13 14:25:00",
+"dateTimeTo": "2027-01-13 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35317,
+"dateTimeFrom": "2026-09-04 08:00:00",
+"dateTimeTo": "2026-09-04 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35320,
+"dateTimeFrom": "2026-09-11 08:00:00",
+"dateTimeTo": "2026-09-11 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35323,
+"dateTimeFrom": "2026-09-18 08:00:00",
+"dateTimeTo": "2026-09-18 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35326,
+"dateTimeFrom": "2026-09-25 08:00:00",
+"dateTimeTo": "2026-09-25 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35329,
+"dateTimeFrom": "2026-10-02 08:00:00",
+"dateTimeTo": "2026-10-02 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35332,
+"dateTimeFrom": "2026-10-09 08:00:00",
+"dateTimeTo": "2026-10-09 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35335,
+"dateTimeFrom": "2026-10-16 08:00:00",
+"dateTimeTo": "2026-10-16 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35338,
+"dateTimeFrom": "2026-10-23 08:00:00",
+"dateTimeTo": "2026-10-23 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35341,
+"dateTimeFrom": "2026-10-30 08:00:00",
+"dateTimeTo": "2026-10-30 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35344,
+"dateTimeFrom": "2026-11-06 08:00:00",
+"dateTimeTo": "2026-11-06 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35347,
+"dateTimeFrom": "2026-11-13 08:00:00",
+"dateTimeTo": "2026-11-13 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35350,
+"dateTimeFrom": "2026-11-20 08:00:00",
+"dateTimeTo": "2026-11-20 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35353,
+"dateTimeFrom": "2026-11-27 08:00:00",
+"dateTimeTo": "2026-11-27 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35356,
+"dateTimeFrom": "2026-12-04 08:00:00",
+"dateTimeTo": "2026-12-04 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35359,
+"dateTimeFrom": "2026-12-11 08:00:00",
+"dateTimeTo": "2026-12-11 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35362,
+"dateTimeFrom": "2026-12-18 08:00:00",
+"dateTimeTo": "2026-12-18 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35365,
+"dateTimeFrom": "2027-01-08 08:00:00",
+"dateTimeTo": "2027-01-08 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35368,
+"dateTimeFrom": "2027-01-15 08:00:00",
+"dateTimeTo": "2027-01-15 08:45:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35422,
+"dateTimeFrom": "2026-09-04 08:50:00",
+"dateTimeTo": "2026-09-04 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35425,
+"dateTimeFrom": "2026-09-11 08:50:00",
+"dateTimeTo": "2026-09-11 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35428,
+"dateTimeFrom": "2026-09-18 08:50:00",
+"dateTimeTo": "2026-09-18 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35431,
+"dateTimeFrom": "2026-09-25 08:50:00",
+"dateTimeTo": "2026-09-25 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35434,
+"dateTimeFrom": "2026-10-02 08:50:00",
+"dateTimeTo": "2026-10-02 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35437,
+"dateTimeFrom": "2026-10-09 08:50:00",
+"dateTimeTo": "2026-10-09 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35440,
+"dateTimeFrom": "2026-10-16 08:50:00",
+"dateTimeTo": "2026-10-16 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35443,
+"dateTimeFrom": "2026-10-23 08:50:00",
+"dateTimeTo": "2026-10-23 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35446,
+"dateTimeFrom": "2026-10-30 08:50:00",
+"dateTimeTo": "2026-10-30 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35449,
+"dateTimeFrom": "2026-11-06 08:50:00",
+"dateTimeTo": "2026-11-06 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35452,
+"dateTimeFrom": "2026-11-13 08:50:00",
+"dateTimeTo": "2026-11-13 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35455,
+"dateTimeFrom": "2026-11-20 08:50:00",
+"dateTimeTo": "2026-11-20 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35458,
+"dateTimeFrom": "2026-11-27 08:50:00",
+"dateTimeTo": "2026-11-27 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35461,
+"dateTimeFrom": "2026-12-04 08:50:00",
+"dateTimeTo": "2026-12-04 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35464,
+"dateTimeFrom": "2026-12-11 08:50:00",
+"dateTimeTo": "2026-12-11 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35467,
+"dateTimeFrom": "2026-12-18 08:50:00",
+"dateTimeTo": "2026-12-18 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35470,
+"dateTimeFrom": "2027-01-08 08:50:00",
+"dateTimeTo": "2027-01-08 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 35473,
+"dateTimeFrom": "2027-01-15 08:50:00",
+"dateTimeTo": "2027-01-15 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38969,
+"dateTimeFrom": "2026-09-07 10:40:00",
+"dateTimeTo": "2026-09-07 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38972,
+"dateTimeFrom": "2026-09-14 10:40:00",
+"dateTimeTo": "2026-09-14 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38975,
+"dateTimeFrom": "2026-09-21 10:40:00",
+"dateTimeTo": "2026-09-21 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38978,
+"dateTimeFrom": "2026-09-28 10:40:00",
+"dateTimeTo": "2026-09-28 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38981,
+"dateTimeFrom": "2026-10-05 10:40:00",
+"dateTimeTo": "2026-10-05 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38984,
+"dateTimeFrom": "2026-10-12 10:40:00",
+"dateTimeTo": "2026-10-12 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38987,
+"dateTimeFrom": "2026-10-19 10:40:00",
+"dateTimeTo": "2026-10-19 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38990,
+"dateTimeFrom": "2026-10-26 10:40:00",
+"dateTimeTo": "2026-10-26 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38993,
+"dateTimeFrom": "2026-11-02 10:40:00",
+"dateTimeTo": "2026-11-02 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38996,
+"dateTimeFrom": "2026-11-09 10:40:00",
+"dateTimeTo": "2026-11-09 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 38999,
+"dateTimeFrom": "2026-11-16 10:40:00",
+"dateTimeTo": "2026-11-16 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39002,
+"dateTimeFrom": "2026-11-23 10:40:00",
+"dateTimeTo": "2026-11-23 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39005,
+"dateTimeFrom": "2026-11-30 10:40:00",
+"dateTimeTo": "2026-11-30 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39008,
+"dateTimeFrom": "2026-12-07 10:40:00",
+"dateTimeTo": "2026-12-07 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39011,
+"dateTimeFrom": "2026-12-14 10:40:00",
+"dateTimeTo": "2026-12-14 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39014,
+"dateTimeFrom": "2026-12-21 10:40:00",
+"dateTimeTo": "2026-12-21 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39017,
+"dateTimeFrom": "2027-01-04 10:40:00",
+"dateTimeTo": "2027-01-04 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39020,
+"dateTimeFrom": "2027-01-11 10:40:00",
+"dateTimeTo": "2027-01-11 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39724,
+"dateTimeFrom": "2026-09-03 11:30:00",
+"dateTimeTo": "2026-09-03 12:15:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39727,
+"dateTimeFrom": "2026-09-10 11:30:00",
+"dateTimeTo": "2026-09-10 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39730,
+"dateTimeFrom": "2026-09-17 11:30:00",
+"dateTimeTo": "2026-09-17 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39733,
+"dateTimeFrom": "2026-09-24 11:30:00",
+"dateTimeTo": "2026-09-24 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39736,
+"dateTimeFrom": "2026-10-01 11:30:00",
+"dateTimeTo": "2026-10-01 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39739,
+"dateTimeFrom": "2026-10-08 11:30:00",
+"dateTimeTo": "2026-10-08 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39742,
+"dateTimeFrom": "2026-10-15 11:30:00",
+"dateTimeTo": "2026-10-15 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39745,
+"dateTimeFrom": "2026-10-22 11:30:00",
+"dateTimeTo": "2026-10-22 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39748,
+"dateTimeFrom": "2026-10-29 11:30:00",
+"dateTimeTo": "2026-10-29 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39751,
+"dateTimeFrom": "2026-11-05 11:30:00",
+"dateTimeTo": "2026-11-05 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39754,
+"dateTimeFrom": "2026-11-12 11:30:00",
+"dateTimeTo": "2026-11-12 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39757,
+"dateTimeFrom": "2026-11-19 11:30:00",
+"dateTimeTo": "2026-11-19 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39760,
+"dateTimeFrom": "2026-11-26 11:30:00",
+"dateTimeTo": "2026-11-26 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39763,
+"dateTimeFrom": "2026-12-03 11:30:00",
+"dateTimeTo": "2026-12-03 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39766,
+"dateTimeFrom": "2026-12-10 11:30:00",
+"dateTimeTo": "2026-12-10 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39769,
+"dateTimeFrom": "2026-12-17 11:30:00",
+"dateTimeTo": "2026-12-17 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39772,
+"dateTimeFrom": "2027-01-07 11:30:00",
+"dateTimeTo": "2027-01-07 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 39775,
+"dateTimeFrom": "2027-01-14 11:30:00",
+"dateTimeTo": "2027-01-14 12:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42757,
+"dateTimeFrom": "2026-09-02 08:50:00",
+"dateTimeTo": "2026-09-02 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42760,
+"dateTimeFrom": "2026-09-09 08:50:00",
+"dateTimeTo": "2026-09-09 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42763,
+"dateTimeFrom": "2026-09-16 08:50:00",
+"dateTimeTo": "2026-09-16 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42766,
+"dateTimeFrom": "2026-09-23 08:50:00",
+"dateTimeTo": "2026-09-23 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42769,
+"dateTimeFrom": "2026-09-30 08:50:00",
+"dateTimeTo": "2026-09-30 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42772,
+"dateTimeFrom": "2026-10-07 08:50:00",
+"dateTimeTo": "2026-10-07 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42775,
+"dateTimeFrom": "2026-10-21 08:50:00",
+"dateTimeTo": "2026-10-21 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42778,
+"dateTimeFrom": "2026-10-28 08:50:00",
+"dateTimeTo": "2026-10-28 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42781,
+"dateTimeFrom": "2026-11-04 08:50:00",
+"dateTimeTo": "2026-11-04 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42784,
+"dateTimeFrom": "2026-11-18 08:50:00",
+"dateTimeTo": "2026-11-18 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42787,
+"dateTimeFrom": "2026-11-25 08:50:00",
+"dateTimeTo": "2026-11-25 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42790,
+"dateTimeFrom": "2026-12-02 08:50:00",
+"dateTimeTo": "2026-12-02 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42793,
+"dateTimeFrom": "2026-12-09 08:50:00",
+"dateTimeTo": "2026-12-09 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42796,
+"dateTimeFrom": "2026-12-16 08:50:00",
+"dateTimeTo": "2026-12-16 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42799,
+"dateTimeFrom": "2027-01-13 08:50:00",
+"dateTimeTo": "2027-01-13 09:35:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42802,
+"dateTimeFrom": "2026-09-02 09:45:00",
+"dateTimeTo": "2026-09-02 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42805,
+"dateTimeFrom": "2026-09-09 09:45:00",
+"dateTimeTo": "2026-09-09 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42808,
+"dateTimeFrom": "2026-09-16 09:45:00",
+"dateTimeTo": "2026-09-16 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42811,
+"dateTimeFrom": "2026-09-23 09:45:00",
+"dateTimeTo": "2026-09-23 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42814,
+"dateTimeFrom": "2026-09-30 09:45:00",
+"dateTimeTo": "2026-09-30 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42817,
+"dateTimeFrom": "2026-10-07 09:45:00",
+"dateTimeTo": "2026-10-07 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42820,
+"dateTimeFrom": "2026-10-21 09:45:00",
+"dateTimeTo": "2026-10-21 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42823,
+"dateTimeFrom": "2026-10-28 09:45:00",
+"dateTimeTo": "2026-10-28 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42826,
+"dateTimeFrom": "2026-11-04 09:45:00",
+"dateTimeTo": "2026-11-04 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42829,
+"dateTimeFrom": "2026-11-18 09:45:00",
+"dateTimeTo": "2026-11-18 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42832,
+"dateTimeFrom": "2026-11-25 09:45:00",
+"dateTimeTo": "2026-11-25 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42835,
+"dateTimeFrom": "2026-12-02 09:45:00",
+"dateTimeTo": "2026-12-02 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42838,
+"dateTimeFrom": "2026-12-09 09:45:00",
+"dateTimeTo": "2026-12-09 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42841,
+"dateTimeFrom": "2026-12-16 09:45:00",
+"dateTimeTo": "2026-12-16 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 42844,
+"dateTimeFrom": "2027-01-13 09:45:00",
+"dateTimeTo": "2027-01-13 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43354,
+"dateTimeFrom": "2026-09-07 09:45:00",
+"dateTimeTo": "2026-09-07 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43357,
+"dateTimeFrom": "2026-09-14 09:45:00",
+"dateTimeTo": "2026-09-14 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43360,
+"dateTimeFrom": "2026-09-21 09:45:00",
+"dateTimeTo": "2026-09-21 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43363,
+"dateTimeFrom": "2026-09-28 09:45:00",
+"dateTimeTo": "2026-09-28 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43366,
+"dateTimeFrom": "2026-10-05 09:45:00",
+"dateTimeTo": "2026-10-05 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43369,
+"dateTimeFrom": "2026-10-12 09:45:00",
+"dateTimeTo": "2026-10-12 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43372,
+"dateTimeFrom": "2026-10-19 09:45:00",
+"dateTimeTo": "2026-10-19 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43375,
+"dateTimeFrom": "2026-10-26 09:45:00",
+"dateTimeTo": "2026-10-26 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43378,
+"dateTimeFrom": "2026-11-02 09:45:00",
+"dateTimeTo": "2026-11-02 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43381,
+"dateTimeFrom": "2026-11-09 09:45:00",
+"dateTimeTo": "2026-11-09 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43384,
+"dateTimeFrom": "2026-11-16 09:45:00",
+"dateTimeTo": "2026-11-16 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43387,
+"dateTimeFrom": "2026-11-23 09:45:00",
+"dateTimeTo": "2026-11-23 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43390,
+"dateTimeFrom": "2026-11-30 09:45:00",
+"dateTimeTo": "2026-11-30 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43393,
+"dateTimeFrom": "2026-12-07 09:45:00",
+"dateTimeTo": "2026-12-07 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43396,
+"dateTimeFrom": "2026-12-14 09:45:00",
+"dateTimeTo": "2026-12-14 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43399,
+"dateTimeFrom": "2026-12-21 09:45:00",
+"dateTimeTo": "2026-12-21 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43402,
+"dateTimeFrom": "2027-01-04 09:45:00",
+"dateTimeTo": "2027-01-04 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 43405,
+"dateTimeFrom": "2027-01-11 09:45:00",
+"dateTimeTo": "2027-01-11 10:30:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46261,
+"dateTimeFrom": "2026-09-02 12:30:00",
+"dateTimeTo": "2026-09-02 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46264,
+"dateTimeFrom": "2026-09-09 12:30:00",
+"dateTimeTo": "2026-09-09 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46267,
+"dateTimeFrom": "2026-09-16 12:30:00",
+"dateTimeTo": "2026-09-16 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46270,
+"dateTimeFrom": "2026-09-23 12:30:00",
+"dateTimeTo": "2026-09-23 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46273,
+"dateTimeFrom": "2026-09-30 12:30:00",
+"dateTimeTo": "2026-09-30 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46276,
+"dateTimeFrom": "2026-10-07 12:30:00",
+"dateTimeTo": "2026-10-07 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46279,
+"dateTimeFrom": "2026-10-21 12:30:00",
+"dateTimeTo": "2026-10-21 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46282,
+"dateTimeFrom": "2026-10-28 12:30:00",
+"dateTimeTo": "2026-10-28 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46285,
+"dateTimeFrom": "2026-11-04 12:30:00",
+"dateTimeTo": "2026-11-04 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46288,
+"dateTimeFrom": "2026-11-18 12:30:00",
+"dateTimeTo": "2026-11-18 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46291,
+"dateTimeFrom": "2026-11-25 12:30:00",
+"dateTimeTo": "2026-11-25 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46294,
+"dateTimeFrom": "2026-12-02 12:30:00",
+"dateTimeTo": "2026-12-02 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46297,
+"dateTimeFrom": "2026-12-09 12:30:00",
+"dateTimeTo": "2026-12-09 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46300,
+"dateTimeFrom": "2026-12-16 12:30:00",
+"dateTimeTo": "2026-12-16 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 46303,
+"dateTimeFrom": "2027-01-13 12:30:00",
+"dateTimeTo": "2027-01-13 13:15:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54351,
+"dateTimeFrom": "2026-09-08 10:40:00",
+"dateTimeTo": "2026-09-08 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54354,
+"dateTimeFrom": "2026-09-15 10:40:00",
+"dateTimeTo": "2026-09-15 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54357,
+"dateTimeFrom": "2026-09-22 10:40:00",
+"dateTimeTo": "2026-09-22 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54360,
+"dateTimeFrom": "2026-09-29 10:40:00",
+"dateTimeTo": "2026-09-29 11:25:00",
+"isCyclic": 1,
+"isCanceled": 1,
+"substitution": 0
+},
+{
+"id": 54363,
+"dateTimeFrom": "2026-10-06 10:40:00",
+"dateTimeTo": "2026-10-06 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54366,
+"dateTimeFrom": "2026-10-13 10:40:00",
+"dateTimeTo": "2026-10-13 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54369,
+"dateTimeFrom": "2026-10-20 10:40:00",
+"dateTimeTo": "2026-10-20 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54372,
+"dateTimeFrom": "2026-10-27 10:40:00",
+"dateTimeTo": "2026-10-27 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54375,
+"dateTimeFrom": "2026-11-03 10:40:00",
+"dateTimeTo": "2026-11-03 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54378,
+"dateTimeFrom": "2026-11-10 10:40:00",
+"dateTimeTo": "2026-11-10 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54381,
+"dateTimeFrom": "2026-11-17 10:40:00",
+"dateTimeTo": "2026-11-17 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54384,
+"dateTimeFrom": "2026-11-24 10:40:00",
+"dateTimeTo": "2026-11-24 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54387,
+"dateTimeFrom": "2026-12-01 10:40:00",
+"dateTimeTo": "2026-12-01 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54390,
+"dateTimeFrom": "2026-12-08 10:40:00",
+"dateTimeTo": "2026-12-08 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54393,
+"dateTimeFrom": "2026-12-15 10:40:00",
+"dateTimeTo": "2026-12-15 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54396,
+"dateTimeFrom": "2026-12-22 10:40:00",
+"dateTimeTo": "2026-12-22 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54399,
+"dateTimeFrom": "2027-01-05 10:40:00",
+"dateTimeTo": "2027-01-05 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 54402,
+"dateTimeFrom": "2027-01-12 10:40:00",
+"dateTimeTo": "2027-01-12 11:25:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83960,
+"dateTimeFrom": "2026-09-08 13:55:00",
+"dateTimeTo": "2026-09-08 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83963,
+"dateTimeFrom": "2026-09-15 13:55:00",
+"dateTimeTo": "2026-09-15 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83966,
+"dateTimeFrom": "2026-09-22 13:55:00",
+"dateTimeTo": "2026-09-22 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83969,
+"dateTimeFrom": "2026-09-29 13:55:00",
+"dateTimeTo": "2026-09-29 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83972,
+"dateTimeFrom": "2026-10-06 13:55:00",
+"dateTimeTo": "2026-10-06 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83975,
+"dateTimeFrom": "2026-10-13 13:55:00",
+"dateTimeTo": "2026-10-13 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83978,
+"dateTimeFrom": "2026-10-20 13:55:00",
+"dateTimeTo": "2026-10-20 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83981,
+"dateTimeFrom": "2026-10-27 13:55:00",
+"dateTimeTo": "2026-10-27 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83984,
+"dateTimeFrom": "2026-11-03 13:55:00",
+"dateTimeTo": "2026-11-03 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83987,
+"dateTimeFrom": "2026-11-10 13:55:00",
+"dateTimeTo": "2026-11-10 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83990,
+"dateTimeFrom": "2026-11-17 13:55:00",
+"dateTimeTo": "2026-11-17 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83993,
+"dateTimeFrom": "2026-11-24 13:55:00",
+"dateTimeTo": "2026-11-24 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83996,
+"dateTimeFrom": "2026-12-01 13:55:00",
+"dateTimeTo": "2026-12-01 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 83999,
+"dateTimeFrom": "2026-12-08 13:55:00",
+"dateTimeTo": "2026-12-08 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 84002,
+"dateTimeFrom": "2026-12-15 13:55:00",
+"dateTimeTo": "2026-12-15 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 84005,
+"dateTimeFrom": "2026-12-22 13:55:00",
+"dateTimeTo": "2026-12-22 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 84008,
+"dateTimeFrom": "2027-01-05 13:55:00",
+"dateTimeTo": "2027-01-05 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 84011,
+"dateTimeFrom": "2027-01-12 13:55:00",
+"dateTimeTo": "2027-01-12 14:40:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95267,
+"dateTimeFrom": "2026-09-03 14:25:00",
+"dateTimeTo": "2026-09-03 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95270,
+"dateTimeFrom": "2026-09-10 14:25:00",
+"dateTimeTo": "2026-09-10 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95273,
+"dateTimeFrom": "2026-09-17 14:25:00",
+"dateTimeTo": "2026-09-17 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95276,
+"dateTimeFrom": "2026-09-24 14:25:00",
+"dateTimeTo": "2026-09-24 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95279,
+"dateTimeFrom": "2026-10-01 14:25:00",
+"dateTimeTo": "2026-10-01 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95282,
+"dateTimeFrom": "2026-10-08 14:25:00",
+"dateTimeTo": "2026-10-08 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95285,
+"dateTimeFrom": "2026-10-15 14:25:00",
+"dateTimeTo": "2026-10-15 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95288,
+"dateTimeFrom": "2026-10-22 14:25:00",
+"dateTimeTo": "2026-10-22 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95291,
+"dateTimeFrom": "2026-10-29 14:25:00",
+"dateTimeTo": "2026-10-29 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95294,
+"dateTimeFrom": "2026-11-05 14:25:00",
+"dateTimeTo": "2026-11-05 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95297,
+"dateTimeFrom": "2026-11-12 14:25:00",
+"dateTimeTo": "2026-11-12 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95300,
+"dateTimeFrom": "2026-11-19 14:25:00",
+"dateTimeTo": "2026-11-19 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95303,
+"dateTimeFrom": "2026-11-26 14:25:00",
+"dateTimeTo": "2026-11-26 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95306,
+"dateTimeFrom": "2026-12-03 14:25:00",
+"dateTimeTo": "2026-12-03 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95309,
+"dateTimeFrom": "2026-12-10 14:25:00",
+"dateTimeTo": "2026-12-10 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95312,
+"dateTimeFrom": "2026-12-17 14:25:00",
+"dateTimeTo": "2026-12-17 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95315,
+"dateTimeFrom": "2027-01-07 14:25:00",
+"dateTimeTo": "2027-01-07 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 95318,
+"dateTimeFrom": "2027-01-14 14:25:00",
+"dateTimeTo": "2027-01-14 15:10:00",
+"isCyclic": 1,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 121881,
+"dateTimeFrom": "2026-09-10 10:40:00",
+"dateTimeTo": "2026-09-10 13:15:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 124427,
+"dateTimeFrom": "2026-09-10 17:00:00",
+"dateTimeTo": "2026-09-10 18:30:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 148518,
+"dateTimeFrom": "2026-09-15 09:45:00",
+"dateTimeTo": "2026-09-15 12:15:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 148582,
+"dateTimeFrom": "2026-09-15 08:50:00",
+"dateTimeTo": "2026-09-15 09:35:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 2
+},
+{
+"id": 149103,
+"dateTimeFrom": "2026-09-17 10:40:00",
+"dateTimeTo": "2026-09-17 13:15:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 149832,
+"dateTimeFrom": "2026-09-23 13:30:00",
+"dateTimeTo": "2026-09-23 15:00:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 149909,
+"dateTimeFrom": "2026-09-24 08:00:00",
+"dateTimeTo": "2026-09-24 08:45:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 2
+},
+{
+"id": 149912,
+"dateTimeFrom": "2026-09-24 08:50:00",
+"dateTimeTo": "2026-09-24 09:35:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 2
+},
+{
+"id": 149954,
+"dateTimeFrom": "2026-09-29 09:15:00",
+"dateTimeTo": "2026-09-29 12:30:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 150023,
+"dateTimeFrom": "2026-10-02 09:45:00",
+"dateTimeTo": "2026-10-02 10:30:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 150190,
+"dateTimeFrom": "2026-09-28 11:30:00",
+"dateTimeTo": "2026-09-28 12:15:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 2
+},
+{
+"id": 150303,
+"dateTimeFrom": "2026-10-03 09:00:00",
+"dateTimeTo": "2026-10-03 11:15:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 0
+},
+{
+"id": 150320,
+"dateTimeFrom": "2026-10-01 09:45:00",
+"dateTimeTo": "2026-10-01 10:30:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 2
+},
+{
+"id": 150458,
+"dateTimeFrom": "2026-10-02 09:45:00",
+"dateTimeTo": "2026-10-02 10:30:00",
+"isCyclic": 0,
+"isCanceled": 0,
+"substitution": 2
+}
+]
