@@ -827,6 +827,7 @@
     "done": "Gotovo",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Datoteke nije bilo moguće priložiti ovoj poruci. Pošaljite ih u novoj poruci."
   }
 }

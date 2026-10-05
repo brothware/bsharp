@@ -565,7 +565,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     required String content,
     int? previousMessageId,
   }) async {
-    return _mailValue(
+    final messageId = _mailValue(
       await _mailbox().sendMessage(
         title: title,
         content: content,
@@ -573,6 +573,10 @@ class MobiregDataProvider implements SchoolDataProvider {
         previousMessageId: previousMessageId,
       ),
     );
+    if (messageId == null) {
+      throw const SentWithoutIdException();
+    }
+    return messageId;
   }
 
   @override

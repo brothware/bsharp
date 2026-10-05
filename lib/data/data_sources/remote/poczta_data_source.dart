@@ -144,7 +144,7 @@ class PocztaDataSource {
     );
   }
 
-  Future<Result<int>> sendMessage({
+  Future<Result<int?>> sendMessage({
     required String title,
     required String content,
     required List<String> recipients,
@@ -167,7 +167,7 @@ class PocztaDataSource {
     return result.map((response) => _sentMessageIdOf(response.data));
   }
 
-  int _sentMessageIdOf(Object? data) {
+  int? _sentMessageIdOf(Object? data) {
     final id = data is Map ? data['id'] : null;
     final parsed = switch (id) {
       int() => id,
@@ -175,7 +175,11 @@ class PocztaDataSource {
       _ => null,
     };
     if (parsed == null) {
-      throw const FormatException('Poczta PUT /api/messages: expected {id}');
+      final shape = data is Map ? 'keys ${data.keys.toList()}' : '$id';
+      debugPrint(
+        'PocztaDataSource: PUT /api/messages accepted the message but '
+        'answered no usable id (${data.runtimeType}, $shape)',
+      );
     }
     return parsed;
   }

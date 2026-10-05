@@ -176,6 +176,23 @@ Future<void> showAttachmentProblemsDialog(
   );
 }
 
+Future<void> showAttachmentsLostDialog(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      title: Text(t.compose.partialTitle),
+      content: Text(t.compose.sentWithoutFiles),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(t.common.ok),
+        ),
+      ],
+    ),
+  );
+}
+
 Future<bool> showUploadFailureDialog(
   BuildContext context,
   List<AttachmentUploadResult> failed,

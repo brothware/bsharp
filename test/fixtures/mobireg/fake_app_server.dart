@@ -45,6 +45,7 @@ class FakeAppServer {
   bool mailExpiresOnce = false;
   final mailPaths = <String>[];
   final sentMessages = <Map<String, dynamic>>[];
+  Object? sentMessageId = _sentMessageId;
   final uploads = <(String path, String filename)>[];
   final uploadStatuses = <String, List<int>>{};
   Object receivers = <Object>[
@@ -107,7 +108,7 @@ class FakeAppServer {
       return Response<dynamic>(
         requestOptions: options,
         statusCode: _ok,
-        data: {'id': _sentMessageId},
+        data: {'id': ?sentMessageId},
       );
     }
     if (options.path.endsWith('/files') && options.data is FormData) {

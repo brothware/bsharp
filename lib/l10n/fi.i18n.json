@@ -824,6 +824,7 @@
     "done": "Valmis",
     "sizeBytes": "${size} t",
     "sizeKilobytes": "${size} kt",
-    "sizeMegabytes": "${size} Mt"
+    "sizeMegabytes": "${size} Mt",
+    "sentWithoutFiles": "Tiedostoja ei voitu liittää tähän viestiin. Lähetä ne uudessa viestissä."
   }
 }

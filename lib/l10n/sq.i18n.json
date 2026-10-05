@@ -824,6 +824,7 @@
     "done": "U krye",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Skedarët nuk mund t'i bashkëngjiteshin këtij mesazhi. Dërgojini në një mesazh të ri."
   }
 }

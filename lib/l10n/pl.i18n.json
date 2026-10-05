@@ -824,6 +824,7 @@
     "done": "Gotowe",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Nie udało się dołączyć plików do tej wiadomości. Wyślij je w nowej wiadomości."
   }
 }

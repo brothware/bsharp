@@ -827,6 +827,7 @@
     "done": "Hotovo",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Súbory sa k tejto správe nepodarilo priložiť. Pošlite ich v novej správe."
   }
 }

@@ -219,6 +219,17 @@ void main() {
     expect(server.sentMessages.single['title'], 'T');
   });
 
+  test('a message sent without an id says so', () async {
+    await signedIn();
+    server.sentMessageId = null;
+
+    await expectLater(
+      provider.sendMessage(recipientIds: ['user_1'], title: 'T', content: 'C'),
+      throwsA(isA<SentWithoutIdException>()),
+    );
+    expect(server.sentMessages, hasLength(1));
+  });
+
   test('uploads each attachment to the sent message in order', () async {
     await signedIn();
     final started = <int>[];

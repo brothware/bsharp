@@ -824,6 +824,7 @@
     "done": "Klaar",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "De bestanden konden niet aan dit bericht worden toegevoegd. Stuur ze in een nieuw bericht."
   }
 }

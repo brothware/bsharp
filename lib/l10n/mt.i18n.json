@@ -830,6 +830,7 @@
     "done": "Lest",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Il-fajls ma setgħux jitwaħħlu ma' dan il-messaġġ. Ibgħathom f'messaġġ ġdid."
   }
 }

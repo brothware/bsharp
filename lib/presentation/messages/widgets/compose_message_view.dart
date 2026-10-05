@@ -421,9 +421,17 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     if (attachments.isNotEmpty && !await _isMailboxReady(dataProvider)) {
       return false;
     }
-    final messageId = await _sendMessage(dataProvider);
-    if (messageId == null) {
+    final sent = await _sendMessage(dataProvider);
+    if (sent == null) {
       return false;
+    }
+    final messageId = sent.messageId;
+    if (messageId == null) {
+      if (attachments.isNotEmpty && mounted) {
+        setState(() => _isTransferring = false);
+        await showAttachmentsLostDialog(context);
+      }
+      return true;
     }
     var pending = attachments;
     while (pending.isNotEmpty && mounted) {
@@ -431,6 +439,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
       if (failed.isEmpty || !mounted) {
         break;
       }
+      setState(() => _isTransferring = false);
       final shouldRetry = await showUploadFailureDialog(context, failed);
       pending = shouldRetry
           ? [for (final result in failed) result.attachment]
@@ -467,14 +476,20 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     }
   }
 
-  Future<int?> _sendMessage(SchoolDataProvider dataProvider) async {
+  Future<({int? messageId})?> _sendMessage(
+    SchoolDataProvider dataProvider,
+  ) async {
     try {
-      return await dataProvider.sendMessage(
+      final messageId = await dataProvider.sendMessage(
         recipientIds: _selectedRecipients.map((r) => r.recipientId).toList(),
         title: _titleController.text,
         content: _contentController.toHtml(),
         previousMessageId: widget.replyTo?.id,
       );
+      return (messageId: messageId);
+    } on SentWithoutIdException catch (error, stackTrace) {
+      debugPrint('ComposeMessageView: sent without an id: $error\n$stackTrace');
+      return (messageId: null);
     } on Exception catch (error, stackTrace) {
       debugPrint('ComposeMessageView: send failed: $error\n$stackTrace');
       if (mounted) {
@@ -489,7 +504,10 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     int messageId,
     List<OutgoingAttachment> pending,
   ) async {
-    setState(() => _uploadProgress = (index: 0, total: pending.length));
+    setState(() {
+      _isTransferring = true;
+      _uploadProgress = (index: 0, total: pending.length);
+    });
     try {
       final results = await dataProvider.uploadAttachments(
         messageId,

@@ -824,6 +824,7 @@
     "done": "Færdig",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Filerne kunne ikke vedhæftes denne besked. Send dem i en ny besked."
   }
 }

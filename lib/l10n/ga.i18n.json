@@ -833,6 +833,7 @@
     "done": "Déanta",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Níorbh fhéidir na comhaid a cheangal leis an teachtaireacht seo. Seol iad i dteachtaireacht nua."
   }
 }

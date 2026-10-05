@@ -824,6 +824,7 @@
     "done": "Fertig",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Die Dateien konnten dieser Nachricht nicht angehängt werden. Senden Sie sie in einer neuen Nachricht."
   }
 }

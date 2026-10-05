@@ -824,6 +824,7 @@
     "done": "Bitti",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Dosyalar bu mesaja eklenemedi. Onları yeni bir mesajla gönderin."
   }
 }

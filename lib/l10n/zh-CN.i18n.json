@@ -824,6 +824,7 @@
     "done": "完成",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "无法将文件附加到此消息。请在新消息中发送。"
   }
 }

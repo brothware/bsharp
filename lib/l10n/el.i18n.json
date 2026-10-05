@@ -824,6 +824,7 @@
     "done": "Τέλος",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Δεν ήταν δυνατή η επισύναψη των αρχείων σε αυτό το μήνυμα. Στείλτε τα σε νέο μήνυμα."
   }
 }

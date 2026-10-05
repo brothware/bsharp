@@ -68,6 +68,7 @@ class _MailProvider extends DemoDataProvider {
   final scripted = <String, List<AttachmentUploadFailure>>{};
   bool isSessionDead = false;
   bool sendFails = false;
+  bool answersNoId = false;
   Completer<void>? uploadGate;
 
   @override
@@ -88,6 +89,9 @@ class _MailProvider extends DemoDataProvider {
       throw const MessagingException(SessionExpired());
     }
     sentTitles.add(title);
+    if (answersNoId) {
+      throw const SentWithoutIdException();
+    }
     return _sentId;
   }
 
@@ -521,6 +525,53 @@ void main() {
     expect(find.text('Failed to send message'), findsOneWidget);
     expect(provider.uploadBatches, isEmpty);
     expect(find.byType(ComposeMessageView), findsOneWidget);
+  });
+
+  testWidgets('a message without files and without an id counts as sent', (
+    tester,
+  ) async {
+    provider.answersNoId = true;
+    await _openCompose(tester, provider: provider, picker: picker);
+
+    await _tapSend(tester);
+
+    expect(provider.sentTitles, hasLength(1));
+    expect(find.byType(ComposeMessageView), findsNothing);
+    expect(find.text('Message sent'), findsOneWidget);
+    expect(find.text('Failed to send message'), findsNothing);
+  });
+
+  testWidgets('files for a message sent without an id are reported lost', (
+    tester,
+  ) async {
+    provider.answersNoId = true;
+    await _openCompose(tester, provider: provider, picker: picker);
+    await _attach(tester, picker, [_attachment('a.pdf')]);
+
+    await _tapSend(tester);
+
+    expect(provider.sentTitles, hasLength(1));
+    expect(provider.uploadBatches, isEmpty);
+    expect(
+      find.text('Message sent, but some files were not attached'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'The files could not be attached to this message. '
+        'Send them in a new message.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Retry'), findsNothing);
+    expect(find.text('Failed to send message'), findsNothing);
+
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ComposeMessageView), findsNothing);
+    expect(find.text('Message sent'), findsOneWidget);
+    expect(provider.sentTitles, hasLength(1));
   });
 
   testWidgets('a message without files is sent without a mailbox check', (

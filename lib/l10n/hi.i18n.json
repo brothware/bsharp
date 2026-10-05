@@ -824,6 +824,7 @@
     "done": "हो गया",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "फ़ाइलें इस संदेश के साथ संलग्न नहीं की जा सकीं। उन्हें एक नए संदेश में भेजें।"
   }
 }

@@ -827,6 +827,7 @@
     "done": "Hotovo",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Soubory se k této zprávě nepodařilo přiložit. Pošlete je v nové zprávě."
   }
 }

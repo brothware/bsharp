@@ -824,6 +824,7 @@
     "done": "Готово",
     "sizeBytes": "${size} Б",
     "sizeKilobytes": "${size} КБ",
-    "sizeMegabytes": "${size} МБ"
+    "sizeMegabytes": "${size} МБ",
+    "sentWithoutFiles": "Файловете не можаха да бъдат прикачени към това съобщение. Изпратете ги в ново съобщение."
   }
 }

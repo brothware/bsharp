@@ -824,6 +824,7 @@
     "done": "Готово",
     "sizeBytes": "${size} Б",
     "sizeKilobytes": "${size} КБ",
-    "sizeMegabytes": "${size} МБ"
+    "sizeMegabytes": "${size} МБ",
+    "sentWithoutFiles": "Датотеките не може да се прикачат на оваа порака. Испратете ги во нова порака."
   }
 }

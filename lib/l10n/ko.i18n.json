@@ -824,6 +824,7 @@
     "done": "완료",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "이 메시지에 파일을 첨부하지 못했습니다. 새 메시지로 보내세요."
   }
 }

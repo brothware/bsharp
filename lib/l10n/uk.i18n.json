@@ -830,6 +830,7 @@
     "done": "Готово",
     "sizeBytes": "${size} Б",
     "sizeKilobytes": "${size} КБ",
-    "sizeMegabytes": "${size} МБ"
+    "sizeMegabytes": "${size} МБ",
+    "sentWithoutFiles": "Не вдалося прикріпити файли до цього повідомлення. Надішліть їх у новому повідомленні."
   }
 }

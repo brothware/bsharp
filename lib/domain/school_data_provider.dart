@@ -56,6 +56,15 @@ class MessagingException implements Exception {
       'MessagingException: ${failure.runtimeType} ${failure.message ?? ''}';
 }
 
+class SentWithoutIdException implements Exception {
+  const SentWithoutIdException();
+
+  @override
+  String toString() =>
+      'SentWithoutIdException: the message was sent but poczta answered '
+      'no message id';
+}
+
 @immutable
 class AccountProbe {
   const AccountProbe({required this.schoolName, required this.students});

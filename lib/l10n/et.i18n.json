@@ -824,6 +824,7 @@
     "done": "Valmis",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Faile ei õnnestunud sellele sõnumile lisada. Saada need uues sõnumis."
   }
 }

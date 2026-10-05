@@ -830,6 +830,7 @@
     "done": "Гатова",
     "sizeBytes": "${size} Б",
     "sizeKilobytes": "${size} КБ",
-    "sizeMegabytes": "${size} МБ"
+    "sizeMegabytes": "${size} МБ",
+    "sentWithoutFiles": "Не ўдалося прымацаваць файлы да гэтага паведамлення. Адпраўце іх у новым паведамленні."
   }
 }

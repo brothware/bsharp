@@ -824,6 +824,7 @@
     "done": "完了",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "このメッセージにファイルを添付できませんでした。新しいメッセージで送信してください。"
   }
 }

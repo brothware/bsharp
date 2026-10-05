@@ -824,6 +824,7 @@
     "done": "Concluído",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Não foi possível anexar os ficheiros a esta mensagem. Envie-os numa nova mensagem."
   }
 }

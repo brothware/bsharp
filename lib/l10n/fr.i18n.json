@@ -824,6 +824,7 @@
     "done": "Terminé",
     "sizeBytes": "${size} o",
     "sizeKilobytes": "${size} Ko",
-    "sizeMegabytes": "${size} Mo"
+    "sizeMegabytes": "${size} Mo",
+    "sentWithoutFiles": "Les fichiers n'ont pas pu être joints à ce message. Envoyez-les dans un nouveau message."
   }
 }

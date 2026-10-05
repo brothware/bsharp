@@ -830,6 +830,7 @@
     "done": "Baigta",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Failų nepavyko pridėti prie šios žinutės. Išsiųskite juos naujoje žinutėje."
   }
 }

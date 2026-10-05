@@ -830,6 +830,7 @@
     "done": "Končano",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Datotek ni bilo mogoče priložiti temu sporočilu. Pošljite jih v novem sporočilu."
   }
 }

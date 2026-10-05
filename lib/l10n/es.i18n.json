@@ -824,6 +824,7 @@
     "done": "Listo",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "No se pudieron adjuntar los archivos a este mensaje. Envíelos en un mensaje nuevo."
   }
 }

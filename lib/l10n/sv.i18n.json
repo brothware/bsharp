@@ -824,6 +824,7 @@
     "done": "Klar",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Filerna kunde inte bifogas till det här meddelandet. Skicka dem i ett nytt meddelande."
   }
 }

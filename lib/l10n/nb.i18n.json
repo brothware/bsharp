@@ -824,6 +824,7 @@
     "done": "Ferdig",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Filene kunne ikke legges ved denne meldingen. Send dem i en ny melding."
   }
 }

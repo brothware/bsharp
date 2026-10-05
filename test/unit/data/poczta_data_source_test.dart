@@ -434,16 +434,24 @@ void main() {
     expect(result.valueOrNull, 778);
   });
 
-  test('a sent message without an id is a FormatException', () async {
-    final (source, _) = await _signedInTo(
-      _PocztaFake()..sendBody = <String, dynamic>{},
-    );
+  for (final body in [
+    <String, dynamic>{},
+    {'id': 'abc'},
+    <Object>[],
+  ]) {
+    test('a sent message answering $body is sent without an id', () async {
+      final (source, _) = await _signedInTo(_PocztaFake()..sendBody = body);
 
-    await expectLater(
-      source.sendMessage(title: 'T', content: 'C', recipients: ['user_1']),
-      throwsFormatException,
-    );
-  });
+      final result = await source.sendMessage(
+        title: 'T',
+        content: 'C',
+        recipients: ['user_1'],
+      );
+
+      expect(result, isA<Success<int?>>());
+      expect(result.valueOrNull, isNull);
+    });
+  }
 
   test('uploads a file as one multipart files part with the cookie', () async {
     final (source, seen) = await _signedIn();

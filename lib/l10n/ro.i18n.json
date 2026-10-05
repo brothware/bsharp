@@ -827,6 +827,7 @@
     "done": "Gata",
     "sizeBytes": "${size} B",
     "sizeKilobytes": "${size} KB",
-    "sizeMegabytes": "${size} MB"
+    "sizeMegabytes": "${size} MB",
+    "sentWithoutFiles": "Fișierele nu au putut fi atașate acestui mesaj. Trimiteți-le într-un mesaj nou."
   }
 }
