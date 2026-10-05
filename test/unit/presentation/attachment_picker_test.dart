@@ -63,4 +63,18 @@ void main() {
     expect(formatAttachmentSize(5 * 1024 * 1024, english), '5 MB');
     expect(formatAttachmentSize(1536, const Locale('pl')), '1,5 KB');
   });
+
+  test('the size limit is read from the constant in the locale units', () {
+    expect(attachmentSizeLimit(const Locale('en')), '50 MB');
+    expect(
+      attachmentProblemText(
+        AttachmentCheck(
+          OutgoingAttachment.memory(name: 'a.mov', bytes: Uint8List(1)),
+          AttachmentProblem.tooLarge,
+        ),
+        const Locale('en'),
+      ),
+      'a.mov is larger than 50 MB',
+    );
+  });
 }

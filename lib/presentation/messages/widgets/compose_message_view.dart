@@ -379,8 +379,9 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     if (!mounted) {
       return;
     }
+    final limit = attachmentSizeLimit(Localizations.localeOf(context));
     for (final attachment in picked.where((a) => a.isTooLarge)) {
-      _showSnackBar(t.compose.tooLarge(name: attachment.name));
+      _showSnackBar(t.compose.tooLarge(name: attachment.name, limit: limit));
     }
     setState(() {
       _attachments.addAll(picked.where((a) => !a.isTooLarge));

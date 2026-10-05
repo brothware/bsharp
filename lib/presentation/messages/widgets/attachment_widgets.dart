@@ -36,13 +36,20 @@ String uploadFailureReason(AttachmentUploadFailure failure) {
   };
 }
 
-String attachmentProblemText(AttachmentCheck check) {
+String attachmentSizeLimit(Locale locale) {
+  return formatAttachmentSize(maxAttachmentBytes, locale);
+}
+
+String attachmentProblemText(AttachmentCheck check, Locale locale) {
   final name = check.attachment.name;
   return switch (check.problem) {
     AttachmentProblem.missing => t.compose.missing(name: name),
     AttachmentProblem.unreadable => t.compose.unreadable(name: name),
     AttachmentProblem.empty => t.compose.empty(name: name),
-    AttachmentProblem.tooLarge => t.compose.tooLargeToSend(name: name),
+    AttachmentProblem.tooLarge => t.compose.tooLargeToSend(
+      name: name,
+      limit: attachmentSizeLimit(locale),
+    ),
   };
 }
 
@@ -153,7 +160,10 @@ Future<void> showAttachmentProblemsDialog(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (final problem in problems) Text(attachmentProblemText(problem)),
+          for (final problem in problems)
+            Text(
+              attachmentProblemText(problem, Localizations.localeOf(context)),
+            ),
         ],
       ),
       actions: [

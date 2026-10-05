@@ -84,6 +84,19 @@ void main() {
     expect(problems, isEmpty);
   });
 
+  test('no attachment string hard-codes the size limit', () {
+    final hardCoded = <String>[
+      for (final MapEntry(key: lang, value: keys) in {
+        'en': enKeys,
+        ...allLocales,
+      }.entries)
+        for (final MapEntry(:key, :value) in keys.entries)
+          if (key.startsWith('compose.') && value.contains('50')) '$lang $key',
+    ];
+
+    expect(hardCoded, isEmpty);
+  });
+
   test('no locale has untranslated English values', () {
     const skipKeys = <String>{
       'messages.replyPrefix',
