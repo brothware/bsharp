@@ -318,6 +318,7 @@
     "readReceipt": "Prebrano",
     "notReadYet": "Še ni prebrano",
     "loadMoreFailed": "Nalaganje več sporočil ni uspelo",
+    "loadFailed": "Sporočil ni bilo mogoče naložiti",
     "actionFailed": "Sporočila ni bilo mogoče posodobiti",
     "readFailed": "Sporočila ni bilo mogoče naložiti",
     "searchFailed": "Iskanje prejemnikov ni uspelo"

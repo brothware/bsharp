@@ -318,6 +318,7 @@
     "readReceipt": "Maqri",
     "notReadYet": "Għadu mhux maqri",
     "loadMoreFailed": "Ma setgħux jitqiegħdu aktar messaġġi",
+    "loadFailed": "Ma setgħux jittellgħu l-messaġġi",
     "actionFailed": "Ma setax jiġi aġġornat il-messaġġ",
     "readFailed": "Ma setax jitqiegħed il-messaġġ",
     "searchFailed": "Ma setgħux jiġu mfittxija riċevituri"

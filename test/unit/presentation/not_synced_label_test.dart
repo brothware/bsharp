@@ -20,6 +20,12 @@ class _StaleHealth extends SyncHealthNotifier {
   SyncHealth build() => initial;
 }
 
+class _ExplodingMailProvider extends DemoDataProvider {
+  @override
+  Future<bool> loadMessages(Ref ref, {DateTime? now}) async =>
+      throw StateError('mail exploded');
+}
+
 class _CountingMailProvider extends DemoDataProvider {
   int loads = 0;
   int refreshes = 0;
@@ -141,6 +147,24 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(provider.loads, 1);
+  });
+
+  testWidgets('a retry that throws is reported instead of escaping', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        const Scaffold(body: MessagesScreen()),
+        health: _staleIn(DataProviderCapability.messages),
+        provider: _ExplodingMailProvider(),
+      ),
+    );
+
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Could not load messages'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('the grades page shows the label when grades are stale', (

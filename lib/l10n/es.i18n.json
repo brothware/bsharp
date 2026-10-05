@@ -312,6 +312,7 @@
     "readReceipt": "Leído",
     "notReadYet": "Aún no leído",
     "loadMoreFailed": "No se pudieron cargar más mensajes",
+    "loadFailed": "No se pudieron cargar los mensajes",
     "actionFailed": "No se pudo actualizar el mensaje",
     "readFailed": "No se pudo cargar el mensaje",
     "searchFailed": "No se pudo buscar destinatarios"

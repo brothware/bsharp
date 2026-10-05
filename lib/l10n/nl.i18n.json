@@ -312,6 +312,7 @@
     "readReceipt": "Gelezen",
     "notReadYet": "Nog niet gelezen",
     "loadMoreFailed": "Meer berichten kunnen niet worden geladen",
+    "loadFailed": "Berichten konden niet worden geladen",
     "actionFailed": "Bericht kon niet worden bijgewerkt",
     "readFailed": "Bericht kon niet worden geladen",
     "searchFailed": "Zoeken naar ontvangers mislukt"

@@ -312,6 +312,7 @@
     "readReceipt": "Elolvasva",
     "notReadYet": "Még nem olvasták el",
     "loadMoreFailed": "Nem sikerült további üzeneteket betölteni",
+    "loadFailed": "Az üzeneteket nem sikerült betölteni",
     "actionFailed": "Nem sikerült frissíteni az üzenetet",
     "readFailed": "Nem sikerült betölteni az üzenetet",
     "searchFailed": "Nem sikerült címzetteket keresni"

@@ -312,6 +312,7 @@
     "readReceipt": "Okundu",
     "notReadYet": "Henüz okunmadı",
     "loadMoreFailed": "Daha fazla mesaj yüklenemedi",
+    "loadFailed": "Mesajlar yüklenemedi",
     "actionFailed": "Mesaj güncellenemedi",
     "readFailed": "Mesaj yüklenemedi",
     "searchFailed": "Alıcılar aranamadı"

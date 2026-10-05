@@ -312,6 +312,7 @@
     "readReceipt": "Loetud",
     "notReadYet": "Pole veel loetud",
     "loadMoreFailed": "Rohkemate sõnumite laadimine ebaõnnestus",
+    "loadFailed": "Sõnumeid ei õnnestunud laadida",
     "actionFailed": "Sõnumit ei õnnestunud uuendada",
     "readFailed": "Sõnumit ei õnnestunud laadida",
     "searchFailed": "Saajate otsing ebaõnnestus"

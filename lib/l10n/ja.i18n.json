@@ -312,6 +312,7 @@
     "readReceipt": "既読",
     "notReadYet": "未読",
     "loadMoreFailed": "これ以上のメッセージを読み込めませんでした",
+    "loadFailed": "メッセージを読み込めませんでした",
     "actionFailed": "メッセージを更新できませんでした",
     "readFailed": "メッセージを読み込めませんでした",
     "searchFailed": "宛先を検索できませんでした"

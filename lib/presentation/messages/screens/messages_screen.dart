@@ -54,8 +54,7 @@ class MessagesScreen extends ConsumerWidget {
           children: [
             NotSyncedLabel(
               area: DataProviderCapability.messages,
-              onRetry: () =>
-                  ref.read(syncStatusProvider.notifier).syncMessages(),
+              onRetry: () => _retryMail(context, ref),
             ),
             if (ref.watch(reauthRequiredProvider))
               MaterialBanner(
@@ -98,6 +97,16 @@ class MessagesScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> _retryMail(BuildContext context, WidgetRef ref) async {
+  final messenger = ScaffoldMessenger.of(context);
+  try {
+    await ref.read(syncStatusProvider.notifier).syncMessages();
+  } on Object catch (error, stackTrace) {
+    debugPrint('MessagesScreen: mail retry failed: $error\n$stackTrace');
+    messenger.showSnackBar(SnackBar(content: Text(t.messages.loadFailed)));
   }
 }
 

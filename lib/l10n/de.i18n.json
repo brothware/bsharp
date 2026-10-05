@@ -312,6 +312,7 @@
     "readReceipt": "Gelesen",
     "notReadYet": "Noch nicht gelesen",
     "loadMoreFailed": "Weitere Nachrichten konnten nicht geladen werden",
+    "loadFailed": "Nachrichten konnten nicht geladen werden",
     "actionFailed": "Nachricht konnte nicht aktualisiert werden",
     "readFailed": "Nachricht konnte nicht geladen werden",
     "searchFailed": "Empfängersuche fehlgeschlagen"

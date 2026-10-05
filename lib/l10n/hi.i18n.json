@@ -312,6 +312,7 @@
     "readReceipt": "पढ़ा गया",
     "notReadYet": "अभी तक नहीं पढ़ा",
     "loadMoreFailed": "और संदेश लोड नहीं हो सके",
+    "loadFailed": "संदेश लोड नहीं हो सके",
     "actionFailed": "संदेश अपडेट नहीं हो सका",
     "readFailed": "संदेश लोड नहीं हो सका",
     "searchFailed": "प्राप्तकर्ता खोजे नहीं जा सके"

@@ -312,6 +312,7 @@
     "readReceipt": "Luettu",
     "notReadYet": "Ei vielä luettu",
     "loadMoreFailed": "Lisää viestejä ei voitu ladata",
+    "loadFailed": "Viestien lataaminen epäonnistui",
     "actionFailed": "Viestiä ei voitu päivittää",
     "readFailed": "Viestiä ei voitu ladata",
     "searchFailed": "Vastaanottajien haku epäonnistui"

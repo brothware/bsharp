@@ -318,6 +318,7 @@
     "readReceipt": "Perskaityta",
     "notReadYet": "Dar neperskaityta",
     "loadMoreFailed": "Nepavyko įkelti daugiau žinučių",
+    "loadFailed": "Nepavyko įkelti žinučių",
     "actionFailed": "Nepavyko atnaujinti žinutės",
     "readFailed": "Nepavyko įkelti žinutės",
     "searchFailed": "Nepavyko ieškoti gavėjų"

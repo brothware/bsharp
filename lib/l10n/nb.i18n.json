@@ -312,6 +312,7 @@
     "readReceipt": "Lest",
     "notReadYet": "Ikke lest ennå",
     "loadMoreFailed": "Kunne ikke laste inn flere meldinger",
+    "loadFailed": "Kunne ikke laste meldinger",
     "actionFailed": "Kunne ikke oppdatere meldingen",
     "readFailed": "Kunne ikke laste inn meldingen",
     "searchFailed": "Kunne ikke søke etter mottakere"

@@ -312,6 +312,7 @@
     "readReceipt": "Läst",
     "notReadYet": "Inte läst ännu",
     "loadMoreFailed": "Det gick inte att läsa in fler meddelanden",
+    "loadFailed": "Det gick inte att läsa in meddelanden",
     "actionFailed": "Det gick inte att uppdatera meddelandet",
     "readFailed": "Det gick inte att läsa in meddelandet",
     "searchFailed": "Det gick inte att söka efter mottagare"

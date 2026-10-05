@@ -315,6 +315,7 @@
     "readReceipt": "Pročitano",
     "notReadYet": "Još nije pročitano",
     "loadMoreFailed": "Nije moguće učitati više poruka",
+    "loadFailed": "Nije moguće učitati poruke",
     "actionFailed": "Nije moguće ažurirati poruku",
     "readFailed": "Nije moguće učitati poruku",
     "searchFailed": "Pretraživanje primatelja nije uspjelo"

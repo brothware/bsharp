@@ -312,6 +312,7 @@
     "readReceipt": "Læst",
     "notReadYet": "Ikke læst endnu",
     "loadMoreFailed": "Kunne ikke indlæse flere beskeder",
+    "loadFailed": "Kunne ikke indlæse beskeder",
     "actionFailed": "Beskeden kunne ikke opdateres",
     "readFailed": "Beskeden kunne ikke indlæses",
     "searchFailed": "Søgningen efter modtagere mislykkedes"

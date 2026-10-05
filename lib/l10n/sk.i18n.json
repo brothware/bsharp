@@ -315,6 +315,7 @@
     "readReceipt": "Prečítané",
     "notReadYet": "Zatiaľ neprečítané",
     "loadMoreFailed": "Nepodarilo sa načítať ďalšie správy",
+    "loadFailed": "Správy sa nepodarilo načítať",
     "actionFailed": "Správu sa nepodarilo aktualizovať",
     "readFailed": "Správu sa nepodarilo načítať",
     "searchFailed": "Vyhľadávanie príjemcov zlyhalo"

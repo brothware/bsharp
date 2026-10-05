@@ -312,6 +312,7 @@
     "readReceipt": "Izlasīts",
     "notReadYet": "Vēl nav izlasīts",
     "loadMoreFailed": "Neizdevās ielādēt vairāk ziņojumu",
+    "loadFailed": "Neizdevās ielādēt ziņojumus",
     "actionFailed": "Neizdevās atjaunināt ziņojumu",
     "readFailed": "Neizdevās ielādēt ziņojumu",
     "searchFailed": "Neizdevās meklēt adresātus"

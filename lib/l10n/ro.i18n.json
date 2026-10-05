@@ -315,6 +315,7 @@
     "readReceipt": "Citit",
     "notReadYet": "Încă necitit",
     "loadMoreFailed": "Nu s-au putut încărca mai multe mesaje",
+    "loadFailed": "Mesajele nu au putut fi încărcate",
     "actionFailed": "Mesajul nu a putut fi actualizat",
     "readFailed": "Mesajul nu a putut fi încărcat",
     "searchFailed": "Căutarea destinatarilor a eșuat"
