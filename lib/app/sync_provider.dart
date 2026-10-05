@@ -116,11 +116,21 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
 
       await loadCustomEventsFromRef(ref, accountId);
 
-      state = SyncStatus.completed;
       ref.read(missingPupilProvider.notifier).value = false;
       ref.read(lastSyncTimeProvider.notifier).value = DateTime.now();
 
-      final changeSet = await _detectChanges();
+      final ChangeSet changeSet;
+      try {
+        changeSet = await _detectChanges();
+      } on Object catch (error, stackTrace) {
+        debugPrint(
+          'SyncStatusNotifier: data applied but change detection failed: '
+          '$error\n$stackTrace',
+        );
+        state = SyncStatus.failed;
+        return const ChangeSet();
+      }
+      state = SyncStatus.completed;
       await _trackNewGrades(changeSet);
 
       await _checkUnexcusedAbsences();
@@ -185,35 +195,31 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
   }
 
   Future<ChangeSet> _detectChanges() async {
-    try {
-      final prefs = ref.read(sharedPreferencesProvider);
-      final previousSnapshot = await SyncSnapshot.load(prefs);
+    final prefs = ref.read(sharedPreferencesProvider);
+    final previousSnapshot = await SyncSnapshot.load(prefs);
 
-      final grades = ref.read(resolvedGradesProvider);
-      final events = ref.read(resolvedEventsProvider);
-      final attendances = ref.read(attendancesProvider);
-      final isMailStale = ref
-          .read(syncHealthProvider)
-          .isStale(DataProviderCapability.messages);
-      final inbox = ref.read(inboxProvider);
+    final grades = ref.read(resolvedGradesProvider);
+    final events = ref.read(resolvedEventsProvider);
+    final attendances = ref.read(attendancesProvider);
+    final isMailStale = ref
+        .read(syncHealthProvider)
+        .isStale(DataProviderCapability.messages);
+    final inbox = ref.read(inboxProvider);
 
-      final currentSnapshot = SyncSnapshot(
-        markIds: grades.map((m) => m.id).toSet(),
-        eventIds: events.map((e) => e.id).toSet(),
-        attendanceIds: attendances.map((a) => a.id).toSet(),
-        inboxMessageIds: isMailStale
-            ? previousSnapshot?.inboxMessageIds ?? const {}
-            : inbox.map((m) => m.id).toSet(),
-        isInboxBaselineKnown:
-            !isMailStale || (previousSnapshot?.isInboxBaselineKnown ?? false),
-      );
+    final currentSnapshot = SyncSnapshot(
+      markIds: grades.map((m) => m.id).toSet(),
+      eventIds: events.map((e) => e.id).toSet(),
+      attendanceIds: attendances.map((a) => a.id).toSet(),
+      inboxMessageIds: isMailStale
+          ? previousSnapshot?.inboxMessageIds ?? const {}
+          : inbox.map((m) => m.id).toSet(),
+      isInboxBaselineKnown:
+          !isMailStale || (previousSnapshot?.isInboxBaselineKnown ?? false),
+    );
 
-      final changeSet = currentSnapshot.diff(previousSnapshot);
-      await currentSnapshot.save(prefs);
-      return changeSet;
-    } on Object {
-      return const ChangeSet();
-    }
+    final changeSet = currentSnapshot.diff(previousSnapshot);
+    await currentSnapshot.save(prefs);
+    return changeSet;
   }
 
   Future<void> _trackNewGrades(ChangeSet changeSet) async {

@@ -20,7 +20,9 @@ import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -70,6 +72,7 @@ Future<ProviderContainer> _containerWith({
   required ProviderAccount account,
   int pupilId = _pupilId,
   NotificationService? notifications,
+  List<Override> overrides = const [],
 }) async {
   final prefs = await SharedPreferences.getInstance();
   final accountStorage = AccountStorage(store: FakeKeyValueStore());
@@ -87,6 +90,7 @@ Future<ProviderContainer> _containerWith({
         notifications ?? _SilentNotificationService(),
       ),
       customEventDaoProvider.overrideWithValue(null),
+      ...overrides,
     ],
   );
   addTearDown(container.dispose);
@@ -127,6 +131,15 @@ class _SlowSchoolFailureProvider extends DemoDataProvider {
   @override
   Future<bool> loadMessages(Ref ref, {DateTime? now}) async =>
       throw const MessagingException(SessionExpired());
+}
+
+class _NoSchoolDataProvider extends DemoDataProvider {
+  @override
+  Future<void> loadSchoolData(
+    Ref ref, {
+    required int studentId,
+    DateTime? now,
+  }) async {}
 }
 
 class _UnloadedMailProvider extends DemoDataProvider {
@@ -605,6 +618,36 @@ void main() {
 
       expect(container.read(syncStatusProvider), SyncStatus.completed);
       expect(container.read(syncHealthProvider).lastSyncedAt, isEmpty);
+    });
+
+    test('a change detection failure fails the sync visibly', () async {
+      final logs = <String>[];
+      final originalDebugPrint = debugPrint;
+      debugPrint = (message, {wrapWidth}) => logs.add(message ?? '');
+      addTearDown(() => debugPrint = originalDebugPrint);
+      final container = await _containerWith(
+        provider: _NoSchoolDataProvider(),
+        account: _account.copyWith(providerType: 'demo'),
+        overrides: [
+          resolvedGradesProvider.overrideWithBuild(
+            (ref, _) => throw StateError('grades unreadable'),
+          ),
+        ],
+      );
+
+      final changes = await container.read(syncStatusProvider.notifier).sync();
+
+      expect(changes.isEmpty, isTrue);
+      expect(container.read(syncStatusProvider), SyncStatus.failed);
+      expect(container.read(lastSyncTimeProvider), isNotNull);
+      expect(
+        logs.where(
+          (line) =>
+              line.contains('change detection failed') &&
+              line.contains('grades unreadable'),
+        ),
+        isNotEmpty,
+      );
     });
 
     test('a mail retry that loads nothing reports it', () async {
