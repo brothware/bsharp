@@ -177,13 +177,20 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       final grades = ref.read(resolvedGradesProvider);
       final events = ref.read(resolvedEventsProvider);
       final attendances = ref.read(attendancesProvider);
+      final isMailStale = ref
+          .read(syncHealthProvider)
+          .isStale(DataProviderCapability.messages);
       final inbox = ref.read(inboxProvider);
 
       final currentSnapshot = SyncSnapshot(
         markIds: grades.map((m) => m.id).toSet(),
         eventIds: events.map((e) => e.id).toSet(),
         attendanceIds: attendances.map((a) => a.id).toSet(),
-        inboxMessageIds: inbox.map((m) => m.id).toSet(),
+        inboxMessageIds: isMailStale
+            ? previousSnapshot?.inboxMessageIds ?? const {}
+            : inbox.map((m) => m.id).toSet(),
+        isInboxBaselineKnown:
+            !isMailStale || (previousSnapshot?.isInboxBaselineKnown ?? false),
       );
 
       final changeSet = currentSnapshot.diff(previousSnapshot);

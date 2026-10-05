@@ -13,6 +13,7 @@ class SyncSnapshot {
     this.testIds = const {},
     this.reprimandIds = const {},
     this.inboxMessageIds = const {},
+    this.isInboxBaselineKnown = true,
   });
 
   factory SyncSnapshot.fromJson(Map<String, dynamic> json) {
@@ -24,6 +25,7 @@ class SyncSnapshot {
       testIds: _intSet(json['testIds']),
       reprimandIds: _intSet(json['reprimandIds']),
       inboxMessageIds: _intSet(json['inboxMessageIds']),
+      isInboxBaselineKnown: json['isInboxBaselineKnown'] as bool? ?? true,
     );
   }
 
@@ -34,6 +36,7 @@ class SyncSnapshot {
   final Set<int> testIds;
   final Set<int> reprimandIds;
   final Set<int> inboxMessageIds;
+  final bool isInboxBaselineKnown;
 
   ChangeSet diff(SyncSnapshot? previous) {
     if (previous == null) return const ChangeSet();
@@ -100,14 +103,16 @@ class SyncSnapshot {
       );
     }
 
-    for (final id in inboxMessageIds.difference(previous.inboxMessageIds)) {
-      changes.add(
-        ChangeItem(
-          category: ChangeCategory.messages,
-          title: t.notification.newMessage,
-          entityId: id,
-        ),
-      );
+    if (isInboxBaselineKnown && previous.isInboxBaselineKnown) {
+      for (final id in inboxMessageIds.difference(previous.inboxMessageIds)) {
+        changes.add(
+          ChangeItem(
+            category: ChangeCategory.messages,
+            title: t.notification.newMessage,
+            entityId: id,
+          ),
+        );
+      }
     }
 
     return ChangeSet(changes: changes);
@@ -122,6 +127,7 @@ class SyncSnapshot {
     'testIds': testIds.toList(),
     'reprimandIds': reprimandIds.toList(),
     'inboxMessageIds': inboxMessageIds.toList(),
+    'isInboxBaselineKnown': isInboxBaselineKnown,
   };
 
   static Set<int> _intSet(dynamic list) {

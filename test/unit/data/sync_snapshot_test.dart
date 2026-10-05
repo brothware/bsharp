@@ -29,4 +29,28 @@ void main() {
       expect(loaded.attendanceIds, {2});
     });
   });
+
+  group('SyncSnapshot.diff', () {
+    test('an unknown inbox baseline reports no new mail', () {
+      const previous = SyncSnapshot(isInboxBaselineKnown: false);
+      const current = SyncSnapshot(inboxMessageIds: {1, 2});
+
+      expect(current.diff(previous).isEmpty, isTrue);
+    });
+
+    test('a known inbox baseline reports new mail', () {
+      const previous = SyncSnapshot(inboxMessageIds: {1});
+      const current = SyncSnapshot(inboxMessageIds: {1, 2});
+
+      expect(current.diff(previous).changes, hasLength(1));
+    });
+
+    test('the baseline flag survives a save and load', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      await const SyncSnapshot(isInboxBaselineKnown: false).save(prefs);
+
+      expect((await SyncSnapshot.load(prefs))!.isInboxBaselineKnown, isFalse);
+    });
+  });
 }

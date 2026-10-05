@@ -14,6 +14,8 @@ import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
+import 'package:bsharp/data/services/sync_snapshot.dart';
+import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
@@ -27,11 +29,13 @@ import '../../fixtures/mobireg/fixtures.dart';
 import '../data/credential_storage_test.dart';
 
 class _SilentNotificationService extends NotificationService {
+  int absenceAlerts = 0;
+
   @override
   Future<void> initialize({void Function(NotificationPayload)? onTap}) async {}
 
   @override
-  Future<void> showUnexcusedAbsenceAlert(int count) async {}
+  Future<void> showUnexcusedAbsenceAlert(int count) async => absenceAlerts++;
 }
 
 const _pupilId = 6339;
@@ -48,6 +52,7 @@ Future<ProviderContainer> _mobiregContainer({
   required FakeAppServer server,
   required ProviderAccount account,
   int pupilId = _pupilId,
+  NotificationService? notifications,
 }) {
   return _containerWith(
     provider: MobiregDataProvider(
@@ -56,6 +61,7 @@ Future<ProviderContainer> _mobiregContainer({
     ),
     account: account,
     pupilId: pupilId,
+    notifications: notifications,
   );
 }
 
@@ -63,6 +69,7 @@ Future<ProviderContainer> _containerWith({
   required SchoolDataProvider provider,
   required ProviderAccount account,
   int pupilId = _pupilId,
+  NotificationService? notifications,
 }) async {
   final prefs = await SharedPreferences.getInstance();
   final accountStorage = AccountStorage(store: FakeKeyValueStore());
@@ -77,7 +84,7 @@ Future<ProviderContainer> _containerWith({
       accountStorageProvider.overrideWithValue(accountStorage),
       activeDataProviderProvider.overrideWithBuild((ref, _) => provider),
       notificationServiceProvider.overrideWithValue(
-        _SilentNotificationService(),
+        notifications ?? _SilentNotificationService(),
       ),
       customEventDaoProvider.overrideWithValue(null),
     ],
@@ -441,6 +448,68 @@ void main() {
         isNotNull,
       );
       expect(container.read(resolvedGradesProvider), isNotEmpty);
+    });
+
+    test('a mail outage still runs grade and absence tracking', () async {
+      server.mailSignInFails = true;
+      final notifications = _SilentNotificationService();
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+        notifications: notifications,
+      );
+      await const SyncSnapshot().save(
+        container.read(sharedPreferencesProvider),
+      );
+
+      final changes = await container.read(syncStatusProvider.notifier).sync();
+
+      expect(changes.byCategory(ChangeCategory.grades), isNotEmpty);
+      expect(container.read(newGradeIdsProvider), isNotEmpty);
+      expect(notifications.absenceAlerts, 1);
+    });
+
+    test(
+      'a first sync during an outage reports no mail as new later',
+      () async {
+        server.mailSignInFails = true;
+        final container = await _mobiregContainer(
+          server: server,
+          account: _account,
+        );
+        final notifier = container.read(syncStatusProvider.notifier);
+        await notifier.sync();
+
+        server.mailSignInFails = false;
+        final changes = await notifier.sync();
+
+        expect(changes.byCategory(ChangeCategory.messages), isEmpty);
+      },
+    );
+
+    test('mail that arrives after an outage is reported once', () async {
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+      final notifier = container.read(syncStatusProvider.notifier);
+      await notifier.sync();
+      server.mailSignInFails = true;
+      await notifier.sync();
+      server.mailSignInFails = false;
+      server.inbox.add({
+        'id': 20002,
+        'subject': 'Nowa',
+        'date': '2026-10-02T10:00:00',
+        'content': 'Tresc',
+        'read_at': null,
+        'stared': false,
+        'author': {'name': 'Anna Nowak'},
+      });
+
+      final changes = await notifier.sync();
+
+      expect(changes.byCategory(ChangeCategory.messages), hasLength(1));
     });
 
     test('a mail outage reports no spurious new messages', () async {
