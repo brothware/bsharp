@@ -48,7 +48,7 @@ class _MalformedReceiversProvider extends DemoDataProvider {
 
 class _SendRejectingProvider extends _ReadableRejectingMailProvider {
   @override
-  Future<void> sendMessage({
+  Future<int> sendMessage({
     required List<String> recipientIds,
     required String title,
     required String content,

@@ -1,6 +1,7 @@
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
+import 'package:bsharp/domain/entities/outgoing_attachment.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -117,11 +118,19 @@ abstract class SchoolDataProvider {
 
   Future<void> restoreMessage(int messageId);
 
-  Future<void> sendMessage({
+  Future<void> ensureMailSession();
+
+  Future<int> sendMessage({
     required List<String> recipientIds,
     required String title,
     required String content,
     int? previousMessageId,
+  });
+
+  Future<List<AttachmentUploadResult>> uploadAttachments(
+    int messageId,
+    List<OutgoingAttachment> attachments, {
+    void Function(int index)? onUploading,
   });
 
   Future<List<PocztaMessage>> loadMoreInbox(int skip);

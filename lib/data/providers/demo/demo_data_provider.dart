@@ -14,6 +14,7 @@ import 'package:bsharp/data/providers/demo/demo_schedule_data.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
+import 'package:bsharp/domain/entities/outgoing_attachment.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/entities/student.dart';
@@ -24,6 +25,8 @@ import 'package:bsharp/domain/entities/term.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+const _demoSentMessageId = 1;
 
 class DemoDataProvider implements SchoolDataProvider {
   @override
@@ -159,12 +162,36 @@ class DemoDataProvider implements SchoolDataProvider {
   Future<void> restoreMessage(int messageId) async {}
 
   @override
-  Future<void> sendMessage({
+  Future<void> ensureMailSession() async {}
+
+  @override
+  Future<int> sendMessage({
     required List<String> recipientIds,
     required String title,
     required String content,
     int? previousMessageId,
-  }) async {}
+  }) async => _demoSentMessageId;
+
+  @override
+  Future<List<AttachmentUploadResult>> uploadAttachments(
+    int messageId,
+    List<OutgoingAttachment> attachments, {
+    void Function(int index)? onUploading,
+  }) async {
+    return [
+      for (final (index, attachment) in attachments.indexed)
+        _acceptAttachment(index, attachment, onUploading),
+    ];
+  }
+
+  AttachmentUploadResult _acceptAttachment(
+    int index,
+    OutgoingAttachment attachment,
+    void Function(int index)? onUploading,
+  ) {
+    onUploading?.call(index);
+    return AttachmentUploadResult.uploaded(attachment);
+  }
 
   @override
   Future<List<PocztaMessage>> loadMoreInbox(int skip) async => [];

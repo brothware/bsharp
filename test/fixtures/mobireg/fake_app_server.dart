@@ -10,6 +10,7 @@ const _ok = 200;
 const _badRequest = 400;
 const _pupilErrno = 102;
 const _mailFolders = ['inbox', 'sent', 'trash'];
+const _sentMessageId = 777;
 
 class _FakeAppApiFactory extends ApiClientFactory {
   _FakeAppApiFactory(this._client, this._pocztaClient, String school)
@@ -41,7 +42,11 @@ class FakeAppServer {
   int mailSignIns = 0;
   bool mailSignInFails = false;
   bool mailFoldersFail = false;
+  bool mailExpiresOnce = false;
   final mailPaths = <String>[];
+  final sentMessages = <Map<String, dynamic>>[];
+  final uploads = <(String path, String filename)>[];
+  final uploadStatuses = <String, List<int>>{};
   Object receivers = <Object>[
     {'id': 'user_201', 'name': 'Anna Nowak', 'role': 'Nauczyciel'},
   ];
@@ -89,6 +94,30 @@ class FakeAppServer {
           if (!mailSignInFails) 'set-cookie': ['laravel_session=fake; path=/'],
         }),
       );
+    }
+    if (mailExpiresOnce) {
+      mailExpiresOnce = false;
+      return Response<dynamic>(
+        requestOptions: options,
+        statusCode: _unauthorized,
+      );
+    }
+    if (options.method == 'PUT' && options.path == '/api/messages') {
+      sentMessages.add(Map<String, dynamic>.from(options.data as Map));
+      return Response<dynamic>(
+        requestOptions: options,
+        statusCode: _ok,
+        data: {'id': _sentMessageId},
+      );
+    }
+    if (options.path.endsWith('/files') && options.data is FormData) {
+      final filename = (options.data as FormData).files.single.value.filename!;
+      uploads.add((options.path, filename));
+      final statuses = uploadStatuses[filename];
+      final status = statuses == null || statuses.isEmpty
+          ? _ok
+          : statuses.removeAt(0);
+      return Response<dynamic>(requestOptions: options, statusCode: status);
     }
     final folder = _mailFolders
         .where((name) => options.path == '/api/messages/$name')

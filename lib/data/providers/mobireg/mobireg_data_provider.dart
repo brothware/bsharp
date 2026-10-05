@@ -23,7 +23,9 @@ import 'package:bsharp/data/providers/mobireg/parsers/term_parser.dart';
 import 'package:bsharp/data/providers/mobireg/parsers/timetable_parser.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
+import 'package:bsharp/domain/attachment_uploader.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/entities/outgoing_attachment.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
 import 'package:bsharp/domain/entities/teacher.dart';
@@ -67,11 +69,13 @@ class MobiregDataProvider implements SchoolDataProvider {
   MobiregDataProvider({
     ApiClientFactory Function(String school)? clientFactory,
     AppApiSessionRegistry? sessions,
+    this._attachmentUploader = const AttachmentUploader(),
   }) : _clientFactory = clientFactory ?? _productionClientFactory,
        _sessions = sessions ?? AppApiSessionRegistry.shared;
 
   final ApiClientFactory Function(String school) _clientFactory;
   final AppApiSessionRegistry _sessions;
+  final AttachmentUploader _attachmentUploader;
   String? _school;
   String? _login;
   String _password = '';
@@ -544,13 +548,24 @@ class MobiregDataProvider implements SchoolDataProvider {
   }
 
   @override
-  Future<void> sendMessage({
+  Future<void> ensureMailSession() async {
+    final pocztaDs = _pocztaDs;
+    if (pocztaDs == null) {
+      throw const MessagingException(
+        SessionExpired(message: 'Poczta was never signed in'),
+      );
+    }
+    _mailValue(await pocztaDs.ensureSession());
+  }
+
+  @override
+  Future<int> sendMessage({
     required List<String> recipientIds,
     required String title,
     required String content,
     int? previousMessageId,
   }) async {
-    _mailValue(
+    return _mailValue(
       await _mailbox().sendMessage(
         title: title,
         content: content,
@@ -558,6 +573,43 @@ class MobiregDataProvider implements SchoolDataProvider {
         previousMessageId: previousMessageId,
       ),
     );
+  }
+
+  @override
+  Future<List<AttachmentUploadResult>> uploadAttachments(
+    int messageId,
+    List<OutgoingAttachment> attachments, {
+    void Function(int index)? onUploading,
+  }) async {
+    final pocztaDs = _mailbox();
+    return _attachmentUploader.uploadAll(
+      attachments,
+      (attachment) async {
+        final result = await pocztaDs.uploadAttachment(messageId, attachment);
+        return switch (result) {
+          Success() => null,
+          Failure(:final failure) => _uploadFailureOf(attachment, failure),
+        };
+      },
+      onUploading: onUploading,
+    );
+  }
+
+  AttachmentUploadFailure _uploadFailureOf(
+    OutgoingAttachment attachment,
+    AppFailure failure,
+  ) {
+    debugPrint(
+      'MobiregDataProvider: upload of ${attachment.name} failed: '
+      '${failure.runtimeType} ${failure.message ?? ''}',
+    );
+    return switch (failure) {
+      FileTooLarge() => AttachmentUploadFailure.tooLarge,
+      FileUnreadable() => AttachmentUploadFailure.unreadable,
+      NoConnection() => AttachmentUploadFailure.connection,
+      ConnectionTimeout() => AttachmentUploadFailure.timeout,
+      _ => AttachmentUploadFailure.server,
+    };
   }
 
   @override

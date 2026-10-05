@@ -1,19 +1,36 @@
+import 'dart:typed_data';
+
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/remote/app_api_session_registry.dart';
+import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
+import 'package:bsharp/domain/attachment_uploader.dart';
+import 'package:bsharp/domain/entities/outgoing_attachment.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../fixtures/mobireg/fake_app_server.dart';
 
+const _payloadTooLarge = 413;
+const _serverError = 500;
+
+OutgoingAttachment _attachment(String name) {
+  return OutgoingAttachment.memory(
+    name: name,
+    bytes: Uint8List.fromList([1, 2, 3]),
+  );
+}
+
 void main() {
   late ProviderContainer container;
   late FakeAppServer server;
   late MobiregDataProvider provider;
+  late List<Duration> pauses;
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
@@ -23,9 +40,13 @@ void main() {
     );
     addTearDown(container.dispose);
     server = FakeAppServer.fromFixtures();
+    pauses = [];
     provider = MobiregDataProvider(
       clientFactory: server.factoryFor,
       sessions: AppApiSessionRegistry(),
+      attachmentUploader: AttachmentUploader(
+        pause: (delay) async => pauses.add(delay),
+      ),
     );
   });
 
@@ -183,5 +204,138 @@ void main() {
     await signedIn();
 
     await expectLater(provider.searchReceivers('Nowak'), throwsFormatException);
+  });
+
+  test('sending a message answers its new id', () async {
+    await signedIn();
+
+    final id = await provider.sendMessage(
+      recipientIds: ['user_1'],
+      title: 'T',
+      content: 'C',
+    );
+
+    expect(id, 777);
+    expect(server.sentMessages.single['title'], 'T');
+  });
+
+  test('uploads each attachment to the sent message in order', () async {
+    await signedIn();
+    final started = <int>[];
+
+    final results = await provider.uploadAttachments(
+      777,
+      [_attachment('a.pdf'), _attachment('b.jpg')],
+      onUploading: started.add,
+    );
+
+    expect(results.every((result) => result.isUploaded), isTrue);
+    expect(server.uploads, [
+      ('/api/messages/777/files', 'a.pdf'),
+      ('/api/messages/777/files', 'b.jpg'),
+    ]);
+    expect(started, [0, 1]);
+  });
+
+  test('a partial failure reports each file on its own', () async {
+    await signedIn();
+    server.uploadStatuses['big.mov'] = [_payloadTooLarge];
+
+    final results = await provider.uploadAttachments(777, [
+      _attachment('big.mov'),
+      _attachment('b.jpg'),
+    ]);
+
+    expect(results.map((result) => result.failure), [
+      AttachmentUploadFailure.tooLarge,
+      null,
+    ]);
+    expect(server.uploads.map((upload) => upload.$2), ['big.mov', 'b.jpg']);
+  });
+
+  test('a transient upload failure is retried until it succeeds', () async {
+    await signedIn();
+    server.uploadStatuses['a.pdf'] = [_serverError];
+
+    final results = await provider.uploadAttachments(777, [
+      _attachment('a.pdf'),
+    ]);
+
+    expect(results.single.isUploaded, isTrue);
+    expect(server.uploads.length, 2);
+    expect(pauses, [const Duration(seconds: 1)]);
+  });
+
+  test('an upload failing every attempt is a server failure', () async {
+    await signedIn();
+    server.uploadStatuses['a.pdf'] = [
+      _serverError,
+      _serverError,
+      _serverError,
+    ];
+
+    final results = await provider.uploadAttachments(777, [
+      _attachment('a.pdf'),
+    ]);
+
+    expect(results.single.failure, AttachmentUploadFailure.server);
+    expect(server.uploads.length, 3);
+  });
+
+  test('uploading without a mail session fails', () async {
+    await expectLater(
+      provider.uploadAttachments(777, [_attachment('a.pdf')]),
+      failsWithMessaging,
+    );
+  });
+
+  test('a live mail session is confirmed without a new SSO', () async {
+    await signedIn();
+
+    await provider.ensureMailSession();
+
+    expect(server.mailSignIns, 1);
+  });
+
+  test('an expired mail session is renewed before sending', () async {
+    await signedIn();
+    server.mailExpiresOnce = true;
+
+    await provider.ensureMailSession();
+
+    expect(server.mailSignIns, 2);
+  });
+
+  test('a mail session that cannot be renewed fails the check', () async {
+    await signedIn();
+    server
+      ..mailExpiresOnce = true
+      ..mailSignInFails = true;
+
+    await expectLater(provider.ensureMailSession(), failsWithMessaging);
+  });
+
+  test('checking a mail session that never existed fails', () async {
+    await expectLater(provider.ensureMailSession(), failsWithMessaging);
+  });
+
+  test('the demo provider accepts every attachment', () async {
+    final demo = DemoDataProvider();
+    final started = <int>[];
+
+    await demo.ensureMailSession();
+    final id = await demo.sendMessage(
+      recipientIds: ['user_1'],
+      title: 'T',
+      content: 'C',
+    );
+    final results = await demo.uploadAttachments(
+      id,
+      [_attachment('a.pdf'), _attachment('b.pdf')],
+      onUploading: started.add,
+    );
+
+    expect(results.every((result) => result.isUploaded), isTrue);
+    expect(started, [0, 1]);
   });
 }
