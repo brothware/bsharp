@@ -7,6 +7,8 @@
     "edit": "Redakto",
     "close": "Mbyll",
     "retry": "Provo përsëri",
+    "notSynced": "Pa sinkronizuar",
+    "notSyncedSince": "Pa sinkronizuar, përditësuar së fundi: ${time}",
     "linkOpenFailed": "Lidhja nuk u hap dot",
     "loading": "Po ngarkohet...",
     "error": "Gabim",

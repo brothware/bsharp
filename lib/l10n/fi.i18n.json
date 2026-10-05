@@ -7,6 +7,8 @@
     "edit": "Muokkaa",
     "close": "Sulje",
     "retry": "Yritä uudelleen",
+    "notSynced": "Ei synkronoitu",
+    "notSyncedSince": "Ei synkronoitu, päivitetty viimeksi: ${time}",
     "linkOpenFailed": "Linkkiä ei voitu avata",
     "loading": "Ladataan...",
     "error": "Virhe",

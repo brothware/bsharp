@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/attendance/widgets/attendance_calendar.dart';
 import 'package:bsharp/presentation/attendance/widgets/attendance_day_detail.dart';
 import 'package:bsharp/presentation/attendance/widgets/attendance_stats_view.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
+import 'package:bsharp/presentation/common/widgets/not_synced_label.dart';
 import 'package:bsharp/presentation/common/widgets/swipe_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +25,7 @@ class AttendanceScreen extends ConsumerWidget {
         onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
         child: Column(
           children: [
+            const NotSyncedLabel(area: DataProviderCapability.attendance),
             TabBar(
               tabs: [
                 Tab(text: t.attendance.calendar),

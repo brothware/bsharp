@@ -1,8 +1,10 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/not_synced_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,38 +16,41 @@ class TestsScreen extends ConsumerWidget {
     final tests = ref.watch(testsProvider);
     final upcoming = ref.watch(upcomingTestsProvider);
 
-    return RefreshIndicator(
-      onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
-      child: tests.isEmpty
-          ? _EmptyState()
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                if (upcoming.isNotEmpty) ...[
-                  Text(
-                    t.tests.upcoming,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
+    return NotSyncedScope(
+      area: DataProviderCapability.tests,
+      child: RefreshIndicator(
+        onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
+        child: tests.isEmpty
+            ? _EmptyState()
+            : ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  if (upcoming.isNotEmpty) ...[
+                    Text(
+                      t.tests.upcoming,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  for (final test in upcoming)
-                    _TestCard(test: test, isUpcoming: true),
-                  const SizedBox(height: 16),
-                ],
-                if (tests.length > upcoming.length) ...[
-                  Text(
-                    t.tests.all,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    const SizedBox(height: 8),
+                    for (final test in upcoming)
+                      _TestCard(test: test, isUpcoming: true),
+                    const SizedBox(height: 16),
+                  ],
+                  if (tests.length > upcoming.length) ...[
+                    Text(
+                      t.tests.all,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  for (final test in tests)
-                    _TestCard(test: test, isUpcoming: false),
+                    const SizedBox(height: 8),
+                    for (final test in tests)
+                      _TestCard(test: test, isUpcoming: false),
+                  ],
                 ],
-              ],
-            ),
+              ),
+      ),
     );
   }
 }

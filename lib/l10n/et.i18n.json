@@ -7,6 +7,8 @@
     "edit": "Muuda",
     "close": "Sulge",
     "retry": "Proovi uuesti",
+    "notSynced": "Sünkroonimata",
+    "notSyncedSince": "Sünkroonimata, viimati uuendatud: ${time}",
     "linkOpenFailed": "Linki ei õnnestunud avada",
     "loading": "Laadimine...",
     "error": "Viga",

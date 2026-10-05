@@ -4,8 +4,10 @@ import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/domain/timeline_item.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/not_synced_label.dart';
 import 'package:bsharp/presentation/common/widgets/obscurable_fab.dart';
 import 'package:bsharp/presentation/schedule/widgets/custom_event_card.dart';
 import 'package:bsharp/presentation/schedule/widgets/custom_event_detail_sheet.dart';
@@ -98,6 +100,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen>
     return Scaffold(
       body: Column(
         children: [
+          const NotSyncedLabel(area: DataProviderCapability.schedule),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: _WeekNavigator(

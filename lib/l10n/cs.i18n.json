@@ -7,6 +7,8 @@
     "edit": "Upravit",
     "close": "Zavřít",
     "retry": "Opakovat",
+    "notSynced": "Nesynchronizováno",
+    "notSyncedSince": "Nesynchronizováno, naposledy aktualizováno: ${time}",
     "linkOpenFailed": "Odkaz se nepodařilo otevřít",
     "loading": "Načítání...",
     "error": "Chyba",

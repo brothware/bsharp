@@ -7,6 +7,8 @@
     "edit": "Redaguoti",
     "close": "Uždaryti",
     "retry": "Bandyti dar kartą",
+    "notSynced": "Nesinchronizuota",
+    "notSyncedSince": "Nesinchronizuota, paskutinį kartą atnaujinta: ${time}",
     "linkOpenFailed": "Nepavyko atidaryti nuorodos",
     "loading": "Kraunama...",
     "error": "Klaida",

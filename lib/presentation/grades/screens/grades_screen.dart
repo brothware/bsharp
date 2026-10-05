@@ -4,7 +4,9 @@ import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/resolved_grade.dart';
 import 'package:bsharp/domain/grade_utils.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/not_synced_label.dart';
 import 'package:bsharp/presentation/grades/widgets/grade_chip.dart';
 import 'package:bsharp/presentation/grades/widgets/grade_detail_sheet.dart';
 import 'package:bsharp/presentation/grades/widgets/term_selector.dart';
@@ -21,44 +23,47 @@ class GradesScreen extends ConsumerWidget {
     final overallSimple = ref.watch(overallSimpleAverageProvider);
     final newIds = ref.watch(newGradeIdsProvider);
 
-    return RefreshIndicator(
-      onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
-      child: subjectGrades.isEmpty
-          ? _EmptyState()
-          : CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                    child: Row(
-                      children: [
-                        const Expanded(child: TermSelector()),
-                        const SizedBox(width: 8),
-                        _AverageChip(
-                          label: t.grades.weightedAverageLabel,
-                          average: overallWeighted,
-                        ),
-                        const SizedBox(width: 6),
-                        _AverageChip(
-                          label: t.grades.simpleAverageLabel,
-                          average: overallSimple,
-                        ),
-                      ],
+    return NotSyncedScope(
+      area: DataProviderCapability.grades,
+      child: RefreshIndicator(
+        onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
+        child: subjectGrades.isEmpty
+            ? _EmptyState()
+            : CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: Row(
+                        children: [
+                          const Expanded(child: TermSelector()),
+                          const SizedBox(width: 8),
+                          _AverageChip(
+                            label: t.grades.weightedAverageLabel,
+                            average: overallWeighted,
+                          ),
+                          const SizedBox(width: 6),
+                          _AverageChip(
+                            label: t.grades.simpleAverageLabel,
+                            average: overallSimple,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final sg = subjectGrades[index];
-                    return _SubjectSection(
-                      subjectGrades: sg,
-                      newGradeIds: newIds,
-                    );
-                  }, childCount: subjectGrades.length),
-                ),
-                const SliverToBoxAdapter(child: SizedBox(height: 16)),
-              ],
-            ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final sg = subjectGrades[index];
+                      return _SubjectSection(
+                        subjectGrades: sg,
+                        newGradeIds: newIds,
+                      );
+                    }, childCount: subjectGrades.length),
+                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                ],
+              ),
+      ),
     );
   }
 }

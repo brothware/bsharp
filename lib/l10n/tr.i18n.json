@@ -7,6 +7,8 @@
     "edit": "Düzenle",
     "close": "Kapat",
     "retry": "Yeniden dene",
+    "notSynced": "Eşitlenmedi",
+    "notSyncedSince": "Eşitlenmedi, son güncelleme: ${time}",
     "linkOpenFailed": "Bağlantı açılamadı",
     "loading": "Yükleniyor...",
     "error": "Hata",

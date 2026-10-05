@@ -7,6 +7,8 @@
     "edit": "Editja",
     "close": "Agħlaq",
     "retry": "Erġa' pprova",
+    "notSynced": "Mhux sinkronizzat",
+    "notSyncedSince": "Mhux sinkronizzat, l-aħħar aġġornament: ${time}",
     "linkOpenFailed": "Ma setax jinfetaħ il-link",
     "loading": "Qed jillowdja...",
     "error": "Żball",

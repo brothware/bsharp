@@ -1,7 +1,9 @@
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/not_synced_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +16,7 @@ class ChangelogScreen extends ConsumerWidget {
       length: 2,
       child: Column(
         children: [
+          const NotSyncedLabel(area: DataProviderCapability.changelog),
           TabBar(
             tabs: [
               Tab(text: t.changelog.gradesTab),

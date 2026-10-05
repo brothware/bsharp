@@ -9,6 +9,7 @@ import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/auth/widgets/reauth_dialog.dart';
+import 'package:bsharp/presentation/common/widgets/not_synced_label.dart';
 import 'package:bsharp/presentation/messages/widgets/compose_message_view.dart';
 import 'package:bsharp/presentation/messages/widgets/mail_action.dart';
 import 'package:bsharp/presentation/messages/widgets/message_tile.dart';
@@ -51,6 +52,11 @@ class MessagesScreen extends ConsumerWidget {
         length: 3,
         child: Column(
           children: [
+            NotSyncedLabel(
+              area: DataProviderCapability.messages,
+              onRetry: () =>
+                  ref.read(syncStatusProvider.notifier).syncMessages(),
+            ),
             if (ref.watch(reauthRequiredProvider))
               MaterialBanner(
                 content: Text(t.auth.reauthMessage),

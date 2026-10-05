@@ -4,8 +4,10 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/portal_date_utils.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/not_synced_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,6 +22,7 @@ class HomeworkScreen extends ConsumerWidget {
         onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
         child: Column(
           children: [
+            const NotSyncedLabel(area: DataProviderCapability.homework),
             TabBar(
               tabs: [
                 Tab(text: t.homework.upcoming),

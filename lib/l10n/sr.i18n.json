@@ -7,6 +7,8 @@
     "edit": "Uredi",
     "close": "Zatvori",
     "retry": "Pokušaj ponovo",
+    "notSynced": "Није синхронизовано",
+    "notSyncedSince": "Није синхронизовано, последње ажурирање: ${time}",
     "linkOpenFailed": "Није могуће отворити везу",
     "loading": "Učitavanje...",
     "error": "Greška",

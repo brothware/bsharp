@@ -5,7 +5,9 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/domain/annotation_utils.dart';
 import 'package:bsharp/domain/entities/portal.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/widgets/not_synced_label.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +30,7 @@ class NotesScreen extends ConsumerWidget {
         onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
         child: Column(
           children: [
+            const NotSyncedLabel(area: DataProviderCapability.notes),
             TabBar(
               tabs: [
                 _TabWithBadge(

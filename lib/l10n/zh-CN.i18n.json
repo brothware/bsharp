@@ -7,6 +7,8 @@
     "edit": "编辑",
     "close": "关闭",
     "retry": "重试",
+    "notSynced": "未同步",
+    "notSyncedSince": "未同步，上次更新：${time}",
     "linkOpenFailed": "无法打开链接",
     "loading": "加载中...",
     "error": "错误",

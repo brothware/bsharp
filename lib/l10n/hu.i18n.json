@@ -7,6 +7,8 @@
     "edit": "Szerkesztés",
     "close": "Bezárás",
     "retry": "Újra",
+    "notSynced": "Nincs szinkronizálva",
+    "notSyncedSince": "Nincs szinkronizálva, utolsó frissítés: ${time}",
     "linkOpenFailed": "Nem sikerült megnyitni a hivatkozást",
     "loading": "Betöltés...",
     "error": "Hiba",

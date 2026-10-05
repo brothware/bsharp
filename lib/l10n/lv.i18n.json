@@ -7,6 +7,8 @@
     "edit": "Rediģēt",
     "close": "Aizvērt",
     "retry": "Mēģināt vēlreiz",
+    "notSynced": "Nav sinhronizēts",
+    "notSyncedSince": "Nav sinhronizēts, pēdējoreiz atjaunināts: ${time}",
     "linkOpenFailed": "Neizdevās atvērt saiti",
     "loading": "Ielādē...",
     "error": "Kļūda",

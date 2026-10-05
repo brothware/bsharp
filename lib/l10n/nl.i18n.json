@@ -7,6 +7,8 @@
     "edit": "Bewerken",
     "close": "Sluiten",
     "retry": "Opnieuw proberen",
+    "notSynced": "Niet gesynchroniseerd",
+    "notSyncedSince": "Niet gesynchroniseerd, laatst bijgewerkt: ${time}",
     "linkOpenFailed": "Link kon niet worden geopend",
     "loading": "Laden...",
     "error": "Fout",

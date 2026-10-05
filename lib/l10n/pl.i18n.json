@@ -7,6 +7,8 @@
     "edit": "Edytuj",
     "close": "Zamknij",
     "retry": "Ponów",
+    "notSynced": "Niezsynchronizowane",
+    "notSyncedSince": "Niezsynchronizowane, ostatnia aktualizacja: ${time}",
     "linkOpenFailed": "Nie udało się otworzyć linku",
     "loading": "Ładowanie...",
     "error": "Błąd",

@@ -2,8 +2,10 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/message_utils.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/widgets/html_body.dart';
+import 'package:bsharp/presentation/common/widgets/not_synced_label.dart';
 import 'package:bsharp/presentation/common/widgets/translate_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,18 +17,21 @@ class BulletinsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bulletins = ref.watch(bulletinsProvider);
 
-    return RefreshIndicator(
-      onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
-      child: bulletins.isEmpty
-          ? _EmptyState()
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: bulletins.length,
-              itemBuilder: (context, index) {
-                final bulletin = bulletins[index];
-                return _BulletinTile(bulletin: bulletin);
-              },
-            ),
+    return NotSyncedScope(
+      area: DataProviderCapability.bulletins,
+      child: RefreshIndicator(
+        onRefresh: () => ref.read(syncStatusProvider.notifier).sync(),
+        child: bulletins.isEmpty
+            ? _EmptyState()
+            : ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: bulletins.length,
+                itemBuilder: (context, index) {
+                  final bulletin = bulletins[index];
+                  return _BulletinTile(bulletin: bulletin);
+                },
+              ),
+      ),
     );
   }
 }

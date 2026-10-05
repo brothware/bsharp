@@ -7,6 +7,8 @@
     "edit": "Rediger",
     "close": "Lukk",
     "retry": "Prøv igjen",
+    "notSynced": "Ikke synkronisert",
+    "notSyncedSince": "Ikke synkronisert, sist oppdatert: ${time}",
     "linkOpenFailed": "Kunne ikke åpne lenken",
     "loading": "Laster...",
     "error": "Feil",

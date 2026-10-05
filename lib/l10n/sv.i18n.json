@@ -7,6 +7,8 @@
     "edit": "Redigera",
     "close": "Stäng",
     "retry": "Försök igen",
+    "notSynced": "Inte synkroniserad",
+    "notSyncedSince": "Inte synkroniserad, senast uppdaterad: ${time}",
     "linkOpenFailed": "Det gick inte att öppna länken",
     "loading": "Laddar...",
     "error": "Fel",

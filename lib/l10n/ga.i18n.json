@@ -7,6 +7,8 @@
     "edit": "Cuir in eagar",
     "close": "Dun",
     "retry": "Bain triail eile as",
+    "notSynced": "Gan sioncronú",
+    "notSyncedSince": "Gan sioncronú, nuashonraithe go deireanach: ${time}",
     "linkOpenFailed": "Níorbh fhéidir an nasc a oscailt",
     "loading": "Ag lodu...",
     "error": "Earraid",
