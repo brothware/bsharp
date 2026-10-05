@@ -83,6 +83,8 @@ class ScheduleEntry {
 
   bool get hasLessonNumber => number > 0;
 
+  bool get showsStartTimeAsNumber => !isReplaced && !hasLessonNumber;
+
   String get displayName {
     if (subjectName case final name? when name.isNotEmpty) return name;
     if (eventName case final name? when name.isNotEmpty) return name;
@@ -98,7 +100,8 @@ class ScheduleEntry {
           ? '${sorted.first}-${sorted.last}'
           : sorted.join(', ');
     }
-    if (isReplaced || !hasLessonNumber) return '-';
+    if (isReplaced) return '-';
+    if (!hasLessonNumber) return _formatTime(startTime);
     return '$number';
   }
 
@@ -112,6 +115,10 @@ class ScheduleEntry {
     return time;
   }
 }
+
+String lessonBadgeLabel(ResolvedEvent event) => event.number > 0
+    ? '${event.number}'
+    : ScheduleEntry._formatTime(event.startTime);
 
 int? parseTimeMinutes(String time) {
   final parts = time.split(':');

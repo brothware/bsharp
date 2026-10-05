@@ -127,4 +127,20 @@ void main() {
 
     expect(find.text('5'), findsOneWidget);
   });
+
+  testWidgets('shows the start time once for an unnumbered lesson', (
+    tester,
+  ) async {
+    final e = entry(
+      number: 0,
+      startTime: '13:55:00',
+      endTime: '14:40:00',
+      subjectName: 'Choir',
+    );
+
+    await tester.pumpWidget(wrap(LessonCard(entry: e)));
+
+    expect(find.text('13:55'), findsOneWidget);
+    expect(find.text('-'), findsNothing);
+  });
 }

@@ -59,13 +59,16 @@ class LessonDetailSheet extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
-                        child: Text(
-                          entry.displayLessonNumber,
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: entry.isReplaced
-                                ? theme.colorScheme.error
-                                : color,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            entry.displayLessonNumber,
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: entry.isReplaced
+                                  ? theme.colorScheme.error
+                                  : color,
+                            ),
                           ),
                         ),
                       ),

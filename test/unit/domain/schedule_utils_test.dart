@@ -1,3 +1,4 @@
+import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -130,9 +131,27 @@ void main() {
       expect(e.displayLessonNumber, '3');
     });
 
-    test('displayLessonNumber shows dash for numberless events', () {
-      final e = entry(number: 0);
-      expect(e.displayLessonNumber, '-');
+    test('displayLessonNumber shows the start time for numberless events', () {
+      final e = entry(number: 0, startTime: '13:55:00');
+      expect(e.displayLessonNumber, '13:55');
+      expect(e.showsStartTimeAsNumber, isTrue);
+    });
+
+    test('displayLessonNumber does not use the start time when numbered', () {
+      final e = entry(number: 3);
+      expect(e.showsStartTimeAsNumber, isFalse);
+    });
+
+    test('lessonBadgeLabel shows number or start time of a resolved event', () {
+      ResolvedEvent event(int number) => ResolvedEvent(
+        id: 1,
+        date: DateTime(2026, 9, 7),
+        number: number,
+        startTime: '13:55:00',
+        endTime: '14:40:00',
+      );
+      expect(lessonBadgeLabel(event(4)), '4');
+      expect(lessonBadgeLabel(event(0)), '13:55');
     });
 
     test('displayLessonNumber shows dash for replaced entries', () {

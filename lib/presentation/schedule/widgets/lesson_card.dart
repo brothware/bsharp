@@ -40,21 +40,25 @@ class LessonCard extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              entry.displayLessonNumber,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: entry.isReplaced
-                                    ? theme.colorScheme.error
-                                    : color,
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                entry.displayLessonNumber,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: entry.isReplaced
+                                      ? theme.colorScheme.error
+                                      : color,
+                                ),
                               ),
                             ),
-                            Text(
-                              _formatTimeShort(entry.startTime),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
+                            if (!entry.showsStartTimeAsNumber)
+                              Text(
+                                _formatTimeShort(entry.startTime),
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ),

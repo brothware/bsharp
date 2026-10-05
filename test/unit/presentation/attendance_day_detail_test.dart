@@ -122,10 +122,11 @@ void main() {
       reason: 'the rehearsal leads the lessons it overlaps',
     );
     expect(
-      rows.contains('-'),
-      isTrue,
-      reason: 'no lesson number is shown as 0',
+      rows.where((row) => row == '10:40').length,
+      2,
+      reason: 'the unnumbered rehearsal shows its start time as the badge',
     );
+    expect(rows.contains('-'), isFalse);
     expect(rows.contains('0'), isFalse);
   });
 }

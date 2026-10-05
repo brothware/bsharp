@@ -85,7 +85,8 @@ void main() {
     expect(find.text('matematyka'), findsOneWidget);
     expect(find.text(t.dashboard.orAlternative), findsOneWidget);
     expect(find.text(t.dashboard.currentLesson), findsOneWidget);
-    expect(find.text('-'), findsOneWidget);
+    expect(find.text('10:40'), findsOneWidget);
+    expect(find.text('-'), findsNothing);
     expect(find.text('4'), findsOneWidget);
   });
 

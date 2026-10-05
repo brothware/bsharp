@@ -192,17 +192,21 @@ class _UnlabeledEventTile extends StatelessWidget {
         children: [
           SizedBox(
             width: 32,
-            child: Text(
-              entry.displayLessonNumber,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleSmall?.copyWith(color: color),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                entry.displayLessonNumber,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleSmall?.copyWith(color: color),
+              ),
             ),
           ),
           const SizedBox(width: 12),
-          Text(
-            entry.startTime.substring(0, 5),
-            style: theme.textTheme.bodySmall?.copyWith(color: color),
-          ),
+          if (!entry.showsStartTimeAsNumber)
+            Text(
+              entry.startTime.substring(0, 5),
+              style: theme.textTheme.bodySmall?.copyWith(color: color),
+            ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -261,19 +265,24 @@ class _EntryTile extends ConsumerWidget {
         children: [
           SizedBox(
             width: 32,
-            child: Text(
-              entry.displayLessonNumber ??
-                  (entry.resolvedEvent != null
-                      ? '${entry.resolvedEvent!.number}'
-                      : '-'),
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                entry.displayLessonNumber ??
+                    (entry.resolvedEvent != null
+                        ? lessonBadgeLabel(entry.resolvedEvent!)
+                        : '-'),
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
           ),
           const SizedBox(width: 12),
-          if (entry.resolvedEvent != null)
+          if (entry.resolvedEvent != null &&
+              (entry.displayLessonNumber != null ||
+                  entry.resolvedEvent!.number > 0))
             Text(
               entry.resolvedEvent!.startTime.substring(0, 5),
               style: theme.textTheme.bodySmall?.copyWith(
@@ -290,7 +299,7 @@ class _EntryTile extends ConsumerWidget {
                     Flexible(
                       child: Text(
                         entry.subjectName ??
-                            '${t.schedule.lessonFallback} ${entry.displayLessonNumber ?? entry.resolvedEvent?.number ?? ""}',
+                            '${t.schedule.lessonFallback} ${entry.displayLessonNumber ?? _numberOf(entry.resolvedEvent)}',
                         style: theme.textTheme.bodyMedium,
                       ),
                     ),
@@ -376,3 +385,6 @@ class _EntryTile extends ConsumerWidget {
     }
   }
 }
+
+String _numberOf(ResolvedEvent? event) =>
+    event != null && event.number > 0 ? '${event.number}' : '';

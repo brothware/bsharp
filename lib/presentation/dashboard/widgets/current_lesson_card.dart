@@ -81,12 +81,15 @@ class _LessonRow extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                entry.displayLessonNumber,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: cs.onPrimary,
-                  fontWeight: FontWeight.bold,
-                  height: 1,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  entry.displayLessonNumber,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: cs.onPrimary,
+                    fontWeight: FontWeight.bold,
+                    height: 1,
+                  ),
                 ),
               ),
               if (isCurrent)
