@@ -401,6 +401,17 @@ class MobiregDataProvider implements SchoolDataProvider {
     await _fetchFolders(ref, pocztaDs);
   }
 
+  @override
+  Set<DataProviderCapability> staleAreasAfter(Object failure) {
+    return switch (failure) {
+      MessagingException() || FormatException() => const {
+        DataProviderCapability.messages,
+        DataProviderCapability.sendMessages,
+      },
+      _ => const {},
+    };
+  }
+
   void _clearMailbox(Ref ref) {
     _hasMailbox = false;
     _pocztaDs = null;

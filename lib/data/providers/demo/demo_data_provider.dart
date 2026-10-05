@@ -116,6 +116,9 @@ class DemoDataProvider implements SchoolDataProvider {
   }
 
   @override
+  Set<DataProviderCapability> staleAreasAfter(Object failure) => const {};
+
+  @override
   Future<void> loadMessages(Ref ref, {DateTime? now}) async {
     now ??= DateTime.now();
     ref.read(inboxProvider.notifier).value = buildDemoInbox(now);

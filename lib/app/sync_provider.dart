@@ -6,6 +6,7 @@ import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
+import 'package:bsharp/app/sync_health_provider.dart';
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/data/services/sync_cache.dart';
 import 'package:bsharp/data/services/sync_snapshot.dart';
@@ -19,6 +20,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sync_provider.g.dart';
+
+const Set<DataProviderCapability> _mailAreas = {
+  DataProviderCapability.messages,
+  DataProviderCapability.sendMessages,
+};
 
 enum SyncStatus {
   idle,
@@ -96,7 +102,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       } else {
         await provider.loadSchoolData(ref, studentId: 1);
       }
-      await provider.loadMessages(ref);
+      await _loadMail(provider, provider.loadMessages);
 
       await loadCustomEventsFromRef(ref, accountId);
 
@@ -239,18 +245,35 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
 
   Future<void> syncMessages() async {
     final provider = ref.read(activeDataProviderProvider);
-    try {
-      await provider.refreshMessages(ref);
-    } on FormatException catch (error, stackTrace) {
-      _failMailRefresh(error, stackTrace);
-    } on MessagingException catch (error, stackTrace) {
-      _failMailRefresh(error, stackTrace);
-    }
+    final isStale = ref
+        .read(syncHealthProvider)
+        .isStale(DataProviderCapability.messages);
+    await _loadMail(
+      provider,
+      isStale ? provider.loadMessages : provider.refreshMessages,
+    );
   }
 
-  void _failMailRefresh(Object error, StackTrace stackTrace) {
-    debugPrint('SyncStatusNotifier: mail refresh failed: $error\n$stackTrace');
-    state = SyncStatus.failed;
+  Future<void> _loadMail(
+    SchoolDataProvider provider,
+    Future<void> Function(Ref ref) load,
+  ) async {
+    final health = ref.read(syncHealthProvider.notifier);
+    try {
+      await load(ref);
+      health.markSynced(_mailAreas, DateTime.now());
+    } on Object catch (error, stackTrace) {
+      final staleAreas = provider.staleAreasAfter(error);
+      if (staleAreas.isEmpty) {
+        Error.throwWithStackTrace(error, stackTrace);
+      }
+      debugPrint(
+        'SyncStatusNotifier: mail unavailable, '
+        '${staleAreas.map((area) => area.name).join(', ')} not synced: '
+        '$error\n$stackTrace',
+      );
+      health.markStale(staleAreas);
+    }
   }
 }
 

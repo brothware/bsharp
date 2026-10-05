@@ -4,6 +4,7 @@ import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
+import 'package:bsharp/app/sync_health_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
@@ -123,11 +124,21 @@ class _SlowSchoolFailureProvider extends DemoDataProvider {
 
 class _MalformedMailDataProvider extends DemoDataProvider {
   @override
+  Set<DataProviderCapability> staleAreasAfter(Object failure) => const {
+    DataProviderCapability.messages,
+  };
+
+  @override
   Future<void> refreshMessages(Ref ref) async =>
       throw const FormatException('View poczta inbox: expected objects');
 }
 
 class _MailRejectedDataProvider extends DemoDataProvider {
+  @override
+  Set<DataProviderCapability> staleAreasAfter(Object failure) => const {
+    DataProviderCapability.messages,
+  };
+
   @override
   Future<void> refreshMessages(Ref ref) async =>
       throw const MessagingException(SessionExpired());
@@ -169,7 +180,7 @@ void main() {
       },
     );
 
-    test('a malformed mail payload during refresh fails the status', () async {
+    test('a malformed mail payload during refresh marks mail stale', () async {
       final failing = ProviderContainer(
         overrides: [
           credentialStorageProvider.overrideWithValue(_emptyStorage()),
@@ -188,10 +199,16 @@ void main() {
 
       await failing.read(syncStatusProvider.notifier).syncMessages();
 
-      expect(failing.read(syncStatusProvider), SyncStatus.failed);
+      expect(failing.read(syncStatusProvider), SyncStatus.idle);
+      expect(
+        failing
+            .read(syncHealthProvider)
+            .isStale(DataProviderCapability.messages),
+        isTrue,
+      );
     });
 
-    test('a rejected mail refresh fails the status', () async {
+    test('a rejected mail refresh marks mail stale', () async {
       final failing = ProviderContainer(
         overrides: [
           credentialStorageProvider.overrideWithValue(_emptyStorage()),
@@ -210,7 +227,20 @@ void main() {
 
       await failing.read(syncStatusProvider.notifier).syncMessages();
 
-      expect(failing.read(syncStatusProvider), SyncStatus.failed);
+      expect(failing.read(syncStatusProvider), SyncStatus.idle);
+      expect(
+        failing
+            .read(syncHealthProvider)
+            .isStale(DataProviderCapability.messages),
+        isTrue,
+      );
+    });
+
+    test('the demo provider reports nothing stale', () {
+      expect(
+        DemoDataProvider().staleAreasAfter(const FormatException('x')),
+        isEmpty,
+      );
     });
 
     test('reset sets state to idle', () async {
@@ -376,7 +406,7 @@ void main() {
       expect(second.read(resolvedGradesProvider), isEmpty);
     });
 
-    test('a mail failure fails the sync', () async {
+    test('a mail outage completes the sync with mail stale', () async {
       server.mailSignInFails = true;
       final container = await _mobiregContainer(
         server: server,
@@ -385,7 +415,78 @@ void main() {
 
       await container.read(syncStatusProvider.notifier).sync();
 
+      final health = container.read(syncHealthProvider);
+      expect(container.read(syncStatusProvider), SyncStatus.completed);
+      expect(container.read(lastSyncTimeProvider), isNotNull);
+      expect(health.staleAreas, {
+        DataProviderCapability.messages,
+        DataProviderCapability.sendMessages,
+      });
+      expect(
+        container.read(sharedPreferencesProvider).getString('sync_snapshot'),
+        isNotNull,
+      );
+      expect(container.read(resolvedGradesProvider), isNotEmpty);
+    });
+
+    test('a mail outage reports no spurious new messages', () async {
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+      final notifier = container.read(syncStatusProvider.notifier);
+      await notifier.sync();
+      server.mailSignInFails = true;
+
+      final changes = await notifier.sync();
+
+      expect(changes.isEmpty, isTrue);
+    });
+
+    test('a later sync with working mail clears the stale area', () async {
+      server.mailSignInFails = true;
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+      final notifier = container.read(syncStatusProvider.notifier);
+      await notifier.sync();
+
+      server.mailSignInFails = false;
+      await notifier.sync();
+
+      final health = container.read(syncHealthProvider);
+      expect(health.staleAreas, isEmpty);
+      expect(health.lastSyncedAt[DataProviderCapability.messages], isNotNull);
+    });
+
+    test('a retried mail load clears the stale area', () async {
+      server.mailSignInFails = true;
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+      final notifier = container.read(syncStatusProvider.notifier);
+      await notifier.sync();
+
+      server.mailSignInFails = false;
+      await notifier.syncMessages();
+
+      expect(container.read(syncHealthProvider).staleAreas, isEmpty);
+    });
+
+    test('a school data failure still fails the sync', () async {
+      final container = await _containerWith(
+        provider: _SlowSchoolFailureProvider(
+          const FormatException('View marks: expected objects'),
+        ),
+        account: _account,
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
       expect(container.read(syncStatusProvider), SyncStatus.failed);
+      expect(container.read(lastSyncTimeProvider), isNull);
     });
 
     test('an account with no mailbox syncs without mail', () async {
@@ -400,6 +501,7 @@ void main() {
 
       final provider = container.read(activeDataProviderProvider);
       expect(container.read(syncStatusProvider), SyncStatus.completed);
+      expect(container.read(syncHealthProvider).staleAreas, isEmpty);
       expect(provider.supports(DataProviderCapability.messages), isFalse);
       expect(provider.supports(DataProviderCapability.sendMessages), isFalse);
     });

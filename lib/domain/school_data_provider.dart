@@ -94,6 +94,8 @@ abstract class SchoolDataProvider {
 
   Future<void> loadMessages(Ref ref);
 
+  Set<DataProviderCapability> staleAreasAfter(Object failure);
+
   Future<void> refreshMessages(Ref ref);
 
   Future<Map<String, dynamic>?> readMessage(int messageId);
