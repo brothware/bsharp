@@ -116,14 +116,28 @@ class DemoDataProvider implements SchoolDataProvider {
   }
 
   @override
-  Set<DataProviderCapability> staleAreasAfter(Object failure) => const {};
+  Set<DataProviderCapability> areasCovered(SyncOperation operation) =>
+      switch (operation) {
+        SyncOperation.mail => const {
+          DataProviderCapability.messages,
+          DataProviderCapability.sendMessages,
+        },
+        SyncOperation.schoolData => const {},
+      };
 
   @override
-  Future<void> loadMessages(Ref ref, {DateTime? now}) async {
+  Set<DataProviderCapability> staleAreasAfter(
+    Object failure, {
+    required SyncOperation during,
+  }) => const {};
+
+  @override
+  Future<bool> loadMessages(Ref ref, {DateTime? now}) async {
     now ??= DateTime.now();
     ref.read(inboxProvider.notifier).value = buildDemoInbox(now);
     ref.read(sentProvider.notifier).value = buildDemoSent(now);
     ref.read(trashProvider.notifier).value = buildDemoTrash(now);
+    return true;
   }
 
   @override

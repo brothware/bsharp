@@ -118,13 +118,21 @@ class _SlowSchoolFailureProvider extends DemoDataProvider {
   }
 
   @override
-  Future<void> loadMessages(Ref ref, {DateTime? now}) async =>
+  Future<bool> loadMessages(Ref ref, {DateTime? now}) async =>
       throw const MessagingException(SessionExpired());
+}
+
+class _UnloadedMailProvider extends DemoDataProvider {
+  @override
+  Future<bool> loadMessages(Ref ref, {DateTime? now}) async => false;
 }
 
 class _MalformedMailDataProvider extends DemoDataProvider {
   @override
-  Set<DataProviderCapability> staleAreasAfter(Object failure) => const {
+  Set<DataProviderCapability> staleAreasAfter(
+    Object failure, {
+    required SyncOperation during,
+  }) => const {
     DataProviderCapability.messages,
   };
 
@@ -135,7 +143,10 @@ class _MalformedMailDataProvider extends DemoDataProvider {
 
 class _MailRejectedDataProvider extends DemoDataProvider {
   @override
-  Set<DataProviderCapability> staleAreasAfter(Object failure) => const {
+  Set<DataProviderCapability> staleAreasAfter(
+    Object failure, {
+    required SyncOperation during,
+  }) => const {
     DataProviderCapability.messages,
   };
 
@@ -238,7 +249,10 @@ void main() {
 
     test('the demo provider reports nothing stale', () {
       expect(
-        DemoDataProvider().staleAreasAfter(const FormatException('x')),
+        DemoDataProvider().staleAreasAfter(
+          const FormatException('x'),
+          during: SyncOperation.mail,
+        ),
         isEmpty,
       );
     });
@@ -473,6 +487,36 @@ void main() {
       await notifier.syncMessages();
 
       expect(container.read(syncHealthProvider).staleAreas, isEmpty);
+    });
+
+    test('mail that was not loaded is not marked as synced', () async {
+      final container = await _containerWith(
+        provider: _UnloadedMailProvider(),
+        account: _account.copyWith(providerType: 'demo'),
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      expect(container.read(syncStatusProvider), SyncStatus.completed);
+      expect(container.read(syncHealthProvider).lastSyncedAt, isEmpty);
+    });
+
+    test('a mobireg parse failure is stale only for the mail operation', () {
+      final provider = MobiregDataProvider();
+      const failure = FormatException('View marks: expected objects');
+
+      expect(
+        provider.staleAreasAfter(failure, during: SyncOperation.schoolData),
+        isEmpty,
+      );
+      expect(
+        provider.staleAreasAfter(failure, during: SyncOperation.mail),
+        provider.areasCovered(SyncOperation.mail),
+      );
+      expect(provider.areasCovered(SyncOperation.mail), {
+        DataProviderCapability.messages,
+        DataProviderCapability.sendMessages,
+      });
     });
 
     test('a school data failure still fails the sync', () async {

@@ -21,11 +21,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sync_provider.g.dart';
 
-const Set<DataProviderCapability> _mailAreas = {
-  DataProviderCapability.messages,
-  DataProviderCapability.sendMessages,
-};
-
 enum SyncStatus {
   idle,
   hydrated,
@@ -102,7 +97,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       } else {
         await provider.loadSchoolData(ref, studentId: 1);
       }
-      await _loadMail(provider, provider.loadMessages);
+      await _loadMail(provider, () => provider.loadMessages(ref));
 
       await loadCustomEventsFromRef(ref, accountId);
 
@@ -248,22 +243,33 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     final isStale = ref
         .read(syncHealthProvider)
         .isStale(DataProviderCapability.messages);
-    await _loadMail(
-      provider,
-      isStale ? provider.loadMessages : provider.refreshMessages,
-    );
+    await _loadMail(provider, () async {
+      if (isStale) {
+        return provider.loadMessages(ref);
+      }
+      await provider.refreshMessages(ref);
+      return true;
+    });
   }
 
   Future<void> _loadMail(
     SchoolDataProvider provider,
-    Future<void> Function(Ref ref) load,
+    Future<bool> Function() load,
   ) async {
     final health = ref.read(syncHealthProvider.notifier);
     try {
-      await load(ref);
-      health.markSynced(_mailAreas, DateTime.now());
+      final isLoaded = await load();
+      if (isLoaded) {
+        health.markSynced(
+          provider.areasCovered(SyncOperation.mail),
+          DateTime.now(),
+        );
+      }
     } on Object catch (error, stackTrace) {
-      final staleAreas = provider.staleAreasAfter(error);
+      final staleAreas = provider.staleAreasAfter(
+        error,
+        during: SyncOperation.mail,
+      );
       if (staleAreas.isEmpty) {
         Error.throwWithStackTrace(error, stackTrace);
       }

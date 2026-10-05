@@ -25,7 +25,10 @@ class _CountingMailProvider extends DemoDataProvider {
   int refreshes = 0;
 
   @override
-  Future<void> loadMessages(Ref ref, {DateTime? now}) async => loads++;
+  Future<bool> loadMessages(Ref ref, {DateTime? now}) async {
+    loads++;
+    return true;
+  }
 
   @override
   Future<void> refreshMessages(Ref ref) async => refreshes++;

@@ -21,6 +21,8 @@ enum DataProviderCapability {
   pushNotifications,
 }
 
+enum SyncOperation { schoolData, mail }
+
 class ReauthRequiredException implements Exception {
   const ReauthRequiredException();
 
@@ -92,9 +94,16 @@ abstract class SchoolDataProvider {
   /// nothing and answers `false`.
   bool hydrateFromCache(Ref ref, SyncCache cache, {required int studentId});
 
-  Future<void> loadMessages(Ref ref);
+  /// Loads mail, answering whether it was actually fetched. A provider with
+  /// no session to fetch it with answers `false`.
+  Future<bool> loadMessages(Ref ref);
 
-  Set<DataProviderCapability> staleAreasAfter(Object failure);
+  Set<DataProviderCapability> areasCovered(SyncOperation operation);
+
+  Set<DataProviderCapability> staleAreasAfter(
+    Object failure, {
+    required SyncOperation during,
+  });
 
   Future<void> refreshMessages(Ref ref);
 

@@ -38,6 +38,16 @@ void main() {
 
   final failsWithMessaging = throwsA(isA<MessagingException>());
 
+  test('loadMessages without a session reports mail as not loaded', () async {
+    expect(await provider.loadMessages(ref()), isFalse);
+  });
+
+  test('loadMessages with a mailbox reports mail as loaded', () async {
+    await provider.authenticate(school: 'sp1', login: 'p', password: 's');
+
+    expect(await provider.loadMessages(ref()), isTrue);
+  });
+
   test('loadMessages fills the folders through one SSO', () async {
     await signedIn();
 

@@ -369,11 +369,11 @@ class MobiregDataProvider implements SchoolDataProvider {
   }
 
   @override
-  Future<void> loadMessages(Ref ref) async {
+  Future<bool> loadMessages(Ref ref) async {
     final school = _school;
     final session = _activeSession(ref);
     if (school == null || session == null) {
-      return;
+      return false;
     }
 
     final account = parseAccount(
@@ -384,7 +384,7 @@ class MobiregDataProvider implements SchoolDataProvider {
     if (messagingUrl == null && messagesToken == null) {
       debugPrint('MobiregDataProvider: $school has no mailbox');
       _clearMailbox(ref);
-      return;
+      return true;
     }
     if (messagingUrl == null || messagesToken == null) {
       throw const FormatException(
@@ -399,15 +399,28 @@ class MobiregDataProvider implements SchoolDataProvider {
       messagesToken: messagesToken,
     );
     await _fetchFolders(ref, pocztaDs);
+    return true;
   }
 
   @override
-  Set<DataProviderCapability> staleAreasAfter(Object failure) {
-    return switch (failure) {
-      MessagingException() || FormatException() => const {
+  Set<DataProviderCapability> areasCovered(SyncOperation operation) {
+    return switch (operation) {
+      SyncOperation.mail => const {
         DataProviderCapability.messages,
         DataProviderCapability.sendMessages,
       },
+      SyncOperation.schoolData => const {},
+    };
+  }
+
+  @override
+  Set<DataProviderCapability> staleAreasAfter(
+    Object failure, {
+    required SyncOperation during,
+  }) {
+    return switch ((during, failure)) {
+      (SyncOperation.mail, MessagingException() || FormatException()) =>
+        areasCovered(during),
       _ => const {},
     };
   }
