@@ -1,10 +1,12 @@
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/message_utils.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/screens/wear_message_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_list_item.dart';
+import 'package:bsharp/wear/widgets/wear_not_synced_label.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
@@ -38,21 +40,31 @@ class _WearMessagesListScreenState
         backgroundColor: theme.colorScheme.surface,
         body: WearScaffold(
           scrollController: _scrollController,
-          child: ListView.builder(
-            controller: _scrollController,
-            padding: const EdgeInsets.all(4),
-            itemCount: inbox.length,
-            itemBuilder: wearScaledItems(_scrollController, (context, index) {
-              final msg = inbox[index];
-              return WearMessageItem(
-                message: msg,
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => WearMessageDetailScreen(message: msg),
-                  ),
+          child: Column(
+            children: [
+              const WearNotSyncedLabel(area: DataProviderCapability.messages),
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.all(4),
+                  itemCount: inbox.length,
+                  itemBuilder: wearScaledItems(_scrollController, (
+                    context,
+                    index,
+                  ) {
+                    final msg = inbox[index];
+                    return WearMessageItem(
+                      message: msg,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => WearMessageDetailScreen(message: msg),
+                        ),
+                      ),
+                    );
+                  }),
                 ),
-              );
-            }),
+              ),
+            ],
           ),
         ),
       ),

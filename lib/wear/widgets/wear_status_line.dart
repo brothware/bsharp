@@ -1,3 +1,4 @@
+import 'package:bsharp/app/sync_health_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
@@ -10,6 +11,9 @@ class WearStatusLine extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final status = ref.watch(syncStatusProvider);
+    final hasStaleAreas = ref.watch(
+      syncHealthProvider.select((health) => health.staleAreas.isNotEmpty),
+    );
     final theme = Theme.of(context);
 
     return switch (status) {
@@ -65,9 +69,28 @@ class WearStatusLine extends ConsumerWidget {
           ],
         ),
       ),
-      SyncStatus.idle ||
-      SyncStatus.hydrated ||
-      SyncStatus.completed => const SizedBox.shrink(),
+      SyncStatus.idle || SyncStatus.hydrated || SyncStatus.completed =>
+        hasStaleAreas
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.sync_problem_outlined,
+                    size: 16,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: WearFittedText(
+                      t.common.notSynced,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : const SizedBox.shrink(),
     };
   }
 }

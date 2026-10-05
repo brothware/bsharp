@@ -1,7 +1,7 @@
 import 'package:bsharp/app/sync_health_provider.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/common/relative_time.dart';
+import 'package:bsharp/presentation/common/not_synced_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -42,10 +42,7 @@ class NotSyncedLabel extends ConsumerWidget {
     }
 
     final theme = Theme.of(context);
-    final lastSyncedAt = health.lastSyncedAt[area];
-    final text = lastSyncedAt == null
-        ? t.common.notSynced
-        : t.common.notSyncedSince(time: formatRelativeTime(lastSyncedAt));
+    final text = notSyncedText(health, area);
 
     return Material(
       color: theme.colorScheme.errorContainer,
