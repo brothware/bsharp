@@ -12,6 +12,7 @@ import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/theme_labels.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.dart';
+import 'package:bsharp/presentation/common/relative_time.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/settings/screens/account_management_screen.dart';
 import 'package:bsharp/presentation/support/tip_jar_sheet.dart';
@@ -342,7 +343,7 @@ class _SyncSection extends ConsumerWidget {
       title: Text(t.settings.syncNow),
       subtitle: Text(
         lastSync != null
-            ? t.settings.syncLast(time: _formatSyncTime(lastSync))
+            ? t.settings.syncLast(time: formatRelativeTime(lastSync))
             : t.settings.syncNever,
       ),
       trailing: syncStatus.isBusy
@@ -356,18 +357,6 @@ class _SyncSection extends ConsumerWidget {
           ? null
           : () => ref.read(syncStatusProvider.notifier).sync(),
     );
-  }
-
-  String _formatSyncTime(DateTime time) {
-    final now = DateTime.now();
-    final diff = now.difference(time);
-    if (diff.inMinutes < 1) return t.common.agoJustNow;
-    if (diff.inMinutes < 60) return t.common.agoMinutes(n: diff.inMinutes);
-    if (diff.inHours < 24) return t.common.agoHours(n: diff.inHours);
-    return '${time.day.toString().padLeft(2, '0')}.'
-        '${time.month.toString().padLeft(2, '0')} '
-        '${time.hour.toString().padLeft(2, '0')}:'
-        '${time.minute.toString().padLeft(2, '0')}';
   }
 }
 

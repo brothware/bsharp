@@ -1,6 +1,7 @@
 import 'package:bsharp/app/sync_health_provider.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/relative_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,7 +45,7 @@ class NotSyncedLabel extends ConsumerWidget {
     final lastSyncedAt = health.lastSyncedAt[area];
     final text = lastSyncedAt == null
         ? t.common.notSynced
-        : t.common.notSyncedSince(time: _formatTime(lastSyncedAt));
+        : t.common.notSyncedSince(time: formatRelativeTime(lastSyncedAt));
 
     return Material(
       color: theme.colorScheme.errorContainer,
@@ -72,16 +73,5 @@ class NotSyncedLabel extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  String _formatTime(DateTime time) {
-    final diff = DateTime.now().difference(time);
-    if (diff.inMinutes < 1) return t.common.agoJustNow;
-    if (diff.inMinutes < 60) return t.common.agoMinutes(n: diff.inMinutes);
-    if (diff.inHours < 24) return t.common.agoHours(n: diff.inHours);
-    return '${time.day.toString().padLeft(2, '0')}.'
-        '${time.month.toString().padLeft(2, '0')} '
-        '${time.hour.toString().padLeft(2, '0')}:'
-        '${time.minute.toString().padLeft(2, '0')}';
   }
 }

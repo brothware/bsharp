@@ -6,6 +6,7 @@ import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/common/relative_time.dart';
 import 'package:bsharp/presentation/common/responsive.dart';
 import 'package:bsharp/presentation/common/widgets/child_switcher.dart';
 import 'package:bsharp/presentation/dashboard/widgets/current_lesson_card.dart';
@@ -56,7 +57,7 @@ class DashboardScreen extends ConsumerWidget {
 
   Widget _buildLastSyncInfo(BuildContext context, DateTime? lastSync) {
     final text = lastSync != null
-        ? t.dashboard.lastSync(time: _formatTime(lastSync))
+        ? t.dashboard.lastSync(time: formatRelativeTime(lastSync))
         : t.dashboard.neverSynced;
     return Text(
       text,
@@ -64,15 +65,6 @@ class DashboardScreen extends ConsumerWidget {
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
-  }
-
-  String _formatTime(DateTime dt) {
-    final now = DateTime.now();
-    final diff = now.difference(dt);
-    if (diff.inMinutes < 1) return t.common.agoJustNow;
-    if (diff.inMinutes < 60) return t.common.agoMinutes(n: diff.inMinutes);
-    if (diff.inHours < 24) return t.common.agoHours(n: diff.inHours);
-    return '${dt.day}.${dt.month.toString().padLeft(2, '0')} ${dt.hour}:${dt.minute.toString().padLeft(2, '0')}';
   }
 
   Widget _buildPhoneLayout(SchoolDataProvider provider) {
