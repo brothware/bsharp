@@ -14,10 +14,13 @@ class SyncHealth {
 
   bool isStale(DataProviderCapability area) => staleAreas.contains(area);
 
-  SyncHealth markStale(Set<DataProviderCapability> areas) {
+  SyncHealth markStale(
+    Set<DataProviderCapability> areas, {
+    Map<DataProviderCapability, DateTime> knownSyncedAt = const {},
+  }) {
     return SyncHealth(
       staleAreas: {...staleAreas, ...areas},
-      lastSyncedAt: lastSyncedAt,
+      lastSyncedAt: {...knownSyncedAt, ...lastSyncedAt},
     );
   }
 
@@ -40,8 +43,15 @@ class SyncHealthNotifier extends Notifier<SyncHealth> {
   @override
   SyncHealth build() => const SyncHealth();
 
-  void markStale(Set<DataProviderCapability> areas) {
-    state = state.markStale(areas);
+  void markStale(
+    Set<DataProviderCapability> areas, {
+    Map<DataProviderCapability, DateTime> knownSyncedAt = const {},
+  }) {
+    state = state.markStale(areas, knownSyncedAt: knownSyncedAt);
+  }
+
+  void reset() {
+    state = const SyncHealth();
   }
 
   void markSynced(Set<DataProviderCapability> areas, DateTime at) {

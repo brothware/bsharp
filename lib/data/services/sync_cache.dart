@@ -14,6 +14,7 @@ class SyncCache {
   static const _legacyPortalPrefix = 'cache_portal_';
   static const _messagesPrefix = 'cache_messages_';
   static const _viewPrefix = 'mobireg_view_';
+  static const _areaSyncedPrefix = 'cache_area_synced_';
 
   void _removeLegacyKeys() {
     _prefs
@@ -49,11 +50,31 @@ class SyncCache {
     return jsonDecode(raw);
   }
 
+  void saveAreaSyncedAt(String scope, String area, DateTime at) {
+    unawaited(
+      _prefs.setString(
+        '$_areaSyncedPrefix${scope}_$area',
+        at.toIso8601String(),
+      ),
+    );
+  }
+
+  DateTime? loadAreaSyncedAt(String scope, String area) {
+    final raw = _prefs.getString('$_areaSyncedPrefix${scope}_$area');
+    if (raw == null) {
+      return null;
+    }
+    return DateTime.parse(raw);
+  }
+
   void clear() {
     _prefs
         .getKeys()
         .where(
-          (k) => k.startsWith(_messagesPrefix) || k.startsWith(_viewPrefix),
+          (k) =>
+              k.startsWith(_messagesPrefix) ||
+              k.startsWith(_viewPrefix) ||
+              k.startsWith(_areaSyncedPrefix),
         )
         .toList()
         .forEach(_prefs.remove);

@@ -450,6 +450,42 @@ void main() {
       expect(container.read(resolvedGradesProvider), isNotEmpty);
     });
 
+    test('switching student clears the stale state and last sync', () async {
+      server.mailSignInFails = true;
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+      await container.read(syncStatusProvider.notifier).sync();
+      expect(container.read(syncHealthProvider).staleAreas, isNotEmpty);
+
+      await container
+          .read(activeSelectionProvider.notifier)
+          .select(const ActiveSelection(accountId: 'a1', studentId: 6541));
+
+      expect(container.read(syncHealthProvider).staleAreas, isEmpty);
+      expect(container.read(lastSyncTimeProvider), isNull);
+    });
+
+    test('the last good mail time survives a cold start', () async {
+      final first = await _mobiregContainer(server: server, account: _account);
+      await first.read(syncStatusProvider.notifier).sync();
+      final syncedAt = first
+          .read(syncHealthProvider)
+          .lastSyncedAt[DataProviderCapability.messages];
+
+      server.mailSignInFails = true;
+      final second = await _mobiregContainer(
+        server: server,
+        account: _account,
+      );
+      await second.read(syncStatusProvider.notifier).sync();
+
+      final health = second.read(syncHealthProvider);
+      expect(health.isStale(DataProviderCapability.messages), isTrue);
+      expect(health.lastSyncedAt[DataProviderCapability.messages], syncedAt);
+    });
+
     test('a mail outage still runs grade and absence tracking', () async {
       server.mailSignInFails = true;
       final notifications = _SilentNotificationService();

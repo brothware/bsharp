@@ -24,5 +24,28 @@ void main() {
       expect(prefs.containsKey('mobireg_view_timetable'), isTrue);
       expect(prefs.getString('unrelated'), 'kept');
     });
+
+    test('an area sync time round-trips per scope', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final cache = SyncCache(prefs);
+      final at = DateTime(2026, 10, 5, 8, 15);
+
+      cache.saveAreaSyncedAt('a1_1', 'messages', at);
+
+      expect(cache.loadAreaSyncedAt('a1_1', 'messages'), at);
+      expect(cache.loadAreaSyncedAt('a1_2', 'messages'), isNull);
+      expect(cache.loadAreaSyncedAt('a1_1', 'grades'), isNull);
+    });
+
+    test('clear removes area sync times', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final cache = SyncCache(prefs)
+        ..saveAreaSyncedAt('a1_1', 'messages', DateTime(2026))
+        ..clear();
+
+      expect(cache.loadAreaSyncedAt('a1_1', 'messages'), isNull);
+    });
   });
 }

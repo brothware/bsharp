@@ -47,7 +47,22 @@ final syncStatusProvider = NotifierProvider<SyncStatusNotifier, SyncStatus>(
 
 class SyncStatusNotifier extends Notifier<SyncStatus> {
   @override
-  SyncStatus build() => SyncStatus.idle;
+  SyncStatus build() {
+    ref.listen(activeSelectionProvider, (previous, next) {
+      final before = previous?.value;
+      final after = next.value;
+      final isSwitched =
+          before != null &&
+          (after?.accountId != before.accountId ||
+              after?.studentId != before.studentId);
+      if (isSwitched) {
+        ref.read(syncHealthProvider.notifier).reset();
+        ref.read(lastSyncTimeProvider.notifier).value = null;
+      }
+    });
+    return SyncStatus.idle;
+  }
+
   SyncStatus get value => state;
   set value(SyncStatus v) => state = v;
 
@@ -267,10 +282,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
     try {
       final isLoaded = await load();
       if (isLoaded) {
-        health.markSynced(
-          provider.areasCovered(SyncOperation.mail),
-          DateTime.now(),
-        );
+        _recordSynced(provider.areasCovered(SyncOperation.mail));
       }
     } on Object catch (error, stackTrace) {
       final staleAreas = provider.staleAreasAfter(
@@ -285,8 +297,45 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
         '${staleAreas.map((area) => area.name).join(', ')} not synced: '
         '$error\n$stackTrace',
       );
-      health.markStale(staleAreas);
+      health.markStale(
+        staleAreas,
+        knownSyncedAt: _persistedSyncTimes(staleAreas),
+      );
     }
+  }
+
+  String? _healthScope() {
+    final selection = ref.read(activeSelectionProvider).value;
+    if (selection == null) {
+      return null;
+    }
+    return '${selection.accountId}_${selection.studentId}';
+  }
+
+  void _recordSynced(Set<DataProviderCapability> areas) {
+    final at = DateTime.now();
+    ref.read(syncHealthProvider.notifier).markSynced(areas, at);
+    final scope = _healthScope();
+    if (scope == null) {
+      return;
+    }
+    final cache = ref.read(syncCacheProvider);
+    for (final area in areas) {
+      cache.saveAreaSyncedAt(scope, area.name, at);
+    }
+  }
+
+  Map<DataProviderCapability, DateTime> _persistedSyncTimes(
+    Set<DataProviderCapability> areas,
+  ) {
+    final scope = _healthScope();
+    if (scope == null) {
+      return const {};
+    }
+    final cache = ref.read(syncCacheProvider);
+    return {
+      for (final area in areas) area: ?cache.loadAreaSyncedAt(scope, area.name),
+    };
   }
 }
 
