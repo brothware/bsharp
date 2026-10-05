@@ -119,17 +119,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
       ref.read(missingPupilProvider.notifier).value = false;
       ref.read(lastSyncTimeProvider.notifier).value = DateTime.now();
 
-      final ChangeSet changeSet;
-      try {
-        changeSet = await _detectChanges();
-      } on Object catch (error, stackTrace) {
-        debugPrint(
-          'SyncStatusNotifier: data applied but change detection failed: '
-          '$error\n$stackTrace',
-        );
-        state = SyncStatus.failed;
-        return const ChangeSet();
-      }
+      final changeSet = await _detectChanges();
       state = SyncStatus.completed;
       await _trackNewGrades(changeSet);
 

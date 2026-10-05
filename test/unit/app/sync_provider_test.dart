@@ -643,8 +643,9 @@ void main() {
       expect(
         logs.where(
           (line) =>
-              line.contains('change detection failed') &&
-              line.contains('grades unreadable'),
+              line.contains('sync failed') &&
+              line.contains('grades unreadable') &&
+              line.contains('_detectChanges'),
         ),
         isNotEmpty,
       );
