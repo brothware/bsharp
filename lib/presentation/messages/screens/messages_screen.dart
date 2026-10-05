@@ -363,7 +363,7 @@ class _MessageListState extends ConsumerState<_MessageList> {
               bottom: 16,
               right: 16,
               child: FloatingActionButton(
-                onPressed: () => _openCompose(context),
+                onPressed: () => composeAndSend(context, ref),
                 child: const Icon(Icons.edit),
               ),
             ),
@@ -386,39 +386,6 @@ class _MessageListState extends ConsumerState<_MessageList> {
       for (final m in inbox)
         if (m.id == message.id) m.copyWith(isRead: true) else m,
     ];
-  }
-
-  Future<void> _openCompose(
-    BuildContext context, {
-    PocztaMessage? replyTo,
-  }) async {
-    final result = await Navigator.of(context).push(
-      MaterialPageRoute<Map<String, dynamic>>(
-        builder: (_) => ComposeMessageView(replyTo: replyTo),
-      ),
-    );
-    if (result == null || !mounted) return;
-
-    final dataProvider = ref.read(activeDataProviderProvider);
-    try {
-      await dataProvider.sendMessage(
-        recipientIds: (result['recipientIds'] as List).cast<String>(),
-        title: result['title'] as String,
-        content: result['content'] as String,
-        previousMessageId: result['previousMessageId'] as int?,
-      );
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(t.messages.messageSent)),
-      );
-      unawaited(ref.read(syncStatusProvider.notifier).syncMessages());
-    } on Exception catch (error, stackTrace) {
-      debugPrint('MessagesScreen: send failed: $error\n$stackTrace');
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(t.messages.sendFailed)),
-      );
-    }
   }
 }
 

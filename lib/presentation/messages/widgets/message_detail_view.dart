@@ -227,7 +227,8 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
           ? ObscurableFab(
               scrollable: scrollable,
               fab: FloatingActionButton.extended(
-                onPressed: () => _openReply(context),
+                onPressed: () =>
+                    composeAndSend(context, ref, replyTo: widget.message),
                 icon: const Icon(Icons.reply),
                 label: Text(t.messages.reply),
               ),
@@ -306,36 +307,6 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
       for (final m in messages)
         if (m.id == message.id) m.copyWith(files: files) else m,
     ]);
-  }
-
-  Future<void> _openReply(BuildContext context) async {
-    final result = await Navigator.of(context).push(
-      MaterialPageRoute<Map<String, dynamic>>(
-        builder: (_) => ComposeMessageView(replyTo: widget.message),
-      ),
-    );
-    if (result == null || !mounted) return;
-
-    final dataProvider = ref.read(activeDataProviderProvider);
-    try {
-      await dataProvider.sendMessage(
-        recipientIds: (result['recipientIds'] as List).cast<String>(),
-        title: result['title'] as String,
-        content: result['content'] as String,
-        previousMessageId: result['previousMessageId'] as int?,
-      );
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(t.messages.messageSent)),
-      );
-      unawaited(ref.read(syncStatusProvider.notifier).syncMessages());
-    } on Exception catch (error, stackTrace) {
-      debugPrint('MessageDetailView: send failed: $error\n$stackTrace');
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(t.messages.sendFailed)),
-      );
-    }
   }
 }
 

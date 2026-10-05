@@ -1,18 +1,46 @@
 import 'dart:async';
 
+import 'package:bsharp/app/attachment_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
+import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/app/translation_provider.dart';
+import 'package:bsharp/domain/entities/outgoing_attachment.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/domain/translation_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/messages/attachments/attachment_picker.dart';
+import 'package:bsharp/presentation/messages/widgets/attachment_widgets.dart';
 import 'package:bsharp/presentation/messages/widgets/rich_text_editing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+Future<void> composeAndSend(
+  BuildContext context,
+  WidgetRef ref, {
+  PocztaMessage? replyTo,
+}) async {
+  final messenger = ScaffoldMessenger.of(context);
+  final syncNotifier = ref.read(syncStatusProvider.notifier);
+  final isSent = await Navigator.of(context).push(
+    MaterialPageRoute<bool>(
+      builder: (_) => ComposeMessageView(replyTo: replyTo),
+    ),
+  );
+  if (isSent != true) {
+    return;
+  }
+  messenger.showSnackBar(SnackBar(content: Text(t.messages.messageSent)));
+  unawaited(syncNotifier.syncMessages());
+}
+
 class ComposeMessageView extends ConsumerStatefulWidget {
-  const ComposeMessageView({super.key, this.replyTo, this.prefilledRecipient});
+  const ComposeMessageView({
+    super.key,
+    this.replyTo,
+    this.prefilledRecipient,
+  });
 
   final PocztaMessage? replyTo;
   final PocztaReceiver? prefilledRecipient;
@@ -27,7 +55,11 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
   final _searchController = TextEditingController();
   final _selectedRecipients = <PocztaReceiver>[];
   var _searchResults = <PocztaReceiver>[];
+  final _attachments = <OutgoingAttachment>[];
   var _isSearching = false;
+  var _isSending = false;
+  var _isTransferring = false;
+  ({int index, int total})? _uploadProgress;
   Timer? _debounce;
 
   @override
@@ -120,14 +152,30 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
       borderSide: BorderSide(color: theme.colorScheme.primary),
     );
 
+    return PopScope(
+      canPop: !_isSending,
+      child: _buildScaffold(theme, fieldBorder, focusedBorder),
+    );
+  }
+
+  Widget _buildScaffold(
+    ThemeData theme,
+    OutlineInputBorder fieldBorder,
+    OutlineInputBorder focusedBorder,
+  ) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           widget.replyTo != null ? t.messages.reply : t.messages.newMessage,
         ),
         actions: [
+          IconButton(
+            onPressed: _isSending ? null : _pickAttachments,
+            icon: const Icon(Icons.attach_file),
+            tooltip: t.compose.attach,
+          ),
           TextButton.icon(
-            onPressed: _canSend ? () => _send(context) : null,
+            onPressed: _canSend ? _send : null,
             icon: const Icon(Icons.send),
             label: Text(t.messages.send),
           ),
@@ -135,6 +183,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
       ),
       body: Column(
         children: [
+          if (_isTransferring) _SendingProgress(upload: _uploadProgress),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: Column(
@@ -239,6 +288,17 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
                   style: theme.textTheme.titleMedium,
                 ),
                 const SizedBox(height: 8),
+                if (_attachments.isNotEmpty) ...[
+                  AttachmentChips(
+                    attachments: _attachments,
+                    onRemove: _isSending
+                        ? null
+                        : (attachment) => setState(() {
+                            _attachments.remove(attachment);
+                          }),
+                  ),
+                  const SizedBox(height: 8),
+                ],
               ],
             ),
           ),
@@ -272,6 +332,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
   }
 
   bool get _canSend =>
+      !_isSending &&
       _selectedRecipients.isNotEmpty &&
       _titleController.text.isNotEmpty &&
       _contentController.text.isNotEmpty;
@@ -292,13 +353,195 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     );
   }
 
-  void _send(BuildContext context) {
-    Navigator.of(context).pop({
-      'title': _titleController.text,
-      'content': _contentController.toHtml(),
-      'recipientIds': _selectedRecipients.map((r) => r.recipientId).toList(),
-      if (widget.replyTo != null) 'previousMessageId': widget.replyTo!.id,
+  void _showSnackBar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+  }
+
+  Future<void> _pickAttachments() async {
+    final picker = ref.read(attachmentPickerProvider);
+    final source = await showAttachmentSourceSheet(
+      context,
+      canUseCamera: picker.canUseCamera,
+    );
+    if (source == null || !mounted) {
+      return;
+    }
+    final List<OutgoingAttachment> picked;
+    try {
+      picked = await picker.pick(source);
+    } on Exception catch (error, stackTrace) {
+      debugPrint('ComposeMessageView: pick failed: $error\n$stackTrace');
+      if (mounted) {
+        _showSnackBar(t.compose.pickFailed);
+      }
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+    for (final attachment in picked.where((a) => a.isTooLarge)) {
+      _showSnackBar(t.compose.tooLarge(name: attachment.name));
+    }
+    setState(() {
+      _attachments.addAll(picked.where((a) => !a.isTooLarge));
     });
+  }
+
+  Future<void> _send() async {
+    setState(() => _isSending = true);
+    final bool isSent;
+    try {
+      isSent = await _sendWithAttachments(List.of(_attachments));
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSending = false;
+          _isTransferring = false;
+          _uploadProgress = null;
+        });
+      }
+    }
+    if (isSent && mounted) {
+      Navigator.of(context).pop(true);
+    }
+  }
+
+  Future<bool> _sendWithAttachments(
+    List<OutgoingAttachment> attachments,
+  ) async {
+    final dataProvider = ref.read(activeDataProviderProvider);
+    if (attachments.isNotEmpty && !await _areSendable(attachments)) {
+      return false;
+    }
+    if (!mounted) {
+      return false;
+    }
+    setState(() => _isTransferring = true);
+    if (attachments.isNotEmpty && !await _isMailboxReady(dataProvider)) {
+      return false;
+    }
+    final messageId = await _sendMessage(dataProvider);
+    if (messageId == null) {
+      return false;
+    }
+    var pending = attachments;
+    while (pending.isNotEmpty && mounted) {
+      final failed = await _uploadPending(dataProvider, messageId, pending);
+      if (failed.isEmpty || !mounted) {
+        break;
+      }
+      final shouldRetry = await showUploadFailureDialog(context, failed);
+      pending = shouldRetry
+          ? [for (final result in failed) result.attachment]
+          : const [];
+    }
+    return true;
+  }
+
+  Future<bool> _areSendable(List<OutgoingAttachment> attachments) async {
+    final problems = await ref
+        .read(attachmentInspectorProvider)
+        .problemsWith(attachments);
+    if (problems.isEmpty) {
+      return true;
+    }
+    if (mounted) {
+      await showAttachmentProblemsDialog(context, problems);
+    }
+    return false;
+  }
+
+  Future<bool> _isMailboxReady(SchoolDataProvider dataProvider) async {
+    try {
+      await dataProvider.ensureMailSession();
+      return true;
+    } on Exception catch (error, stackTrace) {
+      debugPrint(
+        'ComposeMessageView: mailbox check failed: $error\n$stackTrace',
+      );
+      if (mounted) {
+        _showSnackBar(t.compose.mailboxUnavailable);
+      }
+      return false;
+    }
+  }
+
+  Future<int?> _sendMessage(SchoolDataProvider dataProvider) async {
+    try {
+      return await dataProvider.sendMessage(
+        recipientIds: _selectedRecipients.map((r) => r.recipientId).toList(),
+        title: _titleController.text,
+        content: _contentController.toHtml(),
+        previousMessageId: widget.replyTo?.id,
+      );
+    } on Exception catch (error, stackTrace) {
+      debugPrint('ComposeMessageView: send failed: $error\n$stackTrace');
+      if (mounted) {
+        _showSnackBar(t.messages.sendFailed);
+      }
+      return null;
+    }
+  }
+
+  Future<List<AttachmentUploadResult>> _uploadPending(
+    SchoolDataProvider dataProvider,
+    int messageId,
+    List<OutgoingAttachment> pending,
+  ) async {
+    setState(() => _uploadProgress = (index: 0, total: pending.length));
+    try {
+      final results = await dataProvider.uploadAttachments(
+        messageId,
+        pending,
+        onUploading: (index) {
+          if (mounted) {
+            setState(
+              () => _uploadProgress = (index: index, total: pending.length),
+            );
+          }
+        },
+      );
+      return [
+        for (final result in results)
+          if (!result.isUploaded) result,
+      ];
+    } on MessagingException catch (error, stackTrace) {
+      debugPrint('ComposeMessageView: uploads failed: $error\n$stackTrace');
+      return [
+        for (final attachment in pending)
+          AttachmentUploadResult.failed(
+            attachment,
+            AttachmentUploadFailure.server,
+          ),
+      ];
+    }
+  }
+}
+
+class _SendingProgress extends StatelessWidget {
+  const _SendingProgress({required this.upload});
+
+  final ({int index, int total})? upload;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final upload = this.upload;
+    final label = upload == null
+        ? t.compose.sending
+        : t.compose.uploading(current: upload.index + 1, total: upload.total);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        LinearProgressIndicator(
+          value: upload == null ? null : upload.index / upload.total,
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          child: Text(label, style: theme.textTheme.bodySmall),
+        ),
+      ],
+    );
   }
 }
 

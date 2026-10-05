@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -51,6 +52,36 @@ void main() {
       }
       fail(buf.toString());
     }
+  });
+
+  test('every attachment string is translated in every locale', () {
+    final composeKeys = enKeys.keys
+        .where((key) => key.startsWith('compose.'))
+        .toList();
+    expect(composeKeys, isNotEmpty);
+    final problems = <String>[];
+
+    for (final MapEntry(key: lang, value: keys) in allLocales.entries) {
+      for (final key in composeKeys) {
+        final english = enKeys[key]!;
+        final value = keys[key];
+        if (value == null) {
+          problems.add('$lang $key: missing');
+          continue;
+        }
+        if (!setEquals(_placeholdersOf(value), _placeholdersOf(english))) {
+          problems.add('$lang $key: placeholders differ');
+        }
+        final isGenuinelyIdentical =
+            _sizeUnitKeys.contains(key) &&
+            !_localesWithOwnSizeUnits.contains(lang);
+        if (value == english && !isGenuinelyIdentical) {
+          problems.add('$lang $key: still English');
+        }
+      }
+    }
+
+    expect(problems, isEmpty);
   });
 
   test('no locale has untranslated English values', () {
@@ -134,6 +165,7 @@ void main() {
       'gradeCategories.pracaDomowa',
       'support.buyMeACoffee',
       'wearDashboard.moreBadge',
+      ..._sizeUnitKeys,
     };
 
     final untranslated = <String, List<String>>{};
@@ -170,6 +202,20 @@ void main() {
       fail(buf.toString());
     }
   });
+}
+
+const _sizeUnitKeys = {
+  'compose.sizeBytes',
+  'compose.sizeKilobytes',
+  'compose.sizeMegabytes',
+};
+
+const _localesWithOwnSizeUnits = {'be', 'bg', 'fi', 'fr', 'mk', 'uk'};
+
+final _placeholder = RegExp(r'\$\{(\w+)\}');
+
+Set<String> _placeholdersOf(String value) {
+  return _placeholder.allMatches(value).map((match) => match[1]!).toSet();
 }
 
 Map<String, String> _flatten(Map<String, dynamic> json, [String prefix = '']) {

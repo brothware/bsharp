@@ -24,6 +24,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>BSharp uses the camera when you take a photo or record a video to attach to a message.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>BSharp uses the microphone to record sound for videos you attach to a message.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>BSharp opens your photo library when you choose photos or videos to attach to a message.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
