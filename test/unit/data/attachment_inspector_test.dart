@@ -73,7 +73,7 @@ void main() {
     );
   });
 
-  test('a file too large to load is too large', () async {
+  test('an attachment with neither a path nor bytes is missing', () async {
     expect(
       await inspector.problemWith(
         const OutgoingAttachment.unloaded(
@@ -81,7 +81,7 @@ void main() {
           sizeBytes: maxAttachmentBytes + 1,
         ),
       ),
-      AttachmentProblem.tooLarge,
+      AttachmentProblem.missing,
     );
   });
 

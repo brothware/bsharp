@@ -23,9 +23,7 @@ class AttachmentInspector {
     }
     final path = attachment.path;
     if (path == null) {
-      return attachment.isTooLarge
-          ? AttachmentProblem.tooLarge
-          : AttachmentProblem.missing;
+      return AttachmentProblem.missing;
     }
     final file = File(path);
     if (!file.existsSync()) {
