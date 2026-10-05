@@ -187,6 +187,30 @@ final class ConnectionTimeout extends AppFailure {
   int get hashCode => Object.hash(runtimeType, message);
 }
 
+final class FileTooLarge extends AppFailure {
+  const FileTooLarge({super.message});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FileTooLarge && message == other.message;
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+}
+
+final class FileUnreadable extends AppFailure {
+  const FileUnreadable({super.message});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FileUnreadable && message == other.message;
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+}
+
 final class SessionExpired extends AppFailure {
   const SessionExpired({super.message});
 

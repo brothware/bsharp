@@ -159,6 +159,8 @@ void main() {
         TranslationQuotaExceeded(),
         TranslationFailed(),
         PupilNotOnAccount(),
+        FileTooLarge(),
+        FileUnreadable(),
         UnknownFailure(),
       ];
 
@@ -175,6 +177,8 @@ void main() {
           SchoolNotFound() => 'p2',
           TranslationQuotaExceeded() => 'r',
           TranslationFailed() => 's',
+          FileTooLarge() => 't',
+          FileUnreadable() => 'u',
           UnknownFailure() => 'q',
         };
         expect(result, isNotEmpty);
@@ -189,6 +193,11 @@ void main() {
       );
       expect(const ConnectionTimeout(), equals(const ConnectionTimeout()));
       expect(const SessionExpired(), equals(const SessionExpired()));
+      expect(const FileTooLarge(), equals(const FileTooLarge()));
+      expect(
+        const FileUnreadable(message: 'a'),
+        isNot(equals(const FileUnreadable(message: 'b'))),
+      );
       expect(const ProtocolMismatch(), equals(const ProtocolMismatch()));
       expect(
         const UnknownFailure(errno: 1),

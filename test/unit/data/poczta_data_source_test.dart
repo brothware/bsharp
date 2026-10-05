@@ -1,15 +1,19 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bsharp/core/constants/app_constants.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/core/network/api_client_factory.dart';
 import 'package:bsharp/data/data_sources/remote/poczta_data_source.dart';
+import 'package:bsharp/domain/entities/outgoing_attachment.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const _messagingUrl = 'https://poczta.mobireg.pl/sso';
 const _unauthorized = 401;
 const _ok = 200;
+const _payloadTooLarge = 413;
+const _uploadPath = '/api/messages/777/files';
 
 class _PocztaFake {
   bool expireOnce = false;
@@ -17,6 +21,9 @@ class _PocztaFake {
   bool exposeCookiesAsJar = false;
   Object folderBody = {'items': <Object>[], 'total': 0};
   Object searchBody = <Object>[];
+  Object sendBody = {'id': 777};
+  int uploadStatus = _ok;
+  DioExceptionType? uploadError;
 
   Dio client(List<RequestOptions> seen) {
     final factory = ApiClientFactory(
@@ -27,6 +34,13 @@ class _PocztaFake {
         InterceptorsWrapper(
           onRequest: (options, handler) {
             seen.add(options);
+            final error = uploadError;
+            if (error != null && options.path == _uploadPath) {
+              handler.reject(
+                DioException(requestOptions: options, type: error),
+              );
+              return;
+            }
             handler.resolve(_answer(options));
           },
         ),
@@ -57,6 +71,12 @@ class _PocztaFake {
     }
     if (options.path == '/api/messages/receivers/search') {
       return _respond(options, _ok, searchBody);
+    }
+    if (options.method == 'PUT' && options.path == '/api/messages') {
+      return _respond(options, _ok, sendBody);
+    }
+    if (options.path == _uploadPath) {
+      return _respond(options, uploadStatus, <String, dynamic>{});
     }
     return _respond(options, _ok, <String, dynamic>{});
   }
@@ -90,6 +110,31 @@ Future<(PocztaDataSource, List<RequestOptions>)> _signedIn() async {
   await source.establishSession(school: 'sp1', messagesToken: 't');
   seen.clear();
   return (source, seen);
+}
+
+Future<(PocztaDataSource, List<RequestOptions>)> _signedInTo(
+  _PocztaFake server, {
+  bool isWeb = false,
+}) async {
+  final seen = <RequestOptions>[];
+  final source = PocztaDataSource(client: server.client(seen), isWeb: isWeb);
+  await source.establishSession(school: 'sp1', messagesToken: 't');
+  seen.clear();
+  return (source, seen);
+}
+
+OutgoingAttachment _fileAttachment(String name, List<int> content) {
+  final file = File('${Directory.systemTemp.createTempSync().path}/$name')
+    ..writeAsBytesSync(content);
+  return OutgoingAttachment.file(
+    name: name,
+    sizeBytes: content.length,
+    path: file.path,
+  );
+}
+
+MapEntry<String, MultipartFile> _uploadedPart(RequestOptions options) {
+  return (options.data as FormData).files.single;
 }
 
 String get savePath => '${Directory.systemTemp.createTempSync().path}/file';
@@ -361,5 +406,221 @@ void main() {
 
     expect(result, isA<Failure<void>>());
     expect(seen, isEmpty);
+  });
+
+  test('sending a message answers the new message id', () async {
+    final (source, _) = await _signedIn();
+
+    final result = await source.sendMessage(
+      title: 'T',
+      content: 'C',
+      recipients: ['user_1'],
+    );
+
+    expect(result.valueOrNull, 777);
+  });
+
+  test('a numeric string message id is accepted', () async {
+    final (source, _) = await _signedInTo(
+      _PocztaFake()..sendBody = {'id': '778'},
+    );
+
+    final result = await source.sendMessage(
+      title: 'T',
+      content: 'C',
+      recipients: ['user_1'],
+    );
+
+    expect(result.valueOrNull, 778);
+  });
+
+  test('a sent message without an id is a FormatException', () async {
+    final (source, _) = await _signedInTo(
+      _PocztaFake()..sendBody = <String, dynamic>{},
+    );
+
+    await expectLater(
+      source.sendMessage(title: 'T', content: 'C', recipients: ['user_1']),
+      throwsFormatException,
+    );
+  });
+
+  test('uploads a file as one multipart files part with the cookie', () async {
+    final (source, seen) = await _signedIn();
+    final attachment = _fileAttachment('zdjecie.jpg', [1, 2, 3]);
+
+    final result = await source.uploadAttachment(777, attachment);
+
+    expect(result, isA<Success<void>>());
+    final upload = seen.single;
+    expect(upload.method, 'POST');
+    expect(upload.path, _uploadPath);
+    expect(upload.headers['Cookie'], 'laravel_session=abc; XSRF-TOKEN=x');
+    expect(upload.headers['User-Agent'], AppConstants.appUserAgent);
+    expect(upload.headers.containsKey('X-Cookie-Jar'), isFalse);
+    final part = _uploadedPart(upload);
+    expect(part.key, 'files');
+    expect(part.value.filename, 'zdjecie.jpg');
+    expect(part.value.length, 3);
+    expect(part.value.contentType.toString(), 'application/octet-stream');
+    expect(upload.sendTimeout, const Duration(seconds: 900));
+    expect(upload.receiveTimeout, const Duration(seconds: 900));
+  });
+
+  test('uploads each file in its own request', () async {
+    final (source, seen) = await _signedIn();
+
+    await source.uploadAttachment(777, _fileAttachment('a.pdf', [1]));
+    await source.uploadAttachment(777, _fileAttachment('b.pdf', [2, 3]));
+
+    expect(seen.map((o) => o.path), [_uploadPath, _uploadPath]);
+    expect(seen.map((o) => _uploadedPart(o).value.filename), [
+      'a.pdf',
+      'b.pdf',
+    ]);
+  });
+
+  test('uploads picked bytes through the proxy jar header on web', () async {
+    final (source, seen) = await _signedInTo(
+      _PocztaFake()..exposeCookiesAsJar = true,
+      isWeb: true,
+    );
+    final attachment = OutgoingAttachment.memory(
+      name: 'scan.pdf',
+      bytes: Uint8List.fromList([4, 5]),
+    );
+
+    final result = await source.uploadAttachment(777, attachment);
+
+    expect(result, isA<Success<void>>());
+    final upload = seen.single;
+    expect(upload.headers['X-Cookie-Jar'], 'laravel_session=abc; XSRF-TOKEN=x');
+    expect(upload.headers.containsKey('Cookie'), isFalse);
+    expect(_uploadedPart(upload).value.filename, 'scan.pdf');
+    expect(_uploadedPart(upload).value.length, 2);
+  });
+
+  test('a 413 upload is a file too large failure', () async {
+    final (source, _) = await _signedInTo(
+      _PocztaFake()..uploadStatus = _payloadTooLarge,
+    );
+
+    final result = await source.uploadAttachment(
+      777,
+      _fileAttachment('big.mov', [1]),
+    );
+
+    expect(result.failureOrNull, isA<FileTooLarge>());
+  });
+
+  test('an upload after a 401 signs in again and replays it', () async {
+    final server = _PocztaFake();
+    final (source, seen) = await _signedInTo(server);
+    server.expireOnce = true;
+
+    final result = await source.uploadAttachment(
+      777,
+      _fileAttachment('a.pdf', [1, 2]),
+    );
+
+    expect(result, isA<Success<void>>());
+    expect(seen.map((o) => o.path.startsWith('/sso/') ? '/sso' : o.path), [
+      _uploadPath,
+      '/sso',
+      _uploadPath,
+    ]);
+    expect(_uploadedPart(seen.last).value.length, 2);
+  });
+
+  test('a file gone before its upload is an unreadable failure', () async {
+    final (source, seen) = await _signedIn();
+    final gone = OutgoingAttachment.file(
+      name: 'gone.pdf',
+      sizeBytes: 1,
+      path: '${Directory.systemTemp.createTempSync().path}/gone.pdf',
+    );
+
+    final result = await source.uploadAttachment(777, gone);
+
+    expect(result.failureOrNull, isA<FileUnreadable>());
+    expect(seen, isEmpty);
+  });
+
+  test('an upload that times out is a timeout failure', () async {
+    final (source, _) = await _signedInTo(
+      _PocztaFake()..uploadError = DioExceptionType.sendTimeout,
+    );
+
+    final result = await source.uploadAttachment(
+      777,
+      _fileAttachment('a.pdf', [1]),
+    );
+
+    expect(result.failureOrNull, isA<ConnectionTimeout>());
+  });
+
+  test('an upload that loses the connection is a connection failure', () async {
+    final (source, _) = await _signedInTo(
+      _PocztaFake()..uploadError = DioExceptionType.connectionError,
+    );
+
+    final result = await source.uploadAttachment(
+      777,
+      _fileAttachment('a.pdf', [1]),
+    );
+
+    expect(result.failureOrNull, isA<NoConnection>());
+  });
+
+  test('a live session is confirmed without signing in again', () async {
+    final (source, seen) = await _signedIn();
+
+    final result = await source.ensureSession();
+
+    expect(result, isA<Success<void>>());
+    expect(seen.where((o) => o.path.startsWith('/sso/')), isEmpty);
+  });
+
+  test('an expired session is renewed before it is needed', () async {
+    final server = _PocztaFake();
+    final (source, seen) = await _signedInTo(server);
+    server.expireOnce = true;
+
+    final result = await source.ensureSession();
+
+    expect(result, isA<Success<void>>());
+    expect(seen.where((o) => o.path.startsWith('/sso/')).length, 1);
+  });
+
+  test('a session that cannot be renewed fails the check', () async {
+    final (source, _) = await _signedInTo(
+      _PocztaFake()..expireAlways = true,
+    );
+
+    final result = await source.ensureSession();
+
+    expect(result.failureOrNull, isA<SessionExpired>());
+  });
+
+  test('a session lost at sign-in is signed in again first', () async {
+    final seen = <RequestOptions>[];
+    final server = _PocztaFake()..exposeCookiesAsJar = true;
+    final source = PocztaDataSource(client: server.client(seen));
+    await source.establishSession(school: 'sp1', messagesToken: 't');
+    expect(source.hasSession, isFalse);
+    server.exposeCookiesAsJar = false;
+
+    final result = await source.ensureSession();
+
+    expect(result, isA<Success<void>>());
+    expect(source.hasSession, isTrue);
+  });
+
+  test('a session that was never established fails the check', () async {
+    final source = PocztaDataSource(client: _fakePoczta([]));
+
+    final result = await source.ensureSession();
+
+    expect(result.failureOrNull, isA<SessionExpired>());
   });
 }

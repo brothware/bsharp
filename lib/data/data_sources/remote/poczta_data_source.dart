@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:bsharp/core/error/result.dart';
+import 'package:bsharp/domain/entities/outgoing_attachment.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -9,6 +12,8 @@ const _serverErrorFloor = 500;
 const _clientErrorFloor = 400;
 const _successFloor = 200;
 const _redirectFloor = 300;
+const _payloadTooLarge = 413;
+const _uploadTimeout = Duration(seconds: 900);
 
 class _CookieChannel {
   const _CookieChannel({required this.isWeb});
@@ -39,6 +44,14 @@ class PocztaDataSource {
   String? _messagesToken;
 
   bool get hasSession => _cookie != null;
+
+  Future<Result<void>> ensureSession() async {
+    if (!hasSession) {
+      return _signIn();
+    }
+    final probe = await getInbox();
+    return probe.map<void>((_) {});
+  }
 
   Future<Result<void>> establishSession({
     required String school,
@@ -131,7 +144,7 @@ class PocztaDataSource {
     );
   }
 
-  Future<Result<void>> sendMessage({
+  Future<Result<int>> sendMessage({
     required String title,
     required String content,
     required List<String> recipients,
@@ -151,10 +164,64 @@ class PocztaDataSource {
         options: options,
       ),
     );
-    return result.when(
-      success: (_) => const Result.success(null),
-      failure: Result.failure,
-    );
+    return result.map((response) => _sentMessageIdOf(response.data));
+  }
+
+  int _sentMessageIdOf(Object? data) {
+    final id = data is Map ? data['id'] : null;
+    final parsed = switch (id) {
+      int() => id,
+      String() => int.tryParse(id),
+      _ => null,
+    };
+    if (parsed == null) {
+      throw const FormatException('Poczta PUT /api/messages: expected {id}');
+    }
+    return parsed;
+  }
+
+  Future<Result<void>> uploadAttachment(
+    int messageId,
+    OutgoingAttachment attachment,
+  ) async {
+    const fieldName = 'files';
+    try {
+      final result = await _call(
+        (options) async => _client.post<dynamic>(
+          '/api/messages/$messageId/files',
+          data: FormData.fromMap({fieldName: await _partOf(attachment)}),
+          options: options.copyWith(
+            headers: _sessionHeaders(),
+            sendTimeout: _uploadTimeout,
+            receiveTimeout: _uploadTimeout,
+          ),
+        ),
+      );
+      return result.map<void>((_) {});
+    } on FileSystemException catch (e) {
+      return Result.failure(
+        FileUnreadable(message: '${attachment.name}: ${e.message}'),
+      );
+    }
+  }
+
+  Future<MultipartFile> _partOf(OutgoingAttachment attachment) {
+    final mediaType = DioMediaType('application', 'octet-stream');
+    return switch (attachment) {
+      OutgoingAttachment(:final bytes?) => Future.value(
+        MultipartFile.fromBytes(
+          bytes,
+          filename: attachment.name,
+          contentType: mediaType,
+        ),
+      ),
+      OutgoingAttachment(:final path?) => MultipartFile.fromFile(
+        path,
+        filename: attachment.name,
+        contentType: mediaType,
+      ),
+      _ => throw StateError('Attachment ${attachment.name} has no content'),
+    };
   }
 
   Future<Result<void>> deleteMessage(int messageId) async {
@@ -263,6 +330,11 @@ class PocztaDataSource {
         );
       }
       final status = response.statusCode ?? _clientErrorFloor;
+      if (status == _payloadTooLarge) {
+        return const Result.failure(
+          FileTooLarge(message: 'Poczta HTTP $_payloadTooLarge'),
+        );
+      }
       if (status >= _clientErrorFloor) {
         return Result.failure(UnknownFailure(message: 'Poczta HTTP $status'));
       }
@@ -279,7 +351,16 @@ class PocztaDataSource {
 
   AppFailure _failureOf(DioException e) {
     final error = e.error;
-    return error is AppFailure ? error : UnknownFailure(message: e.message);
+    if (error is AppFailure) {
+      return error;
+    }
+    return switch (e.type) {
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.sendTimeout ||
+      DioExceptionType.receiveTimeout => ConnectionTimeout(message: e.message),
+      DioExceptionType.connectionError => NoConnection(message: e.message),
+      _ => UnknownFailure(message: e.message),
+    };
   }
 
   Map<String, String> _baseHeaders() {
@@ -289,14 +370,15 @@ class PocztaDataSource {
     };
   }
 
-  Options _authorizedOptions() {
+  Map<String, String> _sessionHeaders() {
     final cookie = _cookie;
+    return {_cookieChannel.requestHeader: ?cookie};
+  }
+
+  Options _authorizedOptions() {
     return Options(
       validateStatus: (status) => status != null && status < _serverErrorFloor,
-      headers: {
-        ..._baseHeaders(),
-        _cookieChannel.requestHeader: ?cookie,
-      },
+      headers: {..._baseHeaders(), ..._sessionHeaders()},
     );
   }
 }
