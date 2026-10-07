@@ -4,6 +4,7 @@ import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/app.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/notification_router.dart';
+import 'package:bsharp/app/notification_tap_handler.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
@@ -222,6 +223,77 @@ void main() {
           router.routeInformationProvider.value.uri.path,
           '/messages/view',
         );
+      },
+    );
+
+    testWidgets(
+      'a named message opens as soon as it reaches the inbox, '
+      'before the sync ends',
+      (tester) async {
+        final accountStorage = await _accountStorageWithTwoStudents();
+        final ref = await _captureRef(
+          tester,
+          (child) => ProviderScope(
+            overrides: [
+              accountStorageProvider.overrideWithValue(accountStorage),
+            ],
+            child: child,
+          ),
+        );
+        await ref.read(activeSelectionProvider.future);
+
+        final router = createRouter(authState: AuthState.authenticated);
+        NotificationRouter(
+          ref: ref,
+          routerProvider: () => router,
+        ).handleNotificationTap(
+          const NotificationPayload(
+            category: ChangeCategory.messages,
+            itemId: 9,
+          ),
+        );
+        await tester.pump();
+        expect(router.routeInformationProvider.value.uri.path, '/messages');
+
+        ref.read(inboxProvider.notifier).value = [_message(9)];
+        await tester.pump();
+
+        expect(
+          router.routeInformationProvider.value.uri.path,
+          '/messages/view',
+        );
+      },
+    );
+
+    testWidgets(
+      'a revealed message is not opened again when the sync ends',
+      (tester) async {
+        final accountStorage = await _accountStorageWithTwoStudents();
+        final ref = await _captureRef(
+          tester,
+          (child) => ProviderScope(
+            overrides: [
+              accountStorageProvider.overrideWithValue(accountStorage),
+            ],
+            child: child,
+          ),
+        );
+        await ref.read(activeSelectionProvider.future);
+
+        final handler = _CountingTapHandler(ref: ref)
+          ..handleNotificationTap(
+            const NotificationPayload(
+              category: ChangeCategory.messages,
+              itemId: 9,
+            ),
+          );
+        ref.read(inboxProvider.notifier).value = [_message(9)];
+        await tester.pump();
+        handler.handleSyncCompleted(_messageChanges([9]));
+        ref.read(inboxProvider.notifier).value = [_message(9), _message(10)];
+        await tester.pump();
+
+        expect(handler.openedMessageIds, [9]);
       },
     );
 
@@ -520,6 +592,21 @@ void main() {
       },
     );
   });
+}
+
+class _CountingTapHandler extends NotificationTapHandler {
+  _CountingTapHandler({required super.ref});
+
+  final openedMessageIds = <int>[];
+
+  @override
+  bool openSection(ChangeCategory category) => true;
+
+  @override
+  bool openMessage(PocztaMessage message) {
+    openedMessageIds.add(message.id);
+    return true;
+  }
 }
 
 class _NoopNotificationService extends NotificationService {

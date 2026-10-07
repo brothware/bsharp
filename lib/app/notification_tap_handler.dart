@@ -24,6 +24,10 @@ abstract class NotificationTapHandler {
   ChangeCategory? _awaitingReveal;
   int? _awaitingItemId;
 
+  /// Watches the inbox for the named message, which can land there from the
+  /// cache or from the mail part of the sync long before the sync is over.
+  ProviderSubscription<List<PocztaMessage>>? _inboxWatch;
+
   /// Shows the section for [category]. Returns false when this app has nowhere
   /// to put it, in which case the tap is left alone.
   bool openSection(ChangeCategory category);
@@ -39,15 +43,30 @@ abstract class NotificationTapHandler {
 
     if (!openSection(category)) return;
 
+    _stopAwaiting();
     _awaitingReveal = category;
     _awaitingItemId = payload.itemId;
 
     // A named item needs no working out: open it if it is already here, and
-    // otherwise wait for the sync to fetch it.
+    // otherwise open it the moment it arrives.
     if (_reveal(category, payload.itemId)) {
-      _awaitingReveal = null;
-      _awaitingItemId = null;
+      _stopAwaiting();
+      return;
     }
+    if (payload.itemId != null) {
+      _inboxWatch = ref.listenManual(inboxProvider, (_, _) {
+        if (_reveal(category, payload.itemId)) {
+          _stopAwaiting();
+        }
+      });
+    }
+  }
+
+  void _stopAwaiting() {
+    _inboxWatch?.close();
+    _inboxWatch = null;
+    _awaitingReveal = null;
+    _awaitingItemId = null;
   }
 
   /// The sync a tapped notification set off has finished, so the item it was
@@ -55,8 +74,7 @@ abstract class NotificationTapHandler {
   void handleSyncCompleted(ChangeSet changes) {
     final category = _awaitingReveal;
     final namedId = _awaitingItemId;
-    _awaitingReveal = null;
-    _awaitingItemId = null;
+    _stopAwaiting();
     if (category == null) return;
 
     if (namedId != null) {
