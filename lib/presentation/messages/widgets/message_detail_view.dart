@@ -68,6 +68,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
       return;
     }
     if (!mounted) return;
+    _markReadInInbox();
 
     if (data == null) {
       setState(() {
@@ -298,6 +299,18 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
             : dataProvider.deleteMessage(message.id),
       ).then((_) => syncNotifier.syncMessages()),
     );
+  }
+
+  void _markReadInInbox() {
+    final inbox = ref.read(inboxProvider);
+    final id = widget.message.id;
+    if (!inbox.any((m) => m.id == id && !m.isRead)) {
+      return;
+    }
+    ref.read(inboxProvider.notifier).value = [
+      for (final m in inbox)
+        if (m.id == id) m.copyWith(isRead: true) else m,
+    ];
   }
 
   void _updateFilesInProvider(List<PocztaAttachment> files) {

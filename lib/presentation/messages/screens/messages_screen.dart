@@ -373,19 +373,7 @@ class _MessageListState extends ConsumerState<_MessageList> {
   }
 
   void _openDetail(BuildContext context, PocztaMessage message) {
-    if (folder == MessageFolder.inbox && !message.isRead) {
-      _markAsRead(message);
-    }
-
     unawaited(context.push(AppRoutes.messageView, extra: message));
-  }
-
-  void _markAsRead(PocztaMessage message) {
-    final inbox = ref.read(inboxProvider);
-    ref.read(inboxProvider.notifier).value = [
-      for (final m in inbox)
-        if (m.id == message.id) m.copyWith(isRead: true) else m,
-    ];
   }
 }
 

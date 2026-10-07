@@ -112,6 +112,63 @@ void main() {
     );
   });
 
+  testWidgets('opening an unread inbox message marks it read', (
+    tester,
+  ) async {
+    final unread = _message.copyWith(isRead: false);
+    late WidgetRef ref;
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(_prefs),
+          inboxProvider.overrideWithBuild((ref, _) => [unread]),
+          activeDataProviderProvider.overrideWithBuild(
+            (ref, _) => _BodyProvider(libraryMessageHtml),
+          ),
+        ],
+        child: MaterialApp(
+          home: Consumer(
+            builder: (context, widgetRef, _) {
+              ref = widgetRef;
+              return MessageDetailView(message: unread);
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(ref.read(inboxProvider).single.isRead, isTrue);
+    expect(ref.read(unreadCountProvider), 0);
+  });
+
+  testWidgets('a message that failed to load stays unread', (tester) async {
+    final unread = _message.copyWith(isRead: false);
+    late WidgetRef ref;
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(_prefs),
+          inboxProvider.overrideWithBuild((ref, _) => [unread]),
+          activeDataProviderProvider.overrideWithBuild(
+            (ref, _) => _FlakyProvider(),
+          ),
+        ],
+        child: MaterialApp(
+          home: Consumer(
+            builder: (context, widgetRef, _) {
+              ref = widgetRef;
+              return MessageDetailView(message: unread);
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(ref.read(inboxProvider).single.isRead, isFalse);
+  });
+
   testWidgets('a failed read shows an error with retry, never the preview', (
     tester,
   ) async {
