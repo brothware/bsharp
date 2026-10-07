@@ -12,6 +12,7 @@ const _serverErrorFloor = 500;
 const _clientErrorFloor = 400;
 const _successFloor = 200;
 const _redirectFloor = 300;
+const _secureScheme = 'https';
 const _payloadTooLarge = 413;
 const _uploadTimeout = Duration(seconds: 900);
 
@@ -284,12 +285,45 @@ class PocztaDataSource {
   Future<Result<void>> downloadFile(String url, String savePath) async {
     final baseUri = Uri.parse(_client.options.baseUrl);
     final target = baseUri.resolve(url);
-    if (target.scheme != baseUri.scheme ||
-        target.authority != baseUri.authority) {
-      return Result.failure(
-        UnknownFailure(message: 'Refusing to download from foreign host: $url'),
-      );
+    if (target.authority == baseUri.authority &&
+        target.scheme == baseUri.scheme) {
+      return _downloadWithSession(url, savePath);
     }
+    if (target.scheme == _secureScheme) {
+      return _downloadPresigned(target, savePath);
+    }
+    return Result.failure(
+      UnknownFailure(
+        message: 'Refusing to download over ${target.scheme}: $url',
+      ),
+    );
+  }
+
+  Future<Result<void>> _downloadPresigned(Uri target, String savePath) async {
+    try {
+      final response = await _client.downloadUri(
+        target,
+        savePath,
+        options: Options(
+          validateStatus: (status) => status != null,
+        ),
+      );
+      final status = response.statusCode ?? _clientErrorFloor;
+      if (status < _successFloor || status >= _redirectFloor) {
+        return Result.failure(
+          UnknownFailure(message: 'Attachment storage HTTP $status'),
+        );
+      }
+      return const Result.success(null);
+    } on DioException catch (e) {
+      return Result.failure(_failureOf(e));
+    }
+  }
+
+  Future<Result<void>> _downloadWithSession(
+    String url,
+    String savePath,
+  ) async {
     final result = await _call((options) async {
       try {
         return await _client.download(

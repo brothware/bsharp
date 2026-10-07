@@ -14,6 +14,7 @@ const _unauthorized = 401;
 const _ok = 200;
 const _payloadTooLarge = 413;
 const _uploadPath = '/api/messages/777/files';
+const _storageHost = 's3.waw.io.cloud.ovh.net';
 
 class _PocztaFake {
   bool expireOnce = false;
@@ -62,7 +63,8 @@ class _PocztaFake {
       expireOnce = false;
       return _respond(options, _unauthorized, _body(options, ''));
     }
-    if (options.path.startsWith('/files/')) {
+    if (options.path.startsWith('/files/') ||
+        options.uri.host == _storageHost) {
       return _respond(options, _ok, _body(options, 'content'));
     }
     const folders = ['inbox', 'sent', 'trash'];
@@ -384,16 +386,32 @@ void main() {
     expect(seen.where((o) => o.path.startsWith('/sso/')).length, 2);
   });
 
-  test('never sends the cookie to a foreign host', () async {
+  test('downloads a presigned file from storage without the cookie', () async {
     final (source, seen) = await _signedIn();
 
     final result = await source.downloadFile(
-      'https://evil.example/files/1',
+      'https://$_storageHost/poczta-2026/337/a.pdf?X-Amz-Signature=abc',
+      savePath,
+    );
+
+    expect(result, isA<Success<void>>());
+    final request = seen.last;
+    expect(request.uri.host, _storageHost);
+    expect(request.uri.queryParameters['X-Amz-Signature'], 'abc');
+    expect(request.headers.containsKey('Cookie'), isFalse);
+  });
+
+  test('refuses a foreign file over plain http', () async {
+    final (source, seen) = await _signedIn();
+    final requestsBefore = seen.length;
+
+    final result = await source.downloadFile(
+      'http://$_storageHost/poczta-2026/337/a.pdf',
       savePath,
     );
 
     expect(result, isA<Failure<void>>());
-    expect(seen, isEmpty);
+    expect(seen.length, requestsBefore);
   });
 
   test('never sends the cookie over another scheme', () async {
