@@ -263,19 +263,33 @@ void main() {
       expect(int.tryParse(response.data!.trim()), isNotNull);
     });
 
-    test('receivers search returns results', () async {
+    Future<List<dynamic>> searchReceivers(Map<String, Object> body) async {
       final response = await dio.post<List<dynamic>>(
         '/api/messages/receivers/search',
-        data: jsonEncode({'query': 'Kowalska', 'ids': <Object>[]}),
+        data: jsonEncode(body),
         options: Options(
           contentType: 'application/json',
           headers: {'Cookie': await ssoCookie()},
         ),
       );
+      return response.data!;
+    }
 
-      final first = response.data!.first as Map<String, dynamic>;
+    test('receivers search by query returns matches', () async {
+      final matches = await searchReceivers({'query': 'Kowalska'});
+
+      final first = matches.first as Map<String, dynamic>;
       expect(first['id'], isA<String>());
-      expect(first['name'], isA<String>());
+      expect(first['name'], 'Anna Kowalska');
+    });
+
+    test('receivers search with empty ids returns nothing', () async {
+      final matches = await searchReceivers({
+        'query': 'Kowalska',
+        'ids': <Object>[],
+      });
+
+      expect(matches, isEmpty);
     });
   });
 }

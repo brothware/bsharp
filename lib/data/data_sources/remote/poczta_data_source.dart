@@ -266,7 +266,7 @@ class PocztaDataSource {
 
   Future<Result<List<dynamic>>> searchReceivers(String query) async {
     const path = '/api/messages/receivers/search';
-    final result = await _post(path, {'query': query, 'ids': <Object>[]});
+    final result = await _post(path, {'query': query});
     return result.map((data) {
       if (data is List) {
         return data;

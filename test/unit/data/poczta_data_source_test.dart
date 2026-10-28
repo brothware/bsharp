@@ -236,13 +236,13 @@ void main() {
     expect(seen.where((o) => o.path == '/api/messages/inbox').length, 2);
   });
 
-  test('searches receivers with query and ids', () async {
+  test('searches receivers by query alone', () async {
     final (source, seen) = await _signedIn();
 
     await source.searchReceivers('Nowak');
 
     expect(seen.last.path, '/api/messages/receivers/search');
-    expect(seen.last.data, {'query': 'Nowak', 'ids': <Object>[]});
+    expect(seen.last.data, {'query': 'Nowak'});
   });
 
   test('sends a message with PUT', () async {

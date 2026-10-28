@@ -191,11 +191,17 @@ runs the SSO again once and replays the call. There is no CSRF token and no
 | Star / restore | `POST /api/messages/<id>/stared` / `/restore` with `{}` | ignored |
 | Receiver types | `POST /api/messages/receivers {}` | `{types}` |
 | Receivers of a type | `POST /api/messages/receivers {type}` | list, or `{users: [...]}` |
-| Search receivers | `POST /api/messages/receivers/search {query, ids}` | list |
+| Search receivers | `POST /api/messages/receivers/search {query}` | list |
+| Resolve receivers | `POST /api/messages/receivers/search {ids: ["user_<n>"]}` | only those ids |
 
 Not settled statically: the multipart field name, whether `read` marks the
 message read, and the exact id format in `odbiorcy` (bare digits are
 normalised to `user_<n>`).
+
+Since about 2026-10-27 `ids` in `receivers/search` is a filter, not a
+hint: `ids: []` answers `[]` whatever the query, `ids: null` is HTTP 500,
+and bare numeric ids match nothing. Searching by name must leave `ids`
+out.
 
 On 2026-10-04 the SSO, `unreadMessages` and the folder lists answered HTTP 500
 for the official app too: a server-side outage, not a protocol change.
