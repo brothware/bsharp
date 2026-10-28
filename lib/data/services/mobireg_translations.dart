@@ -307,3 +307,22 @@ String _normalizeTermLabel(String label) {
   if (value == null) return label;
   return matchNormCase(label, value);
 }
+
+const _receiverRoleMap = <String, String>{
+  'nauczyciel': 'teacher',
+  'wychowawca': 'homeroom teacher',
+  'dyrektor': 'principal',
+  'pedagog': 'school counsellor',
+  'sekretarz': 'secretary',
+  'sekretariat': 'secretary',
+  'bibliotekarz': 'librarian',
+  'psycholog': 'psychologist',
+  'logopeda': 'speech therapist',
+  'rodzic': 'parent',
+};
+
+String normalizeMobiregReceiverRole(String role) {
+  final trimmed = role.trim();
+  final canonical = _receiverRoleMap[trimmed.toLowerCase()];
+  return canonical == null ? trimmed : matchNormCase(trimmed, canonical);
+}

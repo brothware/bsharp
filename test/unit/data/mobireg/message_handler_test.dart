@@ -28,7 +28,7 @@ void main() {
       expect(messages.single.senderName, 'Agnieszka Nowak');
       expect(messages.single.isStarred, isTrue);
       expect(messages.single.isRead, isFalse);
-      expect(messages.single.recipients.single.role, 'rodzic');
+      expect(messages.single.recipients.single.role, 'parent');
     });
 
     test('the list text is only a preview, never the body', () {

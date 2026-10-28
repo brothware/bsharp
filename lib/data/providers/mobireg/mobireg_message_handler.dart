@@ -1,4 +1,5 @@
 import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/data/services/mobireg_translations.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -50,8 +51,12 @@ PocztaReceiver _receiverOf(Map<String, dynamic> json) {
   return PocztaReceiver(
     id: _receiverIdOf(json['id']),
     name: json['name'] as String? ?? '',
-    role: json['role'] as String?,
+    role: _roleOf(json['role']),
   );
+}
+
+String? _roleOf(Object? role) {
+  return role is String ? normalizeMobiregReceiverRole(role) : null;
 }
 
 String _receiverIdOf(Object? id) {
@@ -108,7 +113,7 @@ PocztaRecipient _recipientOf(Map<String, dynamic> json) {
   final readAt = json['read_at'] as String?;
   return PocztaRecipient(
     name: json['name'] as String? ?? '',
-    role: json['roleName'] as String?,
+    role: _roleOf(json['roleName']),
     readAt: readAt != null ? DateTime.tryParse(readAt) : null,
   );
 }

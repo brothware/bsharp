@@ -85,7 +85,7 @@ void main() {
       const PocztaReceiver(
         id: 'user_3',
         name: 'Anna Nowak',
-        role: 'Nauczyciel',
+        role: 'Teacher',
       ),
     );
   });
@@ -270,6 +270,17 @@ void main() {
     final receivers = await provider.searchReceivers('Nowak');
 
     expect(receivers.map((receiver) => receiver.id), ['user_201', 'user_202']);
+  });
+
+  test('receiver roles arrive in canonical English', () async {
+    server.receivers = <Object>[
+      {'id': 'user_201', 'name': 'Anna Nowak', 'role': 'nauczyciel'},
+    ];
+    await signedIn();
+
+    final receivers = await provider.searchReceivers('Nowak');
+
+    expect(receivers.single.role, 'teacher');
   });
 
   test('a receiver without an id is a FormatException', () async {
