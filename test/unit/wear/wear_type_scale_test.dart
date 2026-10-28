@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:bsharp/wear/wear_app.dart';
+import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('wear text theme floors', () {
-    test('no style in the wear text theme is below the 10sp floor', () {
+    test('no style in the wear text theme is below the 12sp floor', () {
       final theme = wearTheme();
       final textTheme = theme.textTheme;
       final styles = <String, TextStyle?>{
@@ -32,8 +33,10 @@ void main() {
         if (fontSize == null) continue;
         expect(
           fontSize,
-          greaterThanOrEqualTo(10),
-          reason: '${entry.key} is $fontSize, below the 10sp floor',
+          greaterThanOrEqualTo(12),
+          reason:
+              '${entry.key} is $fontSize, below the 12sp that WO-V14 '
+              'asks of essential text',
         );
       }
     });
@@ -47,10 +50,10 @@ void main() {
       expect(textTheme.bodyLarge?.fontSize, 14);
       expect(textTheme.bodyMedium?.fontSize, 13);
       expect(textTheme.labelMedium?.fontSize, 12);
-      expect(textTheme.labelSmall?.fontSize, 10);
+      expect(textTheme.labelSmall?.fontSize, 12);
     });
 
-    test('no lib/wear source file has a fontSize literal below 10', () {
+    test('no lib/wear source file has a fontSize literal below 12', () {
       final wearDir = Directory('lib/wear');
       final offenders = <String>[];
       final pattern = RegExp(r'fontSize:\s*(-?\d+(?:\.\d+)?)');
@@ -60,7 +63,7 @@ void main() {
         final content = entity.readAsStringSync();
         for (final match in pattern.allMatches(content)) {
           final value = double.parse(match.group(1)!);
-          if (value < 10) {
+          if (value < 12) {
             offenders.add('${entity.path}: fontSize: ${match.group(1)}');
           }
         }
@@ -69,8 +72,12 @@ void main() {
       expect(
         offenders,
         isEmpty,
-        reason: 'fontSize literals below the 10sp floor: $offenders',
+        reason: 'fontSize literals below the 12sp floor: $offenders',
       );
+    });
+
+    test('fitted text never shrinks below the 12sp floor', () {
+      expect(wearMinFontSizeSp, 12);
     });
   });
 }

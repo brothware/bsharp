@@ -4,7 +4,7 @@ import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-const _style = TextStyle(fontSize: 14);
+const _style = TextStyle(fontSize: 16);
 const _longWord = 'Nadchodzace';
 
 double _naturalWidth(String text, TextStyle style) {

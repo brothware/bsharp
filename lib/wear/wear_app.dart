@@ -41,7 +41,7 @@ ThemeData wearTheme() {
     bodyLarge: base.textTheme.bodyLarge?.copyWith(fontSize: 14),
     bodyMedium: base.textTheme.bodyMedium?.copyWith(fontSize: 13),
     labelMedium: base.textTheme.labelMedium?.copyWith(fontSize: 12),
-    labelSmall: base.textTheme.labelSmall?.copyWith(fontSize: 10),
+    labelSmall: base.textTheme.labelSmall?.copyWith(fontSize: 12),
   );
   final wearColorScheme = base.colorScheme.copyWith(
     surface: _wearSurface,

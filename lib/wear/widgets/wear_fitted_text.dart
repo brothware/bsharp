@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-const double wearMinFontSizeSp = 10;
+const double wearMinFontSizeSp = 12;
 const double _stepGranularitySp = 0.5;
 
 class WearFittedText extends StatelessWidget {
