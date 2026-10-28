@@ -65,6 +65,7 @@ class _FakeInspector extends AttachmentInspector {
 
 class _MailProvider extends DemoDataProvider {
   final sentTitles = <String>[];
+  final sentRecipients = <List<String>>[];
   final uploadBatches = <List<String>>[];
   final attempts = <String>[];
   final scripted = <String, List<AttachmentUploadFailure>>{};
@@ -92,6 +93,7 @@ class _MailProvider extends DemoDataProvider {
       throw const MessagingException(SessionExpired());
     }
     sentTitles.add(title);
+    sentRecipients.add(recipientIds);
     if (answersNoId) {
       throw const SentWithoutIdException();
     }
@@ -129,6 +131,7 @@ PocztaMessage _received() {
     id: 5,
     title: 'Zebranie',
     senderName: 'Anna Nowak',
+    sender: const PocztaReceiver(id: 'user_3', name: 'Anna Nowak'),
     sendTime: DateTime(2026, 10),
     isRead: true,
     isStarred: false,
@@ -451,6 +454,16 @@ void main() {
     ]);
     expect(find.byType(ComposeMessageView), findsNothing);
     expect(find.text('Message sent'), findsOneWidget);
+  });
+
+  testWidgets('a reply goes to the sender of the message', (tester) async {
+    await _openCompose(tester, provider: provider, picker: picker);
+
+    await _tapSend(tester);
+
+    expect(provider.sentRecipients, [
+      ['user_3'],
+    ]);
   });
 
   testWidgets('uploads show progress and disable sending', (tester) async {

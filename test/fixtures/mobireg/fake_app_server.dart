@@ -61,7 +61,7 @@ class FakeAppServer {
       'content': 'Tresc',
       'read_at': null,
       'stared': false,
-      'author': {'name': 'Anna Nowak'},
+      'author': {'id': 3, 'name': 'Anna Nowak', 'role': 'Nauczyciel'},
     },
   ];
 

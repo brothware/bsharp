@@ -77,6 +77,28 @@ void main() {
     expect(container.read(inboxProvider).single.id, 20001);
   });
 
+  test('an inbox message knows who to reply to', () async {
+    await signedIn();
+
+    expect(
+      container.read(inboxProvider).single.sender,
+      const PocztaReceiver(
+        id: 'user_3',
+        name: 'Anna Nowak',
+        role: 'Nauczyciel',
+      ),
+    );
+  });
+
+  test('an author without an id leaves no one to reply to', () async {
+    server.inbox.single['author'] = {'name': 'Anna Nowak'};
+    await signedIn();
+
+    final message = container.read(inboxProvider).single;
+    expect(message.senderName, 'Anna Nowak');
+    expect(message.sender, isNull);
+  });
+
   test('two syncs sign in to the mailbox once', () async {
     await signedIn();
     await provider.authenticate(school: 'sp1', login: 'p', password: 's');

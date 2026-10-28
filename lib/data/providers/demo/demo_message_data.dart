@@ -6,11 +6,14 @@ String _l({required String pl, required String en}) {
   return locale == AppLocale.pl ? pl : en;
 }
 
+PocztaReceiver _demoSender(String name) => PocztaReceiver(id: name, name: name);
+
 List<PocztaMessage> buildDemoInbox(DateTime now) => [
   PocztaMessage(
     id: 1,
     title: _l(pl: 'Wycieczka klasowa', en: 'Class trip'),
     senderName: 'Anna Nowak',
+    sender: _demoSender('Anna Nowak'),
     sendTime: now.subtract(const Duration(hours: 2)),
     isRead: false,
     isStarred: false,
@@ -23,6 +26,7 @@ List<PocztaMessage> buildDemoInbox(DateTime now) => [
     id: 2,
     title: _l(pl: 'Oceny semestralne', en: 'Semester grades'),
     senderName: 'Marek Kowalczyk',
+    sender: _demoSender('Marek Kowalczyk'),
     sendTime: now.subtract(const Duration(hours: 5)),
     isRead: false,
     isStarred: true,
@@ -35,6 +39,7 @@ List<PocztaMessage> buildDemoInbox(DateTime now) => [
     id: 3,
     title: _l(pl: 'Konkurs matematyczny', en: 'Maths competition'),
     senderName: 'Anna Nowak',
+    sender: _demoSender('Anna Nowak'),
     sendTime: now.subtract(const Duration(days: 1)),
     isRead: true,
     isStarred: false,
@@ -47,6 +52,7 @@ List<PocztaMessage> buildDemoInbox(DateTime now) => [
     id: 4,
     title: _l(pl: 'Zebranie rodziców', en: 'Parent meeting'),
     senderName: 'Dyrekcja',
+    sender: _demoSender('Dyrekcja'),
     sendTime: now.subtract(const Duration(days: 2)),
     isRead: true,
     isStarred: false,
@@ -59,6 +65,7 @@ List<PocztaMessage> buildDemoInbox(DateTime now) => [
     id: 5,
     title: _l(pl: 'Zadanie dodatkowe z fizyki', en: 'Extra physics assignment'),
     senderName: 'Tomasz Kamiński',
+    sender: _demoSender('Tomasz Kamiński'),
     sendTime: now.subtract(const Duration(days: 3)),
     isRead: true,
     isStarred: false,
@@ -71,6 +78,7 @@ List<PocztaMessage> buildDemoInbox(DateTime now) => [
     id: 6,
     title: _l(pl: 'Ubezpieczenie szkolne', en: 'School insurance'),
     senderName: 'Sekretariat',
+    sender: _demoSender('Sekretariat'),
     sendTime: now.subtract(const Duration(days: 5)),
     isRead: true,
     isStarred: false,
@@ -86,6 +94,7 @@ List<PocztaMessage> buildDemoSent(DateTime now) => [
     id: 101,
     title: _l(pl: 'Re: Wycieczka klasowa', en: 'Re: Class trip'),
     senderName: 'Jan Kowalski',
+    sender: _demoSender('Jan Kowalski'),
     sendTime: now.subtract(const Duration(hours: 1)),
     isRead: true,
     isStarred: false,
@@ -98,6 +107,7 @@ List<PocztaMessage> buildDemoSent(DateTime now) => [
     id: 102,
     title: _l(pl: 'Pytanie o ocenę', en: 'Question about grade'),
     senderName: 'Jan Kowalski',
+    sender: _demoSender('Jan Kowalski'),
     sendTime: now.subtract(const Duration(days: 1)),
     isRead: true,
     isStarred: false,
@@ -113,6 +123,7 @@ List<PocztaMessage> buildDemoTrash(DateTime now) => [
     id: 201,
     title: _l(pl: 'Newsletter szkolny', en: 'School newsletter'),
     senderName: 'Sekretariat',
+    sender: _demoSender('Sekretariat'),
     sendTime: now.subtract(const Duration(days: 10)),
     isRead: true,
     isStarred: false,

@@ -11,6 +11,7 @@ abstract class PocztaMessage with _$PocztaMessage {
     required DateTime sendTime,
     required bool isRead,
     required bool isStarred,
+    PocztaReceiver? sender,
     String? preview,
     String? content,
     List<PocztaAttachment>? files,

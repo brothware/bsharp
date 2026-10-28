@@ -13,6 +13,9 @@ List<PocztaMessage> parsePocztaMessages(List<dynamic> data, String folder) {
       senderName: author is Map<String, dynamic>
           ? author['name'] as String? ?? ''
           : '',
+      sender: author is Map<String, dynamic> && author['id'] != null
+          ? _receiverOf(author)
+          : null,
       sendTime: _dateOf(item, view),
       preview: item['content'] as String?,
       isRead: item['read_at'] != null,
@@ -40,13 +43,15 @@ PocztaMessageDetail parsePocztaMessageDetail(Map<String, dynamic> item) {
 }
 
 List<PocztaReceiver> parsePocztaReceivers(List<dynamic> data) {
-  return _objectsOf(data, 'poczta receivers/search').map((item) {
-    return PocztaReceiver(
-      id: _receiverIdOf(item['id']),
-      name: item['name'] as String? ?? '',
-      role: item['role'] as String?,
-    );
-  }).toList();
+  return _objectsOf(data, 'poczta receivers/search').map(_receiverOf).toList();
+}
+
+PocztaReceiver _receiverOf(Map<String, dynamic> json) {
+  return PocztaReceiver(
+    id: _receiverIdOf(json['id']),
+    name: json['name'] as String? ?? '',
+    role: json['role'] as String?,
+  );
 }
 
 String _receiverIdOf(Object? id) {

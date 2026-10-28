@@ -71,9 +71,9 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
       _titleController.text = t.messages.replyPrefix(
         title: widget.replyTo!.title,
       );
-      final sender = widget.replyTo!.senderName;
-      if (sender.isNotEmpty) {
-        _selectedRecipients.add(PocztaReceiver(id: 'user_reply', name: sender));
+      final sender = widget.replyTo!.sender;
+      if (sender != null) {
+        _selectedRecipients.add(sender);
       }
     }
     if (widget.prefilledRecipient != null) {

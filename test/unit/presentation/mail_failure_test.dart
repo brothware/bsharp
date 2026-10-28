@@ -61,6 +61,7 @@ PocztaMessage _message({int id = 1, List<PocztaAttachment>? files}) {
     id: id,
     title: 'Zebranie',
     senderName: 'Anna Nowak',
+    sender: const PocztaReceiver(id: 'user_3', name: 'Anna Nowak'),
     sendTime: DateTime(2026, 10),
     isRead: true,
     isStarred: false,
