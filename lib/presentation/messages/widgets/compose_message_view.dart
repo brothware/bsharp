@@ -485,7 +485,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
   ) async {
     try {
       final messageId = await dataProvider.sendMessage(
-        recipientIds: _selectedRecipients.map((r) => r.recipientId).toList(),
+        recipientIds: _selectedRecipients.map((r) => r.id).toList(),
         title: _titleController.text,
         content: _contentController.toHtml(),
         previousMessageId: widget.replyTo?.id,

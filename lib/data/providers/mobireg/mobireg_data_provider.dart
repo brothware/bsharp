@@ -518,20 +518,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   @override
   Future<List<PocztaReceiver>> searchReceivers(String query) async {
     final data = _mailValue(await _mailbox().searchReceivers(query));
-    return [
-      for (final item in data)
-        if (item is Map<String, dynamic>)
-          PocztaReceiver(
-            id: (item['id'] ?? '').toString(),
-            name: (item['name'] ?? '') as String,
-            role: item['role'] as String?,
-          )
-        else
-          throw FormatException(
-            'Poczta receivers/search: expected objects',
-            item.runtimeType,
-          ),
-    ];
+    return parsePocztaReceivers(data);
   }
 
   @override

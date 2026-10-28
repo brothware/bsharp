@@ -39,6 +39,26 @@ PocztaMessageDetail parsePocztaMessageDetail(Map<String, dynamic> item) {
   );
 }
 
+List<PocztaReceiver> parsePocztaReceivers(List<dynamic> data) {
+  return _objectsOf(data, 'poczta receivers/search').map((item) {
+    return PocztaReceiver(
+      id: _receiverIdOf(item['id']),
+      name: item['name'] as String? ?? '',
+      role: item['role'] as String?,
+    );
+  }).toList();
+}
+
+String _receiverIdOf(Object? id) {
+  const userPrefix = 'user_';
+  final raw = switch (id) {
+    int() => '$id',
+    String() when id.isNotEmpty => id,
+    _ => throw FormatException('Poczta receiver has no usable id', id),
+  };
+  return raw.startsWith(userPrefix) ? raw : '$userPrefix$raw';
+}
+
 PocztaAttachment _attachmentOf(Map<String, dynamic> json) {
   return PocztaAttachment(
     name: json['name'] as String? ?? '',

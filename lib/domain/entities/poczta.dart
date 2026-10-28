@@ -51,8 +51,4 @@ abstract class PocztaReceiver with _$PocztaReceiver {
     required String name,
     String? role,
   }) = _PocztaReceiver;
-
-  const PocztaReceiver._();
-
-  String get recipientId => id.startsWith('user_') ? id : 'user_$id';
 }

@@ -238,6 +238,27 @@ void main() {
     await expectLater(provider.readMessage(20001), throwsFormatException);
   });
 
+  test('a receiver id comes back ready to send to', () async {
+    server.receivers = <Object>[
+      {'id': 201, 'name': 'Anna Nowak', 'role': 'Nauczyciel'},
+      {'id': 'user_202', 'name': 'Jan Kowal', 'role': 'Nauczyciel'},
+    ];
+    await signedIn();
+
+    final receivers = await provider.searchReceivers('Nowak');
+
+    expect(receivers.map((receiver) => receiver.id), ['user_201', 'user_202']);
+  });
+
+  test('a receiver without an id is a FormatException', () async {
+    server.receivers = <Object>[
+      {'name': 'Anna Nowak', 'role': 'Nauczyciel'},
+    ];
+    await signedIn();
+
+    await expectLater(provider.searchReceivers('Nowak'), throwsFormatException);
+  });
+
   test('a receiver that is not an object is a FormatException', () async {
     server.receivers = <Object>['Nowak'];
     await signedIn();
