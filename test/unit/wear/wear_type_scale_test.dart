@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bsharp/presentation/common/theme/app_theme.dart';
 import 'package:bsharp/wear/wear_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('wear text theme floors', () {
     test('no style in the wear text theme is below the 10sp floor', () {
-      final theme = wearTheme(AppTheme.light());
+      final theme = wearTheme();
       final textTheme = theme.textTheme;
       final styles = <String, TextStyle?>{
         'displayLarge': textTheme.displayLarge,
@@ -40,7 +39,7 @@ void main() {
     });
 
     test('the essential wear roles match the specified scale', () {
-      final theme = wearTheme(AppTheme.light());
+      final theme = wearTheme();
       final textTheme = theme.textTheme;
 
       expect(textTheme.displaySmall?.fontSize, 22);

@@ -4,9 +4,7 @@ import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
-import 'package:bsharp/domain/theme_labels.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_child_mode_screen.dart';
 import 'package:bsharp/wear/screens/wear_language_screen.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
@@ -40,8 +38,6 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
   Widget build(BuildContext context) {
     final childState = ref.watch(childModeProvider);
     final allEntries = ref.watch(allStudentsProvider);
-    final themeMode = ref.watch(themeModeProvider);
-    final theme = Theme.of(context);
 
     return WearScaffold(
       scrollController: _scrollController,
@@ -97,21 +93,6 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
                       ),
                     ),
                     _WearSettingsItem(
-                      icon: Icons.brightness_6,
-                      label: t.settings.theme,
-                      trailing: Text(
-                        themeModeLabel(themeMode),
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => const _WearThemeScreen(),
-                        ),
-                      ),
-                    ),
-                    _WearSettingsItem(
                       icon: Icons.language,
                       label: t.settings.language,
                       onTap: () => Navigator.of(context).push(
@@ -161,87 +142,6 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
     // app shows underneath. Without this the confirmation closes onto the
     // settings of an account that no longer exists.
     navigator.popUntil((route) => route.isFirst);
-  }
-}
-
-class _WearThemeScreen extends ConsumerStatefulWidget {
-  const _WearThemeScreen();
-
-  @override
-  ConsumerState<_WearThemeScreen> createState() => _WearThemeScreenState();
-}
-
-class _WearThemeScreenState extends ConsumerState<_WearThemeScreen> {
-  final _scrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final current = ref.watch(themeModeProvider);
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      body: WearScaffold(
-        scrollController: _scrollController,
-        child: ListView(
-          controller: _scrollController,
-          children: wearScaledChildren(_scrollController, [
-            for (final mode in wearThemeModes)
-              InkWell(
-                borderRadius: BorderRadius.circular(8),
-                onTap: () {
-                  unawaited(
-                    ref.read(themeModeProvider.notifier).setThemeMode(mode),
-                  );
-                  Navigator.of(context).pop();
-                },
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 48),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 10,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          themeModeIcon(mode),
-                          size: 18,
-                          color: mode == current
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.onSurfaceVariant,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            themeModeLabel(mode),
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              fontWeight: mode == current
-                                  ? FontWeight.bold
-                                  : null,
-                            ),
-                          ),
-                        ),
-                        if (mode == current)
-                          Icon(
-                            Icons.check,
-                            size: 16,
-                            color: theme.colorScheme.primary,
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-          ]),
-        ),
-      ),
-    );
   }
 }
 

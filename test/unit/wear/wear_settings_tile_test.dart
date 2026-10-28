@@ -3,7 +3,7 @@ import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
-import 'package:bsharp/domain/theme_labels.dart';
+import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_settings_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
@@ -233,46 +233,8 @@ void main() {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
-      expect(find.byIcon(Icons.brightness_6), findsOneWidget);
       expect(find.byIcon(Icons.sync), findsOneWidget);
       expect(find.byIcon(Icons.logout), findsOneWidget);
-    });
-
-    testWidgets('tapping theme opens a theme selection screen', (
-      tester,
-    ) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
-
-      await tester.tap(find.byIcon(Icons.brightness_6));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Light'), findsOneWidget);
-      expect(find.text('Dark'), findsOneWidget);
-      expect(find.byIcon(Icons.light_mode), findsOneWidget);
-      expect(find.byIcon(Icons.dark_mode), findsOneWidget);
-      expect(
-        find.text('System'),
-        findsNothing,
-        reason:
-            'a watch reports night mode off and offers no light/dark switch, '
-            'so system just means a white screen the user did not ask for',
-      );
-    });
-
-    testWidgets('selecting a theme mode pops the selection screen', (
-      tester,
-    ) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
-
-      await tester.tap(find.byIcon(Icons.brightness_6));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('Dark'));
-      await tester.pumpAndSettle();
-
-      expect(find.byIcon(Icons.settings), findsOneWidget);
     });
 
     testWidgets(
@@ -337,27 +299,14 @@ void main() {
         expect(statusRect.left, greaterThanOrEqualTo(0));
       },
     );
-    testWidgets('the theme row names the mode in force', (tester) async {
+    testWidgets('settings offer no theme choice on the watch', (
+      tester,
+    ) async {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
-      final container = ProviderScope.containerOf(
-        tester.element(find.byType(WearSettingsTile)),
-      );
-
-      for (final mode in wearThemeModes) {
-        await container.read(themeModeProvider.notifier).setThemeMode(mode);
-        await tester.pump();
-
-        expect(
-          find.text(themeModeLabel(mode)),
-          findsOneWidget,
-          reason:
-              'choosing a mode whose look matches the current one is '
-              'indistinguishable from a dead control unless the row says '
-              'which mode is in force',
-        );
-      }
+      expect(find.text(t.settings.theme), findsNothing);
+      expect(find.byIcon(Icons.brightness_6), findsNothing);
     });
   });
 }

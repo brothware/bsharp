@@ -6,7 +6,6 @@ import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/app_theme.dart';
-import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
 import 'package:bsharp/wear/screens/wear_reauth_screen.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
@@ -15,8 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const _wearDarkSurface = Color(0xFF000000);
-const _wearLightSurface = Color(0xFFFAFAFA);
+const _wearSurface = Color(0xFF000000);
 const _trackAlpha = 0.24;
 
 /// The wear theme flattens every surface container onto the background for
@@ -35,7 +33,8 @@ class WearScrollBehavior extends MaterialScrollBehavior {
   }
 }
 
-ThemeData wearTheme(ThemeData base) {
+ThemeData wearTheme() {
+  final base = AppTheme.dark();
   final wearText = base.textTheme.copyWith(
     displaySmall: base.textTheme.displaySmall?.copyWith(fontSize: 22),
     titleMedium: base.textTheme.titleMedium?.copyWith(fontSize: 16),
@@ -44,16 +43,14 @@ ThemeData wearTheme(ThemeData base) {
     labelMedium: base.textTheme.labelMedium?.copyWith(fontSize: 12),
     labelSmall: base.textTheme.labelSmall?.copyWith(fontSize: 10),
   );
-  final wearColorScheme = base.brightness == Brightness.dark
-      ? base.colorScheme.copyWith(
-          surface: _wearDarkSurface,
-          surfaceContainerLowest: _wearDarkSurface,
-          surfaceContainerLow: _wearDarkSurface,
-          surfaceContainer: _wearDarkSurface,
-          surfaceContainerHigh: _wearDarkSurface,
-          surfaceContainerHighest: _wearDarkSurface,
-        )
-      : base.colorScheme.copyWith(surface: _wearLightSurface);
+  final wearColorScheme = base.colorScheme.copyWith(
+    surface: _wearSurface,
+    surfaceContainerLowest: _wearSurface,
+    surfaceContainerLow: _wearSurface,
+    surfaceContainer: _wearSurface,
+    surfaceContainerHigh: _wearSurface,
+    surfaceContainerHighest: _wearSurface,
+  );
   return base.copyWith(
     colorScheme: wearColorScheme,
     // ThemeData fixes the scaffold colour when it is built, so swapping the
@@ -102,7 +99,6 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = ref.watch(themeModeProvider);
     ref.watch(localeProvider);
     final authAsync = ref.watch(authStateProvider);
 
@@ -138,9 +134,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
       title: 'BSharp',
       debugShowCheckedModeBanner: false,
       scrollBehavior: WearScrollBehavior(),
-      theme: wearTheme(AppTheme.light()),
-      darkTheme: wearTheme(AppTheme.dark()),
-      themeMode: themeMode,
+      theme: wearTheme(),
       locale: TranslationProvider.of(context).flutterLocale,
       supportedLocales: AppLocaleUtils.supportedLocales,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,

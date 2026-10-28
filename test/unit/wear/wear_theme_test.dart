@@ -45,74 +45,51 @@ void main() {
       final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
 
       expect(
-        app.darkTheme!.scaffoldBackgroundColor,
+        app.theme!.scaffoldBackgroundColor,
         const Color(0xFF000000),
         reason:
             'the theme flattens every surface to black but left the '
             'scaffold on the base colour, so it showed at the foot of any '
             'screen whose content did not reach the bottom',
       );
-      expect(
-        app.theme!.scaffoldBackgroundColor,
-        app.theme!.colorScheme.surface,
-      );
     });
 
-    testWidgets('dark wear theme paints surface true black', (tester) async {
+    testWidgets('wear theme paints every surface true black', (tester) async {
       await tester.pumpWidget(await _buildApp());
       await tester.pump();
 
-      final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
-      expect(app.darkTheme!.colorScheme.surface, const Color(0xFF000000));
-      expect(
-        app.darkTheme!.colorScheme.surfaceContainerLowest,
-        const Color(0xFF000000),
-      );
-      expect(
-        app.darkTheme!.colorScheme.surfaceContainerLow,
-        const Color(0xFF000000),
-      );
-      expect(
-        app.darkTheme!.colorScheme.surfaceContainer,
-        const Color(0xFF000000),
-      );
-      expect(
-        app.darkTheme!.colorScheme.surfaceContainerHigh,
-        const Color(0xFF000000),
-      );
-      expect(
-        app.darkTheme!.colorScheme.surfaceContainerHighest,
-        const Color(0xFF000000),
-      );
+      final scheme = tester
+          .widget<MaterialApp>(find.byType(MaterialApp))
+          .theme!
+          .colorScheme;
+      for (final surface in [
+        scheme.surface,
+        scheme.surfaceContainerLowest,
+        scheme.surfaceContainerLow,
+        scheme.surfaceContainer,
+        scheme.surfaceContainerHigh,
+        scheme.surfaceContainerHighest,
+      ]) {
+        expect(surface, const Color(0xFF000000));
+      }
     });
 
-    testWidgets('light wear theme surface is a clean near-white', (
-      tester,
-    ) async {
-      await tester.pumpWidget(await _buildApp());
-      await tester.pump();
+    for (final mode in ThemeMode.values) {
+      testWidgets('a stored $mode still renders black (WO-V13)', (
+        tester,
+      ) async {
+        await tester.pumpWidget(await _buildApp());
+        await tester.pump();
+        final container = ProviderScope.containerOf(
+          tester.element(find.byType(BSharpWearApp)),
+        );
+        await container.read(themeModeProvider.notifier).setThemeMode(mode);
+        await tester.pump();
 
-      final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
-      expect(
-        app.theme!.colorScheme.surface.computeLuminance(),
-        greaterThan(0.8),
-      );
-    });
-
-    testWidgets('ThemeMode.system is passed through, not rewritten', (
-      tester,
-    ) async {
-      final widget = await _buildApp();
-      await tester.pumpWidget(widget);
-      await tester.pump();
-
-      final element = tester.element(find.byType(BSharpWearApp));
-      final container = ProviderScope.containerOf(element);
-      final providerValue = container.read(themeModeProvider);
-
-      final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
-      expect(providerValue, ThemeMode.system);
-      expect(app.themeMode, ThemeMode.system);
-    });
+        final context = tester.element(find.byType(Scaffold).first);
+        expect(Theme.of(context).colorScheme.surface, const Color(0xFF000000));
+        expect(Theme.of(context).brightness, Brightness.dark);
+      });
+    }
   });
 }

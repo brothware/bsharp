@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:bsharp/presentation/common/theme/app_theme.dart';
 import 'package:bsharp/wear/wear_app.dart';
 import 'package:bsharp/wear/widgets/wear_edge_scrollbar.dart';
 import 'package:flutter/material.dart';
@@ -52,10 +51,7 @@ Future<WearOsScrollbar> _pumpBar(WidgetTester tester, ThemeData theme) async {
 
 void main() {
   group('WearEdgeScrollbar', () {
-    for (final (name, theme) in [
-      ('dark', wearTheme(AppTheme.dark())),
-      ('light', wearTheme(AppTheme.light())),
-    ]) {
+    for (final (name, theme) in [('wear', wearTheme())]) {
       testWidgets('$name: the track reads against the surface behind it', (
         tester,
       ) async {
