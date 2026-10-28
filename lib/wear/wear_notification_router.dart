@@ -13,6 +13,8 @@ import 'package:bsharp/wear/screens/wear_tests_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_section_route.dart';
 import 'package:flutter/material.dart';
 
+const Set<ChangeCategory> _sectionCategories = {ChangeCategory.bulletins};
+
 WidgetBuilder? wearScreenBuilderForCategory(ChangeCategory? category) =>
     switch (category) {
       ChangeCategory.grades => (_) => const WearGradesDetailScreen(),
@@ -40,7 +42,11 @@ class WearNotificationRouter extends NotificationTapHandler {
     if (context == null) return false;
 
     navigatorKey.currentState?.popUntil((route) => route.isFirst);
-    pushWearScreen(context, builder);
+    if (_sectionCategories.contains(category)) {
+      pushWearSection(context, builder);
+    } else {
+      pushWearScreen(context, builder);
+    }
     return true;
   }
 

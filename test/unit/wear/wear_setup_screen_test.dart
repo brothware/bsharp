@@ -599,4 +599,117 @@ void main() {
       });
     });
   }
+
+  group('leaving setup (WO-V3)', () {
+    Future<void> swipeRight(WidgetTester tester) async {
+      await tester.dragFrom(const Offset(5, 200), const Offset(300, 0));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('a swipe on a credential step goes back one step', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_buildApp());
+      await _chooseMobireg(tester);
+      await tester.pumpAndSettle();
+      expect(find.byType(TextField), findsOneWidget);
+
+      await swipeRight(tester);
+
+      expect(find.text('Mobireg'), findsOneWidget);
+      expect(find.byType(TextField), findsNothing);
+    });
+
+    testWidgets('a swipe on the provider list returns to the welcome', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_buildApp());
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Add account'));
+      await tester.pumpAndSettle();
+
+      await swipeRight(tester);
+
+      expect(find.text('No accounts yet'), findsOneWidget);
+    });
+
+    testWidgets('back on a credential step goes back one step', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_buildApp());
+      await _chooseMobireg(tester);
+      await tester.pumpAndSettle();
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Mobireg'),
+        findsOneWidget,
+        reason: 'back on the first credential step closed the whole app',
+      );
+    });
+
+    testWidgets('a swipe on the welcome closes the app', (tester) async {
+      final calls = <String>[];
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          calls.add(call.method);
+          return null;
+        },
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
+      );
+      await tester.pumpWidget(_buildApp());
+      await tester.pumpAndSettle();
+
+      await swipeRight(tester);
+
+      expect(calls, contains('SystemNavigator.pop'));
+    });
+
+    testWidgets('a swipe on adding another account closes setup', (
+      tester,
+    ) async {
+      final storage = CredentialStorage(store: FakeKeyValueStore());
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            credentialStorageProvider.overrideWithValue(storage),
+            accountStorageProvider.overrideWithValue(
+              AccountStorage(store: FakeKeyValueStore()),
+            ),
+            wearScreenShapeProvider.overrideWith(
+              (_) => WearScreenShape.rectangular,
+            ),
+          ],
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) => TextButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const WearSetupScreen(addingAnother: true),
+                  ),
+                ),
+                child: const Text('settings'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('settings'));
+      await tester.pumpAndSettle();
+      expect(find.text('Mobireg'), findsOneWidget);
+
+      await swipeRight(tester);
+
+      expect(find.text('settings'), findsOneWidget);
+      expect(find.byType(WearSetupScreen), findsNothing);
+    });
+  });
 }

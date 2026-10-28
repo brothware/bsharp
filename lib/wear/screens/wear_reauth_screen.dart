@@ -8,6 +8,7 @@ import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/auth/reauthenticate.dart';
 import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -97,48 +98,50 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      body: WearScaffold(
-        scrollController: _scrollController,
-        child: Builder(
-          builder: (context) => ListView(
-            controller: _scrollController,
-            padding: wearListPadding(WearDisplayScope.of(context)),
-            children: [
-              Text(
-                t.auth.reauthTitle,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleSmall,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                t.auth.reauthMessage,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+    return WearSwipeDismiss(
+      child: Scaffold(
+        body: WearScaffold(
+          scrollController: _scrollController,
+          child: Builder(
+            builder: (context) => ListView(
+              controller: _scrollController,
+              padding: wearListPadding(WearDisplayScope.of(context)),
+              children: [
+                Text(
+                  t.auth.reauthTitle,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleSmall,
                 ),
-              ),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                autocorrect: false,
-                textAlign: TextAlign.center,
-                textInputAction: TextInputAction.done,
-                onSubmitted: (_) => _submit(),
-                decoration: InputDecoration(
-                  labelText: t.auth.password,
-                  errorText: _errorMessage,
-                  errorMaxLines: 3,
-                  isDense: true,
+                const SizedBox(height: 4),
+                Text(
+                  t.auth.reauthMessage,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
-                style: theme.textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: _isSubmitting ? null : _submit,
-                child: Text(t.auth.login),
-              ),
-            ],
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  autocorrect: false,
+                  textAlign: TextAlign.center,
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (_) => _submit(),
+                  decoration: InputDecoration(
+                    labelText: t.auth.password,
+                    errorText: _errorMessage,
+                    errorMaxLines: 3,
+                    isDense: true,
+                  ),
+                  style: theme.textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 8),
+                FilledButton(
+                  onPressed: _isSubmitting ? null : _submit,
+                  child: Text(t.auth.login),
+                ),
+              ],
+            ),
           ),
         ),
       ),

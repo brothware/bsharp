@@ -15,7 +15,9 @@ import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_pinned_header.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -107,13 +109,35 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     super.dispose();
   }
 
+  _SetupStep? get _previousStep {
+    final credentialIndex = _credentialSteps.indexOf(_step);
+    return switch (_step) {
+      _SetupStep.welcome => null,
+      _SetupStep.provider => widget.addingAnother ? null : _SetupStep.welcome,
+      _SetupStep.studentPicker => _SetupStep.password,
+      _ when credentialIndex == 0 => _SetupStep.provider,
+      _ => _credentialSteps[credentialIndex - 1],
+    };
+  }
+
   void _goBack() {
-    final index = _credentialSteps.indexOf(_step);
-    if (index < 0) return;
+    final previous = _previousStep;
+    if (previous == null) {
+      _leaveSetup();
+      return;
+    }
     setState(() {
       _errorMessage = null;
-      _step = index == 0 ? _SetupStep.provider : _credentialSteps[index - 1];
+      _step = previous;
     });
+  }
+
+  void _leaveSetup() {
+    if (widget.addingAnother) {
+      Navigator.of(context).pop();
+    } else {
+      unawaited(SystemNavigator.pop());
+    }
   }
 
   Future<void> _selectProvider(SchoolDataProvider provider) async {
@@ -246,6 +270,21 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return PopScope(
+      canPop: _previousStep == null,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          _goBack();
+        }
+      },
+      child: WearSwipeDismiss(
+        onDismiss: _goBack,
+        child: _buildStep(),
+      ),
+    );
+  }
+
+  Widget _buildStep() {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: WearScaffold(

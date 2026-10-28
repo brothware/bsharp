@@ -110,6 +110,22 @@ void main() {
     );
   });
 
+  testWidgets('a swipe closes the sign-in-again screen', (tester) async {
+    final (container, _) = (await tester.runAsync(
+      () => _container(_ProbingProvider(accepts: true)),
+    ))!;
+    await tester.pumpWidget(_app(container));
+    await tester.pumpAndSettle();
+    container.read(reauthRequiredProvider.notifier).value = true;
+    await tester.pumpAndSettle();
+
+    await tester.dragFrom(const Offset(5, 200), const Offset(300, 0));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sign in again'), findsNothing);
+    expect(find.text('Home'), findsOneWidget);
+  });
+
   testWidgets('a rejected password stays on the screen with an error', (
     tester,
   ) async {

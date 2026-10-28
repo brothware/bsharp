@@ -12,6 +12,7 @@ import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
+import 'package:bsharp/wear/screens/wear_bulletins_list_screen.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
 import 'package:bsharp/wear/screens/wear_homework_detail_screen.dart';
@@ -183,6 +184,30 @@ void main() {
       await tester.pump();
 
       expect(find.byType(WearGradesDetailScreen), findsOneWidget);
+    });
+
+    testWidgets('an announcements push opens a screen a swipe closes', (
+      tester,
+    ) async {
+      final service = _FakeNotificationService();
+      await tester.pumpWidget(await _buildApp(service));
+      await tester.pump();
+      await tester.pump();
+
+      service.capturedOnTap!(
+        const NotificationPayload(category: ChangeCategory.bulletins),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(WearBulletinsListScreen), findsOneWidget);
+
+      await tester.dragFrom(const Offset(5, 200), const Offset(300, 0));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byType(WearBulletinsListScreen),
+        findsNothing,
+        reason: 'opened from a push, announcements had no swipe to close',
+      );
     });
 
     testWidgets('a cold start launch payload opens messages', (tester) async {

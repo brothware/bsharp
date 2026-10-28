@@ -8,6 +8,7 @@ import android.text.InputType
 import android.view.Gravity
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -25,6 +26,7 @@ class TextInputActivity : Activity() {
     }
 
     private lateinit var field: EditText
+    private var wasKeyboardShown = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +48,19 @@ class TextInputActivity : Activity() {
         }
 
         setContentView(field)
+        // Under the keyboard this screen is a blank field with nowhere to go,
+        // so it closes with the keyboard rather than wait for a swipe that
+        // the field would take for itself (WO-V3).
+        ViewCompat.setOnApplyWindowInsetsListener(field) { view, insets ->
+            val isKeyboardShown = insets.isVisible(WindowInsetsCompat.Type.ime())
+            if (wasKeyboardShown && !isKeyboardShown) {
+                // Posted so a last commit from the keyboard, queued on this
+                // same thread, lands in the field before it is read.
+                view.post(::finishWithText)
+            }
+            wasKeyboardShown = isKeyboardShown
+            ViewCompat.onApplyWindowInsets(view, insets)
+        }
         field.requestFocus()
     }
 
@@ -71,6 +86,7 @@ class TextInputActivity : Activity() {
     override fun onBackPressed() = finishWithText()
 
     private fun finishWithText() {
+        if (isFinishing) return
         setResult(
             RESULT_OK,
             Intent().putExtra(EXTRA_TEXT, field.text.toString()),

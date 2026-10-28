@@ -146,6 +146,56 @@ void main() {
     expect(selection?.studentId, 2);
   });
 
+  testWidgets('a swipe closes the picker', (tester) async {
+    final accountStorage = _newAccountStorage();
+    await accountStorage.saveAccounts([
+      const ProviderAccount(
+        id: 'a1',
+        providerType: 'mobireg',
+        slug: 'osm-wroclaw',
+        login: 'login',
+        students: [
+          AccountStudent(id: 1, name: 'Jan', surname: 'Kowalski'),
+          AccountStudent(id: 2, name: 'Anna', surname: 'Kowalska'),
+        ],
+      ),
+    ]);
+    await accountStorage.saveActiveSelection(
+      const ActiveSelection(accountId: 'a1', studentId: 1),
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          accountStorageProvider.overrideWithValue(accountStorage),
+          wearScreenShapeProvider.overrideWith(
+            (_) => WearScreenShape.rectangular,
+          ),
+        ],
+        child: MaterialApp(
+          home: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const WearStudentPicker(),
+                ),
+              ),
+              child: const Text('settings'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('settings'));
+    await tester.pumpAndSettle();
+    expect(find.byType(WearStudentPicker), findsOneWidget);
+
+    await tester.dragFrom(const Offset(5, 200), const Offset(300, 0));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(WearStudentPicker), findsNothing);
+  });
+
   testWidgets('the picker lists both students', (tester) async {
     final accountStorage = _newAccountStorage();
     await accountStorage.saveAccounts([
