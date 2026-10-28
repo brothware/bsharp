@@ -250,14 +250,14 @@ void main() {
     expect(detail?.files, isNull);
   });
 
-  test('an attachment that is not an object is a FormatException', () async {
+  test('an attachment that is not an object fails the read', () async {
     server.messageDetail = {
       'content': '<p>Tresc</p>',
       'files': ['plan.pdf'],
     };
     await signedIn();
 
-    await expectLater(provider.readMessage(20001), throwsFormatException);
+    await expectLater(provider.readMessage(20001), failsWithMessaging);
   });
 
   test('a receiver id comes back ready to send to', () async {
@@ -272,6 +272,13 @@ void main() {
     expect(receivers.map((receiver) => receiver.id), ['user_201', 'user_202']);
   });
 
+  test('an inbox page that is not a list of objects fails', () async {
+    await signedIn();
+    server.inbox.add(<String, dynamic>{'id': 'not a number'});
+
+    await expectLater(provider.loadMoreInbox(20), failsWithMessaging);
+  });
+
   test('receiver roles arrive in canonical English', () async {
     server.receivers = <Object>[
       {'id': 'user_201', 'name': 'Anna Nowak', 'role': 'nauczyciel'},
@@ -283,20 +290,20 @@ void main() {
     expect(receivers.single.role, 'teacher');
   });
 
-  test('a receiver without an id is a FormatException', () async {
+  test('a receiver without an id fails the search', () async {
     server.receivers = <Object>[
       {'name': 'Anna Nowak', 'role': 'Nauczyciel'},
     ];
     await signedIn();
 
-    await expectLater(provider.searchReceivers('Nowak'), throwsFormatException);
+    await expectLater(provider.searchReceivers('Nowak'), failsWithMessaging);
   });
 
-  test('a receiver that is not an object is a FormatException', () async {
+  test('a receiver that is not an object fails the search', () async {
     server.receivers = <Object>['Nowak'];
     await signedIn();
 
-    await expectLater(provider.searchReceivers('Nowak'), throwsFormatException);
+    await expectLater(provider.searchReceivers('Nowak'), failsWithMessaging);
   });
 
   test('sending a message answers its new id', () async {

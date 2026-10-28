@@ -43,7 +43,9 @@ class _ReadableRejectingMailProvider extends _RejectingMailProvider {
 class _MalformedReceiversProvider extends DemoDataProvider {
   @override
   Future<List<PocztaReceiver>> searchReceivers(String query) async =>
-      throw const FormatException('receivers payload malformed');
+      throw const MessagingException(
+        ProtocolMismatch(message: 'receivers payload malformed'),
+      );
 }
 
 class _SendRejectingProvider extends _ReadableRejectingMailProvider {

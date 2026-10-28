@@ -116,9 +116,6 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     } on MessagingException catch (error, stackTrace) {
       _reportSearchFailure(error, stackTrace);
       return;
-    } on FormatException catch (error, stackTrace) {
-      _reportSearchFailure(error, stackTrace);
-      return;
     }
     if (!mounted) return;
 
@@ -128,7 +125,7 @@ class _ComposeMessageViewState extends ConsumerState<ComposeMessageView> {
     });
   }
 
-  void _reportSearchFailure(Object error, StackTrace stackTrace) {
+  void _reportSearchFailure(MessagingException error, StackTrace stackTrace) {
     debugPrint('ComposeMessageView: search failed: $error\n$stackTrace');
     if (!mounted) {
       return;

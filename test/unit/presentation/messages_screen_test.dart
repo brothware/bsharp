@@ -1,7 +1,9 @@
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
+import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
+import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/messages/screens/messages_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +12,9 @@ import 'package:flutter_test/flutter_test.dart';
 class _MalformedPageDataProvider extends DemoDataProvider {
   @override
   Future<List<PocztaMessage>> loadMoreInbox(int skip) async =>
-      throw const FormatException('View poczta inbox: expected objects');
+      throw const MessagingException(
+        ProtocolMismatch(message: 'View poczta inbox: expected objects'),
+      );
 }
 
 void main() {

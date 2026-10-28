@@ -216,9 +216,6 @@ class _MessageListState extends ConsumerState<_MessageList> {
     final List<PocztaMessage> newMessages;
     try {
       newMessages = await dataProvider.loadMoreInbox(currentInbox.length);
-    } on FormatException catch (error, stackTrace) {
-      _onLoadMoreFailed(error, stackTrace);
-      return;
     } on MessagingException catch (error, stackTrace) {
       _onLoadMoreFailed(error, stackTrace);
       return;
@@ -231,7 +228,7 @@ class _MessageListState extends ConsumerState<_MessageList> {
     if (mounted) setState(() => _isLoadingMore = false);
   }
 
-  void _onLoadMoreFailed(Object error, StackTrace stackTrace) {
+  void _onLoadMoreFailed(MessagingException error, StackTrace stackTrace) {
     debugPrint('MessagesScreen: loading more mail failed: $error\n$stackTrace');
     if (!mounted) {
       return;

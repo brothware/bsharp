@@ -504,6 +504,17 @@ class MobiregDataProvider implements SchoolDataProvider {
     };
   }
 
+  T _parsedMail<T>(T Function() parse) {
+    try {
+      return parse();
+    } on FormatException catch (error, stackTrace) {
+      Error.throwWithStackTrace(
+        MessagingException(ProtocolMismatch(message: error.toString())),
+        stackTrace,
+      );
+    }
+  }
+
   @override
   Future<void> refreshMessages(Ref ref) async {
     await _fetchFolders(ref, _mailbox());
@@ -512,13 +523,13 @@ class MobiregDataProvider implements SchoolDataProvider {
   @override
   Future<PocztaMessageDetail?> readMessage(int messageId) async {
     final data = _mailValue(await _mailbox().readMessage(messageId));
-    return parsePocztaMessageDetail(data);
+    return _parsedMail(() => parsePocztaMessageDetail(data));
   }
 
   @override
   Future<List<PocztaReceiver>> searchReceivers(String query) async {
     final data = _mailValue(await _mailbox().searchReceivers(query));
-    return parsePocztaReceivers(data);
+    return _parsedMail(() => parsePocztaReceivers(data));
   }
 
   @override
@@ -608,7 +619,7 @@ class MobiregDataProvider implements SchoolDataProvider {
   @override
   Future<List<PocztaMessage>> loadMoreInbox(int skip) async {
     final data = _mailValue(await _mailbox().getInbox(skip: skip));
-    return parsePocztaMessages(data, 'inbox');
+    return _parsedMail(() => parsePocztaMessages(data, 'inbox'));
   }
 
   @override
