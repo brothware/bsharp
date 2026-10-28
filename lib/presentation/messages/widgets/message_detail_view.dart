@@ -53,9 +53,9 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
 
   Future<void> _fetchFullContent() async {
     final dataProvider = ref.read(activeDataProviderProvider);
-    final Map<String, dynamic>? data;
+    final PocztaMessageDetail? detail;
     try {
-      data = await dataProvider.readMessage(widget.message.id);
+      detail = await dataProvider.readMessage(widget.message.id);
     } on MessagingException catch (error, stackTrace) {
       debugPrint('MessageDetailView: reading failed: $error\n$stackTrace');
       if (!mounted) {
@@ -70,7 +70,7 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
     if (!mounted) return;
     _markReadInInbox();
 
-    if (data == null) {
+    if (detail == null) {
       setState(() {
         _fullContent = widget.message.content;
         _loadingContent = false;
@@ -79,23 +79,12 @@ class _MessageDetailViewState extends ConsumerState<MessageDetailView> {
       return;
     }
 
-    final content = data['content'] as String?;
+    final PocztaMessageDetail(:content, :files) = detail;
     if (content == null) {
       debugPrint(
         'MessageDetailView: message ${widget.message.id} came without content',
       );
     }
-    final filesRaw = data['files'] as List<dynamic>?;
-    final files = filesRaw
-        ?.whereType<Map<String, dynamic>>()
-        .map(
-          (f) => PocztaAttachment(
-            name: (f['name'] ?? '') as String,
-            url: (f['url'] ?? '') as String,
-            size: int.tryParse('${f['size'] ?? ''}'),
-          ),
-        )
-        .toList();
     if (files != null && files.isNotEmpty) {
       _updateFilesInProvider(files);
     }

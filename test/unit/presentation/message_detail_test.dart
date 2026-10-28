@@ -25,21 +25,20 @@ class _BodyProvider extends DemoDataProvider {
   final String body;
 
   @override
-  Future<Map<String, dynamic>?> readMessage(int messageId) async => {
-    'content': body,
-  };
+  Future<PocztaMessageDetail?> readMessage(int messageId) async =>
+      PocztaMessageDetail(content: body);
 }
 
 class _FlakyProvider extends DemoDataProvider {
   int reads = 0;
 
   @override
-  Future<Map<String, dynamic>?> readMessage(int messageId) async {
+  Future<PocztaMessageDetail?> readMessage(int messageId) async {
     reads++;
     if (reads == 1) {
       throw const MessagingException(ConnectionTimeout());
     }
-    return {'content': libraryMessageHtml};
+    return PocztaMessageDetail(content: libraryMessageHtml);
   }
 }
 

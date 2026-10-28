@@ -35,7 +35,7 @@ PocztaMessage _msg({
 
 class _RejectingReadProvider extends DemoDataProvider {
   @override
-  Future<Map<String, dynamic>?> readMessage(int messageId) async =>
+  Future<PocztaMessageDetail?> readMessage(int messageId) async =>
       throw const MessagingException(SessionExpired());
 }
 

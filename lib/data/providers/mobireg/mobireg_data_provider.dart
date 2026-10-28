@@ -510,8 +510,9 @@ class MobiregDataProvider implements SchoolDataProvider {
   }
 
   @override
-  Future<Map<String, dynamic>?> readMessage(int messageId) async {
-    return _mailValue(await _mailbox().readMessage(messageId));
+  Future<PocztaMessageDetail?> readMessage(int messageId) async {
+    final data = _mailValue(await _mailbox().readMessage(messageId));
+    return parsePocztaMessageDetail(data);
   }
 
   @override

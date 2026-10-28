@@ -7,6 +7,7 @@ import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/data/providers/mobireg/mobireg_data_provider.dart';
 import 'package:bsharp/domain/attachment_uploader.dart';
 import 'package:bsharp/domain/entities/outgoing_attachment.dart';
+import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 
@@ -197,6 +198,44 @@ void main() {
 
     await expectLater(provider.loadMoreInbox(20), failsWithMessaging);
     await expectLater(provider.refreshMessages(ref()), failsWithMessaging);
+  });
+
+  test('reads a message into its content and attachments', () async {
+    server.messageDetail = {
+      'content': '<p>Tresc</p>',
+      'files': [
+        {'name': 'plan.pdf', 'url': '/files/1', 'size': '1024'},
+      ],
+    };
+    await signedIn();
+
+    expect(
+      await provider.readMessage(20001),
+      const PocztaMessageDetail(
+        content: '<p>Tresc</p>',
+        files: [
+          PocztaAttachment(name: 'plan.pdf', url: '/files/1', size: 1024),
+        ],
+      ),
+    );
+  });
+
+  test('a read without a files list leaves the attachments unknown', () async {
+    await signedIn();
+
+    final detail = await provider.readMessage(20001);
+
+    expect(detail?.files, isNull);
+  });
+
+  test('an attachment that is not an object is a FormatException', () async {
+    server.messageDetail = {
+      'content': '<p>Tresc</p>',
+      'files': ['plan.pdf'],
+    };
+    await signedIn();
+
+    await expectLater(provider.readMessage(20001), throwsFormatException);
   });
 
   test('a receiver that is not an object is a FormatException', () async {

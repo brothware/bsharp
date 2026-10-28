@@ -24,6 +24,29 @@ List<PocztaMessage> parsePocztaMessages(List<dynamic> data, String folder) {
   }).toList();
 }
 
+PocztaMessageDetail parsePocztaMessageDetail(Map<String, dynamic> item) {
+  const view = 'poczta read';
+  final content = item['content'];
+  if (content != null && content is! String) {
+    throw FormatException('View $view: "content" is not text', item['id']);
+  }
+  final files = item['files'];
+  return PocztaMessageDetail(
+    content: content as String?,
+    files: files == null
+        ? null
+        : _objectsOf(files as Object, view).map(_attachmentOf).toList(),
+  );
+}
+
+PocztaAttachment _attachmentOf(Map<String, dynamic> json) {
+  return PocztaAttachment(
+    name: json['name'] as String? ?? '',
+    url: json['url'] as String? ?? '',
+    size: int.tryParse('${json['size'] ?? ''}'),
+  );
+}
+
 List<Map<String, dynamic>> _objectsOf(Object data, String view) {
   if (data is! List) {
     throw FormatException('View $view: expected a list', data.runtimeType);

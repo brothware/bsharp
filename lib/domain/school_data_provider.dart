@@ -117,7 +117,7 @@ abstract class SchoolDataProvider {
 
   Future<void> refreshMessages(Ref ref);
 
-  Future<Map<String, dynamic>?> readMessage(int messageId);
+  Future<PocztaMessageDetail?> readMessage(int messageId);
 
   Future<List<PocztaReceiver>> searchReceivers(String query);
 

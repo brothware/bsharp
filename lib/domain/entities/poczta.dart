@@ -28,6 +28,14 @@ abstract class PocztaRecipient with _$PocztaRecipient {
 }
 
 @freezed
+abstract class PocztaMessageDetail with _$PocztaMessageDetail {
+  const factory PocztaMessageDetail({
+    String? content,
+    List<PocztaAttachment>? files,
+  }) = _PocztaMessageDetail;
+}
+
+@freezed
 abstract class PocztaAttachment with _$PocztaAttachment {
   const factory PocztaAttachment({
     required String name,

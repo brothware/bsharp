@@ -47,9 +47,9 @@ class _WearMessageDetailScreenState
 
   Future<void> _fetchFullContent() async {
     final dataProvider = ref.read(activeDataProviderProvider);
-    final Map<String, dynamic>? data;
+    final PocztaMessageDetail? detail;
     try {
-      data = await dataProvider.readMessage(widget.message.id);
+      detail = await dataProvider.readMessage(widget.message.id);
     } on MessagingException catch (error, stackTrace) {
       debugPrint(
         'WearMessageDetailScreen: reading failed: $error\n$stackTrace',
@@ -65,7 +65,7 @@ class _WearMessageDetailScreenState
     }
     if (!mounted) return;
 
-    if (data == null) {
+    if (detail == null) {
       setState(() {
         _fullContent = widget.message.content;
         _loadingContent = false;
@@ -74,7 +74,7 @@ class _WearMessageDetailScreenState
       return;
     }
 
-    final content = data['content'] as String?;
+    final content = detail.content;
     setState(() {
       _fullContent = content;
       _loadingContent = false;

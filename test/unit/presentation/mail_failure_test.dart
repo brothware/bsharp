@@ -23,7 +23,7 @@ class _RejectingMailProvider extends DemoDataProvider {
   Future<List<PocztaMessage>> loadMoreInbox(int skip) async => throw _rejected;
 
   @override
-  Future<Map<String, dynamic>?> readMessage(int messageId) async =>
+  Future<PocztaMessageDetail?> readMessage(int messageId) async =>
       throw _rejected;
 
   @override
@@ -37,7 +37,7 @@ class _RejectingMailProvider extends DemoDataProvider {
 
 class _ReadableRejectingMailProvider extends _RejectingMailProvider {
   @override
-  Future<Map<String, dynamic>?> readMessage(int messageId) async => null;
+  Future<PocztaMessageDetail?> readMessage(int messageId) async => null;
 }
 
 class _MalformedReceiversProvider extends DemoDataProvider {

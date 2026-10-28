@@ -52,6 +52,7 @@ class FakeAppServer {
   Object receivers = <Object>[
     {'id': 'user_201', 'name': 'Anna Nowak', 'role': 'Nauczyciel'},
   ];
+  Object messageDetail = <String, dynamic>{'content': '<p>Tresc</p>'};
   final inbox = <Map<String, dynamic>>[
     {
       'id': 20001,
@@ -136,6 +137,13 @@ class FakeAppServer {
         requestOptions: options,
         statusCode: _ok,
         data: {'items': items, 'total': items.length},
+      );
+    }
+    if (options.path.startsWith('/api/messages/read/')) {
+      return Response<dynamic>(
+        requestOptions: options,
+        statusCode: _ok,
+        data: messageDetail,
       );
     }
     if (options.path == '/api/messages/receivers/search') {

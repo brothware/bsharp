@@ -147,7 +147,7 @@ class DemoDataProvider implements SchoolDataProvider {
   Future<void> refreshMessages(Ref ref) async {}
 
   @override
-  Future<Map<String, dynamic>?> readMessage(int messageId) async => null;
+  Future<PocztaMessageDetail?> readMessage(int messageId) async => null;
 
   @override
   Future<List<PocztaReceiver>> searchReceivers(String query) async => [];
