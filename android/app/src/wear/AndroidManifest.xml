@@ -1,5 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-feature android:name="android.hardware.type.watch" />
+    <!-- Tips and mail attachments are phone-only, yet their plugins still
+         merge these into the watch build. Play reviews every permission an
+         app holds against what it does (WO-G1). -->
+    <uses-permission android:name="com.android.vending.BILLING" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="remove" />
     <application>
         <meta-data
             android:name="com.google.android.wearable.standalone"
