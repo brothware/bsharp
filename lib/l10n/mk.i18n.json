@@ -847,6 +847,7 @@
     "noSavedPassword": "Во вашата сметка на Google нема зачувана лозинка за BSharp",
     "savedPasswordFailed": "Зачуваната лозинка не може да се користи",
     "typeOnWatch": "Внесете на часовникот",
-    "differentAccount": "Тоа е друга сметка"
+    "differentAccount": "Тоа е друга сметка",
+    "phoneUnreachable": "Телефонот не одговори. Држете го блиску или користете зачувана лозинка."
   }
 }

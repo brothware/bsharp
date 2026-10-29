@@ -853,6 +853,7 @@
     "noSavedPassword": "Ma hemm l-ebda password ta’ BSharp issejvjata fil-kont Google tiegħek",
     "savedPasswordFailed": "Il-password issejvjata ma setgħetx tintuża",
     "typeOnWatch": "Ittajpjaha fuq l-arloġġ",
-    "differentAccount": "Dak huwa kont ieħor"
+    "differentAccount": "Dak huwa kont ieħor",
+    "phoneUnreachable": "It-telefon ma wieġebx. Żommu qrib jew uża l-password issejvjata."
   }
 }

@@ -850,6 +850,7 @@
     "noSavedPassword": "U vašem Google računu nije sačuvana lozinka za BSharp",
     "savedPasswordFailed": "Sačuvanu lozinku nije moguće koristiti",
     "typeOnWatch": "Upišite na satu",
-    "differentAccount": "To je drugi račun"
+    "differentAccount": "To je drugi račun",
+    "phoneUnreachable": "Telefon se nije javio. Držite ga blizu ili koristite sačuvanu lozinku."
   }
 }

@@ -847,6 +847,7 @@
     "noSavedPassword": "В профила ви в Google няма запазена парола за BSharp",
     "savedPasswordFailed": "Запазената парола не можа да се използва",
     "typeOnWatch": "Въведете на часовника",
-    "differentAccount": "Това е друг акаунт"
+    "differentAccount": "Това е друг акаунт",
+    "phoneUnreachable": "Телефонът не отговори. Дръжте го наблизо или използвайте запазена парола."
   }
 }

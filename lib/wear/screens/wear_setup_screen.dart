@@ -80,6 +80,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   _SetupStep? _signedInFrom;
   int _signInAttempt = 0;
   bool _isPickingSavedPassword = false;
+  bool _isPhoneUnreachable = false;
 
   @override
   void initState() {
@@ -176,11 +177,19 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           (account) => unawaited(_signInFromPhone(account)),
           onError: _onPhoneAccountUnreadable,
         );
-    unawaited(openSetUpWatchOnPhone());
+    unawaited(_openOnPhone());
     setState(() {
       _errorMessage = null;
       _step = _SetupStep.phone;
     });
+  }
+
+  Future<void> _openOnPhone() async {
+    setState(() => _isPhoneUnreachable = false);
+    final isOpened = await openSetUpWatchOnPhone();
+    if (mounted && !isOpened && _step == _SetupStep.phone) {
+      setState(() => _isPhoneUnreachable = true);
+    }
   }
 
   void _stopListeningToPhone() {
@@ -661,7 +670,16 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 12),
-              const Center(child: CircularProgressIndicator()),
+              if (_isPhoneUnreachable)
+                Text(
+                  t.watchSetup.phoneUnreachable,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                )
+              else
+                const Center(child: CircularProgressIndicator()),
               if (_errorMessage case final message?)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),

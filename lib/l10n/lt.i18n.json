@@ -853,6 +853,7 @@
     "noSavedPassword": "Jūsų „Google“ paskyroje nėra išsaugoto BSharp slaptažodžio",
     "savedPasswordFailed": "Nepavyko panaudoti išsaugoto slaptažodžio",
     "typeOnWatch": "Įvesti laikrodyje",
-    "differentAccount": "Tai kita paskyra"
+    "differentAccount": "Tai kita paskyra",
+    "phoneUnreachable": "Telefonas neatsakė. Laikykite jį šalia arba naudokite išsaugotą slaptažodį."
   }
 }

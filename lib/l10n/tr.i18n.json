@@ -847,6 +847,7 @@
     "noSavedPassword": "Google hesabınızda kayıtlı BSharp şifresi yok",
     "savedPasswordFailed": "Kayıtlı şifre kullanılamadı",
     "typeOnWatch": "Saatte yazın",
-    "differentAccount": "Bu farklı bir hesap"
+    "differentAccount": "Bu farklı bir hesap",
+    "phoneUnreachable": "Telefonunuz yanıt vermedi. Yakında tutun veya kayıtlı şifreyi kullanın."
   }
 }

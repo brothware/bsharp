@@ -847,6 +847,7 @@
     "noSavedPassword": "आपके Google खाते में कोई BSharp पासवर्ड सहेजा नहीं गया है",
     "savedPasswordFailed": "सहेजे गए पासवर्ड का उपयोग नहीं हो सका",
     "typeOnWatch": "घड़ी पर टाइप करें",
-    "differentAccount": "यह कोई दूसरा खाता है"
+    "differentAccount": "यह कोई दूसरा खाता है",
+    "phoneUnreachable": "आपके फ़ोन ने जवाब नहीं दिया। उसे पास रखें या सहेजा गया पासवर्ड इस्तेमाल करें।"
   }
 }

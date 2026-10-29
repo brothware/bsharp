@@ -122,11 +122,18 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
             );
           },
         );
-    unawaited(openSetUpWatchOnPhone());
+    unawaited(_openOnPhone());
     setState(() {
       _errorMessage = null;
       _isWaitingForPhone = true;
     });
+  }
+
+  Future<void> _openOnPhone() async {
+    final isOpened = await openSetUpWatchOnPhone();
+    if (mounted && !isOpened) {
+      setState(() => _errorMessage = t.watchSetup.phoneUnreachable);
+    }
   }
 
   Future<void> _signInFromPhone(AccountHandoff account) async {

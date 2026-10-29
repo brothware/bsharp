@@ -847,6 +847,7 @@
     "noSavedPassword": "Er is geen BSharp-wachtwoord opgeslagen in je Google-account",
     "savedPasswordFailed": "Kan het opgeslagen wachtwoord niet gebruiken",
     "typeOnWatch": "Typ het op het horloge",
-    "differentAccount": "Dat is een ander account"
+    "differentAccount": "Dat is een ander account",
+    "phoneUnreachable": "Je telefoon reageerde niet. Houd hem dichtbij of gebruik het opgeslagen wachtwoord."
   }
 }

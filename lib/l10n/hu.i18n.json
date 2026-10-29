@@ -847,6 +847,7 @@
     "noSavedPassword": "A Google-fiókjában nincs mentett BSharp-jelszó",
     "savedPasswordFailed": "A mentett jelszót nem sikerült használni",
     "typeOnWatch": "Beírás az órán",
-    "differentAccount": "Ez egy másik fiók"
+    "differentAccount": "Ez egy másik fiók",
+    "phoneUnreachable": "A telefon nem válaszolt. Tartsa a közelben, vagy használja a mentett jelszót."
   }
 }

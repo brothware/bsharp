@@ -847,6 +847,7 @@
     "noSavedPassword": "Ingen BSharp-passord er lagret på Google-kontoen din",
     "savedPasswordFailed": "Kunne ikke bruke det lagrede passordet",
     "typeOnWatch": "Skriv det på klokken",
-    "differentAccount": "Det er en annen konto"
+    "differentAccount": "Det er en annen konto",
+    "phoneUnreachable": "Telefonen svarte ikke. Hold den i nærheten, eller bruk lagret passord."
   }
 }

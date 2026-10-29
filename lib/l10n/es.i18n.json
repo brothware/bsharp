@@ -847,6 +847,7 @@
     "noSavedPassword": "No hay ninguna contraseña de BSharp guardada en tu cuenta de Google",
     "savedPasswordFailed": "No se pudo usar la contraseña guardada",
     "typeOnWatch": "Escribirla en el reloj",
-    "differentAccount": "Es otra cuenta"
+    "differentAccount": "Es otra cuenta",
+    "phoneUnreachable": "El teléfono no respondió. Mantenlo cerca o usa la contraseña guardada."
   }
 }

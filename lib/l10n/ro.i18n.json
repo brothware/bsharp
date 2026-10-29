@@ -850,6 +850,7 @@
     "noSavedPassword": "Nu există nicio parolă BSharp salvată în contul tău Google",
     "savedPasswordFailed": "Parola salvată nu a putut fi folosită",
     "typeOnWatch": "Tastează pe ceas",
-    "differentAccount": "Este alt cont"
+    "differentAccount": "Este alt cont",
+    "phoneUnreachable": "Telefonul nu a răspuns. Ține-l aproape sau folosește parola salvată."
   }
 }

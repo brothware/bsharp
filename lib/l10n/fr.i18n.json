@@ -847,6 +847,7 @@
     "noSavedPassword": "Aucun mot de passe BSharp n’est enregistré dans votre compte Google",
     "savedPasswordFailed": "Impossible d’utiliser le mot de passe enregistré",
     "typeOnWatch": "Le saisir sur la montre",
-    "differentAccount": "C’est un autre compte"
+    "differentAccount": "C’est un autre compte",
+    "phoneUnreachable": "Votre téléphone n’a pas répondu. Gardez-le à proximité ou utilisez le mot de passe enregistré."
   }
 }

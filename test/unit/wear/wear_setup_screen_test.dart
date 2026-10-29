@@ -879,6 +879,32 @@ void main() {
       expect(calls.single.arguments, {'url': watchSetupLink});
     });
 
+    testWidgets('a phone that cannot be reached is named, not waited on', (
+      tester,
+    ) async {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        const MethodChannel('pl.brothware.bsharp/wear'),
+        (call) async => throw PlatformException(code: 'phone_unreachable'),
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          const MethodChannel('pl.brothware.bsharp/wear'),
+          null,
+        ),
+      );
+
+      await openUsePhone(tester);
+      await settle(tester);
+
+      expect(
+        find.text(
+          'Your phone did not answer. Keep it near, or use Saved password.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+    });
+
     testWidgets('the watch says where to go on the phone', (tester) async {
       await openUsePhone(tester);
 

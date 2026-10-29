@@ -847,6 +847,7 @@
     "noSavedPassword": "Google-tilillesi ei ole tallennettu BSharp-salasanaa",
     "savedPasswordFailed": "Tallennettua salasanaa ei voitu käyttää",
     "typeOnWatch": "Kirjoita kelloon",
-    "differentAccount": "Tämä on eri tili"
+    "differentAccount": "Tämä on eri tili",
+    "phoneUnreachable": "Puhelin ei vastannut. Pidä se lähellä tai käytä tallennettua salasanaa."
   }
 }

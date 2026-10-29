@@ -856,6 +856,7 @@
     "noSavedPassword": "Níl aon phasfhocal BSharp sábháilte i do chuntas Google",
     "savedPasswordFailed": "Níorbh fhéidir an pasfhocal sábháilte a úsáid",
     "typeOnWatch": "Clóscríobh ar an uaireadóir é",
-    "differentAccount": "Is cuntas eile é sin"
+    "differentAccount": "Is cuntas eile é sin",
+    "phoneUnreachable": "Níor fhreagair do ghuthán. Coinnigh in aice leat é, nó úsáid an pasfhocal sábháilte."
   }
 }

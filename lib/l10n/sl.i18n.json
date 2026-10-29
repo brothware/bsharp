@@ -853,6 +853,7 @@
     "noSavedPassword": "V vašem Google računu ni shranjenega gesla za BSharp",
     "savedPasswordFailed": "Shranjenega gesla ni bilo mogoče uporabiti",
     "typeOnWatch": "Vnesite na uri",
-    "differentAccount": "To je drug račun"
+    "differentAccount": "To je drug račun",
+    "phoneUnreachable": "Telefon se ni odzval. Imejte ga blizu ali uporabite shranjeno geslo."
   }
 }

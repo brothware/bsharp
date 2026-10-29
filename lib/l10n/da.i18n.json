@@ -847,6 +847,7 @@
     "noSavedPassword": "Der er ingen BSharp-adgangskode gemt på din Google-konto",
     "savedPasswordFailed": "Den gemte adgangskode kunne ikke bruges",
     "typeOnWatch": "Skriv den på uret",
-    "differentAccount": "Det er en anden konto"
+    "differentAccount": "Det er en anden konto",
+    "phoneUnreachable": "Telefonen svarede ikke. Hold den tæt på, eller brug gemt adgangskode."
   }
 }

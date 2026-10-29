@@ -844,6 +844,7 @@
     "noSavedPassword": "No BSharp password is saved in your Google account",
     "savedPasswordFailed": "Could not use the saved password",
     "typeOnWatch": "Type it on the watch",
-    "differentAccount": "That is a different account"
+    "differentAccount": "That is a different account",
+    "phoneUnreachable": "Your phone did not answer. Keep it near, or use Saved password."
   }
 }

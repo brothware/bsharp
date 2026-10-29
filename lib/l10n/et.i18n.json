@@ -847,6 +847,7 @@
     "noSavedPassword": "Teie Google'i kontole pole BSharpi parooli salvestatud",
     "savedPasswordFailed": "Salvestatud parooli ei saanud kasutada",
     "typeOnWatch": "Sisesta kellas",
-    "differentAccount": "See on teine konto"
+    "differentAccount": "See on teine konto",
+    "phoneUnreachable": "Telefon ei vastanud. Hoia see lähedal või kasuta salvestatud parooli."
   }
 }

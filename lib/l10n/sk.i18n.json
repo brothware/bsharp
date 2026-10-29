@@ -850,6 +850,7 @@
     "noSavedPassword": "Vo vašom účte Google nie je uložené heslo pre BSharp",
     "savedPasswordFailed": "Uložené heslo sa nepodarilo použiť",
     "typeOnWatch": "Zadať na hodinkách",
-    "differentAccount": "To je iný účet"
+    "differentAccount": "To je iný účet",
+    "phoneUnreachable": "Telefón neodpovedal. Majte ho blízko alebo použite uložené heslo."
   }
 }

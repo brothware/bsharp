@@ -847,6 +847,7 @@
     "noSavedPassword": "你的 Google 帳戶中沒有儲存 BSharp 密碼",
     "savedPasswordFailed": "無法使用已儲存的密碼",
     "typeOnWatch": "在手錶上輸入",
-    "differentAccount": "這是另一個帳戶"
+    "differentAccount": "這是另一個帳戶",
+    "phoneUnreachable": "手機沒有回應。請將手機放在附近，或使用已儲存的密碼。"
   }
 }

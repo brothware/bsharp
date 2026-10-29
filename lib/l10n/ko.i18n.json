@@ -847,6 +847,7 @@
     "noSavedPassword": "Google 계정에 저장된 BSharp 비밀번호가 없습니다",
     "savedPasswordFailed": "저장된 비밀번호를 사용할 수 없습니다",
     "typeOnWatch": "워치에서 입력",
-    "differentAccount": "다른 계정입니다"
+    "differentAccount": "다른 계정입니다",
+    "phoneUnreachable": "휴대전화가 응답하지 않습니다. 가까이 두거나 저장된 비밀번호를 사용하세요."
   }
 }

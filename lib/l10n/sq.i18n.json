@@ -847,6 +847,7 @@
     "noSavedPassword": "Nuk ka fjalëkalim BSharp të ruajtur në llogarinë tënde Google",
     "savedPasswordFailed": "Fjalëkalimi i ruajtur nuk mund të përdorej",
     "typeOnWatch": "Shkruaje në orë",
-    "differentAccount": "Kjo është një llogari tjetër"
+    "differentAccount": "Kjo është një llogari tjetër",
+    "phoneUnreachable": "Telefoni nuk u përgjigj. Mbajeni pranë ose përdorni fjalëkalimin e ruajtur."
   }
 }

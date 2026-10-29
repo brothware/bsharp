@@ -847,6 +847,7 @@
     "noSavedPassword": "Jūsu Google kontā nav saglabāta BSharp parole",
     "savedPasswordFailed": "Neizdevās izmantot saglabāto paroli",
     "typeOnWatch": "Ievadīt pulkstenī",
-    "differentAccount": "Tas ir cits konts"
+    "differentAccount": "Tas ir cits konts",
+    "phoneUnreachable": "Tālrunis neatbildēja. Turiet to tuvumā vai izmantojiet saglabāto paroli."
   }
 }
