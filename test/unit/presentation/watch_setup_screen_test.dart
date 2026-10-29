@@ -23,6 +23,9 @@ class _FakeWatchLink implements WatchLink {
   final sent = <AccountHandoff>[];
 
   @override
+  Future<bool> hasPairedWatch() async => true;
+
+  @override
   Future<bool> hasConnectedCounterpart() async => isConnected;
 
   @override

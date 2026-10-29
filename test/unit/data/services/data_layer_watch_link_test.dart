@@ -7,6 +7,7 @@ import 'package:watch_connectivity/watch_connectivity.dart';
 
 class _Nodes {
   bool isReachable = true;
+  bool isPaired = true;
 }
 
 class _FakeConnectivity implements WatchConnectivityBase {
@@ -19,6 +20,9 @@ class _FakeConnectivity implements WatchConnectivityBase {
 
   @override
   Future<bool> get isReachable async => nodes.isReachable;
+
+  @override
+  Future<bool> get isPaired async => nodes.isPaired;
 
   @override
   Future<void> sendMessage(Map<String, dynamic> message) async {
@@ -62,6 +66,14 @@ void main() {
     connectivity.nodes.isReachable = false;
 
     expect(await link.hasConnectedCounterpart(), isFalse);
+  });
+
+  test('a phone with no watch app has no paired watch', () async {
+    expect(await link.hasPairedWatch(), isTrue);
+
+    connectivity.nodes.isPaired = false;
+
+    expect(await link.hasPairedWatch(), isFalse);
   });
 
   test('messages of another kind are not accounts', () async {

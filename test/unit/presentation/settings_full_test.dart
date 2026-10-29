@@ -1,5 +1,6 @@
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/support_provider.dart';
+import 'package:bsharp/app/watch_link_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/settings/screens/settings_screen.dart';
@@ -11,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
 
-Future<Widget> _buildSettings({String? locale}) async {
+Future<Widget> _buildSettings({String? locale, bool hasWatch = false}) async {
   final initial = locale != null ? {'locale': locale} : <String, Object>{};
   SharedPreferences.setMockInitialValues(initial);
   final prefs = await SharedPreferences.getInstance();
@@ -21,6 +22,7 @@ Future<Widget> _buildSettings({String? locale}) async {
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       credentialStorageProvider.overrideWithValue(storage),
+      hasPairedWatchProvider.overrideWith((_) async => hasWatch),
       packageInfoProvider.overrideWith(
         (_) async => PackageInfo(
           appName: 'BSharp',
@@ -180,5 +182,25 @@ void main() {
       expect(find.text('Source code'), findsOneWidget);
       expect(find.text('GitHub'), findsOneWidget);
     });
+  });
+
+  group('Settings - Watch', () {
+    testWidgets('offers Set up watch when a watch is paired', (tester) async {
+      await tester.pumpWidget(await _buildSettings(hasWatch: true));
+      await tester.pumpAndSettle();
+
+      await _scrollTo(tester, 'Set up watch');
+
+      expect(find.text('Set up watch'), findsOneWidget);
+    }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+    testWidgets('a phone with no watch gets no Set up watch', (tester) async {
+      await tester.pumpWidget(await _buildSettings());
+      await tester.pumpAndSettle();
+
+      await _scrollTo(tester, 'Source code');
+
+      expect(find.text('Set up watch'), findsNothing);
+    }, variant: TargetPlatformVariant.only(TargetPlatform.android));
   });
 }

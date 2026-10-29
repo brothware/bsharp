@@ -52,6 +52,9 @@ class DataLayerWatchLink implements WatchLink {
   final WatchConnectivityBase _connectivity;
 
   @override
+  Future<bool> hasPairedWatch() => _connectivity.isPaired;
+
+  @override
   Future<bool> hasConnectedCounterpart() => _connectivity.isReachable;
 
   @override

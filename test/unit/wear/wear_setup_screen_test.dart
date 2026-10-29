@@ -121,6 +121,9 @@ class _PhoneLink implements WatchLink {
   final accounts = StreamController<AccountHandoff>.broadcast();
 
   @override
+  Future<bool> hasPairedWatch() async => true;
+
+  @override
   Future<bool> hasConnectedCounterpart() async => true;
 
   @override
