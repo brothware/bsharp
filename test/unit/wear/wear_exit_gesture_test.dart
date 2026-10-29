@@ -72,5 +72,42 @@ void main() {
 
       expect(dismissed, isFalse);
     });
+
+    testWidgets('a swipe handled in place leaves the screen at rest', (
+      tester,
+    ) async {
+      var dismissals = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: WearSwipeDismiss(
+              onDismiss: () => dismissals++,
+              child: const SizedBox.expand(key: Key('step')),
+            ),
+          ),
+        ),
+      );
+
+      await tester.dragFrom(const Offset(10, 300), const Offset(300, 0));
+      await tester.pumpAndSettle();
+      final transform = tester.widget<Transform>(
+        find
+            .ancestor(
+              of: find.byKey(const Key('step')),
+              matching: find.byType(Transform),
+            )
+            .first,
+      );
+      expect(
+        transform.transform.getTranslation().x,
+        0,
+        reason: 'the next step was drawn shifted off by the last swipe',
+      );
+
+      await tester.dragFrom(const Offset(10, 300), const Offset(5, 0));
+      await tester.pumpAndSettle();
+      expect(dismissals, 1, reason: 'a 5px nudge went back another step');
+    });
   });
 }

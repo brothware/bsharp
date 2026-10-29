@@ -49,6 +49,9 @@ class _WearSwipeDismissState extends State<WearSwipeDismiss>
     if (_dragOffset.abs() >= _dismissThreshold) {
       unawaited(HapticFeedback.lightImpact());
       if (widget.onDismiss case final onDismiss?) {
+        // Handled in place, the same widget stays up for what comes next,
+        // so it has to come back to rest rather than keep the drag.
+        setState(() => _dragOffset = 0);
         onDismiss();
       } else {
         Navigator.of(context).pop();
