@@ -70,6 +70,19 @@ android {
             }
         }
     }
+
+    // Play's Wear quality review rejects these, and lint only warns about
+    // most of them, so a watch build that has one fails instead.
+    lint {
+        fatal += setOf(
+            "GestureBackNavigation",
+            "WearBackNavigation",
+            "WearPasswordInput",
+            "WearRecents",
+            "WearSplashScreen",
+            "WearStandaloneAppFlag",
+        )
+    }
 }
 
 kotlin {
