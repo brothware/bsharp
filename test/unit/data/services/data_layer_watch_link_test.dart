@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/data/services/data_layer_watch_link.dart';
 import 'package:bsharp/domain/entities/account_handoff.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:watch_connectivity/watch_connectivity.dart';
 
@@ -82,6 +83,13 @@ void main() {
     await link.acknowledgeAccount();
 
     expect(connectivity.sent.single['kind'], 'bsharp.account-received');
+  });
+
+  test('a stream error while sending reaches the caller', () async {
+    final sending = link.sendAccount(_account);
+    connectivity.incoming.addError(PlatformException(code: 'node_lost'));
+
+    await expectLater(sending, throwsA(isA<PlatformException>()));
   });
 
   test('a send that times out stops listening for its answer', () async {

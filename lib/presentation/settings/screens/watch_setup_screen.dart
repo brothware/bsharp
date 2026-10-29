@@ -95,9 +95,17 @@ class _WatchSetupScreenState extends ConsumerState<WatchSetupScreen> {
 
   Future<void> _send(ProviderAccount account) async {
     setState(() => _sendingAccountId = account.id);
-    final outcome = await _handOff(account);
+    final String outcome;
+    try {
+      outcome = await _handOff(account);
+    } finally {
+      // An error other than a platform one still propagates, but must not
+      // leave the button spinning for good.
+      if (mounted) {
+        setState(() => _sendingAccountId = null);
+      }
+    }
     if (!mounted) return;
-    setState(() => _sendingAccountId = null);
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(outcome)));
   }

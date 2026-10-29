@@ -78,12 +78,15 @@ class DataLayerWatchLink implements WatchLink {
         }
       },
     );
+    // Listened to before the send, so an error while sending still has a
+    // handler instead of escaping as an uncaught one.
+    final answer = acknowledged.future.timeout(
+      _acknowledgementTimeout,
+      onTimeout: () => false,
+    );
     try {
       await _connectivity.sendMessage(encodeAccountHandoff(account));
-      return await acknowledged.future.timeout(
-        _acknowledgementTimeout,
-        onTimeout: () => false,
-      );
+      return await answer;
     } finally {
       await subscription.cancel();
     }
