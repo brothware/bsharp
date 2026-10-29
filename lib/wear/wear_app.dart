@@ -93,6 +93,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
     );
     final service = ref.read(notificationServiceProvider);
     await service.initialize(onTap: router.handleNotificationTap);
+    await service.requestPermission();
     final launchPayload = await service.getLaunchPayload();
     if (launchPayload != null) router.handleNotificationTap(launchPayload);
   }

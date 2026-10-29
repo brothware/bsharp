@@ -57,6 +57,7 @@ class _FakeSyncStatusNotifier extends SyncStatusNotifier {
 class _FakeNotificationService extends NotificationService {
   void Function(NotificationPayload)? capturedOnTap;
   NotificationPayload? launchPayload;
+  int permissionRequests = 0;
 
   @override
   Future<void> initialize({void Function(NotificationPayload)? onTap}) async {
@@ -67,7 +68,10 @@ class _FakeNotificationService extends NotificationService {
   Future<NotificationPayload?> getLaunchPayload() async => launchPayload;
 
   @override
-  Future<bool> requestPermission() async => true;
+  Future<bool> requestPermission() async {
+    permissionRequests++;
+    return true;
+  }
 }
 
 Future<AccountStorage> _accountStorageWithOneStudent() async {
@@ -171,6 +175,19 @@ void main() {
   });
 
   group('BSharpWearApp notification routing', () {
+    testWidgets('the watch asks to post notifications', (tester) async {
+      final service = _FakeNotificationService();
+      await tester.pumpWidget(await _buildApp(service));
+      await tester.pump();
+      await tester.pump();
+
+      expect(
+        service.permissionRequests,
+        1,
+        reason: 'from API 33 a notification is dropped unless asked for',
+      );
+    });
+
     testWidgets('a warm tap on a grades push opens grades', (tester) async {
       final service = _FakeNotificationService();
       await tester.pumpWidget(await _buildApp(service));
