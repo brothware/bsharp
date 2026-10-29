@@ -49,7 +49,7 @@ double _buttonWidth(BuildContext context) {
   return math.min(content, halfWidth * 2);
 }
 
-class _WearConfirmationScreen extends StatelessWidget {
+class _WearConfirmationScreen extends StatefulWidget {
   const _WearConfirmationScreen({
     required this.icon,
     required this.question,
@@ -65,8 +65,29 @@ class _WearConfirmationScreen extends StatelessWidget {
   final bool isDestructive;
 
   @override
+  State<_WearConfirmationScreen> createState() =>
+      _WearConfirmationScreenState();
+}
+
+class _WearConfirmationScreenState extends State<_WearConfirmationScreen> {
+  final _questionScrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _questionScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final _WearConfirmationScreen(
+      :icon,
+      :question,
+      :confirmLabel,
+      :cancelLabel,
+      :isDestructive,
+    ) = widget;
     final accentColor = isDestructive
         ? theme.colorScheme.error
         : theme.colorScheme.primary;
@@ -74,6 +95,7 @@ class _WearConfirmationScreen extends StatelessWidget {
     return Scaffold(
       body: WearSwipeDismiss(
         child: WearScaffold(
+          scrollController: _questionScrollController,
           child: Builder(
             builder: (context) => Column(
               children: [
@@ -81,21 +103,15 @@ class _WearConfirmationScreen extends StatelessWidget {
                 const SizedBox(height: 2),
                 Expanded(
                   // Two 48dp buttons and an icon leave the question very little
-                  // of a round watch, and it was simply cut off at the boundary.
-                  // Wrap it at the full width, then scale the wrapped block to
-                  // whatever is left, so all of it shows rather than the top
-                  // half of it.
-                  child: LayoutBuilder(
-                    builder: (context, constraints) => FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: SizedBox(
-                        width: constraints.maxWidth,
-                        child: Text(
-                          question,
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                      ),
+                  // of a round watch. Scaling it to fit took it as low as 5sp
+                  // on a 192dp watch (WO-V14), so a long one scrolls instead,
+                  // with the edge scrollbar showing there is more (WO-V8).
+                  child: SingleChildScrollView(
+                    controller: _questionScrollController,
+                    child: Text(
+                      question,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyLarge,
                     ),
                   ),
                 ),

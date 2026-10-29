@@ -175,11 +175,12 @@ class _WearHeroBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final textColumn = Column(
+    final heading = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           eyebrow,
+          textAlign: TextAlign.center,
           style: theme.textTheme.labelMedium?.copyWith(
             color: theme.colorScheme.primary,
             fontWeight: FontWeight.bold,
@@ -194,10 +195,16 @@ class _WearHeroBody extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+      ],
+    );
+    final details = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
         if (room case final room?) ...[
           const SizedBox(height: 2),
-          Text(
+          WearFittedText(
             room,
+            textAlign: TextAlign.center,
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -220,7 +227,7 @@ class _WearHeroBody extends StatelessWidget {
       ],
     );
 
-    return _tappable(_layout(context, textColumn));
+    return _tappable(_layout(context, heading, details));
   }
 
   Widget _tappable(Widget child) {
@@ -232,37 +239,47 @@ class _WearHeroBody extends StatelessWidget {
     );
   }
 
-  Widget _layout(BuildContext context, Widget textColumn) {
+  Widget _layout(BuildContext context, Widget heading, Widget details) {
     final theme = Theme.of(context);
 
     if (progress == null) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: textColumn,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [heading, details],
+        ),
       );
     }
 
     if (isRound) {
+      // Only the heading sits in the ring: room, countdown and page dots
+      // under it would not fit the ring at 12sp (WO-V14), and scaling the
+      // group down to fit is what took them below it.
       return Padding(
         padding: const EdgeInsets.all(8),
-        child: SizedBox(
-          width: _ringDiameter,
-          height: _ringDiameter,
-          child: CustomPaint(
-            painter: _ProgressRingPainter(
-              progress: progress!,
-              color: theme.colorScheme.primary,
-              backgroundColor: wearTrackColor(theme.colorScheme),
-            ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(_ringTextInset),
-                // A longer countdown or a wordier language shrinks the whole
-                // group rather than pushing it through the ring.
-                child: FittedBox(fit: BoxFit.scaleDown, child: textColumn),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: _ringDiameter,
+              height: _ringDiameter,
+              child: CustomPaint(
+                painter: _ProgressRingPainter(
+                  progress: progress!,
+                  color: theme.colorScheme.primary,
+                  backgroundColor: wearTrackColor(theme.colorScheme),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(_ringTextInset),
+                    child: heading,
+                  ),
+                ),
               ),
             ),
-          ),
+            details,
+          ],
         ),
       );
     }
@@ -272,7 +289,8 @@ class _WearHeroBody extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          textColumn,
+          heading,
+          details,
           const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),

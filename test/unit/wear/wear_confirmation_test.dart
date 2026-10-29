@@ -1,8 +1,11 @@
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_confirmation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'wear_text_size_probe.dart';
 
 const _longQuestion =
     'Are you sure you want to log out of this account right now? '
@@ -55,6 +58,23 @@ Future<bool?> _pumpAndOpen(
 
 void main() {
   group('showWearConfirmation', () {
+    testWidgets('a long question keeps its 12sp on a 192dp round watch', (
+      tester,
+    ) async {
+      tester.binding.defaultBinaryMessenger.setMockStreamHandler(
+        const EventChannel('wear_os_scrollbar/rotary'),
+        MockStreamHandler.inline(onListen: (_, _) {}),
+      );
+      await _pumpAndOpen(
+        tester,
+        WearScreenShape.round,
+        viewSize: const Size(192, 192),
+      );
+
+      expect(textBelowFloor(tester), isEmpty);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('the question gets more of the screen than the buttons', (
       tester,
     ) async {
@@ -92,9 +112,13 @@ void main() {
       );
     });
 
-    testWidgets('the whole question is drawn above the buttons', (
+    testWidgets('a long question scrolls in the room above the buttons', (
       tester,
     ) async {
+      tester.binding.defaultBinaryMessenger.setMockStreamHandler(
+        const EventChannel('wear_os_scrollbar/rotary'),
+        MockStreamHandler.inline(onListen: (_, _) {}),
+      );
       // A real round watch is 227dp across; at dpr 1.0 that is the view size.
       await _pumpAndOpen(
         tester,
@@ -102,17 +126,31 @@ void main() {
         viewSize: const Size(227, 227),
       );
 
-      final question = tester.getRect(find.text(_longQuestion));
+      final questionArea = tester.getRect(
+        find.ancestor(
+          of: find.text(_longQuestion),
+          matching: find.byType(Scrollable),
+        ),
+      );
       final confirm = tester.getRect(
         find.widgetWithText(FilledButton, 'Log out'),
       );
+      final scrollable = tester.state<ScrollableState>(
+        find.ancestor(
+          of: find.text(_longQuestion),
+          matching: find.byType(Scrollable),
+        ),
+      );
 
       expect(
-        question.bottom,
+        questionArea.bottom,
         lessThanOrEqualTo(confirm.top + 0.5),
-        reason:
-            'the question was taking 96dp of a 45dp slot and the rest was '
-            'simply cut off at the boundary',
+        reason: 'the question ran under the buttons',
+      );
+      expect(
+        scrollable.position.maxScrollExtent,
+        greaterThan(0),
+        reason: 'the rest of a long question must be reachable by scrolling',
       );
     });
 

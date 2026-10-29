@@ -20,8 +20,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
+import 'wear_text_size_probe.dart';
 
-const _watchSizeDp = Size(227, 227);
+const _watchSizesDp = [Size(227, 227), Size(192, 192)];
 const _sections = [
   'Schedule',
   'Grades',
@@ -58,12 +59,12 @@ class _NoPhone implements WatchLink {
   Stream<AccountHandoff> get receivedAccounts => const Stream.empty();
 }
 
-Future<void> _openDemo(WidgetTester tester) async {
+Future<void> _openDemo(WidgetTester tester, Size watchSizeDp) async {
   tester.binding.defaultBinaryMessenger.setMockStreamHandler(
     const EventChannel('wear_os_scrollbar/rotary'),
     MockStreamHandler.inline(onListen: (_, _) {}),
   );
-  tester.view.physicalSize = _watchSizeDp * 2;
+  tester.view.physicalSize = watchSizeDp * 2;
   tester.view.devicePixelRatio = 2;
   addTearDown(tester.view.reset);
   SharedPreferences.setMockInitialValues({});
@@ -137,6 +138,11 @@ Future<void> _expectGuidelines(WidgetTester tester, String where) async {
     );
   }
   _expectTapTargetsAtLeast48dp(tester, where);
+  expect(
+    textBelowFloor(tester),
+    isEmpty,
+    reason: '$where: text drawn under 12sp (WO-V14)',
+  );
 }
 
 /// androidTapTargetGuideline measures what is on screen, after the clip of
@@ -164,34 +170,40 @@ void _expectTapTargetsAtLeast48dp(WidgetTester tester, String where) {
 }
 
 void main() {
-  testWidgets('the dashboard meets the Android accessibility guidelines', (
-    tester,
-  ) async {
-    final handle = tester.ensureSemantics();
-    await _openDemo(tester);
+  for (final watchSizeDp in _watchSizesDp) {
+    final size = '${watchSizeDp.width.toInt()}dp';
 
-    await _expectGuidelines(tester, 'dashboard');
-    handle.dispose();
-  });
-
-  for (final section in _sections) {
-    testWidgets('$section meets the Android accessibility guidelines', (
+    testWidgets('$size: the dashboard meets the accessibility guidelines', (
       tester,
     ) async {
       final handle = tester.ensureSemantics();
-      await _openDemo(tester);
-      final row = find.text(section);
-      await tester.scrollUntilVisible(row, 60);
-      tester
-          .widget<InkWell>(
-            find.ancestor(of: row.first, matching: find.byType(InkWell)).first,
-          )
-          .onTap!();
-      await tester.pumpAndSettle();
-      expect(find.byType(WearHome), findsNothing, reason: '$section opened');
+      await _openDemo(tester, watchSizeDp);
 
-      await _expectGuidelines(tester, section);
+      await _expectGuidelines(tester, '$size dashboard');
       handle.dispose();
     });
+
+    for (final section in _sections) {
+      testWidgets('$size: $section meets the accessibility guidelines', (
+        tester,
+      ) async {
+        final handle = tester.ensureSemantics();
+        await _openDemo(tester, watchSizeDp);
+        final row = find.text(section);
+        await tester.scrollUntilVisible(row, 60);
+        tester
+            .widget<InkWell>(
+              find
+                  .ancestor(of: row.first, matching: find.byType(InkWell))
+                  .first,
+            )
+            .onTap!();
+        await tester.pumpAndSettle();
+        expect(find.byType(WearHome), findsNothing, reason: '$section opened');
+
+        await _expectGuidelines(tester, '$size $section');
+        handle.dispose();
+      });
+    }
   }
 }

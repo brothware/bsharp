@@ -9,6 +9,7 @@ import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_dashboard.dart';
+import 'package:bsharp/wear/wear_app.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_news_badges.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -16,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'wear_text_size_probe.dart';
 
 /// Today, at a fixed time of day.
 ///
@@ -79,6 +82,7 @@ Widget _buildDashboard({
       bulletinsProvider.overrideWithBuild((ref, _) => bulletins),
     ],
     child: MaterialApp(
+      theme: wearTheme(),
       home: Scaffold(
         body: WearDisplayScope(
           display: WearDisplay(shape: shape, sizeDp: const Size(400, 400)),
@@ -155,10 +159,12 @@ void main() {
         // inner edge of that stroke.
         final inner = (ring.shortestSide - 6) / 2 - 3;
 
-        final texts = [
-          find.text('zajęcia praktyczno-techniczne'),
-          find.textContaining('Ends in'),
-        ];
+        expect(
+          tester.getRect(find.textContaining('Ends in')).top,
+          greaterThanOrEqualTo(ring.bottom),
+          reason: 'the details go under the ring instead of shrinking in it',
+        );
+        final texts = [find.text('zajęcia praktyczno-techniczne')];
         for (final text in texts) {
           final box = tester.getRect(text);
           for (final corner in [
@@ -176,6 +182,26 @@ void main() {
             );
           }
         }
+      });
+
+      testWidgets('no hero text is drawn under 12sp (WO-V14)', (tester) async {
+        await tester.pumpWidget(
+          _buildDashboard(
+            prefs: prefs,
+            shape: shape,
+            resolvedEvents: [
+              _resolvedEvent(
+                subjectName: 'zajęcia praktyczno-techniczne',
+                roomName: 'Sala gimnastyczna 4.01',
+                startTime: '10:00:00',
+                endTime: '14:00:00',
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+
+        expect(textBelowFloor(tester), isEmpty);
       });
 
       testWidgets('offers the overlapping event as a second page', (

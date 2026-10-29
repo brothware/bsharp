@@ -153,6 +153,9 @@ class _WearAttendanceDetailScreenState
   }
 }
 
+/// Wide enough for "100.0%" in bold 12sp inside the ring.
+const _donutSizeDp = 60.0;
+
 class _WearAttendanceSummary extends StatelessWidget {
   const _WearAttendanceSummary({required this.stats, required this.theme});
 
@@ -161,51 +164,49 @@ class _WearAttendanceSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 52,
-            height: 52,
-            child: CustomPaint(
-              key: const Key('attendanceDonut'),
-              painter: _DonutPainter(
-                percent: stats.presentPercent,
-                color: theme.colorScheme.primary,
-                backgroundColor: wearTrackColor(theme.colorScheme),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(6),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    attendancePercentLabel(stats.presentPercent),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+    // Wraps rather than scaling down to fit: scaled, the 12sp labels came out
+    // at 7sp on a 192dp watch (WO-V14).
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 6,
+      runSpacing: 4,
+      children: [
+        SizedBox(
+          width: _donutSizeDp,
+          height: _donutSizeDp,
+          child: CustomPaint(
+            key: const Key('attendanceDonut'),
+            painter: _DonutPainter(
+              percent: stats.presentPercent,
+              color: theme.colorScheme.primary,
+              backgroundColor: wearTrackColor(theme.colorScheme),
+            ),
+            child: Center(
+              child: Text(
+                attendancePercentLabel(stats.presentPercent),
+                maxLines: 1,
+                softWrap: false,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          _WearAttendanceStatChip(
-            label: t.attendance.presentAbbr,
-            value: '${stats.presentCount}',
-            color: theme.colorScheme.primary,
-            theme: theme,
-          ),
-          const SizedBox(width: 6),
-          _WearAttendanceStatChip(
-            label: t.attendance.absentAbbr,
-            value: '${stats.absentCount}',
-            color: theme.colorScheme.error,
-            theme: theme,
-          ),
-        ],
-      ),
+        ),
+        _WearAttendanceStatChip(
+          label: t.attendance.presentAbbr,
+          value: '${stats.presentCount}',
+          color: theme.colorScheme.primary,
+          theme: theme,
+        ),
+        _WearAttendanceStatChip(
+          label: t.attendance.absentAbbr,
+          value: '${stats.absentCount}',
+          color: theme.colorScheme.error,
+          theme: theme,
+        ),
+      ],
     );
   }
 }
@@ -309,12 +310,12 @@ class _WearWeekdayHeaders extends StatelessWidget {
       color: theme.colorScheme.surface,
       constraints: const BoxConstraints(minHeight: 18),
       padding: EdgeInsets.symmetric(horizontal: inset),
+      // Seven equal columns, as the grid below has, so a letter sits over its
+      // day; fixed 20dp boxes overflowed a 192dp watch.
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: labels
             .map(
-              (l) => SizedBox(
-                width: 20,
+              (l) => Expanded(
                 child: Center(
                   child: Text(
                     l,
@@ -359,30 +360,29 @@ class _WearCalendarDay extends StatelessWidget {
               border: Border.all(color: theme.colorScheme.primary),
             )
           : null,
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              '${day.day}',
-              style: theme.textTheme.labelMedium?.copyWith(color: dayColor),
-            ),
-            if (isCurrentMonth && status != AttendanceDayStatus.noData)
-              Container(
-                width: 4,
-                height: 4,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: attendanceStatusColor(
-                    status,
-                    brightness: theme.brightness,
-                  ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '${day.day}',
+            maxLines: 1,
+            softWrap: false,
+            style: theme.textTheme.labelMedium?.copyWith(color: dayColor),
+          ),
+          if (isCurrentMonth && status != AttendanceDayStatus.noData)
+            Container(
+              width: 4,
+              height: 4,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: attendanceStatusColor(
+                  status,
+                  brightness: theme.brightness,
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
