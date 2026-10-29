@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The phone's night themes would otherwise win on a watch that reports
+         night mode, dropping the splash theme and the black window. -->
+    <style name="LaunchTheme" parent="WearLaunchTheme" />
+    <style name="NormalTheme" parent="WearNormalTheme" />
+</resources>

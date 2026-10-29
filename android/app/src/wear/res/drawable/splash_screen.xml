@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wear App Quality WO-V15: the launch icon is 48dp. The round icon takes the
+     whole default space, so it is sized here rather than left to the platform,
+     which drew the bare PNG at 60dp. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="@dimen/splash_screen_icon_size"
+        android:height="@dimen/splash_screen_icon_size"
+        android:drawable="@drawable/splash_icon"
+        android:gravity="center" />
+</layer-list>
