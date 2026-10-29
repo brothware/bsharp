@@ -134,5 +134,21 @@ void main() {
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       handle.dispose();
     });
+
+    testWidgets('a screen reader can press both buttons', (tester) async {
+      final handle = tester.ensureSemantics();
+      var previous = 0;
+      var next = 0;
+      await tester.pumpWidget(
+        _app(onPrevious: () => previous++, onNext: () => next++),
+      );
+      await tester.pumpAndSettle();
+
+      tester.semantics.tap(find.semantics.byLabel('Previous'));
+      tester.semantics.tap(find.semantics.byLabel('Next'));
+
+      expect((previous, next), (1, 1));
+      handle.dispose();
+    });
   });
 }
