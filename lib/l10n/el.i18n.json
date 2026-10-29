@@ -22,7 +22,9 @@
     "agoJustNow": "μόλις τώρα",
     "agoMinutes": "πριν ${n} λεπ.",
     "agoHours": "πριν ${n} ώρ.",
-    "yesterday": "Χθες"
+    "yesterday": "Χθες",
+    "previous": "Προηγούμενο",
+    "next": "Επόμενο"
   },
   "nav": {
     "dashboard": "Πίνακας",

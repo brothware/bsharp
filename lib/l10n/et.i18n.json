@@ -22,7 +22,9 @@
     "agoJustNow": "just praegu",
     "agoMinutes": "${n} min tagasi",
     "agoHours": "${n} t tagasi",
-    "yesterday": "Eile"
+    "yesterday": "Eile",
+    "previous": "Eelmine",
+    "next": "Järgmine"
   },
   "nav": {
     "dashboard": "Avaleht",

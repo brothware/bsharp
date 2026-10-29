@@ -22,7 +22,9 @@
     "agoJustNow": "épp most",
     "agoMinutes": "${n} perce",
     "agoHours": "${n} órája",
-    "yesterday": "Tegnap"
+    "yesterday": "Tegnap",
+    "previous": "Előző",
+    "next": "Következő"
   },
   "nav": {
     "dashboard": "Áttekintés",

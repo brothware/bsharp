@@ -22,7 +22,9 @@
     "agoJustNow": "juuri nyt",
     "agoMinutes": "${n} min sitten",
     "agoHours": "${n} t sitten",
-    "yesterday": "Eilen"
+    "yesterday": "Eilen",
+    "previous": "Edellinen",
+    "next": "Seuraava"
   },
   "nav": {
     "dashboard": "Yleiskatsaus",

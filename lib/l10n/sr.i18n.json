@@ -22,7 +22,9 @@
     "agoJustNow": "upravo sada",
     "agoMinutes": "pre ${n} min",
     "agoHours": "pre ${n} h",
-    "yesterday": "Јуче"
+    "yesterday": "Јуче",
+    "previous": "Претходно",
+    "next": "Следеће"
   },
   "nav": {
     "dashboard": "Početna",

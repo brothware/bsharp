@@ -22,7 +22,9 @@
     "agoJustNow": "chiar acum",
     "agoMinutes": "acum ${n} min",
     "agoHours": "acum ${n} ore",
-    "yesterday": "Ieri"
+    "yesterday": "Ieri",
+    "previous": "Anterior",
+    "next": "Următor"
   },
   "nav": {
     "dashboard": "Panou",

@@ -22,7 +22,9 @@
     "agoJustNow": "剛剛",
     "agoMinutes": "${n}分鐘前",
     "agoHours": "${n}小時前",
-    "yesterday": "昨天"
+    "yesterday": "昨天",
+    "previous": "上一個",
+    "next": "下一個"
   },
   "nav": {
     "dashboard": "總覽",

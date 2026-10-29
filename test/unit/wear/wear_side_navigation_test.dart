@@ -123,5 +123,16 @@ void main() {
       await tester.pump();
       expect((previous, next), (1, 1));
     });
+
+    testWidgets('screen readers name both buttons', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(_app());
+      await tester.pumpAndSettle();
+
+      expect(find.bySemanticsLabel('Previous'), findsOneWidget);
+      expect(find.bySemanticsLabel('Next'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      handle.dispose();
+    });
   });
 }

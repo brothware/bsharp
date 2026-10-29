@@ -22,7 +22,9 @@
     "agoJustNow": "právě teď",
     "agoMinutes": "před ${n} min",
     "agoHours": "před ${n} hod",
-    "yesterday": "Včera"
+    "yesterday": "Včera",
+    "previous": "Předchozí",
+    "next": "Další"
   },
   "nav": {
     "dashboard": "Přehled",

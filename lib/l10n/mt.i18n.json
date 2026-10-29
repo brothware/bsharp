@@ -22,7 +22,9 @@
     "agoJustNow": "bħalissa",
     "agoMinutes": "${n} min ilu",
     "agoHours": "${n} sig ilu",
-    "yesterday": "Ilbieraħ"
+    "yesterday": "Ilbieraħ",
+    "previous": "Ta’ qabel",
+    "next": "Li jmiss"
   },
   "nav": {
     "dashboard": "Dashboard",

@@ -22,7 +22,9 @@
     "agoJustNow": "ką tik",
     "agoMinutes": "prieš ${n} min",
     "agoHours": "prieš ${n} val.",
-    "yesterday": "Vakar"
+    "yesterday": "Vakar",
+    "previous": "Ankstesnis",
+    "next": "Kitas"
   },
   "nav": {
     "dashboard": "Pradžia",

@@ -22,7 +22,9 @@
     "agoJustNow": "pravkar",
     "agoMinutes": "pred ${n} min",
     "agoHours": "pred ${n} h",
-    "yesterday": "Včeraj"
+    "yesterday": "Včeraj",
+    "previous": "Prejšnje",
+    "next": "Naslednje"
   },
   "nav": {
     "dashboard": "Nadzorna plošča",

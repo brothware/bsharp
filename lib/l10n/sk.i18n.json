@@ -22,7 +22,9 @@
     "agoJustNow": "práve teraz",
     "agoMinutes": "pred ${n} min",
     "agoHours": "pred ${n} hod",
-    "yesterday": "Včera"
+    "yesterday": "Včera",
+    "previous": "Predchádzajúce",
+    "next": "Ďalšie"
   },
   "nav": {
     "dashboard": "Prehľad",

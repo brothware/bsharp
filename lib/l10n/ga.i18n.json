@@ -22,7 +22,9 @@
     "agoJustNow": "direach anois",
     "agoMinutes": "${n} noi. o shin",
     "agoHours": "${n} u. o shin",
-    "yesterday": "Inné"
+    "yesterday": "Inné",
+    "previous": "Roimhe seo",
+    "next": "Ar aghaidh"
   },
   "nav": {
     "dashboard": "Deais",

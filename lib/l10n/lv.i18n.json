@@ -22,7 +22,9 @@
     "agoJustNow": "tikko",
     "agoMinutes": "pirms ${n} min",
     "agoHours": "pirms ${n} st.",
-    "yesterday": "Vakar"
+    "yesterday": "Vakar",
+    "previous": "Iepriekšējais",
+    "next": "Nākamais"
   },
   "nav": {
     "dashboard": "Panelis",

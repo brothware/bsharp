@@ -22,7 +22,9 @@
     "agoJustNow": "akkurat nå",
     "agoMinutes": "${n} min siden",
     "agoHours": "${n} t siden",
-    "yesterday": "I går"
+    "yesterday": "I går",
+    "previous": "Forrige",
+    "next": "Neste"
   },
   "nav": {
     "dashboard": "Oversikt",

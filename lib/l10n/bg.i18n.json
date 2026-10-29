@@ -22,7 +22,9 @@
     "agoJustNow": "току-що",
     "agoMinutes": "преди ${n} мин",
     "agoHours": "преди ${n} ч",
-    "yesterday": "Вчера"
+    "yesterday": "Вчера",
+    "previous": "Предишен",
+    "next": "Следващ"
   },
   "nav": {
     "dashboard": "Табло",

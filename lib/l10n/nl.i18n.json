@@ -22,7 +22,9 @@
     "agoJustNow": "zojuist",
     "agoMinutes": "${n} min geleden",
     "agoHours": "${n} u geleden",
-    "yesterday": "Gisteren"
+    "yesterday": "Gisteren",
+    "previous": "Vorige",
+    "next": "Volgende"
   },
   "nav": {
     "dashboard": "Dashboard",

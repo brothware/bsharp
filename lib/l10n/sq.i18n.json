@@ -22,7 +22,9 @@
     "agoJustNow": "pikërisht tani",
     "agoMinutes": "${n} min më parë",
     "agoHours": "${n} orë më parë",
-    "yesterday": "Dje"
+    "yesterday": "Dje",
+    "previous": "I mëparshmi",
+    "next": "Tjetri"
   },
   "nav": {
     "dashboard": "Ballina",

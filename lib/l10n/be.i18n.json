@@ -22,7 +22,9 @@
     "agoJustNow": "толькі што",
     "agoMinutes": "${n} хв таму",
     "agoHours": "${n} гадз таму",
-    "yesterday": "Учора"
+    "yesterday": "Учора",
+    "previous": "Папярэдні",
+    "next": "Наступны"
   },
   "nav": {
     "dashboard": "Галоўная",

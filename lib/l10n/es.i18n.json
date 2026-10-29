@@ -22,7 +22,9 @@
     "agoJustNow": "justo ahora",
     "agoMinutes": "hace ${n} min",
     "agoHours": "hace ${n} h",
-    "yesterday": "Ayer"
+    "yesterday": "Ayer",
+    "previous": "Anterior",
+    "next": "Siguiente"
   },
   "nav": {
     "dashboard": "Panel",

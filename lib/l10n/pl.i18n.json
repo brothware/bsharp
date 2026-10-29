@@ -22,7 +22,9 @@
     "agoJustNow": "przed chwilą",
     "agoMinutes": "${n} min temu",
     "agoHours": "${n} godz. temu",
-    "yesterday": "Wczoraj"
+    "yesterday": "Wczoraj",
+    "previous": "Poprzedni",
+    "next": "Następny"
   },
   "nav": {
     "dashboard": "Pulpit",
