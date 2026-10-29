@@ -83,12 +83,14 @@ class _ProbingProvider extends DemoDataProvider {
     required String password,
   }) async {
     probedPasswords.add(password);
+    await gate?.future;
     return accepts
         ? const Result.success(AccountProbe(schoolName: 'S', students: []))
         : const Result.failure(InvalidCredentials());
   }
 
   final probedPasswords = <String>[];
+  Completer<void>? gate;
 }
 
 Future<(ProviderContainer, AccountStorage)> _container(
@@ -370,6 +372,33 @@ void main() {
       expect(provider.probedPasswords, isEmpty);
       expect(find.text('That is a different account'), findsOneWidget);
     });
+
+    testWidgets('a second send while signing in is not acknowledged', (
+      tester,
+    ) async {
+      final link = _PhoneLink();
+      addTearDown(link.accounts.close);
+      final gate = Completer<void>();
+      final provider = await openPrompt(tester, watchLink: link);
+      provider.gate = gate;
+
+      await tester.tap(find.text('Use phone'));
+      await settle(tester);
+      const account = AccountHandoff(
+        providerType: 'mobireg',
+        school: 'sp1',
+        login: 'p',
+        password: 'from phone',
+      );
+      link.accounts
+        ..add(account)
+        ..add(account);
+      await settle(tester);
+
+      expect(link.acknowledgements, 1);
+      gate.complete();
+      await settle(tester);
+    }, variant: TargetPlatformVariant.only(TargetPlatform.linux));
 
     testWidgets('the phone can send this account again', (tester) async {
       final link = _PhoneLink();

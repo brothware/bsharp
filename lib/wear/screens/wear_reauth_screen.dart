@@ -142,7 +142,7 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
   }
 
   Future<void> _signInFromPhone(AccountHandoff account) async {
-    if (!mounted) return;
+    if (!mounted || _isSubmitting) return;
     if (!_isActiveAccount(account.school, account.login)) {
       setState(() => _errorMessage = t.watchSetup.differentAccount);
       return;
