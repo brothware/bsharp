@@ -1,20 +1,30 @@
 # Wear: phone-synced watch, and sign-in without typing (WO-P6)
 
 Play rejects the wear build while its only way in is typing school, login and
-password on the watch keyboard (WO-P6). Most watches have no LTE, so a watch
-paired with a phone should not talk to mobireg at all: the phone syncs and the
-watch shows what the phone sends.
+password on the watch keyboard (WO-P6). Most watches have no LTE, so while the
+phone is connected the phone syncs and the watch shows what it sends. When the
+phone is away and the watch has its own Wi-Fi or LTE, the watch syncs with
+mobireg itself.
 
 ## Decisions (agreed 2026-10-28/29)
 
-- **Paired watch = phone mode.** The phone syncs with mobireg and sends the
-  result to the watch over the Wear Data Layer (Bluetooth when near, Wi-Fi or
-  Google's relay otherwise). The watch holds no mobireg password in this mode.
-- **Standalone watch** (LTE / Wi-Fi, no phone app) signs in itself: a password
-  saved in the user's Google account (Credential Manager) first, Demo mode, and
-  a small "Type it on the watch" link as the last resort.
-- The phone offers Android's "Save password?" prompt after a login, so a
-  standalone watch has something to find.
+- **Source chosen at run time.** Phone connected: the phone syncs with
+  mobireg and sends the result over the Wear Data Layer (Bluetooth when near,
+  Wi-Fi or Google's relay otherwise). Phone away and the watch online: the
+  watch syncs itself. The newer data wins.
+- **The watch holds the account** (password included) so it can sync alone.
+  It gets it without typing, in this order:
+  1. "Set up watch" on the phone, one explicit tap, sent as a single Data Layer
+     message (MessageClient, direct to the connected node; never a data item,
+     never stored or relayed);
+  2. a password saved in the user's Google account (Credential Manager), for a
+     watch that has never seen the phone app;
+  3. a small "Type it on the watch" link as the last resort.
+  Demo mode stays on the first screen.
+- The phone offers Android's "Save password?" prompt after a login, so option 2
+  has something to find.
+- A standalone sync opens a second mobireg session, only while the phone is
+  away; the phone keeps its own single session.
 - **Freshness:** the phone forwards a snapshot after every sync, including the
   background sync it runs when a mobireg push arrives.
 - **Delivery:** the latest snapshot is a Data Layer data item, so a watch out
@@ -52,15 +62,19 @@ failure it shows today when the phone does not answer.
 ## Phases and commits
 
 **Phase 1 - clears WO-P6**
-1. Snapshot codec: encode the sync cache and account into a versioned payload
+1. Account handoff: phone "Set up watch" sends a chosen account; the watch
+   sign-in screen receives it and runs the existing account probe. Watch
+   "Use phone" opens that phone screen (RemoteActivityHelper +
+   `bsharp://watch-setup`).
+2. Credential Manager: the phone saves the password after a login; the watch
+   offers "Sign in with saved password"; the keyboard steps move behind a
+   small link; re-auth tries the saved password first.
+3. Snapshot codec: encode the sync cache and account into a versioned payload
    and decode it back (pure Dart, unit tested).
-2. Phone publishes the snapshot after each sync, foreground and push-triggered.
-3. Watch phone mode: receive the snapshot, hydrate from it, show the phone's
-   student; data screens work unchanged.
-4. Watch first run: "Open BSharp on your phone" when a phone node is present,
-   else standalone sign-in; Demo mode in both.
-5. Phone saves the password to Credential Manager after a login; standalone
-   watch "Sign in with saved password"; keyboard behind a small link.
+4. Phone publishes the snapshot after each sync, foreground and push-triggered.
+5. Watch source selection: with a phone node connected, hydrate from the
+   phone's snapshot and skip its own sync; with none and a network, sync
+   itself; keep whichever data is newer.
 
 **Phase 2 - relay**
 6. Relay protocol and the phone's listener service with a background engine.
