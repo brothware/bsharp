@@ -5,6 +5,7 @@ import 'package:bsharp/app/providers/schedule_providers.dart';
 import 'package:bsharp/domain/schedule_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/wear_app.dart';
+import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -137,15 +138,30 @@ class _WearLessonHeroState extends ConsumerState<WearLessonHero> {
   }
 }
 
-const double _ringDiameter = 148;
+const double _maxRingDiameter = 148;
 const double _ringStroke = 6;
+const double _ringPadding = 8;
+
+/// Room for the room and countdown lines under the ring, so they are on the
+/// glass at rest rather than below it.
+const double _detailsUnderRing = 44;
+
+/// As large as the ring was, but small enough on a 192dp watch that the
+/// details under it still fit the content box.
+double _ringDiameterFor(WearDisplay display) {
+  final contentHeight =
+      display.sizeDp.shortestSide * (1 - 2 * kWearRoundInsetFactor);
+  return math.min(
+    _maxRingDiameter,
+    contentHeight - 2 * _ringPadding - _detailsUnderRing,
+  );
+}
 
 /// The ring is a circle but the text is laid out in the square around it, so
-/// without this a long countdown - more minutes, or a language that spells
-/// them out - runs straight through the stroke. Inset to the largest square
-/// that fits inside the ring and the text can never reach it.
-const double _ringTextInset =
-    (_ringDiameter - (_ringDiameter - 2 * _ringStroke) * _inverseSqrt2) / 2;
+/// without this a long title runs straight through the stroke. Inset to the
+/// largest square that fits inside the ring and the text can never reach it.
+double _ringTextInsetFor(double diameter) =>
+    (diameter - (diameter - 2 * _ringStroke) * _inverseSqrt2) / 2;
 const double _inverseSqrt2 = 0.7071067811865476;
 
 class _WearHeroBody extends StatelessWidget {
@@ -256,14 +272,15 @@ class _WearHeroBody extends StatelessWidget {
       // Only the heading sits in the ring: room, countdown and page dots
       // under it would not fit the ring at 12sp (WO-V14), and scaling the
       // group down to fit is what took them below it.
+      final diameter = _ringDiameterFor(WearDisplayScope.of(context));
       return Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(_ringPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: _ringDiameter,
-              height: _ringDiameter,
+              width: diameter,
+              height: diameter,
               child: CustomPaint(
                 painter: _ProgressRingPainter(
                   progress: progress!,
@@ -272,7 +289,7 @@ class _WearHeroBody extends StatelessWidget {
                 ),
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(_ringTextInset),
+                    padding: EdgeInsets.all(_ringTextInsetFor(diameter)),
                     child: heading,
                   ),
                 ),

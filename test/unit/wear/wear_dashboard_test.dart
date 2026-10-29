@@ -11,6 +11,7 @@ import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/wear/screens/wear_dashboard.dart';
 import 'package:bsharp/wear/wear_app.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_lesson_hero.dart';
 import 'package:bsharp/wear/widgets/wear_news_badges.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ Widget _buildDashboard({
   List<PortalTest> tests = const [],
   List<PortalReprimand> reprimands = const [],
   List<PortalBulletin> bulletins = const [],
+  Size displaySizeDp = const Size(400, 400),
 }) {
   return ProviderScope(
     overrides: [
@@ -85,7 +87,7 @@ Widget _buildDashboard({
       theme: wearTheme(),
       home: Scaffold(
         body: WearDisplayScope(
-          display: WearDisplay(shape: shape, sizeDp: const Size(400, 400)),
+          display: WearDisplay(shape: shape, sizeDp: displaySizeDp),
           child: const WearDashboard(),
         ),
       ),
@@ -182,6 +184,40 @@ void main() {
             );
           }
         }
+      });
+
+      testWidgets('on a 192dp watch the countdown is on screen at rest', (
+        tester,
+      ) async {
+        if (shape != WearScreenShape.round) return;
+        const watch = Size(192, 192);
+
+        await tester.pumpWidget(
+          _buildDashboard(
+            prefs: prefs,
+            shape: shape,
+            displaySizeDp: watch,
+            resolvedEvents: [
+              _resolvedEvent(
+                subjectName: 'zajęcia praktyczno-techniczne',
+                roomName: 'Sala gimnastyczna 4.01',
+                startTime: '10:00:00',
+                endTime: '14:00:00',
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+
+        final contentHeight =
+            watch.shortestSide * (1 - 2 * kWearRoundInsetFactor);
+        final hero = tester.getRect(find.byType(WearLessonHero));
+        final countdown = tester.getRect(find.textContaining('Ends in'));
+        expect(
+          countdown.bottom - hero.top,
+          lessThanOrEqualTo(contentHeight),
+          reason: 'the time left sat below the glass until scrolled to',
+        );
       });
 
       testWidgets('no hero text is drawn under 12sp (WO-V14)', (tester) async {
