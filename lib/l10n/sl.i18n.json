@@ -832,5 +832,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Datotek ni bilo mogoče priložiti temu sporočilu. Pošljite jih v novem sporočilu."
+  },
+  "watchSetup": {
+    "title": "Nastavi uro",
+    "settingsSubtitle": "Prijavite uro brez vnosa gesla",
+    "intro": "Na uri odprite BSharp in tapnite »Telefon«. Nato od tu pošljite račun.",
+    "send": "Pošlji",
+    "sent": "Poslano. Dokončajte na uri.",
+    "noWatch": "Nobena ura ni povezana. Imejte jo blizu telefona z odprtim BSharp.",
+    "sendFailed": "Pošiljanje na uro ni uspelo",
+    "noAccounts": "Najprej dodajte šolski račun",
+    "usePhone": "Telefon",
+    "waitingTitle": "Uporabite telefon",
+    "waitingBody": "Na telefonu odprite BSharp, nato »Nastavitve«, nato »Nastavi uro«",
+    "receiveFailed": "Računa s telefona ni bilo mogoče prebrati",
+    "updateApp": "Posodobite BSharp na obeh napravah, da boste lahko uporabili ta račun"
   }
 }

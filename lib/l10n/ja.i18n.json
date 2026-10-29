@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "このメッセージにファイルを添付できませんでした。新しいメッセージで送信してください。"
+  },
+  "watchSetup": {
+    "title": "ウォッチを設定",
+    "settingsSubtitle": "パスワードを入力せずにウォッチにログイン",
+    "intro": "ウォッチで BSharp を開き、「スマホ」をタップしてから、ここからアカウントを送信します。",
+    "send": "送信",
+    "sent": "送信しました。ウォッチで完了してください。",
+    "noWatch": "ウォッチが接続されていません。BSharp を開いたまま電話の近くに置いてください。",
+    "sendFailed": "ウォッチに送信できませんでした",
+    "noAccounts": "まず学校のアカウントを追加してください",
+    "usePhone": "スマホ",
+    "waitingTitle": "スマートフォンを使う",
+    "waitingBody": "スマートフォンで BSharp を開き、「設定」、「ウォッチを設定」の順に進みます",
+    "receiveFailed": "スマートフォンからアカウントを読み取れませんでした",
+    "updateApp": "このアカウントを使うには両方のデバイスで BSharp を更新してください"
   }
 }

@@ -823,5 +823,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "The files could not be attached to this message. Send them in a new message."
+  },
+  "watchSetup": {
+    "title": "Set up watch",
+    "settingsSubtitle": "Sign the watch in without typing a password",
+    "intro": "On the watch, open BSharp and tap Use phone. Then send an account from here.",
+    "send": "Send",
+    "sent": "Sent. Finish on the watch.",
+    "noWatch": "No watch is connected. Keep it near the phone with BSharp open.",
+    "sendFailed": "Could not send to the watch",
+    "noAccounts": "Add a school account first",
+    "usePhone": "Use phone",
+    "waitingTitle": "Use your phone",
+    "waitingBody": "On the phone, open BSharp, then Settings, then Set up watch",
+    "receiveFailed": "Could not read the account from the phone",
+    "updateApp": "Update BSharp on both devices to use this account"
   }
 }

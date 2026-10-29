@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Die Dateien konnten dieser Nachricht nicht angehängt werden. Senden Sie sie in einer neuen Nachricht."
+  },
+  "watchSetup": {
+    "title": "Uhr einrichten",
+    "settingsSubtitle": "Uhr ohne Passworteingabe anmelden",
+    "intro": "Öffne BSharp auf der Uhr und tippe auf „Telefon nutzen“. Sende dann hier ein Konto.",
+    "send": "Senden",
+    "sent": "Gesendet. Auf der Uhr abschließen.",
+    "noWatch": "Keine Uhr verbunden. Halte sie mit geöffnetem BSharp in der Nähe des Telefons.",
+    "sendFailed": "Senden an die Uhr fehlgeschlagen",
+    "noAccounts": "Füge zuerst ein Schulkonto hinzu",
+    "usePhone": "Telefon nutzen",
+    "waitingTitle": "Telefon verwenden",
+    "waitingBody": "Öffne auf dem Telefon BSharp, dann „Einstellungen“, dann „Uhr einrichten“",
+    "receiveFailed": "Das Konto vom Telefon konnte nicht gelesen werden",
+    "updateApp": "Aktualisiere BSharp auf beiden Geräten, um dieses Konto zu nutzen"
   }
 }

@@ -829,5 +829,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Fișierele nu au putut fi atașate acestui mesaj. Trimiteți-le într-un mesaj nou."
+  },
+  "watchSetup": {
+    "title": "Configurează ceasul",
+    "settingsSubtitle": "Conectează ceasul fără să tastezi parola",
+    "intro": "Pe ceas, deschide BSharp și atinge „Telefon”. Apoi trimite un cont de aici.",
+    "send": "Trimite",
+    "sent": "Trimis. Finalizează pe ceas.",
+    "noWatch": "Niciun ceas conectat. Ține-l lângă telefon cu BSharp deschis.",
+    "sendFailed": "Nu s-a putut trimite la ceas",
+    "noAccounts": "Adaugă mai întâi un cont școlar",
+    "usePhone": "Telefon",
+    "waitingTitle": "Folosește telefonul",
+    "waitingBody": "Pe telefon, deschide BSharp, apoi „Setări”, apoi „Configurează ceasul”",
+    "receiveFailed": "Contul de pe telefon nu a putut fi citit",
+    "updateApp": "Actualizează BSharp pe ambele dispozitive pentru a folosi acest cont"
   }
 }

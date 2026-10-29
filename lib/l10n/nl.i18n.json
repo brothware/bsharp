@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "De bestanden konden niet aan dit bericht worden toegevoegd. Stuur ze in een nieuw bericht."
+  },
+  "watchSetup": {
+    "title": "Horloge instellen",
+    "settingsSubtitle": "Log in op het horloge zonder een wachtwoord te typen",
+    "intro": "Open BSharp op het horloge en tik op ‘Telefoon’. Stuur daarna hier een account.",
+    "send": "Versturen",
+    "sent": "Verstuurd. Rond af op het horloge.",
+    "noWatch": "Geen horloge verbonden. Houd het bij de telefoon met BSharp open.",
+    "sendFailed": "Versturen naar het horloge mislukt",
+    "noAccounts": "Voeg eerst een schoolaccount toe",
+    "usePhone": "Telefoon",
+    "waitingTitle": "Gebruik je telefoon",
+    "waitingBody": "Open op de telefoon BSharp, dan ‘Instellingen’, dan ‘Horloge instellen’",
+    "receiveFailed": "Kan het account van de telefoon niet lezen",
+    "updateApp": "Werk BSharp bij op beide apparaten om dit account te gebruiken"
   }
 }

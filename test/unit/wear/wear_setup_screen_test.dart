@@ -3,12 +3,16 @@ import 'dart:async';
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/watch_link_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
+import 'package:bsharp/data/services/data_layer_watch_link.dart';
+import 'package:bsharp/domain/entities/account_handoff.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
+import 'package:bsharp/domain/watch_link.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +74,39 @@ class _CountingProbeDataProvider extends DemoDataProvider {
   }
 }
 
+class _RecordingProbeDataProvider extends DemoDataProvider {
+  final probed = <(String, String, String)>[];
+
+  @override
+  String get id => 'mobireg';
+
+  @override
+  bool get requiresCredentials => true;
+
+  @override
+  Future<Result<AccountProbe>> probeAccount({
+    required String school,
+    required String login,
+    required String password,
+  }) {
+    probed.add((school, login, password));
+    return super.probeAccount(school: school, login: login, password: password);
+  }
+}
+
+class _PhoneLink implements WatchLink {
+  final accounts = StreamController<AccountHandoff>.broadcast();
+
+  @override
+  Future<bool> hasConnectedCounterpart() async => true;
+
+  @override
+  Future<void> sendAccount(AccountHandoff account) async {}
+
+  @override
+  Stream<AccountHandoff> get receivedAccounts => accounts.stream;
+}
+
 /// The school and login steps hand typing to the watch's own input screen, so
 /// a test answers the channel instead of typing into the field. The password
 /// step keeps a real field, and takes text directly.
@@ -100,6 +137,7 @@ Widget _buildApp({
   WearScreenShape shape = WearScreenShape.rectangular,
   AccountStorage? accountStorage,
   bool addingAnother = false,
+  WatchLink? watchLink,
 }) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
@@ -109,6 +147,7 @@ Widget _buildApp({
         accountStorage ?? AccountStorage(store: FakeKeyValueStore()),
       ),
       wearScreenShapeProvider.overrideWith((_) => shape),
+      watchLinkProvider.overrideWithValue(watchLink ?? _PhoneLink()),
       ...extraOverrides.cast(),
     ],
     child: MaterialApp(
@@ -139,6 +178,8 @@ class _SlowAccountStorage extends AccountStorage {
 Future<void> _chooseMobireg(WidgetTester tester) async {
   // The screen waits to learn whether an account is already saved before it
   // offers to add one, and the provider list is a step past that.
+  await tester.pumpAndSettle();
+  await tester.drag(find.byType(ListView).first, const Offset(0, -200));
   await tester.pumpAndSettle();
   await tester.tap(find.text('Add account'));
   await tester.pumpAndSettle();
@@ -710,6 +751,119 @@ void main() {
 
       expect(find.text('settings'), findsOneWidget);
       expect(find.byType(WearSetupScreen), findsNothing);
+    });
+  });
+
+  group('signing in from the phone', () {
+    late _PhoneLink link;
+    late _RecordingProbeDataProvider provider;
+
+    setUp(() {
+      link = _PhoneLink();
+      provider = _RecordingProbeDataProvider();
+    });
+
+    tearDown(() => link.accounts.close());
+
+    Future<void> settle(WidgetTester tester) async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+
+    Future<void> openUsePhone(WidgetTester tester) async {
+      await tester.pumpWidget(
+        _buildApp(
+          watchLink: link,
+          extraOverrides: [
+            activeDataProviderProvider.overrideWithBuild((ref, _) => provider),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Use phone'));
+      await settle(tester);
+    }
+
+    testWidgets('the watch says where to go on the phone', (tester) async {
+      await openUsePhone(tester);
+
+      expect(
+        find.text(
+          'On the phone, open BSharp, then Settings, then Set up watch',
+        ),
+        findsOneWidget,
+      );
+      expect(find.byType(TextField), findsNothing);
+    });
+
+    testWidgets('an account sent from the phone signs the watch in', (
+      tester,
+    ) async {
+      await openUsePhone(tester);
+
+      link.accounts.add(
+        const AccountHandoff(
+          providerType: 'mobireg',
+          school: 'osm-wroclaw',
+          login: 'parent',
+          password: 'secret',
+        ),
+      );
+      await settle(tester);
+
+      expect(provider.probed, [('osm-wroclaw', 'parent', 'secret')]);
+      expect(find.byType(TextField), findsNothing);
+    });
+
+    testWidgets('an account from a newer phone app asks for an update', (
+      tester,
+    ) async {
+      await openUsePhone(tester);
+
+      link.accounts.addError(const UnsupportedHandoffVersion(2));
+      await settle(tester);
+
+      expect(
+        find.text('Update BSharp on both devices to use this account'),
+        findsOneWidget,
+      );
+      expect(provider.probed, isEmpty);
+    });
+
+    testWidgets('an unreadable account says so and keeps waiting', (
+      tester,
+    ) async {
+      await openUsePhone(tester);
+
+      link.accounts.addError(const FormatException('no "password"'));
+      await settle(tester);
+
+      expect(
+        find.text('Could not read the account from the phone'),
+        findsOneWidget,
+      );
+      link.accounts.add(
+        const AccountHandoff(
+          providerType: 'mobireg',
+          school: 'osm-wroclaw',
+          login: 'parent',
+          password: 'secret',
+        ),
+      );
+      await settle(tester);
+
+      expect(provider.probed, hasLength(1));
+    });
+
+    testWidgets('a swipe leaves the phone step for the welcome', (
+      tester,
+    ) async {
+      await openUsePhone(tester);
+
+      await tester.dragFrom(const Offset(5, 200), const Offset(300, 0));
+      await settle(tester);
+
+      expect(find.text('No accounts yet'), findsOneWidget);
     });
   });
 }

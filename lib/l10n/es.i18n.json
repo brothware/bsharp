@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "No se pudieron adjuntar los archivos a este mensaje. Envíelos en un mensaje nuevo."
+  },
+  "watchSetup": {
+    "title": "Configurar reloj",
+    "settingsSubtitle": "Inicia sesión en el reloj sin escribir la contraseña",
+    "intro": "En el reloj, abre BSharp y toca «Usar teléfono». Después envía una cuenta desde aquí.",
+    "send": "Enviar",
+    "sent": "Enviado. Termina en el reloj.",
+    "noWatch": "No hay ningún reloj conectado. Mantenlo cerca del teléfono con BSharp abierto.",
+    "sendFailed": "No se pudo enviar al reloj",
+    "noAccounts": "Primero añade una cuenta escolar",
+    "usePhone": "Usar teléfono",
+    "waitingTitle": "Usa tu teléfono",
+    "waitingBody": "En el teléfono, abre BSharp, luego «Ajustes» y luego «Configurar reloj»",
+    "receiveFailed": "No se pudo leer la cuenta del teléfono",
+    "updateApp": "Actualiza BSharp en ambos dispositivos para usar esta cuenta"
   }
 }

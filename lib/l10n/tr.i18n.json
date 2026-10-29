@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Dosyalar bu mesaja eklenemedi. Onları yeni bir mesajla gönderin."
+  },
+  "watchSetup": {
+    "title": "Saati kur",
+    "settingsSubtitle": "Şifre yazmadan saatte oturum açın",
+    "intro": "Saatte BSharp'ı açın ve \"Telefon\" öğesine dokunun. Ardından buradan bir hesap gönderin.",
+    "send": "Gönder",
+    "sent": "Gönderildi. Saatte tamamlayın.",
+    "noWatch": "Bağlı saat yok. BSharp açıkken saati telefona yakın tutun.",
+    "sendFailed": "Saate gönderilemedi",
+    "noAccounts": "Önce bir okul hesabı ekleyin",
+    "usePhone": "Telefon",
+    "waitingTitle": "Telefonunuzu kullanın",
+    "waitingBody": "Telefonda BSharp'ı açın, sonra \"Ayarlar\", sonra \"Saati kur\"",
+    "receiveFailed": "Hesap telefondan okunamadı",
+    "updateApp": "Bu hesabı kullanmak için BSharp'ı her iki cihazda da güncelleyin"
   }
 }

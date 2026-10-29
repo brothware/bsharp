@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Nie udało się dołączyć plików do tej wiadomości. Wyślij je w nowej wiadomości."
+  },
+  "watchSetup": {
+    "title": "Skonfiguruj zegarek",
+    "settingsSubtitle": "Zaloguj zegarek bez wpisywania hasła",
+    "intro": "Na zegarku otwórz BSharp i wybierz Użyj telefonu. Potem wyślij konto stąd.",
+    "send": "Wyślij",
+    "sent": "Wysłano. Dokończ na zegarku.",
+    "noWatch": "Brak połączonego zegarka. Trzymaj go blisko telefonu z otwartym BSharp.",
+    "sendFailed": "Nie udało się wysłać na zegarek",
+    "noAccounts": "Najpierw dodaj konto szkolne",
+    "usePhone": "Użyj telefonu",
+    "waitingTitle": "Użyj telefonu",
+    "waitingBody": "Na telefonie otwórz BSharp, potem Ustawienia, potem Skonfiguruj zegarek",
+    "receiveFailed": "Nie udało się odczytać konta z telefonu",
+    "updateApp": "Zaktualizuj BSharp na obu urządzeniach, aby użyć tego konta"
   }
 }

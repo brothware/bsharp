@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Skedarët nuk mund t'i bashkëngjiteshin këtij mesazhi. Dërgojini në një mesazh të ri."
+  },
+  "watchSetup": {
+    "title": "Konfiguro orën",
+    "settingsSubtitle": "Hyni në orë pa shkruar fjalëkalimin",
+    "intro": "Në orë hapni BSharp dhe prekni «Telefoni». Pastaj dërgoni një llogari nga këtu.",
+    "send": "Dërgo",
+    "sent": "U dërgua. Përfundoni në orë.",
+    "noWatch": "Nuk ka orë të lidhur. Mbajeni pranë telefonit me BSharp të hapur.",
+    "sendFailed": "Dërgimi në orë dështoi",
+    "noAccounts": "Shtoni fillimisht një llogari shkollore",
+    "usePhone": "Telefoni",
+    "waitingTitle": "Përdorni telefonin",
+    "waitingBody": "Në telefon hapni BSharp, pastaj «Cilësimet», pastaj «Konfiguro orën»",
+    "receiveFailed": "Llogaria nga telefoni nuk u lexua",
+    "updateApp": "Përditësoni BSharp në të dyja pajisjet për të përdorur këtë llogari"
   }
 }

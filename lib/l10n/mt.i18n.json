@@ -832,5 +832,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Il-fajls ma setgħux jitwaħħlu ma' dan il-messaġġ. Ibgħathom f'messaġġ ġdid."
+  },
+  "watchSetup": {
+    "title": "Issettja l-arloġġ",
+    "settingsSubtitle": "Idħol fl-arloġġ mingħajr ma tittajpja password",
+    "intro": "Fuq l-arloġġ, iftaħ BSharp u agħfas “Telefon”. Imbagħad ibgħat kont minn hawn.",
+    "send": "Ibgħat",
+    "sent": "Mibgħut. Lesti fuq l-arloġġ.",
+    "noWatch": "L-ebda arloġġ mhu mqabbad. Żommu qrib it-telefon b’BSharp miftuħ.",
+    "sendFailed": "Ma setax jintbagħat lill-arloġġ",
+    "noAccounts": "L-ewwel żid kont tal-iskola",
+    "usePhone": "Telefon",
+    "waitingTitle": "Uża t-telefon",
+    "waitingBody": "Fuq it-telefon, iftaħ BSharp, imbagħad “Issettjar”, imbagħad “Issettja l-arloġġ”",
+    "receiveFailed": "Il-kont mit-telefon ma setax jinqara",
+    "updateApp": "Aġġorna BSharp fuq iż-żewġ apparati biex tuża dan il-kont"
   }
 }

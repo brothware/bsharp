@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "A fájlokat nem sikerült csatolni ehhez az üzenethez. Küldje el őket egy új üzenetben."
+  },
+  "watchSetup": {
+    "title": "Óra beállítása",
+    "settingsSubtitle": "Jelentkeztesse be az órát jelszó beírása nélkül",
+    "intro": "Az órán nyissa meg a BSharpot, és koppintson a „Telefon” gombra. Ezután küldjön innen egy fiókot.",
+    "send": "Küldés",
+    "sent": "Elküldve. Fejezze be az órán.",
+    "noWatch": "Nincs csatlakoztatott óra. Tartsa a telefon közelében, nyitott BSharppal.",
+    "sendFailed": "Nem sikerült elküldeni az órára",
+    "noAccounts": "Először adjon hozzá egy iskolai fiókot",
+    "usePhone": "Telefon",
+    "waitingTitle": "Használja a telefont",
+    "waitingBody": "A telefonon nyissa meg a BSharpot, majd „Beállítások”, majd „Óra beállítása”",
+    "receiveFailed": "A fiók nem olvasható be a telefonról",
+    "updateApp": "A fiók használatához frissítse a BSharpot mindkét eszközön"
   }
 }

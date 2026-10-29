@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} kt",
     "sizeMegabytes": "${size} Mt",
     "sentWithoutFiles": "Tiedostoja ei voitu liittää tähän viestiin. Lähetä ne uudessa viestissä."
+  },
+  "watchSetup": {
+    "title": "Määritä kello",
+    "settingsSubtitle": "Kirjaa kello sisään kirjoittamatta salasanaa",
+    "intro": "Avaa kellossa BSharp ja napauta ”Puhelin”. Lähetä sitten tili täältä.",
+    "send": "Lähetä",
+    "sent": "Lähetetty. Viimeistele kellossa.",
+    "noWatch": "Kelloa ei ole yhdistetty. Pidä se puhelimen lähellä BSharp avoinna.",
+    "sendFailed": "Lähetys kelloon epäonnistui",
+    "noAccounts": "Lisää ensin koulutili",
+    "usePhone": "Puhelin",
+    "waitingTitle": "Käytä puhelinta",
+    "waitingBody": "Avaa puhelimessa BSharp, sitten ”Asetukset”, sitten ”Määritä kello”",
+    "receiveFailed": "Tiliä ei voitu lukea puhelimesta",
+    "updateApp": "Päivitä BSharp molemmissa laitteissa käyttääksesi tätä tiliä"
   }
 }

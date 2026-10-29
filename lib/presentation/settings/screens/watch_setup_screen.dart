@@ -1,0 +1,104 @@
+import 'dart:async';
+
+import 'package:bsharp/app/account_providers.dart';
+import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/watch_link_provider.dart';
+import 'package:bsharp/domain/entities/account_handoff.dart';
+import 'package:bsharp/domain/entities/provider_account.dart';
+import 'package:bsharp/l10n/strings.g.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class WatchSetupScreen extends ConsumerStatefulWidget {
+  const WatchSetupScreen({super.key});
+
+  @override
+  ConsumerState<WatchSetupScreen> createState() => _WatchSetupScreenState();
+}
+
+class _WatchSetupScreenState extends ConsumerState<WatchSetupScreen> {
+  String? _sendingAccountId;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final accounts = [
+      for (final account
+          in ref.watch(providerAccountsProvider).value ??
+              const <ProviderAccount>[])
+        if (_canHandOff(account)) account,
+    ];
+
+    return Scaffold(
+      appBar: AppBar(title: Text(t.watchSetup.title)),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(t.watchSetup.intro, style: theme.textTheme.bodyLarge),
+          ),
+          const SizedBox(height: 16),
+          if (accounts.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(t.watchSetup.noAccounts),
+            ),
+          for (final account in accounts)
+            ListTile(
+              leading: const Icon(Icons.school),
+              title: Text(account.schoolName ?? account.slug),
+              subtitle: Text(account.login),
+              trailing: _sendingAccountId == account.id
+                  ? const SizedBox.square(
+                      dimension: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : IconButton.filledTonal(
+                      tooltip: t.watchSetup.send,
+                      icon: const Icon(Icons.send_to_mobile),
+                      onPressed: _sendingAccountId == null
+                          ? () => unawaited(_send(account))
+                          : null,
+                    ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Future<String> _handOff(ProviderAccount account) async {
+    final link = ref.read(watchLinkProvider);
+    try {
+      if (!await link.hasConnectedCounterpart()) {
+        return t.watchSetup.noWatch;
+      }
+      await link.sendAccount(
+        AccountHandoff(
+          providerType: account.providerType,
+          school: account.slug,
+          login: account.login,
+          password: account.password,
+        ),
+      );
+      return t.watchSetup.sent;
+    } on PlatformException catch (error, stackTrace) {
+      debugPrint('WatchSetupScreen: send failed: $error\n$stackTrace');
+      return t.watchSetup.sendFailed;
+    }
+  }
+
+  bool _canHandOff(ProviderAccount account) =>
+      account.password.isNotEmpty &&
+      createProviderForType(account.providerType).requiresCredentials;
+
+  Future<void> _send(ProviderAccount account) async {
+    setState(() => _sendingAccountId = account.id);
+    final outcome = await _handOff(account);
+    if (!mounted) return;
+    setState(() => _sendingAccountId = null);
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(outcome)));
+  }
+}

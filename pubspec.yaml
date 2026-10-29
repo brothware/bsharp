@@ -42,6 +42,7 @@ dependencies:
   sqlite3: ^3.5.2
   url_launcher: ^6.3.2
   uuid: ^4.6.0
+  watch_connectivity: ^0.2.11
   wear_os_scrollbar: ^1.0.0
   web: any
 dev_dependencies:

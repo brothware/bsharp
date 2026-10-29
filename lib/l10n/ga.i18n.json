@@ -835,5 +835,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Níorbh fhéidir na comhaid a cheangal leis an teachtaireacht seo. Seol iad i dteachtaireacht nua."
+  },
+  "watchSetup": {
+    "title": "Socraigh an uaireadóir",
+    "settingsSubtitle": "Sínigh isteach ar an uaireadóir gan pasfhocal a chlóscríobh",
+    "intro": "Ar an uaireadóir, oscail BSharp agus tapáil “Fón”. Ansin seol cuntas as seo.",
+    "send": "Seol",
+    "sent": "Seolta. Críochnaigh ar an uaireadóir.",
+    "noWatch": "Níl aon uaireadóir ceangailte. Coinnigh é in aice leis an bhfón agus BSharp oscailte.",
+    "sendFailed": "Níorbh fhéidir seoladh chuig an uaireadóir",
+    "noAccounts": "Cuir cuntas scoile leis ar dtús",
+    "usePhone": "Fón",
+    "waitingTitle": "Úsáid do ghuthán",
+    "waitingBody": "Ar an bhfón, oscail BSharp, ansin “Socruithe”, ansin “Socraigh an uaireadóir”",
+    "receiveFailed": "Níorbh fhéidir an cuntas a léamh ón bhfón",
+    "updateApp": "Nuashonraigh BSharp ar an dá ghléas chun an cuntas seo a úsáid"
   }
 }

@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/watch_link_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
+import 'package:bsharp/data/services/data_layer_watch_link.dart';
+import 'package:bsharp/domain/entities/account_handoff.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/failure_messages.dart';
@@ -21,7 +24,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-enum _SetupStep { welcome, provider, school, username, password, studentPicker }
+enum _SetupStep {
+  welcome,
+  provider,
+  phone,
+  school,
+  username,
+  password,
+  studentPicker,
+}
 
 const List<_SetupStep> _credentialSteps = [
   _SetupStep.school,
@@ -61,6 +72,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   List<Student> _students = [];
   int? _selectedStudentId;
   String _password = '';
+  StreamSubscription<AccountHandoff>? _phoneAccounts;
+  bool _isFromPhone = false;
 
   @override
   void initState() {
@@ -100,6 +113,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
 
   @override
   void dispose() {
+    unawaited(_phoneAccounts?.cancel());
     _schoolController.dispose();
     _loginController.dispose();
     _passwordController.dispose();
@@ -114,7 +128,10 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     return switch (_step) {
       _SetupStep.welcome => null,
       _SetupStep.provider => widget.addingAnother ? null : _SetupStep.welcome,
-      _SetupStep.studentPicker => _SetupStep.password,
+      _SetupStep.phone =>
+        widget.addingAnother ? _SetupStep.provider : _SetupStep.welcome,
+      _SetupStep.studentPicker =>
+        _isFromPhone ? _SetupStep.phone : _SetupStep.password,
       _ when credentialIndex == 0 => _SetupStep.provider,
       _ => _credentialSteps[credentialIndex - 1],
     };
@@ -125,6 +142,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     if (previous == null) {
       _leaveSetup();
       return;
+    }
+    if (_step == _SetupStep.phone) {
+      _stopListeningToPhone();
     }
     setState(() {
       _errorMessage = null;
@@ -138,6 +158,47 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     } else {
       unawaited(SystemNavigator.pop());
     }
+  }
+
+  void _listenToPhone() {
+    _phoneAccounts ??= ref
+        .read(watchLinkProvider)
+        .receivedAccounts
+        .listen(
+          (account) => unawaited(_signInFromPhone(account)),
+          onError: _onPhoneAccountUnreadable,
+        );
+    setState(() {
+      _errorMessage = null;
+      _step = _SetupStep.phone;
+    });
+  }
+
+  void _stopListeningToPhone() {
+    unawaited(_phoneAccounts?.cancel());
+    _phoneAccounts = null;
+  }
+
+  void _onPhoneAccountUnreadable(Object error, StackTrace stackTrace) {
+    debugPrint('WearSetupScreen: phone account unreadable: $error');
+    _showError(
+      error is UnsupportedHandoffVersion
+          ? t.watchSetup.updateApp
+          : t.watchSetup.receiveFailed,
+    );
+  }
+
+  Future<void> _signInFromPhone(AccountHandoff account) async {
+    if (_isLoading) return;
+    if (ref.read(activeDataProviderProvider).id != account.providerType) {
+      ref.read(activeDataProviderProvider.notifier).value =
+          createProviderForType(account.providerType);
+    }
+    _schoolController.text = account.school;
+    _loginController.text = account.login;
+    _password = account.password;
+    _isFromPhone = true;
+    await _loadStudents();
   }
 
   Future<void> _selectProvider(SchoolDataProvider provider) async {
@@ -294,6 +355,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
             _knowsWhetherSetUp ? _buildWelcomeStep() : const SizedBox.shrink(),
           _SetupStep.provider =>
             _knowsWhetherSetUp ? _buildProviderStep() : const SizedBox.shrink(),
+          _SetupStep.phone => _buildPhoneStep(),
           _SetupStep.school => _buildSchoolStep(),
           _SetupStep.username => _buildUsernameStep(),
           _SetupStep.password => _buildPasswordStep(),
@@ -478,6 +540,11 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           ),
           const SizedBox(height: 12),
           FilledButton(
+            onPressed: _listenToPhone,
+            child: Text(t.watchSetup.usePhone),
+          ),
+          const SizedBox(height: 6),
+          OutlinedButton(
             onPressed: () => setState(() => _step = _SetupStep.provider),
             child: Text(t.accounts.addAccount),
           ),
@@ -490,6 +557,42 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPhoneStep() {
+    final theme = Theme.of(context);
+
+    return Column(
+      children: [
+        _buildStepHeader(label: t.watchSetup.waitingTitle),
+        const SizedBox(height: 8),
+        Expanded(
+          child: ListView(
+            controller: _fieldStepScrollController,
+            children: [
+              Text(
+                t.watchSetup.waitingBody,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 12),
+              const Center(child: CircularProgressIndicator()),
+              if (_errorMessage case final message?)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    message,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -513,6 +616,14 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           child: ListView(
             controller: _fieldStepScrollController,
             children: [
+              if (widget.addingAnother)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: FilledButton(
+                    onPressed: _isLoading ? null : _listenToPhone,
+                    child: Text(t.watchSetup.usePhone),
+                  ),
+                ),
               for (final provider in allKnownProviders().where(
                 (provider) => provider.requiresCredentials,
               ))

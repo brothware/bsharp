@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Filerna kunde inte bifogas till det här meddelandet. Skicka dem i ett nytt meddelande."
+  },
+  "watchSetup": {
+    "title": "Konfigurera klockan",
+    "settingsSubtitle": "Logga in klockan utan att skriva lösenord",
+    "intro": "Öppna BSharp på klockan och tryck på ”Telefon”. Skicka sedan ett konto härifrån.",
+    "send": "Skicka",
+    "sent": "Skickat. Slutför på klockan.",
+    "noWatch": "Ingen klocka är ansluten. Håll den nära telefonen med BSharp öppen.",
+    "sendFailed": "Kunde inte skicka till klockan",
+    "noAccounts": "Lägg först till ett skolkonto",
+    "usePhone": "Telefon",
+    "waitingTitle": "Använd telefonen",
+    "waitingBody": "Öppna BSharp på telefonen, sedan ”Inställningar”, sedan ”Konfigurera klockan”",
+    "receiveFailed": "Kunde inte läsa kontot från telefonen",
+    "updateApp": "Uppdatera BSharp på båda enheterna för att använda kontot"
   }
 }

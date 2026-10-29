@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} Ko",
     "sizeMegabytes": "${size} Mo",
     "sentWithoutFiles": "Les fichiers n'ont pas pu être joints à ce message. Envoyez-les dans un nouveau message."
+  },
+  "watchSetup": {
+    "title": "Configurer la montre",
+    "settingsSubtitle": "Connectez la montre sans saisir de mot de passe",
+    "intro": "Sur la montre, ouvrez BSharp et touchez « Utiliser le téléphone ». Envoyez ensuite un compte depuis ici.",
+    "send": "Envoyer",
+    "sent": "Envoyé. Terminez sur la montre.",
+    "noWatch": "Aucune montre connectée. Gardez-la près du téléphone avec BSharp ouvert.",
+    "sendFailed": "Impossible d’envoyer à la montre",
+    "noAccounts": "Ajoutez d’abord un compte scolaire",
+    "usePhone": "Utiliser le téléphone",
+    "waitingTitle": "Utilisez votre téléphone",
+    "waitingBody": "Sur le téléphone, ouvrez BSharp, puis « Paramètres », puis « Configurer la montre »",
+    "receiveFailed": "Impossible de lire le compte depuis le téléphone",
+    "updateApp": "Mettez à jour BSharp sur les deux appareils pour utiliser ce compte"
   }
 }

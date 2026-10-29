@@ -15,10 +15,15 @@ import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.
 import 'package:bsharp/presentation/common/relative_time.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/settings/screens/account_management_screen.dart';
+import 'package:bsharp/presentation/settings/screens/watch_setup_screen.dart';
 import 'package:bsharp/presentation/support/tip_jar_sheet.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+bool get _canPairWatch =>
+    !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -83,6 +88,17 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
           ),
+          if (_canPairWatch)
+            ListTile(
+              leading: const Icon(Icons.watch),
+              title: Text(t.watchSetup.title),
+              subtitle: Text(t.watchSetup.settingsSubtitle),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const WatchSetupScreen(),
+                ),
+              ),
+            ),
           if (isCredentialBased)
             ListTile(
               leading: const Icon(Icons.password),

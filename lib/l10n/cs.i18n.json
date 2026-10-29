@@ -829,5 +829,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Soubory se k této zprávě nepodařilo přiložit. Pošlete je v nové zprávě."
+  },
+  "watchSetup": {
+    "title": "Nastavit hodinky",
+    "settingsSubtitle": "Přihlaste hodinky bez psaní hesla",
+    "intro": "Na hodinkách otevřete BSharp a klepněte na „Telefon“. Pak odsud odešlete účet.",
+    "send": "Odeslat",
+    "sent": "Odesláno. Dokončete na hodinkách.",
+    "noWatch": "Žádné hodinky nejsou připojené. Mějte je u telefonu s otevřeným BSharp.",
+    "sendFailed": "Odeslání do hodinek se nezdařilo",
+    "noAccounts": "Nejdřív přidejte školní účet",
+    "usePhone": "Telefon",
+    "waitingTitle": "Použijte telefon",
+    "waitingBody": "V telefonu otevřete BSharp, pak „Nastavení“, pak „Nastavit hodinky“",
+    "receiveFailed": "Účet z telefonu se nepodařilo načíst",
+    "updateApp": "Aktualizujte BSharp na obou zařízeních, abyste mohli tento účet použít"
   }
 }

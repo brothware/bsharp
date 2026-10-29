@@ -147,6 +147,7 @@ void main() {
       'messages.inbox',
       'messages.attachments',
       'messages.send',
+      'watchSetup.send',
       'gradeNames.poprawne',
       'gradeCategories.projekt',
       'gradeCategories.kartkowka',

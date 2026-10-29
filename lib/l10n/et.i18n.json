@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Faile ei õnnestunud sellele sõnumile lisada. Saada need uues sõnumis."
+  },
+  "watchSetup": {
+    "title": "Seadista kell",
+    "settingsSubtitle": "Logi kell sisse ilma parooli sisestamata",
+    "intro": "Ava kellas BSharp ja puuduta „Telefon“. Seejärel saada konto siit.",
+    "send": "Saada",
+    "sent": "Saadetud. Lõpeta kellas.",
+    "noWatch": "Ühtegi kella pole ühendatud. Hoia seda telefoni lähedal, BSharp avatud.",
+    "sendFailed": "Kellale saatmine ebaõnnestus",
+    "noAccounts": "Lisa esmalt kooli konto",
+    "usePhone": "Telefon",
+    "waitingTitle": "Kasuta telefoni",
+    "waitingBody": "Ava telefonis BSharp, siis „Seaded“, siis „Seadista kell“",
+    "receiveFailed": "Telefonist kontot ei õnnestunud lugeda",
+    "updateApp": "Selle konto kasutamiseks uuenda BSharp mõlemas seadmes"
   }
 }

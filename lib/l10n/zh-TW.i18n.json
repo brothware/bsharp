@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "無法將檔案附加到這則訊息。請在新訊息中傳送。"
+  },
+  "watchSetup": {
+    "title": "設定手錶",
+    "settingsSubtitle": "不必輸入密碼即可登入手錶",
+    "intro": "在手錶上開啟 BSharp 並輕觸「手機」，然後從這裡傳送帳號。",
+    "send": "傳送",
+    "sent": "已傳送。請在手錶上完成。",
+    "noWatch": "未連接手錶。請保持 BSharp 開啟並讓手錶靠近手機。",
+    "sendFailed": "無法傳送到手錶",
+    "noAccounts": "請先新增學校帳號",
+    "usePhone": "手機",
+    "waitingTitle": "使用手機",
+    "waitingBody": "在手機上開啟 BSharp，然後依序前往「設定」和「設定手錶」",
+    "receiveFailed": "無法讀取手機傳送的帳號",
+    "updateApp": "請在兩部裝置上更新 BSharp 以使用此帳號"
   }
 }

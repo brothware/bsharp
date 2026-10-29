@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "无法将文件附加到此消息。请在新消息中发送。"
+  },
+  "watchSetup": {
+    "title": "设置手表",
+    "settingsSubtitle": "无需输入密码即可登录手表",
+    "intro": "在手表上打开 BSharp 并点按“手机”，然后从这里发送账号。",
+    "send": "发送",
+    "sent": "已发送。请在手表上完成。",
+    "noWatch": "未连接手表。请保持 BSharp 打开并将手表靠近手机。",
+    "sendFailed": "无法发送到手表",
+    "noAccounts": "请先添加学校账号",
+    "usePhone": "手机",
+    "waitingTitle": "使用手机",
+    "waitingBody": "在手机上打开 BSharp，然后依次进入“设置”和“设置手表”",
+    "receiveFailed": "无法读取手机发送的账号",
+    "updateApp": "请在两台设备上更新 BSharp 以使用此账号"
   }
 }

@@ -1,0 +1,112 @@
+import 'dart:async';
+
+import 'package:bsharp/data/services/data_layer_watch_link.dart';
+import 'package:bsharp/domain/entities/account_handoff.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:watch_connectivity/watch_connectivity.dart';
+
+class _Nodes {
+  bool isReachable = true;
+}
+
+class _FakeConnectivity implements WatchConnectivityBase {
+  final sent = <Map<String, dynamic>>[];
+  final incoming = StreamController<Map<String, dynamic>>.broadcast();
+  final nodes = _Nodes();
+
+  @override
+  Stream<Map<String, dynamic>> get messageStream => incoming.stream;
+
+  @override
+  Future<bool> get isReachable async => nodes.isReachable;
+
+  @override
+  Future<void> sendMessage(Map<String, dynamic> message) async {
+    sent.add(message);
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+const _account = AccountHandoff(
+  providerType: 'mobireg',
+  school: 'osm-wroclaw',
+  login: 'parent',
+  password: 'secret',
+);
+
+void main() {
+  late _FakeConnectivity connectivity;
+  late DataLayerWatchLink link;
+
+  setUp(() {
+    connectivity = _FakeConnectivity();
+    link = DataLayerWatchLink(connectivity);
+  });
+
+  tearDown(() => connectivity.incoming.close());
+
+  test('an account sent from the phone arrives on the watch whole', () async {
+    await link.sendAccount(_account);
+    final received = link.receivedAccounts.first;
+
+    connectivity.incoming.add(connectivity.sent.single);
+
+    expect(await received, _account);
+  });
+
+  test('the counterpart is connected when a node is reachable', () async {
+    expect(await link.hasConnectedCounterpart(), isTrue);
+
+    connectivity.nodes.isReachable = false;
+
+    expect(await link.hasConnectedCounterpart(), isFalse);
+  });
+
+  test('messages of another kind are not accounts', () async {
+    final received = <AccountHandoff>[];
+    final subscription = link.receivedAccounts.listen(received.add);
+
+    connectivity.incoming.add({'kind': 'bsharp.snapshot', 'version': 1});
+    await pumpEventQueue();
+
+    expect(received, isEmpty);
+    await subscription.cancel();
+  });
+
+  test('a malformed account message is reported, not dropped', () async {
+    final errors = <Object>[];
+    final subscription = link.receivedAccounts.listen(
+      (_) {},
+      onError: errors.add,
+    );
+
+    connectivity.incoming.add({
+      'kind': 'bsharp.account',
+      'version': 1,
+      'school': 'osm-wroclaw',
+    });
+    await pumpEventQueue();
+
+    expect(errors.single, isA<FormatException>());
+    await subscription.cancel();
+  });
+
+  test('an account from a newer app version is reported', () async {
+    final errors = <Object>[];
+    final subscription = link.receivedAccounts.listen(
+      (_) {},
+      onError: errors.add,
+    );
+    final message = Map<String, dynamic>.of(
+      encodeAccountHandoff(_account),
+    )..['version'] = 99;
+
+    connectivity.incoming.add(message);
+    await pumpEventQueue();
+
+    expect(errors.single, isA<UnsupportedHandoffVersion>());
+    await subscription.cancel();
+  });
+}

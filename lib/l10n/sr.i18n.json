@@ -829,5 +829,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Datoteke nije bilo moguće priložiti ovoj poruci. Pošaljite ih u novoj poruci."
+  },
+  "watchSetup": {
+    "title": "Подеси сат",
+    "settingsSubtitle": "Пријавите сат без куцања лозинке",
+    "intro": "На сату отворите BSharp и додирните „Телефон“. Затим одавде пошаљите налог.",
+    "send": "Пошаљи",
+    "sent": "Послато. Завршите на сату.",
+    "noWatch": "Ниједан сат није повезан. Држите га близу телефона са отвореним BSharp-ом.",
+    "sendFailed": "Слање на сат није успело",
+    "noAccounts": "Прво додајте школски налог",
+    "usePhone": "Телефон",
+    "waitingTitle": "Користите телефон",
+    "waitingBody": "На телефону отворите BSharp, затим „Podešavanja“, затим „Подеси сат“",
+    "receiveFailed": "Налог са телефона није могуће прочитати",
+    "updateApp": "Ажурирајте BSharp на оба уређаја да бисте користили овај налог"
   }
 }

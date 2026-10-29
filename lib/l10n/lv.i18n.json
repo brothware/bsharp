@@ -826,5 +826,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Failus neizdevās pievienot šim ziņojumam. Nosūtiet tos jaunā ziņojumā."
+  },
+  "watchSetup": {
+    "title": "Iestatīt pulksteni",
+    "settingsSubtitle": "Pierakstieties pulkstenī, neievadot paroli",
+    "intro": "Pulkstenī atveriet BSharp un pieskarieties “Tālrunis”. Pēc tam nosūtiet kontu no šejienes.",
+    "send": "Sūtīt",
+    "sent": "Nosūtīts. Pabeidziet pulkstenī.",
+    "noWatch": "Neviens pulkstenis nav savienots. Turiet to tālruņa tuvumā ar atvērtu BSharp.",
+    "sendFailed": "Neizdevās nosūtīt uz pulksteni",
+    "noAccounts": "Vispirms pievienojiet skolas kontu",
+    "usePhone": "Tālrunis",
+    "waitingTitle": "Izmantojiet tālruni",
+    "waitingBody": "Tālrunī atveriet BSharp, tad “Iestatījumi”, tad “Iestatīt pulksteni”",
+    "receiveFailed": "Neizdevās nolasīt kontu no tālruņa",
+    "updateApp": "Lai izmantotu šo kontu, atjauniniet BSharp abās ierīcēs"
   }
 }

@@ -832,5 +832,20 @@
     "sizeKilobytes": "${size} KB",
     "sizeMegabytes": "${size} MB",
     "sentWithoutFiles": "Failų nepavyko pridėti prie šios žinutės. Išsiųskite juos naujoje žinutėje."
+  },
+  "watchSetup": {
+    "title": "Nustatyti laikrodį",
+    "settingsSubtitle": "Prisijunkite laikrodyje neįvesdami slaptažodžio",
+    "intro": "Laikrodyje atidarykite BSharp ir palieskite „Telefonas“. Tada išsiųskite paskyrą iš čia.",
+    "send": "Siųsti",
+    "sent": "Išsiųsta. Užbaikite laikrodyje.",
+    "noWatch": "Laikrodis neprijungtas. Laikykite jį šalia telefono su atidaryta BSharp.",
+    "sendFailed": "Nepavyko išsiųsti į laikrodį",
+    "noAccounts": "Pirmiausia pridėkite mokyklos paskyrą",
+    "usePhone": "Telefonas",
+    "waitingTitle": "Naudokite telefoną",
+    "waitingBody": "Telefone atidarykite BSharp, tada „Nustatymai“, tada „Nustatyti laikrodį“",
+    "receiveFailed": "Nepavyko nuskaityti paskyros iš telefono",
+    "updateApp": "Norėdami naudoti šią paskyrą, atnaujinkite BSharp abiejuose įrenginiuose"
   }
 }
