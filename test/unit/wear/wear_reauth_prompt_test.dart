@@ -175,6 +175,34 @@ void main() {
     expect(find.text('Home'), findsOneWidget);
   });
 
+  testWidgets('a dismissed sign-in-again comes back when the watch wakes', (
+    tester,
+  ) async {
+    final (container, _) = (await tester.runAsync(
+      () => _container(_ProbingProvider(accepts: true)),
+    ))!;
+    await tester.pumpWidget(_app(container));
+    await tester.pumpAndSettle();
+    container.read(reauthRequiredProvider.notifier).value = true;
+    await tester.pumpAndSettle();
+    await tester.dragFrom(const Offset(5, 200), const Offset(300, 0));
+    await tester.pumpAndSettle();
+
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Sign in again'),
+      findsOneWidget,
+      reason: 'a swipe left the watch on stale data with no way back',
+    );
+  });
+
   testWidgets('a rejected password stays on the screen with an error', (
     tester,
   ) async {

@@ -29,20 +29,39 @@ class WearReauthPrompt extends ConsumerStatefulWidget {
 }
 
 class _WearReauthPromptState extends ConsumerState<WearReauthPrompt> {
+  late final AppLifecycleListener _lifecycle;
+  bool _isOpen = false;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && ref.read(reauthRequiredProvider)) {
-        unawaited(_openReauth());
-      }
-    });
+    // A swipe can put the screen away while the password is still wrong, and
+    // the flag never changes again, so it comes back each time the watch does.
+    _lifecycle = AppLifecycleListener(onResume: _openIfStillRequired);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _openIfStillRequired(),
+    );
   }
 
-  Future<void> _openReauth() {
-    return Navigator.of(context).push(
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  void _openIfStillRequired() {
+    if (mounted && ref.read(reauthRequiredProvider)) {
+      unawaited(_openReauth());
+    }
+  }
+
+  Future<void> _openReauth() async {
+    if (_isOpen) return;
+    _isOpen = true;
+    await Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => const WearReauthScreen()),
     );
+    _isOpen = false;
   }
 
   @override
