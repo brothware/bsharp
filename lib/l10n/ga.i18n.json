@@ -851,6 +851,11 @@
     "waitingTitle": "Úsáid do ghuthán",
     "waitingBody": "Ar an bhfón, oscail BSharp, ansin “Socruithe”, ansin “Socraigh an uaireadóir”",
     "receiveFailed": "Níorbh fhéidir an cuntas a léamh ón bhfón",
-    "updateApp": "Nuashonraigh BSharp ar an dá ghléas chun an cuntas seo a úsáid"
+    "updateApp": "Nuashonraigh BSharp ar an dá ghléas chun an cuntas seo a úsáid",
+    "savedPassword": "Pasfhocal sábháilte",
+    "noSavedPassword": "Níl aon phasfhocal BSharp sábháilte i do chuntas Google",
+    "savedPasswordFailed": "Níorbh fhéidir an pasfhocal sábháilte a úsáid",
+    "typeOnWatch": "Clóscríobh ar an uaireadóir é",
+    "differentAccount": "Is cuntas eile é sin"
   }
 }

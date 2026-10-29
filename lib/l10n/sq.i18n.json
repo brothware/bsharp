@@ -842,6 +842,11 @@
     "waitingTitle": "Përdorni telefonin",
     "waitingBody": "Në telefon hapni BSharp, pastaj «Cilësimet», pastaj «Konfiguro orën»",
     "receiveFailed": "Llogaria nga telefoni nuk u lexua",
-    "updateApp": "Përditësoni BSharp në të dyja pajisjet për të përdorur këtë llogari"
+    "updateApp": "Përditësoni BSharp në të dyja pajisjet për të përdorur këtë llogari",
+    "savedPassword": "Fjalëkalim i ruajtur",
+    "noSavedPassword": "Nuk ka fjalëkalim BSharp të ruajtur në llogarinë tënde Google",
+    "savedPasswordFailed": "Fjalëkalimi i ruajtur nuk mund të përdorej",
+    "typeOnWatch": "Shkruaje në orë",
+    "differentAccount": "Kjo është një llogari tjetër"
   }
 }

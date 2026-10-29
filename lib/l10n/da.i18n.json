@@ -842,6 +842,11 @@
     "waitingTitle": "Brug din telefon",
     "waitingBody": "Åbn BSharp på telefonen, derefter \"Indstillinger\" og så \"Konfigurer ur\"",
     "receiveFailed": "Kunne ikke læse kontoen fra telefonen",
-    "updateApp": "Opdater BSharp på begge enheder for at bruge denne konto"
+    "updateApp": "Opdater BSharp på begge enheder for at bruge denne konto",
+    "savedPassword": "Gemt adgangskode",
+    "noSavedPassword": "Der er ingen BSharp-adgangskode gemt på din Google-konto",
+    "savedPasswordFailed": "Den gemte adgangskode kunne ikke bruges",
+    "typeOnWatch": "Skriv den på uret",
+    "differentAccount": "Det er en anden konto"
   }
 }

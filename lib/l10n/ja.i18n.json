@@ -842,6 +842,11 @@
     "waitingTitle": "スマートフォンを使う",
     "waitingBody": "スマートフォンで BSharp を開き、「設定」、「ウォッチを設定」の順に進みます",
     "receiveFailed": "スマートフォンからアカウントを読み取れませんでした",
-    "updateApp": "このアカウントを使うには両方のデバイスで BSharp を更新してください"
+    "updateApp": "このアカウントを使うには両方のデバイスで BSharp を更新してください",
+    "savedPassword": "保存済みのパスワード",
+    "noSavedPassword": "Google アカウントに BSharp のパスワードが保存されていません",
+    "savedPasswordFailed": "保存済みのパスワードを使用できませんでした",
+    "typeOnWatch": "ウォッチで入力",
+    "differentAccount": "別のアカウントです"
   }
 }

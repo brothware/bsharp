@@ -839,6 +839,11 @@
     "waitingTitle": "Use your phone",
     "waitingBody": "On the phone, open BSharp, then Settings, then Set up watch",
     "receiveFailed": "Could not read the account from the phone",
-    "updateApp": "Update BSharp on both devices to use this account"
+    "updateApp": "Update BSharp on both devices to use this account",
+    "savedPassword": "Saved password",
+    "noSavedPassword": "No BSharp password is saved in your Google account",
+    "savedPasswordFailed": "Could not use the saved password",
+    "typeOnWatch": "Type it on the watch",
+    "differentAccount": "That is a different account"
   }
 }

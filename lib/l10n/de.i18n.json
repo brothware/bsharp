@@ -842,6 +842,11 @@
     "waitingTitle": "Telefon verwenden",
     "waitingBody": "Öffne auf dem Telefon BSharp, dann „Einstellungen“, dann „Uhr einrichten“",
     "receiveFailed": "Das Konto vom Telefon konnte nicht gelesen werden",
-    "updateApp": "Aktualisiere BSharp auf beiden Geräten, um dieses Konto zu nutzen"
+    "updateApp": "Aktualisiere BSharp auf beiden Geräten, um dieses Konto zu nutzen",
+    "savedPassword": "Gespeichertes Passwort",
+    "noSavedPassword": "In deinem Google-Konto ist kein BSharp-Passwort gespeichert",
+    "savedPasswordFailed": "Das gespeicherte Passwort konnte nicht verwendet werden",
+    "typeOnWatch": "Auf der Uhr eingeben",
+    "differentAccount": "Das ist ein anderes Konto"
   }
 }

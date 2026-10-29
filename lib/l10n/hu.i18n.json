@@ -842,6 +842,11 @@
     "waitingTitle": "Használja a telefont",
     "waitingBody": "A telefonon nyissa meg a BSharpot, majd „Beállítások”, majd „Óra beállítása”",
     "receiveFailed": "A fiók nem olvasható be a telefonról",
-    "updateApp": "A fiók használatához frissítse a BSharpot mindkét eszközön"
+    "updateApp": "A fiók használatához frissítse a BSharpot mindkét eszközön",
+    "savedPassword": "Mentett jelszó",
+    "noSavedPassword": "A Google-fiókjában nincs mentett BSharp-jelszó",
+    "savedPasswordFailed": "A mentett jelszót nem sikerült használni",
+    "typeOnWatch": "Beírás az órán",
+    "differentAccount": "Ez egy másik fiók"
   }
 }

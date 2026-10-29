@@ -842,6 +842,11 @@
     "waitingTitle": "휴대전화 사용",
     "waitingBody": "휴대전화에서 BSharp를 열고 \"설정\", \"워치 설정\" 순서로 이동하세요",
     "receiveFailed": "휴대전화에서 계정을 읽을 수 없습니다",
-    "updateApp": "이 계정을 사용하려면 두 기기 모두에서 BSharp를 업데이트하세요"
+    "updateApp": "이 계정을 사용하려면 두 기기 모두에서 BSharp를 업데이트하세요",
+    "savedPassword": "저장된 비밀번호",
+    "noSavedPassword": "Google 계정에 저장된 BSharp 비밀번호가 없습니다",
+    "savedPasswordFailed": "저장된 비밀번호를 사용할 수 없습니다",
+    "typeOnWatch": "워치에서 입력",
+    "differentAccount": "다른 계정입니다"
   }
 }

@@ -842,6 +842,11 @@
     "waitingTitle": "Usa tu teléfono",
     "waitingBody": "En el teléfono, abre BSharp, luego «Ajustes» y luego «Configurar reloj»",
     "receiveFailed": "No se pudo leer la cuenta del teléfono",
-    "updateApp": "Actualiza BSharp en ambos dispositivos para usar esta cuenta"
+    "updateApp": "Actualiza BSharp en ambos dispositivos para usar esta cuenta",
+    "savedPassword": "Contraseña guardada",
+    "noSavedPassword": "No hay ninguna contraseña de BSharp guardada en tu cuenta de Google",
+    "savedPasswordFailed": "No se pudo usar la contraseña guardada",
+    "typeOnWatch": "Escribirla en el reloj",
+    "differentAccount": "Es otra cuenta"
   }
 }

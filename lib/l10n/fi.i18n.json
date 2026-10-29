@@ -842,6 +842,11 @@
     "waitingTitle": "Käytä puhelinta",
     "waitingBody": "Avaa puhelimessa BSharp, sitten ”Asetukset”, sitten ”Määritä kello”",
     "receiveFailed": "Tiliä ei voitu lukea puhelimesta",
-    "updateApp": "Päivitä BSharp molemmissa laitteissa käyttääksesi tätä tiliä"
+    "updateApp": "Päivitä BSharp molemmissa laitteissa käyttääksesi tätä tiliä",
+    "savedPassword": "Tallennettu salasana",
+    "noSavedPassword": "Google-tilillesi ei ole tallennettu BSharp-salasanaa",
+    "savedPasswordFailed": "Tallennettua salasanaa ei voitu käyttää",
+    "typeOnWatch": "Kirjoita kelloon",
+    "differentAccount": "Tämä on eri tili"
   }
 }

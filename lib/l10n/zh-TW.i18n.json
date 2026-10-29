@@ -842,6 +842,11 @@
     "waitingTitle": "使用手機",
     "waitingBody": "在手機上開啟 BSharp，然後依序前往「設定」和「設定手錶」",
     "receiveFailed": "無法讀取手機傳送的帳號",
-    "updateApp": "請在兩部裝置上更新 BSharp 以使用此帳號"
+    "updateApp": "請在兩部裝置上更新 BSharp 以使用此帳號",
+    "savedPassword": "已儲存的密碼",
+    "noSavedPassword": "你的 Google 帳戶中沒有儲存 BSharp 密碼",
+    "savedPasswordFailed": "無法使用已儲存的密碼",
+    "typeOnWatch": "在手錶上輸入",
+    "differentAccount": "這是另一個帳戶"
   }
 }

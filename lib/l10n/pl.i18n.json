@@ -842,6 +842,11 @@
     "waitingTitle": "Użyj telefonu",
     "waitingBody": "Na telefonie otwórz BSharp, potem Ustawienia, potem Skonfiguruj zegarek",
     "receiveFailed": "Nie udało się odczytać konta z telefonu",
-    "updateApp": "Zaktualizuj BSharp na obu urządzeniach, aby użyć tego konta"
+    "updateApp": "Zaktualizuj BSharp na obu urządzeniach, aby użyć tego konta",
+    "savedPassword": "Zapisane hasło",
+    "noSavedPassword": "Na Twoim koncie Google nie ma zapisanego hasła BSharp",
+    "savedPasswordFailed": "Nie udało się użyć zapisanego hasła",
+    "typeOnWatch": "Wpisz na zegarku",
+    "differentAccount": "To jest inne konto"
   }
 }

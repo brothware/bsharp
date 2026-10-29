@@ -845,6 +845,11 @@
     "waitingTitle": "Koristite telefon",
     "waitingBody": "Na telefonu otvorite BSharp, zatim „Podešavanja“, zatim „Postavi sat“",
     "receiveFailed": "Račun s telefona nije moguće pročitati",
-    "updateApp": "Ažurirajte BSharp na oba uređaja da biste koristili ovaj račun"
+    "updateApp": "Ažurirajte BSharp na oba uređaja da biste koristili ovaj račun",
+    "savedPassword": "Sačuvana lozinka",
+    "noSavedPassword": "U vašem Google računu nije sačuvana lozinka za BSharp",
+    "savedPasswordFailed": "Sačuvanu lozinku nije moguće koristiti",
+    "typeOnWatch": "Upišite na satu",
+    "differentAccount": "To je drugi račun"
   }
 }

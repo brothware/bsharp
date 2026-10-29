@@ -842,6 +842,11 @@
     "waitingTitle": "Använd telefonen",
     "waitingBody": "Öppna BSharp på telefonen, sedan ”Inställningar”, sedan ”Konfigurera klockan”",
     "receiveFailed": "Kunde inte läsa kontot från telefonen",
-    "updateApp": "Uppdatera BSharp på båda enheterna för att använda kontot"
+    "updateApp": "Uppdatera BSharp på båda enheterna för att använda kontot",
+    "savedPassword": "Sparat lösenord",
+    "noSavedPassword": "Inget BSharp-lösenord är sparat i ditt Google-konto",
+    "savedPasswordFailed": "Det sparade lösenordet kunde inte användas",
+    "typeOnWatch": "Skriv det på klockan",
+    "differentAccount": "Det är ett annat konto"
   }
 }

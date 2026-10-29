@@ -842,6 +842,11 @@
     "waitingTitle": "Telefonunuzu kullanın",
     "waitingBody": "Telefonda BSharp'ı açın, sonra \"Ayarlar\", sonra \"Saati kur\"",
     "receiveFailed": "Hesap telefondan okunamadı",
-    "updateApp": "Bu hesabı kullanmak için BSharp'ı her iki cihazda da güncelleyin"
+    "updateApp": "Bu hesabı kullanmak için BSharp'ı her iki cihazda da güncelleyin",
+    "savedPassword": "Kayıtlı şifre",
+    "noSavedPassword": "Google hesabınızda kayıtlı BSharp şifresi yok",
+    "savedPasswordFailed": "Kayıtlı şifre kullanılamadı",
+    "typeOnWatch": "Saatte yazın",
+    "differentAccount": "Bu farklı bir hesap"
   }
 }

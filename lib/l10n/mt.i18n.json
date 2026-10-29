@@ -848,6 +848,11 @@
     "waitingTitle": "Uża t-telefon",
     "waitingBody": "Fuq it-telefon, iftaħ BSharp, imbagħad “Issettjar”, imbagħad “Issettja l-arloġġ”",
     "receiveFailed": "Il-kont mit-telefon ma setax jinqara",
-    "updateApp": "Aġġorna BSharp fuq iż-żewġ apparati biex tuża dan il-kont"
+    "updateApp": "Aġġorna BSharp fuq iż-żewġ apparati biex tuża dan il-kont",
+    "savedPassword": "Password issejvjata",
+    "noSavedPassword": "Ma hemm l-ebda password ta’ BSharp issejvjata fil-kont Google tiegħek",
+    "savedPasswordFailed": "Il-password issejvjata ma setgħetx tintuża",
+    "typeOnWatch": "Ittajpjaha fuq l-arloġġ",
+    "differentAccount": "Dak huwa kont ieħor"
   }
 }

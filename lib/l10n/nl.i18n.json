@@ -842,6 +842,11 @@
     "waitingTitle": "Gebruik je telefoon",
     "waitingBody": "Open op de telefoon BSharp, dan ‘Instellingen’, dan ‘Horloge instellen’",
     "receiveFailed": "Kan het account van de telefoon niet lezen",
-    "updateApp": "Werk BSharp bij op beide apparaten om dit account te gebruiken"
+    "updateApp": "Werk BSharp bij op beide apparaten om dit account te gebruiken",
+    "savedPassword": "Opgeslagen wachtwoord",
+    "noSavedPassword": "Er is geen BSharp-wachtwoord opgeslagen in je Google-account",
+    "savedPasswordFailed": "Kan het opgeslagen wachtwoord niet gebruiken",
+    "typeOnWatch": "Typ het op het horloge",
+    "differentAccount": "Dat is een ander account"
   }
 }

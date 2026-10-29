@@ -845,6 +845,11 @@
     "waitingTitle": "Použijte telefon",
     "waitingBody": "V telefonu otevřete BSharp, pak „Nastavení“, pak „Nastavit hodinky“",
     "receiveFailed": "Účet z telefonu se nepodařilo načíst",
-    "updateApp": "Aktualizujte BSharp na obou zařízeních, abyste mohli tento účet použít"
+    "updateApp": "Aktualizujte BSharp na obou zařízeních, abyste mohli tento účet použít",
+    "savedPassword": "Uložené heslo",
+    "noSavedPassword": "Ve vašem účtu Google není uložené heslo pro BSharp",
+    "savedPasswordFailed": "Uložené heslo se nepodařilo použít",
+    "typeOnWatch": "Zadat na hodinkách",
+    "differentAccount": "To je jiný účet"
   }
 }

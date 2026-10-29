@@ -848,6 +848,11 @@
     "waitingTitle": "Naudokite telefoną",
     "waitingBody": "Telefone atidarykite BSharp, tada „Nustatymai“, tada „Nustatyti laikrodį“",
     "receiveFailed": "Nepavyko nuskaityti paskyros iš telefono",
-    "updateApp": "Norėdami naudoti šią paskyrą, atnaujinkite BSharp abiejuose įrenginiuose"
+    "updateApp": "Norėdami naudoti šią paskyrą, atnaujinkite BSharp abiejuose įrenginiuose",
+    "savedPassword": "Išsaugotas slaptažodis",
+    "noSavedPassword": "Jūsų „Google“ paskyroje nėra išsaugoto BSharp slaptažodžio",
+    "savedPasswordFailed": "Nepavyko panaudoti išsaugoto slaptažodžio",
+    "typeOnWatch": "Įvesti laikrodyje",
+    "differentAccount": "Tai kita paskyra"
   }
 }

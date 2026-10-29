@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/saved_passwords_provider.dart';
 import 'package:bsharp/app/watch_link_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
@@ -11,6 +12,8 @@ import 'package:bsharp/data/providers/demo/demo_data_provider.dart';
 import 'package:bsharp/data/services/data_layer_watch_link.dart';
 import 'package:bsharp/domain/entities/account_handoff.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
+import 'package:bsharp/domain/entities/saved_login.dart';
+import 'package:bsharp/domain/saved_passwords.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/domain/watch_link.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
@@ -94,6 +97,26 @@ class _RecordingProbeDataProvider extends DemoDataProvider {
   }
 }
 
+class _SavedPasswords implements SavedPasswords {
+  _SavedPasswords([this.pickResult = const NoSavedLogin()]) : fails = false;
+
+  _SavedPasswords.failing() : pickResult = const NoSavedLogin(), fails = true;
+
+  final SavedLoginPick pickResult;
+  final bool fails;
+
+  @override
+  Future<void> offerToSave(SavedLogin login) async {}
+
+  @override
+  Future<SavedLoginPick> pick() async {
+    if (fails) {
+      throw const SavedPasswordsException('pick failed');
+    }
+    return pickResult;
+  }
+}
+
 class _PhoneLink implements WatchLink {
   final accounts = StreamController<AccountHandoff>.broadcast();
 
@@ -138,6 +161,7 @@ Widget _buildApp({
   AccountStorage? accountStorage,
   bool addingAnother = false,
   WatchLink? watchLink,
+  SavedPasswords? savedPasswords,
 }) {
   final storage = CredentialStorage(store: FakeKeyValueStore());
   return ProviderScope(
@@ -148,6 +172,9 @@ Widget _buildApp({
       ),
       wearScreenShapeProvider.overrideWith((_) => shape),
       watchLinkProvider.overrideWithValue(watchLink ?? _PhoneLink()),
+      savedPasswordsProvider.overrideWithValue(
+        savedPasswords ?? _SavedPasswords(),
+      ),
       ...extraOverrides.cast(),
     ],
     child: MaterialApp(
@@ -173,16 +200,29 @@ class _SlowAccountStorage extends AccountStorage {
   }
 }
 
+/// Typing the account on the watch is the last resort, a link at the foot
+/// of the welcome; a test reaches it through its handler, not a tap at the
+/// rim of a round screen.
+Future<void> _openTypedSetup(WidgetTester tester) async {
+  await tester.pumpAndSettle();
+  await tester.scrollUntilVisible(find.text('Type it on the watch'), 40);
+  tester
+      .widget<TextButton>(
+        find.ancestor(
+          of: find.text('Type it on the watch'),
+          matching: find.byType(TextButton),
+        ),
+      )
+      .onPressed!();
+  await tester.pumpAndSettle();
+}
+
 /// Setup now opens on the provider step, so a test about the credential
 /// steps has to choose a backend that wants credentials first.
 Future<void> _chooseMobireg(WidgetTester tester) async {
   // The screen waits to learn whether an account is already saved before it
   // offers to add one, and the provider list is a step past that.
-  await tester.pumpAndSettle();
-  await tester.drag(find.byType(ListView).first, const Offset(0, -200));
-  await tester.pumpAndSettle();
-  await tester.tap(find.text('Add account'));
-  await tester.pumpAndSettle();
+  await _openTypedSetup(tester);
   await tester.tap(find.text('Mobireg'));
   await tester.pump();
 }
@@ -271,8 +311,7 @@ void main() {
               'provider it is with',
         );
 
-        await tester.tap(find.text('Add account'));
-        await tester.pumpAndSettle();
+        await _openTypedSetup(tester);
 
         expect(find.text('Mobireg'), findsOneWidget);
         expect(
@@ -307,8 +346,7 @@ void main() {
 
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Add account'));
-        await tester.pumpAndSettle();
+        await _openTypedSetup(tester);
 
         final heading = tester.renderObject<RenderParagraph>(
           find.text('Add account'),
@@ -328,8 +366,7 @@ void main() {
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Add account'));
-        await tester.pumpAndSettle();
+        await _openTypedSetup(tester);
 
         expect(find.text('Mobireg'), findsOneWidget);
         expect(
@@ -347,8 +384,7 @@ void main() {
       ) async {
         await tester.pumpWidget(_buildApp(shape: shape));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Add account'));
-        await tester.pumpAndSettle();
+        await _openTypedSetup(tester);
 
         await tester.tap(find.text('Mobireg'));
         await tester.pump();
@@ -666,8 +702,7 @@ void main() {
     ) async {
       await tester.pumpWidget(_buildApp());
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Add account'));
-      await tester.pumpAndSettle();
+      await _openTypedSetup(tester);
 
       await swipeRight(tester);
 
@@ -864,6 +899,102 @@ void main() {
       await settle(tester);
 
       expect(find.text('No accounts yet'), findsOneWidget);
+    });
+  });
+
+  group('signing in with a saved password', () {
+    Future<_RecordingProbeDataProvider> openWelcome(
+      WidgetTester tester,
+      SavedPasswords passwords,
+    ) async {
+      final provider = _RecordingProbeDataProvider();
+      await tester.pumpWidget(
+        _buildApp(
+          savedPasswords: passwords,
+          extraOverrides: [
+            activeDataProviderProvider.overrideWithBuild((ref, _) => provider),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+      return provider;
+    }
+
+    Future<void> tapSavedPassword(WidgetTester tester) async {
+      await tester.scrollUntilVisible(find.text('Saved password'), 40);
+      await tester.tap(find.text('Saved password'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+
+    testWidgets('the welcome offers no keyboard but a last-resort link', (
+      tester,
+    ) async {
+      await openWelcome(tester, _SavedPasswords());
+
+      expect(find.text('Use phone'), findsOneWidget);
+      expect(find.text('Saved password'), findsOneWidget);
+      expect(find.byType(TextField), findsNothing);
+      expect(
+        find.ancestor(
+          of: find.text('Type it on the watch'),
+          matching: find.byType(TextButton),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('a saved password signs the watch in', (tester) async {
+      final provider = await openWelcome(
+        tester,
+        _SavedPasswords(
+          const SavedLoginPicked(
+            SavedLogin(
+              school: 'osm-wroclaw',
+              login: 'parent',
+              password: 'secret',
+            ),
+          ),
+        ),
+      );
+
+      await tapSavedPassword(tester);
+
+      expect(provider.probed, [('osm-wroclaw', 'parent', 'secret')]);
+    });
+
+    testWidgets('with nothing saved the watch says so', (tester) async {
+      final provider = await openWelcome(tester, _SavedPasswords());
+
+      await tapSavedPassword(tester);
+
+      expect(
+        find.text('No BSharp password is saved in your Google account'),
+        findsOneWidget,
+      );
+      expect(provider.probed, isEmpty);
+    });
+
+    testWidgets('a cancelled pick leaves the welcome as it was', (
+      tester,
+    ) async {
+      final provider = await openWelcome(
+        tester,
+        _SavedPasswords(const SavedLoginCancelled()),
+      );
+
+      await tapSavedPassword(tester);
+
+      expect(find.text('No accounts yet'), findsOneWidget);
+      expect(provider.probed, isEmpty);
+    });
+
+    testWidgets('a failed pick says so', (tester) async {
+      await openWelcome(tester, _SavedPasswords.failing());
+
+      await tapSavedPassword(tester);
+
+      expect(find.text('Could not use the saved password'), findsOneWidget);
     });
   });
 }

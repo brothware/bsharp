@@ -842,6 +842,11 @@
     "waitingTitle": "Kasuta telefoni",
     "waitingBody": "Ava telefonis BSharp, siis „Seaded“, siis „Seadista kell“",
     "receiveFailed": "Telefonist kontot ei õnnestunud lugeda",
-    "updateApp": "Selle konto kasutamiseks uuenda BSharp mõlemas seadmes"
+    "updateApp": "Selle konto kasutamiseks uuenda BSharp mõlemas seadmes",
+    "savedPassword": "Salvestatud parool",
+    "noSavedPassword": "Teie Google'i kontole pole BSharpi parooli salvestatud",
+    "savedPasswordFailed": "Salvestatud parooli ei saanud kasutada",
+    "typeOnWatch": "Sisesta kellas",
+    "differentAccount": "See on teine konto"
   }
 }

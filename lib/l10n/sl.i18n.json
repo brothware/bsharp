@@ -848,6 +848,11 @@
     "waitingTitle": "Uporabite telefon",
     "waitingBody": "Na telefonu odprite BSharp, nato »Nastavitve«, nato »Nastavi uro«",
     "receiveFailed": "Računa s telefona ni bilo mogoče prebrati",
-    "updateApp": "Posodobite BSharp na obeh napravah, da boste lahko uporabili ta račun"
+    "updateApp": "Posodobite BSharp na obeh napravah, da boste lahko uporabili ta račun",
+    "savedPassword": "Shranjeno geslo",
+    "noSavedPassword": "V vašem Google računu ni shranjenega gesla za BSharp",
+    "savedPasswordFailed": "Shranjenega gesla ni bilo mogoče uporabiti",
+    "typeOnWatch": "Vnesite na uri",
+    "differentAccount": "To je drug račun"
   }
 }

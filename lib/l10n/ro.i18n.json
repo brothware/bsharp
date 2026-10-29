@@ -845,6 +845,11 @@
     "waitingTitle": "Folosește telefonul",
     "waitingBody": "Pe telefon, deschide BSharp, apoi „Setări”, apoi „Configurează ceasul”",
     "receiveFailed": "Contul de pe telefon nu a putut fi citit",
-    "updateApp": "Actualizează BSharp pe ambele dispozitive pentru a folosi acest cont"
+    "updateApp": "Actualizează BSharp pe ambele dispozitive pentru a folosi acest cont",
+    "savedPassword": "Parolă salvată",
+    "noSavedPassword": "Nu există nicio parolă BSharp salvată în contul tău Google",
+    "savedPasswordFailed": "Parola salvată nu a putut fi folosită",
+    "typeOnWatch": "Tastează pe ceas",
+    "differentAccount": "Este alt cont"
   }
 }

@@ -842,6 +842,11 @@
     "waitingTitle": "Utilisez votre téléphone",
     "waitingBody": "Sur le téléphone, ouvrez BSharp, puis « Paramètres », puis « Configurer la montre »",
     "receiveFailed": "Impossible de lire le compte depuis le téléphone",
-    "updateApp": "Mettez à jour BSharp sur les deux appareils pour utiliser ce compte"
+    "updateApp": "Mettez à jour BSharp sur les deux appareils pour utiliser ce compte",
+    "savedPassword": "Mot de passe enregistré",
+    "noSavedPassword": "Aucun mot de passe BSharp n’est enregistré dans votre compte Google",
+    "savedPasswordFailed": "Impossible d’utiliser le mot de passe enregistré",
+    "typeOnWatch": "Le saisir sur la montre",
+    "differentAccount": "C’est un autre compte"
   }
 }

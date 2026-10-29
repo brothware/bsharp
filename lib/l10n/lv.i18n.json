@@ -842,6 +842,11 @@
     "waitingTitle": "Izmantojiet tālruni",
     "waitingBody": "Tālrunī atveriet BSharp, tad “Iestatījumi”, tad “Iestatīt pulksteni”",
     "receiveFailed": "Neizdevās nolasīt kontu no tālruņa",
-    "updateApp": "Lai izmantotu šo kontu, atjauniniet BSharp abās ierīcēs"
+    "updateApp": "Lai izmantotu šo kontu, atjauniniet BSharp abās ierīcēs",
+    "savedPassword": "Saglabātā parole",
+    "noSavedPassword": "Jūsu Google kontā nav saglabāta BSharp parole",
+    "savedPasswordFailed": "Neizdevās izmantot saglabāto paroli",
+    "typeOnWatch": "Ievadīt pulkstenī",
+    "differentAccount": "Tas ir cits konts"
   }
 }

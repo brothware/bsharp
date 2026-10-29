@@ -842,6 +842,11 @@
     "waitingTitle": "Use o telemóvel",
     "waitingBody": "No telemóvel, abra o BSharp, depois «Definições» e depois «Configurar relógio»",
     "receiveFailed": "Não foi possível ler a conta do telemóvel",
-    "updateApp": "Atualize o BSharp em ambos os dispositivos para usar esta conta"
+    "updateApp": "Atualize o BSharp em ambos os dispositivos para usar esta conta",
+    "savedPassword": "Palavra-passe guardada",
+    "noSavedPassword": "Não há nenhuma palavra-passe do BSharp guardada na sua conta Google",
+    "savedPasswordFailed": "Não foi possível usar a palavra-passe guardada",
+    "typeOnWatch": "Escrever no relógio",
+    "differentAccount": "É outra conta"
   }
 }

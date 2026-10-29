@@ -111,7 +111,7 @@ void main() {
     await tester.pump();
 
     // Setup now welcomes first, then asks which backend.
-    await tester.tap(find.text('Add account'));
+    await tester.tap(find.text('Type it on the watch'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Mobireg'));
     await tester.pump();

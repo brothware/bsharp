@@ -842,6 +842,11 @@
     "waitingTitle": "Usa il telefono",
     "waitingBody": "Sul telefono apri BSharp, poi «Impostazioni», poi «Configura orologio»",
     "receiveFailed": "Impossibile leggere l’account dal telefono",
-    "updateApp": "Aggiorna BSharp su entrambi i dispositivi per usare questo account"
+    "updateApp": "Aggiorna BSharp su entrambi i dispositivi per usare questo account",
+    "savedPassword": "Password salvata",
+    "noSavedPassword": "Nessuna password di BSharp è salvata nel tuo account Google",
+    "savedPasswordFailed": "Impossibile usare la password salvata",
+    "typeOnWatch": "Digitala sull’orologio",
+    "differentAccount": "È un altro account"
   }
 }

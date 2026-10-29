@@ -3,14 +3,17 @@ import 'dart:async';
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/saved_passwords_provider.dart';
 import 'package:bsharp/app/watch_link_provider.dart';
 import 'package:bsharp/core/error/result.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/services/data_layer_watch_link.dart';
 import 'package:bsharp/domain/entities/account_handoff.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
+import 'package:bsharp/domain/entities/saved_login.dart';
 import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/failure_messages.dart';
+import 'package:bsharp/domain/saved_passwords.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/wear_text_input.dart';
@@ -73,7 +76,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   int? _selectedStudentId;
   String _password = '';
   StreamSubscription<AccountHandoff>? _phoneAccounts;
-  bool _isFromPhone = false;
+  _SetupStep? _signedInFrom;
 
   @override
   void initState() {
@@ -130,8 +133,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       _SetupStep.provider => widget.addingAnother ? null : _SetupStep.welcome,
       _SetupStep.phone =>
         widget.addingAnother ? _SetupStep.provider : _SetupStep.welcome,
-      _SetupStep.studentPicker =>
-        _isFromPhone ? _SetupStep.phone : _SetupStep.password,
+      _SetupStep.studentPicker => _signedInFrom ?? _SetupStep.password,
       _ when credentialIndex == 0 => _SetupStep.provider,
       _ => _credentialSteps[credentialIndex - 1],
     };
@@ -188,16 +190,56 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     );
   }
 
-  Future<void> _signInFromPhone(AccountHandoff account) async {
-    if (_isLoading) return;
-    if (ref.read(activeDataProviderProvider).id != account.providerType) {
-      ref.read(activeDataProviderProvider.notifier).value =
-          createProviderForType(account.providerType);
+  Future<void> _signInFromPhone(AccountHandoff account) => _signInWith(
+    providerType: account.providerType,
+    login: SavedLogin(
+      school: account.school,
+      login: account.login,
+      password: account.password,
+    ),
+    from: _SetupStep.phone,
+  );
+
+  Future<void> _signInWithSavedPassword() async {
+    final SavedLoginPick pick;
+    try {
+      pick = await ref.read(savedPasswordsProvider).pick();
+    } on SavedPasswordsException catch (error) {
+      debugPrint('WearSetupScreen: ${error.message}');
+      _showError(t.watchSetup.savedPasswordFailed);
+      return;
     }
-    _schoolController.text = account.school;
-    _loginController.text = account.login;
-    _password = account.password;
-    _isFromPhone = true;
+    if (!mounted) return;
+    switch (pick) {
+      case SavedLoginPicked(:final login):
+        await _signInWith(
+          providerType: allKnownProviders()
+              .firstWhere((provider) => provider.requiresCredentials)
+              .id,
+          login: login,
+          from: _step,
+        );
+      case NoSavedLogin():
+        _showError(t.watchSetup.noSavedPassword);
+      case SavedLoginCancelled():
+        break;
+    }
+  }
+
+  Future<void> _signInWith({
+    required String providerType,
+    required SavedLogin login,
+    required _SetupStep from,
+  }) async {
+    if (_isLoading) return;
+    if (ref.read(activeDataProviderProvider).id != providerType) {
+      ref.read(activeDataProviderProvider.notifier).value =
+          createProviderForType(providerType);
+    }
+    _schoolController.text = login.school;
+    _loginController.text = login.login;
+    _password = login.password;
+    _signedInFrom = from;
     await _loadStudents();
   }
 
@@ -545,8 +587,10 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           ),
           const SizedBox(height: 6),
           OutlinedButton(
-            onPressed: () => setState(() => _step = _SetupStep.provider),
-            child: Text(t.accounts.addAccount),
+            onPressed: _isLoading
+                ? null
+                : () => unawaited(_signInWithSavedPassword()),
+            child: Text(t.watchSetup.savedPassword),
           ),
           const SizedBox(height: 6),
           // Beside the way in, as on the phone: demo is not a school anyone
@@ -554,6 +598,26 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           OutlinedButton(
             onPressed: _isLoading ? null : () => unawaited(_startDemo()),
             child: Text(t.auth.demoMode),
+          ),
+          if (_errorMessage case final message?)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                message,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
+              ),
+            ),
+          // Google asks Wear apps not to take a password on the watch
+          // (WO-P6); typing stays possible, but only as the last way in.
+          TextButton(
+            onPressed: () => setState(() {
+              _errorMessage = null;
+              _step = _SetupStep.provider;
+            }),
+            child: Text(t.watchSetup.typeOnWatch),
           ),
         ],
       ),
@@ -616,7 +680,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           child: ListView(
             controller: _fieldStepScrollController,
             children: [
-              if (widget.addingAnother)
+              if (widget.addingAnother) ...[
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: FilledButton(
@@ -624,6 +688,16 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                     child: Text(t.watchSetup.usePhone),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: OutlinedButton(
+                    onPressed: _isLoading
+                        ? null
+                        : () => unawaited(_signInWithSavedPassword()),
+                    child: Text(t.watchSetup.savedPassword),
+                  ),
+                ),
+              ],
               for (final provider in allKnownProviders().where(
                 (provider) => provider.requiresCredentials,
               ))
