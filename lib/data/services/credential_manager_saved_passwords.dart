@@ -1,6 +1,7 @@
 import 'package:bsharp/domain/entities/saved_login.dart';
 import 'package:bsharp/domain/saved_passwords.dart';
 import 'package:credential_manager/credential_manager.dart';
+import 'package:flutter/services.dart';
 
 const _schoolSeparator = '@';
 const _saveCancelled = 301;
@@ -30,9 +31,19 @@ class CredentialManagerSavedPasswords implements SavedPasswords {
   final CredentialManager _manager;
   Future<void>? _initialised;
 
-  Future<void> _ready() => _initialised ??= _manager.init(
-    preferImmediatelyAvailableCredentials: false,
-  );
+  Future<void> _ready() async {
+    try {
+      await (_initialised ??= _manager.init(
+        preferImmediatelyAvailableCredentials: false,
+      ));
+    } on CredentialException catch (error) {
+      _initialised = null;
+      throw SavedPasswordsException('start failed: ${error.message}');
+    } on PlatformException catch (error) {
+      _initialised = null;
+      throw SavedPasswordsException('start failed: ${error.code}');
+    }
+  }
 
   @override
   Future<void> offerToSave(SavedLogin login) async {
@@ -48,6 +59,8 @@ class CredentialManagerSavedPasswords implements SavedPasswords {
       if (error.code != _saveCancelled) {
         throw SavedPasswordsException('save failed: ${error.message}');
       }
+    } on PlatformException catch (error) {
+      throw SavedPasswordsException('save failed: ${error.code}');
     }
   }
 
@@ -65,6 +78,8 @@ class CredentialManagerSavedPasswords implements SavedPasswords {
         _nothingSaved => const NoSavedLogin(),
         _ => throw SavedPasswordsException('pick failed: ${error.message}'),
       };
+    } on PlatformException catch (error) {
+      throw SavedPasswordsException('pick failed: ${error.code}');
     }
     final password = credentials.passwordCredential;
     if (password == null) {

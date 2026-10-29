@@ -2,14 +2,16 @@ import 'package:bsharp/data/services/credential_manager_saved_passwords.dart';
 import 'package:bsharp/domain/entities/saved_login.dart';
 import 'package:bsharp/domain/saved_passwords.dart';
 import 'package:credential_manager/credential_manager.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _FakeCredentialManager implements CredentialManager {
-  _FakeCredentialManager({this.picked, this.error});
+  _FakeCredentialManager({this.picked, this.error, this.failedInits = 0});
 
   final PasswordCredential? picked;
   final CredentialException? error;
   final saved = <PasswordCredential>[];
+  int failedInits;
   int inits = 0;
 
   @override
@@ -18,6 +20,10 @@ class _FakeCredentialManager implements CredentialManager {
     String? googleClientId,
   }) async {
     inits++;
+    if (failedInits > 0) {
+      failedInits--;
+      throw PlatformException(code: 'init', message: 'no GMS');
+    }
   }
 
   @override
@@ -87,6 +93,20 @@ void main() {
       expect(manager.inits, 1);
       expect(manager.saved.first.username, 'parent@osm-wroclaw');
       expect(manager.saved.first.password, 'secret');
+    });
+
+    test('a failed start is reported and tried again next time', () async {
+      final manager = _FakeCredentialManager(failedInits: 1);
+      final passwords = CredentialManagerSavedPasswords(manager);
+
+      await expectLater(
+        passwords.pick(),
+        throwsA(isA<SavedPasswordsException>()),
+      );
+      await passwords.offerToSave(_login);
+
+      expect(manager.inits, 2);
+      expect(manager.saved, hasLength(1));
     });
 
     test('declining to save is not an error', () async {
