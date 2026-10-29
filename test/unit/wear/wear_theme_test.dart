@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
@@ -91,5 +93,28 @@ void main() {
         expect(Theme.of(context).brightness, Brightness.dark);
       });
     }
+
+    test('nothing on the watch is drawn in a black surface colour', () {
+      final offenders = <String>[];
+      final pattern = RegExp(r'colorScheme\.surfaceContainer\w*');
+      for (final entity in Directory('lib/wear').listSync(recursive: true)) {
+        if (entity is! File ||
+            !entity.path.endsWith('.dart') ||
+            entity.path.endsWith('wear_app.dart')) {
+          continue;
+        }
+        for (final match in pattern.allMatches(entity.readAsStringSync())) {
+          offenders.add('${entity.path}: ${match.group(0)}');
+        }
+      }
+
+      expect(
+        offenders,
+        isEmpty,
+        reason:
+            'every surface container is black on the watch (WO-V13), so a '
+            'dot or track drawn in one vanishes; use wearTrackColor',
+      );
+    });
   });
 }

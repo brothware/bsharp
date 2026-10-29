@@ -4,6 +4,7 @@ import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/domain/date_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/wear_app.dart';
 import 'package:bsharp/wear/widgets/wear_period_selector.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_side_navigation.dart';
@@ -173,7 +174,7 @@ class _WearAttendanceSummary extends StatelessWidget {
               painter: _DonutPainter(
                 percent: stats.presentPercent,
                 color: theme.colorScheme.primary,
-                backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                backgroundColor: wearTrackColor(theme.colorScheme),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(6),

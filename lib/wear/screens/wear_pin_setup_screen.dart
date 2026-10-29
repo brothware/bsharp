@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/wear_app.dart';
 import 'package:bsharp/wear/widgets/wear_compact_keypad.dart';
 import 'package:bsharp/wear/widgets/wear_edge_scrollbar.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -72,7 +73,7 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
                               shape: BoxShape.circle,
                               color: i < _pin.length
                                   ? theme.colorScheme.primary
-                                  : theme.colorScheme.surfaceContainerHighest,
+                                  : wearTrackColor(theme.colorScheme),
                             ),
                           );
                         }),
