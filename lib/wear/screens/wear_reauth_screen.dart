@@ -88,6 +88,7 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
   bool _isSubmitting = false;
   bool _isTyping = false;
   bool _isWaitingForPhone = false;
+  bool _isPickingSavedPassword = false;
   String? _errorMessage;
   StreamSubscription<AccountHandoff>? _phoneAccounts;
 
@@ -129,6 +130,7 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
   }
 
   Future<void> _signInFromPhone(AccountHandoff account) async {
+    if (!mounted) return;
     if (!_isActiveAccount(account.school, account.login)) {
       setState(() => _errorMessage = t.watchSetup.differentAccount);
       return;
@@ -137,13 +139,19 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
   }
 
   Future<void> _signInWithSavedPassword() async {
+    if (_isPickingSavedPassword) return;
+    _isPickingSavedPassword = true;
     final SavedLoginPick pick;
     try {
       pick = await ref.read(savedPasswordsProvider).pick();
     } on SavedPasswordsException catch (error) {
       debugPrint('WearReauthScreen: ${error.message}');
-      setState(() => _errorMessage = t.watchSetup.savedPasswordFailed);
+      if (mounted) {
+        setState(() => _errorMessage = t.watchSetup.savedPasswordFailed);
+      }
       return;
+    } finally {
+      _isPickingSavedPassword = false;
     }
     if (!mounted) return;
     switch (pick) {

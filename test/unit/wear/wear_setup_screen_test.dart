@@ -14,6 +14,7 @@ import 'package:bsharp/data/services/data_layer_watch_link.dart';
 import 'package:bsharp/domain/entities/account_handoff.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/entities/saved_login.dart';
+import 'package:bsharp/domain/entities/student.dart';
 import 'package:bsharp/domain/saved_passwords.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/domain/watch_link.dart';
@@ -116,6 +117,39 @@ class _SavedPasswords implements SavedPasswords {
     }
     return pickResult;
   }
+}
+
+class _GatedProbeDataProvider extends DemoDataProvider {
+  final probes = <Completer<Result<AccountProbe>>>[];
+
+  @override
+  String get id => 'mobireg';
+
+  @override
+  bool get requiresCredentials => true;
+
+  @override
+  Future<Result<AccountProbe>> probeAccount({
+    required String school,
+    required String login,
+    required String password,
+  }) {
+    final probe = Completer<Result<AccountProbe>>();
+    probes.add(probe);
+    return probe.future;
+  }
+
+  void answerWithTwoStudents() => probes.last.complete(
+    const Result.success(
+      AccountProbe(
+        schoolName: 'S',
+        students: [
+          Student(id: 1, name: 'Ada', surname: 'Nowak'),
+          Student(id: 2, name: 'Jan', surname: 'Nowak'),
+        ],
+      ),
+    ),
+  );
 }
 
 class _PhoneLink implements WatchLink {
@@ -1021,6 +1055,94 @@ void main() {
       await tapSavedPassword(tester);
 
       expect(find.text('Could not use the saved password'), findsOneWidget);
+    });
+  });
+
+  group('one sign-in at a time', () {
+    late _PhoneLink link;
+    late _GatedProbeDataProvider provider;
+    const account = AccountHandoff(
+      providerType: 'mobireg',
+      school: 'osm-wroclaw',
+      login: 'parent',
+      password: 'secret',
+    );
+
+    setUp(() {
+      link = _PhoneLink();
+      provider = _GatedProbeDataProvider();
+    });
+
+    tearDown(() => link.accounts.close());
+
+    Future<void> settle(WidgetTester tester) async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+
+    Future<void> waitForPhone(WidgetTester tester) async {
+      await tester.pumpWidget(
+        _buildApp(
+          watchLink: link,
+          extraOverrides: [
+            activeDataProviderProvider.overrideWithBuild((ref, _) => provider),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Use phone'));
+      await settle(tester);
+    }
+
+    testWidgets('back from the student list returns to the phone step', (
+      tester,
+    ) async {
+      await waitForPhone(tester);
+      link.accounts.add(account);
+      await settle(tester);
+      provider.answerWithTwoStudents();
+      await settle(tester);
+      expect(find.text('Ada Nowak'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await settle(tester);
+
+      expect(
+        find.text('Use your phone'),
+        findsOneWidget,
+        reason: 'the arrow went to the password step of a typed login',
+      );
+      expect(find.byType(TextField), findsNothing);
+    });
+
+    testWidgets('a probe that answers after backing out is dropped', (
+      tester,
+    ) async {
+      await waitForPhone(tester);
+      link.accounts.add(account);
+      await settle(tester);
+
+      await tester.dragFrom(const Offset(5, 200), const Offset(300, 0));
+      await settle(tester);
+      provider.answerWithTwoStudents();
+      await settle(tester);
+
+      expect(find.text('No accounts yet'), findsOneWidget);
+      expect(find.text('Ada Nowak'), findsNothing);
+    });
+
+    testWidgets('a second send while signing in is ignored', (tester) async {
+      await waitForPhone(tester);
+      link.accounts.add(account);
+      await settle(tester);
+      provider.answerWithTwoStudents();
+      await settle(tester);
+
+      link.accounts.add(account);
+      await settle(tester);
+
+      expect(provider.probes, hasLength(1));
+      expect(find.text('Ada Nowak'), findsOneWidget);
     });
   });
 }

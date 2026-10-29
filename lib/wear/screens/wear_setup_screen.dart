@@ -78,6 +78,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   String _password = '';
   StreamSubscription<AccountHandoff>? _phoneAccounts;
   _SetupStep? _signedInFrom;
+  int _signInAttempt = 0;
+  bool _isPickingSavedPassword = false;
 
   @override
   void initState() {
@@ -108,6 +110,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     _schoolController.text = account.slug;
     _loginController.text = account.login;
     _password = account.password;
+    _signedInFrom = null;
     if (_password.isEmpty) {
       return;
     }
@@ -149,7 +152,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     if (_step == _SetupStep.phone) {
       _stopListeningToPhone();
     }
+    _signInAttempt++;
     setState(() {
+      _isLoading = false;
       _errorMessage = null;
       _step = previous;
     });
@@ -192,24 +197,33 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     );
   }
 
-  Future<void> _signInFromPhone(AccountHandoff account) => _signInWith(
-    providerType: account.providerType,
-    login: SavedLogin(
-      school: account.school,
-      login: account.login,
-      password: account.password,
-    ),
-    from: _SetupStep.phone,
-  );
+  Future<void> _signInFromPhone(AccountHandoff account) async {
+    if (_step != _SetupStep.phone) return;
+    await _signInWith(
+      providerType: account.providerType,
+      login: SavedLogin(
+        school: account.school,
+        login: account.login,
+        password: account.password,
+      ),
+      from: _SetupStep.phone,
+    );
+  }
 
   Future<void> _signInWithSavedPassword() async {
+    if (_isPickingSavedPassword) return;
+    _isPickingSavedPassword = true;
     final SavedLoginPick pick;
     try {
       pick = await ref.read(savedPasswordsProvider).pick();
     } on SavedPasswordsException catch (error) {
       debugPrint('WearSetupScreen: ${error.message}');
-      _showError(t.watchSetup.savedPasswordFailed);
+      if (mounted) {
+        _showError(t.watchSetup.savedPasswordFailed);
+      }
       return;
+    } finally {
+      _isPickingSavedPassword = false;
     }
     if (!mounted) return;
     switch (pick) {
@@ -292,10 +306,12 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     });
 
     _password = password;
+    _signedInFrom = null;
     await _loadStudents();
   }
 
   Future<void> _loadStudents() async {
+    final attempt = ++_signInAttempt;
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -308,7 +324,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       password: _password,
     );
 
-    if (!mounted) return;
+    // The wearer may have backed out while the server was answering; a
+    // late answer must not pull them forward into a sign-in they left.
+    if (!mounted || attempt != _signInAttempt) return;
 
     switch (result) {
       case Failure(:final failure):
@@ -814,10 +832,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
                 width: 48,
                 height: 48,
                 child: IconButton(
-                  onPressed: () => setState(() {
-                    _errorMessage = null;
-                    _step = _SetupStep.password;
-                  }),
+                  onPressed: _goBack,
                   icon: const Icon(Icons.arrow_back),
                 ),
               ),
