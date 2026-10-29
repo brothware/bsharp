@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- watch_connectivity's isPaired looks for this Pixel Watch companion
+         too, but its own manifest only declares the Wear OS and Samsung
+         apps, so from Android 11 a Pixel-only pairing read as no watch. -->
+    <queries>
+        <package android:name="com.google.android.apps.wear.companion" />
+    </queries>
     <application>
         <activity
             android:name=".MainActivity"
