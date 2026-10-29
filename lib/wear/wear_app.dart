@@ -10,7 +10,9 @@ import 'package:bsharp/wear/screens/wear_home.dart';
 import 'package:bsharp/wear/screens/wear_reauth_screen.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/wear_notification_router.dart';
+import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -126,8 +128,10 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
       },
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (_, _) =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error, stackTrace) {
+        debugPrint('BSharpWearApp: start failed: $error\n$stackTrace');
+        return const _WearStartupError();
+      },
     );
 
     return MaterialApp(
@@ -140,6 +144,42 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
       supportedLocales: AppLocaleUtils.supportedLocales,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: home,
+    );
+  }
+}
+
+/// Reading the saved accounts failed. A spinner here would never end and
+/// offer no way out, so the watch says so, can try again, and can be left.
+class _WearStartupError extends ConsumerWidget {
+  const _WearStartupError();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    return WearSwipeDismiss(
+      onDismiss: () => unawaited(SystemNavigator.pop()),
+      child: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  t.errors.unknownError,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 8),
+                FilledButton(
+                  onPressed: () => ref.invalidate(authStateProvider),
+                  child: Text(t.common.retry),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
