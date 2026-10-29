@@ -16,6 +16,7 @@ private const val INPUT_REQUEST = 4201
 
 class MainActivity : FlutterActivity() {
     private var pendingInput: MethodChannel.Result? = null
+    private val remoteActivityHelper by lazy { RemoteActivityHelper(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Wear App Quality wants the app icon on black while the engine warms
@@ -66,7 +67,7 @@ class MainActivity : FlutterActivity() {
         val intent = Intent(Intent.ACTION_VIEW)
             .addCategory(Intent.CATEGORY_BROWSABLE)
             .setData(Uri.parse(url))
-        val started = RemoteActivityHelper(this).startRemoteActivity(intent)
+        val started = remoteActivityHelper.startRemoteActivity(intent)
         started.addListener(
             {
                 try {

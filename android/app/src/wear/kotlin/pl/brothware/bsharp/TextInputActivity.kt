@@ -28,6 +28,7 @@ class TextInputActivity : ComponentActivity() {
 
     private lateinit var field: EditText
     private var wasKeyboardShown = false
+    private var isResumed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +55,10 @@ class TextInputActivity : ComponentActivity() {
         // the field would take for itself (WO-V3).
         ViewCompat.setOnApplyWindowInsetsListener(field) { view, insets ->
             val isKeyboardShown = insets.isVisible(WindowInsetsCompat.Type.ime())
-            if (wasKeyboardShown && !isKeyboardShown) {
+            // Only the wearer closing the keyboard ends the input; a hide
+            // because the screen dimmed or something took focus does not.
+            val isWearerClosing = isResumed && view.hasWindowFocus()
+            if (wasKeyboardShown && !isKeyboardShown && isWearerClosing) {
                 // Posted so a last commit from the keyboard, queued on this
                 // same thread, lands in the field before it is read.
                 view.post(::finishWithText)
@@ -72,6 +76,16 @@ class TextInputActivity : ComponentActivity() {
     /// window holds input focus there is nothing for the input method to
     /// attach to, so the request made while starting up is dropped and the
     /// wearer has to tap the field again to raise it.
+    override fun onResume() {
+        super.onResume()
+        isResumed = true
+    }
+
+    override fun onPause() {
+        isResumed = false
+        super.onPause()
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (!hasFocus) return
