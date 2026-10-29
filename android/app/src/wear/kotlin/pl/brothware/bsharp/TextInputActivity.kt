@@ -1,6 +1,5 @@
 package pl.brothware.bsharp
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -8,6 +7,8 @@ import android.text.InputType
 import android.view.Gravity
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.activity.ComponentActivity
+import androidx.activity.addCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,7 +20,7 @@ import androidx.core.view.WindowInsetsCompat
 /// EditText. Flutter draws its fields itself and has none, so that copy stops
 /// after the first letter and the wearer types blind. One native field for the
 /// duration of the typing costs nothing and the keyboard behaves.
-class TextInputActivity : Activity() {
+class TextInputActivity : ComponentActivity() {
     companion object {
         const val EXTRA_LABEL = "label"
         const val EXTRA_TEXT = "text"
@@ -61,6 +62,9 @@ class TextInputActivity : Activity() {
             wasKeyboardShown = isKeyboardShown
             ViewCompat.onApplyWindowInsets(view, insets)
         }
+        // Backing out keeps what was typed: on a watch the keyboard covers
+        // the screen, so its back gesture is the only way off it.
+        onBackPressedDispatcher.addCallback(this) { finishWithText() }
         field.requestFocus()
     }
 
@@ -80,10 +84,6 @@ class TextInputActivity : Activity() {
         WindowCompat.getInsetsController(window, field)
             .show(WindowInsetsCompat.Type.ime())
     }
-
-    /// Backing out keeps what was typed: on a watch the keyboard covers the
-    /// screen, so its back gesture is the only way off it.
-    override fun onBackPressed() = finishWithText()
 
     private fun finishWithText() {
         if (isFinishing) return
