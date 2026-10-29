@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Kan het opgeslagen wachtwoord niet gebruiken",
     "typeOnWatch": "Typ het op het horloge",
     "differentAccount": "Dat is een ander account",
-    "phoneUnreachable": "Je telefoon reageerde niet. Houd hem dichtbij of gebruik het opgeslagen wachtwoord."
+    "phoneUnreachable": "Je telefoon reageerde niet. Houd hem dichtbij of gebruik het opgeslagen wachtwoord.",
+    "watchDidNotAnswer": "Het horloge reageerde niet. Tik op het horloge op ‘Telefoon’ en verstuur opnieuw."
   }
 }

@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Det sparade lösenordet kunde inte användas",
     "typeOnWatch": "Skriv det på klockan",
     "differentAccount": "Det är ett annat konto",
-    "phoneUnreachable": "Telefonen svarade inte. Håll den nära eller använd sparat lösenord."
+    "phoneUnreachable": "Telefonen svarade inte. Håll den nära eller använd sparat lösenord.",
+    "watchDidNotAnswer": "Klockan svarade inte. Tryck på ”Telefon” på klockan och skicka igen."
   }
 }

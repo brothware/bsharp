@@ -854,6 +854,7 @@
     "savedPasswordFailed": "Shranjenega gesla ni bilo mogoče uporabiti",
     "typeOnWatch": "Vnesite na uri",
     "differentAccount": "To je drug račun",
-    "phoneUnreachable": "Telefon se ni odzval. Imejte ga blizu ali uporabite shranjeno geslo."
+    "phoneUnreachable": "Telefon se ni odzval. Imejte ga blizu ali uporabite shranjeno geslo.",
+    "watchDidNotAnswer": "Ura se ni odzvala. Na uri tapnite »Telefon« in pošljite znova."
   }
 }

@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Den gemte adgangskode kunne ikke bruges",
     "typeOnWatch": "Skriv den på uret",
     "differentAccount": "Det er en anden konto",
-    "phoneUnreachable": "Telefonen svarede ikke. Hold den tæt på, eller brug gemt adgangskode."
+    "phoneUnreachable": "Telefonen svarede ikke. Hold den tæt på, eller brug gemt adgangskode.",
+    "watchDidNotAnswer": "Uret svarede ikke. Tryk på \"Telefon\" på uret, og send igen."
   }
 }

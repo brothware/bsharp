@@ -162,7 +162,7 @@ class _PhoneLink implements WatchLink {
   Future<bool> hasConnectedCounterpart() async => true;
 
   @override
-  Future<void> sendAccount(AccountHandoff account) async {}
+  Future<bool> sendAccount(AccountHandoff account) async => true;
 
   @override
   Stream<AccountHandoff> get receivedAccounts => accounts.stream;

@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Impossible d’utiliser le mot de passe enregistré",
     "typeOnWatch": "Le saisir sur la montre",
     "differentAccount": "C’est un autre compte",
-    "phoneUnreachable": "Votre téléphone n’a pas répondu. Gardez-le à proximité ou utilisez le mot de passe enregistré."
+    "phoneUnreachable": "Votre téléphone n’a pas répondu. Gardez-le à proximité ou utilisez le mot de passe enregistré.",
+    "watchDidNotAnswer": "La montre n’a pas répondu. Sur la montre, touchez « Utiliser le téléphone », puis renvoyez."
   }
 }

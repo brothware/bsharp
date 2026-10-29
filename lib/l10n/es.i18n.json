@@ -848,6 +848,7 @@
     "savedPasswordFailed": "No se pudo usar la contraseña guardada",
     "typeOnWatch": "Escribirla en el reloj",
     "differentAccount": "Es otra cuenta",
-    "phoneUnreachable": "El teléfono no respondió. Mantenlo cerca o usa la contraseña guardada."
+    "phoneUnreachable": "El teléfono no respondió. Mantenlo cerca o usa la contraseña guardada.",
+    "watchDidNotAnswer": "El reloj no respondió. En el reloj, toca «Usar teléfono» y vuelve a enviar."
   }
 }

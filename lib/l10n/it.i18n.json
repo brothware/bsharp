@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Impossibile usare la password salvata",
     "typeOnWatch": "Digitala sull’orologio",
     "differentAccount": "È un altro account",
-    "phoneUnreachable": "Il telefono non ha risposto. Tienilo vicino o usa la password salvata."
+    "phoneUnreachable": "Il telefono non ha risposto. Tienilo vicino o usa la password salvata.",
+    "watchDidNotAnswer": "L’orologio non ha risposto. Sull’orologio tocca «Usa telefono», poi invia di nuovo."
   }
 }

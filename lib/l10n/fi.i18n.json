@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Tallennettua salasanaa ei voitu käyttää",
     "typeOnWatch": "Kirjoita kelloon",
     "differentAccount": "Tämä on eri tili",
-    "phoneUnreachable": "Puhelin ei vastannut. Pidä se lähellä tai käytä tallennettua salasanaa."
+    "phoneUnreachable": "Puhelin ei vastannut. Pidä se lähellä tai käytä tallennettua salasanaa.",
+    "watchDidNotAnswer": "Kello ei vastannut. Napauta kellossa ”Puhelin” ja lähetä uudelleen."
   }
 }

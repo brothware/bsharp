@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Neizdevās izmantot saglabāto paroli",
     "typeOnWatch": "Ievadīt pulkstenī",
     "differentAccount": "Tas ir cits konts",
-    "phoneUnreachable": "Tālrunis neatbildēja. Turiet to tuvumā vai izmantojiet saglabāto paroli."
+    "phoneUnreachable": "Tālrunis neatbildēja. Turiet to tuvumā vai izmantojiet saglabāto paroli.",
+    "watchDidNotAnswer": "Pulkstenis neatbildēja. Pulkstenī pieskarieties “Tālrunis” un nosūtiet vēlreiz."
   }
 }

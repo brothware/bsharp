@@ -8,7 +8,9 @@ abstract interface class WatchLink {
 
   Future<bool> hasConnectedCounterpart();
 
-  Future<void> sendAccount(AccountHandoff account);
+  /// Sends [account] to the watch and answers whether the watch said it
+  /// got it. A watch that is not on its Use phone screen does not answer.
+  Future<bool> sendAccount(AccountHandoff account);
 
   Stream<AccountHandoff> get receivedAccounts;
 }

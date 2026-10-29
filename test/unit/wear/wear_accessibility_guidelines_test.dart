@@ -52,7 +52,7 @@ class _NoPhone implements WatchLink {
   Future<bool> hasConnectedCounterpart() async => false;
 
   @override
-  Future<void> sendAccount(AccountHandoff account) async {}
+  Future<bool> sendAccount(AccountHandoff account) async => true;
 
   @override
   Stream<AccountHandoff> get receivedAccounts => const Stream.empty();

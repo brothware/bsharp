@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Kunne ikke bruke det lagrede passordet",
     "typeOnWatch": "Skriv det på klokken",
     "differentAccount": "Det er en annen konto",
-    "phoneUnreachable": "Telefonen svarte ikke. Hold den i nærheten, eller bruk lagret passord."
+    "phoneUnreachable": "Telefonen svarte ikke. Hold den i nærheten, eller bruk lagret passord.",
+    "watchDidNotAnswer": "Klokken svarte ikke. Trykk på «Telefon» på klokken, og send på nytt."
   }
 }

@@ -851,6 +851,7 @@
     "savedPasswordFailed": "Sačuvanu lozinku nije moguće koristiti",
     "typeOnWatch": "Upišite na satu",
     "differentAccount": "To je drugi račun",
-    "phoneUnreachable": "Telefon se nije javio. Držite ga blizu ili koristite sačuvanu lozinku."
+    "phoneUnreachable": "Telefon se nije javio. Držite ga blizu ili koristite sačuvanu lozinku.",
+    "watchDidNotAnswer": "Sat se nije javio. Na satu dodirnite „Telefon“, pa pošaljite ponovo."
   }
 }

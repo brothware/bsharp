@@ -74,7 +74,7 @@ class _WatchSetupScreenState extends ConsumerState<WatchSetupScreen> {
       if (!await link.hasConnectedCounterpart()) {
         return t.watchSetup.noWatch;
       }
-      await link.sendAccount(
+      final isDelivered = await link.sendAccount(
         AccountHandoff(
           providerType: account.providerType,
           school: account.slug,
@@ -82,7 +82,7 @@ class _WatchSetupScreenState extends ConsumerState<WatchSetupScreen> {
           password: account.password,
         ),
       );
-      return t.watchSetup.sent;
+      return isDelivered ? t.watchSetup.sent : t.watchSetup.watchDidNotAnswer;
     } on PlatformException catch (error, stackTrace) {
       debugPrint('WatchSetupScreen: send failed: $error\n$stackTrace');
       return t.watchSetup.sendFailed;

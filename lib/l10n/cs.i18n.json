@@ -851,6 +851,7 @@
     "savedPasswordFailed": "Uložené heslo se nepodařilo použít",
     "typeOnWatch": "Zadat na hodinkách",
     "differentAccount": "To je jiný účet",
-    "phoneUnreachable": "Telefon neodpověděl. Mějte ho poblíž, nebo použijte uložené heslo."
+    "phoneUnreachable": "Telefon neodpověděl. Mějte ho poblíž, nebo použijte uložené heslo.",
+    "watchDidNotAnswer": "Hodinky neodpověděly. Na hodinkách klepněte na „Telefon“ a odešlete znovu."
   }
 }

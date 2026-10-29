@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Das gespeicherte Passwort konnte nicht verwendet werden",
     "typeOnWatch": "Auf der Uhr eingeben",
     "differentAccount": "Das ist ein anderes Konto",
-    "phoneUnreachable": "Dein Telefon hat nicht geantwortet. Halte es in der Nähe oder nutze das gespeicherte Passwort."
+    "phoneUnreachable": "Dein Telefon hat nicht geantwortet. Halte es in der Nähe oder nutze das gespeicherte Passwort.",
+    "watchDidNotAnswer": "Die Uhr hat nicht geantwortet. Tippe auf der Uhr auf „Telefon nutzen“ und sende erneut."
   }
 }

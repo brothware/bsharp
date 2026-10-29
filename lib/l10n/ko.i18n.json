@@ -848,6 +848,7 @@
     "savedPasswordFailed": "저장된 비밀번호를 사용할 수 없습니다",
     "typeOnWatch": "워치에서 입력",
     "differentAccount": "다른 계정입니다",
-    "phoneUnreachable": "휴대전화가 응답하지 않습니다. 가까이 두거나 저장된 비밀번호를 사용하세요."
+    "phoneUnreachable": "휴대전화가 응답하지 않습니다. 가까이 두거나 저장된 비밀번호를 사용하세요.",
+    "watchDidNotAnswer": "워치가 응답하지 않습니다. 워치에서 \"휴대전화\"를 탭한 다음 다시 보내세요."
   }
 }

@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Nie udało się użyć zapisanego hasła",
     "typeOnWatch": "Wpisz na zegarku",
     "differentAccount": "To jest inne konto",
-    "phoneUnreachable": "Telefon nie odpowiada. Trzymaj go blisko albo użyj zapisanego hasła."
+    "phoneUnreachable": "Telefon nie odpowiada. Trzymaj go blisko albo użyj zapisanego hasła.",
+    "watchDidNotAnswer": "Zegarek nie odpowiada. Na zegarku wybierz Użyj telefonu i wyślij ponownie."
   }
 }

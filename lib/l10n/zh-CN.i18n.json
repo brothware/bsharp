@@ -848,6 +848,7 @@
     "savedPasswordFailed": "无法使用已保存的密码",
     "typeOnWatch": "在手表上输入",
     "differentAccount": "这是另一个账号",
-    "phoneUnreachable": "手机没有响应。请将手机放在附近，或使用已保存的密码。"
+    "phoneUnreachable": "手机没有响应。请将手机放在附近，或使用已保存的密码。",
+    "watchDidNotAnswer": "手表没有响应。请在手表上点按“手机”，然后重新发送。"
   }
 }

@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Salvestatud parooli ei saanud kasutada",
     "typeOnWatch": "Sisesta kellas",
     "differentAccount": "See on teine konto",
-    "phoneUnreachable": "Telefon ei vastanud. Hoia see lähedal või kasuta salvestatud parooli."
+    "phoneUnreachable": "Telefon ei vastanud. Hoia see lähedal või kasuta salvestatud parooli.",
+    "watchDidNotAnswer": "Kell ei vastanud. Puuduta kellas „Telefon“ ja saada uuesti."
   }
 }

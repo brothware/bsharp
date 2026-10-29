@@ -16,9 +16,14 @@ import 'package:flutter_test/flutter_test.dart';
 import '../data/credential_storage_test.dart';
 
 class _FakeWatchLink implements WatchLink {
-  _FakeWatchLink({this.isConnected = true, this.sendError});
+  _FakeWatchLink({
+    this.isConnected = true,
+    this.sendError,
+    this.isAcknowledged = true,
+  });
 
   final bool isConnected;
+  final bool isAcknowledged;
   final Exception? sendError;
   final sent = <AccountHandoff>[];
 
@@ -29,11 +34,12 @@ class _FakeWatchLink implements WatchLink {
   Future<bool> hasConnectedCounterpart() async => isConnected;
 
   @override
-  Future<void> sendAccount(AccountHandoff account) async {
+  Future<bool> sendAccount(AccountHandoff account) async {
     if (sendError case final error?) {
       throw error;
     }
     sent.add(account);
+    return isAcknowledged;
   }
 
   @override
@@ -104,6 +110,18 @@ void main() {
 
     expect(link.sent, isEmpty);
     expect(find.textContaining('No watch is connected'), findsOneWidget);
+  });
+
+  testWidgets('a watch that does not answer is not reported as signed in', (
+    tester,
+  ) async {
+    await _pump(tester, _FakeWatchLink(isAcknowledged: false));
+
+    await tester.tap(find.byTooltip('Send'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sent. Finish on the watch.'), findsNothing);
+    expect(find.textContaining('The watch did not answer'), findsOneWidget);
   });
 
   testWidgets('a failed send says so', (tester) async {

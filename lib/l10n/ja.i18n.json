@@ -848,6 +848,7 @@
     "savedPasswordFailed": "保存済みのパスワードを使用できませんでした",
     "typeOnWatch": "ウォッチで入力",
     "differentAccount": "別のアカウントです",
-    "phoneUnreachable": "スマートフォンが応答しません。近くに置くか、保存済みのパスワードを使ってください。"
+    "phoneUnreachable": "スマートフォンが応答しません。近くに置くか、保存済みのパスワードを使ってください。",
+    "watchDidNotAnswer": "ウォッチが応答しません。ウォッチで「スマホ」をタップしてから、もう一度送信してください。"
   }
 }

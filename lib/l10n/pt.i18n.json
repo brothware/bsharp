@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Não foi possível usar a palavra-passe guardada",
     "typeOnWatch": "Escrever no relógio",
     "differentAccount": "É outra conta",
-    "phoneUnreachable": "O telemóvel não respondeu. Mantenha-o perto ou use a palavra-passe guardada."
+    "phoneUnreachable": "O telemóvel não respondeu. Mantenha-o perto ou use a palavra-passe guardada.",
+    "watchDidNotAnswer": "O relógio não respondeu. No relógio, toque em «Usar telemóvel» e envie novamente."
   }
 }

@@ -46,18 +46,48 @@ void main() {
 
   setUp(() {
     connectivity = _FakeConnectivity();
-    link = DataLayerWatchLink(connectivity);
+    link = DataLayerWatchLink(
+      connectivity,
+      acknowledgementTimeout: const Duration(milliseconds: 50),
+    );
   });
 
   tearDown(() => connectivity.incoming.close());
 
   test('an account sent from the phone arrives on the watch whole', () async {
-    await link.sendAccount(_account);
+    final delivered = link.sendAccount(_account);
+    await pumpEventQueue();
     final received = link.receivedAccounts.first;
 
     connectivity.incoming.add(connectivity.sent.single);
 
     expect(await received, _account);
+    await delivered;
+  });
+
+  test('the watch acknowledges an account it reads', () async {
+    final received = link.receivedAccounts.first;
+
+    connectivity.incoming.add(encodeAccountHandoff(_account));
+    await received;
+
+    expect(connectivity.sent.single['kind'], 'bsharp.account-received');
+  });
+
+  test('the phone hears the acknowledgement and reports delivery', () async {
+    final delivered = link.sendAccount(_account);
+    await pumpEventQueue();
+
+    connectivity.incoming.add({
+      'kind': 'bsharp.account-received',
+      'version': 1,
+    });
+
+    expect(await delivered, isTrue);
+  });
+
+  test('with no acknowledgement the phone reports nothing delivered', () async {
+    expect(await link.sendAccount(_account), isFalse);
   });
 
   test('the counterpart is connected when a node is reachable', () async {

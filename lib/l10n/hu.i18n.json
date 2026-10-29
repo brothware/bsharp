@@ -848,6 +848,7 @@
     "savedPasswordFailed": "A mentett jelszót nem sikerült használni",
     "typeOnWatch": "Beírás az órán",
     "differentAccount": "Ez egy másik fiók",
-    "phoneUnreachable": "A telefon nem válaszolt. Tartsa a közelben, vagy használja a mentett jelszót."
+    "phoneUnreachable": "A telefon nem válaszolt. Tartsa a közelben, vagy használja a mentett jelszót.",
+    "watchDidNotAnswer": "Az óra nem válaszolt. Az órán koppintson a „Telefon” gombra, majd küldje újra."
   }
 }

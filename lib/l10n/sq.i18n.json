@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Fjalëkalimi i ruajtur nuk mund të përdorej",
     "typeOnWatch": "Shkruaje në orë",
     "differentAccount": "Kjo është një llogari tjetër",
-    "phoneUnreachable": "Telefoni nuk u përgjigj. Mbajeni pranë ose përdorni fjalëkalimin e ruajtur."
+    "phoneUnreachable": "Telefoni nuk u përgjigj. Mbajeni pranë ose përdorni fjalëkalimin e ruajtur.",
+    "watchDidNotAnswer": "Ora nuk u përgjigj. Në orë prekni «Telefoni», pastaj dërgoni sërish."
   }
 }

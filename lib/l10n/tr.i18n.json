@@ -848,6 +848,7 @@
     "savedPasswordFailed": "Kayıtlı şifre kullanılamadı",
     "typeOnWatch": "Saatte yazın",
     "differentAccount": "Bu farklı bir hesap",
-    "phoneUnreachable": "Telefonunuz yanıt vermedi. Yakında tutun veya kayıtlı şifreyi kullanın."
+    "phoneUnreachable": "Telefonunuz yanıt vermedi. Yakında tutun veya kayıtlı şifreyi kullanın.",
+    "watchDidNotAnswer": "Saat yanıt vermedi. Saatte \"Telefon\" öğesine dokunup yeniden gönderin."
   }
 }
