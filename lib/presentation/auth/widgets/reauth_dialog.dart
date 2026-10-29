@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/core/error/result.dart';
@@ -89,6 +90,9 @@ class _ReauthDialogState extends ConsumerState<_ReauthDialog> {
       return;
     }
 
+    if (ref.read(activeAccountProvider) case final account?) {
+      unawaited(offerToSaveLogin(ref, account));
+    }
     Navigator.of(context).pop();
     await ref.read(syncStatusProvider.notifier).sync();
   }

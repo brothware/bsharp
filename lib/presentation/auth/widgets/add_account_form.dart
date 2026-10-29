@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/core/error/result.dart';
@@ -5,6 +7,7 @@ import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/domain/failure_messages.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/presentation/auth/reauthenticate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -126,6 +129,7 @@ class _AddAccountFormState extends ConsumerState<AddAccountForm> {
 
         if (!mounted) return;
 
+        unawaited(offerToSaveLogin(ref, account));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(t.accounts.accountAddedSuccess)),
         );
