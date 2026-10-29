@@ -18,6 +18,9 @@ import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Each grade opens its details, so it is a touch target: 48dp (WO-V2).
+const _gradeChipMinSizeDp = 48.0;
+
 class WearGradesDetailScreen extends ConsumerStatefulWidget {
   const WearGradesDetailScreen({super.key});
 
@@ -196,8 +199,8 @@ class _WearSubjectSection extends StatelessWidget {
                 ),
                 child: Container(
                   constraints: const BoxConstraints(
-                    minWidth: 40,
-                    minHeight: 28,
+                    minWidth: _gradeChipMinSizeDp,
+                    minHeight: _gradeChipMinSizeDp,
                   ),
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(horizontal: 2),
