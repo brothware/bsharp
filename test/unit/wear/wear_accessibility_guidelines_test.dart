@@ -1,6 +1,7 @@
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/sync_provider.dart';
+import 'package:bsharp/app/translation_provider.dart';
 import 'package:bsharp/app/watch_link_provider.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
@@ -81,6 +82,7 @@ Future<void> _openDemo(WidgetTester tester) async {
           _SilentNotificationService(),
         ),
         watchLinkProvider.overrideWithValue(_NoPhone()),
+        isTranslationAvailableProvider.overrideWithValue(true),
         wearScreenShapeProvider.overrideWith((_) => WearScreenShape.round),
       ],
       child: TranslationProvider(child: const BSharpWearApp()),
@@ -145,6 +147,7 @@ void _expectTapTargetsAtLeast48dp(WidgetTester tester, String where) {
   final targets = find.byWidgetPredicate(
     (widget) => switch (widget) {
       InkResponse(:final onTap) => onTap != null,
+      GestureDetector(:final onTap) => onTap != null,
       ButtonStyleButton(:final onPressed) => onPressed != null,
       IconButton(:final onPressed) => onPressed != null,
       _ => false,
