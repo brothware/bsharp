@@ -105,6 +105,9 @@ dependencies {
     // OnBackPressedDispatcher: from API 36 a back gesture no longer calls
     // Activity.onBackPressed, so the input screen would ignore it.
     "wearImplementation"("androidx.activity:activity-ktx:1.13.0")
+    // RemoteActivityHelper: the watch's "Use phone" opens Set up watch in the
+    // phone app.
+    "wearImplementation"("androidx.wear:wear-remote-interactions:1.2.0")
 }
 
 flutter {

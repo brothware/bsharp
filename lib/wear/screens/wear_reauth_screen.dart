@@ -12,6 +12,7 @@ import 'package:bsharp/domain/failure_messages.dart';
 import 'package:bsharp/domain/saved_passwords.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/auth/reauthenticate.dart';
+import 'package:bsharp/wear/wear_phone.dart';
 import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
@@ -101,6 +102,7 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
             );
           },
         );
+    unawaited(openSetUpWatchOnPhone());
     setState(() {
       _errorMessage = null;
       _isWaitingForPhone = true;

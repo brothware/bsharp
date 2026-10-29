@@ -2,8 +2,11 @@ package pl.brothware.bsharp
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.wear.remote.interactions.RemoteActivityHelper
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -35,6 +38,7 @@ class MainActivity : FlutterActivity() {
                             call.argument("text"),
                             result,
                         )
+                    "openOnPhone" -> openOnPhone(call.argument("url"), result)
                     else -> result.notImplemented()
                 }
             }
@@ -52,6 +56,28 @@ class MainActivity : FlutterActivity() {
             .putExtra(TextInputActivity.EXTRA_LABEL, label)
             .putExtra(TextInputActivity.EXTRA_TEXT, text)
         startActivityForResult(intent, INPUT_REQUEST)
+    }
+
+    private fun openOnPhone(url: String?, result: MethodChannel.Result) {
+        if (url == null) {
+            result.error("bad_arguments", "openOnPhone needs a url", null)
+            return
+        }
+        val intent = Intent(Intent.ACTION_VIEW)
+            .addCategory(Intent.CATEGORY_BROWSABLE)
+            .setData(Uri.parse(url))
+        val started = RemoteActivityHelper(this).startRemoteActivity(intent)
+        started.addListener(
+            {
+                try {
+                    started.get()
+                    result.success(true)
+                } catch (error: Exception) {
+                    result.error("phone_unreachable", error.message, null)
+                }
+            },
+            ContextCompat.getMainExecutor(this),
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

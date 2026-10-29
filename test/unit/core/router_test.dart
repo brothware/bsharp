@@ -27,6 +27,18 @@ void main() {
       expect(AppRoutes.tests, '/tests');
       expect(AppRoutes.bulletins, '/bulletins');
       expect(AppRoutes.changelog, '/changelog');
+      expect(AppRoutes.watchSetup, '/watch-setup');
+    });
+
+    test('the link the watch opens lands on Set up watch', () {
+      final router = createRouter(authState: AuthState.authenticated);
+
+      final match = router.configuration.findMatch(
+        Uri.parse(watchSetupLink).replace(scheme: '', host: ''),
+      );
+
+      expect(match.isNotEmpty, isTrue);
+      expect(match.last.route.path, AppRoutes.watchSetup);
     });
   });
 }

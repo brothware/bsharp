@@ -16,6 +16,7 @@ import 'package:bsharp/domain/failure_messages.dart';
 import 'package:bsharp/domain/saved_passwords.dart';
 import 'package:bsharp/domain/school_data_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
+import 'package:bsharp/wear/wear_phone.dart';
 import 'package:bsharp/wear/wear_text_input.dart';
 import 'package:bsharp/wear/widgets/wear_fitted_text.dart';
 import 'package:bsharp/wear/widgets/wear_list_item.dart';
@@ -170,6 +171,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
           (account) => unawaited(_signInFromPhone(account)),
           onError: _onPhoneAccountUnreadable,
         );
+    unawaited(openSetUpWatchOnPhone());
     setState(() {
       _errorMessage = null;
       _step = _SetupStep.phone;

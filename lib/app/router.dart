@@ -15,8 +15,13 @@ import 'package:bsharp/presentation/schedule/screens/custom_event_form_screen.da
 import 'package:bsharp/presentation/schedule/screens/schedule_screen.dart';
 import 'package:bsharp/presentation/settings/screens/account_management_screen.dart';
 import 'package:bsharp/presentation/settings/screens/settings_screen.dart';
+import 'package:bsharp/presentation/settings/screens/watch_setup_screen.dart';
 import 'package:bsharp/presentation/tests/screens/tests_screen.dart';
 import 'package:go_router/go_router.dart';
+
+/// What the watch's "Use phone" opens on the phone. The Android manifest
+/// of the phone flavour declares the same scheme and host.
+const watchSetupLink = 'bsharp://open${AppRoutes.watchSetup}';
 
 abstract final class AppRoutes {
   static const accountSetup = '/account-setup';
@@ -28,6 +33,7 @@ abstract final class AppRoutes {
   static const messageView = '/messages/view';
   static const settings = '/settings';
   static const accountsManage = '/accounts/manage';
+  static const watchSetup = '/watch-setup';
   static const homework = '/homework';
   static const notes = '/notes';
   static const tests = '/tests';
@@ -153,6 +159,10 @@ GoRouter createRouter({required AuthState authState}) {
       GoRoute(
         path: AppRoutes.accountsManage,
         builder: (context, state) => const AccountManagementScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.watchSetup,
+        builder: (context, state) => const WatchSetupScreen(),
       ),
       GoRoute(
         path: AppRoutes.customEventCreate,

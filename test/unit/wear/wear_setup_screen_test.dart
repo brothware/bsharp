@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/router.dart';
 import 'package:bsharp/app/saved_passwords_provider.dart';
 import 'package:bsharp/app/watch_link_provider.dart';
 import 'package:bsharp/core/error/result.dart';
@@ -821,6 +822,28 @@ void main() {
       await tester.tap(find.text('Use phone'));
       await settle(tester);
     }
+
+    testWidgets('Use phone opens Set up watch on the phone', (tester) async {
+      final calls = <MethodCall>[];
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        const MethodChannel('pl.brothware.bsharp/wear'),
+        (call) async {
+          calls.add(call);
+          return true;
+        },
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          const MethodChannel('pl.brothware.bsharp/wear'),
+          null,
+        ),
+      );
+
+      await openUsePhone(tester);
+
+      expect(calls.single.method, 'openOnPhone');
+      expect(calls.single.arguments, {'url': watchSetupLink});
+    });
 
     testWidgets('the watch says where to go on the phone', (tester) async {
       await openUsePhone(tester);

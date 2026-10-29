@@ -1,7 +1,6 @@
+import 'package:bsharp/wear/wear_host_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
-const _channel = MethodChannel('pl.brothware.bsharp/wear');
 
 /// Asks the watch for a line of text on its own input screen.
 ///
@@ -17,7 +16,7 @@ Future<String?> requestWearTextInput({
   String text = '',
 }) async {
   try {
-    return await _channel.invokeMethod<String>('requestTextInput', {
+    return await wearHostChannel.invokeMethod<String>('requestTextInput', {
       'label': label,
       'text': text,
     });
