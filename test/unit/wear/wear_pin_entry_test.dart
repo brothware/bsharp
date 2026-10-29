@@ -4,6 +4,8 @@ import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,6 +13,53 @@ import '../data/credential_storage_test.dart';
 
 void main() {
   group('WearPinEntry', () {
+    testWidgets('the heading stays inside a 192dp round screen', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(192, 192);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      tester.binding.defaultBinaryMessenger.setMockStreamHandler(
+        const EventChannel('wear_os_scrollbar/rotary'),
+        MockStreamHandler.inline(onListen: (_, _) {}),
+      );
+      final storage = CredentialStorage(store: FakeKeyValueStore());
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            credentialStorageProvider.overrideWithValue(storage),
+            wearScreenShapeProvider.overrideWith((_) => WearScreenShape.round),
+          ],
+          child: const MaterialApp(home: WearPinEntry()),
+        ),
+      );
+      await tester.pump();
+
+      final paragraph = tester.renderObject<RenderParagraph>(
+        find.text('Enter parent PIN'),
+      );
+      final origin = paragraph.localToGlobal(Offset.zero);
+      final lines = paragraph.getBoxesForSelection(
+        TextSelection(
+          baseOffset: 0,
+          extentOffset: paragraph.text.toPlainText().length,
+        ),
+      );
+      const centre = Offset(96, 96);
+      for (final line in lines) {
+        for (final corner in [
+          Offset(line.left, line.top),
+          Offset(line.right, line.top),
+        ]) {
+          expect(
+            (origin + corner - centre).distance,
+            lessThanOrEqualTo(96),
+            reason: 'the heading corner ${origin + corner} is off the glass',
+          );
+        }
+      }
+    });
+
     testWidgets('renders title and keypad', (tester) async {
       final storage = CredentialStorage(store: FakeKeyValueStore());
       await tester.pumpWidget(

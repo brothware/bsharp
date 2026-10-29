@@ -118,6 +118,21 @@ double wearRoundInsetFor(
   return math.max(0, contentHalf - available);
 }
 
+/// Insets for a heading at the top of a screen that lays itself out without
+/// WearScaffold, such as the PIN screens, whose keypad needs the full width
+/// the middle of the glass has: down by the round margin, and in from the
+/// sides as far as the circle asks at that height (WO-V16).
+EdgeInsets wearTopHeadingInsets(
+  WearDisplay display, {
+  double headingHeight = 40,
+}) {
+  if (!display.isRound) return EdgeInsets.zero;
+  final margin = display.sizeDp.shortestSide * kWearRoundInsetFactor;
+  final side =
+      margin + wearRoundInsetFor(display, top: 0, bottom: headingHeight);
+  return EdgeInsets.fromLTRB(side, margin, side, 0);
+}
+
 /// The extra inset a fixed grid needs inside the content box.
 ///
 /// A row of cells sits at fixed columns, so shrinking one does not move it

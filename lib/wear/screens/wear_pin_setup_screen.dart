@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/wear/wear_app.dart';
+import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_compact_keypad.dart';
 import 'package:bsharp/wear/widgets/wear_edge_scrollbar.dart';
+import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +35,15 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
     super.dispose();
   }
 
+  EdgeInsets _headingInsets(BuildContext context) => wearTopHeadingInsets(
+    WearDisplay(
+      shape:
+          ref.watch(wearScreenShapeProvider).value ??
+          WearScreenShape.rectangular,
+      sizeDp: MediaQuery.sizeOf(context),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -45,6 +56,7 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
             child: LayoutBuilder(
               builder: (context, constraints) => SingleChildScrollView(
                 controller: _scrollController,
+                padding: EdgeInsets.only(top: _headingInsets(context).top),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minHeight: constraints.maxHeight,
@@ -53,12 +65,18 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 4),
-                      Text(
-                        _step == _PinSetupStep.create
-                            ? t.childMode.createPin
-                            : t.childMode.confirmPin,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: _headingInsets(context).left,
+                        ),
+                        child: Text(
+                          _step == _PinSetupStep.create
+                              ? t.childMode.createPin
+                              : t.childMode.confirmPin,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),
