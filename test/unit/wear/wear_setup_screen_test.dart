@@ -238,6 +238,21 @@ class _SlowAccountStorage extends AccountStorage {
   }
 }
 
+/// "Use phone" asks the watch host to open the phone app; a reachable phone
+/// answers at once.
+void _answerPhoneOpen(WidgetTester tester) {
+  tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+    const MethodChannel('pl.brothware.bsharp/wear'),
+    (call) async => true,
+  );
+  addTearDown(
+    () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      const MethodChannel('pl.brothware.bsharp/wear'),
+      null,
+    ),
+  );
+}
+
 /// Typing the account on the watch is the last resort, a link at the foot
 /// of the welcome; a test reaches it through its handler, not a tap at the
 /// rim of a round screen.
@@ -844,6 +859,12 @@ void main() {
     }
 
     Future<void> openUsePhone(WidgetTester tester) async {
+      if (tester.binding.defaultBinaryMessenger.checkMockMessageHandler(
+        'pl.brothware.bsharp/wear',
+        null,
+      )) {
+        _answerPhoneOpen(tester);
+      }
       await tester.pumpWidget(
         _buildApp(
           watchLink: link,
@@ -903,6 +924,33 @@ void main() {
         findsOneWidget,
       );
       expect(find.byType(CircularProgressIndicator), findsNothing);
+    });
+
+    testWidgets('a phone that never answers is named after a while', (
+      tester,
+    ) async {
+      final never = Completer<Object?>();
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        const MethodChannel('pl.brothware.bsharp/wear'),
+        (call) => never.future,
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          const MethodChannel('pl.brothware.bsharp/wear'),
+          null,
+        ),
+      );
+
+      await openUsePhone(tester);
+      await tester.pump(const Duration(seconds: 11));
+      await settle(tester);
+
+      expect(
+        find.text(
+          'Your phone did not answer. Keep it near, or use Saved password.',
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('the watch says where to go on the phone', (tester) async {
@@ -1107,6 +1155,7 @@ void main() {
     }
 
     Future<void> waitForPhone(WidgetTester tester) async {
+      _answerPhoneOpen(tester);
       await tester.pumpWidget(
         _buildApp(
           watchLink: link,

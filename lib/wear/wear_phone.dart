@@ -7,10 +7,21 @@ import 'package:flutter/services.dart';
 /// have to find it. The watch keeps saying where it is either way, so a
 /// phone that cannot be reached only costs that shortcut.
 Future<bool> openSetUpWatchOnPhone() async {
+  // Play services can sit on the request without ever answering, and the
+  // wearer is waiting on this screen meanwhile.
+  const answerTimeout = Duration(seconds: 10);
   try {
-    return await wearHostChannel.invokeMethod<bool>('openOnPhone', {
-          'url': watchSetupLink,
-        }) ??
+    return await wearHostChannel
+            .invokeMethod<bool>('openOnPhone', {'url': watchSetupLink})
+            .timeout(
+              answerTimeout,
+              onTimeout: () {
+                debugPrint(
+                  'openSetUpWatchOnPhone: no answer in $answerTimeout',
+                );
+                return false;
+              },
+            ) ??
         false;
   } on MissingPluginException {
     debugPrint('openSetUpWatchOnPhone: no host implementation');
