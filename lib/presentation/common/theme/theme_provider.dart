@@ -14,9 +14,6 @@ final themeModeProvider = NotifierProvider<ThemeModeNotifier, ThemeMode>(
   ThemeModeNotifier.new,
 );
 
-/// Wear OS has no user-facing light/dark switch and reports night mode off,
-/// so [ThemeMode.system] resolves to a white watch. The watch picks one.
-
 class ThemeModeNotifier extends Notifier<ThemeMode> {
   static const preferenceKey = 'theme_mode';
 
