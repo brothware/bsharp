@@ -674,37 +674,42 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         _buildStepHeader(label: t.watchSetup.waitingTitle),
         const SizedBox(height: 8),
         Expanded(
-          child: ListView(
-            controller: _fieldStepScrollController,
-            children: [
-              Text(
-                t.watchSetup.waitingBody,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 12),
-              if (_isPhoneUnreachable)
+          // Round padding at the foot so the last row can be scrolled up off
+          // the bezel, as every other list does (WO-V16).
+          child: Builder(
+            builder: (context) => ListView(
+              controller: _fieldStepScrollController,
+              padding: wearListPadding(WearDisplayScope.of(context)),
+              children: [
                 Text(
-                  t.watchSetup.phoneUnreachable,
+                  t.watchSetup.waitingBody,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                )
-              else
-                const Center(child: CircularProgressIndicator()),
-              if (_errorMessage case final message?)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    message,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.error,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  style: theme.textTheme.bodyMedium,
                 ),
-            ],
+                const SizedBox(height: 12),
+                if (_isPhoneUnreachable)
+                  Text(
+                    t.watchSetup.phoneUnreachable,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  )
+                else
+                  const Center(child: CircularProgressIndicator()),
+                if (_errorMessage case final message?)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      message,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ],
@@ -728,43 +733,48 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         _buildStepHeader(label: t.accounts.addAccount),
         const SizedBox(height: 8),
         Expanded(
-          child: ListView(
-            controller: _fieldStepScrollController,
-            children: [
-              if (widget.addingAnother) ...[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: FilledButton(
-                    onPressed: _isLoading ? null : _listenToPhone,
-                    child: Text(t.watchSetup.usePhone),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: OutlinedButton(
-                    onPressed: _isLoading
-                        ? null
-                        : () => unawaited(_signInWithSavedPassword()),
-                    child: Text(t.watchSetup.savedPassword),
-                  ),
-                ),
-              ],
-              for (final provider in allKnownProviders().where(
-                (provider) => provider.requiresCredentials,
-              ))
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: FilledButton.tonal(
-                    onPressed: _isLoading
-                        ? null
-                        : () => unawaited(_selectProvider(provider)),
-                    child: Text(
-                      provider.displayName,
-                      style: theme.textTheme.bodyMedium,
+          // Round padding at the foot so the last row can be scrolled up off
+          // the bezel, as every other list does (WO-V16).
+          child: Builder(
+            builder: (context) => ListView(
+              controller: _fieldStepScrollController,
+              padding: wearListPadding(WearDisplayScope.of(context)),
+              children: [
+                if (widget.addingAnother) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: FilledButton(
+                      onPressed: _isLoading ? null : _listenToPhone,
+                      child: Text(t.watchSetup.usePhone),
                     ),
                   ),
-                ),
-            ],
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: OutlinedButton(
+                      onPressed: _isLoading
+                          ? null
+                          : () => unawaited(_signInWithSavedPassword()),
+                      child: Text(t.watchSetup.savedPassword),
+                    ),
+                  ),
+                ],
+                for (final provider in allKnownProviders().where(
+                  (provider) => provider.requiresCredentials,
+                ))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: FilledButton.tonal(
+                      onPressed: _isLoading
+                          ? null
+                          : () => unawaited(_selectProvider(provider)),
+                      child: Text(
+                        provider.displayName,
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ],
@@ -882,43 +892,46 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
         ),
         const SizedBox(height: 4),
         Expanded(
-          child: ListView.builder(
-            controller: _studentPickerScrollController,
-            itemCount: _students.length,
-            itemBuilder: (context, index) {
-              final student = _students[index];
-              final isSelected = student.id == _selectedStudentId;
-              return InkWell(
-                onTap: () => setState(() => _selectedStudentId = student.id),
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  constraints: const BoxConstraints(minHeight: 48),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 6,
-                  ),
-                  child: Row(
-                    children: [
-                      if (isSelected)
-                        Icon(
-                          Icons.check,
-                          size: 16,
-                          color: theme.colorScheme.primary,
-                        )
-                      else
-                        const SizedBox(width: 16),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          '${student.name} ${student.surname}',
-                          style: theme.textTheme.bodySmall,
+          child: Builder(
+            builder: (context) => ListView.builder(
+              controller: _studentPickerScrollController,
+              padding: wearListPadding(WearDisplayScope.of(context)),
+              itemCount: _students.length,
+              itemBuilder: (context, index) {
+                final student = _students[index];
+                final isSelected = student.id == _selectedStudentId;
+                return InkWell(
+                  onTap: () => setState(() => _selectedStudentId = student.id),
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    constraints: const BoxConstraints(minHeight: 48),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 6,
+                    ),
+                    child: Row(
+                      children: [
+                        if (isSelected)
+                          Icon(
+                            Icons.check,
+                            size: 16,
+                            color: theme.colorScheme.primary,
+                          )
+                        else
+                          const SizedBox(width: 16),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            '${student.name} ${student.surname}',
+                            style: theme.textTheme.bodySmall,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
         SizedBox(

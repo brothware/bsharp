@@ -44,46 +44,48 @@ class _WearLanguageScreenState extends ConsumerState<WearLanguageScreen> {
               ),
               const SizedBox(height: 4),
               Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: EdgeInsets.zero,
-                  itemCount: AppLocale.values.length + 1,
-                  itemBuilder: wearScaledItems(_scrollController, (
-                    context,
-                    index,
-                  ) {
-                    if (index == 0) {
+                child: Builder(
+                  builder: (context) => ListView.builder(
+                    controller: _scrollController,
+                    padding: wearListPadding(WearDisplayScope.of(context)),
+                    itemCount: AppLocale.values.length + 1,
+                    itemBuilder: wearScaledItems(_scrollController, (
+                      context,
+                      index,
+                    ) {
+                      if (index == 0) {
+                        return _LanguageItem(
+                          label: t.settings.languageSystem,
+                          isSelected: isSystem,
+                          onTap: () {
+                            unawaited(
+                              ref.read(localeProvider.notifier).resetToSystem(),
+                            );
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }
+                      final locale = AppLocale.values[index - 1];
+                      final flutterLocale = locale.flutterLocale;
+                      final isSelected =
+                          !isSystem &&
+                          currentLocale.languageCode ==
+                              flutterLocale.languageCode;
+
                       return _LanguageItem(
-                        label: t.settings.languageSystem,
-                        isSelected: isSystem,
+                        label: localeDisplayName(flutterLocale),
+                        isSelected: isSelected,
                         onTap: () {
                           unawaited(
-                            ref.read(localeProvider.notifier).resetToSystem(),
+                            ref
+                                .read(localeProvider.notifier)
+                                .setLocale(flutterLocale),
                           );
                           Navigator.of(context).pop();
                         },
                       );
-                    }
-                    final locale = AppLocale.values[index - 1];
-                    final flutterLocale = locale.flutterLocale;
-                    final isSelected =
-                        !isSystem &&
-                        currentLocale.languageCode ==
-                            flutterLocale.languageCode;
-
-                    return _LanguageItem(
-                      label: localeDisplayName(flutterLocale),
-                      isSelected: isSelected,
-                      onTap: () {
-                        unawaited(
-                          ref
-                              .read(localeProvider.notifier)
-                              .setLocale(flutterLocale),
-                        );
-                        Navigator.of(context).pop();
-                      },
-                    );
-                  }),
+                    }),
+                  ),
                 ),
               ),
             ],

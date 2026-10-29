@@ -85,21 +85,23 @@ class _WearBulletinsListScreenState
             )
           else
             Expanded(
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: EdgeInsets.zero,
-                itemCount: bulletins.length,
-                itemBuilder: wearScaledItems(_scrollController, (
-                  context,
-                  index,
-                ) {
-                  final item = bulletins[index];
-                  return InkWell(
-                    onTap: () => _openDetail(context, item),
-                    borderRadius: BorderRadius.circular(8),
-                    child: _WearBulletinItem(item: item),
-                  );
-                }),
+              child: Builder(
+                builder: (context) => ListView.builder(
+                  controller: _scrollController,
+                  padding: wearListPadding(WearDisplayScope.of(context)),
+                  itemCount: bulletins.length,
+                  itemBuilder: wearScaledItems(_scrollController, (
+                    context,
+                    index,
+                  ) {
+                    final item = bulletins[index];
+                    return InkWell(
+                      onTap: () => _openDetail(context, item),
+                      borderRadius: BorderRadius.circular(8),
+                      child: _WearBulletinItem(item: item),
+                    );
+                  }),
+                ),
               ),
             ),
         ],

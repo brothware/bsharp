@@ -34,55 +34,58 @@ class _WearStudentPickerState extends ConsumerState<WearStudentPicker> {
       child: Scaffold(
         body: WearScaffold(
           scrollController: _scrollController,
-          child: ListView(
-            controller: _scrollController,
-            children: wearScaledChildren(_scrollController, [
-              for (final entry in entries)
-                InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: () => _selectStudent(ref, context, entry),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 48),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.person,
-                            size: 18,
-                            color:
-                                entry.student.id == activeSelection?.studentId
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              '${entry.student.name} ${entry.student.surname}',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                fontWeight:
-                                    entry.student.id ==
-                                        activeSelection?.studentId
-                                    ? FontWeight.bold
-                                    : null,
+          child: Builder(
+            builder: (context) => ListView(
+              controller: _scrollController,
+              padding: wearListPadding(WearDisplayScope.of(context)),
+              children: wearScaledChildren(_scrollController, [
+                for (final entry in entries)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () => _selectStudent(ref, context, entry),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 48),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 10,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 18,
+                              color:
+                                  entry.student.id == activeSelection?.studentId
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.onSurfaceVariant,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                '${entry.student.name} ${entry.student.surname}',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  fontWeight:
+                                      entry.student.id ==
+                                          activeSelection?.studentId
+                                      ? FontWeight.bold
+                                      : null,
+                                ),
                               ),
                             ),
-                          ),
-                          if (entry.student.id == activeSelection?.studentId)
-                            Icon(
-                              Icons.check,
-                              size: 16,
-                              color: theme.colorScheme.primary,
-                            ),
-                        ],
+                            if (entry.student.id == activeSelection?.studentId)
+                              Icon(
+                                Icons.check,
+                                size: 16,
+                                color: theme.colorScheme.primary,
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-            ]),
+              ]),
+            ),
           ),
         ),
       ),
