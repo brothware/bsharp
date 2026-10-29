@@ -203,6 +203,50 @@ void main() {
     );
   });
 
+  testWidgets('waking over another screen does not stack sign-in on it', (
+    tester,
+  ) async {
+    final (container, _) = (await tester.runAsync(
+      () => _container(_ProbingProvider(accepts: true)),
+    ))!;
+    await tester.pumpWidget(_app(container));
+    await tester.pumpAndSettle();
+    container.read(reauthRequiredProvider.notifier).value = true;
+    await tester.pumpAndSettle();
+    await tester.dragFrom(const Offset(5, 200), const Offset(300, 0));
+    await tester.pumpAndSettle();
+    final navigator = tester.state<NavigatorState>(find.byType(Navigator))
+      ..push(
+        MaterialPageRoute<void>(
+          builder: (_) => const Scaffold(body: Text('Add account')),
+        ),
+      );
+    await tester.pumpAndSettle();
+
+    void wake() => [
+      AppLifecycleState.inactive,
+      AppLifecycleState.hidden,
+      AppLifecycleState.paused,
+      AppLifecycleState.hidden,
+      AppLifecycleState.inactive,
+      AppLifecycleState.resumed,
+    ].forEach(tester.binding.handleAppLifecycleStateChanged);
+
+    wake();
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Sign in again'),
+      findsNothing,
+      reason: 'coming back from the keyboard or picker is a resume too',
+    );
+
+    navigator.pop();
+    await tester.pumpAndSettle();
+    wake();
+    await tester.pumpAndSettle();
+    expect(find.text('Sign in again'), findsOneWidget);
+  });
+
   testWidgets('a rejected password stays on the screen with an error', (
     tester,
   ) async {

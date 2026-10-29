@@ -50,7 +50,11 @@ class _WearReauthPromptState extends ConsumerState<WearReauthPrompt> {
   }
 
   void _openIfStillRequired() {
-    if (mounted && ref.read(reauthRequiredProvider)) {
+    // Only over the home screen: the app also resumes on coming back from its
+    // own keyboard or password picker, mid-way through another flow.
+    if (!mounted) return;
+    final isHomeShowing = ModalRoute.of(context)?.isCurrent ?? true;
+    if (isHomeShowing && ref.read(reauthRequiredProvider)) {
       unawaited(_openReauth());
     }
   }
