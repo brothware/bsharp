@@ -12,6 +12,9 @@ import 'package:bsharp/wear/widgets/wear_vertical_overscroll_pager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Dimmer than this month's days yet still 4.5:1 on black (WCAG AA).
+const _otherMonthDayAlpha = 0.6;
+
 class WearAttendanceDetailScreen extends ConsumerStatefulWidget {
   const WearAttendanceDetailScreen({super.key});
 
@@ -346,7 +349,7 @@ class _WearCalendarDay extends StatelessWidget {
   Widget build(BuildContext context) {
     final dayColor = isCurrentMonth
         ? theme.colorScheme.onSurface
-        : theme.colorScheme.onSurface.withValues(alpha: 0.3);
+        : theme.colorScheme.onSurface.withValues(alpha: _otherMonthDayAlpha);
 
     return Container(
       decoration: isToday
