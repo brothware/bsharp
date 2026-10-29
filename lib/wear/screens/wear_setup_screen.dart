@@ -437,13 +437,17 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   }
 
   static const _stepHeaderButtonWidth = 48.0;
+  static const _stepHeaderMinHeight = 32.0;
 
   Widget _buildStepHeader({required String label, int maxLines = 1}) {
     final theme = Theme.of(context);
     final stepIndex = _credentialSteps.indexOf(_step);
     final canGoBack = stepIndex > 0;
 
+    // A back arrow is a touch target, so the header is tall enough to give
+    // it the full 48dp (WO-V2) rather than the two lines of text it holds.
     return WearPinnedHeader(
+      minHeight: canGoBack ? _stepHeaderButtonWidth : _stepHeaderMinHeight,
       child: SizedBox(
         width: double.infinity,
         child: Stack(

@@ -576,6 +576,25 @@ void main() {
         );
       });
 
+      testWidgets('the step back arrow is a full 48dp target (WO-V2)', (
+        tester,
+      ) async {
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await _chooseMobireg(tester);
+        await _typeIntoStep(tester, 'osm-wroclaw');
+        await tester.tap(find.text('Next'));
+        await tester.pumpAndSettle();
+
+        final arrow = tester.getSize(
+          find.ancestor(
+            of: find.byIcon(Icons.arrow_back),
+            matching: find.byType(IconButton),
+          ),
+        );
+        expect(arrow.height, greaterThanOrEqualTo(48));
+        expect(arrow.width, greaterThanOrEqualTo(48));
+      });
+
       testWidgets('the back button clears the step indicator', (tester) async {
         tester.view.physicalSize = const Size(454, 454);
         tester.view.devicePixelRatio = 2.0;
