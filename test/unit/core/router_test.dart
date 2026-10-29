@@ -27,7 +27,7 @@ void main() {
       expect(AppRoutes.tests, '/tests');
       expect(AppRoutes.bulletins, '/bulletins');
       expect(AppRoutes.changelog, '/changelog');
-      expect(AppRoutes.watchSetup, '/watch-setup');
+      expect(AppRoutes.watchSetup, '/settings/watch-setup');
     });
 
     test('the link the watch opens lands on Set up watch', () {
@@ -38,7 +38,11 @@ void main() {
       );
 
       expect(match.isNotEmpty, isTrue);
-      expect(match.last.route.path, AppRoutes.watchSetup);
+      expect(
+        match.matches.map((m) => m.matchedLocation),
+        [AppRoutes.settings, AppRoutes.watchSetup],
+        reason: 'opened from the watch, back should reach Settings, not exit',
+      );
     });
   });
 }

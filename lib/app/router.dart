@@ -33,7 +33,7 @@ abstract final class AppRoutes {
   static const messageView = '/messages/view';
   static const settings = '/settings';
   static const accountsManage = '/accounts/manage';
-  static const watchSetup = '/watch-setup';
+  static const watchSetup = '/settings/watch-setup';
   static const homework = '/homework';
   static const notes = '/notes';
   static const tests = '/tests';
@@ -155,15 +155,18 @@ GoRouter createRouter({required AuthState authState}) {
       GoRoute(
         path: AppRoutes.settings,
         builder: (context, state) => const SettingsScreen(),
+        routes: [
+          GoRoute(
+            path: 'watch-setup',
+            builder: (context, state) => const WatchSetupScreen(),
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.accountsManage,
         builder: (context, state) => const AccountManagementScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.watchSetup,
-        builder: (context, state) => const WatchSetupScreen(),
-      ),
+
       GoRoute(
         path: AppRoutes.customEventCreate,
         builder: (context, state) => const CustomEventFormScreen(),
