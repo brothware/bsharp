@@ -47,6 +47,8 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // Read here, in build: the builder below runs during layout.
+    final headingInsets = _headingInsets(context);
 
     return Scaffold(
       body: WearEdgeScrollbar(
@@ -56,7 +58,7 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
             child: LayoutBuilder(
               builder: (context, constraints) => SingleChildScrollView(
                 controller: _scrollController,
-                padding: EdgeInsets.only(top: _headingInsets(context).top),
+                padding: EdgeInsets.only(top: headingInsets.top),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minHeight: constraints.maxHeight,
@@ -67,7 +69,7 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
                       const SizedBox(height: 4),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: _headingInsets(context).left,
+                          horizontal: headingInsets.left,
                         ),
                         child: Text(
                           _step == _PinSetupStep.create

@@ -44,6 +44,8 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
   Widget build(BuildContext context) {
     final state = ref.watch(childModeProvider);
     final theme = Theme.of(context);
+    // Read here, in build: the builder below runs during layout.
+    final headingInsets = _headingInsets(context);
 
     if (state.isLocked) {
       return Scaffold(
@@ -83,7 +85,7 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
             child: LayoutBuilder(
               builder: (context, constraints) => SingleChildScrollView(
                 controller: _scrollController,
-                padding: EdgeInsets.only(top: _headingInsets(context).top),
+                padding: EdgeInsets.only(top: headingInsets.top),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minHeight: constraints.maxHeight,
@@ -94,7 +96,7 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
                       const SizedBox(height: 4),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: _headingInsets(context).left,
+                          horizontal: headingInsets.left,
                         ),
                         child: Text(
                           t.childMode.enterParentPin,
