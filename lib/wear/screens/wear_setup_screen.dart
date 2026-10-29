@@ -207,7 +207,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   }
 
   Future<void> _signInFromPhone(AccountHandoff account) async {
-    if (_step != _SetupStep.phone) return;
+    if (_step != _SetupStep.phone || _isLoading) return;
+    unawaited(_acknowledgeToPhone());
     await _signInWith(
       providerType: account.providerType,
       login: SavedLogin(
@@ -217,6 +218,14 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
       ),
       from: _SetupStep.phone,
     );
+  }
+
+  Future<void> _acknowledgeToPhone() async {
+    try {
+      await ref.read(watchLinkProvider).acknowledgeAccount();
+    } on PlatformException catch (error) {
+      debugPrint('WearSetupScreen: could not answer the phone: $error');
+    }
   }
 
   Future<void> _signInWithSavedPassword() async {

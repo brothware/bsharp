@@ -13,4 +13,9 @@ abstract interface class WatchLink {
   Future<bool> sendAccount(AccountHandoff account);
 
   Stream<AccountHandoff> get receivedAccounts;
+
+  /// Tells the phone the account it sent was taken. Only for an account the
+  /// watch actually goes on to use, so the phone does not report an ignored
+  /// or refused one as received.
+  Future<void> acknowledgeAccount();
 }

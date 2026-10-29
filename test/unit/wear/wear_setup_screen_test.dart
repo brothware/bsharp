@@ -154,6 +154,10 @@ class _GatedProbeDataProvider extends DemoDataProvider {
 
 class _PhoneLink implements WatchLink {
   final accounts = StreamController<AccountHandoff>.broadcast();
+  int acknowledgements = 0;
+
+  @override
+  Future<void> acknowledgeAccount() async => acknowledgements++;
 
   @override
   Future<bool> hasPairedWatch() async => true;
@@ -1001,6 +1005,7 @@ void main() {
 
       expect(provider.probed, [('osm-wroclaw', 'parent', 'secret')]);
       expect(find.byType(TextField), findsNothing);
+      expect(link.acknowledgements, 1);
     });
 
     testWidgets('an account from a newer phone app asks for an update', (
@@ -1237,6 +1242,11 @@ void main() {
 
       expect(provider.probes, hasLength(1));
       expect(find.text('Ada Nowak'), findsOneWidget);
+      expect(
+        link.acknowledgements,
+        1,
+        reason: 'the ignored second send must not read as received',
+      );
     });
   });
 }

@@ -47,6 +47,9 @@ class _SilentNotificationService extends NotificationService {
 
 class _NoPhone implements WatchLink {
   @override
+  Future<void> acknowledgeAccount() async {}
+
+  @override
   Future<bool> hasPairedWatch() async => true;
 
   @override

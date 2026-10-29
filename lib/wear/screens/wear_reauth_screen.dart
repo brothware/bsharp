@@ -17,6 +17,7 @@ import 'package:bsharp/wear/widgets/wear_list_item.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class WearReauthPrompt extends ConsumerStatefulWidget {
@@ -146,7 +147,16 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
       setState(() => _errorMessage = t.watchSetup.differentAccount);
       return;
     }
+    unawaited(_acknowledgeToPhone());
     await _signInAgain(account.password);
+  }
+
+  Future<void> _acknowledgeToPhone() async {
+    try {
+      await ref.read(watchLinkProvider).acknowledgeAccount();
+    } on PlatformException catch (error) {
+      debugPrint('WearReauthScreen: could not answer the phone: $error');
+    }
   }
 
   Future<void> _signInWithSavedPassword() async {

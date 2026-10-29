@@ -65,23 +65,38 @@ class DataLayerWatchLink implements WatchLink {
 
   @override
   Future<bool> sendAccount(AccountHandoff account) async {
-    final acknowledged = _connectivity.messageStream
-        .firstWhere((message) => message[_kindKey] == _receivedKind)
-        .then((_) => true)
-        .timeout(_acknowledgementTimeout, onTimeout: () => false);
-    await _connectivity.sendMessage(encodeAccountHandoff(account));
-    return acknowledged;
+    final acknowledged = Completer<bool>();
+    final subscription = _connectivity.messageStream.listen(
+      (message) {
+        if (message[_kindKey] == _receivedKind && !acknowledged.isCompleted) {
+          acknowledged.complete(true);
+        }
+      },
+      onError: (Object error, StackTrace stackTrace) {
+        if (!acknowledged.isCompleted) {
+          acknowledged.completeError(error, stackTrace);
+        }
+      },
+    );
+    try {
+      await _connectivity.sendMessage(encodeAccountHandoff(account));
+      return await acknowledged.future.timeout(
+        _acknowledgementTimeout,
+        onTimeout: () => false,
+      );
+    } finally {
+      await subscription.cancel();
+    }
   }
+
+  @override
+  Future<void> acknowledgeAccount() => _connectivity.sendMessage({
+    _kindKey: _receivedKind,
+    _versionKey: _accountVersion,
+  });
 
   @override
   Stream<AccountHandoff> get receivedAccounts => _connectivity.messageStream
       .where((message) => message[_kindKey] == _accountKind)
-      .map(decodeAccountHandoff)
-      .asyncMap((account) async {
-        await _connectivity.sendMessage({
-          _kindKey: _receivedKind,
-          _versionKey: _accountVersion,
-        });
-        return account;
-      });
+      .map(decodeAccountHandoff);
 }

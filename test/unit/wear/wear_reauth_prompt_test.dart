@@ -47,6 +47,10 @@ class _SavedPasswords implements SavedPasswords {
 
 class _PhoneLink implements WatchLink {
   final accounts = StreamController<AccountHandoff>.broadcast();
+  int acknowledgements = 0;
+
+  @override
+  Future<void> acknowledgeAccount() async => acknowledgements++;
 
   @override
   Future<bool> hasPairedWatch() async => true;
@@ -386,6 +390,7 @@ void main() {
 
       expect(provider.probedPasswords, ['from phone']);
       expect(find.text('Sign in again'), findsNothing);
+      expect(link.acknowledgements, 1);
     }, variant: TargetPlatformVariant.only(TargetPlatform.linux));
   });
 }

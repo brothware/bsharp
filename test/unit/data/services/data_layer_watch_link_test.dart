@@ -65,13 +65,33 @@ void main() {
     await delivered;
   });
 
-  test('the watch acknowledges an account it reads', () async {
+  test('reading an account does not answer for the screen', () async {
     final received = link.receivedAccounts.first;
 
     connectivity.incoming.add(encodeAccountHandoff(_account));
     await received;
 
+    expect(
+      connectivity.sent,
+      isEmpty,
+      reason: 'the screen may still ignore or refuse it',
+    );
+  });
+
+  test('the watch acknowledges an account the screen accepted', () async {
+    await link.acknowledgeAccount();
+
     expect(connectivity.sent.single['kind'], 'bsharp.account-received');
+  });
+
+  test('a send that times out stops listening for its answer', () async {
+    expect(await link.sendAccount(_account), isFalse);
+
+    expect(
+      connectivity.incoming.hasListener,
+      isFalse,
+      reason: 'a late answer would be credited to the next send',
+    );
   });
 
   test('the phone hears the acknowledgement and reports delivery', () async {

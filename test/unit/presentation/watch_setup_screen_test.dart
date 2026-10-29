@@ -43,6 +43,9 @@ class _FakeWatchLink implements WatchLink {
   }
 
   @override
+  Future<void> acknowledgeAccount() async {}
+
+  @override
   Stream<AccountHandoff> get receivedAccounts => const Stream.empty();
 }
 
