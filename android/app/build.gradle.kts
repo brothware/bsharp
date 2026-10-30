@@ -101,7 +101,7 @@ dependencies {
     "wearImplementation"("androidx.core:core-splashscreen:1.2.0")
     // WindowInsetsControllerCompat: asking the input method to show itself
     // through the window insets is the route that actually raises it.
-    "wearImplementation"("androidx.core:core:1.17.0")
+    "wearImplementation"("androidx.core:core:1.19.1")
     // OnBackPressedDispatcher: from API 36 a back gesture no longer calls
     // Activity.onBackPressed, so the input screen would ignore it.
     "wearImplementation"("androidx.activity:activity-ktx:1.13.0")
