@@ -55,15 +55,18 @@ class WearSetupScreen extends ConsumerStatefulWidget {
   ConsumerState<WearSetupScreen> createState() => _WearSetupScreenState();
 }
 
-class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
-  final _schoolController = TextEditingController();
-  final _loginController = TextEditingController();
+class _WearSetupScreenState extends ConsumerState<WearSetupScreen>
+    with RestorationMixin {
+  final _school = RestorableTextEditingController();
+  final _login = RestorableTextEditingController();
+  final _savedStep = RestorableStringN(null);
+  bool _isRestorationRegistered = false;
   final _passwordController = TextEditingController();
   final _passwordFocus = FocusNode();
   final _fieldStepScrollController = ScrollController();
   final _studentPickerScrollController = ScrollController();
 
-  _SetupStep _step = _SetupStep.welcome;
+  _SetupStep _currentStep = _SetupStep.welcome;
 
   /// Whether the saved accounts have been read yet. Until they have, the
   /// screen cannot know whether it is setting an account up or re-authorising
@@ -81,6 +84,32 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   int _signInAttempt = 0;
   bool _isPickingSavedPassword = false;
   bool _isPhoneUnreachable = false;
+
+  TextEditingController get _schoolController => _school.value;
+  TextEditingController get _loginController => _login.value;
+
+  _SetupStep get _step => _currentStep;
+
+  set _step(_SetupStep step) {
+    _currentStep = step;
+    if (_isRestorationRegistered) {
+      _savedStep.value = _credentialSteps.contains(step) ? step.name : null;
+    }
+  }
+
+  @override
+  String get restorationId => 'wear-setup';
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_school, 'school');
+    registerForRestoration(_login, 'login');
+    registerForRestoration(_savedStep, 'step');
+    _isRestorationRegistered = true;
+    if (_savedStep.value case final name?) {
+      _currentStep = _SetupStep.values.byName(name);
+    }
+  }
 
   @override
   void initState() {
@@ -122,8 +151,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
   @override
   void dispose() {
     unawaited(_phoneAccounts?.cancel());
-    _schoolController.dispose();
-    _loginController.dispose();
+    _school.dispose();
+    _login.dispose();
+    _savedStep.dispose();
     _passwordController.dispose();
     _passwordFocus.dispose();
     _fieldStepScrollController.dispose();
