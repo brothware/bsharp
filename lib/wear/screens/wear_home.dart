@@ -9,16 +9,7 @@ import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/domain/attendance_utils.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
-import 'package:bsharp/wear/screens/wear_bulletins_list_screen.dart';
 import 'package:bsharp/wear/screens/wear_dashboard.dart';
-import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
-import 'package:bsharp/wear/screens/wear_homework_detail_screen.dart';
-import 'package:bsharp/wear/screens/wear_messages_list_screen.dart';
-import 'package:bsharp/wear/screens/wear_notes_detail_screen.dart';
-import 'package:bsharp/wear/screens/wear_schedule_detail_screen.dart';
-import 'package:bsharp/wear/screens/wear_settings_tile.dart';
-import 'package:bsharp/wear/screens/wear_tests_detail_screen.dart';
 import 'package:bsharp/wear/wear_summary_utils.dart';
 import 'package:bsharp/wear/widgets/wear_launcher_row.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
@@ -36,15 +27,13 @@ class _WearSection {
     required this.icon,
     required this.title,
     required this.summary,
-    required this.builder,
-    this.isFullScreen = true,
+    required this.section,
   });
 
   final IconData icon;
   final String title;
   final String summary;
-  final WidgetBuilder builder;
-  final bool isFullScreen;
+  final WearSection section;
 }
 
 class WearHome extends ConsumerStatefulWidget {
@@ -105,14 +94,14 @@ class _WearHomeState extends ConsumerState<WearHome> {
           icon: Icons.calendar_today,
           title: t.nav.schedule,
           summary: t.wearLauncher.lessonsCount(count: todayLessons.length),
-          builder: (_) => const WearScheduleDetailScreen(),
+          section: WearSection.schedule,
         ),
       if (notifier.isFeatureVisible(ChildModeFeature.grades))
         _WearSection(
           icon: Icons.grade,
           title: t.nav.grades,
           summary: t.wearLauncher.gradesNewCount(count: newGrades),
-          builder: (_) => const WearGradesDetailScreen(),
+          section: WearSection.grades,
         ),
       if (notifier.isFeatureVisible(ChildModeFeature.attendance))
         _WearSection(
@@ -121,33 +110,33 @@ class _WearHomeState extends ConsumerState<WearHome> {
           summary: attendanceStats.totalLessons == 0
               ? t.common.noData
               : attendancePercentLabel(attendanceStats.presentPercent),
-          builder: (_) => const WearAttendanceDetailScreen(),
+          section: WearSection.attendance,
         ),
       _WearSection(
         icon: Icons.assignment,
         title: t.homework.title,
         summary: t.wearLauncher.homeworkDueCount(count: homeworkDue),
-        builder: (_) => const WearHomeworkDetailScreen(),
+        section: WearSection.homework,
       ),
       _WearSection(
         icon: Icons.quiz_outlined,
         title: t.tests.title,
         summary: t.wearLauncher.testsWeekCount(count: testsThisWeek),
-        builder: (_) => const WearTestsDetailScreen(),
+        section: WearSection.tests,
       ),
       if (notifier.isFeatureVisible(ChildModeFeature.notes))
         _WearSection(
           icon: Icons.sticky_note_2_outlined,
           title: t.nav.notes,
           summary: t.wearLauncher.annotationsSummary,
-          builder: (_) => const WearNotesDetailScreen(),
+          section: WearSection.notes,
         ),
       if (notifier.isFeatureVisible(ChildModeFeature.messages))
         _WearSection(
           icon: Icons.mail_outline,
           title: t.nav.messages,
           summary: t.wearLauncher.messagesUnreadCount(count: unreadMessages),
-          builder: (_) => const WearMessagesListScreen(),
+          section: WearSection.messages,
         ),
       _WearSection(
         icon: Icons.campaign_outlined,
@@ -155,8 +144,7 @@ class _WearHomeState extends ConsumerState<WearHome> {
         summary: t.wearLauncher.announcementsNewCount(
           count: unreadAnnouncements,
         ),
-        builder: (_) => const WearBulletinsListScreen(),
-        isFullScreen: false,
+        section: WearSection.bulletins,
       ),
       _WearSection(
         icon: Icons.settings,
@@ -164,8 +152,7 @@ class _WearHomeState extends ConsumerState<WearHome> {
         summary: lastSync == null
             ? t.wearLauncher.settingsNeverSynced
             : t.wearLauncher.settingsSyncedAt(time: _formatTime(lastSync)),
-        builder: (_) => const WearSettingsTile(),
-        isFullScreen: false,
+        section: WearSection.settings,
       ),
     ];
 
@@ -182,6 +169,7 @@ class _WearHomeState extends ConsumerState<WearHome> {
               );
               return CustomScrollView(
                 controller: _controller,
+                restorationId: 'wear-home',
                 scrollCacheExtent: const ScrollCacheExtent.pixels(2000),
                 slivers: [
                   const SliverToBoxAdapter(child: WearDashboard()),
@@ -195,9 +183,7 @@ class _WearHomeState extends ConsumerState<WearHome> {
                         title: section.title,
                         summary: section.summary,
                         scrollController: _controller,
-                        onTap: () => section.isFullScreen
-                            ? pushWearScreen(context, section.builder)
-                            : pushWearSection(context, section.builder),
+                        onTap: () => openWearSection(context, section.section),
                       );
                     }, childCount: sections.length),
                   ),

@@ -141,36 +141,36 @@ Future<Widget> _buildApp(
 }
 
 void main() {
-  group('wearScreenBuilderForCategory', () {
+  group('wearSectionForCategory', () {
     test('maps every known notification kind to its screen', () {
       expect(
-        wearScreenBuilderForCategory(ChangeCategory.grades)!(_ctx),
+        wearSectionForCategory(ChangeCategory.grades)!.build(),
         isA<WearGradesDetailScreen>(),
       );
       expect(
-        wearScreenBuilderForCategory(ChangeCategory.messages)!(_ctx),
+        wearSectionForCategory(ChangeCategory.messages)!.build(),
         isA<WearMessagesListScreen>(),
       );
       expect(
-        wearScreenBuilderForCategory(ChangeCategory.schedule)!(_ctx),
+        wearSectionForCategory(ChangeCategory.schedule)!.build(),
         isA<WearScheduleDetailScreen>(),
       );
       expect(
-        wearScreenBuilderForCategory(ChangeCategory.attendance)!(_ctx),
+        wearSectionForCategory(ChangeCategory.attendance)!.build(),
         isA<WearAttendanceDetailScreen>(),
       );
       expect(
-        wearScreenBuilderForCategory(ChangeCategory.homework)!(_ctx),
+        wearSectionForCategory(ChangeCategory.homework)!.build(),
         isA<WearHomeworkDetailScreen>(),
       );
       expect(
-        wearScreenBuilderForCategory(ChangeCategory.notes)!(_ctx),
+        wearSectionForCategory(ChangeCategory.notes)!.build(),
         isA<WearNotesDetailScreen>(),
       );
     });
 
     test('an unknown kind falls back to the top level', () {
-      expect(wearScreenBuilderForCategory(null), isNull);
+      expect(wearSectionForCategory(null), isNull);
     });
   });
 
@@ -299,13 +299,4 @@ void main() {
       expect(find.byType(WearHome), findsOneWidget);
     });
   });
-}
-
-const BuildContext _ctx = _FakeContext();
-
-class _FakeContext implements BuildContext {
-  const _FakeContext();
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

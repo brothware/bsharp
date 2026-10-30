@@ -136,6 +136,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
 
     return MaterialApp(
       navigatorKey: BSharpWearApp.navigatorKey,
+      restorationScopeId: 'bsharp-wear',
       title: 'BSharp',
       debugShowCheckedModeBanner: false,
       scrollBehavior: WearScrollBehavior(),
