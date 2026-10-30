@@ -1000,10 +1000,10 @@ packages:
     dependency: transitive
     description:
       name: material_ui
-      sha256: fbfb53cab6c4629438feeade5f3d305f72944bc9d9f25786b19106d32b80ec45
+      sha256: feb289df1e5f9ed9522f9fe3d909432a7f7bc76943f16abad09f80a16cd25196
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.9.0"
   meta:
     dependency: transitive
     description:
@@ -1685,10 +1685,10 @@ packages:
     dependency: "direct main"
     description:
       name: wear_os_scrollbar
-      sha256: cdb08dabd7e8bf0f6be0b61008ec35eb64e5654b1a377e00afcfefccba5dddf8
+      sha256: d798b05f449d149df16a913f7290e4a5af4cb8d5594e0014dc6f721e706afe03
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.4"
   web:
     dependency: "direct main"
     description:
