@@ -26,14 +26,15 @@ class WearNotificationRouter extends NotificationTapHandler {
   @override
   bool openSection(ChangeCategory category) {
     final section = wearSectionForCategory(category);
-    if (section == null) return false;
+    if (section == null) {
+      return false;
+    }
 
     final context = navigatorKey.currentContext;
     if (context == null) return false;
 
     navigatorKey.currentState?.popUntil((route) => route.isFirst);
-    openWearSection(context, section);
-    return true;
+    return openWearSection(context, section);
   }
 
   @override

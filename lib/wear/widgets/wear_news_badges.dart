@@ -1,3 +1,4 @@
+import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/providers/more_providers.dart';
@@ -38,6 +39,8 @@ class WearNewsBadges extends ConsumerWidget {
     final infoCount = ref.watch(unreadInfoCountProvider);
     final unreadAnnotations = remarksCount + praisesCount + infoCount;
     final unreadAnnouncements = ref.watch(unreadBulletinsCountProvider);
+    ref.watch(childModeProvider);
+    final childMode = ref.read(childModeProvider.notifier);
 
     final badges = <_Badge>[
       if (unreadMessages > 0)
@@ -70,7 +73,7 @@ class WearNewsBadges extends ConsumerWidget {
           count: unreadAnnouncements,
           section: WearSection.bulletins,
         ),
-    ];
+    ].where((badge) => badge.section.isVisibleIn(childMode)).toList();
 
     if (badges.isEmpty) return const SizedBox.shrink();
 

@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/app/providers/dashboard_providers.dart';
 import 'package:bsharp/app/providers/messages_providers.dart';
 import 'package:bsharp/app/providers/more_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
+import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/poczta.dart';
 import 'package:bsharp/domain/entities/portal.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
@@ -19,6 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/credential_storage_test.dart';
 import 'wear_text_size_probe.dart';
 
 /// Today, at a fixed time of day.
@@ -71,10 +75,12 @@ Widget _buildDashboard({
   List<PortalReprimand> reprimands = const [],
   List<PortalBulletin> bulletins = const [],
   Size displaySizeDp = const Size(400, 400),
+  CredentialStorage? storage,
 }) {
   return ProviderScope(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
+      if (storage != null) credentialStorageProvider.overrideWithValue(storage),
       minuteTickProvider.overrideWith((ref) => _pinnedNow),
       wearScreenShapeProvider.overrideWith((_) => shape),
       resolvedEventsProvider.overrideWithBuild((ref, _) => resolvedEvents),
@@ -406,6 +412,40 @@ void main() {
         await tester.pump();
 
         expect(find.text('1'), findsOneWidget);
+      });
+
+      testWidgets('child mode drops the badge of a hidden section', (
+        tester,
+      ) async {
+        final store = FakeKeyValueStore();
+        await store.write(key: 'child_mode_pin', value: '1234');
+        await store.write(key: 'child_mode_active', value: 'true');
+        await store.write(
+          key: 'child_mode_config',
+          value: jsonEncode({'messagesVisible': false}),
+        );
+        await tester.pumpWidget(
+          _buildDashboard(
+            prefs: prefs,
+            shape: shape,
+            storage: CredentialStorage(store: store),
+            inbox: [
+              PocztaMessage(
+                id: 1,
+                title: 'Hi',
+                senderName: 'Teacher',
+                sendTime: DateTime(2025, 6, 15),
+                isRead: false,
+                isStarred: false,
+              ),
+            ],
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+
+        expect(find.byType(WearNewsBadges), findsOneWidget);
+        expect(find.text('1'), findsNothing);
       });
 
       testWidgets('badges sit beside each other, not one per line', (

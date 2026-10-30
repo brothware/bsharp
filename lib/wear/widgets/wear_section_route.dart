@@ -1,3 +1,4 @@
+import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/wear/screens/wear_attendance_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_bulletins_list_screen.dart';
 import 'package:bsharp/wear/screens/wear_grades_detail_screen.dart';
@@ -9,21 +10,28 @@ import 'package:bsharp/wear/screens/wear_settings_tile.dart';
 import 'package:bsharp/wear/screens/wear_tests_detail_screen.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum WearSection {
-  schedule,
-  grades,
-  attendance,
+  schedule(childModeFeature: ChildModeFeature.schedule),
+  grades(childModeFeature: ChildModeFeature.grades),
+  attendance(childModeFeature: ChildModeFeature.attendance),
   homework,
   tests,
-  notes,
-  messages,
+  notes(childModeFeature: ChildModeFeature.notes),
+  messages(childModeFeature: ChildModeFeature.messages),
   bulletins(isFullScreen: false),
   settings(isFullScreen: false);
 
-  const WearSection({this.isFullScreen = true});
+  const WearSection({this.isFullScreen = true, this.childModeFeature});
 
   final bool isFullScreen;
+  final ChildModeFeature? childModeFeature;
+
+  bool isVisibleIn(ChildModeNotifier childMode) => switch (childModeFeature) {
+    final feature? => childMode.isFeatureVisible(feature),
+    null => true,
+  };
 
   Widget build() => switch (this) {
     WearSection.schedule => const WearScheduleDetailScreen(),
@@ -38,10 +46,18 @@ enum WearSection {
   };
 }
 
-void openWearSection(BuildContext context, WearSection section) {
+bool openWearSection(BuildContext context, WearSection section) {
+  final childMode = ProviderScope.containerOf(
+    context,
+    listen: false,
+  ).read(childModeProvider.notifier);
+  if (!section.isVisibleIn(childMode)) {
+    return false;
+  }
   Navigator.of(
     context,
   ).restorablePush(_restoreWearSection, arguments: section.name);
+  return true;
 }
 
 @pragma('vm:entry-point')
