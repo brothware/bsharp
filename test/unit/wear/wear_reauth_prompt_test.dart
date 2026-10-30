@@ -354,6 +354,40 @@ void main() {
       expect(find.text('Sign in again'), findsNothing);
     }, variant: TargetPlatformVariant.only(TargetPlatform.linux));
 
+    testWidgets('an error past the foot of the glass is brought into view', (
+      tester,
+    ) async {
+      const glass = Size(192, 192);
+      tester.view.physicalSize = glass;
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await openPrompt(tester);
+      await tester.scrollUntilVisible(find.text('Saved password'), 40);
+      await tester.pumpAndSettle();
+
+      tester
+          .widget<OutlinedButton>(
+            find.ancestor(
+              of: find.text('Saved password'),
+              matching: find.byType(OutlinedButton),
+            ),
+          )
+          .onPressed!();
+      await settle(tester);
+      await tester.pumpAndSettle();
+
+      final error = find.text(
+        'No BSharp password is saved in your Google account',
+      );
+      final rect = tester.getRect(error);
+      expect(
+        rect.top >= 0 && rect.bottom <= glass.height,
+        isTrue,
+        reason: 'the error at $rect is off the ${glass.height}dp glass',
+      );
+      expect(tester.getSemantics(error).flagsCollection.isLiveRegion, isTrue);
+    });
+
     testWidgets('a saved password for another account is refused', (
       tester,
     ) async {

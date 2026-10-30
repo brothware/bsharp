@@ -87,6 +87,8 @@ class WearReauthScreen extends ConsumerStatefulWidget {
   ConsumerState<WearReauthScreen> createState() => _WearReauthScreenState();
 }
 
+const _errorScrollDuration = Duration(milliseconds: 200);
+
 class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
   final _passwordController = TextEditingController();
   final _scrollController = ScrollController();
@@ -105,6 +107,18 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
     super.dispose();
   }
 
+  void _showError(String message) {
+    setState(() => _errorMessage = message);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: _errorScrollDuration,
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
   Future<void> _submit() => _signInAgain(_passwordController.text);
 
   bool _isActiveAccount(String school, String login) {
@@ -120,8 +134,8 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
           (account) => unawaited(_signInFromPhone(account)),
           onError: (Object error) {
             debugPrint('WearReauthScreen: phone account unreadable: $error');
-            setState(
-              () => _errorMessage = error is UnsupportedHandoffVersion
+            _showError(
+              error is UnsupportedHandoffVersion
                   ? t.watchSetup.updateApp
                   : t.watchSetup.receiveFailed,
             );
@@ -137,14 +151,14 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
   Future<void> _openOnPhone() async {
     final isOpened = await openSetUpWatchOnPhone();
     if (mounted && !isOpened) {
-      setState(() => _errorMessage = t.watchSetup.phoneUnreachable);
+      _showError(t.watchSetup.phoneUnreachable);
     }
   }
 
   Future<void> _signInFromPhone(AccountHandoff account) async {
     if (!mounted || _isSubmitting) return;
     if (!_isActiveAccount(account.school, account.login)) {
-      setState(() => _errorMessage = t.watchSetup.differentAccount);
+      _showError(t.watchSetup.differentAccount);
       return;
     }
     unawaited(_acknowledgeToPhone());
@@ -168,7 +182,7 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
     } on SavedPasswordsException catch (error) {
       debugPrint('WearReauthScreen: ${error.message}');
       if (mounted) {
-        setState(() => _errorMessage = t.watchSetup.savedPasswordFailed);
+        _showError(t.watchSetup.savedPasswordFailed);
       }
       return;
     } finally {
@@ -180,9 +194,9 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
           when _isActiveAccount(login.school, login.login):
         await _signInAgain(login.password);
       case SavedLoginPicked():
-        setState(() => _errorMessage = t.watchSetup.differentAccount);
+        _showError(t.watchSetup.differentAccount);
       case NoSavedLogin():
-        setState(() => _errorMessage = t.watchSetup.noSavedPassword);
+        _showError(t.watchSetup.noSavedPassword);
       case SavedLoginCancelled():
         break;
     }
@@ -202,10 +216,8 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
       return;
     }
     if (result case Failure(:final failure)) {
-      setState(() {
-        _isSubmitting = false;
-        _errorMessage = failureMessage(failure);
-      });
+      setState(() => _isSubmitting = false);
+      _showError(failureMessage(failure));
       return;
     }
 
@@ -221,82 +233,88 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
         body: WearScaffold(
           scrollController: _scrollController,
           child: Builder(
-            builder: (context) => ListView(
+            builder: (context) => SingleChildScrollView(
               controller: _scrollController,
               padding: wearListPadding(WearDisplayScope.of(context)),
-              children: [
-                Text(
-                  t.auth.reauthTitle,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleSmall,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  t.auth.reauthMessage,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                FilledButton(
-                  onPressed: _isSubmitting ? null : _listenToPhone,
-                  child: Text(t.watchSetup.usePhone),
-                ),
-                if (_isWaitingForPhone)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      t.watchSetup.waitingBody,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodySmall,
-                    ),
-                  ),
-                const SizedBox(height: 6),
-                OutlinedButton(
-                  onPressed: _isSubmitting
-                      ? null
-                      : () => unawaited(_signInWithSavedPassword()),
-                  child: Text(t.watchSetup.savedPassword),
-                ),
-                if (_isTyping) ...[
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    autocorrect: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    t.auth.reauthTitle,
                     textAlign: TextAlign.center,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => _submit(),
-                    decoration: InputDecoration(
-                      labelText: t.auth.password,
-                      isDense: true,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    t.auth.reauthMessage,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    style: theme.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 8),
                   FilledButton(
-                    onPressed: _isSubmitting ? null : _submit,
-                    child: Text(t.auth.login),
+                    onPressed: _isSubmitting ? null : _listenToPhone,
+                    child: Text(t.watchSetup.usePhone),
                   ),
-                ] else
-                  // Google asks Wear apps not to take a password on the
-                  // watch (WO-P6); typing stays, but only as the last way in.
-                  TextButton(
-                    onPressed: () => setState(() => _isTyping = true),
-                    child: Text(t.watchSetup.typeOnWatch),
-                  ),
-                if (_errorMessage case final message?)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.error,
+                  if (_isWaitingForPhone)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        t.watchSetup.waitingBody,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodySmall,
                       ),
                     ),
+                  const SizedBox(height: 6),
+                  OutlinedButton(
+                    onPressed: _isSubmitting
+                        ? null
+                        : () => unawaited(_signInWithSavedPassword()),
+                    child: Text(t.watchSetup.savedPassword),
                   ),
-              ],
+                  if (_isTyping) ...[
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      autocorrect: false,
+                      textAlign: TextAlign.center,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (_) => _submit(),
+                      decoration: InputDecoration(
+                        labelText: t.auth.password,
+                        isDense: true,
+                      ),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    FilledButton(
+                      onPressed: _isSubmitting ? null : _submit,
+                      child: Text(t.auth.login),
+                    ),
+                  ] else
+                    // Google asks Wear apps not to take a password on the
+                    // watch (WO-P6); typing stays, but only as the last way in.
+                    TextButton(
+                      onPressed: () => setState(() => _isTyping = true),
+                      child: Text(t.watchSetup.typeOnWatch),
+                    ),
+                  if (_errorMessage case final message?)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Semantics(
+                        liveRegion: true,
+                        child: Text(
+                          message,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.error,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
