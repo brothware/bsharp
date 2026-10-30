@@ -60,9 +60,7 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
     return Scaffold(
       body: WearSwipeDismiss(
         child: WearPinDial(
-          shape:
-              ref.watch(wearScreenShapeProvider).value ??
-              WearScreenShape.rectangular,
+          shape: ref.watch(wearScreenShapeProvider).requireValue,
           prompt: t.childMode.enterParentPin,
           error: _error,
           enteredCount: _pin.length,
@@ -83,7 +81,9 @@ class _WearPinEntryState extends ConsumerState<WearPinEntry> {
       return;
     }
 
-    if (_pin.length >= _pinLength) return;
+    if (_pin.length >= _pinLength) {
+      return;
+    }
 
     setState(() {
       _pin += key;
