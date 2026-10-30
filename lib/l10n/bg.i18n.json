@@ -393,6 +393,7 @@
     "tryAgainLater": "Опитайте отново след 5 минути",
     "enterParentPin": "Въведете родителски ПИН",
     "attemptsRemaining": "Оставащи опити: ${remaining}",
+    "pinProgress": "Въведени цифри: ${entered} от ${total}",
     "invalidPin": "Невалиден ПИН",
     "locked": "Заключено"
   },

@@ -402,6 +402,7 @@
     "tryAgainLater": "Bain triail eile as i gceann 5 noimiaid",
     "enterParentPin": "Cuir isteach PIN an tuismitheora",
     "attemptsRemaining": "Iarrachtai fagtha: ${remaining}",
+    "pinProgress": "Digití iontráilte: ${entered} as ${total}",
     "invalidPin": "PIN neamhbhaili",
     "locked": "Glasailte"
   },

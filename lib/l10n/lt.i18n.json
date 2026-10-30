@@ -399,6 +399,7 @@
     "tryAgainLater": "Bandykite dar kartą po 5 minučių",
     "enterParentPin": "Įveskite tėvų PIN",
     "attemptsRemaining": "Liko bandymų: ${remaining}",
+    "pinProgress": "Įvesta skaitmenų: ${entered} iš ${total}",
     "invalidPin": "Neteisingas PIN",
     "locked": "Užrakinta"
   },

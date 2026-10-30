@@ -393,6 +393,7 @@
     "tryAgainLater": "5 मिनट बाद पुनः प्रयास करें",
     "enterParentPin": "अभिभावक पिन दर्ज करें",
     "attemptsRemaining": "शेष प्रयास: ${remaining}",
+    "pinProgress": "दर्ज किए गए अंक: ${total} में से ${entered}",
     "invalidPin": "गलत पिन",
     "locked": "लॉक है"
   },

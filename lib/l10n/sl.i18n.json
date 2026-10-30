@@ -399,6 +399,7 @@
     "tryAgainLater": "Poskusite znova čez 5 minut",
     "enterParentPin": "Vnesite starševski PIN",
     "attemptsRemaining": "Preostali poskusi: ${remaining}",
+    "pinProgress": "Vnesene števke: ${entered} od ${total}",
     "invalidPin": "Napačen PIN",
     "locked": "Zaklenjeno"
   },

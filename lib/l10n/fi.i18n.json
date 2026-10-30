@@ -393,6 +393,7 @@
     "tryAgainLater": "Yritä uudelleen 5 minuutin kuluttua",
     "enterParentPin": "Syötä vanhemman PIN",
     "attemptsRemaining": "Yrityksiä jäljellä: ${remaining}",
+    "pinProgress": "Syötetyt numerot: ${entered}/${total}",
     "invalidPin": "Virheellinen PIN",
     "locked": "Lukittu"
   },

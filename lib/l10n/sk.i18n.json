@@ -396,6 +396,7 @@
     "tryAgainLater": "Skúste to znova o 5 minút",
     "enterParentPin": "Zadajte rodičovský PIN",
     "attemptsRemaining": "Zostávajúce pokusy: ${remaining}",
+    "pinProgress": "Zadané číslice: ${entered} z ${total}",
     "invalidPin": "Neplatný PIN",
     "locked": "Zamknuté"
   },

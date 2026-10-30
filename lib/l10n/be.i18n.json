@@ -399,6 +399,7 @@
     "tryAgainLater": "Паспрабуйце зноў праз 5 хвілін",
     "enterParentPin": "Увядзіце бацькоўскі PIN",
     "attemptsRemaining": "Засталося спроб: ${remaining}",
+    "pinProgress": "Уведзена лічбаў: ${entered} з ${total}",
     "invalidPin": "Няправільны PIN",
     "locked": "Заблакавана"
   },

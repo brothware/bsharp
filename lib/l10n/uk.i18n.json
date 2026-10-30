@@ -399,6 +399,7 @@
     "tryAgainLater": "Спробуйте знову через 5 хвилин",
     "enterParentPin": "Введіть батьківський PIN",
     "attemptsRemaining": "Залишилось спроб: ${remaining}",
+    "pinProgress": "Введено цифр: ${entered} з ${total}",
     "invalidPin": "Невірний PIN",
     "locked": "Заблоковано"
   },

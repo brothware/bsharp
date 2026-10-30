@@ -166,7 +166,7 @@ class _PinMessage extends StatelessWidget {
     final theme = Theme.of(context);
     final message = error;
     return Semantics(
-      liveRegion: message != null,
+      liveRegion: true,
       child: Text(
         message ?? prompt,
         textAlign: TextAlign.center,
@@ -195,12 +195,20 @@ class _PinProgress extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var index = 0; index < pinLength; index++)
-              WearPinDot(isFilled: index < enteredCount),
-          ],
+        Semantics(
+          label: t.childMode.pinProgress(
+            entered: enteredCount,
+            total: pinLength,
+          ),
+          liveRegion: true,
+          excludeSemantics: true,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var index = 0; index < pinLength; index++)
+                WearPinDot(isFilled: index < enteredCount),
+            ],
+          ),
         ),
         IconButton(
           tooltip: t.common.delete,

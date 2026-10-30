@@ -393,6 +393,7 @@
     "tryAgainLater": "Proovi uuesti 5 minuti pärast",
     "enterParentPin": "Sisesta vanema PIN",
     "attemptsRemaining": "Katseid jäänud: ${remaining}",
+    "pinProgress": "Sisestatud numbreid: ${entered} / ${total}",
     "invalidPin": "Vale PIN",
     "locked": "Lukustatud"
   },

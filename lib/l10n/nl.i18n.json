@@ -393,6 +393,7 @@
     "tryAgainLater": "Probeer het over 5 minuten opnieuw",
     "enterParentPin": "Voer ouder-PIN in",
     "attemptsRemaining": "Resterende pogingen: ${remaining}",
+    "pinProgress": "Ingevoerde cijfers: ${entered} van ${total}",
     "invalidPin": "Ongeldige PIN",
     "locked": "Vergrendeld"
   },

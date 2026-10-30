@@ -393,6 +393,7 @@
     "tryAgainLater": "Prøv igjen om 5 minutter",
     "enterParentPin": "Skriv inn foreldre-PIN",
     "attemptsRemaining": "Gjenstående forsøk: ${remaining}",
+    "pinProgress": "Inntastede sifre: ${entered} av ${total}",
     "invalidPin": "Ugyldig PIN",
     "locked": "Låst"
   },

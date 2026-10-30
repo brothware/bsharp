@@ -393,6 +393,7 @@
     "tryAgainLater": "5분 후 다시 시도하세요",
     "enterParentPin": "보호자 PIN 입력",
     "attemptsRemaining": "남은 시도 횟수: ${remaining}",
+    "pinProgress": "입력한 자릿수: ${total}자리 중 ${entered}자리",
     "invalidPin": "잘못된 PIN",
     "locked": "잠김"
   },

@@ -276,6 +276,20 @@ void main() {
       expect(find.byTooltip(t.common.delete), findsOneWidget);
       expect(_dots(isFilled: true), findsNWidgets(2));
       expect(_dots(isFilled: false), findsNWidgets(2));
+      expect(find.bySemanticsLabel('Digits entered: 2 of 4'), findsOneWidget);
+    });
+
+    testWidgets('a new prompt is announced', (tester) async {
+      const screen = (shape: WearScreenShape.round, size: Size(227, 227));
+      await _pumpDial(tester, screen);
+
+      expect(
+        tester
+            .getSemantics(find.text('Enter parent PIN'))
+            .flagsCollection
+            .isLiveRegion,
+        isTrue,
+      );
     });
 
     testWidgets('an error takes the place of the prompt', (tester) async {

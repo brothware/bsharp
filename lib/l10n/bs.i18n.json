@@ -396,6 +396,7 @@
     "tryAgainLater": "Pokušajte ponovo za 5 minuta",
     "enterParentPin": "Unesite roditeljski PIN",
     "attemptsRemaining": "Preostalo pokušaja: ${remaining}",
+    "pinProgress": "Unesene cifre: ${entered} od ${total}",
     "invalidPin": "Neispravan PIN",
     "locked": "Zaključano"
   },

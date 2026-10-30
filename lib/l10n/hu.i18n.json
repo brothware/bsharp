@@ -393,6 +393,7 @@
     "tryAgainLater": "Próbálja újra 5 perc múlva",
     "enterParentPin": "Adja meg a szülői PIN-t",
     "attemptsRemaining": "Hátralévő próbálkozások: ${remaining}",
+    "pinProgress": "Beírt számjegyek: ${entered}/${total}",
     "invalidPin": "Érvénytelen PIN",
     "locked": "Zárolva"
   },

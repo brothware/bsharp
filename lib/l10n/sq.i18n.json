@@ -393,6 +393,7 @@
     "tryAgainLater": "Provoni përsëri pas 5 minutash",
     "enterParentPin": "Vendosni PIN-in prindëror",
     "attemptsRemaining": "Përpjekje të mbetura: ${remaining}",
+    "pinProgress": "Shifra të futura: ${entered} nga ${total}",
     "invalidPin": "PIN i gabuar",
     "locked": "I bllokuar"
   },

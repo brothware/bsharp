@@ -396,6 +396,7 @@
     "tryAgainLater": "Încercați din nou în 5 minute",
     "enterParentPin": "Introduceți PIN-ul părinte",
     "attemptsRemaining": "Încercări rămase: ${remaining}",
+    "pinProgress": "Cifre introduse: ${entered} din ${total}",
     "invalidPin": "PIN invalid",
     "locked": "Blocat"
   },

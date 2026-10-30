@@ -393,6 +393,7 @@
     "tryAgainLater": "Mēģiniet vēlreiz pēc 5 minūtēm",
     "enterParentPin": "Ievadiet vecāka PIN",
     "attemptsRemaining": "Atlikušie mēģinājumi: ${remaining}",
+    "pinProgress": "Ievadīti cipari: ${entered} no ${total}",
     "invalidPin": "Nepareizs PIN",
     "locked": "Bloķēts"
   },

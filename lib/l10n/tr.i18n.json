@@ -393,6 +393,7 @@
     "tryAgainLater": "5 dakika sonra tekrar deneyin",
     "enterParentPin": "Ebeveyn PIN'ini girin",
     "attemptsRemaining": "Kalan deneme: ${remaining}",
+    "pinProgress": "Girilen rakamlar: ${total} rakamdan ${entered}",
     "invalidPin": "Geçersiz PIN",
     "locked": "Kilitli"
   },

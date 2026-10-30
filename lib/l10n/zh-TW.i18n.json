@@ -393,6 +393,7 @@
     "tryAgainLater": "請5分鐘後重試",
     "enterParentPin": "輸入家長PIN碼",
     "attemptsRemaining": "剩餘嘗試次數：${remaining}",
+    "pinProgress": "已輸入 ${entered}/${total} 位",
     "invalidPin": "PIN碼錯誤",
     "locked": "已鎖定"
   },

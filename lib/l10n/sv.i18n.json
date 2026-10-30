@@ -393,6 +393,7 @@
     "tryAgainLater": "Försök igen om 5 minuter",
     "enterParentPin": "Ange föräldra-PIN",
     "attemptsRemaining": "Återstående försök: ${remaining}",
+    "pinProgress": "Inmatade siffror: ${entered} av ${total}",
     "invalidPin": "Ogiltig PIN",
     "locked": "Låst"
   },

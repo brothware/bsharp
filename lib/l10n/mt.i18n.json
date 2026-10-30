@@ -399,6 +399,7 @@
     "tryAgainLater": "Erġa' pprova fi 5 minuti",
     "enterParentPin": "Daħħal il-PIN tal-ġenitur",
     "attemptsRemaining": "Tentattivi li fadal: ${remaining}",
+    "pinProgress": "Ċifri mdaħħla: ${entered} minn ${total}",
     "invalidPin": "PIN mhux validu",
     "locked": "Ibblokkjat"
   },

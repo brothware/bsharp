@@ -393,6 +393,7 @@
     "tryAgainLater": "Inténtelo de nuevo en 5 minutos",
     "enterParentPin": "Introduzca el PIN de padre",
     "attemptsRemaining": "Intentos restantes: ${remaining}",
+    "pinProgress": "Dígitos introducidos: ${entered} de ${total}",
     "invalidPin": "PIN incorrecto",
     "locked": "Bloqueado"
   },

@@ -393,6 +393,7 @@
     "tryAgainLater": "Δοκιμάστε ξανά σε 5 λεπτά",
     "enterParentPin": "Εισάγετε το PIN γονέα",
     "attemptsRemaining": "Υπολειπόμενες προσπάθειες: ${remaining}",
+    "pinProgress": "Ψηφία που εισήχθησαν: ${entered} από ${total}",
     "invalidPin": "Λάθος PIN",
     "locked": "Κλειδωμένο"
   },

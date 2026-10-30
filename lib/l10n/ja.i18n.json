@@ -393,6 +393,7 @@
     "tryAgainLater": "5分後に再試行してください",
     "enterParentPin": "保護者PINを入力",
     "attemptsRemaining": "残り試行回数: ${remaining}",
+    "pinProgress": "入力済みの桁: ${entered}/${total}",
     "invalidPin": "PINが正しくありません",
     "locked": "ロック中"
   },
