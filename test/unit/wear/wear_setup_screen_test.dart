@@ -25,6 +25,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 import '../data/credential_storage_test.dart';
 
@@ -752,6 +753,56 @@ void main() {
       });
     });
   }
+
+  group('scroll track', () {
+    void expectTrackMatchesStep(WidgetTester tester, String step) {
+      final bar = tester.widget<WearOsScrollbar>(find.byType(WearOsScrollbar));
+      final canScroll = bar.controller.position.maxScrollExtent > 0;
+      final track = find.byWidgetPredicate(
+        (widget) =>
+            widget is CustomPaint &&
+            widget.painter.runtimeType.toString() ==
+                '_CircularScrollIndicatorPainter',
+      );
+      expect(
+        track,
+        canScroll ? findsOneWidget : findsNothing,
+        reason: 'the $step step ${canScroll ? 'scrolls' : 'fits'}',
+      );
+    }
+
+    testWidgets('each step draws the track only when it scrolls', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(192, 192);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      tester.binding.defaultBinaryMessenger.setMockStreamHandler(
+        const EventChannel('wear_os_scrollbar/rotary'),
+        MockStreamHandler.inline(onListen: (_, _) {}),
+      );
+
+      await tester.pumpWidget(_buildApp(shape: WearScreenShape.round));
+      await tester.pumpAndSettle();
+      expectTrackMatchesStep(tester, 'welcome');
+
+      await _openTypedSetup(tester);
+      expectTrackMatchesStep(tester, 'provider');
+
+      tester
+          .widget<InkWell>(
+            find
+                .ancestor(
+                  of: find.text('Mobireg'),
+                  matching: find.byType(InkWell),
+                )
+                .first,
+          )
+          .onTap!();
+      await tester.pumpAndSettle();
+      expectTrackMatchesStep(tester, 'school');
+    });
+  });
 
   group('leaving setup (WO-V3)', () {
     Future<void> swipeRight(WidgetTester tester) async {

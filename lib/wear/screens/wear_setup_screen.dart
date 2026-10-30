@@ -429,6 +429,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: WearScaffold(
+        key: ValueKey((_step, _knowsWhetherSetUp)),
         scrollController: _activeScrollController,
         child: switch (_step) {
           _SetupStep.welcome =>
