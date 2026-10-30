@@ -6,7 +6,6 @@ import 'package:bsharp/wear/screens/wear_language_screen.dart';
 import 'package:bsharp/wear/screens/wear_notes_detail_screen.dart';
 import 'package:bsharp/wear/screens/wear_settings_tile.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
-import 'package:bsharp/wear/widgets/wear_compact_keypad.dart';
 import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,17 +32,6 @@ void _expectAllAtLeastMinTouchTarget(WidgetTester tester, Finder finder) {
 
 void main() {
   group('Wear touch targets', () {
-    testWidgets('PIN keypad keys are at least 48dp', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: WearCompactKeypad(onKeyTap: (_) {})),
-        ),
-      );
-      await tester.pump();
-
-      _expectAllAtLeastMinTouchTarget(tester, find.byType(InkWell));
-    });
-
     testWidgets('settings rows are at least 48dp', (tester) async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();

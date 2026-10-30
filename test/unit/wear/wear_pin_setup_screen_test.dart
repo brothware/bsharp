@@ -2,6 +2,7 @@ import 'package:bsharp/app/auth_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/wear/screens/wear_pin_setup_screen.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_pin_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,9 +21,13 @@ Widget _buildApp({List<Object> extraOverrides = const []}) {
   );
 }
 
+Finder _filledDots() => find.byWidgetPredicate(
+  (widget) => widget is WearPinDot && widget.isFilled,
+);
+
 void main() {
   group('WearPinSetupScreen', () {
-    testWidgets('renders create PIN title and keypad', (tester) async {
+    testWidgets('renders the create prompt and the dial', (tester) async {
       await tester.pumpWidget(_buildApp());
       await tester.pump();
 
@@ -30,7 +35,7 @@ void main() {
       for (final digit in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) {
         expect(find.text(digit), findsOneWidget);
       }
-      expect(find.byIcon(Icons.backspace_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.backspace_outlined), findsNothing);
     });
 
     testWidgets('switches to confirm step after 4 digits', (tester) async {
@@ -63,7 +68,14 @@ void main() {
       await tester.pump();
 
       expect(find.text('PIN does not match, try again'), findsOneWidget);
-      expect(find.text('Create PIN'), findsOneWidget);
+      expect(find.text('Create PIN'), findsNothing);
+
+      for (final digit in ['1', '2', '3', '4']) {
+        await tester.tap(find.text(digit));
+      }
+      await tester.pump();
+
+      expect(find.text('Confirm PIN'), findsOneWidget);
     });
 
     testWidgets('successful setup pops with true', (tester) async {
@@ -124,6 +136,11 @@ void main() {
       await tester.tap(find.text('1'));
       await tester.tap(find.text('2'));
       await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.backspace_outlined));
+      await tester.pump();
+
+      expect(_filledDots(), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.backspace_outlined));
       await tester.pump();

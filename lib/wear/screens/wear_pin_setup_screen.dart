@@ -2,11 +2,8 @@ import 'dart:async';
 
 import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
-import 'package:bsharp/wear/wear_app.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
-import 'package:bsharp/wear/widgets/wear_compact_keypad.dart';
-import 'package:bsharp/wear/widgets/wear_edge_scrollbar.dart';
-import 'package:bsharp/wear/widgets/wear_scaffold.dart';
+import 'package:bsharp/wear/widgets/wear_pin_dial.dart';
 import 'package:bsharp/wear/widgets/wear_swipe_dismiss.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +19,6 @@ class WearPinSetupScreen extends ConsumerStatefulWidget {
 }
 
 class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
-  final _scrollController = ScrollController();
   String _pin = '';
   String? _firstPin;
   String? _error;
@@ -30,91 +26,20 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
   static const _pinLength = 4;
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  EdgeInsets _headingInsets(BuildContext context) => wearTopHeadingInsets(
-    WearDisplay(
-      shape:
-          ref.watch(wearScreenShapeProvider).value ??
-          WearScreenShape.rectangular,
-      sizeDp: MediaQuery.sizeOf(context),
-    ),
-  );
-
-  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    // Read here, in build: the builder below runs during layout.
-    final headingInsets = _headingInsets(context);
-
     return Scaffold(
-      body: WearEdgeScrollbar(
-        controller: _scrollController,
-        child: WearSwipeDismiss(
-          child: SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) => SingleChildScrollView(
-                controller: _scrollController,
-                padding: EdgeInsets.only(top: headingInsets.top),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 4),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: headingInsets.left,
-                        ),
-                        child: Text(
-                          _step == _PinSetupStep.create
-                              ? t.childMode.createPin
-                              : t.childMode.confirmPin,
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(_pinLength, (i) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            width: 12,
-                            height: 12,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: i < _pin.length
-                                  ? theme.colorScheme.primary
-                                  : wearTrackColor(theme.colorScheme),
-                            ),
-                          );
-                        }),
-                      ),
-                      if (_error != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          _error!,
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: theme.colorScheme.error,
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 8),
-                      WearCompactKeypad(onKeyTap: _onKeyTap),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+      body: WearSwipeDismiss(
+        child: WearPinDial(
+          shape:
+              ref.watch(wearScreenShapeProvider).value ??
+              WearScreenShape.rectangular,
+          prompt: _step == _PinSetupStep.create
+              ? t.childMode.createPin
+              : t.childMode.confirmPin,
+          error: _error,
+          enteredCount: _pin.length,
+          pinLength: _pinLength,
+          onKeyTap: _onKeyTap,
         ),
       ),
     );
@@ -123,7 +48,7 @@ class _WearPinSetupScreenState extends ConsumerState<WearPinSetupScreen> {
   void _onKeyTap(String key) {
     unawaited(HapticFeedback.lightImpact());
 
-    if (key == 'del') {
+    if (key == WearPinDial.deleteKey) {
       if (_pin.isNotEmpty) {
         setState(() => _pin = _pin.substring(0, _pin.length - 1));
       }

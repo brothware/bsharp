@@ -3,6 +3,7 @@ import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/wear/screens/wear_pin_entry.dart';
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
+import 'package:bsharp/wear/widgets/wear_pin_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../data/credential_storage_test.dart';
+
+Finder _filledDots() => find.byWidgetPredicate(
+  (widget) => widget is WearPinDot && widget.isFilled,
+);
 
 void main() {
   group('WearPinEntry', () {
@@ -81,7 +86,7 @@ void main() {
       }
     });
 
-    testWidgets('shows pin dots', (tester) async {
+    testWidgets('shows the dots once a digit is entered', (tester) async {
       final storage = CredentialStorage(store: FakeKeyValueStore());
       await tester.pumpWidget(
         ProviderScope(
@@ -96,13 +101,13 @@ void main() {
       );
       await tester.pump();
 
-      final containers = tester.widgetList<Container>(
-        find.descendant(of: find.byType(Row), matching: find.byType(Container)),
-      );
-      final dots = containers.where(
-        (c) => c.constraints?.maxWidth == 12 && c.constraints?.maxHeight == 12,
-      );
-      expect(dots.length, 4);
+      expect(find.byType(WearPinDot), findsNothing);
+
+      await tester.tap(find.text('1'));
+      await tester.pump();
+
+      expect(find.byType(WearPinDot), findsNWidgets(4));
+      expect(_filledDots(), findsOneWidget);
     });
 
     testWidgets('shows error on wrong PIN', (tester) async {
@@ -225,7 +230,7 @@ void main() {
       await tester.tap(find.byIcon(Icons.backspace_outlined));
       await tester.pump();
 
-      expect(find.byType(WearPinEntry), findsOneWidget);
+      expect(_filledDots(), findsOneWidget);
     });
   });
 }
