@@ -106,17 +106,23 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen>
     registerForRestoration(_login, 'login');
     registerForRestoration(_savedStep, 'step');
     _isRestorationRegistered = true;
-    if (_savedStep.value case final name?) {
-      _currentStep = _SetupStep.values.byName(name);
+    final savedStep = _savedStep.value;
+    if (savedStep != null) {
+      _currentStep = _SetupStep.values.byName(savedStep);
+    } else if (!initialRestore) {
+      _currentStep = _firstStep;
     }
   }
+
+  _SetupStep get _firstStep =>
+      widget.addingAnother ? _SetupStep.provider : _SetupStep.welcome;
 
   @override
   void initState() {
     super.initState();
     if (widget.addingAnother) {
       _knowsWhetherSetUp = true;
-      _step = _SetupStep.provider;
+      _step = _firstStep;
       return;
     }
     unawaited(_checkNeedsSetup());
