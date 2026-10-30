@@ -10,6 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 const _minTouchTarget = 48.0;
 const _layoutTolerance = 0.01;
 const _keyFaceInset = 4.0;
+const double _keyFaceDiameter = _minTouchTarget - 2 * _keyFaceInset;
+const _edgeSamples = 16;
 const _digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 
 typedef _Screen = ({WearScreenShape shape, Size size});
@@ -73,29 +75,80 @@ Future<void> _pumpDial(
 void main() {
   group('wearDialKeyCentres', () {
     for (final screen in _screens) {
-      test('${_describe(screen)}: ten keys on the glass, 48dp apart', () {
+      test('${_describe(screen)}: every touch area lies on the glass', () {
         final centres = wearDialKeyCentres(
           size: screen.size,
           shape: screen.shape,
         );
 
         expect(centres, hasLength(_digits.length));
+        for (final (index, centre) in centres.indexed) {
+          final touchArea = Rect.fromCircle(
+            center: centre,
+            radius: _minTouchTarget / 2,
+          );
+          final edges = screen.shape == WearScreenShape.round
+              ? [
+                  for (var step = 0; step < _edgeSamples; step++)
+                    centre +
+                        Offset.fromDirection(
+                          2 * math.pi * step / _edgeSamples,
+                          _minTouchTarget / 2,
+                        ),
+                ]
+              : [
+                  touchArea.topLeft,
+                  touchArea.topRight,
+                  touchArea.bottomLeft,
+                  touchArea.bottomRight,
+                ];
+          for (final edge in edges) {
+            expect(
+              _isOnGlass(edge, screen),
+              isTrue,
+              reason: 'key $index reaches $edge, off the glass',
+            );
+          }
+        }
+      });
+
+      test('${_describe(screen)}: no two key faces touch', () {
+        final centres = wearDialKeyCentres(
+          size: screen.size,
+          shape: screen.shape,
+        );
+
+        for (var index = 0; index < centres.length; index++) {
+          for (var other = index + 1; other < centres.length; other++) {
+            expect(
+              (centres[other] - centres[index]).distance,
+              greaterThan(_keyFaceDiameter),
+              reason: 'the faces of keys $index and $other touch',
+            );
+          }
+        }
+      });
+    }
+
+    test('a frame keeps whole 48dp targets apart', () {
+      for (final screen in _screens.where(
+        (screen) => screen.shape == WearScreenShape.rectangular,
+      )) {
+        final centres = wearDialKeyCentres(
+          size: screen.size,
+          shape: screen.shape,
+        );
         for (var index = 0; index < centres.length; index++) {
           for (var other = index + 1; other < centres.length; other++) {
             expect(
               (centres[other] - centres[index]).distance,
               greaterThanOrEqualTo(_minTouchTarget - _layoutTolerance),
-              reason: 'key $index overlaps key $other',
+              reason: '${_describe(screen)}: key $index overlaps key $other',
             );
           }
-          expect(
-            _isOnGlass(centres[index], screen),
-            isTrue,
-            reason: 'key $index at ${centres[index]} is off the glass',
-          );
         }
-      });
-    }
+      }
+    });
 
     test('a ring starts right of twelve and ends mirrored left of it', () {
       const size = Size(227, 227);

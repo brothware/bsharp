@@ -9,6 +9,10 @@ const _keyDiameter = 48.0;
 const _keyFaceDiameter = 40.0;
 const _dotDiameter = 12.0;
 const _dotSpacing = 8.0;
+const _keyFaceGap = 2.0;
+const _ringStartInSteps = 0.5;
+const _frameSideSpans = 3;
+const double _shallowChordAngle = math.pi / 3;
 const _dialDigits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 
 List<Offset> wearDialKeyCentres({
@@ -21,17 +25,18 @@ List<Offset> wearDialKeyCentres({
 
 List<Offset> _ringCentres(Size size) {
   const keyRadius = _keyDiameter / 2;
+  const separateFacesHalfChord = (_keyFaceDiameter + _keyFaceGap) / 2;
   final step = 2 * math.pi / _dialDigits.length;
-  final touchingRadius = keyRadius / math.sin(step / 2);
   final huggingRadius = size.shortestSide / 2 - keyRadius;
-  final radius = math.max(touchingRadius, huggingRadius);
+  final separateFacesRadius = separateFacesHalfChord / math.sin(step / 2);
+  final radius = math.max(huggingRadius, separateFacesRadius);
   final centre = size.center(Offset.zero);
   return [
     for (var index = 0; index < _dialDigits.length; index++)
       centre +
-          Offset(
-            radius * math.sin((index + 0.5) * step),
-            -radius * math.cos((index + 0.5) * step),
+          Offset.fromDirection(
+            (index + _ringStartInSteps) * step - math.pi / 2,
+            radius,
           ),
   ];
 }
@@ -43,8 +48,9 @@ List<Offset> _frameCentres(Size size) {
   const top = half;
   final bottom = size.height - half;
   final middleX = size.width / 2;
-  final thirdY = top + (bottom - top) / 3;
-  final twoThirdsY = top + (bottom - top) * 2 / 3;
+  double sideRow(int span) => top + (bottom - top) * span / _frameSideSpans;
+  final thirdY = sideRow(1);
+  final twoThirdsY = sideRow(2);
   return [
     const Offset(left, top),
     Offset(middleX, top),
@@ -59,16 +65,24 @@ List<Offset> _frameCentres(Size size) {
   ];
 }
 
-Rect _centreArea(Size size, WearScreenShape shape) {
+Rect _centreArea(
+  Size size,
+  WearScreenShape shape, {
+  required bool isShallow,
+}) {
   final bounds = Offset.zero & size;
   switch (shape) {
     case WearScreenShape.round:
       final centres = _ringCentres(size);
       final innerRadius =
           (centres.first - bounds.center).distance - _keyFaceDiameter / 2;
-      return Rect.fromCircle(
+      final halfWidth = isShallow
+          ? innerRadius * math.sin(_shallowChordAngle)
+          : innerRadius / math.sqrt2;
+      return Rect.fromCenter(
         center: bounds.center,
-        radius: innerRadius / math.sqrt2,
+        width: 2 * halfWidth,
+        height: 2 * innerRadius,
       );
     case WearScreenShape.rectangular:
       return bounds.deflate(_keyDiameter);
@@ -101,7 +115,11 @@ class WearPinDial extends StatelessWidget {
       builder: (context, constraints) {
         final size = constraints.biggest;
         final centres = wearDialKeyCentres(size: size, shape: shape);
-        final centreArea = _centreArea(size, shape);
+        final centreArea = _centreArea(
+          size,
+          shape,
+          isShallow: enteredCount > 0,
+        );
         return Stack(
           children: [
             Positioned(
