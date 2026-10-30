@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-46 -46 348 348"><defs>
+    <linearGradient id="bgBase" gradientUnits="userSpaceOnUse" x1="35.2" y1="12" x2="220.8" y2="244">
+      <stop offset="0%" stop-color="#66BB6A"/>
+      <stop offset="55%" stop-color="#42A5F5"/>
+      <stop offset="100%" stop-color="#1E88E5"/>
+    </linearGradient>
+    <radialGradient id="orangeGlow" gradientUnits="userSpaceOnUse" cx="202.2" cy="100.2" r="127.6">
+      <stop offset="0%" stop-color="#FFB74D"/>
+      <stop offset="45%" stop-color="#FFA726" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#FFA726" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="greenHighlight" gradientUnits="userSpaceOnUse" cx="39.8" cy="35.2" r="104.4">
+      <stop offset="0%" stop-color="#81C784" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#81C784" stop-opacity="0"/>
+    </radialGradient>
+    
+    <filter id="glow" x="-5%" y="-5%" width="115%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset in="blur" dx="0" dy="2" result="shadow"/>
+      <feFlood flood-color="#000" flood-opacity="0.12" result="color"/>
+      <feComposite in="color" in2="shadow" operator="in" result="colorShadow"/>
+      <feMerge>
+        <feMergeNode in="colorShadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+<rect x="-46" y="-46" width="348" height="348" fill="url(#bgBase)"/>
+<rect x="-46" y="-46" width="348" height="348" fill="url(#orangeGlow)"/>
+<rect x="-46" y="-46" width="348" height="348" fill="url(#greenHighlight)"/>
+<g transform="rotate(-8, 128, 130)" stroke="white" stroke-width="3.5" opacity="0.35" fill="none">
+      <path d="M-120 82 Q60 78, 130 83 Q200 88, 380 82"/>
+      <path d="M-120 103 Q60 99, 130 104 Q200 109, 380 103"/>
+      <path d="M-120 124 Q60 120, 130 125 Q200 130, 380 124"/>
+      <path d="M-120 145 Q60 141, 130 146 Q200 151, 380 145"/>
+      <path d="M-120 166 Q60 162, 130 167 Q200 172, 380 166"/>
+    </g><g transform="translate(128 128) scale(0.82) translate(-128 -128)"><path d="M200 40 L203 28 L206 40 L218 43 L206 46 L203 58 L200 46 L188 43 Z" fill="white" opacity="0.9"/><circle cx="62" cy="48" r="5" fill="#FFA726" opacity="0.85"/><circle cx="47" cy="67" r="3" fill="white" opacity="0.5"/><circle cx="200" cy="200" r="5" fill="#80DEEA" opacity="0.8"/></g></svg>
