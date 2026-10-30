@@ -110,7 +110,9 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
   void _showError(String message) {
     setState(() => _errorMessage = message);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_scrollController.hasClients) return;
+      if (!mounted || !_scrollController.hasClients) {
+        return;
+      }
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: _errorScrollDuration,
