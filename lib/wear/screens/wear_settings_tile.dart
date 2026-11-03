@@ -76,12 +76,9 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
                     _WearSettingsItem(
                       icon: Icons.person_add_alt,
                       label: t.accounts.addAccount,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) =>
-                              const WearSetupScreen(addingAnother: true),
-                        ),
-                      ),
+                      onTap: () => Navigator.of(
+                        context,
+                      ).restorablePush(_addAccountRoute),
                     ),
                     _WearSettingsItem(
                       icon: Icons.child_care,
@@ -144,6 +141,12 @@ class _WearSettingsTileState extends ConsumerState<WearSettingsTile> {
     navigator.popUntil((route) => route.isFirst);
   }
 }
+
+@pragma('vm:entry-point')
+Route<void> _addAccountRoute(BuildContext context, Object? arguments) =>
+    MaterialPageRoute<void>(
+      builder: (_) => const WearSetupScreen(addingAnother: true),
+    );
 
 class _WearSettingsItem extends StatelessWidget {
   const _WearSettingsItem({

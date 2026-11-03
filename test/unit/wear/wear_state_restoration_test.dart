@@ -105,6 +105,26 @@ void main() {
       expect(_fieldText(tester), 'osm-wroclaw');
     });
 
+    testWidgets('adding another account comes back with what was typed', (
+      tester,
+    ) async {
+      await openWearDemo(tester, _watch);
+      await _openRow(tester, 'Settings');
+      await _openRow(tester, 'Add account');
+      await _openRow(tester, 'Mobireg');
+      await _typeOnSystemInput(tester, 'osm-wroclaw');
+      await _pressStepButton(tester, 'Next');
+      await _typeOnSystemInput(tester, 'jan');
+
+      await tester.restartAndRestore();
+      await pumpWearUntil(tester, find.byType(TextField));
+
+      expect(_fieldText(tester), 'jan');
+      Navigator.of(tester.element(find.byType(TextField))).maybePop();
+      await tester.pumpAndSettle();
+      expect(_fieldText(tester), 'osm-wroclaw');
+    });
+
     testWidgets('home comes back scrolled where it was left', (tester) async {
       await openWearDemo(tester, _watch);
       _homePosition(tester).jumpTo(_homeScrollDp);
