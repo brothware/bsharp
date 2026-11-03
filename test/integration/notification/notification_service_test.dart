@@ -3,6 +3,7 @@ library;
 
 import 'package:bsharp/data/services/notification_service.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/child_mode.dart';
 import 'package:bsharp/domain/entities/notification_preferences.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -102,11 +103,88 @@ void main() {
           category: category,
         );
 
-    NotificationService serviceWith(NotificationPreferences prefs) =>
-        NotificationService(
-          plugin: mockPlugin,
-          loadPreferences: () async => prefs,
-        );
+    NotificationService serviceWith(
+      NotificationPreferences prefs, {
+      ChildModeConfig? childMode,
+    }) => NotificationService(
+      plugin: mockPlugin,
+      loadPreferences: () async => prefs,
+      loadChildModeConfig: () async => childMode,
+    );
+
+    test('says nothing about a section hidden from the child', () async {
+      final service = serviceWith(
+        const NotificationPreferences(),
+        childMode: const ChildModeConfig(gradesVisible: false),
+      );
+      await service.initialize();
+
+      await service.showFcmNotification(specOf(ChangeCategory.grades));
+
+      verifyNever(
+        () => mockPlugin.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      );
+    });
+
+    test('shows a section the child may see', () async {
+      final service = serviceWith(
+        const NotificationPreferences(),
+        childMode: const ChildModeConfig(),
+      );
+      await service.initialize();
+
+      await service.showFcmNotification(specOf(ChangeCategory.grades));
+
+      verify(
+        () => mockPlugin.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      ).called(1);
+    });
+
+    test('a hidden section still syncs in child mode', () async {
+      final service = serviceWith(
+        const NotificationPreferences(),
+        childMode: const ChildModeConfig(gradesVisible: false),
+      );
+      await service.initialize();
+
+      final shouldSync = await service.handleForegroundFcmMessage(
+        specOf(ChangeCategory.grades),
+      );
+
+      expect(shouldSync, isTrue);
+    });
+
+    test('a switch the parent turned off stays off in child mode', () async {
+      final service = serviceWith(
+        const NotificationPreferences(gradesEnabled: false),
+        childMode: const ChildModeConfig(),
+      );
+      await service.initialize();
+
+      await service.showFcmNotification(specOf(ChangeCategory.grades));
+
+      verifyNever(
+        () => mockPlugin.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      );
+    });
 
     test('shows a notification the person left switched on', () async {
       final service = serviceWith(const NotificationPreferences());

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:bsharp/data/data_sources/local/key_value_store.dart';
 import 'package:bsharp/data/data_sources/local/key_value_store_native.dart'
     if (dart.library.js_interop) 'package:bsharp/data/data_sources/local/key_value_store_web.dart'
     as platform;
+import 'package:bsharp/domain/child_mode.dart';
 
 class CredentialStorage {
   CredentialStorage({KeyValueStore? store})
@@ -32,6 +35,20 @@ class CredentialStorage {
       _store.write(key: _childModeActiveKey, value: active.toString());
 
   Future<String?> getChildModeConfig() => _store.read(key: _childModeConfigKey);
+
+  Future<ChildModeConfig?> activeChildModeConfig() async {
+    final hasPin = await getChildModePin() != null;
+    if (!hasPin || !await isChildModeActive()) {
+      return null;
+    }
+    final configJson = await getChildModeConfig();
+    if (configJson == null) {
+      return const ChildModeConfig();
+    }
+    return ChildModeConfig.fromJson(
+      jsonDecode(configJson) as Map<String, dynamic>,
+    );
+  }
 
   Future<void> saveChildModeConfig(String configJson) =>
       _store.write(key: _childModeConfigKey, value: configJson);

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/data_sources/local/key_value_store.dart';
+import 'package:bsharp/domain/child_mode.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -24,6 +27,44 @@ void main() {
       expect(await credentialStorage.isChildModeActive(), isFalse);
       await credentialStorage.saveChildModeActive(active: true);
       expect(await credentialStorage.isChildModeActive(), isTrue);
+    });
+
+    test('no child mode config is active in parent mode', () async {
+      await credentialStorage.saveChildModePin('1234');
+      await credentialStorage.saveChildModeConfig(
+        jsonEncode(const ChildModeConfig(gradesVisible: false).toJson()),
+      );
+
+      expect(await credentialStorage.activeChildModeConfig(), isNull);
+    });
+
+    test('no child mode config is active without a PIN', () async {
+      await credentialStorage.saveChildModeActive(active: true);
+
+      expect(await credentialStorage.activeChildModeConfig(), isNull);
+    });
+
+    test('child mode with a PIN yields the saved config', () async {
+      await credentialStorage.saveChildModePin('1234');
+      await credentialStorage.saveChildModeActive(active: true);
+      await credentialStorage.saveChildModeConfig(
+        jsonEncode(const ChildModeConfig(gradesVisible: false).toJson()),
+      );
+
+      final config = await credentialStorage.activeChildModeConfig();
+
+      expect(config?.gradesVisible, isFalse);
+      expect(config?.scheduleVisible, isTrue);
+    });
+
+    test('child mode with no saved config yields the defaults', () async {
+      await credentialStorage.saveChildModePin('1234');
+      await credentialStorage.saveChildModeActive(active: true);
+
+      final config = await credentialStorage.activeChildModeConfig();
+
+      expect(config?.messagesVisible, isFalse);
+      expect(config?.gradesVisible, isTrue);
     });
 
     test('deepl api key round-trip', () async {

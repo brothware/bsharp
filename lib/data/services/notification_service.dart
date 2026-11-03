@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/data/data_sources/local/notification_preferences_store.dart';
 import 'package:bsharp/domain/change_detection.dart';
+import 'package:bsharp/domain/child_mode.dart';
 import 'package:bsharp/domain/entities/notification_preferences.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -72,12 +74,16 @@ class NotificationService {
   NotificationService({
     FlutterLocalNotificationsPlugin? plugin,
     Future<NotificationPreferences> Function()? loadPreferences,
+    Future<ChildModeConfig?> Function()? loadChildModeConfig,
   }) : _plugin = plugin ?? FlutterLocalNotificationsPlugin(),
        _loadPreferences =
-           loadPreferences ?? const NotificationPreferencesStore().load;
+           loadPreferences ?? const NotificationPreferencesStore().load,
+       _loadChildModeConfig =
+           loadChildModeConfig ?? CredentialStorage().activeChildModeConfig;
 
   final FlutterLocalNotificationsPlugin _plugin;
   final Future<NotificationPreferences> Function() _loadPreferences;
+  final Future<ChildModeConfig?> Function() _loadChildModeConfig;
   bool _initialized = false;
 
   static const _unexcusedChannelId = 'unexcused_absences';
@@ -150,7 +156,11 @@ class NotificationService {
   Future<bool> _wanted(ChangeCategory? category) async {
     if (category == null) return true;
     final preferences = await _loadPreferences();
-    return preferences.isCategoryEnabled(category);
+    if (!preferences.isCategoryEnabled(category)) {
+      return false;
+    }
+    final childMode = await _loadChildModeConfig();
+    return childMode == null || !childMode.hidesCategory(category);
   }
 
   Future<bool> handleForegroundFcmMessage(LocalFcmNotification? spec) async {

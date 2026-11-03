@@ -1,3 +1,5 @@
+import 'package:bsharp/domain/change_detection.dart';
+
 class ChildModeConfig {
   const ChildModeConfig({
     this.gradesVisible = true,
@@ -53,6 +55,20 @@ class ChildModeConfig {
       ChildModeFeature.settings => settingsVisible,
       ChildModeFeature.notes => notesVisible,
     };
+  }
+
+  bool hidesCategory(ChangeCategory category) {
+    final feature = switch (category) {
+      ChangeCategory.grades => ChildModeFeature.grades,
+      ChangeCategory.messages => ChildModeFeature.messages,
+      ChangeCategory.schedule => ChildModeFeature.schedule,
+      ChangeCategory.attendance => ChildModeFeature.attendance,
+      ChangeCategory.notes => ChildModeFeature.notes,
+      ChangeCategory.homework ||
+      ChangeCategory.tests ||
+      ChangeCategory.bulletins => null,
+    };
+    return feature != null && !isFeatureVisible(feature);
   }
 
   Map<String, dynamic> toJson() => {
