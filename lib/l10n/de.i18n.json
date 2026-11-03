@@ -850,6 +850,7 @@
     "typeOnWatch": "Auf der Uhr eingeben",
     "differentAccount": "Das ist ein anderes Konto",
     "phoneUnreachable": "Dein Telefon hat nicht geantwortet. Halte es in der Nähe oder nutze das gespeicherte Passwort.",
+    "phoneDidNotOpen": "BSharp hat sich auf dem Telefon nicht geöffnet. Öffne dort „Uhr einrichten“; dort steht, wie die Uhr es öffnen darf.",
     "watchDidNotAnswer": "Die Uhr hat nicht geantwortet. Tippe auf der Uhr auf „Telefon nutzen“ und sende erneut.",
     "allowOpenHeading": "Uhr hat BSharp hier nicht geöffnet?",
     "allowOpenTitle": "Erlaube der App deiner Uhr, BSharp zu öffnen",

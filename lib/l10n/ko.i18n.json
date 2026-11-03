@@ -850,6 +850,7 @@
     "typeOnWatch": "워치에서 입력",
     "differentAccount": "다른 계정입니다",
     "phoneUnreachable": "휴대전화가 응답하지 않습니다. 가까이 두거나 저장된 비밀번호를 사용하세요.",
+    "phoneDidNotOpen": "휴대전화에서 BSharp가 열리지 않았습니다. 휴대전화에서 \"워치 설정\"을 열면 워치가 앱을 열 수 있게 하는 방법이 나옵니다.",
     "watchDidNotAnswer": "워치가 응답하지 않습니다. 워치에서 \"휴대전화\"를 탭한 다음 다시 보내세요.",
     "allowOpenHeading": "워치가 여기서 BSharp를 열지 못했나요?",
     "allowOpenTitle": "워치 앱이 BSharp를 열도록 허용",

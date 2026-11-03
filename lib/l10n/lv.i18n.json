@@ -850,6 +850,7 @@
     "typeOnWatch": "Ievadīt pulkstenī",
     "differentAccount": "Tas ir cits konts",
     "phoneUnreachable": "Tālrunis neatbildēja. Turiet to tuvumā vai izmantojiet saglabāto paroli.",
+    "phoneDidNotOpen": "BSharp tālrunī neatvērās. Atveriet tur “Iestatīt pulksteni”: tur redzams, kā atļaut pulkstenim to atvērt.",
     "watchDidNotAnswer": "Pulkstenis neatbildēja. Pulkstenī pieskarieties “Tālrunis” un nosūtiet vēlreiz.",
     "allowOpenHeading": "Pulkstenis šeit neatvēra BSharp?",
     "allowOpenTitle": "Atļaujiet pulksteņa lietotnei atvērt BSharp",

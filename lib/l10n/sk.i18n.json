@@ -853,6 +853,7 @@
     "typeOnWatch": "Zadať na hodinkách",
     "differentAccount": "To je iný účet",
     "phoneUnreachable": "Telefón neodpovedal. Majte ho blízko alebo použite uložené heslo.",
+    "phoneDidNotOpen": "BSharp sa v telefóne neotvoril. Otvorte tam „Nastaviť hodinky“: ukáže, ako hodinkám povoliť jeho otváranie.",
     "watchDidNotAnswer": "Hodinky neodpovedali. Na hodinkách ťuknite na „Telefón“ a odošlite znova.",
     "allowOpenHeading": "Hodinky tu BSharp neotvorili?",
     "allowOpenTitle": "Povoľte aplikácii hodiniek otvárať BSharp",

@@ -850,6 +850,7 @@
     "typeOnWatch": "Sisesta kellas",
     "differentAccount": "See on teine konto",
     "phoneUnreachable": "Telefon ei vastanud. Hoia see lähedal või kasuta salvestatud parooli.",
+    "phoneDidNotOpen": "BSharp ei avanenud telefonis. Ava seal „Seadista kell“; see näitab, kuidas lubada kellal seda avada.",
     "watchDidNotAnswer": "Kell ei vastanud. Puuduta kellas „Telefon“ ja saada uuesti.",
     "allowOpenHeading": "Kell ei avanud siin BSharpi?",
     "allowOpenTitle": "Luba kella rakendusel BSharpi avada",

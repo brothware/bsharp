@@ -850,6 +850,7 @@
     "typeOnWatch": "Wpisz na zegarku",
     "differentAccount": "To jest inne konto",
     "phoneUnreachable": "Telefon nie odpowiada. Trzymaj go blisko albo użyj zapisanego hasła.",
+    "phoneDidNotOpen": "BSharp nie otworzył się na telefonie. Otwórz tam Skonfiguruj zegarek: pokazuje, jak pozwolić zegarkowi go otwierać.",
     "watchDidNotAnswer": "Zegarek nie odpowiada. Na zegarku wybierz Użyj telefonu i wyślij ponownie.",
     "allowOpenHeading": "Zegarek nie otworzył tu BSharp?",
     "allowOpenTitle": "Pozwól aplikacji zegarka otwierać BSharp",

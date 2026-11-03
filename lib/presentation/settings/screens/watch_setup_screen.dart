@@ -22,6 +22,20 @@ class _WatchSetupScreenState extends ConsumerState<WatchSetupScreen> {
   String? _sendingAccountId;
 
   @override
+  void initState() {
+    super.initState();
+    unawaited(_announceOpen());
+  }
+
+  Future<void> _announceOpen() async {
+    try {
+      await ref.read(watchLinkProvider).announceSetupOpen();
+    } on PlatformException catch (error) {
+      debugPrint('WatchSetupScreen: could not tell the watch: $error');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final accounts = [

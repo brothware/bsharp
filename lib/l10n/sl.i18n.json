@@ -856,6 +856,7 @@
     "typeOnWatch": "Vnesite na uri",
     "differentAccount": "To je drug račun",
     "phoneUnreachable": "Telefon se ni odzval. Imejte ga blizu ali uporabite shranjeno geslo.",
+    "phoneDidNotOpen": "BSharp se na telefonu ni odprl. Tam odprite »Nastavi uro«: pokaže, kako uri dovolite, da ga odpira.",
     "watchDidNotAnswer": "Ura se ni odzvala. Na uri tapnite »Telefon« in pošljite znova.",
     "allowOpenHeading": "Ura tukaj ni odprla BSharpa?",
     "allowOpenTitle": "Dovolite aplikaciji ure, da odpira BSharp",

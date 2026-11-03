@@ -83,7 +83,8 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen>
   _SetupStep? _signedInFrom;
   int _signInAttempt = 0;
   bool _isPickingSavedPassword = false;
-  bool _isPhoneUnreachable = false;
+  PhoneSetupOutcome? _phoneSetupOutcome;
+  PhoneSetupOpener? _phoneSetupOpener;
 
   TextEditingController get _schoolController => _school.value;
   TextEditingController get _loginController => _login.value;
@@ -157,6 +158,7 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen>
   @override
   void dispose() {
     unawaited(_phoneAccounts?.cancel());
+    _phoneSetupOpener?.cancel();
     _school.dispose();
     _login.dispose();
     _savedStep.dispose();
@@ -220,15 +222,26 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen>
     });
   }
 
-  Future<void> _openOnPhone() async {
-    setState(() => _isPhoneUnreachable = false);
-    final isOpened = await openSetUpWatchOnPhone();
-    if (mounted && !isOpened && _step == _SetupStep.phone) {
-      setState(() => _isPhoneUnreachable = true);
-    }
+  Future<void> _openOnPhone() {
+    setState(() => _phoneSetupOutcome = null);
+    final opener = _phoneSetupOpener ??= PhoneSetupOpener(
+      ref.read(watchLinkProvider),
+    );
+    return opener.open((outcome) {
+      if (mounted && _step == _SetupStep.phone) {
+        setState(() => _phoneSetupOutcome = outcome);
+      }
+    });
   }
 
+  String? get _phoneSetupProblem => switch (_phoneSetupOutcome) {
+    PhoneSetupOutcome.unreachable => t.watchSetup.phoneUnreachable,
+    PhoneSetupOutcome.notOpened => t.watchSetup.phoneDidNotOpen,
+    PhoneSetupOutcome.opened || null => null,
+  };
+
   void _stopListeningToPhone() {
+    _phoneSetupOpener?.cancel();
     unawaited(_phoneAccounts?.cancel());
     _phoneAccounts = null;
   }
@@ -728,9 +741,9 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen>
                   style: theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 12),
-                if (_isPhoneUnreachable)
+                if (_phoneSetupProblem case final problem?)
                   Text(
-                    t.watchSetup.phoneUnreachable,
+                    problem,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,

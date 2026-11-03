@@ -847,6 +847,7 @@
     "typeOnWatch": "Type it on the watch",
     "differentAccount": "That is a different account",
     "phoneUnreachable": "Your phone did not answer. Keep it near, or use Saved password.",
+    "phoneDidNotOpen": "BSharp did not open on the phone. Open Set up watch there; it shows how to let the watch open it.",
     "watchDidNotAnswer": "The watch did not answer. On the watch, tap Use phone, then send again.",
     "allowOpenHeading": "Watch did not open BSharp here?",
     "allowOpenTitle": "Let your watch's app open BSharp",

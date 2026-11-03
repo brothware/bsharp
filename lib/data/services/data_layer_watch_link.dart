@@ -9,6 +9,7 @@ const _versionKey = 'version';
 const _accountKind = 'bsharp.account';
 const _accountVersion = 1;
 const _receivedKind = 'bsharp.account-received';
+const _setupOpenKind = 'bsharp.setup-open';
 const _defaultAcknowledgementTimeout = Duration(seconds: 10);
 
 class UnsupportedHandoffVersion implements Exception {
@@ -97,6 +98,17 @@ class DataLayerWatchLink implements WatchLink {
     _kindKey: _receivedKind,
     _versionKey: _accountVersion,
   });
+
+  @override
+  Future<void> announceSetupOpen() => _connectivity.sendMessage({
+    _kindKey: _setupOpenKind,
+    _versionKey: _accountVersion,
+  });
+
+  @override
+  Stream<void> get setupOpenings => _connectivity.messageStream.where(
+    (message) => message[_kindKey] == _setupOpenKind,
+  );
 
   @override
   Stream<AccountHandoff> get receivedAccounts => _connectivity.messageStream

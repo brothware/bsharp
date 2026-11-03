@@ -853,6 +853,7 @@
     "typeOnWatch": "Tastează pe ceas",
     "differentAccount": "Este alt cont",
     "phoneUnreachable": "Telefonul nu a răspuns. Ține-l aproape sau folosește parola salvată.",
+    "phoneDidNotOpen": "BSharp nu s-a deschis pe telefon. Deschide acolo „Configurează ceasul”: arată cum permiți ceasului să-l deschidă.",
     "watchDidNotAnswer": "Ceasul nu a răspuns. Pe ceas, atinge „Telefon”, apoi trimite din nou.",
     "allowOpenHeading": "Ceasul nu a deschis BSharp aici?",
     "allowOpenTitle": "Permite aplicației ceasului să deschidă BSharp",

@@ -850,6 +850,7 @@
     "typeOnWatch": "Skriv den på uret",
     "differentAccount": "Det er en anden konto",
     "phoneUnreachable": "Telefonen svarede ikke. Hold den tæt på, eller brug gemt adgangskode.",
+    "phoneDidNotOpen": "BSharp åbnede ikke på telefonen. Åbn \"Konfigurer ur\" der; den viser, hvordan uret får lov at åbne den.",
     "watchDidNotAnswer": "Uret svarede ikke. Tryk på \"Telefon\" på uret, og send igen.",
     "allowOpenHeading": "Åbnede uret ikke BSharp her?",
     "allowOpenTitle": "Lad urets app åbne BSharp",

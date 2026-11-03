@@ -154,8 +154,13 @@ class _GatedProbeDataProvider extends DemoDataProvider {
   );
 }
 
+const _phoneDidNotOpen =
+    'BSharp did not open on the phone. Open Set up watch there; it shows '
+    'how to let the watch open it.';
+
 class _PhoneLink implements WatchLink {
   final accounts = StreamController<AccountHandoff>.broadcast();
+  final openings = StreamController<void>.broadcast();
   int acknowledgements = 0;
 
   @override
@@ -172,6 +177,12 @@ class _PhoneLink implements WatchLink {
 
   @override
   Stream<AccountHandoff> get receivedAccounts => accounts.stream;
+
+  @override
+  Future<void> announceSetupOpen() async {}
+
+  @override
+  Stream<void> get setupOpenings => openings.stream;
 }
 
 /// The school and login steps hand typing to the watch's own input screen, so
@@ -932,7 +943,10 @@ void main() {
       provider = _RecordingProbeDataProvider();
     });
 
-    tearDown(() => link.accounts.close());
+    tearDown(() {
+      unawaited(link.openings.close());
+      return link.accounts.close();
+    });
 
     Future<void> settle(WidgetTester tester) async {
       await tester.pump();
@@ -1032,6 +1046,29 @@ void main() {
         ),
         findsOneWidget,
       );
+    });
+
+    testWidgets('a phone that takes the request but never opens is named', (
+      tester,
+    ) async {
+      await openUsePhone(tester);
+      await tester.pump(const Duration(seconds: 16));
+      await settle(tester);
+
+      expect(find.text(_phoneDidNotOpen), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+    });
+
+    testWidgets('a phone that opens Set up watch keeps the watch waiting', (
+      tester,
+    ) async {
+      await openUsePhone(tester);
+      link.openings.add(null);
+      await tester.pump(const Duration(seconds: 16));
+      await settle(tester);
+
+      expect(find.text(_phoneDidNotOpen), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
     testWidgets('the watch says where to go on the phone', (tester) async {
@@ -1229,7 +1266,10 @@ void main() {
       provider = _GatedProbeDataProvider();
     });
 
-    tearDown(() => link.accounts.close());
+    tearDown(() {
+      unawaited(link.openings.close());
+      return link.accounts.close();
+    });
 
     Future<void> settle(WidgetTester tester) async {
       await tester.pump();

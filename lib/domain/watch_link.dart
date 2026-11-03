@@ -18,4 +18,8 @@ abstract interface class WatchLink {
   /// watch actually goes on to use, so the phone does not report an ignored
   /// or refused one as received.
   Future<void> acknowledgeAccount();
+
+  Future<void> announceSetupOpen();
+
+  Stream<void> get setupOpenings;
 }

@@ -850,6 +850,7 @@
     "typeOnWatch": "Digitala sull’orologio",
     "differentAccount": "È un altro account",
     "phoneUnreachable": "Il telefono non ha risposto. Tienilo vicino o usa la password salvata.",
+    "phoneDidNotOpen": "BSharp non si è aperto sul telefono. Apri lì «Configura orologio»: mostra come consentire all'orologio di aprirlo.",
     "watchDidNotAnswer": "L’orologio non ha risposto. Sull’orologio tocca «Usa telefono», poi invia di nuovo.",
     "allowOpenHeading": "L'orologio non ha aperto BSharp qui?",
     "allowOpenTitle": "Consenti all'app dell'orologio di aprire BSharp",

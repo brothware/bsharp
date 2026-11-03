@@ -46,8 +46,13 @@ class _SavedPasswords implements SavedPasswords {
   Future<SavedLoginPick> pick() async => pickResult;
 }
 
+const _phoneDidNotOpen =
+    'BSharp did not open on the phone. Open Set up watch there; it shows '
+    'how to let the watch open it.';
+
 class _PhoneLink implements WatchLink {
   final accounts = StreamController<AccountHandoff>.broadcast();
+  final openings = StreamController<void>.broadcast();
   int acknowledgements = 0;
 
   @override
@@ -64,6 +69,12 @@ class _PhoneLink implements WatchLink {
 
   @override
   Stream<AccountHandoff> get receivedAccounts => accounts.stream;
+
+  @override
+  Future<void> announceSetupOpen() async {}
+
+  @override
+  Stream<void> get setupOpenings => openings.stream;
 }
 
 class _ProbingProvider extends DemoDataProvider {
@@ -456,6 +467,39 @@ void main() {
       expect(provider.probedPasswords, ['from phone']);
       expect(find.text('Sign in again'), findsNothing);
       expect(link.acknowledgements, 1);
+    }, variant: TargetPlatformVariant.only(TargetPlatform.linux));
+
+    testWidgets('a phone that takes the request but never opens is named', (
+      tester,
+    ) async {
+      final link = _PhoneLink();
+      addTearDown(link.accounts.close);
+      addTearDown(link.openings.close);
+      await openPrompt(tester, watchLink: link);
+
+      await tester.tap(find.text('Use phone'));
+      await settle(tester);
+      await tester.pump(const Duration(seconds: 16));
+      await tester.pump();
+
+      expect(find.text(_phoneDidNotOpen), findsOneWidget);
+    }, variant: TargetPlatformVariant.only(TargetPlatform.linux));
+
+    testWidgets('a phone that opens Set up watch raises no warning', (
+      tester,
+    ) async {
+      final link = _PhoneLink();
+      addTearDown(link.accounts.close);
+      addTearDown(link.openings.close);
+      await openPrompt(tester, watchLink: link);
+
+      await tester.tap(find.text('Use phone'));
+      await settle(tester);
+      link.openings.add(null);
+      await tester.pump(const Duration(seconds: 16));
+      await tester.pump();
+
+      expect(find.text(_phoneDidNotOpen), findsNothing);
     }, variant: TargetPlatformVariant.only(TargetPlatform.linux));
   });
 }

@@ -850,6 +850,7 @@
     "typeOnWatch": "Beírás az órán",
     "differentAccount": "Ez egy másik fiók",
     "phoneUnreachable": "A telefon nem válaszolt. Tartsa a közelben, vagy használja a mentett jelszót.",
+    "phoneDidNotOpen": "A BSharp nem nyílt meg a telefonon. Nyissa meg ott az „Óra beállítása” részt; megmutatja, hogyan engedheti meg az órának a megnyitását.",
     "watchDidNotAnswer": "Az óra nem válaszolt. Az órán koppintson a „Telefon” gombra, majd küldje újra.",
     "allowOpenHeading": "Az óra nem nyitotta meg itt a BSharpot?",
     "allowOpenTitle": "Engedje, hogy az óra alkalmazása megnyissa a BSharpot",

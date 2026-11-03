@@ -859,6 +859,7 @@
     "typeOnWatch": "Clóscríobh ar an uaireadóir é",
     "differentAccount": "Is cuntas eile é sin",
     "phoneUnreachable": "Níor fhreagair do ghuthán. Coinnigh in aice leat é, nó úsáid an pasfhocal sábháilte.",
+    "phoneDidNotOpen": "Níor osclaíodh BSharp ar an bhfón. Oscail “Socraigh an uaireadóir” ansin; taispeánann sé conas cead a thabhairt don uaireadóir é a oscailt.",
     "watchDidNotAnswer": "Níor fhreagair an uaireadóir. Ar an uaireadóir, tapáil “Fón”, ansin seol arís.",
     "allowOpenHeading": "Níor oscail an t-uaireadóir BSharp anseo?",
     "allowOpenTitle": "Lig d'aip an uaireadóra BSharp a oscailt",

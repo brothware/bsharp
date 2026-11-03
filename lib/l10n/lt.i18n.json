@@ -856,6 +856,7 @@
     "typeOnWatch": "Įvesti laikrodyje",
     "differentAccount": "Tai kita paskyra",
     "phoneUnreachable": "Telefonas neatsakė. Laikykite jį šalia arba naudokite išsaugotą slaptažodį.",
+    "phoneDidNotOpen": "BSharp telefone neatsidarė. Atidarykite ten „Nustatyti laikrodį“: ten parodyta, kaip leisti laikrodžiui jį atidaryti.",
     "watchDidNotAnswer": "Laikrodis neatsakė. Laikrodyje palieskite „Telefonas“ ir siųskite dar kartą.",
     "allowOpenHeading": "Laikrodis čia neatidarė BSharp?",
     "allowOpenTitle": "Leiskite laikrodžio programai atidaryti BSharp",

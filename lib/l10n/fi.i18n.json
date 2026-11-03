@@ -850,6 +850,7 @@
     "typeOnWatch": "Kirjoita kelloon",
     "differentAccount": "Tämä on eri tili",
     "phoneUnreachable": "Puhelin ei vastannut. Pidä se lähellä tai käytä tallennettua salasanaa.",
+    "phoneDidNotOpen": "BSharp ei avautunut puhelimessa. Avaa siellä ”Määritä kello”; se näyttää, miten kello saa avata sen.",
     "watchDidNotAnswer": "Kello ei vastannut. Napauta kellossa ”Puhelin” ja lähetä uudelleen.",
     "allowOpenHeading": "Eikö kello avannut BSharpia täällä?",
     "allowOpenTitle": "Salli kellon sovelluksen avata BSharp",

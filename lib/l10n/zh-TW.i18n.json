@@ -850,6 +850,7 @@
     "typeOnWatch": "在手錶上輸入",
     "differentAccount": "這是另一個帳戶",
     "phoneUnreachable": "手機沒有回應。請將手機放在附近，或使用已儲存的密碼。",
+    "phoneDidNotOpen": "BSharp 沒有在手機上開啟。請在手機上開啟「設定手錶」，那裡會說明如何允許手錶開啟它。",
     "watchDidNotAnswer": "手錶沒有回應。請在手錶上輕觸「手機」，然後重新傳送。",
     "allowOpenHeading": "手錶沒有在這裡開啟 BSharp？",
     "allowOpenTitle": "允許手錶的應用程式開啟 BSharp",

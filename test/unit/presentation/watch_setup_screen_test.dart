@@ -22,12 +22,15 @@ class _FakeWatchLink implements WatchLink {
     this.isConnected = true,
     this.sendError,
     this.isAcknowledged = true,
+    this.announceError,
   });
 
   final bool isConnected;
   final bool isAcknowledged;
   final Exception? sendError;
+  final Exception? announceError;
   final sent = <AccountHandoff>[];
+  int setupOpenAnnouncements = 0;
 
   @override
   Future<bool> hasPairedWatch() async => true;
@@ -49,6 +52,17 @@ class _FakeWatchLink implements WatchLink {
 
   @override
   Stream<AccountHandoff> get receivedAccounts => const Stream.empty();
+
+  @override
+  Future<void> announceSetupOpen() async {
+    if (announceError case final error?) {
+      throw error;
+    }
+    setupOpenAnnouncements++;
+  }
+
+  @override
+  Stream<void> get setupOpenings => const Stream.empty();
 }
 
 class _FakeOpenPermission implements WatchOpenPermission {
@@ -176,6 +190,27 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Could not open the app list'), findsOneWidget);
+  });
+
+  testWidgets('opening Set up watch tells a waiting watch it opened', (
+    tester,
+  ) async {
+    final link = _FakeWatchLink();
+    await _pump(tester, link);
+
+    expect(link.setupOpenAnnouncements, 1);
+  });
+
+  testWidgets('a watch that cannot be told still leaves the screen usable', (
+    tester,
+  ) async {
+    final link = _FakeWatchLink(
+      announceError: PlatformException(code: 'unreachable'),
+    );
+    await _pump(tester, link);
+
+    expect(tester.takeException(), isNull);
+    expect(find.byTooltip('Send'), findsOneWidget);
   });
 
   testWidgets('sending an account hands its credentials to the watch', (

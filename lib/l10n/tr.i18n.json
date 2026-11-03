@@ -850,6 +850,7 @@
     "typeOnWatch": "Saatte yazın",
     "differentAccount": "Bu farklı bir hesap",
     "phoneUnreachable": "Telefonunuz yanıt vermedi. Yakında tutun veya kayıtlı şifreyi kullanın.",
+    "phoneDidNotOpen": "BSharp telefonda açılmadı. Orada \"Saati kur\"u açın; saatin onu açmasına nasıl izin vereceğinizi gösterir.",
     "watchDidNotAnswer": "Saat yanıt vermedi. Saatte \"Telefon\" öğesine dokunup yeniden gönderin.",
     "allowOpenHeading": "Saat burada BSharp'ı açmadı mı?",
     "allowOpenTitle": "Saatin uygulamasının BSharp'ı açmasına izin verin",

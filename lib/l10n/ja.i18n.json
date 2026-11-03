@@ -850,6 +850,7 @@
     "typeOnWatch": "ウォッチで入力",
     "differentAccount": "別のアカウントです",
     "phoneUnreachable": "スマートフォンが応答しません。近くに置くか、保存済みのパスワードを使ってください。",
+    "phoneDidNotOpen": "スマートフォンで BSharp が開きませんでした。そちらで「ウォッチを設定」を開くと、ウォッチから開けるようにする方法が表示されます。",
     "watchDidNotAnswer": "ウォッチが応答しません。ウォッチで「スマホ」をタップしてから、もう一度送信してください。",
     "allowOpenHeading": "ウォッチからここで BSharp が開きませんでしたか？",
     "allowOpenTitle": "ウォッチのアプリに BSharp を開くことを許可",

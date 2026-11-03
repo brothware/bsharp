@@ -850,6 +850,7 @@
     "typeOnWatch": "Le saisir sur la montre",
     "differentAccount": "C’est un autre compte",
     "phoneUnreachable": "Votre téléphone n’a pas répondu. Gardez-le à proximité ou utilisez le mot de passe enregistré.",
+    "phoneDidNotOpen": "BSharp ne s'est pas ouvert sur le téléphone. Ouvrez-y « Configurer la montre » : vous y verrez comment autoriser la montre à l'ouvrir.",
     "watchDidNotAnswer": "La montre n’a pas répondu. Sur la montre, touchez « Utiliser le téléphone », puis renvoyez.",
     "allowOpenHeading": "La montre n'a pas ouvert BSharp ici ?",
     "allowOpenTitle": "Autoriser l'app de la montre à ouvrir BSharp",

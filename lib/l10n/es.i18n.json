@@ -850,6 +850,7 @@
     "typeOnWatch": "Escribirla en el reloj",
     "differentAccount": "Es otra cuenta",
     "phoneUnreachable": "El teléfono no respondió. Mantenlo cerca o usa la contraseña guardada.",
+    "phoneDidNotOpen": "BSharp no se abrió en el teléfono. Abre allí «Configurar reloj»; muestra cómo permitir que el reloj lo abra.",
     "watchDidNotAnswer": "El reloj no respondió. En el reloj, toca «Usar teléfono» y vuelve a enviar.",
     "allowOpenHeading": "¿El reloj no abrió BSharp aquí?",
     "allowOpenTitle": "Permite que la app del reloj abra BSharp",

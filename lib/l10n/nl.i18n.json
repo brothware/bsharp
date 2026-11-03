@@ -850,6 +850,7 @@
     "typeOnWatch": "Typ het op het horloge",
     "differentAccount": "Dat is een ander account",
     "phoneUnreachable": "Je telefoon reageerde niet. Houd hem dichtbij of gebruik het opgeslagen wachtwoord.",
+    "phoneDidNotOpen": "BSharp is niet geopend op de telefoon. Open daar ‘Horloge instellen’; daar staat hoe je het horloge toestemming geeft om het te openen.",
     "watchDidNotAnswer": "Het horloge reageerde niet. Tik op het horloge op ‘Telefoon’ en verstuur opnieuw.",
     "allowOpenHeading": "Opende het horloge BSharp hier niet?",
     "allowOpenTitle": "Laat de app van je horloge BSharp openen",

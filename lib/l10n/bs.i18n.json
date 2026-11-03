@@ -853,6 +853,7 @@
     "typeOnWatch": "Upišite na satu",
     "differentAccount": "To je drugi račun",
     "phoneUnreachable": "Telefon se nije javio. Držite ga blizu ili koristite sačuvanu lozinku.",
+    "phoneDidNotOpen": "BSharp se nije otvorio na telefonu. Tamo otvorite „Postavi sat“: pokazuje kako dozvoliti satu da ga otvara.",
     "watchDidNotAnswer": "Sat se nije javio. Na satu dodirnite „Telefon“, pa pošaljite ponovo.",
     "allowOpenHeading": "Sat nije otvorio BSharp ovdje?",
     "allowOpenTitle": "Dozvolite aplikaciji sata da otvara BSharp",

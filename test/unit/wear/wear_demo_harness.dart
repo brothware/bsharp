@@ -46,6 +46,12 @@ class _NoPhone implements WatchLink {
 
   @override
   Stream<AccountHandoff> get receivedAccounts => const Stream.empty();
+
+  @override
+  Future<void> announceSetupOpen() async {}
+
+  @override
+  Stream<void> get setupOpenings => const Stream.empty();
 }
 
 Future<void> pumpWearApp(WidgetTester tester, Size watchSizeDp) async {

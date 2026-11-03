@@ -179,4 +179,26 @@ void main() {
     expect(errors.single, isA<UnsupportedHandoffVersion>());
     await subscription.cancel();
   });
+
+  test('the phone says when Set up watch is open', () async {
+    await link.announceSetupOpen();
+
+    expect(connectivity.sent.single, {
+      'kind': 'bsharp.setup-open',
+      'version': 1,
+    });
+  });
+
+  test('the watch hears that Set up watch opened on the phone', () async {
+    final openings = <void>[];
+    final subscription = link.setupOpenings.listen(openings.add);
+
+    connectivity.incoming
+      ..add({'kind': 'bsharp.account-received', 'version': 1})
+      ..add({'kind': 'bsharp.setup-open', 'version': 1});
+    await pumpEventQueue();
+
+    expect(openings, hasLength(1));
+    await subscription.cancel();
+  });
 }

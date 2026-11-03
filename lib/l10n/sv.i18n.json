@@ -850,6 +850,7 @@
     "typeOnWatch": "Skriv det på klockan",
     "differentAccount": "Det är ett annat konto",
     "phoneUnreachable": "Telefonen svarade inte. Håll den nära eller använd sparat lösenord.",
+    "phoneDidNotOpen": "BSharp öppnades inte på telefonen. Öppna ”Konfigurera klockan” där; den visar hur klockan får öppna den.",
     "watchDidNotAnswer": "Klockan svarade inte. Tryck på ”Telefon” på klockan och skicka igen.",
     "allowOpenHeading": "Öppnade inte klockan BSharp här?",
     "allowOpenTitle": "Låt klockans app öppna BSharp",

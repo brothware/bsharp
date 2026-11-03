@@ -98,10 +98,12 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
   bool _isPickingSavedPassword = false;
   String? _errorMessage;
   StreamSubscription<AccountHandoff>? _phoneAccounts;
+  PhoneSetupOpener? _phoneSetupOpener;
 
   @override
   void dispose() {
     unawaited(_phoneAccounts?.cancel());
+    _phoneSetupOpener?.cancel();
     _passwordController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -150,11 +152,23 @@ class _WearReauthScreenState extends ConsumerState<WearReauthScreen> {
     });
   }
 
-  Future<void> _openOnPhone() async {
-    final isOpened = await openSetUpWatchOnPhone();
-    if (mounted && !isOpened) {
-      _showError(t.watchSetup.phoneUnreachable);
-    }
+  Future<void> _openOnPhone() {
+    final opener = _phoneSetupOpener ??= PhoneSetupOpener(
+      ref.read(watchLinkProvider),
+    );
+    return opener.open((outcome) {
+      if (!mounted) {
+        return;
+      }
+      switch (outcome) {
+        case PhoneSetupOutcome.unreachable:
+          _showError(t.watchSetup.phoneUnreachable);
+        case PhoneSetupOutcome.notOpened:
+          _showError(t.watchSetup.phoneDidNotOpen);
+        case PhoneSetupOutcome.opened:
+          break;
+      }
+    });
   }
 
   Future<void> _signInFromPhone(AccountHandoff account) async {

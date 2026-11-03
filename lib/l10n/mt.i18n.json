@@ -856,6 +856,7 @@
     "typeOnWatch": "Ittajpjaha fuq l-arloġġ",
     "differentAccount": "Dak huwa kont ieħor",
     "phoneUnreachable": "It-telefon ma wieġebx. Żommu qrib jew uża l-password issejvjata.",
+    "phoneDidNotOpen": "BSharp ma nfetaħx fuq it-telefon. Iftaħ “Issettja l-arloġġ” hemmhekk; juri kif tħalli l-arloġġ jiftħu.",
     "watchDidNotAnswer": "L-arloġġ ma wieġebx. Fuq l-arloġġ, agħfas “Telefon”, imbagħad erġa’ ibgħat.",
     "allowOpenHeading": "L-arloġġ ma fetaħx BSharp hawn?",
     "allowOpenTitle": "Ħalli l-app tal-arloġġ tiftaħ BSharp",
