@@ -24,6 +24,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/credential_storage_test.dart';
+import 'wear_demo_harness.dart';
 
 const _legacyAccount = ProviderAccount(
   id: 'a1',
@@ -305,6 +306,7 @@ void main() {
       SavedPasswords? savedPasswords,
       WatchLink? watchLink,
     }) async {
+      answerPhoneOpen(tester);
       final provider = _ProbingProvider(accepts: true);
       final (container, _) = (await tester.runAsync(
         () => _container(

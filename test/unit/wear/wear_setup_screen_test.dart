@@ -28,6 +28,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wear_os_scrollbar/wear_os_scrollbar.dart';
 
 import '../data/credential_storage_test.dart';
+import 'wear_demo_harness.dart';
 
 /// The longest failure the setup step can show: four lines on a 432px watch.
 class _SchoolNotFoundDataProvider extends DemoDataProvider {
@@ -245,19 +246,6 @@ class _SlowAccountStorage extends AccountStorage {
 
 /// "Use phone" asks the watch host to open the phone app; a reachable phone
 /// answers at once.
-void _answerPhoneOpen(WidgetTester tester) {
-  tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-    const MethodChannel('pl.brothware.bsharp/wear'),
-    (call) async => true,
-  );
-  addTearDown(
-    () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-      const MethodChannel('pl.brothware.bsharp/wear'),
-      null,
-    ),
-  );
-}
-
 /// Typing the account on the watch is the last resort, a link at the foot
 /// of the welcome; a test reaches it through its handler, not a tap at the
 /// rim of a round screen.
@@ -937,7 +925,7 @@ void main() {
         'pl.brothware.bsharp/wear',
         null,
       )) {
-        _answerPhoneOpen(tester);
+        answerPhoneOpen(tester);
       }
       await tester.pumpWidget(
         _buildApp(
@@ -1230,7 +1218,7 @@ void main() {
     }
 
     Future<void> waitForPhone(WidgetTester tester) async {
-      _answerPhoneOpen(tester);
+      answerPhoneOpen(tester);
       await tester.pumpWidget(
         _buildApp(
           watchLink: link,

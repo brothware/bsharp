@@ -118,3 +118,16 @@ Future<void> pumpWearUntil(
       .toList();
   fail('$finder never appeared; showing $shown');
 }
+
+void answerPhoneOpen(WidgetTester tester) {
+  tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+    const MethodChannel('pl.brothware.bsharp/wear'),
+    (call) async => true,
+  );
+  addTearDown(
+    () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      const MethodChannel('pl.brothware.bsharp/wear'),
+      null,
+    ),
+  );
+}
