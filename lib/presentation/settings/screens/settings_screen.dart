@@ -73,11 +73,7 @@ class SettingsScreen extends ConsumerWidget {
               leading: const Icon(Icons.child_care),
               title: Text(t.settings.childModeConfig),
               subtitle: Text(t.settings.childModeConfigSubtitle),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const ChildModeConfigScreen(),
-                ),
-              ),
+              onTap: () => unawaited(_openChildModeConfig(context, ref)),
             ),
             const Divider(),
             _SectionHeader(title: t.settings.account),
@@ -204,6 +200,21 @@ class SettingsScreen extends ConsumerWidget {
           );
         },
       ),
+    );
+  }
+
+  Future<void> _openChildModeConfig(BuildContext context, WidgetRef ref) async {
+    final navigator = Navigator.of(context);
+    if (ref.read(childModeProvider).isChildMode) {
+      final isUnlocked = await navigator.push(
+        MaterialPageRoute<bool>(builder: (_) => const PinEntryScreen()),
+      );
+      if (isUnlocked != true) {
+        return;
+      }
+    }
+    await navigator.push(
+      MaterialPageRoute<void>(builder: (_) => const ChildModeConfigScreen()),
     );
   }
 

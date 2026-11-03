@@ -7,6 +7,7 @@ import 'package:bsharp/app/router.dart';
 import 'package:bsharp/data/data_sources/local/account_storage.dart';
 import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
+import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.dart';
 import 'package:bsharp/presentation/child_mode/screens/pin_entry_screen.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -152,6 +153,53 @@ void main() {
 
       expect(find.text('Child mode active'), findsOneWidget);
       expect(find.text('Appearance'), findsOneWidget);
+    });
+
+    testWidgets('child mode setup asks for the parent PIN first', (
+      tester,
+    ) async {
+      final container = await _pumpApp(
+        tester,
+        credentials: await _childModeOn(settingsVisible: true),
+      );
+
+      await tester.tap(find.byTooltip('Settings'));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.text('Child mode configuration'),
+        300,
+      );
+      await tester.tap(find.text('Child mode configuration'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(PinEntryScreen), findsOneWidget);
+      expect(find.byType(ChildModeConfigScreen), findsNothing);
+
+      await _enterPin(tester, _pin);
+
+      expect(find.byType(ChildModeConfigScreen), findsOneWidget);
+      expect(container.read(childModeProvider).isParentMode, isTrue);
+    });
+
+    testWidgets('a wrong PIN keeps child mode setup closed', (tester) async {
+      await _pumpApp(
+        tester,
+        credentials: await _childModeOn(settingsVisible: true),
+      );
+
+      await tester.tap(find.byTooltip('Settings'));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.text('Child mode configuration'),
+        300,
+      );
+      await tester.tap(find.text('Child mode configuration'));
+      await tester.pumpAndSettle();
+      await _enterPin(tester, '9999');
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ChildModeConfigScreen), findsNothing);
     });
   });
 }
