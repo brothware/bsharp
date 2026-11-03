@@ -72,5 +72,30 @@ void main() {
 
       expect(find.byType(SwitchListTile), findsNWidgets(6));
     });
+
+    for (final (name, isActive, label, button) in [
+      ('parent mode', false, 'Parent mode', 'Enable child mode'),
+      ('child mode', true, 'Child mode active', 'Exit'),
+    ]) {
+      testWidgets('the $name row keeps its label on one line', (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.625;
+        addTearDown(tester.view.reset);
+        final store = FakeKeyValueStore();
+        await store.write(key: 'child_mode_pin', value: '1234');
+        await store.write(key: 'child_mode_active', value: '$isActive');
+        await tester.pumpWidget(
+          _buildApp(storage: CredentialStorage(store: store)),
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(find.text(button), 200);
+
+        final labelSize = tester.getSize(find.text(label));
+        final lineHeight = tester.getSize(find.text('Mode')).height;
+
+        expect(labelSize.height, lessThan(lineHeight * 2));
+        expect(find.text(button), findsOneWidget);
+      });
+    }
   });
 }

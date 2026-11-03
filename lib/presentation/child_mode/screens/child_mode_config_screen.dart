@@ -103,7 +103,7 @@ class ChildModeConfigScreen extends ConsumerWidget {
           ),
           const Divider(),
           _SectionHeader(title: t.childMode.mode),
-          if (state.isPinSet)
+          if (state.isPinSet) ...[
             ListTile(
               leading: Icon(
                 state.isChildMode ? Icons.child_care : Icons.supervisor_account,
@@ -114,7 +114,10 @@ class ChildModeConfigScreen extends ConsumerWidget {
                     ? t.childMode.childModeActive
                     : t.childMode.parentMode,
               ),
-              trailing: FilledButton(
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: FilledButton(
                 onPressed: () {
                   if (state.isChildMode) {
                     _navigateToPinEntry(context);
@@ -129,6 +132,7 @@ class ChildModeConfigScreen extends ConsumerWidget {
                 ),
               ),
             ),
+          ],
         ],
       ),
     );
