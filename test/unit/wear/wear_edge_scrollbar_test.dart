@@ -24,6 +24,16 @@ double _contrastRatio(Color a, Color b) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
+Widget _scrollingPage(ScrollController controller) => Scaffold(
+  body: WearEdgeScrollbar(
+    controller: controller,
+    child: ListView(
+      controller: controller,
+      children: [for (var i = 0; i < 40; i++) const SizedBox(height: 40)],
+    ),
+  ),
+);
+
 Future<WearOsScrollbar> _pumpBar(WidgetTester tester, ThemeData theme) async {
   final controller = ScrollController();
   addTearDown(controller.dispose);
@@ -31,17 +41,7 @@ Future<WearOsScrollbar> _pumpBar(WidgetTester tester, ThemeData theme) async {
   await tester.pumpWidget(
     MaterialApp(
       theme: theme,
-      home: Scaffold(
-        body: WearEdgeScrollbar(
-          controller: controller,
-          child: ListView(
-            controller: controller,
-            children: [
-              for (var i = 0; i < 40; i++) const SizedBox(height: 40),
-            ],
-          ),
-        ),
-      ),
+      home: _scrollingPage(controller),
     ),
   );
   await tester.pumpAndSettle();
@@ -51,6 +51,37 @@ Future<WearOsScrollbar> _pumpBar(WidgetTester tester, ThemeData theme) async {
 
 void main() {
   group('WearEdgeScrollbar', () {
+    testWidgets('a list first built under another page gets its bar later', (
+      tester,
+    ) async {
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+      final navigatorKey = GlobalKey<NavigatorState>();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Navigator(
+            key: navigatorKey,
+            onGenerateInitialRoutes: (_, _) => [
+              MaterialPageRoute<void>(
+                builder: (_) => _scrollingPage(controller),
+              ),
+              MaterialPageRoute<void>(builder: (_) => const Scaffold()),
+            ],
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+
+      navigatorKey.currentState!.pop();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(WearOsScrollbar), findsOneWidget);
+      expect(controller.position.maxScrollExtent, greaterThan(0));
+    });
+
     for (final (name, theme) in [('wear', wearTheme())]) {
       testWidgets('$name: the track reads against the surface behind it', (
         tester,
