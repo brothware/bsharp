@@ -501,6 +501,25 @@ void main() {
         expect(find.text('my-school'), findsOneWidget);
       });
 
+      testWidgets('the step back arrow is named for screen readers', (
+        tester,
+      ) async {
+        final semantics = tester.ensureSemantics();
+        await tester.pumpWidget(_buildApp(shape: shape));
+        await tester.pump();
+        await _chooseMobireg(tester);
+
+        await _typeIntoStep(tester, 'my-school');
+        await tester.tap(find.byType(FilledButton));
+        await tester.pump();
+
+        expect(
+          tester.getSemantics(find.byIcon(Icons.arrow_back)),
+          isSemantics(label: 'Back', isButton: true, hasTapAction: true),
+        );
+        semantics.dispose();
+      });
+
       testWidgets('the primary action is visible and at least 48dp', (
         tester,
       ) async {
@@ -1251,6 +1270,23 @@ void main() {
         reason: 'the arrow went to the password step of a typed login',
       );
       expect(find.byType(TextField), findsNothing);
+    });
+
+    testWidgets('the student list back arrow is named for screen readers', (
+      tester,
+    ) async {
+      final semantics = tester.ensureSemantics();
+      await waitForPhone(tester);
+      link.accounts.add(account);
+      await settle(tester);
+      provider.answerWithTwoStudents();
+      await settle(tester);
+
+      expect(
+        tester.getSemantics(find.byIcon(Icons.arrow_back)),
+        isSemantics(label: 'Back', isButton: true, hasTapAction: true),
+      );
+      semantics.dispose();
     });
 
     testWidgets('a probe that answers after backing out is dropped', (

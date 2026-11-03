@@ -539,7 +539,11 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen>
                   width: _stepHeaderButtonWidth,
                   child: IconButton(
                     onPressed: _goBack,
-                    icon: const Icon(Icons.arrow_back),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      semanticLabel: MaterialLocalizations.of(context)
+                          .backButtonTooltip,
+                    ),
                   ),
                 ),
               ),
@@ -911,7 +915,11 @@ class _WearSetupScreenState extends ConsumerState<WearSetupScreen>
                 height: 48,
                 child: IconButton(
                   onPressed: _goBack,
-                  icon: const Icon(Icons.arrow_back),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    semanticLabel: MaterialLocalizations.of(context)
+                        .backButtonTooltip,
+                  ),
                 ),
               ),
               Expanded(
