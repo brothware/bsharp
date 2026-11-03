@@ -1,3 +1,4 @@
+import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/app/providers/grades_providers.dart';
@@ -139,6 +140,14 @@ Stream<Set<int>> ignoredAttendanceIds(Ref ref) {
   final dao = ref.watch(ignoredAttendanceDaoProvider);
   if (dao == null) return Stream.value(const <int>{});
   return dao.watchIgnoredIds();
+}
+
+@Riverpod(keepAlive: true)
+List<UnexcusedAbsence> visibleUnexcusedAbsences(Ref ref) {
+  if (ref.watch(childModeProvider).isChildMode) {
+    return const [];
+  }
+  return ref.watch(staleUnexcusedAbsencesProvider);
 }
 
 @Riverpod(keepAlive: true)

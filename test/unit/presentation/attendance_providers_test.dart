@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/providers/schedule_providers.dart';
+import 'package:bsharp/data/data_sources/local/credential_storage.dart';
 import 'package:bsharp/domain/entities/attendance.dart';
 import 'package:bsharp/domain/entities/resolved_event.dart';
 import 'package:bsharp/domain/entities/sync_action.dart';
@@ -11,6 +14,8 @@ import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../data/credential_storage_test.dart';
 
 Stream<Set<int>> _emit(Set<int> value) async* {
   yield value;
@@ -225,6 +230,70 @@ void main() {
         attendanceForDayProvider(DateTime(2026, 2, 27)),
       );
       expect(day, isNull);
+    });
+  });
+
+  group('visibleUnexcusedAbsencesProvider', () {
+    final oldDate = DateTime.now().subtract(const Duration(days: 30));
+
+    ProviderContainer containerIn(AppMode mode) {
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          attendancesProvider.overrideWithBuild(
+            (ref, _) => [attendance(id: 10, eventsId: 100, typesId: 2)],
+          ),
+          attendanceTypesProvider.overrideWithBuild(
+            (ref, _) => [presentType, absentType],
+          ),
+          resolvedEventsProvider.overrideWithBuild(
+            (ref, _) => [resolvedEvent(id: 100, date: oldDate)],
+          ),
+          ignoredAttendanceIdsProvider.overrideWith(
+            (ref) => _emit(const <int>{}),
+          ),
+          childModeProvider.overrideWithBuild(
+            (ref, _) => ChildModeState(mode: mode, isPinSet: true),
+          ),
+          credentialStorageProvider.overrideWithValue(
+            CredentialStorage(store: FakeKeyValueStore()),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+      return container;
+    }
+
+    test('a parent sees the stale unexcused absences', () {
+      final container = containerIn(AppMode.parent);
+
+      expect(
+        container.read(visibleUnexcusedAbsencesProvider),
+        container.read(staleUnexcusedAbsencesProvider),
+      );
+      expect(container.read(visibleUnexcusedAbsencesProvider), hasLength(1));
+    });
+
+    test('a child sees none', () {
+      final container = containerIn(AppMode.child);
+
+      expect(container.read(staleUnexcusedAbsencesProvider), hasLength(1));
+      expect(container.read(visibleUnexcusedAbsencesProvider), isEmpty);
+    });
+
+    test('entering child mode empties the list', () {
+      final container = containerIn(AppMode.parent);
+      final seen = <int>[];
+      container.listen(
+        visibleUnexcusedAbsencesProvider,
+        (_, next) => seen.add(next.length),
+        fireImmediately: true,
+      );
+
+      container.read(childModeProvider.notifier).enterChildMode();
+      container.read(visibleUnexcusedAbsencesProvider);
+
+      expect(seen, [1, 0]);
     });
   });
 

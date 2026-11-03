@@ -11,7 +11,7 @@ class UnexcusedAbsencesCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final absences = ref.watch(staleUnexcusedAbsencesProvider);
+    final absences = ref.watch(visibleUnexcusedAbsencesProvider);
     if (absences.isEmpty) return const SizedBox.shrink();
 
     final theme = Theme.of(context);

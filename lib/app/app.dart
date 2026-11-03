@@ -60,7 +60,7 @@ class _BSharpAppState extends ConsumerState<BSharpApp> {
       });
 
       ref.listenManual<List<UnexcusedAbsence>>(
-        staleUnexcusedAbsencesProvider,
+        visibleUnexcusedAbsencesProvider,
         (prev, next) async {
           if (prev?.length == next.length) return;
           final service = ref.read(notificationServiceProvider);

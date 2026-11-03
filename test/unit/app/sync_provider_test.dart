@@ -1,6 +1,8 @@
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
+import 'package:bsharp/app/providers/attendance_providers.dart';
 import 'package:bsharp/app/providers/custom_event_providers.dart';
 import 'package:bsharp/app/providers/grades_providers.dart';
 import 'package:bsharp/app/reauth_provider.dart';
@@ -31,13 +33,16 @@ import '../../fixtures/mobireg/fixtures.dart';
 import '../data/credential_storage_test.dart';
 
 class _SilentNotificationService extends NotificationService {
-  int absenceAlerts = 0;
+  final absenceAlertCounts = <int>[];
+
+  int get absenceAlerts => absenceAlertCounts.length;
 
   @override
   Future<void> initialize({void Function(NotificationPayload)? onTap}) async {}
 
   @override
-  Future<void> showUnexcusedAbsenceAlert(int count) async => absenceAlerts++;
+  Future<void> showUnexcusedAbsenceAlert(int count) async =>
+      absenceAlertCounts.add(count);
 }
 
 const _pupilId = 6339;
@@ -55,6 +60,7 @@ Future<ProviderContainer> _mobiregContainer({
   required ProviderAccount account,
   int pupilId = _pupilId,
   NotificationService? notifications,
+  List<Override> overrides = const [],
 }) {
   return _containerWith(
     provider: MobiregDataProvider(
@@ -64,6 +70,7 @@ Future<ProviderContainer> _mobiregContainer({
     account: account,
     pupilId: pupilId,
     notifications: notifications,
+    overrides: overrides,
   );
 }
 
@@ -516,6 +523,26 @@ void main() {
       expect(changes.byCategory(ChangeCategory.grades), isNotEmpty);
       expect(container.read(newGradeIdsProvider), isNotEmpty);
       expect(notifications.absenceAlerts, 1);
+    });
+
+    test('in child mode a sync raises no unexcused absence alert', () async {
+      final notifications = _SilentNotificationService();
+      final container = await _mobiregContainer(
+        server: server,
+        account: _account,
+        notifications: notifications,
+        overrides: [
+          childModeProvider.overrideWithBuild(
+            (ref, _) =>
+                const ChildModeState(mode: AppMode.child, isPinSet: true),
+          ),
+        ],
+      );
+
+      await container.read(syncStatusProvider.notifier).sync();
+
+      expect(container.read(staleUnexcusedAbsencesProvider), isNotEmpty);
+      expect(notifications.absenceAlertCounts, [0]);
     });
 
     test(

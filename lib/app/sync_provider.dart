@@ -227,7 +227,7 @@ class SyncStatusNotifier extends Notifier<SyncStatus> {
   }
 
   Future<void> _checkUnexcusedAbsences() async {
-    final stale = ref.read(staleUnexcusedAbsencesProvider);
+    final stale = ref.read(visibleUnexcusedAbsencesProvider);
     final service = ref.read(notificationServiceProvider);
     await service.initialize();
     await service.showUnexcusedAbsenceAlert(stale.length);
