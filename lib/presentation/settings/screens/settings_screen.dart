@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bsharp/app/auth_provider.dart';
+import 'package:bsharp/app/child_mode_provider.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/locale_provider.dart';
 import 'package:bsharp/app/notification_preferences_provider.dart';
@@ -13,6 +14,7 @@ import 'package:bsharp/domain/change_detection.dart';
 import 'package:bsharp/domain/theme_labels.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/child_mode/screens/child_mode_config_screen.dart';
+import 'package:bsharp/presentation/child_mode/screens/pin_entry_screen.dart';
 import 'package:bsharp/presentation/common/relative_time.dart';
 import 'package:bsharp/presentation/common/theme/theme_provider.dart';
 import 'package:bsharp/presentation/settings/screens/account_management_screen.dart';
@@ -31,88 +33,92 @@ class SettingsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final provider = ref.watch(activeDataProviderProvider);
     final isCredentialBased = provider.requiresCredentials;
+    final childMode = ref.watch(childModeProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(t.settings.title)),
       body: ListView(
         children: [
-          _SectionHeader(title: t.settings.appearance),
-          ListTile(
-            leading: const Icon(Icons.brightness_6),
-            title: Text(t.settings.theme),
-            subtitle: Text(themeModeLabel(themeMode)),
-            onTap: () => _showThemeDialog(context, ref),
-          ),
-          ListTile(
-            leading: const Icon(Icons.language),
-            title: Text(t.settings.language),
-            subtitle: Text(_languageSubtitle(ref)),
-            onTap: () => _showLanguageDialog(context, ref),
-          ),
-          if (isCredentialBased) ...[
-            const Divider(),
-            _SectionHeader(title: t.settings.syncSection),
-            const _SyncSection(),
-          ],
-          const Divider(),
-          _SectionHeader(title: t.settings.notifications),
-          const _NotificationSection(),
-          if (ref.watch(isTranslationAvailableProvider)) ...[
-            const Divider(),
-            _SectionHeader(title: t.translation.settingsTitle),
-            const _TranslationSection(),
-          ],
-          const Divider(),
-          _SectionHeader(title: t.settings.childMode),
-          ListTile(
-            leading: const Icon(Icons.child_care),
-            title: Text(t.settings.childModeConfig),
-            subtitle: Text(t.settings.childModeConfigSubtitle),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const ChildModeConfigScreen(),
-              ),
-            ),
-          ),
-          const Divider(),
-          _SectionHeader(title: t.settings.account),
-          ListTile(
-            leading: const Icon(Icons.manage_accounts),
-            title: Text(t.accounts.manageAccounts),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const AccountManagementScreen(),
-              ),
-            ),
-          ),
-          if (ref.watch(hasPairedWatchProvider).value ?? false)
+          if (childMode.isChildMode) const _ChildModeActiveTile(),
+          if (childMode.isParentMode || childMode.config.settingsVisible) ...[
+            _SectionHeader(title: t.settings.appearance),
             ListTile(
-              leading: const Icon(Icons.watch),
-              title: Text(t.watchSetup.title),
-              subtitle: Text(t.watchSetup.settingsSubtitle),
+              leading: const Icon(Icons.brightness_6),
+              title: Text(t.settings.theme),
+              subtitle: Text(themeModeLabel(themeMode)),
+              onTap: () => _showThemeDialog(context, ref),
+            ),
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(t.settings.language),
+              subtitle: Text(_languageSubtitle(ref)),
+              onTap: () => _showLanguageDialog(context, ref),
+            ),
+            if (isCredentialBased) ...[
+              const Divider(),
+              _SectionHeader(title: t.settings.syncSection),
+              const _SyncSection(),
+            ],
+            const Divider(),
+            _SectionHeader(title: t.settings.notifications),
+            const _NotificationSection(),
+            if (ref.watch(isTranslationAvailableProvider)) ...[
+              const Divider(),
+              _SectionHeader(title: t.translation.settingsTitle),
+              const _TranslationSection(),
+            ],
+            const Divider(),
+            _SectionHeader(title: t.settings.childMode),
+            ListTile(
+              leading: const Icon(Icons.child_care),
+              title: Text(t.settings.childModeConfig),
+              subtitle: Text(t.settings.childModeConfigSubtitle),
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => const WatchSetupScreen(),
+                  builder: (_) => const ChildModeConfigScreen(),
                 ),
               ),
             ),
-          if (isCredentialBased)
+            const Divider(),
+            _SectionHeader(title: t.settings.account),
             ListTile(
-              leading: const Icon(Icons.password),
-              title: Text(t.settings.changePassword),
-              onTap: () => _showChangePasswordDialog(context, ref),
+              leading: const Icon(Icons.manage_accounts),
+              title: Text(t.accounts.manageAccounts),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const AccountManagementScreen(),
+                ),
+              ),
             ),
-          ListTile(
-            leading: Icon(Icons.logout, color: theme.colorScheme.error),
-            title: Text(
-              t.auth.logout,
-              style: TextStyle(color: theme.colorScheme.error),
+            if (ref.watch(hasPairedWatchProvider).value ?? false)
+              ListTile(
+                leading: const Icon(Icons.watch),
+                title: Text(t.watchSetup.title),
+                subtitle: Text(t.watchSetup.settingsSubtitle),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const WatchSetupScreen(),
+                  ),
+                ),
+              ),
+            if (isCredentialBased)
+              ListTile(
+                leading: const Icon(Icons.password),
+                title: Text(t.settings.changePassword),
+                onTap: () => _showChangePasswordDialog(context, ref),
+              ),
+            ListTile(
+              leading: Icon(Icons.logout, color: theme.colorScheme.error),
+              title: Text(
+                t.auth.logout,
+                style: TextStyle(color: theme.colorScheme.error),
+              ),
+              onTap: () => _confirmLogout(context, ref),
             ),
-            onTap: () => _confirmLogout(context, ref),
-          ),
-          const Divider(),
-          _SectionHeader(title: t.settings.about),
-          const _AboutSection(),
+            const Divider(),
+            _SectionHeader(title: t.settings.about),
+            const _AboutSection(),
+          ],
         ],
       ),
     );
@@ -369,6 +375,22 @@ class _SyncSection extends ConsumerWidget {
       onTap: syncStatus.isBusy
           ? null
           : () => ref.read(syncStatusProvider.notifier).sync(),
+    );
+  }
+}
+
+class _ChildModeActiveTile extends StatelessWidget {
+  const _ChildModeActiveTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.child_care, color: Colors.orange),
+      title: Text(t.childMode.childModeActive),
+      subtitle: Text(t.childMode.enterParentPin),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<bool>(builder: (_) => const PinEntryScreen()),
+      ),
     );
   }
 }

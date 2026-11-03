@@ -75,9 +75,6 @@ class MainShell extends ConsumerWidget {
     final messagesVisible =
         notifier.isFeatureVisible(ChildModeFeature.messages) &&
         provider.supports(DataProviderCapability.messages);
-    final settingsVisible = notifier.isFeatureVisible(
-      ChildModeFeature.settings,
-    );
 
     final onDashboard = navigationShell.currentIndex == 0;
 
@@ -121,11 +118,11 @@ class MainShell extends ConsumerWidget {
                   ),
                   onPressed: () => context.push(AppRoutes.messages),
                 ),
-              if (settingsVisible)
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () => context.push(AppRoutes.settings),
-                ),
+              IconButton(
+                icon: const Icon(Icons.settings),
+                tooltip: t.settings.title,
+                onPressed: () => context.push(AppRoutes.settings),
+              ),
             ],
           ),
           body: size == ScreenSize.phone
