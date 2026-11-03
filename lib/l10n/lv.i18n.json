@@ -850,6 +850,11 @@
     "typeOnWatch": "Ievadīt pulkstenī",
     "differentAccount": "Tas ir cits konts",
     "phoneUnreachable": "Tālrunis neatbildēja. Turiet to tuvumā vai izmantojiet saglabāto paroli.",
-    "watchDidNotAnswer": "Pulkstenis neatbildēja. Pulkstenī pieskarieties “Tālrunis” un nosūtiet vēlreiz."
+    "watchDidNotAnswer": "Pulkstenis neatbildēja. Pulkstenī pieskarieties “Tālrunis” un nosūtiet vēlreiz.",
+    "allowOpenHeading": "Pulkstenis šeit neatvēra BSharp?",
+    "allowOpenTitle": "Atļaujiet pulksteņa lietotnei atvērt BSharp",
+    "allowOpenTitleNamed": "Atļaujiet ${watch} lietotnei atvērt BSharp",
+    "allowOpenSubtitle": "Daži tālruņi to bloķē. Lietotņu sarakstā atveriet lietotni, kas pārvalda pulksteni, un atļaujiet tai fonā atvērt lietotnes vai logus.",
+    "allowOpenFailed": "Neizdevās atvērt lietotņu sarakstu"
   }
 }

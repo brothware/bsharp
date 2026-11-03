@@ -847,6 +847,11 @@
     "typeOnWatch": "Type it on the watch",
     "differentAccount": "That is a different account",
     "phoneUnreachable": "Your phone did not answer. Keep it near, or use Saved password.",
-    "watchDidNotAnswer": "The watch did not answer. On the watch, tap Use phone, then send again."
+    "watchDidNotAnswer": "The watch did not answer. On the watch, tap Use phone, then send again.",
+    "allowOpenHeading": "Watch did not open BSharp here?",
+    "allowOpenTitle": "Let your watch's app open BSharp",
+    "allowOpenTitleNamed": "Let the app for ${watch} open BSharp",
+    "allowOpenSubtitle": "Some phones block it. In the app list, open the app that manages your watch and allow it to open apps or windows in the background.",
+    "allowOpenFailed": "Could not open the app list"
   }
 }

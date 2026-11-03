@@ -850,6 +850,11 @@
     "typeOnWatch": "Saatte yazın",
     "differentAccount": "Bu farklı bir hesap",
     "phoneUnreachable": "Telefonunuz yanıt vermedi. Yakında tutun veya kayıtlı şifreyi kullanın.",
-    "watchDidNotAnswer": "Saat yanıt vermedi. Saatte \"Telefon\" öğesine dokunup yeniden gönderin."
+    "watchDidNotAnswer": "Saat yanıt vermedi. Saatte \"Telefon\" öğesine dokunup yeniden gönderin.",
+    "allowOpenHeading": "Saat burada BSharp'ı açmadı mı?",
+    "allowOpenTitle": "Saatin uygulamasının BSharp'ı açmasına izin verin",
+    "allowOpenTitleNamed": "${watch} uygulamasının BSharp'ı açmasına izin verin",
+    "allowOpenSubtitle": "Bazı telefonlar bunu engeller. Uygulama listesinde saatinizi yöneten uygulamayı açın ve arka planda uygulama veya pencere açmasına izin verin.",
+    "allowOpenFailed": "Uygulama listesi açılamadı"
   }
 }

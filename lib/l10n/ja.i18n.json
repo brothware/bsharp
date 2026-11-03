@@ -850,6 +850,11 @@
     "typeOnWatch": "ウォッチで入力",
     "differentAccount": "別のアカウントです",
     "phoneUnreachable": "スマートフォンが応答しません。近くに置くか、保存済みのパスワードを使ってください。",
-    "watchDidNotAnswer": "ウォッチが応答しません。ウォッチで「スマホ」をタップしてから、もう一度送信してください。"
+    "watchDidNotAnswer": "ウォッチが応答しません。ウォッチで「スマホ」をタップしてから、もう一度送信してください。",
+    "allowOpenHeading": "ウォッチからここで BSharp が開きませんでしたか？",
+    "allowOpenTitle": "ウォッチのアプリに BSharp を開くことを許可",
+    "allowOpenTitleNamed": "${watch} のアプリに BSharp を開くことを許可",
+    "allowOpenSubtitle": "一部のスマートフォンではブロックされます。アプリ一覧でウォッチを管理するアプリを開き、バックグラウンドでアプリやウィンドウを開くことを許可してください。",
+    "allowOpenFailed": "アプリ一覧を開けませんでした"
   }
 }

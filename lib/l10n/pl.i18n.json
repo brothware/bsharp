@@ -850,6 +850,11 @@
     "typeOnWatch": "Wpisz na zegarku",
     "differentAccount": "To jest inne konto",
     "phoneUnreachable": "Telefon nie odpowiada. Trzymaj go blisko albo użyj zapisanego hasła.",
-    "watchDidNotAnswer": "Zegarek nie odpowiada. Na zegarku wybierz Użyj telefonu i wyślij ponownie."
+    "watchDidNotAnswer": "Zegarek nie odpowiada. Na zegarku wybierz Użyj telefonu i wyślij ponownie.",
+    "allowOpenHeading": "Zegarek nie otworzył tu BSharp?",
+    "allowOpenTitle": "Pozwól aplikacji zegarka otwierać BSharp",
+    "allowOpenTitleNamed": "Pozwól aplikacji dla ${watch} otwierać BSharp",
+    "allowOpenSubtitle": "Niektóre telefony to blokują. Na liście aplikacji otwórz aplikację, która obsługuje zegarek, i pozwól jej otwierać aplikacje lub okna w tle.",
+    "allowOpenFailed": "Nie udało się otworzyć listy aplikacji"
   }
 }

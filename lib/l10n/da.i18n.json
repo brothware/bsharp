@@ -850,6 +850,11 @@
     "typeOnWatch": "Skriv den på uret",
     "differentAccount": "Det er en anden konto",
     "phoneUnreachable": "Telefonen svarede ikke. Hold den tæt på, eller brug gemt adgangskode.",
-    "watchDidNotAnswer": "Uret svarede ikke. Tryk på \"Telefon\" på uret, og send igen."
+    "watchDidNotAnswer": "Uret svarede ikke. Tryk på \"Telefon\" på uret, og send igen.",
+    "allowOpenHeading": "Åbnede uret ikke BSharp her?",
+    "allowOpenTitle": "Lad urets app åbne BSharp",
+    "allowOpenTitleNamed": "Lad appen til ${watch} åbne BSharp",
+    "allowOpenSubtitle": "Nogle telefoner blokerer det. Åbn den app, der styrer dit ur, på applisten, og tillad den at åbne apps eller vinduer i baggrunden.",
+    "allowOpenFailed": "Applisten kunne ikke åbnes"
   }
 }

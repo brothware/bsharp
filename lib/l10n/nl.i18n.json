@@ -850,6 +850,11 @@
     "typeOnWatch": "Typ het op het horloge",
     "differentAccount": "Dat is een ander account",
     "phoneUnreachable": "Je telefoon reageerde niet. Houd hem dichtbij of gebruik het opgeslagen wachtwoord.",
-    "watchDidNotAnswer": "Het horloge reageerde niet. Tik op het horloge op ‘Telefoon’ en verstuur opnieuw."
+    "watchDidNotAnswer": "Het horloge reageerde niet. Tik op het horloge op ‘Telefoon’ en verstuur opnieuw.",
+    "allowOpenHeading": "Opende het horloge BSharp hier niet?",
+    "allowOpenTitle": "Laat de app van je horloge BSharp openen",
+    "allowOpenTitleNamed": "Laat de app voor ${watch} BSharp openen",
+    "allowOpenSubtitle": "Sommige telefoons blokkeren dit. Open in de lijst met apps de app die je horloge beheert en sta toe dat die op de achtergrond apps of vensters opent.",
+    "allowOpenFailed": "De lijst met apps kon niet worden geopend"
   }
 }

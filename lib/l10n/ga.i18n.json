@@ -859,6 +859,11 @@
     "typeOnWatch": "Clóscríobh ar an uaireadóir é",
     "differentAccount": "Is cuntas eile é sin",
     "phoneUnreachable": "Níor fhreagair do ghuthán. Coinnigh in aice leat é, nó úsáid an pasfhocal sábháilte.",
-    "watchDidNotAnswer": "Níor fhreagair an uaireadóir. Ar an uaireadóir, tapáil “Fón”, ansin seol arís."
+    "watchDidNotAnswer": "Níor fhreagair an uaireadóir. Ar an uaireadóir, tapáil “Fón”, ansin seol arís.",
+    "allowOpenHeading": "Níor oscail an t-uaireadóir BSharp anseo?",
+    "allowOpenTitle": "Lig d'aip an uaireadóra BSharp a oscailt",
+    "allowOpenTitleNamed": "Lig don aip do ${watch} BSharp a oscailt",
+    "allowOpenSubtitle": "Cuireann roinnt fón bac air seo. Sa liosta aipeanna, oscail an aip a bhainistíonn d'uaireadóir agus lig di aipeanna nó fuinneoga a oscailt sa chúlra.",
+    "allowOpenFailed": "Níorbh fhéidir an liosta aipeanna a oscailt"
   }
 }

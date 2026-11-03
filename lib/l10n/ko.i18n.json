@@ -850,6 +850,11 @@
     "typeOnWatch": "워치에서 입력",
     "differentAccount": "다른 계정입니다",
     "phoneUnreachable": "휴대전화가 응답하지 않습니다. 가까이 두거나 저장된 비밀번호를 사용하세요.",
-    "watchDidNotAnswer": "워치가 응답하지 않습니다. 워치에서 \"휴대전화\"를 탭한 다음 다시 보내세요."
+    "watchDidNotAnswer": "워치가 응답하지 않습니다. 워치에서 \"휴대전화\"를 탭한 다음 다시 보내세요.",
+    "allowOpenHeading": "워치가 여기서 BSharp를 열지 못했나요?",
+    "allowOpenTitle": "워치 앱이 BSharp를 열도록 허용",
+    "allowOpenTitleNamed": "${watch} 앱이 BSharp를 열도록 허용",
+    "allowOpenSubtitle": "일부 휴대전화는 이를 차단합니다. 앱 목록에서 워치를 관리하는 앱을 열고 백그라운드에서 앱이나 창을 열 수 있도록 허용하세요.",
+    "allowOpenFailed": "앱 목록을 열 수 없습니다"
   }
 }

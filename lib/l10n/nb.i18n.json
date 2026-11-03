@@ -850,6 +850,11 @@
     "typeOnWatch": "Skriv det på klokken",
     "differentAccount": "Det er en annen konto",
     "phoneUnreachable": "Telefonen svarte ikke. Hold den i nærheten, eller bruk lagret passord.",
-    "watchDidNotAnswer": "Klokken svarte ikke. Trykk på «Telefon» på klokken, og send på nytt."
+    "watchDidNotAnswer": "Klokken svarte ikke. Trykk på «Telefon» på klokken, og send på nytt.",
+    "allowOpenHeading": "Åpnet ikke klokken BSharp her?",
+    "allowOpenTitle": "La klokkens app åpne BSharp",
+    "allowOpenTitleNamed": "La appen for ${watch} åpne BSharp",
+    "allowOpenSubtitle": "Noen telefoner blokkerer det. Åpne appen som styrer klokken, i applisten, og la den åpne apper eller vinduer i bakgrunnen.",
+    "allowOpenFailed": "Kunne ikke åpne applisten"
   }
 }

@@ -850,6 +850,11 @@
     "typeOnWatch": "Sisesta kellas",
     "differentAccount": "See on teine konto",
     "phoneUnreachable": "Telefon ei vastanud. Hoia see lähedal või kasuta salvestatud parooli.",
-    "watchDidNotAnswer": "Kell ei vastanud. Puuduta kellas „Telefon“ ja saada uuesti."
+    "watchDidNotAnswer": "Kell ei vastanud. Puuduta kellas „Telefon“ ja saada uuesti.",
+    "allowOpenHeading": "Kell ei avanud siin BSharpi?",
+    "allowOpenTitle": "Luba kella rakendusel BSharpi avada",
+    "allowOpenTitleNamed": "Luba ${watch} rakendusel BSharpi avada",
+    "allowOpenSubtitle": "Mõned telefonid blokeerivad selle. Ava rakenduste loendis rakendus, mis haldab su kella, ja luba sellel taustal rakendusi või aknaid avada.",
+    "allowOpenFailed": "Rakenduste loendit ei saanud avada"
   }
 }

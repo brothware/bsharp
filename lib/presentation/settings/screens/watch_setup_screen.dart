@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bsharp/app/account_providers.dart';
 import 'package:bsharp/app/data_provider_registry.dart';
 import 'package:bsharp/app/watch_link_provider.dart';
+import 'package:bsharp/app/watch_open_permission_provider.dart';
 import 'package:bsharp/domain/entities/account_handoff.dart';
 import 'package:bsharp/domain/entities/provider_account.dart';
 import 'package:bsharp/l10n/strings.g.dart';
@@ -29,6 +30,7 @@ class _WatchSetupScreenState extends ConsumerState<WatchSetupScreen> {
               const <ProviderAccount>[])
         if (_canHandOff(account)) account,
     ];
+    final watchName = ref.watch(connectedWatchNameProvider).value;
 
     return Scaffold(
       appBar: AppBar(title: Text(t.watchSetup.title)),
@@ -63,9 +65,41 @@ class _WatchSetupScreenState extends ConsumerState<WatchSetupScreen> {
                           : null,
                     ),
             ),
+          const Divider(height: 32),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              t.watchSetup.allowOpenHeading,
+              style: theme.textTheme.titleSmall,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.open_in_new),
+            title: Text(
+              watchName == null
+                  ? t.watchSetup.allowOpenTitle
+                  : t.watchSetup.allowOpenTitleNamed(watch: watchName),
+            ),
+            subtitle: Text(t.watchSetup.allowOpenSubtitle),
+            onTap: () => unawaited(_openAppList()),
+          ),
         ],
       ),
     );
+  }
+
+  Future<void> _openAppList() async {
+    try {
+      await ref.read(watchOpenPermissionProvider).openAppList();
+    } on PlatformException catch (error, stackTrace) {
+      debugPrint('WatchSetupScreen: app list failed: $error\n$stackTrace');
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(t.watchSetup.allowOpenFailed)));
+    }
   }
 
   Future<String> _handOff(ProviderAccount account) async {

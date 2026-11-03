@@ -850,6 +850,11 @@
     "typeOnWatch": "Le saisir sur la montre",
     "differentAccount": "C’est un autre compte",
     "phoneUnreachable": "Votre téléphone n’a pas répondu. Gardez-le à proximité ou utilisez le mot de passe enregistré.",
-    "watchDidNotAnswer": "La montre n’a pas répondu. Sur la montre, touchez « Utiliser le téléphone », puis renvoyez."
+    "watchDidNotAnswer": "La montre n’a pas répondu. Sur la montre, touchez « Utiliser le téléphone », puis renvoyez.",
+    "allowOpenHeading": "La montre n'a pas ouvert BSharp ici ?",
+    "allowOpenTitle": "Autoriser l'app de la montre à ouvrir BSharp",
+    "allowOpenTitleNamed": "Autoriser l'app de ${watch} à ouvrir BSharp",
+    "allowOpenSubtitle": "Certains téléphones le bloquent. Dans la liste des applis, ouvrez l'appli qui gère votre montre et autorisez-la à ouvrir des applis ou des fenêtres en arrière-plan.",
+    "allowOpenFailed": "Impossible d'ouvrir la liste des applis"
   }
 }

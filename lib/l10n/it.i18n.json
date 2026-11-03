@@ -850,6 +850,11 @@
     "typeOnWatch": "Digitala sull’orologio",
     "differentAccount": "È un altro account",
     "phoneUnreachable": "Il telefono non ha risposto. Tienilo vicino o usa la password salvata.",
-    "watchDidNotAnswer": "L’orologio non ha risposto. Sull’orologio tocca «Usa telefono», poi invia di nuovo."
+    "watchDidNotAnswer": "L’orologio non ha risposto. Sull’orologio tocca «Usa telefono», poi invia di nuovo.",
+    "allowOpenHeading": "L'orologio non ha aperto BSharp qui?",
+    "allowOpenTitle": "Consenti all'app dell'orologio di aprire BSharp",
+    "allowOpenTitleNamed": "Consenti all'app di ${watch} di aprire BSharp",
+    "allowOpenSubtitle": "Alcuni telefoni lo bloccano. Nell'elenco delle app apri l'app che gestisce l'orologio e consentile di aprire app o finestre in background.",
+    "allowOpenFailed": "Impossibile aprire l'elenco delle app"
   }
 }

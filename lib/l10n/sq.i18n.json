@@ -850,6 +850,11 @@
     "typeOnWatch": "Shkruaje në orë",
     "differentAccount": "Kjo është një llogari tjetër",
     "phoneUnreachable": "Telefoni nuk u përgjigj. Mbajeni pranë ose përdorni fjalëkalimin e ruajtur.",
-    "watchDidNotAnswer": "Ora nuk u përgjigj. Në orë prekni «Telefoni», pastaj dërgoni sërish."
+    "watchDidNotAnswer": "Ora nuk u përgjigj. Në orë prekni «Telefoni», pastaj dërgoni sërish.",
+    "allowOpenHeading": "Ora nuk e hapi BSharp këtu?",
+    "allowOpenTitle": "Lejoni aplikacionin e orës të hapë BSharp",
+    "allowOpenTitleNamed": "Lejoni aplikacionin për ${watch} të hapë BSharp",
+    "allowOpenSubtitle": "Disa telefona e bllokojnë. Në listën e aplikacioneve hapni aplikacionin që menaxhon orën dhe lejojeni të hapë aplikacione ose dritare në sfond.",
+    "allowOpenFailed": "Lista e aplikacioneve nuk u hap"
   }
 }

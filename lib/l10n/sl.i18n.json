@@ -856,6 +856,11 @@
     "typeOnWatch": "Vnesite na uri",
     "differentAccount": "To je drug račun",
     "phoneUnreachable": "Telefon se ni odzval. Imejte ga blizu ali uporabite shranjeno geslo.",
-    "watchDidNotAnswer": "Ura se ni odzvala. Na uri tapnite »Telefon« in pošljite znova."
+    "watchDidNotAnswer": "Ura se ni odzvala. Na uri tapnite »Telefon« in pošljite znova.",
+    "allowOpenHeading": "Ura tukaj ni odprla BSharpa?",
+    "allowOpenTitle": "Dovolite aplikaciji ure, da odpira BSharp",
+    "allowOpenTitleNamed": "Dovolite aplikaciji za ${watch}, da odpira BSharp",
+    "allowOpenSubtitle": "Nekateri telefoni to blokirajo. Na seznamu aplikacij odprite aplikacijo, ki upravlja uro, in ji dovolite odpiranje aplikacij ali oken v ozadju.",
+    "allowOpenFailed": "Seznama aplikacij ni bilo mogoče odpreti"
   }
 }

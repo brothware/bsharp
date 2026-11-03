@@ -850,6 +850,11 @@
     "typeOnWatch": "在手表上输入",
     "differentAccount": "这是另一个账号",
     "phoneUnreachable": "手机没有响应。请将手机放在附近，或使用已保存的密码。",
-    "watchDidNotAnswer": "手表没有响应。请在手表上点按“手机”，然后重新发送。"
+    "watchDidNotAnswer": "手表没有响应。请在手表上点按“手机”，然后重新发送。",
+    "allowOpenHeading": "手表没有在这里打开 BSharp？",
+    "allowOpenTitle": "允许手表的应用打开 BSharp",
+    "allowOpenTitleNamed": "允许 ${watch} 的应用打开 BSharp",
+    "allowOpenSubtitle": "有些手机会阻止这一操作。请在应用列表中打开管理手表的应用，并允许它在后台打开应用或窗口。",
+    "allowOpenFailed": "无法打开应用列表"
   }
 }

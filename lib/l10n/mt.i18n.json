@@ -856,6 +856,11 @@
     "typeOnWatch": "Ittajpjaha fuq l-arloġġ",
     "differentAccount": "Dak huwa kont ieħor",
     "phoneUnreachable": "It-telefon ma wieġebx. Żommu qrib jew uża l-password issejvjata.",
-    "watchDidNotAnswer": "L-arloġġ ma wieġebx. Fuq l-arloġġ, agħfas “Telefon”, imbagħad erġa’ ibgħat."
+    "watchDidNotAnswer": "L-arloġġ ma wieġebx. Fuq l-arloġġ, agħfas “Telefon”, imbagħad erġa’ ibgħat.",
+    "allowOpenHeading": "L-arloġġ ma fetaħx BSharp hawn?",
+    "allowOpenTitle": "Ħalli l-app tal-arloġġ tiftaħ BSharp",
+    "allowOpenTitleNamed": "Ħalli l-app għal ${watch} tiftaħ BSharp",
+    "allowOpenSubtitle": "Xi telefowns jimblukkawh. Fil-lista tal-apps, iftaħ l-app li tmexxi l-arloġġ tiegħek u ħalliha tiftaħ apps jew twieqi fl-isfond.",
+    "allowOpenFailed": "Ma setgħetx tinfetaħ il-lista tal-apps"
   }
 }

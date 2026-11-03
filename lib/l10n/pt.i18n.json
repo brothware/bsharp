@@ -850,6 +850,11 @@
     "typeOnWatch": "Escrever no relógio",
     "differentAccount": "É outra conta",
     "phoneUnreachable": "O telemóvel não respondeu. Mantenha-o perto ou use a palavra-passe guardada.",
-    "watchDidNotAnswer": "O relógio não respondeu. No relógio, toque em «Usar telemóvel» e envie novamente."
+    "watchDidNotAnswer": "O relógio não respondeu. No relógio, toque em «Usar telemóvel» e envie novamente.",
+    "allowOpenHeading": "O relógio não abriu o BSharp aqui?",
+    "allowOpenTitle": "Permitir que a app do relógio abra o BSharp",
+    "allowOpenTitleNamed": "Permitir que a app de ${watch} abra o BSharp",
+    "allowOpenSubtitle": "Alguns telemóveis bloqueiam isto. Na lista de apps, abra a app que gere o relógio e permita que abra apps ou janelas em segundo plano.",
+    "allowOpenFailed": "Não foi possível abrir a lista de apps"
   }
 }

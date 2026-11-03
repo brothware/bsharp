@@ -853,6 +853,11 @@
     "typeOnWatch": "Tastează pe ceas",
     "differentAccount": "Este alt cont",
     "phoneUnreachable": "Telefonul nu a răspuns. Ține-l aproape sau folosește parola salvată.",
-    "watchDidNotAnswer": "Ceasul nu a răspuns. Pe ceas, atinge „Telefon”, apoi trimite din nou."
+    "watchDidNotAnswer": "Ceasul nu a răspuns. Pe ceas, atinge „Telefon”, apoi trimite din nou.",
+    "allowOpenHeading": "Ceasul nu a deschis BSharp aici?",
+    "allowOpenTitle": "Permite aplicației ceasului să deschidă BSharp",
+    "allowOpenTitleNamed": "Permite aplicației pentru ${watch} să deschidă BSharp",
+    "allowOpenSubtitle": "Unele telefoane blochează asta. În lista de aplicații, deschide aplicația care gestionează ceasul și permite-i să deschidă aplicații sau ferestre în fundal.",
+    "allowOpenFailed": "Lista de aplicații nu s-a putut deschide"
   }
 }
