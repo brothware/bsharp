@@ -84,6 +84,13 @@ void main() {
   });
 
   group('ChildModeNotifier', () {
+    test('a container disposed while loading takes no late state', () async {
+      _createContainer()
+        ..read(childModeProvider)
+        ..dispose();
+      await pumpEventQueue();
+    });
+
     test('setupPin saves valid 4-digit PIN', () async {
       final container = _createContainer();
       final notifier = container.read(childModeProvider.notifier);

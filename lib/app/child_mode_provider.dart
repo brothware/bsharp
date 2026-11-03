@@ -147,6 +147,9 @@ class ChildMode extends _$ChildMode {
     final configJson = await storage.getChildModeConfig();
     final failedAttempts = await storage.getChildModeFailedAttempts();
     final lockedUntil = await storage.getChildModeLockedUntil();
+    if (!ref.mounted) {
+      return;
+    }
 
     var config = const ChildModeConfig();
     if (configJson != null) {
