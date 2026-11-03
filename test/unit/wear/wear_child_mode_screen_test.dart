@@ -129,5 +129,42 @@ void main() {
       final container = ProviderScope.containerOf(element);
       expect(container.read(childModeProvider).config.scheduleVisible, isFalse);
     });
+
+    testWidgets('tapping a toggle label changes config', (tester) async {
+      await tester.pumpWidget(await _buildAppWithPin());
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.text('Grades'));
+      await tester.pump();
+
+      final element = tester.element(find.byType(WearChildModeScreen));
+      final container = ProviderScope.containerOf(element);
+      expect(container.read(childModeProvider).config.gradesVisible, isFalse);
+    });
+
+    testWidgets('a toggle row is one labelled switch to screen readers', (
+      tester,
+    ) async {
+      final semantics = tester.ensureSemantics();
+      await tester.pumpWidget(await _buildAppWithPin());
+      await tester.pump();
+      await tester.pump();
+
+      expect(
+        tester.getSemantics(find.text('Grades')),
+        matchesSemantics(
+          label: 'Grades',
+          hasToggledState: true,
+          isToggled: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          isFocusable: true,
+          hasTapAction: true,
+          hasFocusAction: true,
+        ),
+      );
+      semantics.dispose();
+    });
   });
 }
