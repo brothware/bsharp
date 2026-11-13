@@ -88,7 +88,7 @@ void main() {
         await container.read(themeModeProvider.notifier).setThemeMode(mode);
         await tester.pump();
 
-        final context = tester.element(find.byType(Scaffold).first);
+        final context = tester.element(find.byType(Navigator));
         expect(Theme.of(context).colorScheme.surface, const Color(0xFF000000));
         expect(Theme.of(context).brightness, Brightness.dark);
       });

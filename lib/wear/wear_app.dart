@@ -7,6 +7,7 @@ import 'package:bsharp/app/sync_provider.dart';
 import 'package:bsharp/l10n/strings.g.dart';
 import 'package:bsharp/presentation/common/theme/app_theme.dart';
 import 'package:bsharp/wear/screens/wear_home.dart';
+import 'package:bsharp/wear/screens/wear_launch_screen.dart';
 import 'package:bsharp/wear/screens/wear_reauth_screen.dart';
 import 'package:bsharp/wear/screens/wear_setup_screen.dart';
 import 'package:bsharp/wear/wear_notification_router.dart';
@@ -126,8 +127,7 @@ class _BSharpWearAppState extends ConsumerState<BSharpWearApp> {
           AuthState.unauthenticated => const WearSetupScreen(),
         };
       },
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => const WearLaunchScreen(),
       error: (error, stackTrace) {
         debugPrint('BSharpWearApp: start failed: $error\n$stackTrace');
         return const _WearStartupError();
