@@ -3,9 +3,7 @@ package pl.brothware.bsharp
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import androidx.core.content.ContextCompat
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -17,13 +15,6 @@ private const val INPUT_REQUEST = 4201
 class MainActivity : FlutterActivity() {
     private var pendingInput: MethodChannel.Result? = null
     private val remoteActivityHelper by lazy { RemoteActivityHelper(this) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        // Wear App Quality wants the app icon on black while the engine warms
-        // up. Has to run before super.onCreate to own the first frame.
-        installSplashScreen()
-        super.onCreate(savedInstanceState)
-    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
