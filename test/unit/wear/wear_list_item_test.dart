@@ -4,11 +4,26 @@ import 'package:bsharp/wear/widgets/wear_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+const _glassSizeDp = 227.0;
+const _devicePixelRatio = 2.0;
+
+void _useGlassSizedView(WidgetTester tester) {
+  tester.view.physicalSize = const Size(
+    _glassSizeDp * _devicePixelRatio,
+    _glassSizeDp * _devicePixelRatio,
+  );
+  tester.view.devicePixelRatio = _devicePixelRatio;
+  addTearDown(tester.view.reset);
+}
+
 Widget _list(WearScreenShape shape, ScrollController controller) {
   return MaterialApp(
     home: Scaffold(
       body: WearDisplayScope(
-        display: WearDisplay(shape: shape, sizeDp: const Size(227, 227)),
+        display: WearDisplay(
+          shape: shape,
+          sizeDp: const Size(_glassSizeDp, _glassSizeDp),
+        ),
         child: ListView.builder(
           controller: controller,
           itemCount: 20,
@@ -65,6 +80,7 @@ void main() {
     testWidgets('a round screen paints its rows smaller near the edges', (
       tester,
     ) async {
+      _useGlassSizedView(tester);
       final controller = ScrollController();
       addTearDown(controller.dispose);
 
@@ -73,7 +89,7 @@ void main() {
 
       expect(
         _paintedWidth(tester, 'row 0'),
-        lessThan(_paintedWidth(tester, 'row 7')),
+        lessThan(_paintedWidth(tester, 'row 2')),
         reason:
             'the screen keeps only a thin margin now, so a row at the top or '
             'bottom of the viewport has to give up the width the circle does',
@@ -83,6 +99,7 @@ void main() {
     testWidgets('scaling a row never changes the space it occupies', (
       tester,
     ) async {
+      _useGlassSizedView(tester);
       final controller = ScrollController();
       addTearDown(controller.dispose);
 
@@ -111,6 +128,7 @@ void main() {
     });
 
     testWidgets('a rectangular screen leaves its rows alone', (tester) async {
+      _useGlassSizedView(tester);
       final controller = ScrollController();
       addTearDown(controller.dispose);
 
@@ -121,7 +139,7 @@ void main() {
 
       expect(
         _paintedWidth(tester, 'row 0'),
-        _paintedWidth(tester, 'row 7'),
+        _paintedWidth(tester, 'row 2'),
       );
     });
   });

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:bsharp/wear/wear_screen_shape_provider.dart';
 import 'package:bsharp/wear/widgets/wear_edge_scrollbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Not the largest rectangle that fits the circle, which is only 64% of the
@@ -56,14 +57,16 @@ class WearScaffold extends ConsumerWidget {
 
     return WearDisplayScope(
       display: display,
-      child: ColoredBox(
-        color: theme.colorScheme.surface,
-        child: _withEdgeScrollbar(
-          Stack(
-            children: [
-              Padding(padding: _insetFor(display), child: child),
-              ?edgeContent,
-            ],
+      child: WearGlassFrame(
+        child: ColoredBox(
+          color: theme.colorScheme.surface,
+          child: _withEdgeScrollbar(
+            Stack(
+              children: [
+                Padding(padding: _insetFor(display), child: child),
+                ?edgeContent,
+              ],
+            ),
           ),
         ),
       ),
@@ -89,6 +92,29 @@ class WearScaffold extends ConsumerWidget {
     );
   }
 }
+
+/// Marks the box that stands for the watch glass: the whole page, which moves
+/// with it while a route transition zooms or slides it.
+///
+/// Anything that has to fit the circle measures itself against this box
+/// rather than the screen, so a page caught mid transition is measured the
+/// way it will settle.
+class WearGlassFrame extends SingleChildRenderObjectWidget {
+  const WearGlassFrame({required super.child, super.key});
+
+  @override
+  RenderWearGlassFrame createRenderObject(BuildContext context) =>
+      RenderWearGlassFrame();
+
+  static RenderWearGlassFrame? maybeOf(RenderObject descendant) {
+    for (var node = descendant.parent; node != null; node = node.parent) {
+      if (node is RenderWearGlassFrame) return node;
+    }
+    return null;
+  }
+}
+
+class RenderWearGlassFrame extends RenderProxyBox {}
 
 /// How much narrower than the content box a band has to be to stay inside a
 /// round screen, given where it sits below the top of that box.

@@ -23,6 +23,18 @@ import 'package:flutter/rendering.dart';
 /// is what the margin in [kWearRoundInsetFactor] is chosen against.
 const double _edgeScale = 0.8;
 
+/// The smallest a row is ever painted, however little of the glass is left
+/// where it sits; by then it is mostly scrolled out of the viewport anyway.
+const double _minimumFitScale = 0.5;
+
+/// Room kept between a row and the bezel, so nothing is drawn right up to the
+/// edge of the glass.
+const double _bezelClearanceDp = 2;
+
+/// Enough halvings of the scale range to settle on a scale well under a
+/// hundredth of a logical pixel away from the true fit.
+const int _fitSearchSteps = 12;
+
 class WearListItem extends StatelessWidget {
   const WearListItem({
     required this.child,
@@ -36,11 +48,16 @@ class WearListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = scrollController;
-    if (controller == null || !WearDisplayScope.of(context).isRound) {
+    final display = WearDisplayScope.of(context);
+    if (controller == null || !display.isRound) {
       return child;
     }
 
-    return _EdgeScaled(controller: controller, child: child);
+    return _EdgeScaled(
+      controller: controller,
+      display: display,
+      child: child,
+    );
   }
 }
 
@@ -49,33 +66,51 @@ class WearListItem extends StatelessWidget {
 /// The scale is read and applied at paint time, when the row's position is
 /// already settled, so it can never change what the row measured.
 class _EdgeScaled extends SingleChildRenderObjectWidget {
-  const _EdgeScaled({required this.controller, required super.child});
+  const _EdgeScaled({
+    required this.controller,
+    required this.display,
+    required super.child,
+  });
 
   final ScrollController controller;
+  final WearDisplay display;
 
   @override
   _RenderEdgeScaled createRenderObject(BuildContext context) =>
-      _RenderEdgeScaled(controller);
+      _RenderEdgeScaled(controller, display);
 
   @override
   void updateRenderObject(BuildContext context, _RenderEdgeScaled render) {
-    render.controller = controller;
+    render
+      ..controller = controller
+      ..display = display;
   }
 }
 
 class _RenderEdgeScaled extends RenderProxyBox {
-  _RenderEdgeScaled(this._controller) {
-    _controller.addListener(markNeedsPaint);
-  }
+  _RenderEdgeScaled(this._controller, this._display);
 
   ScrollController _controller;
+  WearDisplay _display;
+  WearDisplay get display => _display;
+
+  set display(WearDisplay value) {
+    if (value.sizeDp == _display.sizeDp && value.shape == _display.shape) {
+      return;
+    }
+    _display = value;
+    markNeedsPaint();
+  }
+
   ScrollController get controller => _controller;
 
   set controller(ScrollController value) {
     if (value == _controller) return;
-    _controller.removeListener(markNeedsPaint);
+    if (attached) {
+      _controller.removeListener(markNeedsPaint);
+      value.addListener(markNeedsPaint);
+    }
     _controller = value;
-    _controller.addListener(markNeedsPaint);
     markNeedsPaint();
   }
 
@@ -91,8 +126,14 @@ class _RenderEdgeScaled extends RenderProxyBox {
     _controller.addListener(markNeedsPaint);
   }
 
-  /// Full size through the middle of the glass, shrinking to [_edgeScale] over
-  /// the outer quarter at each end.
+  /// Full size through the middle of the viewport, shrinking to [_edgeScale]
+  /// over the outer quarter at each end, and never larger than what still fits
+  /// inside the glass.
+  ///
+  /// The viewport is not the glass: a screen with a header above its list
+  /// pushes the viewport down, so a row in the middle of the viewport can sit
+  /// low on the circle where the eased scale alone leaves its corners past
+  /// the bezel.
   ///
   /// Measured against the viewport this row is painted into rather than the
   /// controller: while a screen swaps one list for another the controller is
@@ -116,10 +157,60 @@ class _RenderEdgeScaled extends RenderProxyBox {
       0.0,
       1.0,
     );
-    if (normalised <= 0.5) return 1;
 
-    final intoEdge = (normalised - 0.5) / 0.5;
-    return 1 - (1 - _edgeScale) * Curves.easeIn.transform(intoEdge);
+    final eased = normalised <= 0.5
+        ? 1.0
+        : 1 -
+              (1 - _edgeScale) *
+                  Curves.easeIn.transform((normalised - 0.5) / 0.5);
+
+    return math.min(eased, _fitScale(viewport));
+  }
+
+  /// The largest scale at which the part of this row the viewport shows lies
+  /// inside the glass.
+  ///
+  /// Positions are taken in the page's own frame when the row sits in a
+  /// [WearScaffold], so a transition transforming the page cannot skew them;
+  /// a row outside one has only the screen to go by.
+  double _fitScale(RenderBox viewport) {
+    final glass = WearGlassFrame.maybeOf(this);
+    final glassSize = glass?.size ?? _display.sizeDp;
+    final viewportTop = viewport.localToGlobal(Offset.zero, ancestor: glass).dy;
+    final viewportBottom = viewportTop + viewport.size.height;
+    final centre = localToGlobal(size.center(Offset.zero), ancestor: glass);
+    final glassCentre = glassSize.center(Offset.zero);
+    final radius = glassSize.shortestSide / 2 - _bezelClearanceDp;
+
+    bool fits(double scale) {
+      final halfWidth = size.width * scale / 2;
+      final halfHeight = size.height * scale / 2;
+      final top = math.max(centre.dy - halfHeight, viewportTop);
+      final bottom = math.min(centre.dy + halfHeight, viewportBottom);
+      if (top >= bottom) return true;
+
+      final dx = (centre.dx - glassCentre.dx).abs() + halfWidth;
+      final dy = math.max(
+        (top - glassCentre.dy).abs(),
+        (bottom - glassCentre.dy).abs(),
+      );
+      return dx * dx + dy * dy <= radius * radius;
+    }
+
+    if (fits(1)) return 1;
+    if (!fits(_minimumFitScale)) return _minimumFitScale;
+
+    var low = _minimumFitScale;
+    var high = 1.0;
+    for (var step = 0; step < _fitSearchSteps; step++) {
+      final middle = (low + high) / 2;
+      if (fits(middle)) {
+        low = middle;
+      } else {
+        high = middle;
+      }
+    }
+    return low;
   }
 
   Matrix4 _transformAt(double scale) {
